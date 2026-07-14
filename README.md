@@ -1,4 +1,4 @@
-# Tesla Charge Companion V6.4 stable
+# Tesla Charge Companion V6.5 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -57,3 +57,14 @@ Avant de lancer une simulation, il est possible de définir une distance maximal
 Le filtre utilise la distance routière OSRM lorsqu’elle est disponible. À défaut, il utilise la distance à vol d’oiseau. Une valeur vide ou égale à 0 désactive la limite.
 
 Les résultats restent limités aux 20 meilleures configurations selon le classement prix + distance.
+
+
+## Correction de la limite de distance
+
+La limite est désormais stricte :
+
+- aucune borne au-delà du nombre de kilomètres saisi n’est affichée ;
+- l’application ne complète jamais la liste avec des bornes plus éloignées ;
+- le cache des anciennes distances est vidé à chaque simulation ;
+- le calcul routier est effectué par petits lots pour plus de fiabilité ;
+- un second filtre est appliqué juste avant le classement final.
