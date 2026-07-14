@@ -3,7 +3,7 @@
     "id": "lidl-saint-cyr",
     "name": "Lidl Saint-Cyr",
     "kind": "AC",
-    "powerKw": 11,
+    "powerKw": 22,
     "address": "104 Avenue Pierre Curie, 78210 Saint-Cyr-l'École",
     "pricing": {
       "type": "kwh",
@@ -54,7 +54,23 @@
     },
     "lastUpdated": "2026-07-10",
     "operator": "",
-    "stalls": 0
+    "stalls": 4,
+    "chargingConfigurations": [
+      {
+        "id": "ac-22",
+        "label": "AC 22 kW",
+        "kind": "AC",
+        "powerKw": 22,
+        "stalls": 2
+      },
+      {
+        "id": "dc-180",
+        "label": "DC 180 kW",
+        "kind": "DC",
+        "powerKw": 180,
+        "stalls": 2
+      }
+    ]
   },
   {
     "id": "izivia-levant",
@@ -116,7 +132,16 @@
     },
     "lastUpdated": "2026-07-10",
     "operator": "",
-    "stalls": 0
+    "stalls": 0,
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "AC 11 kW",
+        "kind": "AC",
+        "powerKw": 11,
+        "stalls": 0
+      }
+    ]
   },
   {
     "id": "alize-galard",
@@ -178,7 +203,16 @@
     },
     "lastUpdated": "2026-07-10",
     "operator": "",
-    "stalls": 0
+    "stalls": 0,
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "AC 7 kW",
+        "kind": "AC",
+        "powerKw": 7,
+        "stalls": 0
+      }
+    ]
   },
   {
     "id": "one-nation",
@@ -235,6 +269,15 @@
     },
     "lastUpdated": "2026-07-10",
     "operator": "",
-    "stalls": 0
+    "stalls": 0,
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "AC 11 kW",
+        "kind": "AC",
+        "powerKw": 11,
+        "stalls": 0
+      }
+    ]
   }
 ]

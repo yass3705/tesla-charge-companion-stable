@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Tesla Charge Companion 6.0</title>
+<title>Tesla Charge Companion 6.1</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -74,10 +74,15 @@
 <div class="grid">
 <div><label>Nom</label><input id="fName"></div>
 <div><label>Opérateur</label><input id="fOperator" placeholder="Ex. Tesla, Izivia, Lidl…"></div>
-<div><label>Nombre de bornes / points de charge</label><input id="fStalls" type="number" min="0" step="1" value="0"></div>
 <div class="full"><label>Adresse / destination Google Maps</label><input id="fAddress"></div>
-<div><label>Type</label><select id="fKind"><option>AC</option><option>DC</option></select></div>
-<div><label>Puissance (kW)</label><input id="fPower" type="number" value="11"></div>
+<div class="full box">
+  <div class="row" style="justify-content:space-between">
+    <b>Configurations de recharge du site</b>
+    <button type="button" class="secondary" onclick="addChargingConfiguration()">Ajouter une puissance</button>
+  </div>
+  <div class="small" style="margin-top:7px">Un même site reste sur une seule fiche, mais chaque combinaison type/puissance apparaît séparément dans les résultats.</div>
+  <div id="chargingConfigurations"></div>
+</div>
 <div><label>Dernière mise à jour</label><input id="fUpdated" type="date"></div>
 <div class="full box">
   <div class="row" style="justify-content:space-between">
@@ -113,7 +118,7 @@
 <section id="fx" class="panel">
 <div class="card">
 <h3>À propos</h3>
-<div class="small">Tesla Charge Companion <b>V6.0</b><br>
+<div class="small">Tesla Charge Companion <b>V6.1</b><br>
 Tarifs Tesla saisis manuellement. Les taux de change sont actualisés quotidiennement par GitHub Actions.</div>
 <div id="dataFreshness" class="small" style="margin-top:10px"></div>
 </div>

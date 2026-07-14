@@ -83,7 +83,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-porto-vecchio-20",
@@ -169,7 +178,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-aime-la-plagne-73",
@@ -255,7 +273,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-dinan-22",
@@ -363,7 +390,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-cesson-77",
@@ -460,7 +496,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-montauban-les-chaumes-82",
@@ -546,7 +591,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-boulogne-sur-mer-62",
@@ -654,7 +708,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-meg-ve-74",
@@ -740,7 +803,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-carpiquet-14",
@@ -848,7 +920,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-saint-brieuc-22",
@@ -956,7 +1037,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-saint-pierre-d-irube-64",
@@ -1064,7 +1154,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-scionzier-74",
@@ -1172,7 +1271,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-sallanches-74",
@@ -1280,7 +1388,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-montauban-aussonne-82",
@@ -1388,7 +1505,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-rouen-76",
@@ -1496,7 +1622,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-bernin-38",
@@ -1604,7 +1739,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-moulins-l-s-metz-57",
@@ -1712,7 +1856,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-dieppe-76",
@@ -1820,7 +1973,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-albi-81",
@@ -1928,7 +2090,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-loud-ac-22",
@@ -2014,7 +2185,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-figeac-46",
@@ -2100,7 +2280,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-phalsbourg-57",
@@ -2208,7 +2397,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-ar-s-33",
@@ -2316,7 +2514,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-manosque-4",
@@ -2424,7 +2631,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-caen-bretteville-14",
@@ -2532,7 +2748,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-saint-quentin-2",
@@ -2640,7 +2865,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-morlaix-29",
@@ -2748,7 +2982,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-saint-chamond-42",
@@ -2856,7 +3099,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-vannes-56",
@@ -2964,7 +3216,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-pinal-88",
@@ -3072,7 +3333,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-deauville-14",
@@ -3180,7 +3450,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-quimper-29",
@@ -3288,7 +3567,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-biganos-33",
@@ -3396,7 +3684,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-agde-34",
@@ -3504,7 +3801,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-noyelles-godault-62",
@@ -3612,7 +3918,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-les-sables-d-olonne-85",
@@ -3720,7 +4035,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-beynost-1",
@@ -3828,7 +4152,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-herblay-sur-seine-95",
@@ -3936,7 +4269,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 7
+      }
+    ]
   },
   {
     "id": "tesla-valenciennes-59",
@@ -4044,7 +4386,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-treilli-res-44",
@@ -4152,7 +4503,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-artix-64",
@@ -4260,7 +4620,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-rungis-94",
@@ -4368,7 +4737,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-le-touquet-62",
@@ -4476,7 +4854,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-gap-5",
@@ -4595,7 +4982,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-verniolle-9",
@@ -4681,7 +5077,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-aurillac-15",
@@ -4767,7 +5172,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-varneville-bretteville-76",
@@ -4864,7 +5278,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-lorient-56",
@@ -4972,7 +5395,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-hauconcourt-57",
@@ -5080,7 +5512,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-besan-on-ch-teaufarine-25",
@@ -5188,7 +5629,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-rennes-cleunay-35",
@@ -5296,7 +5746,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-houssen-68",
@@ -5404,7 +5863,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-archamps-74",
@@ -5523,7 +5991,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-la-seyne-sur-mer-83",
@@ -5631,7 +6108,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-val-de-reuil-27",
@@ -5739,7 +6225,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-dunkerque-59",
@@ -5847,7 +6342,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-rennes-alma-35",
@@ -5955,7 +6459,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-brest-29",
@@ -6063,7 +6576,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-saint-rapha-l-83",
@@ -6171,7 +6693,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-amiens-80",
@@ -6279,7 +6810,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-beauvais-60",
@@ -6387,7 +6927,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-chasse-sur-rh-ne-38",
@@ -6495,7 +7044,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-la-roche-sur-yon-85",
@@ -6603,7 +7161,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-s-nas-13",
@@ -6711,7 +7278,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 23
+      }
+    ]
   },
   {
     "id": "tesla-lagord-17",
@@ -6819,7 +7395,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-pontarlier-25",
@@ -6927,7 +7512,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-manissieux-69",
@@ -7035,7 +7629,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-bourg-de-p-age-26",
@@ -7143,7 +7746,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-taverny-95",
@@ -7251,7 +7863,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-langon-33",
@@ -7359,7 +7980,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 11
+      }
+    ]
   },
   {
     "id": "tesla-mandelieu-la-napoule-6",
@@ -7467,7 +8097,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-dreux-28",
@@ -7575,7 +8214,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-roanne-42",
@@ -7683,7 +8331,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-saint-priest-69",
@@ -7791,7 +8448,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-b-gles-33",
@@ -7899,7 +8565,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-angers-49",
@@ -8007,7 +8682,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-gassin-83",
@@ -8115,7 +8799,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-aix-en-provence-beaumanoir-13",
@@ -8223,7 +8916,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-annecy-74",
@@ -8331,7 +9033,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-ajaccio-20",
@@ -8439,7 +9150,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 15
+      }
+    ]
   },
   {
     "id": "tesla-aix-en-provence-val-de-l-arc-13",
@@ -8547,7 +9267,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-valence-26",
@@ -8655,7 +9384,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-auch-32",
@@ -8763,7 +9501,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-neuville-en-ferrain-59",
@@ -8882,7 +9629,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-la-chapelle-sur-erdre-44",
@@ -8990,7 +9746,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-rivesaltes-66",
@@ -9098,7 +9863,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-le-mans-72",
@@ -9206,7 +9980,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-saint-herblain-44",
@@ -9314,7 +10097,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-paris-bercy-75",
@@ -9422,7 +10214,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-avignon-84",
@@ -9530,7 +10331,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-orl-ans-45",
@@ -9638,7 +10448,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-pau-64",
@@ -9746,7 +10565,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-s-m-ac-65",
@@ -9854,7 +10682,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 7
+      }
+    ]
   },
   {
     "id": "tesla-vendenheim-67",
@@ -9962,7 +10799,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-dardilly-nord-69",
@@ -10070,7 +10916,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-montpellier-34",
@@ -10178,7 +11033,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 30
+      }
+    ]
   },
   {
     "id": "tesla-saint-julien-en-genevois-74",
@@ -10286,7 +11150,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-tarbes-65",
@@ -10394,7 +11267,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 7
+      }
+    ]
   },
   {
     "id": "tesla-laxou-54",
@@ -10502,7 +11384,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-buchelay-78",
@@ -10610,7 +11501,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-gallargues-le-montueux-30",
@@ -10718,7 +11618,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 21
+      }
+    ]
   },
   {
     "id": "tesla-annemasse-74",
@@ -10826,7 +11735,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-villab-91",
@@ -10934,7 +11852,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-mougins-6",
@@ -11042,7 +11969,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-colombe-38",
@@ -11150,7 +12086,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-cagnes-sur-mer-6",
@@ -11258,7 +12203,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 125.0 kW",
+        "kind": "DC",
+        "powerKw": 125.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-aix-en-provence-pont-de-l-arc-13",
@@ -11366,7 +12320,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-biguglia-20",
@@ -11474,7 +12437,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-lesquin-59",
@@ -11582,7 +12554,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-n-mes-nimotel-30",
@@ -11690,7 +12671,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-chasse-sud-38",
@@ -11809,7 +12799,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-les-pennes-mirabeau-13",
@@ -11917,7 +12916,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-m-rignac-33",
@@ -12025,7 +13033,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 10
+      }
+    ]
   },
   {
     "id": "tesla-far-bersviller-57",
@@ -12144,7 +13161,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-le-mans-rue-des-fr-res-voisin-72",
@@ -12252,7 +13278,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-porte-de-savoie-73",
@@ -12338,7 +13373,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 19
+      }
+    ]
   },
   {
     "id": "tesla-chamb-ry-73",
@@ -12446,7 +13490,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 125.0 kW",
+        "kind": "DC",
+        "powerKw": 125.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-senlis-60",
@@ -12554,7 +13607,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-orgeval-78",
@@ -12673,7 +13735,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 125.0 kW",
+        "kind": "DC",
+        "powerKw": 125.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-houdemont-54",
@@ -12792,7 +13863,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-clermont-ferrand-63",
@@ -12911,7 +13991,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-bordeaux-lac-33",
@@ -13019,7 +14108,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-bron-69",
@@ -13127,7 +14225,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 40
+      }
+    ]
   },
   {
     "id": "tesla-chauray-79",
@@ -13246,7 +14353,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-barberaz-73",
@@ -13354,7 +14470,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-caen-st-contest-14",
@@ -13462,7 +14587,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-fontaine-l-s-dijon-21",
@@ -13570,7 +14704,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-saint-louis-68",
@@ -13678,7 +14821,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-coll-gien-77",
@@ -13786,7 +14938,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-englos-59",
@@ -13894,7 +15055,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-villebon-sur-yvette-91",
@@ -14002,7 +15172,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-br-tigny-sur-orge-91",
@@ -14099,7 +15278,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-calais-62",
@@ -14207,7 +15395,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-cambarette-83",
@@ -14315,7 +15512,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 10
+      }
+    ]
   },
   {
     "id": "tesla-champfleury-51",
@@ -14423,7 +15629,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 26
+      }
+    ]
   },
   {
     "id": "tesla-terville-57",
@@ -14531,7 +15746,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-mulhouse-rue-des-c-vennes-68",
@@ -14639,7 +15863,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-v-lizy-78",
@@ -14747,7 +15980,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 30
+      }
+    ]
   },
   {
     "id": "tesla-cherbourg-50",
@@ -14855,7 +16097,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-vry-courcouronnes-91",
@@ -14952,7 +16203,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-franconville-95",
@@ -15060,7 +16320,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-rochecorbon-37",
@@ -15168,7 +16437,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-limoges-rue-henri-giffard-87",
@@ -15276,7 +16554,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-albertville-73",
@@ -15362,7 +16649,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-le-muy-83",
@@ -15470,7 +16766,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-nice-lingosti-re-6",
@@ -15578,7 +16883,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-bourg-en-bresse-1",
@@ -15686,7 +17000,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 3
+      }
+    ]
   },
   {
     "id": "tesla-castelnau-d-estr-tefonds-31",
@@ -15794,7 +17117,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-strasbourg-sud-67",
@@ -15902,7 +17234,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-ury-77",
@@ -16010,7 +17351,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 10
+      }
+    ]
   },
   {
     "id": "tesla-matougues-51",
@@ -16118,7 +17468,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 90.0 kW",
+        "kind": "DC",
+        "powerKw": 90.0,
+        "stalls": 4
+      }
+    ]
   },
   {
     "id": "tesla-cuers-83",
@@ -16226,7 +17585,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-moisselles-95",
@@ -16334,7 +17702,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 7
+      }
+    ]
   },
   {
     "id": "tesla-charleville-m-zi-res-8",
@@ -16442,7 +17819,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-thiais-94",
@@ -16561,7 +17947,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-valence-chemin-de-la-sonacotral-26",
@@ -16669,7 +18064,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-tours-37",
@@ -16777,7 +18181,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-marseille-la-valentine-13",
@@ -16885,7 +18298,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-dardilly-69",
@@ -16993,7 +18415,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-bailly-romainvilliers-77",
@@ -17101,7 +18532,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-blagnac-31",
@@ -17209,7 +18649,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-rodez-12",
@@ -17317,7 +18766,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-goussainville-95",
@@ -17425,7 +18883,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-bayonne-64",
@@ -17533,7 +19000,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-b-ziers-rue-zenobe-gramme-34",
@@ -17641,7 +19117,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-besan-on-chemaudin-et-vaux-25",
@@ -17749,7 +19234,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-les-clayes-sous-bois-78",
@@ -17868,7 +19362,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-mont-saint-michel-35",
@@ -17976,7 +19479,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-le-bosc-34",
@@ -18084,7 +19596,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-portes-l-s-valence-ouest-26",
@@ -18170,7 +19691,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-brian-on-5",
@@ -18256,7 +19786,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-l-aveyron-12",
@@ -18342,7 +19881,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-sanilhac-24",
@@ -18428,7 +19976,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-lafayette-43",
@@ -18514,7 +20071,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 22
+      }
+    ]
   },
   {
     "id": "tesla-vesoul-70",
@@ -18600,7 +20166,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-lu-on-85",
@@ -18686,7 +20261,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-eurotunnel-terminal-62",
@@ -18794,7 +20378,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 125.0 kW",
+        "kind": "DC",
+        "powerKw": 125.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-d-urvillers-2",
@@ -18913,7 +20506,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aulnay-sous-bois-93",
@@ -19021,7 +20623,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-roissy-en-france-avenue-du-bois-de-la-pie-95",
@@ -19129,7 +20740,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-aire-du-caylar-34",
@@ -19237,7 +20857,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-la-baie-de-somme-80",
@@ -19356,7 +20985,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 10
+      }
+    ]
   },
   {
     "id": "tesla-montlu-on-3",
@@ -19442,7 +21080,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-sisteron-4",
@@ -19528,7 +21175,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-saint-parres-aux-tertres-10",
@@ -19614,7 +21270,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 26
+      }
+    ]
   },
   {
     "id": "tesla-narbonne-11",
@@ -19700,7 +21365,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-angoul-me-16",
@@ -19786,7 +21460,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 14
+      }
+    ]
   },
   {
     "id": "tesla-saintes-cours-du-mar-chal-leclerc-17",
@@ -19872,7 +21555,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-saintes-17",
@@ -19958,7 +21650,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-bourges-18",
@@ -20044,7 +21745,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 10
+      }
+    ]
   },
   {
     "id": "tesla-ussac-19",
@@ -20130,7 +21840,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-beaune-centre-21",
@@ -20216,7 +21935,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-mont-limar-26",
@@ -20302,7 +22030,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 56
+      }
+    ]
   },
   {
     "id": "tesla-chartres-28",
@@ -20388,7 +22125,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-b-ziers-34",
@@ -20474,7 +22220,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-ch-teauroux-36",
@@ -20560,7 +22315,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-chambray-l-s-tours-37",
@@ -20646,7 +22410,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-salaise-sur-sanne-38",
@@ -20732,7 +22505,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-labouheyre-40",
@@ -20818,7 +22600,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-pannes-45",
@@ -20904,7 +22695,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-albaret-sainte-marie-48",
@@ -20990,7 +22790,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-aire-des-portes-d-angers-49",
@@ -21076,7 +22885,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-tinqueux-51",
@@ -21162,7 +22980,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-val-de-meuse-52",
@@ -21248,7 +23075,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-riom-63",
@@ -21334,7 +23170,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-chalon-sur-sa-ne-71",
@@ -21420,7 +23265,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-m-con-71",
@@ -21506,7 +23360,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 36
+      }
+    ]
   },
   {
     "id": "tesla-tournus-71",
@@ -21592,7 +23455,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-l-abis-73",
@@ -21678,7 +23550,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-vouill-79",
@@ -21764,7 +23645,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-orange-84",
@@ -21850,7 +23740,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-poitiers-sud-86",
@@ -21936,7 +23835,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 40
+      }
+    ]
   },
   {
     "id": "tesla-ch-tellerault-86",
@@ -22022,7 +23930,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-poitiers-futuroscope-86",
@@ -22108,7 +24025,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-limoges-87",
@@ -22194,7 +24120,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-avallon-89",
@@ -22280,7 +24215,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-tossiat-1",
@@ -22366,7 +24310,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 24
+      }
+    ]
   },
   {
     "id": "tesla-montmarault-3",
@@ -22452,7 +24405,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 22
+      }
+    ]
   },
   {
     "id": "tesla-vichy-3",
@@ -22538,7 +24500,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-aire-du-bourbonnais-3",
@@ -22624,7 +24595,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-sisteron-val-de-durance-4",
@@ -22710,7 +24690,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-magnant-10",
@@ -22796,7 +24785,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 56
+      }
+    ]
   },
   {
     "id": "tesla-carcassonne-11",
@@ -22882,7 +24880,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-narbonne-sud-11",
@@ -22968,7 +24975,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-castelnaudary-11",
@@ -23054,7 +25070,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-ruffec-16",
@@ -23140,7 +25165,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-bourges-chemin-le-vallon-18",
@@ -23226,7 +25260,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-vierzon-18",
@@ -23312,7 +25355,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 48
+      }
+    ]
   },
   {
     "id": "tesla-saint-pardoux-l-ortigier-19",
@@ -23398,7 +25450,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-brive-la-gaillarde-19",
@@ -23484,7 +25545,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-arc-sur-tille-21",
@@ -23570,7 +25640,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-longvic-21",
@@ -23656,7 +25735,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-beaune-nord-21",
@@ -23742,7 +25830,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-p-rigueux-24",
@@ -23828,7 +25925,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-montb-liard-25",
@@ -23914,7 +26020,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-bourg-achard-27",
@@ -24000,7 +26115,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-saint-gaudens-31",
@@ -24086,7 +26210,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-saint-andr-de-cubzac-33",
@@ -24172,7 +26305,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-argenton-sur-creuse-36",
@@ -24258,7 +26400,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-aire-du-jura-39",
@@ -24344,7 +26495,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-castets-40",
@@ -24430,7 +26590,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-sur-l-adour-40",
@@ -24516,7 +26685,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-blois-capcin-41",
@@ -24602,7 +26780,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-artenay-45",
@@ -24688,7 +26875,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-agen-47",
@@ -24774,7 +26970,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 20
+      }
+    ]
   },
   {
     "id": "tesla-villedieu-les-po-les-rouffigny-50",
@@ -24860,7 +27065,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 16
+      }
+    ]
   },
   {
     "id": "tesla-saint-dizier-52",
@@ -24946,7 +27160,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 6
+      }
+    ]
   },
   {
     "id": "tesla-laval-53",
@@ -25032,7 +27255,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-cosne-cours-sur-loire-58",
@@ -25118,7 +27350,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-varennes-vauzelles-58",
@@ -25204,7 +27445,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-charolles-71",
@@ -25312,7 +27562,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-du-poulet-de-bresse-71",
@@ -25398,7 +27657,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150.0 kW",
+        "kind": "DC",
+        "powerKw": 150.0,
+        "stalls": 10
+      }
+    ]
   },
   {
     "id": "tesla-saint-saturnin-72",
@@ -25484,7 +27752,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 48
+      }
+    ]
   },
   {
     "id": "tesla-saint-jean-de-maurienne-73",
@@ -25570,7 +27847,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-aire-du-granier-73",
@@ -25656,7 +27942,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-coigni-res-78",
@@ -25742,7 +28037,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-roye-80",
@@ -25828,7 +28132,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 32
+      }
+    ]
   },
   {
     "id": "tesla-aire-de-la-vend-e-85",
@@ -25914,7 +28227,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-limoges-avenue-des-casseaux-87",
@@ -26000,7 +28322,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-saint-di-des-vosges-88",
@@ -26086,7 +28417,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-auxerre-89",
@@ -26172,7 +28512,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 36
+      }
+    ]
   },
   {
     "id": "tesla-eurotunnel-flexiplus-62",
@@ -26280,7 +28629,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 125.0 kW",
+        "kind": "DC",
+        "powerKw": 125.0,
+        "stalls": 2
+      }
+    ]
   },
   {
     "id": "tesla-livry-gargan-93",
@@ -26388,7 +28746,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 7
+      }
+    ]
   },
   {
     "id": "tesla-blois-avenue-de-ch-teaudun-41",
@@ -26496,7 +28863,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 9
+      }
+    ]
   },
   {
     "id": "tesla-cholet-49",
@@ -26604,7 +28980,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-roissy-en-france-95",
@@ -26712,7 +29097,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-abbeville-80",
@@ -26820,7 +29214,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-les-herbiers-85",
@@ -26917,7 +29320,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   },
   {
     "id": "tesla-falaise-14",
@@ -27014,7 +29426,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 12
+      }
+    ]
   },
   {
     "id": "tesla-n-mes-carr-sud-30",
@@ -27122,7 +29543,16 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 28
+      }
+    ]
   },
   {
     "id": "tesla-bergerac-24",
@@ -27208,6 +29638,15 @@
     },
     "lastUpdated": "2026-07-11",
     "temporarilyUnavailable": false,
-    "operator": "Tesla"
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250.0 kW",
+        "kind": "DC",
+        "powerKw": 250.0,
+        "stalls": 8
+      }
+    ]
   }
 ]

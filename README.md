@@ -1,32 +1,16 @@
-# Tesla Charge Companion V6.0 stable
+# Tesla Charge Companion V6.1 stable
 
-Version recentrée sur les fonctions fiables.
+## Nouveauté : plusieurs puissances sur un même site
 
-## Fonctionnement
+Une borne/site peut contenir plusieurs configurations de recharge.
 
-- tarifs Tesla renseignés et modifiés manuellement ;
-- lien direct vers la fiche officielle Tesla de chaque Superchargeur ;
-- date de dernière mise à jour affichée ;
-- taux de change actualisés automatiquement chaque jour par GitHub Actions ;
-- comparaison prix + distance, jusqu’à 20 bornes ;
-- filtres Tesla uniquement ou Tesla + autres opérateurs ;
-- horaires, tarifs au kWh ou à la minute, frais de connexion et d’occupation ;
-- ajout, modification, désactivation temporaire et suppression des bornes.
+Exemple Lidl Saint-Cyr :
 
-## Ce qui a été retiré
+- 2 points AC de 22 kW ;
+- 2 points DC de 180 kW.
 
-- workflow de récupération automatique Tesla ;
-- scripts Python Tesla ;
-- Playwright, Chromium, extensions Firefox et Companion macOS.
+Dans l’onglet **Bornes**, Lidl reste affiché sur une seule fiche. Dans les résultats de comparaison, les configurations AC 22 kW et DC 180 kW sont évaluées séparément et peuvent apparaître toutes les deux si elles font partie des 20 meilleurs résultats prix + distance.
 
-Ces méthodes étaient bloquées ou insuffisamment fiables.
+Le formulaire **Ajouter / Modifier** permet d’ajouter ou supprimer autant de configurations que nécessaire. Le tarif, l’adresse et les horaires restent communs au site.
 
-## Mise à jour manuelle d’un tarif Tesla
-
-1. Dans l’onglet **Bornes**, ouvre la **Fiche Tesla** de la station.
-2. Relève le prix Tesla et les éventuels créneaux.
-3. Clique sur **Modifier**.
-4. Modifie le ou les tarifs et la date de mise à jour.
-5. Clique sur **Enregistrer**.
-
-Les modifications réalisées dans l’application sont stockées localement sur l’appareil utilisé.
+Les taux de change restent actualisés quotidiennement par GitHub Actions. Les tarifs Tesla restent manuels.

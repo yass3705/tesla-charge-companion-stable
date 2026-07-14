@@ -19,3 +19,7 @@ input,select,textarea{width:100%;font:inherit;color:#fff;background:#101012;bord
 .currency-badge{background:#243421}
 
 @media(max-width:560px){.grid{grid-template-columns:1fr 1fr}.dayrow{grid-template-columns:42px 68px 1fr 1fr}}
+
+.charge-config{margin-top:12px;padding:12px;border-radius:14px;background:#0f0f11;border:1px solid var(--line)}
+.charge-config-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:10px;margin-top:10px}
+@media(max-width:700px){.charge-config-grid{grid-template-columns:1fr 1fr}}

@@ -1,4 +1,4 @@
-# Installation de Tesla Charge Companion V6.0 stable
+# Installation de Tesla Charge Companion V6.1 stable
 
 ## Remplacer la version actuelle
 
@@ -6,12 +6,12 @@
 2. Ouvre GitHub Desktop.
 3. Sélectionne ton dépôt Tesla Charge Companion.
 4. Clique sur **Repository → Show in Finder**.
-5. Copie tout le contenu du dossier V6.0 dans le dossier local du dépôt.
+5. Copie tout le contenu du dossier V6.1 dans le dossier local du dépôt.
 6. Accepte le remplacement des fichiers.
 7. Vérifie que `.github/workflows` contient uniquement :
    - `pages.yml`
    - `update-fx.yml`
-8. Dans GitHub Desktop, saisis : `Passage à la V6.0 stable`.
+8. Dans GitHub Desktop, saisis : `Passage à la V6.1 stable`.
 9. Clique sur **Commit to main**.
 10. Clique sur **Push origin**.
 
@@ -35,3 +35,8 @@ Après la publication :
 2. vérifie la mention **Version 6.0 stable** ;
 3. ouvre l’onglet **Devises** et vérifie la date de mise à jour ;
 4. ouvre l’onglet **Bornes** et utilise **Modifier** pour corriger manuellement un tarif Tesla.
+
+
+## Migration V6.1
+
+Les anciennes bornes à puissance unique sont converties automatiquement en une configuration unique. Lidl Saint-Cyr reçoit automatiquement ses deux configurations publiées.
