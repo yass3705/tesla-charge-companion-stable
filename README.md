@@ -1,4 +1,4 @@
-# Tesla Charge Companion V6.1 stable
+# Tesla Charge Companion V6.2 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -14,3 +14,15 @@ Dans l’onglet **Bornes**, Lidl reste affiché sur une seule fiche. Dans les r�
 Le formulaire **Ajouter / Modifier** permet d’ajouter ou supprimer autant de configurations que nécessaire. Le tarif, l’adresse et les horaires restent communs au site.
 
 Les taux de change restent actualisés quotidiennement par GitHub Actions. Les tarifs Tesla restent manuels.
+
+
+## Tarifs par configuration
+
+Chaque configuration de puissance possède désormais sa propre tarification.
+
+Exemple Lidl Saint-Cyr :
+
+- 2 × AC 22 kW : 0,29 €/kWh ;
+- 2 × DC 180 kW : 0,39 €/kWh.
+
+Le site reste regroupé sur une seule fiche dans l’onglet Bornes, mais les configurations sont calculées séparément dans les résultats.

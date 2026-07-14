@@ -6,9 +6,20 @@
     "powerKw": 22,
     "address": "104 Avenue Pierre Curie, 78210 Saint-Cyr-l'École",
     "pricing": {
-      "type": "kwh",
-      "pricePerKwh": 0.29,
-      "currency": "EUR"
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.29,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0
+        }
+      ]
     },
     "access": {
       "limited": true,
@@ -61,14 +72,46 @@
         "label": "AC 22 kW",
         "kind": "AC",
         "powerKw": 22,
-        "stalls": 2
+        "stalls": 2,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.29,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
       },
       {
         "id": "dc-180",
         "label": "DC 180 kW",
         "kind": "DC",
         "powerKw": 180,
-        "stalls": 2
+        "stalls": 2,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.39,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
       }
     ]
   },
@@ -139,7 +182,17 @@
         "label": "AC 11 kW",
         "kind": "AC",
         "powerKw": 11,
-        "stalls": 0
+        "stalls": 0,
+        "pricing": {
+          "type": "kwhPlusParking",
+          "pricePerKwh": 0.39,
+          "freeMinutes": 180,
+          "parkingPerMinute": 0.05,
+          "nightCap": 4.0,
+          "nightStart": "20:00",
+          "nightEnd": "08:00",
+          "currency": "EUR"
+        }
       }
     ]
   },
@@ -210,7 +263,17 @@
         "label": "AC 7 kW",
         "kind": "AC",
         "powerKw": 7,
-        "stalls": 0
+        "stalls": 0,
+        "pricing": {
+          "type": "accessPlusTime",
+          "accessFee": 3.45,
+          "freeMinutes": 60,
+          "dayPerHour": 1.15,
+          "dayStart": "08:00",
+          "dayEnd": "20:00",
+          "nightPerHour": 0,
+          "currency": "EUR"
+        }
       }
     ]
   },
@@ -276,7 +339,12 @@
         "label": "AC 11 kW",
         "kind": "AC",
         "powerKw": 11,
-        "stalls": 0
+        "stalls": 0,
+        "pricing": {
+          "type": "freeWindowUnknownAfter",
+          "freeMinutes": 120,
+          "currency": "EUR"
+        }
       }
     ]
   }

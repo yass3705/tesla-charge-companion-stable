@@ -1,10 +1,12 @@
 # Changelog
 
-## V6.1 stable
+## V6.2 stable
 
-- Plusieurs configurations de puissance par site.
-- Lidl Saint-Cyr : 2 × 22 kW AC et 2 × 180 kW DC.
-- Une seule fiche par site dans la liste des bornes.
-- Une ligne de résultat distincte pour chaque configuration.
-- Classement prix + distance limité à 20 configurations.
-- Migration automatique des anciennes bornes à puissance unique.
+- Tarification propre à chaque configuration de puissance.
+- Lidl Saint-Cyr :
+  - 2 × AC 22 kW à 0,29 €/kWh ;
+  - 2 × DC 180 kW à 0,39 €/kWh.
+- Ajout, modification et créneaux tarifaires disponibles séparément pour chaque puissance.
+- Une seule fiche par site dans l’onglet Bornes.
+- Une ligne distincte par configuration dans les résultats.
+- Dépôt cible : `tesla-charge-companion-stable`.

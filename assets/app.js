@@ -2,7 +2,7 @@ const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],st
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates()});
 $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
-function localStations(){return JSON.parse(localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
+function localStations(){return JSON.parse(localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
 function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV25')||'null')}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
@@ -15,7 +15,14 @@ function legacyConfiguration(st){
 }
 function normalizeConfigurations(configs,st){
  let source=Array.isArray(configs)&&configs.length?configs:legacyConfiguration(st);
- return source.map((c,i)=>({id:c.id||`config-${i+1}`,label:c.label||`${c.kind||'AC'} ${Number(c.powerKw||11)} kW`,kind:c.kind||'AC',powerKw:Number(c.powerKw||11),stalls:Math.max(0,Math.round(Number(c.stalls||0)))}));
+ return source.map((c,i)=>({
+   id:c.id||`config-${i+1}`,
+   label:c.label||`${c.kind||'AC'} ${Number(c.powerKw||11)} kW`,
+   kind:c.kind||'AC',
+   powerKw:Number(c.powerKw||11),
+   stalls:Math.max(0,Math.round(Number(c.stalls||0))),
+   pricing:normalizePricingCurrency(c.pricing||st.pricing||{type:'kwh',pricePerKwh:.29,currency:'EUR'})
+ }));
 }
 function normalizeStation(st,defaults={}){
  let merged={...defaults,...st};
@@ -34,9 +41,21 @@ function normalizeStation(st,defaults={}){
 }
 function stationConfigurations(st){return normalizeConfigurations(st.chargingConfigurations,st)}
 function expandConfigurations(baseStations){
- return baseStations.flatMap(st=>stationConfigurations(st).map((cfg,index)=>({...st,id:`${st.id}::${cfg.id}`,baseStationId:st.id,configurationId:cfg.id,configurationLabel:cfg.label||`${cfg.kind} ${cfg.powerKw} kW`,kind:cfg.kind,powerKw:cfg.powerKw,stalls:cfg.stalls,totalSiteStalls:st.stalls,configurationIndex:index})));
+ return baseStations.flatMap(st=>stationConfigurations(st).map((cfg,index)=>({
+   ...st,
+   id:`${st.id}::${cfg.id}`,
+   baseStationId:st.id,
+   configurationId:cfg.id,
+   configurationLabel:cfg.label||`${cfg.kind} ${cfg.powerKw} kW`,
+   kind:cfg.kind,
+   powerKw:cfg.powerKw,
+   stalls:cfg.stalls,
+   pricing:cfg.pricing||st.pricing,
+   totalSiteStalls:st.stalls,
+   configurationIndex:index
+ })));
 }
-function saveLocal(){localStorage.setItem('tccStationsV61',JSON.stringify(stations))}
+function saveLocal(){localStorage.setItem('tccStationsV62',JSON.stringify(stations))}
 function mins(t){let [h,m]=t.split(':').map(Number);return h*60+m}
 function fmtMin(m){m=Math.max(0,m);let h=Math.floor(m/60),n=Math.round(m%60);return h?`${h} h ${String(n).padStart(2,'0')}`:`${n} min`}
 function finishTime(dateStr,timeStr,durationMin){
@@ -257,13 +276,17 @@ function pricingRuleTemplate(rule={}){
    </div>
  </div>`;
 }
-function addPricingRule(rule={}){
- $('pricingRules').insertAdjacentHTML('beforeend',pricingRuleTemplate(rule));
- let el=$('pricingRules').lastElementChild;refreshPricingRule(el.dataset.ruleId);
+function addPricingRuleTo(container,rule={}){
+ container.insertAdjacentHTML('beforeend',pricingRuleTemplate(rule));
+ let el=container.lastElementChild;refreshPricingRule(el.dataset.ruleId);
 }
+function addPricingRule(rule={}){let container=$('pricingRules');if(container)addPricingRuleTo(container,rule)}
 function removePricingRule(id){
- let el=document.querySelector(`[data-rule-id="${id}"]`);if(el)el.remove();
- if(!$('pricingRules').children.length)addPricingRule();
+ let el=document.querySelector(`[data-rule-id="${id}"]`);
+ if(!el)return;
+ let container=el.parentElement;
+ el.remove();
+ if(container&&!container.children.length)addPricingRuleTo(container,{});
 }
 function refreshPricingRule(id){
  let el=document.querySelector(`[data-rule-id="${id}"]`);if(!el)return;
@@ -272,14 +295,20 @@ function refreshPricingRule(id){
  el.querySelectorAll('.pr-kwh').forEach(x=>x.classList.toggle('hidden',billing!=='kwh'));
  el.querySelectorAll('.pr-minute').forEach(x=>x.classList.toggle('hidden',billing!=='minute'));
 }
-function readPricingRules(){
- return {type:'rules',rules:[...document.querySelectorAll('#pricingRules .pricing-rule')].map(el=>({
-   scope:el.querySelector('.pr-scope').value,start:el.querySelector('.pr-start').value||'00:00',end:el.querySelector('.pr-end').value||'24:00',
-   billing:el.querySelector('.pr-billing').value,currency:(el.querySelector('.pr-currency').value||'EUR').trim().toUpperCase(),pricePerKwh:+el.querySelector('.pr-price-kwh').value||0,
-   chargePerMinute:+el.querySelector('.pr-charge-min').value||0,connectionFee:+el.querySelector('.pr-connection').value||0,
+function readPricingRulesFrom(container){
+ return {type:'rules',rules:[...container.querySelectorAll('.pricing-rule')].map(el=>({
+   scope:el.querySelector('.pr-scope').value,
+   start:el.querySelector('.pr-start').value||'00:00',
+   end:el.querySelector('.pr-end').value||'24:00',
+   billing:el.querySelector('.pr-billing').value,
+   currency:(el.querySelector('.pr-currency').value||'EUR').trim().toUpperCase(),
+   pricePerKwh:+el.querySelector('.pr-price-kwh').value||0,
+   chargePerMinute:+el.querySelector('.pr-charge-min').value||0,
+   connectionFee:+el.querySelector('.pr-connection').value||0,
    idlePerMinute:+el.querySelector('.pr-idle-min').value||0
  }))};
 }
+function readPricingRules(){let container=$('pricingRules');return container?readPricingRulesFrom(container):{type:'rules',rules:[]}}
 function legacyPricingToRules(pricing){
  if(!pricing)return[{scope:'allDay',billing:'kwh',currency:'EUR',pricePerKwh:.29,connectionFee:0,idlePerMinute:0}];
  if(pricing.type==='rules')return(pricing.rules||[]).map(r=>({...r,currency:(r.currency||pricing.currency||'EUR').toUpperCase()}));
@@ -293,9 +322,13 @@ function legacyPricingToRules(pricing){
  if(pricing.type==='freeWindowUnknownAfter')return[{scope:'allDay',billing:'minute',chargePerMinute:0,connectionFee:0,idlePerMinute:0}];
  return[{scope:'allDay',billing:'kwh',pricePerKwh:.29,connectionFee:0,idlePerMinute:0}];
 }
-function loadPricingRules(pricing){
- $('pricingRules').innerHTML='';let rules=legacyPricingToRules(pricing);if(!rules.length)rules=[{}];rules.forEach(addPricingRule);
+function loadPricingRulesInto(container,pricing){
+ container.innerHTML='';
+ let rules=legacyPricingToRules(pricing);
+ if(!rules.length)rules=[{}];
+ rules.forEach(rule=>addPricingRuleTo(container,rule));
 }
+function loadPricingRules(pricing){let container=$('pricingRules');if(container)loadPricingRulesInto(container,pricing)}
 function toggleAccessMode(){
  let scheduled=$('fAccessMode').value==='schedule';$('scheduleBox').classList.toggle('hidden',!scheduled);
 }
@@ -408,7 +441,7 @@ function renderStations(){
  $('stationList').innerHTML=stations.map(st=>`<div class="station ${st.temporarilyUnavailable?'disabled-station':''}">
  <div class="station-head">
   <div>
-   <h3>${st.name}</h3>${st.operator?`<span class="badge operator-badge">${st.operator}</span>`:''}${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} au total</span>`:''}<div style="margin-top:6px">${stationConfigurations(st).map(c=>`<span class="badge">${c.stalls?`${c.stalls} × `:''}${c.kind} ${c.powerKw} kW</span>`).join('')}</div>
+   <h3>${st.name}</h3>${st.operator?`<span class="badge operator-badge">${st.operator}</span>`:''}${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} au total</span>`:''}<div style="margin-top:6px">${stationConfigurations(st).map(c=>{let rules=legacyPricingToRules(c.pricing),first=rules[0],price=first?(first.billing==='kwh'?`${Number(first.pricePerKwh||0).toFixed(2)} ${first.currency||'EUR'}/kWh`:`${Number(first.chargePerMinute||0).toFixed(3)} ${first.currency||'EUR'}/min`):'tarif à définir';return`<span class="badge">${c.stalls?`${c.stalls} × `:''}${c.kind} ${c.powerKw} kW · ${price}</span>`}).join('')}</div>
    ${st.temporarilyUnavailable?'<span class="badge badge-unavailable">Temporairement indisponible</span>':''}
    <div class="small">${st.address||'Aucune adresse'}<br>${st.access?.limited?(st.access.afterCloseMode==='exit_allowed'?'Charge possible après fermeture':'Arrêt obligatoire à la fermeture'):'Accessible 24 h/24'}</div>
    ${routeHtml(st)}
@@ -432,36 +465,83 @@ function toggleStationAvailability(id){
 }
 let chargingConfigSeq=0;
 function chargingConfigurationTemplate(config={}){
- let id=`charge-config-${++chargingConfigSeq}`,kind=config.kind||'AC',power=Number(config.powerKw||11),stalls=Math.max(0,Math.round(Number(config.stalls||0)));
- return `<div class="charge-config" data-charge-config="${id}"><div class="row" style="justify-content:space-between"><b>Configuration</b><button type="button" class="danger" onclick="removeChargingConfiguration('${id}')">Supprimer</button></div><div class="charge-config-grid"><div><label>Libellé</label><input class="cc-label" value="${config.label||`${kind} ${power} kW`}"></div><div><label>Type</label><select class="cc-kind"><option ${kind==='AC'?'selected':''}>AC</option><option ${kind==='DC'?'selected':''}>DC</option></select></div><div><label>Puissance (kW)</label><input class="cc-power" type="number" min="1" step="1" value="${power}"></div><div><label>Nombre de points</label><input class="cc-stalls" type="number" min="0" step="1" value="${stalls}"></div></div></div>`;
+ let id=`charge-config-${++chargingConfigSeq}`;
+ let kind=config.kind||'AC',power=Number(config.powerKw||11),stalls=Math.max(0,Math.round(Number(config.stalls||0)));
+ return `<div class="charge-config" data-charge-config="${id}">
+   <div class="row" style="justify-content:space-between">
+     <b>Configuration</b>
+     <button type="button" class="danger" onclick="removeChargingConfiguration('${id}')">Supprimer</button>
+   </div>
+   <div class="charge-config-grid">
+     <div><label>Libellé</label><input class="cc-label" value="${config.label||`${kind} ${power} kW`}"></div>
+     <div><label>Type</label><select class="cc-kind"><option ${kind==='AC'?'selected':''}>AC</option><option ${kind==='DC'?'selected':''}>DC</option></select></div>
+     <div><label>Puissance (kW)</label><input class="cc-power" type="number" min="1" step="1" value="${power}"></div>
+     <div><label>Nombre de points</label><input class="cc-stalls" type="number" min="0" step="1" value="${stalls}"></div>
+   </div>
+   <div class="box" style="margin-top:12px">
+     <div class="row" style="justify-content:space-between">
+       <b>Tarification de cette puissance</b>
+       <button type="button" class="secondary cc-add-price">Ajouter un tarif</button>
+     </div>
+     <div class="small" style="margin-top:6px">Tarif au kWh ou à la minute, frais de connexion et d’occupation, toute la journée ou par créneau.</div>
+     <div class="cc-pricing-rules"></div>
+   </div>
+ </div>`;
 }
-function addChargingConfiguration(config={}){$('chargingConfigurations').insertAdjacentHTML('beforeend',chargingConfigurationTemplate(config))}
-function removeChargingConfiguration(id){let el=document.querySelector(`[data-charge-config="${id}"]`);if(el)el.remove();if(!$('chargingConfigurations').children.length)addChargingConfiguration()}
-function loadChargingConfigurations(configs,st={}){$('chargingConfigurations').innerHTML='';normalizeConfigurations(configs,st).forEach(addChargingConfiguration)}
+function addChargingConfiguration(config={}){
+ $('chargingConfigurations').insertAdjacentHTML('beforeend',chargingConfigurationTemplate(config));
+ let card=$('chargingConfigurations').lastElementChild;
+ let pricingContainer=card.querySelector('.cc-pricing-rules');
+ loadPricingRulesInto(pricingContainer,config.pricing||{type:'kwh',pricePerKwh:.29,currency:'EUR'});
+ card.querySelector('.cc-add-price').onclick=()=>addPricingRuleTo(pricingContainer,{});
+}
+function removeChargingConfiguration(id){
+ let el=document.querySelector(`[data-charge-config="${id}"]`);
+ if(el)el.remove();
+ if(!$('chargingConfigurations').children.length)addChargingConfiguration();
+}
+function loadChargingConfigurations(configs,st={}){
+ $('chargingConfigurations').innerHTML='';
+ normalizeConfigurations(configs,st).forEach(addChargingConfiguration);
+}
 function readChargingConfigurations(){
- let configs=[...document.querySelectorAll('#chargingConfigurations .charge-config')].map((el,i)=>{let kind=el.querySelector('.cc-kind').value,power=Math.max(1,Number(el.querySelector('.cc-power').value||11));return{id:`config-${i+1}`,label:el.querySelector('.cc-label').value.trim()||`${kind} ${power} kW`,kind,powerKw:power,stalls:Math.max(0,Math.round(Number(el.querySelector('.cc-stalls').value||0)))}});
- return configs.length?configs:[{id:'main',label:'AC 11 kW',kind:'AC',powerKw:11,stalls:0}];
+ let configs=[...document.querySelectorAll('#chargingConfigurations .charge-config')].map((el,i)=>{
+   let kind=el.querySelector('.cc-kind').value;
+   let power=Math.max(1,Number(el.querySelector('.cc-power').value||11));
+   return{
+     id:`config-${i+1}`,
+     label:el.querySelector('.cc-label').value.trim()||`${kind} ${power} kW`,
+     kind,
+     powerKw:power,
+     stalls:Math.max(0,Math.round(Number(el.querySelector('.cc-stalls').value||0))),
+     pricing:readPricingRulesFrom(el.querySelector('.cc-pricing-rules'))
+   };
+ });
+ return configs.length?configs:[{
+   id:'main',label:'AC 11 kW',kind:'AC',powerKw:11,stalls:0,
+   pricing:{type:'rules',rules:[{scope:'allDay',billing:'kwh',currency:'EUR',pricePerKwh:.29,chargePerMinute:0,connectionFee:0,idlePerMinute:0}]}
+ }];
 }
 function buildDays(){$('daysForm').innerHTML=DAYS.map((d,i)=>`<div class="dayrow"><b>${d}</b><label><input id="dOpen${i}" type="checkbox"> ouvert</label><input id="dStart${i}" type="time" value="09:00"><input id="dEnd${i}" type="time" value="20:00"></div>`).join('')}
 function resetForm(){
  $('formTitle').textContent='Ajouter une borne';$('editId').value='';$('fName').value='';$('fOperator').value='';$('fAddress').value='';loadChargingConfigurations([{id:'main',label:'AC 11 kW',kind:'AC',powerKw:11,stalls:1}]);
  $('fAccessMode').value='always';$('fTemporarilyUnavailable').checked=false;$('fCloseMode').value='must_stop';$('fCloseNote').value='';$('fUpdated').valueAsDate=new Date();
  for(let i=0;i<7;i++){$('dOpen'+i).checked=true;$('dStart'+i).value='00:00';$('dEnd'+i).value='24:00'}
- loadPricingRules({type:'kwh',pricePerKwh:.29});toggleAccessMode();
+ toggleAccessMode();
 }
 function editStation(id){
  let st=stations.find(x=>x.id===id);if(!st)return;document.querySelector('[data-tab="edit"]').click();
  $('formTitle').textContent='Modifier la borne';$('editId').value=st.id;$('fName').value=st.name;$('fOperator').value=st.operator||'';$('fAddress').value=st.address||'';loadChargingConfigurations(st.chargingConfigurations,st);
  $('fAccessMode').value=st.access?.limited?'schedule':'always';$('fTemporarilyUnavailable').checked=!!st.temporarilyUnavailable;$('fCloseMode').value=st.access?.afterCloseMode||'must_stop';$('fCloseNote').value=st.access?.afterCloseNote||'';$('fUpdated').value=st.lastUpdated||new Date().toISOString().slice(0,10);
  for(let i=0;i<7;i++){let d=st.access?.days?.[String(i)]||{open:true,start:'00:00',end:'24:00'};$('dOpen'+i).checked=d.open;$('dStart'+i).value=d.start;$('dEnd'+i).value=d.end}
- loadPricingRules(st.pricing);toggleAccessMode();
+ toggleAccessMode();
 }
 function saveStation(){
  let id=$('editId').value||('station-'+Date.now()),days={};
  for(let i=0;i<7;i++)days[String(i)]={open:$('dOpen'+i).checked,start:$('dStart'+i).value,end:$('dEnd'+i).value};
  let i=stations.findIndex(x=>x.id===id),existing=i>=0?stations[i]:{};
  let configs=readChargingConfigurations(),totalStalls=configs.reduce((sum,c)=>sum+c.stalls,0),first=configs[0];
- let st={...existing,id,name:$('fName').value.trim()||'Nouvelle borne',operator:$('fOperator').value.trim(),stalls:totalStalls,address:$('fAddress').value.trim(),kind:first.kind,source:existing.source||'custom',powerKw:first.powerKw,chargingConfigurations:configs,pricing:readPricingRules(),lastUpdated:$('fUpdated').value,temporarilyUnavailable:$('fTemporarilyUnavailable').checked,access:{limited:$('fAccessMode').value==='schedule',days,afterCloseMode:$('fCloseMode').value,afterCloseNote:$('fCloseNote').value.trim()}};
+ let st={...existing,id,name:$('fName').value.trim()||'Nouvelle borne',operator:$('fOperator').value.trim(),stalls:totalStalls,address:$('fAddress').value.trim(),kind:first.kind,source:existing.source||'custom',powerKw:first.powerKw,chargingConfigurations:configs,pricing:first.pricing,lastUpdated:$('fUpdated').value,temporarilyUnavailable:$('fTemporarilyUnavailable').checked,access:{limited:$('fAccessMode').value==='schedule',days,afterCloseMode:$('fCloseMode').value,afterCloseNote:$('fCloseNote').value.trim()}};
  if(i>=0)stations[i]=st;else stations.push(st);saveLocal();renderStations();resetForm();alert('Borne enregistrée.');
 }
 function deleteStation(id){if(confirm('Supprimer cette borne ?')){stations=stations.filter(x=>x.id!==id);saveLocal();renderStations()}}

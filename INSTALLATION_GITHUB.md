@@ -40,3 +40,6 @@ Après la publication :
 ## Migration V6.1
 
 Les anciennes bornes à puissance unique sont converties automatiquement en une configuration unique. Lidl Saint-Cyr reçoit automatiquement ses deux configurations publiées.
+
+
+URL du dépôt stable : `https://yass3705.github.io/tesla-charge-companion-stable/`

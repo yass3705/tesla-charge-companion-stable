@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Tesla Charge Companion 6.1</title>
+<title>Tesla Charge Companion 6.2</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
 </datalist>
 <header>
 <h1>⚡ Tesla Charge Companion</h1>
-<p>Version 6.0 stable · tarifs Tesla manuels et devises quotidiennes</p>
+<p>Version 6.2 stable · tarifs distincts pour chaque puissance</p>
 <nav>
 <button class="active" data-tab="compare">Comparer</button>
 <button data-tab="stations">Bornes</button>
@@ -80,17 +80,12 @@
     <b>Configurations de recharge du site</b>
     <button type="button" class="secondary" onclick="addChargingConfiguration()">Ajouter une puissance</button>
   </div>
-  <div class="small" style="margin-top:7px">Un même site reste sur une seule fiche, mais chaque combinaison type/puissance apparaît séparément dans les résultats.</div>
+  <div class="small" style="margin-top:7px">Un même site reste sur une seule fiche. Chaque configuration possède sa puissance, son nombre de points et sa propre tarification, puis apparaît séparément dans les résultats.</div>
   <div id="chargingConfigurations"></div>
 </div>
 <div><label>Dernière mise à jour</label><input id="fUpdated" type="date"></div>
-<div class="full box">
-  <div class="row" style="justify-content:space-between">
-    <b>Tarification</b>
-    <button type="button" class="secondary" onclick="addPricingRule()">Ajouter un tarif</button>
-  </div>
-  <div class="small" style="margin-top:7px">Chaque tarif peut s’appliquer toute la journée ou à un créneau horaire. Tu peux cumuler plusieurs créneaux.</div>
-  <div id="pricingRules"></div>
+<div class="full small box">
+Les tarifs sont maintenant renseignés directement dans chaque configuration de recharge ci-dessus. Par exemple, un même site peut avoir du 22 kW à 0,29 €/kWh et du 180 kW à 0,39 €/kWh.
 </div>
 <div class="full box">
 <label>Mode d’accès</label>
@@ -118,7 +113,7 @@
 <section id="fx" class="panel">
 <div class="card">
 <h3>À propos</h3>
-<div class="small">Tesla Charge Companion <b>V6.1</b><br>
+<div class="small">Tesla Charge Companion <b>V6.2</b><br>
 Tarifs Tesla saisis manuellement. Les taux de change sont actualisés quotidiennement par GitHub Actions.</div>
 <div id="dataFreshness" class="small" style="margin-top:10px"></div>
 </div>
