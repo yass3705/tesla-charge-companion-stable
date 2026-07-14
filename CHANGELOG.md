@@ -1,12 +1,14 @@
 # Changelog
 
-## V6.2 stable
+## V6.3 stable
 
-- Tarification propre à chaque configuration de puissance.
-- Lidl Saint-Cyr :
-  - 2 × AC 22 kW à 0,29 €/kWh ;
-  - 2 × DC 180 kW à 0,39 €/kWh.
-- Ajout, modification et créneaux tarifaires disponibles séparément pour chaque puissance.
-- Une seule fiche par site dans l’onglet Bornes.
-- Une ligne distincte par configuration dans les résultats.
+- Ajout de frais déclenchés après une durée de connexion définie.
+- Montant à la minute configurable.
+- Seuil en minutes configurable.
+- Plafond facultatif et créneau du plafond configurables.
+- Gymnase du Levant configuré à :
+  - 0,39 €/kWh ;
+  - 0,05 €/min après 180 minutes ;
+  - plafond de 4 € entre 20 h et 8 h.
+- Affichage séparé des frais de connexion, d’occupation après charge et des frais liés à la durée.
 - Dépôt cible : `tesla-charge-companion-stable`.

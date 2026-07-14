@@ -1,4 +1,4 @@
-# Tesla Charge Companion V6.2 stable
+# Tesla Charge Companion V6.3 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -26,3 +26,21 @@ Exemple Lidl Saint-Cyr :
 - 2 × DC 180 kW : 0,39 €/kWh.
 
 Le site reste regroupé sur une seule fiche dans l’onglet Bornes, mais les configurations sont calculées séparément dans les résultats.
+
+
+## Frais déclenchés après une durée
+
+Chaque tarif peut désormais inclure :
+
+- un montant par minute ;
+- un seuil de déclenchement en minutes ;
+- un plafond facultatif ;
+- un créneau horaire pendant lequel le plafond s’applique.
+
+Pour Izivia – Gymnase du Levant :
+
+- recharge : 0,39 €/kWh ;
+- frais supplémentaires : 0,05 €/min après 180 minutes de connexion ;
+- plafond nocturne : 4 € entre 20 h et 8 h.
+
+La durée prise en compte est la durée totale de connexion. Si une heure de débranchement est renseignée, elle est utilisée ; sinon l’application suppose un débranchement à la fin de la recharge.

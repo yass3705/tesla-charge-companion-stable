@@ -2,7 +2,7 @@ const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],st
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates()});
 $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
-function localStations(){return JSON.parse(localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
+function localStations(){return JSON.parse(localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
 function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV25')||'null')}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
@@ -55,7 +55,7 @@ function expandConfigurations(baseStations){
    configurationIndex:index
  })));
 }
-function saveLocal(){localStorage.setItem('tccStationsV62',JSON.stringify(stations))}
+function saveLocal(){localStorage.setItem('tccStationsV63',JSON.stringify(stations))}
 function mins(t){let [h,m]=t.split(':').map(Number);return h*60+m}
 function fmtMin(m){m=Math.max(0,m);let h=Math.floor(m/60),n=Math.round(m%60);return h?`${h} h ${String(n).padStart(2,'0')}`:`${n} min`}
 function finishTime(dateStr,timeStr,durationMin){
@@ -273,6 +273,11 @@ function pricingRuleTemplate(rule={}){
      <div class="pr-minute"><label>Prix de charge (€ / min)</label><input class="pr-charge-min" type="number" min="0" step=".001" value="${rule.chargePerMinute??0}"></div>
      <div><label>Frais de connexion (€)</label><input class="pr-connection" type="number" min="0" step=".01" value="${rule.connectionFee??0}"></div>
      <div><label>Occupation sans charger (€ / min)</label><input class="pr-idle-min" type="number" min="0" step=".001" value="${rule.idlePerMinute??0}"></div>
+     <div><label>Frais après une durée (€ / min)</label><input class="pr-after-min-rate" type="number" min="0" step=".001" value="${rule.afterMinutesRate??0}"></div>
+     <div><label>Déclenchement après (minutes)</label><input class="pr-after-min-threshold" type="number" min="0" step="1" value="${rule.afterMinutesThreshold??0}"></div>
+     <div><label>Plafond de ces frais (€)</label><input class="pr-after-min-cap" type="number" min="0" step=".01" value="${rule.afterMinutesCap??0}"><div class="small">0 = aucun plafond.</div></div>
+     <div><label>Plafond valable à partir de</label><input class="pr-cap-start" type="time" value="${rule.afterMinutesCapStart||'00:00'}"></div>
+     <div><label>Plafond valable jusqu’à</label><input class="pr-cap-end" type="time" value="${rule.afterMinutesCapEnd||'24:00'}"><div class="small">00:00–24:00 = plafond toute la journée.</div></div>
    </div>
  </div>`;
 }
@@ -305,7 +310,12 @@ function readPricingRulesFrom(container){
    pricePerKwh:+el.querySelector('.pr-price-kwh').value||0,
    chargePerMinute:+el.querySelector('.pr-charge-min').value||0,
    connectionFee:+el.querySelector('.pr-connection').value||0,
-   idlePerMinute:+el.querySelector('.pr-idle-min').value||0
+   idlePerMinute:+el.querySelector('.pr-idle-min').value||0,
+   afterMinutesRate:+el.querySelector('.pr-after-min-rate').value||0,
+   afterMinutesThreshold:Math.max(0,Math.round(+el.querySelector('.pr-after-min-threshold').value||0)),
+   afterMinutesCap:+el.querySelector('.pr-after-min-cap').value||0,
+   afterMinutesCapStart:el.querySelector('.pr-cap-start').value||'00:00',
+   afterMinutesCapEnd:el.querySelector('.pr-cap-end').value||'24:00'
  }))};
 }
 function readPricingRules(){let container=$('pricingRules');return container?readPricingRulesFrom(container):{type:'rules',rules:[]}}
@@ -314,7 +324,19 @@ function legacyPricingToRules(pricing){
  if(pricing.type==='rules')return(pricing.rules||[]).map(r=>({...r,currency:(r.currency||pricing.currency||'EUR').toUpperCase()}));
  if(pricing.type==='kwh')return[{scope:'allDay',billing:'kwh',currency:(pricing.currency||'EUR').toUpperCase(),pricePerKwh:pricing.pricePerKwh||0,connectionFee:0,idlePerMinute:0}];
  if(pricing.type==='timeBandsKwh')return(pricing.bands||[]).map(b=>({scope:'timeWindow',start:b.start,end:b.end,billing:'kwh',currency:(b.currency||pricing.currency||'EUR').toUpperCase(),pricePerKwh:b.pricePerKwh||0,connectionFee:0,idlePerMinute:0}));
- if(pricing.type==='kwhPlusParking')return[{scope:'allDay',billing:'kwh',pricePerKwh:pricing.pricePerKwh||0,connectionFee:0,idlePerMinute:pricing.parkingPerMinute||0}];
+ if(pricing.type==='kwhPlusParking')return[{
+   scope:'allDay',
+   billing:'kwh',
+   currency:(pricing.currency||'EUR').toUpperCase(),
+   pricePerKwh:pricing.pricePerKwh||0,
+   connectionFee:0,
+   idlePerMinute:0,
+   afterMinutesRate:pricing.parkingPerMinute||0,
+   afterMinutesThreshold:pricing.freeMinutes||0,
+   afterMinutesCap:pricing.nightCap||0,
+   afterMinutesCapStart:pricing.nightStart||'00:00',
+   afterMinutesCapEnd:pricing.nightEnd||'24:00'
+ }];
  if(pricing.type==='accessPlusTime')return[
   {scope:'timeWindow',start:pricing.dayStart||'08:00',end:pricing.dayEnd||'20:00',billing:'minute',chargePerMinute:(pricing.dayPerHour||0)/60,connectionFee:pricing.accessFee||0,idlePerMinute:0},
   {scope:'timeWindow',start:pricing.dayEnd||'20:00',end:pricing.dayStart||'08:00',billing:'minute',chargePerMinute:(pricing.nightPerHour||0)/60,connectionFee:pricing.accessFee||0,idlePerMinute:0}
@@ -347,7 +369,7 @@ function unplugDurationMinutes(startTime,chargeMinutes,unplugTime){
 }
 function priceWithRules(pp,startMin,chargeMinutes,billedEnergy,unplugTime,startTime){
  let rules=pp.rules||[],startRule=ruleForMinute(rules,startMin);if(!startRule)return{error:'Aucun tarif applicable à l’heure de branchement'};
- let currencies=new Set(),connection=0,chargeCost=0,idleCost=0,energyPerMinute=chargeMinutes>0?billedEnergy/chargeMinutes:0;
+ let currencies=new Set(),connection=0,chargeCost=0,idleCost=0,durationSurcharge=0,energyPerMinute=chargeMinutes>0?billedEnergy/chargeMinutes:0;
  try{
    currencies.add((startRule.currency||'EUR').toUpperCase());
    connection=fxToEur(startRule.connectionFee||0,startRule.currency||'EUR');
@@ -363,7 +385,44 @@ function priceWithRules(pp,startMin,chargeMinutes,billedEnergy,unplugTime,startT
      let currency=(rule.currency||'EUR').toUpperCase();currencies.add(currency);
      idleCost+=fxToEur(rule.idlePerMinute||0,currency);
    }
-   return{total:connection+chargeCost+idleCost,connection,chargeCost,idleCost,occupiedMinutes:occupied,currencies:[...currencies]};
+
+   // Frais liés à la durée totale de connexion, même si la voiture charge encore.
+   // Exemple : 0,05 €/min après 180 min.
+   const surchargeByRule=new Map();
+   for(let i=0;i<Math.ceil(occupied);i++){
+     let rule=ruleForMinute(rules,minuteOfSession(startMin,i));if(!rule)continue;
+     let threshold=Math.max(0,Number(rule.afterMinutesThreshold||0));
+     let rate=Math.max(0,Number(rule.afterMinutesRate||0));
+     if(rate<=0||i<threshold)continue;
+     let fraction=Math.min(1,occupied-i);
+     let currency=(rule.currency||'EUR').toUpperCase();currencies.add(currency);
+     let key=rule;
+     let current=surchargeByRule.get(key)||0;
+     surchargeByRule.set(key,current+fxToEur(rate*fraction,currency));
+   }
+
+   for(const [rule,rawAmount] of surchargeByRule.entries()){
+     let amount=rawAmount;
+     let cap=Math.max(0,Number(rule.afterMinutesCap||0));
+     if(cap>0){
+       let capStart=rule.afterMinutesCapStart||'00:00';
+       let capEnd=rule.afterMinutesCapEnd||'24:00';
+       let hasCappedWindow=false;
+       for(let i=Math.max(0,Number(rule.afterMinutesThreshold||0));i<Math.ceil(occupied);i++){
+         if(inWindow(minuteOfSession(startMin,i),capStart,capEnd)){hasCappedWindow=true;break}
+       }
+       if(hasCappedWindow){
+         amount=Math.min(amount,fxToEur(cap,rule.currency||'EUR'));
+       }
+     }
+     durationSurcharge+=amount;
+   }
+
+   return{
+     total:connection+chargeCost+idleCost+durationSurcharge,
+     connection,chargeCost,idleCost,durationSurcharge,
+     occupiedMinutes:occupied,currencies:[...currencies]
+   };
  }catch(err){return{error:err.message}}
 }
 function daySchedule(st,dateStr){let d=new Date(dateStr+'T12:00:00');return st.access?.days?.[String(d.getDay())]}
@@ -419,7 +478,7 @@ async function compare(){
     if(st.access?.limited&&st.access.afterCloseMode==='exit_allowed')info=`<div class="good small">✓ Entrée avant ${r.access.close}; la charge peut continuer après fermeture.</div>`;
     if(r.truncated)info=`<div class="warn small"><b>Charge arrêtée à ${r.access.close}</b><br>Niveau estimé : ${r.reached.toFixed(0)} %.</div>`;
     let taper=target>80&&st.kind==='DC'?`<div class="warn small">Le ralentissement au-dessus de 80 % est inclus.</div>`:'';
-    let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost)?`<div class="small">Connexion : ${(r.pricingDetails.connection||0).toFixed(2)} € · Occupation : ${(r.pricingDetails.idleCost||0).toFixed(2)} €</div>`:'';
+    let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge)?`<div class="small">Connexion : ${(r.pricingDetails.connection||0).toFixed(2)} € · Occupation après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Frais après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} €</div>`:'';
     return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies} → EUR</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div><div class="cost">${r.total.toFixed(2)} €</div></div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access.label}<br><b>${fmtMin(r.allowed)}</b> · fin estimée : <b>${finishTime(date,time,r.allowed)}</b><br>${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st.address)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
    }).join('');
  }catch(err){
@@ -519,7 +578,7 @@ function readChargingConfigurations(){
  });
  return configs.length?configs:[{
    id:'main',label:'AC 11 kW',kind:'AC',powerKw:11,stalls:0,
-   pricing:{type:'rules',rules:[{scope:'allDay',billing:'kwh',currency:'EUR',pricePerKwh:.29,chargePerMinute:0,connectionFee:0,idlePerMinute:0}]}
+   pricing:{type:'rules',rules:[{scope:'allDay',billing:'kwh',currency:'EUR',pricePerKwh:.29,chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0,afterMinutesCap:0,afterMinutesCapStart:'00:00',afterMinutesCapEnd:'24:00'}]}
  }];
 }
 function buildDays(){$('daysForm').innerHTML=DAYS.map((d,i)=>`<div class="dayrow"><b>${d}</b><label><input id="dOpen${i}" type="checkbox"> ouvert</label><input id="dStart${i}" type="time" value="09:00"><input id="dEnd${i}" type="time" value="20:00"></div>`).join('')}

@@ -122,14 +122,25 @@
     "powerKw": 11,
     "address": "Gymnase du Levant, Saint-Cyr-l'École",
     "pricing": {
-      "type": "kwhPlusParking",
-      "pricePerKwh": 0.39,
-      "freeMinutes": 180,
-      "parkingPerMinute": 0.05,
-      "nightCap": 4.0,
-      "nightStart": "20:00",
-      "nightEnd": "08:00",
-      "currency": "EUR"
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.39,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "afterMinutesRate": 0.05,
+          "afterMinutesThreshold": 180,
+          "afterMinutesCap": 4.0,
+          "afterMinutesCapStart": "20:00",
+          "afterMinutesCapEnd": "08:00"
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -184,14 +195,25 @@
         "powerKw": 11,
         "stalls": 0,
         "pricing": {
-          "type": "kwhPlusParking",
-          "pricePerKwh": 0.39,
-          "freeMinutes": 180,
-          "parkingPerMinute": 0.05,
-          "nightCap": 4.0,
-          "nightStart": "20:00",
-          "nightEnd": "08:00",
-          "currency": "EUR"
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.39,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "afterMinutesRate": 0.05,
+              "afterMinutesThreshold": 180,
+              "afterMinutesCap": 4.0,
+              "afterMinutesCapStart": "20:00",
+              "afterMinutesCapEnd": "08:00"
+            }
+          ]
         }
       }
     ]
