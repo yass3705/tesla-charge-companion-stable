@@ -1,4 +1,4 @@
-# Tesla Charge Companion V6.3 stable
+# Tesla Charge Companion V6.4 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -44,3 +44,16 @@ Pour Izivia – Gymnase du Levant :
 - plafond nocturne : 4 € entre 20 h et 8 h.
 
 La durée prise en compte est la durée totale de connexion. Si une heure de débranchement est renseignée, elle est utilisée ; sinon l’application suppose un débranchement à la fin de la recharge.
+
+
+## Distance maximale
+
+Avant de lancer une simulation, il est possible de définir une distance maximale depuis l’adresse de départ, par exemple :
+
+- 10 km ;
+- 20 km ;
+- 50 km.
+
+Le filtre utilise la distance routière OSRM lorsqu’elle est disponible. À défaut, il utilise la distance à vol d’oiseau. Une valeur vide ou égale à 0 désactive la limite.
+
+Les résultats restent limités aux 20 meilleures configurations selon le classement prix + distance.

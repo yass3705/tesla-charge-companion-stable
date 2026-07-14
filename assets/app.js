@@ -1,8 +1,8 @@
 const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],stations=[],routeResults={},fxRowSeq=0;const $=id=>document.getElementById(id);
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates()});
-$('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';
+$('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';$('simMaxDistance').value=localStorage.getItem('tccMaxDistanceKm')||'20';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
-function localStations(){return JSON.parse(localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
+function localStations(){return JSON.parse(localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
 function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV25')||'null')}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
@@ -55,7 +55,7 @@ function expandConfigurations(baseStations){
    configurationIndex:index
  })));
 }
-function saveLocal(){localStorage.setItem('tccStationsV63',JSON.stringify(stations))}
+function saveLocal(){localStorage.setItem('tccStationsV64',JSON.stringify(stations))}
 function mins(t){let [h,m]=t.split(':').map(Number);return h*60+m}
 function fmtMin(m){m=Math.max(0,m);let h=Math.floor(m/60),n=Math.round(m%60);return h?`${h} h ${String(n).padStart(2,'0')}`:`${n} min`}
 function finishTime(dateStr,timeStr,durationMin){
@@ -112,37 +112,75 @@ function haversineKm(aLat,aLon,bLat,bLon){
  let q=Math.sin(dLat/2)**2+Math.cos(toRad(aLat))*Math.cos(toRad(bLat))*Math.sin(dLon/2)**2;
  return 2*R*Math.asin(Math.sqrt(q));
 }
-async function candidateStations(filterMode='tesla'){
+async function candidateStations(filterMode='tesla',maxDistanceKm=0){
  let originText=$('simOrigin').value.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
  let origin=await resolveOrigin(originText);
  let candidates=stations.filter(s=>!s.temporarilyUnavailable&&(filterMode==='all'||(s.operator||'').toLowerCase()==='tesla'||s.source==='teslaSupercharger'));
  let cache=geoCache();
+
  for(let st of candidates){
    if(!Number.isFinite(st.latitude)||!Number.isFinite(st.longitude)){
      let key=(st.address||'').trim().toLowerCase();
-     if(cache[key]){st.latitude=cache[key].lat;st.longitude=cache[key].lon}
-     else if(st.address){
-       try{let geo=await geocodeAddress(st.address);st.latitude=geo.lat;st.longitude=geo.lon;cache=geoCache()}catch(e){}
+     if(cache[key]){
+       st.latitude=cache[key].lat;
+       st.longitude=cache[key].lon;
+     }else if(st.address){
+       try{
+         let geo=await geocodeAddress(st.address);
+         st.latitude=geo.lat;
+         st.longitude=geo.lon;
+         cache=geoCache();
+       }catch(e){}
      }
    }
  }
+
  candidates=candidates.filter(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude));
  candidates.forEach(s=>s._airKm=haversineKm(origin.lat,origin.lon,s.latitude,s.longitude));
- let shortlist=candidates.sort((a,b)=>a._airKm-b._airKm).slice(0,Math.min(40,candidates.length));
+
+ // Une distance routière ne peut pas être inférieure à la distance à vol d’oiseau.
+ // Ce premier filtre ne peut donc pas exclure une borne réellement située dans le rayon demandé.
+ if(maxDistanceKm>0)candidates=candidates.filter(s=>s._airKm<=maxDistanceKm);
+
+ // Le classement final est limité à 20 résultats, mais on garde jusqu’à 80 candidats
+ // afin de ne pas écarter trop tôt une borne plus éloignée mais nettement moins chère.
+ let shortlist=candidates.sort((a,b)=>a._airKm-b._airKm).slice(0,Math.min(80,candidates.length));
+
  try{
-   let coords=[`${origin.lon},${origin.lat}`,...shortlist.map(s=>`${s.longitude},${s.latitude}`)].join(';');
-   let destinations=shortlist.map((_,i)=>i+1).join(';');
-   let url=`https://router.project-osrm.org/table/v1/driving/${coords}?sources=0&destinations=${destinations}&annotations=distance,duration`;
-   let response=await fetch(url);
-   if(response.ok){
-     let data=await response.json();
-     if(data.code==='Ok')shortlist.forEach((s,i)=>{
-       let d=data.distances?.[0]?.[i],t=data.durations?.[0]?.[i];
-       if(d!=null&&t!=null)routeResults[s.id]={distanceKm:d/1000,durationMin:t/60,originLabel:origin.label};
-     });
+   if(shortlist.length){
+     let coords=[`${origin.lon},${origin.lat}`,...shortlist.map(s=>`${s.longitude},${s.latitude}`)].join(';');
+     let destinations=shortlist.map((_,i)=>i+1).join(';');
+     let url=`https://router.project-osrm.org/table/v1/driving/${coords}?sources=0&destinations=${destinations}&annotations=distance,duration`;
+     let response=await fetch(url);
+     if(response.ok){
+       let data=await response.json();
+       if(data.code==='Ok'){
+         shortlist.forEach((s,i)=>{
+           let d=data.distances?.[0]?.[i],t=data.durations?.[0]?.[i];
+           if(d!=null&&t!=null){
+             routeResults[s.id]={
+               distanceKm:d/1000,
+               durationMin:t/60,
+               originLabel:origin.label
+             };
+           }
+         });
+       }
+     }
    }
  }catch(e){}
- return{origin,stations:shortlist};
+
+ // Le filtre définitif utilise la distance routière quand elle est disponible.
+ // En cas d’indisponibilité d’OSRM, la distance à vol d’oiseau sert de repli.
+ if(maxDistanceKm>0){
+   shortlist=shortlist.filter(s=>{
+     let route=routeResults[s.id];
+     let effectiveDistance=route?.distanceKm??s._airKm;
+     return effectiveDistance<=maxDistanceKm;
+   });
+ }
+
+ return{origin,stations:shortlist,maxDistanceKm};
 }
 function rankingWeights(mode){
  if(mode==='price')return{price:.7,distance:.3};
@@ -458,18 +496,28 @@ async function compare(){
  let now=+$('simNow').value,target=+$('simTarget').value,date=$('simDate').value,time=$('simTime').value;
  let condition=$('simCondition').value,profile=$('simProfile').value,unplugTime=$('simUnplugTime').value;
  let filterMode=$('simOperatorFilter').value,rankingMode=$('simRanking').value;
+ let rawMaxDistance=$('simMaxDistance').value.trim();
+ let maxDistanceKm=rawMaxDistance===''?0:Math.max(0,Number(rawMaxDistance)||0);
+ localStorage.setItem('tccMaxDistanceKm',maxDistanceKm>0?String(maxDistanceKm):'0');
  if(target<=now){$('results').innerHTML='<div class="bad">Objectif invalide.</div>';return}
  $('results').innerHTML='<div class="small">Calcul du classement prix + distance…</div>';
  try{
-   let prepared=await candidateStations(filterMode);
+   let prepared=await candidateStations(filterMode,maxDistanceKm);
    let expanded=expandConfigurations(prepared.stations);
    let rows=expanded.map(st=>{
      let baseId=st.baseStationId||st.id,route=routeResults[baseId],distanceKm=route?.distanceKm??st._airKm;
      return{st,distanceKm,r:simulate(st,date,time,now,target,condition,profile,unplugTime)};
    });
    let ranked=rankByPriceDistance(rows,rankingMode);
-   $('routeStatus').innerHTML=`<span class="good">${ranked.length} borne(s) affichée(s) depuis ${prepared.origin.label}.</span>`;
-   if(!ranked.length){$('results').innerHTML='<div class="warn">Aucune borne exploitable n’a été trouvée.</div>';return}
+   let radiusText=maxDistanceKm>0?` dans un rayon routier maximal de ${maxDistanceKm} km`:' sans limite de distance';
+   $('routeStatus').innerHTML=`<span class="good">${ranked.length} borne(s) affichée(s) depuis ${prepared.origin.label}${radiusText}.</span>`;
+   if(!ranked.length){
+     let message=maxDistanceKm>0
+       ?`Aucune borne exploitable n’a été trouvée dans un rayon de ${maxDistanceKm} km. Augmente la distance maximale ou retire la limite.`
+       :'Aucune borne exploitable n’a été trouvée.';
+     $('results').innerHTML=`<div class="warn">${message}</div>`;
+     return
+   }
    $('results').innerHTML=ranked.map(({st,r,distanceKm,score},idx)=>{
     let route=routeResults[st.baseStationId||st.id],distance=route?`${route.distanceKm.toFixed(1)} km · ${Math.round(route.durationMin)} min`:`≈ ${distanceKm.toFixed(1)} km à vol d’oiseau`;
     let operator=st.operator||'Opérateur non renseigné';
