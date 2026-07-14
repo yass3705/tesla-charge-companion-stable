@@ -1,4 +1,4 @@
-# Tesla Charge Companion V6.5 stable
+# Tesla Charge Companion V6.6 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -68,3 +68,20 @@ La limite est désormais stricte :
 - le cache des anciennes distances est vidé à chaque simulation ;
 - le calcul routier est effectué par petits lots pour plus de fiabilité ;
 - un second filtre est appliqué juste avant le classement final.
+
+
+## Tarification à la minute selon la puissance
+
+Une configuration peut désormais appliquer un tarif différent selon la puissance instantanée estimée.
+
+Exemple intégré : Tesla Casablanca — Onomo
+
+- 0 à 60 kW : 1,10 MAD/min ;
+- 60 à 100 kW : 2,30 MAD/min ;
+- 100 à 150 kW : 3,50 MAD/min ;
+- parking fixe : 6 MAD ;
+- congestion/occupation après charge : jusqu’à 4,50 MAD/min.
+
+Le calcul utilise la courbe de charge simulée minute par minute. Une même session peut donc traverser plusieurs tranches tarifaires.
+
+Le géocodage n’est plus limité à la France. Il accepte également une adresse internationale ou des coordonnées sous la forme `33.6189855, -7.4823168`.
