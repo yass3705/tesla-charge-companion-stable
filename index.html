@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Tesla Charge Companion 6.0</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<datalist id="currencyCodes">
+<option value="EUR"><option value="CHF"><option value="GBP"><option value="USD"><option value="MAD">
+<option value="NOK"><option value="SEK"><option value="DKK"><option value="PLN"><option value="CZK">
+</datalist>
+<header>
+<h1>⚡ Tesla Charge Companion</h1>
+<p>Version 6.0 stable · tarifs Tesla manuels et devises quotidiennes</p>
+<nav>
+<button class="active" data-tab="compare">Comparer</button>
+<button data-tab="stations">Bornes</button>
+<button data-tab="edit">Ajouter / modifier</button>
+<button data-tab="fx">Devises</button>
+</nav>
+</header>
+<main>
+<section id="compare" class="panel active">
+<div class="card">
+<div class="grid">
+<div><label>Date</label><input id="simDate" type="date"></div>
+<div><label>Heure de branchement</label><input id="simTime" type="time"></div>
+<div><label>Heure prévue de débranchement</label><input id="simUnplugTime" type="time"><div class="small" style="margin-top:5px">Optionnel : utilisé pour calculer les frais d’occupation après la fin de charge.</div></div>
+<div class="full"><label>Adresse de départ</label><input id="simOrigin" type="text" placeholder="Ex. Versailles, une adresse précise ou Ma position"></div>
+<div><label>Batterie actuelle (%)</label><input id="simNow" type="number" value="20" min="0" max="100"></div>
+<div><label>Objectif (%)</label><input id="simTarget" type="number" value="80" min="0" max="100"></div>
+<div><label>État de la batterie en DC</label><select id="simCondition"><option value="warm">Préconditionnée / chaude</option><option value="normal" selected>Température normale</option><option value="cold">Froide / sans préconditionnement</option></select></div>
+<div><label>Profil de calcul</label><select id="simProfile"><option value="optimistic">Optimiste</option><option value="realistic" selected>Réaliste</option><option value="conservative">Prudent</option></select></div>
+<div><label>Réseaux affichés</label>
+<select id="simOperatorFilter">
+  <option value="tesla" selected>Tesla uniquement</option>
+  <option value="all">Tesla + autres opérateurs</option>
+</select></div>
+<div><label>Priorité de classement</label>
+<select id="simRanking">
+  <option value="balanced" selected>Équilibré : prix 50 % / distance 50 %</option>
+  <option value="price">Prix prioritaire : 70 % / distance 30 %</option>
+  <option value="distance">Distance prioritaire : 70 % / prix 30 %</option>
+</select></div>
+</div>
+<button class="primary" onclick="compare()">Simuler</button>
+<button class="secondary" style="width:100%;margin-top:8px" onclick="saveDefaultOrigin()">Enregistrer cette adresse comme départ par défaut</button>
+<button class="secondary" id="routeButton" style="width:100%;margin-top:8px" onclick="calculateRoutes()">Recalculer les 20 meilleures bornes</button>
+<div id="routeStatus" class="small" style="margin-top:8px"></div><div class="small" style="margin-top:5px">Données d’adresses © contributeurs OpenStreetMap · itinéraires OSRM. Calcul lancé uniquement sur demande.</div>
+</div>
+<div class="card" id="results"></div>
+<div class="card small"><b>Calcul V2 :</b> la recharge DC est simulée par tranches de 1 %, avec un ralentissement marqué au-dessus de 80 %. L’heure de fin tient compte d’une éventuelle fermeture qui impose l’arrêt de la charge. Les distances routières sont calculées à la demande depuis l’adresse de départ.</div>
+</section>
+<section id="stations" class="panel">
+<div class="card">
+<div class="row" style="justify-content:space-between">
+<div>
+<b>Tarifs Tesla — mise à jour manuelle</b>
+<div class="small">Vérifie le tarif sur la fiche officielle Tesla, puis utilise <b>Modifier</b> pour mettre à jour les créneaux, la devise et la date. Aucune récupération automatique Tesla n’est utilisée.</div>
+</div>
+<button class="secondary" onclick="showTeslaSyncInfo()">Comment mettre à jour</button>
+</div>
+<div id="teslaSyncInfo" class="small" style="margin-top:10px"></div>
+</div>
+<div class="card" id="stationList"></div>
+</section>
+<section id="edit" class="panel">
+<div class="card">
+<h3 id="formTitle">Ajouter une borne</h3><input id="editId" type="hidden">
+<div class="grid">
+<div><label>Nom</label><input id="fName"></div>
+<div><label>Opérateur</label><input id="fOperator" placeholder="Ex. Tesla, Izivia, Lidl…"></div>
+<div><label>Nombre de bornes / points de charge</label><input id="fStalls" type="number" min="0" step="1" value="0"></div>
+<div class="full"><label>Adresse / destination Google Maps</label><input id="fAddress"></div>
+<div><label>Type</label><select id="fKind"><option>AC</option><option>DC</option></select></div>
+<div><label>Puissance (kW)</label><input id="fPower" type="number" value="11"></div>
+<div><label>Dernière mise à jour</label><input id="fUpdated" type="date"></div>
+<div class="full box">
+  <div class="row" style="justify-content:space-between">
+    <b>Tarification</b>
+    <button type="button" class="secondary" onclick="addPricingRule()">Ajouter un tarif</button>
+  </div>
+  <div class="small" style="margin-top:7px">Chaque tarif peut s’appliquer toute la journée ou à un créneau horaire. Tu peux cumuler plusieurs créneaux.</div>
+  <div id="pricingRules"></div>
+</div>
+<div class="full box">
+<label>Mode d’accès</label>
+<select id="fAccessMode" onchange="toggleAccessMode()">
+  <option value="always">Accessible 24 h/24</option>
+  <option value="schedule">Horaires définis jour par jour</option>
+</select>
+<div class="small" style="margin-top:6px">Choisis 24 h/24 ou renseigne les horaires d’ouverture pour chaque jour.</div>
+</div>
+<div class="full box">
+<label style="margin:0"><input id="fTemporarilyUnavailable" type="checkbox" style="width:auto"> Borne temporairement indisponible</label>
+<div class="small" style="margin-top:6px">Elle restera visible dans la liste des bornes, mais sera exclue des résultats de comparaison.</div>
+</div>
+<div class="full box"><b>Comportement à la fermeture</b>
+<select id="fCloseMode" style="margin-top:8px">
+<option value="must_stop">Arrêt obligatoire et sortie avant la fermeture</option>
+<option value="exit_allowed">Entrée avant fermeture, charge et sortie possibles ensuite</option>
+</select>
+<label style="margin-top:10px">Information complémentaire</label><textarea id="fCloseNote"></textarea></div>
+<div class="full box" id="scheduleBox"><b>Horaires d’accessibilité</b><div id="daysForm"></div></div>
+</div>
+<button class="primary" onclick="saveStation()">Enregistrer la borne</button>
+<button class="secondary" style="width:100%;margin-top:8px" onclick="resetForm()">Vider le formulaire</button>
+</div></section>
+<section id="fx" class="panel">
+<div class="card">
+<h3>À propos</h3>
+<div class="small">Tesla Charge Companion <b>V6.0</b><br>
+Tarifs Tesla saisis manuellement. Les taux de change sont actualisés quotidiennement par GitHub Actions.</div>
+<div id="dataFreshness" class="small" style="margin-top:10px"></div>
+</div>
+<div class="card">
+<h3>Devises et taux de conversion</h3>
+<div class="small">Base de comparaison : EUR. Un taux signifie « 1 EUR = X unités de la devise ».</div>
+<div class="row" style="margin-top:12px">
+<button class="primary" style="width:auto;margin:0" onclick="updateLiveFx()">Actualiser les taux en ligne</button>
+<button class="secondary" onclick="addFxRow()">Ajouter une devise</button>
+</div>
+<div id="fxStatus" class="small" style="margin-top:10px"></div>
+<div id="fxRows" style="margin-top:12px"></div>
+<button class="primary" onclick="saveFxRates()">Enregistrer les taux manuels</button>
+</div>
+</section>
+</main>
+<script src="assets/app.js" defer></script>
+</body></html>
