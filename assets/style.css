@@ -23,3 +23,9 @@ input,select,textarea{width:100%;font:inherit;color:#fff;background:#101012;bord
 .charge-config{margin-top:12px;padding:12px;border-radius:14px;background:#0f0f11;border:1px solid var(--line)}
 .charge-config-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:10px;margin-top:10px}
 @media(max-width:700px){.charge-config-grid{grid-template-columns:1fr 1fr}}
+
+.fx-pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.fx-published{background:#17351f;color:#8fe5a3}
+.fx-manual{background:#4b3210;color:#ffc76a}
+.fx-fallback{background:#3a2c0a;color:#ffcf55}
+.fx-base{background:#292a30;color:#d8d8dc}

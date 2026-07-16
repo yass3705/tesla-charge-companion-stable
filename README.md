@@ -1,4 +1,4 @@
-# Tesla Charge Companion V7.0 stable
+# Tesla Charge Companion V7.0.1 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -104,3 +104,9 @@ Principes :
 - conservation du dernier taux valide en cas de panne ;
 - migration des anciens taux manuels ;
 - mise à jour GitHub quotidienne via deux fournisseurs successifs.
+
+
+## Correctif V7.0.1
+
+Après la publication, effectue un rechargement forcé (`⌘ ⇧ R`).
+Le bouton « Effacer les corrections manuelles » enregistre maintenant explicitement un objet vide et marque la migration comme terminée. Les anciens taux V1 ne peuvent donc plus réapparaître.

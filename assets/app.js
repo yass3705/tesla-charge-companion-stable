@@ -2,7 +2,7 @@ const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],st
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates()});
 $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';$('simMaxDistance').value=localStorage.getItem('tccMaxDistanceKm')||'20';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
-function localStations(){return JSON.parse(localStorage.getItem('tccStationsV70')||localStorage.getItem('tccStationsV66')||localStorage.getItem('tccStationsV65')||localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
+function localStations(){return JSON.parse(localStorage.getItem('tccStationsV701')||localStorage.getItem('tccStationsV66')||localStorage.getItem('tccStationsV65')||localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
 function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV25')||'null')}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
@@ -55,7 +55,7 @@ function expandConfigurations(baseStations){
    configurationIndex:index
  })));
 }
-function saveLocal(){localStorage.setItem('tccStationsV70',JSON.stringify(stations))}
+function saveLocal(){localStorage.setItem('tccStationsV701',JSON.stringify(stations))}
 function mins(t){let [h,m]=t.split(':').map(Number);return h*60+m}
 function fmtMin(m){m=Math.max(0,m);let h=Math.floor(m/60),n=Math.round(m%60);return h?`${h} h ${String(n).padStart(2,'0')}`:`${n} min`}
 function finishTime(dateStr,timeStr,durationMin){
@@ -273,12 +273,18 @@ const DEFAULT_FX={
 };
 const FX_PUBLISHED_KEY='tccFxPublishedV2';
 const FX_OVERRIDE_KEY='tccFxOverridesV2';
+const FX_MIGRATION_KEY='tccFxMigrationV2Done';
 
 function safeJsonParse(value,fallback=null){
  try{return JSON.parse(value)}catch(e){return fallback}
 }
 function migrateOldFxOverrides(){
- if(localStorage.getItem(FX_OVERRIDE_KEY)!==null)return;
+ if(localStorage.getItem(FX_MIGRATION_KEY)==='1')return;
+ let existing=safeJsonParse(localStorage.getItem(FX_OVERRIDE_KEY)||'null');
+ if(existing&&typeof existing==='object'){
+   localStorage.setItem(FX_MIGRATION_KEY,'1');
+   return;
+ }
  let old=safeJsonParse(localStorage.getItem('tccFxRatesV1')||'null');
  let overrides={};
  if(old?.rates){
@@ -288,6 +294,7 @@ function migrateOldFxOverrides(){
    }
  }
  localStorage.setItem(FX_OVERRIDE_KEY,JSON.stringify(overrides));
+ localStorage.setItem(FX_MIGRATION_KEY,'1');
 }
 function getFxOverrides(){
  migrateOldFxOverrides();
@@ -359,29 +366,43 @@ function localCostHtml(totalEur,currencies=[]){
  }
  return `<div class="cost">${formatMoney(totalEur,'EUR')}</div>`;
 }
+function publishedFxIsFallback(){
+ let published=getPublishedFx();
+ return !published.updated || String(published.source||'').toLowerCase().includes('fallback');
+}
 function renderFxRates(){
- let state=getFxState(),overrides=state.overrides||{};
+ let state=getFxState(),overrides=state.overrides||{},fallback=publishedFxIsFallback();
  $('fxRows').innerHTML='';
+ fxRowSeq=0;
  let currentRegion='';
  for(let item of SUPPORTED_FX){
    if(item.region!==currentRegion){
      currentRegion=item.region;
      $('fxRows').insertAdjacentHTML('beforeend',`<h4 class="fx-region">${currentRegion}</h4>`);
    }
-   addFxRow(item.code,state.rates[item.code],item.name,Object.prototype.hasOwnProperty.call(overrides,item.code));
+   let sourceState=item.code==='EUR'?'base':
+     (Object.prototype.hasOwnProperty.call(overrides,item.code)?'manual':
+     (fallback?'fallback':'published'));
+   addFxRow(item.code,state.rates[item.code],item.name,sourceState);
  }
  let overrideCount=Object.keys(overrides).length;
  let dateText=state.updated?`Taux publiés du ${state.updated}`:'Aucune date de publication';
  let sourceText=state.source||'source inconnue';
- let warning=sourceText.includes('fallback')?'<br><span class="warn">⚠ Valeurs de secours : lance une actualisation avant une comparaison multi-devise.</span>':'';
+ let warning=fallback?'<br><span class="warn">⚠ Valeurs de secours : lance une actualisation avant une comparaison multi-devise.</span>':'';
  $('fxStatus').innerHTML=`${dateText} · Source : ${sourceText}${overrideCount?` · ${overrideCount} correction(s) manuelle(s)`:''}${warning}`;
 }
-function addFxRow(code='',rate='',name='',isOverride=false){
+function addFxRow(code='',rate='',name='',sourceState='published'){
  fxRowSeq+=1;let id=`fx-${fxRowSeq}`,disabled=code==='EUR'?'disabled':'';
+ let labels={
+   base:'<span class="fx-pill fx-base">Base</span>',
+   manual:'<span class="fx-pill fx-manual">Manuel</span>',
+   fallback:'<span class="fx-pill fx-fallback">Secours</span>',
+   published:'<span class="fx-pill fx-published">Publié</span>'
+ };
  $('fxRows').insertAdjacentHTML('beforeend',`<div class="fx-row" id="${id}" data-code="${code}">
  <div><label>Devise</label><b>${code}</b><div class="small">${name||code}</div></div>
  <div><label>1 EUR =</label><input class="fx-rate" type="number" min="0" step=".000001" value="${rate??''}" ${disabled}></div>
- <div class="fx-source">${code==='EUR'?'Base':(isOverride?'Manuel':'Publié')}</div>
+ <div class="fx-source">${labels[sourceState]||labels.published}</div>
  </div>`);
 }
 function saveFxRates(){
@@ -400,8 +421,11 @@ function saveFxRates(){
 }
 function resetFxOverrides(){
  if(!confirm('Effacer toutes les corrections manuelles de devises ?'))return;
- localStorage.removeItem(FX_OVERRIDE_KEY);
+ localStorage.setItem(FX_OVERRIDE_KEY,'{}');
+ localStorage.setItem(FX_MIGRATION_KEY,'1');
+ localStorage.removeItem('tccFxRatesV1');
  renderFxRates();
+ alert('Toutes les corrections manuelles ont été effacées.');
 }
 async function updateLiveFx(){
  $('fxStatus').textContent='Actualisation en cours…';
@@ -409,6 +433,11 @@ async function updateLiveFx(){
    let state=await loadPublishedFx(true);
    if(!state)throw new Error('Aucun fichier de taux disponible');
    renderFxRates();
+   if($('dataFreshness')){
+     let fxDate=state.updated||'valeurs de secours';
+     let current=$('dataFreshness').innerHTML||'';
+     $('dataFreshness').innerHTML=current.replace(/Taux de change\s*:\s*[^<]*/i,`Taux de change : ${fxDate}`);
+   }
  }catch(err){
    $('fxStatus').innerHTML=`<span class="bad">Actualisation impossible : ${err.message}. Le dernier taux valide reste utilisé.</span>`;
  }
