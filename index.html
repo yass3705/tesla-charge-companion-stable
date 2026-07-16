@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Tesla Charge Companion 6.6</title>
+<title>Tesla Charge Companion 7.0</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <datalist id="currencyCodes">
-<option value="EUR"><option value="CHF"><option value="GBP"><option value="USD"><option value="MAD">
-<option value="NOK"><option value="SEK"><option value="DKK"><option value="PLN"><option value="CZK">
+<option value="EUR"><option value="CHF"><option value="GBP">
+<option value="NOK"><option value="SEK"><option value="DKK"><option value="PLN">
+<option value="CZK"><option value="HUF"><option value="RON"><option value="BGN">
+<option value="MAD"><option value="DZD"><option value="TND">
 </datalist>
 <header>
 <h1>⚡ Tesla Charge Companion</h1>
-<p>Version 6.6 stable · tarification à la minute selon la puissance</p>
+<p>Version 7.0 stable · devises Europe et Maghreb restructurées</p>
 <nav>
 <button class="active" data-tab="compare">Comparer</button>
 <button data-tab="stations">Bornes</button>
@@ -117,20 +119,26 @@ Les tarifs sont maintenant renseignés directement dans chaque configuration de 
 <section id="fx" class="panel">
 <div class="card">
 <h3>À propos</h3>
-<div class="small">Tesla Charge Companion <b>V6.6</b><br>
-Tarifs Tesla saisis manuellement. Les taux de change sont actualisés quotidiennement par GitHub Actions.</div>
+<div class="small">Tesla Charge Companion <b>V7.0</b><br>
+Tarifs Tesla saisis ou importés séparément. Les devises Europe et Maghreb sont actualisées quotidiennement, avec conservation du dernier taux valide.</div>
 <div id="dataFreshness" class="small" style="margin-top:10px"></div>
 </div>
 <div class="card">
-<h3>Devises et taux de conversion</h3>
-<div class="small">Base de comparaison : EUR. Un taux signifie « 1 EUR = X unités de la devise ».</div>
+<h3>Devises Europe et Maghreb</h3>
+<div class="small">
+Base du classement : EUR. Les tarifs locaux restent affichés dans leur devise d’origine.
+Un taux signifie « 1 EUR = X unités de la devise ».
+</div>
 <div class="row" style="margin-top:12px">
-<button class="primary" style="width:auto;margin:0" onclick="updateLiveFx()">Actualiser les taux en ligne</button>
-<button class="secondary" onclick="addFxRow()">Ajouter une devise</button>
+<button class="primary" style="width:auto;margin:0" onclick="updateLiveFx()">Actualiser maintenant</button>
+<button class="secondary" onclick="saveFxRates()">Enregistrer les corrections manuelles</button>
+<button class="secondary" onclick="resetFxOverrides()">Effacer les corrections manuelles</button>
 </div>
 <div id="fxStatus" class="small" style="margin-top:10px"></div>
 <div id="fxRows" style="margin-top:12px"></div>
-<button class="primary" onclick="saveFxRates()">Enregistrer les taux manuels</button>
+<div class="small box" style="margin-top:12px">
+Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas d’échec réseau, le dernier taux publié ou enregistré reste utilisé.
+</div>
 </div>
 </section>
 </main>

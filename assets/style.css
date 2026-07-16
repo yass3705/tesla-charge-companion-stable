@@ -13,7 +13,7 @@ input,select,textarea{width:100%;font:inherit;color:#fff;background:#101012;bord
 .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .hidden{display:none!important}
 .rule-title{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.rule-title b{font-size:14px}.fx-row{display:grid;grid-template-columns:100px 1fr auto;gap:10px;align-items:end;margin:10px 0}
+.rule-title b{font-size:14px}.fx-row{display:grid;grid-template-columns:minmax(135px,1.2fr) minmax(130px,1fr) 72px;gap:10px;align-items:end;margin:10px 0;padding:10px;border:1px solid #303036;border-radius:10px}.fx-region{margin:18px 0 6px}.fx-source{font-size:12px;color:#aaa;text-align:right;padding-bottom:11px}.cost-eur{font-size:12px;font-weight:500;color:#aaa;margin-top:3px}
 .scorebox{margin-top:7px;font-size:12px;color:var(--muted)}
 .operator-badge{background:#20283a}
 .currency-badge{background:#243421}

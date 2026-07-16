@@ -2,7 +2,7 @@ const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],st
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates()});
 $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';$('simMaxDistance').value=localStorage.getItem('tccMaxDistanceKm')||'20';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
-function localStations(){return JSON.parse(localStorage.getItem('tccStationsV66')||localStorage.getItem('tccStationsV65')||localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
+function localStations(){return JSON.parse(localStorage.getItem('tccStationsV70')||localStorage.getItem('tccStationsV66')||localStorage.getItem('tccStationsV65')||localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
 function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV25')||'null')}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
@@ -55,7 +55,7 @@ function expandConfigurations(baseStations){
    configurationIndex:index
  })));
 }
-function saveLocal(){localStorage.setItem('tccStationsV66',JSON.stringify(stations))}
+function saveLocal(){localStorage.setItem('tccStationsV70',JSON.stringify(stations))}
 function mins(t){let [h,m]=t.split(':').map(Number);return h*60+m}
 function fmtMin(m){m=Math.max(0,m);let h=Math.floor(m/60),n=Math.round(m%60);return h?`${h} h ${String(n).padStart(2,'0')}`:`${n} min`}
 function finishTime(dateStr,timeStr,durationMin){
@@ -251,59 +251,166 @@ function acPowerAtSoc(soc,stationMax){
 }
 
 
-const DEFAULT_FX={EUR:1};
+const SUPPORTED_FX=[
+ {code:'EUR',name:'Euro',region:'Europe'},
+ {code:'CHF',name:'Franc suisse',region:'Europe'},
+ {code:'GBP',name:'Livre sterling',region:'Europe'},
+ {code:'NOK',name:'Couronne norvégienne',region:'Europe'},
+ {code:'SEK',name:'Couronne suédoise',region:'Europe'},
+ {code:'DKK',name:'Couronne danoise',region:'Europe'},
+ {code:'PLN',name:'Zloty polonais',region:'Europe'},
+ {code:'CZK',name:'Couronne tchèque',region:'Europe'},
+ {code:'HUF',name:'Forint hongrois',region:'Europe'},
+ {code:'RON',name:'Leu roumain',region:'Europe'},
+ {code:'BGN',name:'Lev bulgare',region:'Europe'},
+ {code:'MAD',name:'Dirham marocain',region:'Maghreb'},
+ {code:'DZD',name:'Dinar algérien',region:'Maghreb'},
+ {code:'TND',name:'Dinar tunisien',region:'Maghreb'}
+];
+const DEFAULT_FX={
+ EUR:1,CHF:.93,GBP:.84,NOK:11.7,SEK:11.2,DKK:7.46,PLN:4.25,CZK:24.6,
+ HUF:400,RON:5.08,BGN:1.95583,MAD:10.8,DZD:151,TND:3.38
+};
+const FX_PUBLISHED_KEY='tccFxPublishedV2';
+const FX_OVERRIDE_KEY='tccFxOverridesV2';
+
+function safeJsonParse(value,fallback=null){
+ try{return JSON.parse(value)}catch(e){return fallback}
+}
+function migrateOldFxOverrides(){
+ if(localStorage.getItem(FX_OVERRIDE_KEY)!==null)return;
+ let old=safeJsonParse(localStorage.getItem('tccFxRatesV1')||'null');
+ let overrides={};
+ if(old?.rates){
+   for(let [code,rate] of Object.entries(old.rates)){
+     code=String(code).toUpperCase();
+     if(code!=='EUR'&&SUPPORTED_FX.some(x=>x.code===code)&&Number(rate)>0)overrides[code]=Number(rate);
+   }
+ }
+ localStorage.setItem(FX_OVERRIDE_KEY,JSON.stringify(overrides));
+}
+function getFxOverrides(){
+ migrateOldFxOverrides();
+ return safeJsonParse(localStorage.getItem(FX_OVERRIDE_KEY)||'{}',{})||{};
+}
+function getPublishedFx(){
+ return window.publishedFxState||
+   safeJsonParse(localStorage.getItem(FX_PUBLISHED_KEY)||'null')||
+   {base:'EUR',rates:{...DEFAULT_FX},updated:null,source:'fallback intégré'};
+}
 function getFxState(){
- let saved=JSON.parse(localStorage.getItem('tccFxRatesV1')||'null');
- return saved||window.publishedFxState||{base:'EUR',rates:{...DEFAULT_FX},updated:null,source:'manual'};
+ let published=getPublishedFx(),overrides=getFxOverrides();
+ return{
+   base:'EUR',
+   rates:{...DEFAULT_FX,...(published.rates||{}),...overrides,EUR:1},
+   updated:published.updated||null,
+   source:published.source||'fallback intégré',
+   overrides
+ };
 }
-async function loadPublishedFx(){
+async function loadPublishedFx(cacheBust=false){
  try{
-   let data=await fetch('data/exchange_rates.json').then(r=>r.json());
-   window.publishedFxState={base:'EUR',rates:{EUR:1,...(data.rates||{})},updated:data.date||null,source:'live'};
- }catch(e){}
+   let suffix=cacheBust?`?v=${Date.now()}`:'';
+   let response=await fetch(`data/exchange_rates.json${suffix}`,{cache:cacheBust?'no-store':'default'});
+   if(!response.ok)throw new Error(`Erreur ${response.status}`);
+   let data=await response.json();
+   let state={
+     base:'EUR',
+     rates:{...DEFAULT_FX,EUR:1,...(data.rates||{})},
+     updated:data.date||null,
+     source:data.source||'GitHub quotidien'
+   };
+   window.publishedFxState=state;
+   localStorage.setItem(FX_PUBLISHED_KEY,JSON.stringify(state));
+   return state;
+ }catch(e){
+   let cached=safeJsonParse(localStorage.getItem(FX_PUBLISHED_KEY)||'null');
+   if(cached)window.publishedFxState=cached;
+   return cached;
+ }
 }
-function setFxState(state){localStorage.setItem('tccFxRatesV1',JSON.stringify(state))}
 function fxToEur(amount,currency){
- let code=(currency||'EUR').toUpperCase(),state=getFxState();
- if(code==='EUR')return amount;
- let rate=state.rates?.[code];
- if(!rate||rate<=0)throw new Error(`Taux de conversion ${code}/EUR manquant`);
- return amount/rate;
+ let code=(currency||'EUR').toUpperCase(),rate=getFxState().rates?.[code];
+ if(code==='EUR')return Number(amount)||0;
+ if(!Number.isFinite(Number(rate))||Number(rate)<=0)throw new Error(`Taux ${code} manquant`);
+ return (Number(amount)||0)/Number(rate);
+}
+function eurToFx(amountEur,currency){
+ let code=(currency||'EUR').toUpperCase(),rate=getFxState().rates?.[code];
+ if(code==='EUR')return Number(amountEur)||0;
+ if(!Number.isFinite(Number(rate))||Number(rate)<=0)return null;
+ return (Number(amountEur)||0)*Number(rate);
+}
+function currencyInfo(code){
+ return SUPPORTED_FX.find(item=>item.code===code)||{code,name:code,region:'Autre'};
+}
+function formatMoney(amount,code){
+ try{
+   return new Intl.NumberFormat('fr-FR',{
+     style:'currency',currency:code,minimumFractionDigits:2,maximumFractionDigits:2
+   }).format(amount);
+ }catch(e){return `${Number(amount).toFixed(2)} ${code}`}
+}
+function localCostHtml(totalEur,currencies=[]){
+ let unique=[...new Set((currencies||[]).map(x=>String(x).toUpperCase()))];
+ if(unique.length===1&&unique[0]!=='EUR'){
+   let code=unique[0],local=eurToFx(totalEur,code);
+   if(local!==null)return `<div class="cost">${formatMoney(local,code)}<div class="cost-eur">≈ ${formatMoney(totalEur,'EUR')}</div></div>`;
+ }
+ return `<div class="cost">${formatMoney(totalEur,'EUR')}</div>`;
 }
 function renderFxRates(){
- let state=getFxState(),codes=Object.keys(state.rates||{}).sort((a,b)=>a==='EUR'?-1:b==='EUR'?1:a.localeCompare(b));
+ let state=getFxState(),overrides=state.overrides||{};
  $('fxRows').innerHTML='';
- codes.forEach(code=>addFxRow(code,state.rates[code]));
- $('fxStatus').innerHTML=state.updated?`Dernière mise à jour : ${state.updated} · ${state.source==='live'?'en ligne':'manuelle'}`:'Aucune mise à jour enregistrée.';
+ let currentRegion='';
+ for(let item of SUPPORTED_FX){
+   if(item.region!==currentRegion){
+     currentRegion=item.region;
+     $('fxRows').insertAdjacentHTML('beforeend',`<h4 class="fx-region">${currentRegion}</h4>`);
+   }
+   addFxRow(item.code,state.rates[item.code],item.name,Object.prototype.hasOwnProperty.call(overrides,item.code));
+ }
+ let overrideCount=Object.keys(overrides).length;
+ let dateText=state.updated?`Taux publiés du ${state.updated}`:'Aucune date de publication';
+ let sourceText=state.source||'source inconnue';
+ let warning=sourceText.includes('fallback')?'<br><span class="warn">⚠ Valeurs de secours : lance une actualisation avant une comparaison multi-devise.</span>':'';
+ $('fxStatus').innerHTML=`${dateText} · Source : ${sourceText}${overrideCount?` · ${overrideCount} correction(s) manuelle(s)`:''}${warning}`;
 }
-function addFxRow(code='',rate=''){
- fxRowSeq+=1;let id=`fx-${fxRowSeq}`;
- $('fxRows').insertAdjacentHTML('beforeend',`<div class="fx-row" id="${id}">
- <div><label>Devise</label><input class="fx-code" maxlength="3" value="${String(code).toUpperCase()}"></div>
- <div><label>1 EUR =</label><input class="fx-rate" type="number" min="0" step=".000001" value="${rate}"></div>
- <button class="danger" ${String(code).toUpperCase()==='EUR'?'disabled':''} onclick="document.getElementById('${id}').remove()">×</button>
+function addFxRow(code='',rate='',name='',isOverride=false){
+ fxRowSeq+=1;let id=`fx-${fxRowSeq}`,disabled=code==='EUR'?'disabled':'';
+ $('fxRows').insertAdjacentHTML('beforeend',`<div class="fx-row" id="${id}" data-code="${code}">
+ <div><label>Devise</label><b>${code}</b><div class="small">${name||code}</div></div>
+ <div><label>1 EUR =</label><input class="fx-rate" type="number" min="0" step=".000001" value="${rate??''}" ${disabled}></div>
+ <div class="fx-source">${code==='EUR'?'Base':(isOverride?'Manuel':'Publié')}</div>
  </div>`);
 }
 function saveFxRates(){
- let rates={EUR:1};
+ let overrides={};
  [...document.querySelectorAll('.fx-row')].forEach(row=>{
-   let code=row.querySelector('.fx-code').value.trim().toUpperCase(),rate=+row.querySelector('.fx-rate').value;
-   if(code&&rate>0)rates[code]=rate;
+   let code=(row.dataset.code||'').toUpperCase();
+   let rate=Number(row.querySelector('.fx-rate')?.value);
+   if(code&&code!=='EUR'&&Number.isFinite(rate)&&rate>0){
+     let published=Number(getPublishedFx().rates?.[code]??DEFAULT_FX[code]);
+     if(!Number.isFinite(published)||Math.abs(rate-published)>1e-9)overrides[code]=rate;
+   }
  });
- setFxState({base:'EUR',rates,updated:new Date().toLocaleString('fr-FR'),source:'manual'});
- renderFxRates();alert('Taux enregistrés sur cet appareil.');
+ localStorage.setItem(FX_OVERRIDE_KEY,JSON.stringify(overrides));
+ renderFxRates();
+ alert('Corrections manuelles enregistrées sur cet appareil.');
+}
+function resetFxOverrides(){
+ if(!confirm('Effacer toutes les corrections manuelles de devises ?'))return;
+ localStorage.removeItem(FX_OVERRIDE_KEY);
+ renderFxRates();
 }
 async function updateLiveFx(){
- $('fxStatus').textContent='Mise à jour en cours…';
+ $('fxStatus').textContent='Actualisation en cours…';
  try{
-   let response=await fetch('https://api.frankfurter.app/latest?from=EUR');
-   if(!response.ok)throw new Error(`Erreur ${response.status}`);
-   let data=await response.json();
-   let current=getFxState(),rates={...current.rates,EUR:1,...data.rates};
-   setFxState({base:'EUR',rates,updated:data.date||new Date().toLocaleDateString('fr-FR'),source:'live'});
+   let state=await loadPublishedFx(true);
+   if(!state)throw new Error('Aucun fichier de taux disponible');
    renderFxRates();
  }catch(err){
-   $('fxStatus').innerHTML=`<span class="bad">Mise à jour en ligne impossible : ${err.message}. Les taux manuels restent disponibles.</span>`;
+   $('fxStatus').innerHTML=`<span class="bad">Actualisation impossible : ${err.message}. Le dernier taux valide reste utilisé.</span>`;
  }
 }
 let pricingRuleSeq=0;
@@ -338,7 +445,7 @@ function pricingRuleTemplate(rule={}){
      </div>
      <div><label>Frais fixes / parking</label><input class="pr-connection" type="number" min="0" step=".01" value="${rule.connectionFee??0}"></div>
      <div><label>Congestion / occupation après charge, par min</label><input class="pr-idle-min" type="number" min="0" step=".001" value="${rule.idlePerMinute??0}"></div>
-     <div><label>Frais après une durée (€ / min)</label><input class="pr-after-min-rate" type="number" min="0" step=".001" value="${rule.afterMinutesRate??0}"></div>
+     <div><label>Frais après une durée / min</label><input class="pr-after-min-rate" type="number" min="0" step=".001" value="${rule.afterMinutesRate??0}"></div>
      <div><label>Déclenchement après (minutes)</label><input class="pr-after-min-threshold" type="number" min="0" step="1" value="${rule.afterMinutesThreshold??0}"></div>
      <div><label>Plafond de ces frais (€)</label><input class="pr-after-min-cap" type="number" min="0" step=".01" value="${rule.afterMinutesCap??0}"><div class="small">0 = aucun plafond.</div></div>
      <div><label>Plafond valable à partir de</label><input class="pr-cap-start" type="time" value="${rule.afterMinutesCapStart||'00:00'}"></div>
@@ -504,7 +611,7 @@ function priceWithRules(pp,startMin,chargeMinutes,billedEnergy,unplugTime,startT
    }
 
    // Frais liés à la durée totale de connexion, même si la voiture charge encore.
-   // Exemple : 0,05 €/min après 180 min.
+   // Exemple : 0,05 unité monétaire/min après 180 min.
    const surchargeByRule=new Map();
    for(let i=0;i<Math.ceil(occupied);i++){
      let rule=ruleForMinute(rules,minuteOfSession(startMin,i));if(!rule)continue;
@@ -628,7 +735,7 @@ async function compare(){
     if(r.truncated)info=`<div class="warn small"><b>Charge arrêtée à ${r.access.close}</b><br>Niveau estimé : ${r.reached.toFixed(0)} %.</div>`;
     let taper=target>80&&st.kind==='DC'?`<div class="warn small">Le ralentissement au-dessus de 80 % est inclus.</div>`:'';
     let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge)?`<div class="small">Parking / fixe : ${(r.pricingDetails.connection||0).toFixed(2)} € · Congestion / après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Frais après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} €</div>`:'';
-    return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies} → EUR</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div><div class="cost">${r.total.toFixed(2)} €</div></div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access.label}<br><b>${fmtMin(r.allowed)}</b> · fin estimée : <b>${finishTime(date,time,r.allowed)}</b><br>${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st.address)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
+    return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies==='EUR'?'EUR':`${currencies} · comparaison EUR`}</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div>${localCostHtml(r.total,r.pricingDetails?.currencies||['EUR'])}</div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access.label}<br><b>${fmtMin(r.allowed)}</b> · fin estimée : <b>${finishTime(date,time,r.allowed)}</b><br>${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st.address)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
    }).join('');
  }catch(err){
    $('results').innerHTML=`<div class="bad">${err.message}</div>`;

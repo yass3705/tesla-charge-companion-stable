@@ -1,4 +1,4 @@
-# Tesla Charge Companion V6.6 stable
+# Tesla Charge Companion V7.0 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
@@ -85,3 +85,22 @@ Exemple intégré : Tesla Casablanca — Onomo
 Le calcul utilise la courbe de charge simulée minute par minute. Une même session peut donc traverser plusieurs tranches tarifaires.
 
 Le géocodage n’est plus limité à la France. Il accepte également une adresse internationale ou des coordonnées sous la forme `33.6189855, -7.4823168`.
+
+
+## V7.0 — nouveau moteur de devises
+
+Devises prises en charge :
+
+- Europe : EUR, CHF, GBP, NOK, SEK, DKK, PLN, CZK, HUF, RON et BGN ;
+- Maghreb : MAD, DZD et TND.
+
+Principes :
+
+- prix local affiché dans la devise de la borne ;
+- équivalent EUR affiché sous le prix local ;
+- classement effectué en EUR ;
+- taux publiés prioritaires ;
+- corrections manuelles limitées à l'appareil ;
+- conservation du dernier taux valide en cas de panne ;
+- migration des anciens taux manuels ;
+- mise à jour GitHub quotidienne via deux fournisseurs successifs.
