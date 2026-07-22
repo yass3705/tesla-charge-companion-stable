@@ -1,5 +1,11 @@
 # Changelog
 
+## V7.2.1.1 — Correctif synchronisation GitHub
+
+- Correction de l’erreur Safari `Can't find variable: escapeHtml` dans le journal de synchronisation.
+- Le bouton **Tester la connexion** fonctionne désormais sans interrompre l’affichage du statut.
+- Cache PWA renouvelé afin de forcer le chargement du correctif.
+
 ## V7.2.1 — Synchronisation GitHub renforcée
 
 - Indicateur permanent de l’état de synchronisation.

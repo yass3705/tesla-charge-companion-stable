@@ -1,4 +1,5 @@
 const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],stations=[],routeResults={},fxRowSeq=0;const $=id=>document.getElementById(id);
+function escapeHtml(value){return String(value??'').replace(/[&<>'\"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]))}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates();if(b.dataset.tab==='sync')loadGithubSettingsForm()});
 $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';$('simMaxDistance').value=localStorage.getItem('tccMaxDistanceKm')||'20';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
