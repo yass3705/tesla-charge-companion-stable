@@ -1,4 +1,4 @@
-# Version 7.0.2
+# Version 7.0.3
 
 - Les coordonnées GPS sont utilisées en priorité pour les itinéraires Google Maps ; l’adresse reste affichée comme libellé.
 - La mise à jour des devises enregistre la date de la source et l’heure de vérification séparément.

@@ -26,6 +26,13 @@ function normalizeConfigurations(configs,st){
 }
 function normalizeStation(st,defaults={}){
  let merged={...defaults,...st};
+ // Pour les fiches publiées, les coordonnées GPS officielles restent prioritaires
+ // sur une ancienne copie locale ou une adresse textuelle modifiée.
+ let officialLat=Number(defaults.latitude),officialLon=Number(defaults.longitude);
+ if(Number.isFinite(officialLat)&&Number.isFinite(officialLon)){
+   merged.latitude=officialLat;
+   merged.longitude=officialLon;
+ }
  // Une nouvelle configuration publiée est adoptée seulement si l'ancienne fiche locale n'en possédait pas.
  let configurations=Array.isArray(st.chargingConfigurations)&&st.chargingConfigurations.length?st.chargingConfigurations:defaults.chargingConfigurations;
  configurations=normalizeConfigurations(configurations,merged);
@@ -207,7 +214,9 @@ function rankingWeights(mode){
 }
 function rankByPriceDistance(rows,mode){
  let available=rows.filter(x=>!x.r.unavailable&&!x.r.unknown&&Number.isFinite(x.r.total));
- if(!available.length)return rows.slice(0,20);
+ let unknown=rows.filter(x=>!x.r.unavailable&&(x.r.unknown||!Number.isFinite(x.r.total)))
+   .sort((a,b)=>a.distanceKm-b.distanceKm);
+ if(!available.length)return unknown.slice(0,20);
  let costs=available.map(x=>x.r.total),distances=available.map(x=>x.distanceKm);
  let minC=Math.min(...costs),maxC=Math.max(...costs),minD=Math.min(...distances),maxD=Math.max(...distances),w=rankingWeights(mode);
  available.forEach(x=>{
@@ -215,7 +224,7 @@ function rankByPriceDistance(rows,mode){
    let dn=maxD===minD?0:(x.distanceKm-minD)/(maxD-minD);
    x.score=w.price*cn+w.distance*dn;
  });
- return available.sort((a,b)=>a.score-b.score).slice(0,20);
+ return [...available.sort((a,b)=>a.score-b.score),...unknown].slice(0,20);
 }
 async function calculateRoutes(){
  let button=$('routeButton');button.classList.add('loading');button.textContent='Calcul en cours…';
@@ -725,7 +734,12 @@ function simulate(st,dateStr,timeStr,now,target,condition='normal',profile='real
  if(st.access?.limited&&st.access.afterCloseMode==='must_stop'&&b.minutes>a.remaining){allowed=a.remaining;truncated=true}
  let ratio=allowed/b.minutes,deliveredBilled=b.billed*ratio,deliveredBatt=b.batt*ratio,reached=now+(target-now)*ratio,start=mins(timeStr),pp=st.pricing,total=0,unknown=false;
  let pricingDetails={connection:0,chargeCost:0,idleCost:0,occupiedMinutes:allowed};
- if(pp.type==='rules'){let priced=priceWithRules(pp,start,allowed,deliveredBilled,unplugTime,timeStr,b.segments);if(priced.error)return{unavailable:true,message:priced.error};total=priced.total;pricingDetails=priced}
+ if(pp?.type==='rules'){
+   if(!(pp.rules||[]).length)return{...b,allowed,deliveredBilled,deliveredBatt,reached,total:NaN,truncated,access:a,unknown:true,message:'Tarif non disponible',pricingDetails};
+   let priced=priceWithRules(pp,start,allowed,deliveredBilled,unplugTime,timeStr,b.segments);
+   if(priced.error)return{...b,allowed,deliveredBilled,deliveredBatt,reached,total:NaN,truncated,access:a,unknown:true,message:priced.error,pricingDetails};
+   total=priced.total;pricingDetails=priced
+ }
  else if(pp.type==='kwh')total=fxToEur(deliveredBilled*pp.pricePerKwh,pp.currency||'EUR');
  else if(pp.type==='timeBandsKwh'){let c=energyCostBands(pp,start,allowed,deliveredBilled);if(c===null)return{unavailable:true,message:'Tarif absent pour une partie de la session'};total=c}
  else if(pp.type==='kwhPlusParking'){let parking=Math.max(0,allowed-pp.freeMinutes)*pp.parkingPerMinute;if(minutesInWindow((start+pp.freeMinutes)%1440,Math.max(0,allowed-pp.freeMinutes),pp.nightStart,pp.nightEnd)>0)parking=Math.min(parking,pp.nightCap);total=deliveredBilled*pp.pricePerKwh+parking;pricingDetails.idleCost=parking}
@@ -777,7 +791,7 @@ async function compare(){
     if(r.truncated)info=`<div class="warn small"><b>Charge arrêtée à ${r.access.close}</b><br>Niveau estimé : ${r.reached.toFixed(0)} %.</div>`;
     let taper=target>80&&st.kind==='DC'?`<div class="warn small">Le ralentissement au-dessus de 80 % est inclus.</div>`:'';
     let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge)?`<div class="small">Parking / fixe : ${(r.pricingDetails.connection||0).toFixed(2)} € · Congestion / après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Frais après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} €</div>`:'';
-    return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies==='EUR'?'EUR':`${currencies} · comparaison EUR`}</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div>${localCostHtml(r.total,r.pricingDetails?.currencies||['EUR'])}</div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access.label}<br><b>${fmtMin(r.allowed)}</b> · fin estimée : <b>${finishTime(date,time,r.allowed)}</b><br>${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
+    return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies==='EUR'?'EUR':`${currencies} · comparaison EUR`}</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div>${Number.isFinite(r.total)?localCostHtml(r.total,r.pricingDetails?.currencies||['EUR']):'<div class="cost">Tarif à compléter</div>'}</div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access?.label||'Accès disponible'}<br><b>${Number.isFinite(r.allowed)?fmtMin(r.allowed):'—'}</b>${Number.isFinite(r.allowed)?` · fin estimée : <b>${finishTime(date,time,r.allowed)}</b>`:''}<br>${Number.isFinite(r.deliveredBilled)?`${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW`:r.message||'Tarif non disponible'}</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
    }).join('');
  }catch(err){
    $('results').innerHTML=`<div class="bad">${err.message}</div>`;

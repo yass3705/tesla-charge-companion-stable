@@ -13,7 +13,7 @@ SUPPORTED = (
 )
 PRIMARY_URL = "https://open.er-api.com/v6/latest/EUR"
 FALLBACK_URL = "https://api.frankfurter.dev/v1/latest?from=EUR"
-USER_AGENT = "TeslaChargeCompanion/7.0.2"
+USER_AGENT = "TeslaChargeCompanion/7.0.3"
 
 
 def fetch_json(url: str) -> dict:
