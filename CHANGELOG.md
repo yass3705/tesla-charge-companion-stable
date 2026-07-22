@@ -1,10 +1,11 @@
+# V7.2.1.2 — Correctif Safari définitif
+
+- Fonction `escapeHtml` exposée explicitement dans la page et dans `app.js`.
+- Ajout d'un identifiant de version à `app.js` pour contourner le cache HTTP de Safari/GitHub Pages.
+- Service Worker configuré en priorité réseau pour tous les fichiers `assets/`.
+- Nouveau cache PWA `tcc-v7212-safari-definitive`.
+
 # Changelog
-
-## V7.2.1.1 — Correctif synchronisation GitHub
-
-- Correction de l’erreur Safari `Can't find variable: escapeHtml` dans le journal de synchronisation.
-- Le bouton **Tester la connexion** fonctionne désormais sans interrompre l’affichage du statut.
-- Cache PWA renouvelé afin de forcer le chargement du correctif.
 
 ## V7.2.1 — Synchronisation GitHub renforcée
 

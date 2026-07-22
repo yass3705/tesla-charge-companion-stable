@@ -1,9 +1,9 @@
-const CACHE = 'tcc-v7211-sync-hotfix';
+const CACHE = 'tcc-v7212-safari-definitive';
 const SHELL = [
   './',
-  './index.html',
-  './assets/style.css',
-  './assets/app.js',
+  './index.html?v=7212',
+  './assets/style.css?v=7212',
+  './assets/app.js?v=7212',
   './manifest.webmanifest'
 ];
 
@@ -20,19 +20,28 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
-  const networkFirst = url.pathname.includes('/data/') || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/');
+  const sameOrigin = url.origin === self.location.origin;
+  const networkFirst = sameOrigin && (
+    url.pathname.includes('/data/') ||
+    url.pathname.includes('/assets/') ||
+    url.pathname.endsWith('/index.html') ||
+    url.pathname.endsWith('/')
+  );
   if (networkFirst) {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: 'no-store' })
         .then(response => {
-          const copy = response.clone();
-          caches.open(CACHE).then(cache => cache.put(event.request, copy));
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE).then(cache => cache.put(event.request, copy));
+          }
           return response;
         })
         .catch(() => caches.match(event.request))
     );
     return;
   }
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request)));
+  event.respondWith(fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(event.request)));
 });
