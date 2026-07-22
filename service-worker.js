@@ -1,9 +1,9 @@
-const CACHE = 'tcc-v7220-sync-ux';
+const CACHE = 'tcc-v7300-stable';
 const SHELL = [
   './',
-  './index.html?v=7220',
-  './assets/style.css?v=7220',
-  './assets/app.js?v=7220',
+  './index.html?v=7300',
+  './assets/style.css?v=7300',
+  './assets/app.js?v=7300',
   './manifest.webmanifest'
 ];
 

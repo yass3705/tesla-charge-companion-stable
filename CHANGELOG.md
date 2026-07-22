@@ -1,3 +1,15 @@
+# V7.3 Stable — Phase de test grandeur nature
+
+- Promotion de la V7.2.2 validée en version stable.
+- Synchronisation GitHub multi-appareils des bornes tierces.
+- Indicateur global de synchronisation et dernière synchronisation relative.
+- Nom de l’appareil dans l’historique de synchronisation.
+- Mode lecture seule pour les appareils de consultation.
+- Export et import de sauvegardes JSON.
+- Journal local des dernières synchronisations.
+- Cache PWA renouvelé (`7300`) pour forcer le chargement de la version stable.
+- Aucun changement du format de `custom_stations.json` : compatibilité conservée avec la V7.2.x.
+
 # Version 7.2.2 test — Expérience de synchronisation
 
 - Affichage relatif de la dernière synchronisation (à l’instant, il y a X min/h/j).
