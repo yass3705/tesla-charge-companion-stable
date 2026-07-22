@@ -1,5 +1,17 @@
 # Changelog
 
+## V7.2.1 — Synchronisation GitHub renforcée
+
+- Indicateur permanent de l’état de synchronisation.
+- Date et heure de la dernière synchronisation réussie.
+- Bouton de test de la connexion GitHub.
+- Affichage explicite de l’état du jeton sans le révéler.
+- Messages d’erreur détaillés pour les principaux statuts GitHub.
+- Nouvelle tentative automatique en cas de conflit GitHub 409.
+- Sauvegarde locale de sécurité avant chaque synchronisation.
+- Journal local des huit derniers événements de synchronisation.
+- Cache PWA renouvelé pour la V7.2.1.
+
 ## V7.2.0 test — Synchronisation GitHub
 
 - Synchronisation multi-appareils des bornes tierces via `data/custom_stations.json`.

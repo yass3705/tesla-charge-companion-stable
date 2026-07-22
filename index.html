@@ -17,7 +17,7 @@
 </datalist>
 <header>
 <h1>⚡ Tesla Charge Companion</h1>
-<p>Version 7.2.0 test · synchronisation GitHub des bornes tierces</p>
+<p>Version 7.2.1 · synchronisation GitHub renforcée <span id="globalSyncBadge" class="sync-badge idle">● Synchronisation</span></p>
 <nav>
 <button class="active" data-tab="compare">Comparer</button>
 <button data-tab="stations">Bornes</button>
@@ -152,7 +152,7 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 <div><label>Dépôt</label><input id="ghRepo" autocomplete="off" placeholder="tesla-charge-companion-stable"></div>
 <div><label>Branche</label><input id="ghBranch" autocomplete="off" value="main"></div>
 <div><label>Chemin du fichier</label><input id="ghPath" autocomplete="off" value="data/custom_stations.json"></div>
-<div class="full"><label>Jeton GitHub à accès fin (Contents : lecture et écriture)</label><input id="ghToken" type="password" autocomplete="new-password" placeholder="Laisse vide pour conserver le jeton déjà enregistré"></div>
+<div class="full"><label>Jeton GitHub à accès fin (Contents : lecture et écriture)</label><input id="ghToken" type="password" autocomplete="new-password" placeholder="Colle un nouveau jeton uniquement pour l’enregistrer ou le remplacer"><div id="ghTokenState" class="small token-state">Aucun jeton enregistré</div></div>
 <div class="full box">
 <label style="margin:0"><input id="ghAutoSync" type="checkbox" style="width:auto"> Synchroniser automatiquement après chaque ajout, modification ou suppression d’une borne tierce</label>
 <div class="small" style="margin-top:6px">Une synchronisation automatique lit d’abord la version GitHub, fusionne les changements puis enregistre le résultat pour éviter d’écraser les modifications d’un autre appareil.</div>
@@ -160,10 +160,13 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 </div>
 <div class="row" style="margin-top:12px">
 <button class="secondary" onclick="saveGithubSettings()">Enregistrer la configuration</button>
+<button class="secondary" onclick="testGithubConnection()">Tester la connexion</button>
 <button class="primary sync-primary" onclick="syncGithubNow()">Synchroniser maintenant</button>
 <button class="danger" onclick="forgetGithubToken()">Effacer le jeton</button>
 </div>
 <div id="githubSyncStatus" class="small box" style="margin-top:12px">Synchronisation non configurée.</div>
+<div id="ghLastSync" class="small box" style="margin-top:12px">Aucune synchronisation réussie enregistrée sur cet appareil.</div>
+<details class="box" style="margin-top:12px"><summary>Journal des dernières synchronisations</summary><div id="ghSyncLog" style="margin-top:10px"></div></details>
 <div class="small box" style="margin-top:12px"><b>Sécurité :</b> utilise un jeton à accès fin limité uniquement à ce dépôt, avec la permission <b>Contents: Read and write</b>. Ne partage jamais ce jeton et ne l’inscris pas dans un fichier du dépôt.</div>
 </div>
 </section>

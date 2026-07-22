@@ -11,6 +11,9 @@ function saveHiddenStationIds(ids){localStorage.setItem(HIDDEN_STATIONS_KEY,JSON
 const GH_SETTINGS_KEY='tccGithubSyncSettingsV1';
 const GH_TOKEN_KEY='tccGithubSyncTokenV1';
 const CUSTOM_DELETIONS_KEY='tccCustomStationDeletionsV1';
+const GH_LAST_SYNC_KEY='tccGithubLastSyncV1';
+const GH_SYNC_LOG_KEY='tccGithubSyncLogV1';
+const GH_BACKUP_KEY='tccGithubCustomBackupV1';
 function githubSettings(){return safeJsonParse(localStorage.getItem(GH_SETTINGS_KEY)||'{}',{})||{}}
 function githubToken(){return localStorage.getItem(GH_TOKEN_KEY)||''}
 function customDeletions(){return safeJsonParse(localStorage.getItem(CUSTOM_DELETIONS_KEY)||'{}',{})||{}}
@@ -31,6 +34,7 @@ function loadGithubSettingsForm(){
  if($('ghPath'))$('ghPath').value=cfg.path||'data/custom_stations.json';
  if($('ghToken'))$('ghToken').value='';
  if($('ghAutoSync'))$('ghAutoSync').checked=!!cfg.autoSync;
+ renderGithubTokenState();renderGithubLastSync();renderGithubLog();
  updateGithubStatus(githubToken()&&cfg.owner&&cfg.repo?'Configuration enregistrée sur cet appareil.':'Synchronisation non configurée.',githubToken()?'good':'');
 }
 function saveGithubSettings(){
@@ -40,15 +44,24 @@ function saveGithubSettings(){
  localStorage.setItem(GH_SETTINGS_KEY,JSON.stringify(cfg));
  if(token)localStorage.setItem(GH_TOKEN_KEY,token);
  $('ghToken').value='';
- updateGithubStatus(githubToken()?'Configuration enregistrée. Tu peux lancer la synchronisation.':'Configuration enregistrée, mais aucun jeton n’est disponible.','good');
+ renderGithubTokenState();updateGithubStatus(githubToken()?'Configuration enregistrée. Tu peux tester la connexion ou synchroniser.':'Configuration enregistrée, mais aucun jeton n’est disponible.',githubToken()?'good':'warn');
 }
 function forgetGithubToken(){
  if(!confirm('Effacer le jeton GitHub enregistré sur cet appareil ?'))return;
- localStorage.removeItem(GH_TOKEN_KEY);if($('ghToken'))$('ghToken').value='';updateGithubStatus('Jeton GitHub effacé de cet appareil.','warn');
+ localStorage.removeItem(GH_TOKEN_KEY);if($('ghToken'))$('ghToken').value='';renderGithubTokenState();updateGithubStatus('Jeton GitHub effacé de cet appareil.','warn');
 }
 function updateGithubStatus(message,kind=''){
- let el=$('githubSyncStatus');if(!el)return;el.className=`small box ${kind}`;el.textContent=message;
+ let el=$('githubSyncStatus');if(el){el.className=`small box ${kind}`;el.textContent=message}
+ let badge=$('globalSyncBadge');if(badge){badge.className=`sync-badge ${kind||'idle'}`;badge.textContent=kind==='good'?'● Synchronisé':kind==='warn'?'● Synchronisation…':kind==='bad'?'● Erreur de synchro':'● Synchronisation'}
 }
+function renderGithubTokenState(){let el=$('ghTokenState');if(!el)return;el.textContent=githubToken()?'Jeton GitHub enregistré ✔️':'Aucun jeton enregistré';el.className=`small token-state ${githubToken()?'good':'warn'}`}
+function githubLastSync(){return safeJsonParse(localStorage.getItem(GH_LAST_SYNC_KEY)||'null',null)}
+function setGithubLastSync(data){localStorage.setItem(GH_LAST_SYNC_KEY,JSON.stringify(data));renderGithubLastSync()}
+function renderGithubLastSync(){let el=$('ghLastSync');if(!el)return;let x=githubLastSync();el.textContent=x?.at?`Dernière synchronisation réussie : ${new Date(x.at).toLocaleString('fr-FR')} · ${x.count} borne(s) tierce(s)`:'Aucune synchronisation réussie enregistrée sur cet appareil.'}
+function githubSyncLog(){return safeJsonParse(localStorage.getItem(GH_SYNC_LOG_KEY)||'[]',[])||[]}
+function addGithubLog(type,message){let log=githubSyncLog();log.unshift({at:new Date().toISOString(),type,message});localStorage.setItem(GH_SYNC_LOG_KEY,JSON.stringify(log.slice(0,8)));renderGithubLog()}
+function renderGithubLog(){let el=$('ghSyncLog');if(!el)return;let log=githubSyncLog();el.innerHTML=log.length?log.map(x=>`<div class="log-entry ${x.type}"><b>${new Date(x.at).toLocaleString('fr-FR')}</b><br>${escapeHtml(x.message)}</div>`).join(''):'<div class="small">Aucun événement de synchronisation.</div>'}
+function friendlyGithubError(status,detail=''){if(status===401)return'Jeton invalide ou expiré.';if(status===403)return'Accès refusé : vérifie que le jeton autorise Contents en lecture et écriture sur ce dépôt.';if(status===404)return'Dépôt, branche ou fichier introuvable.';if(status===409)return'Conflit GitHub détecté : les données distantes ont changé. Réessaie la synchronisation.';if(status===422)return'Requête refusée par GitHub : vérifie la branche et le chemin du fichier.';return detail||`Erreur GitHub (${status}).`}
 function utf8ToBase64(text){let bytes=new TextEncoder().encode(text),binary='';bytes.forEach(b=>binary+=String.fromCharCode(b));return btoa(binary)}
 function base64ToUtf8(value){let binary=atob((value||'').replace(/\n/g,'')),bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
 function isoTime(value){let t=Date.parse(value||'');return Number.isFinite(t)?t:0}
@@ -81,7 +94,7 @@ function githubContentUrl(cfg){return `https://api.github.com/repos/${encodeURIC
 async function readGithubCustomFile(cfg){
  let response=await fetch(githubContentUrl(cfg),{headers:githubApiHeaders(),cache:'no-store'});
  if(response.status===404)return{sha:null,data:{schemaVersion:2,stations:[],deletedIds:{}}};
- if(!response.ok)throw new Error(`Lecture GitHub impossible (${response.status}).`);
+ if(!response.ok){let detail=await response.json().catch(()=>({}));throw new Error(friendlyGithubError(response.status,detail.message))}
  let payload=await response.json();return{sha:payload.sha,data:JSON.parse(base64ToUtf8(payload.content))};
 }
 async function writeGithubCustomFile(cfg,state,sha){
@@ -89,7 +102,7 @@ async function writeGithubCustomFile(cfg,state,sha){
  let body={message:`Synchronisation des bornes tierces (${new Date().toLocaleString('fr-FR')})`,content:utf8ToBase64(JSON.stringify(state,null,2)),branch:cfg.branch||'main'};
  if(sha)body.sha=sha;
  let response=await fetch(url,{method:'PUT',headers:{...githubApiHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
- if(!response.ok){let detail=await response.json().catch(()=>({}));throw new Error(detail.message||`Écriture GitHub impossible (${response.status}).`)}
+ if(!response.ok){let detail=await response.json().catch(()=>({}));let err=new Error(friendlyGithubError(response.status,detail.message));err.status=response.status;throw err}
  return response.json();
 }
 let githubSyncPromise=null;
@@ -98,13 +111,18 @@ async function syncGithubNow(silent=false){
  githubSyncPromise=(async()=>{
   let cfg=githubSettings();
   if(!cfg.owner||!cfg.repo||!githubToken())throw new Error('Configure le dépôt et le jeton GitHub sur cet appareil.');
-  if(!silent)updateGithubStatus('Synchronisation en cours…','warn');
+  updateGithubStatus('Synchronisation en cours…','warn');
+  localStorage.setItem(GH_BACKUP_KEY,JSON.stringify({at:new Date().toISOString(),stations:customStationsForSync(),deletedIds:customDeletions()}));
   let remote=await readGithubCustomFile(cfg),merged=mergeCustomCloudStates(remote.data);
-  await writeGithubCustomFile(cfg,merged,remote.sha);applyMergedCustomState(merged);
-  updateGithubStatus(`Synchronisation réussie : ${merged.stations.length} borne(s) tierce(s), ${Object.keys(merged.deletedIds).length} suppression(s) mémorisée(s).`,'good');
-  return merged;
- })().catch(err=>{updateGithubStatus(`Échec : ${err.message}`,'bad');if(!silent)alert(`Synchronisation GitHub impossible : ${err.message}`);throw err}).finally(()=>githubSyncPromise=null);
+  try{await writeGithubCustomFile(cfg,merged,remote.sha)}catch(err){if(err.status!==409)throw err;remote=await readGithubCustomFile(cfg);merged=mergeCustomCloudStates(remote.data);await writeGithubCustomFile(cfg,merged,remote.sha)}
+  applyMergedCustomState(merged);setGithubLastSync({at:new Date().toISOString(),count:merged.stations.length});
+  let msg=`Synchronisation réussie : ${merged.stations.length} borne(s) tierce(s), ${Object.keys(merged.deletedIds).length} suppression(s) mémorisée(s).`;
+  updateGithubStatus(msg,'good');addGithubLog('good',msg);return merged;
+ })().catch(err=>{let msg=`Échec : ${err.message}`;updateGithubStatus(msg,'bad');addGithubLog('bad',msg);if(!silent)alert(`Synchronisation GitHub impossible : ${err.message}`);throw err}).finally(()=>githubSyncPromise=null);
  return githubSyncPromise;
+}
+async function testGithubConnection(){
+ try{let cfg=githubSettings();if(!cfg.owner||!cfg.repo||!githubToken())throw new Error('Enregistre d’abord le dépôt et le jeton.');updateGithubStatus('Test de connexion en cours…','warn');let r=await fetch(`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/branches/${encodeURIComponent(cfg.branch||'main')}`,{headers:githubApiHeaders(),cache:'no-store'});if(!r.ok){let d=await r.json().catch(()=>({}));throw new Error(friendlyGithubError(r.status,d.message))}updateGithubStatus('Connexion GitHub validée : dépôt et branche accessibles.','good');addGithubLog('good','Test de connexion GitHub réussi.')}catch(err){updateGithubStatus(`Échec du test : ${err.message}`,'bad');addGithubLog('bad',`Test de connexion : ${err.message}`);alert(`Test GitHub impossible : ${err.message}`)}
 }
 function queueGithubSync(){let cfg=githubSettings();if(cfg.autoSync&&githubToken())setTimeout(()=>syncGithubNow(true).catch(()=>{}),100)}
 
