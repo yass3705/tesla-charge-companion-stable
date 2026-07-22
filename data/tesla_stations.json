@@ -58969,7 +58969,41 @@
     "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/agadirsupercharger",
     "pricing": {
       "type": "rules",
-      "rules": []
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "powerMinute",
+          "currency": "MAD",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "powerBands": [
+            {
+              "minKw": 0,
+              "maxKw": 60,
+              "ratePerMinute": 1.1
+            },
+            {
+              "minKw": 60,
+              "maxKw": 100,
+              "ratePerMinute": 2.3
+            },
+            {
+              "minKw": 100,
+              "maxKw": 180,
+              "ratePerMinute": 3.5
+            },
+            {
+              "minKw": 180,
+              "maxKw": 1000,
+              "ratePerMinute": 6.0
+            }
+          ]
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -59025,7 +59059,41 @@
         "stalls": 4,
         "pricing": {
           "type": "rules",
-          "rules": []
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "powerMinute",
+              "currency": "MAD",
+              "pricePerKwh": 0,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "powerBands": [
+                {
+                  "minKw": 0,
+                  "maxKw": 60,
+                  "ratePerMinute": 1.1
+                },
+                {
+                  "minKw": 60,
+                  "maxKw": 100,
+                  "ratePerMinute": 2.3
+                },
+                {
+                  "minKw": 100,
+                  "maxKw": 180,
+                  "ratePerMinute": 3.5
+                },
+                {
+                  "minKw": 180,
+                  "maxKw": 1000,
+                  "ratePerMinute": 6.0
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -59064,7 +59132,41 @@
     "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/casablancamoroccosupercharger",
     "pricing": {
       "type": "rules",
-      "rules": []
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "powerMinute",
+          "currency": "MAD",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "powerBands": [
+            {
+              "minKw": 0,
+              "maxKw": 60,
+              "ratePerMinute": 1.1
+            },
+            {
+              "minKw": 60,
+              "maxKw": 100,
+              "ratePerMinute": 2.3
+            },
+            {
+              "minKw": 100,
+              "maxKw": 180,
+              "ratePerMinute": 3.5
+            },
+            {
+              "minKw": 180,
+              "maxKw": 1000,
+              "ratePerMinute": 6.0
+            }
+          ]
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -59120,7 +59222,41 @@
         "stalls": 4,
         "pricing": {
           "type": "rules",
-          "rules": []
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "powerMinute",
+              "currency": "MAD",
+              "pricePerKwh": 0,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "powerBands": [
+                {
+                  "minKw": 0,
+                  "maxKw": 60,
+                  "ratePerMinute": 1.1
+                },
+                {
+                  "minKw": 60,
+                  "maxKw": 100,
+                  "ratePerMinute": 2.3
+                },
+                {
+                  "minKw": 100,
+                  "maxKw": 180,
+                  "ratePerMinute": 3.5
+                },
+                {
+                  "minKw": 180,
+                  "maxKw": 1000,
+                  "ratePerMinute": 6.0
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -59159,7 +59295,41 @@
     "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/fessupercharger",
     "pricing": {
       "type": "rules",
-      "rules": []
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "powerMinute",
+          "currency": "MAD",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "powerBands": [
+            {
+              "minKw": 0,
+              "maxKw": 60,
+              "ratePerMinute": 1.1
+            },
+            {
+              "minKw": 60,
+              "maxKw": 100,
+              "ratePerMinute": 2.3
+            },
+            {
+              "minKw": 100,
+              "maxKw": 180,
+              "ratePerMinute": 3.5
+            },
+            {
+              "minKw": 180,
+              "maxKw": 1000,
+              "ratePerMinute": 6.0
+            }
+          ]
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -59215,7 +59385,41 @@
         "stalls": 4,
         "pricing": {
           "type": "rules",
-          "rules": []
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "powerMinute",
+              "currency": "MAD",
+              "pricePerKwh": 0,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "powerBands": [
+                {
+                  "minKw": 0,
+                  "maxKw": 60,
+                  "ratePerMinute": 1.1
+                },
+                {
+                  "minKw": 60,
+                  "maxKw": 100,
+                  "ratePerMinute": 2.3
+                },
+                {
+                  "minKw": 100,
+                  "maxKw": 180,
+                  "ratePerMinute": 3.5
+                },
+                {
+                  "minKw": 180,
+                  "maxKw": 1000,
+                  "ratePerMinute": 6.0
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -59254,7 +59458,41 @@
     "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/marrakechsupercharger",
     "pricing": {
       "type": "rules",
-      "rules": []
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "powerMinute",
+          "currency": "MAD",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "powerBands": [
+            {
+              "minKw": 0,
+              "maxKw": 60,
+              "ratePerMinute": 1.1
+            },
+            {
+              "minKw": 60,
+              "maxKw": 100,
+              "ratePerMinute": 2.3
+            },
+            {
+              "minKw": 100,
+              "maxKw": 180,
+              "ratePerMinute": 3.5
+            },
+            {
+              "minKw": 180,
+              "maxKw": 1000,
+              "ratePerMinute": 6.0
+            }
+          ]
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -59310,7 +59548,41 @@
         "stalls": 4,
         "pricing": {
           "type": "rules",
-          "rules": []
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "powerMinute",
+              "currency": "MAD",
+              "pricePerKwh": 0,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "powerBands": [
+                {
+                  "minKw": 0,
+                  "maxKw": 60,
+                  "ratePerMinute": 1.1
+                },
+                {
+                  "minKw": 60,
+                  "maxKw": 100,
+                  "ratePerMinute": 2.3
+                },
+                {
+                  "minKw": 100,
+                  "maxKw": 180,
+                  "ratePerMinute": 3.5
+                },
+                {
+                  "minKw": 180,
+                  "maxKw": 1000,
+                  "ratePerMinute": 6.0
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -59349,7 +59621,41 @@
     "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/26002",
     "pricing": {
       "type": "rules",
-      "rules": []
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "powerMinute",
+          "currency": "MAD",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "powerBands": [
+            {
+              "minKw": 0,
+              "maxKw": 60,
+              "ratePerMinute": 1.1
+            },
+            {
+              "minKw": 60,
+              "maxKw": 100,
+              "ratePerMinute": 2.3
+            },
+            {
+              "minKw": 100,
+              "maxKw": 180,
+              "ratePerMinute": 3.5
+            },
+            {
+              "minKw": 180,
+              "maxKw": 1000,
+              "ratePerMinute": 6.0
+            }
+          ]
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -59405,7 +59711,41 @@
         "stalls": 4,
         "pricing": {
           "type": "rules",
-          "rules": []
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "powerMinute",
+              "currency": "MAD",
+              "pricePerKwh": 0,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "powerBands": [
+                {
+                  "minKw": 0,
+                  "maxKw": 60,
+                  "ratePerMinute": 1.1
+                },
+                {
+                  "minKw": 60,
+                  "maxKw": 100,
+                  "ratePerMinute": 2.3
+                },
+                {
+                  "minKw": 100,
+                  "maxKw": 180,
+                  "ratePerMinute": 3.5
+                },
+                {
+                  "minKw": 180,
+                  "maxKw": 1000,
+                  "ratePerMinute": 6.0
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -59444,7 +59784,41 @@
     "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/tangiersupercharger",
     "pricing": {
       "type": "rules",
-      "rules": []
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "powerMinute",
+          "currency": "MAD",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "connectionFee": 0,
+          "idlePerMinute": 0,
+          "powerBands": [
+            {
+              "minKw": 0,
+              "maxKw": 60,
+              "ratePerMinute": 1.1
+            },
+            {
+              "minKw": 60,
+              "maxKw": 100,
+              "ratePerMinute": 2.3
+            },
+            {
+              "minKw": 100,
+              "maxKw": 180,
+              "ratePerMinute": 3.5
+            },
+            {
+              "minKw": 180,
+              "maxKw": 1000,
+              "ratePerMinute": 6.0
+            }
+          ]
+        }
+      ]
     },
     "access": {
       "limited": false,
@@ -59500,7 +59874,41 @@
         "stalls": 4,
         "pricing": {
           "type": "rules",
-          "rules": []
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "powerMinute",
+              "currency": "MAD",
+              "pricePerKwh": 0,
+              "chargePerMinute": 0,
+              "connectionFee": 0,
+              "idlePerMinute": 0,
+              "powerBands": [
+                {
+                  "minKw": 0,
+                  "maxKw": 60,
+                  "ratePerMinute": 1.1
+                },
+                {
+                  "minKw": 60,
+                  "maxKw": 100,
+                  "ratePerMinute": 2.3
+                },
+                {
+                  "minKw": 100,
+                  "maxKw": 180,
+                  "ratePerMinute": 3.5
+                },
+                {
+                  "minKw": 180,
+                  "maxKw": 1000,
+                  "ratePerMinute": 6.0
+                }
+              ]
+            }
+          ]
         }
       }
     ],
