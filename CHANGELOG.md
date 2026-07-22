@@ -1,4 +1,11 @@
-# Version 7.0.4
+# Version 7.1.0 Stable
+
+- `data/exchange_rates.json` est relu sans cache au démarrage et via le bouton d’actualisation.
+- La date « À propos » provient du fichier de taux réellement chargé, et non plus uniquement de `metadata.json`.
+- Le cache local des devises change de version afin d’écarter les anciennes valeurs.
+- Le bouton Supprimer fonctionne pour les stations personnalisées.
+- Une station publiée Tesla/tiers est masquée durablement sur l’appareil via une liste locale, sans modifier GitHub.
+- Les stations masquées ne réapparaissent plus au prochain chargement.
 
 - Les coordonnées GPS sont utilisées en priorité pour les itinéraires Google Maps ; l’adresse reste affichée comme libellé.
 - La mise à jour des devises enregistre la date de la source et l’heure de vérification séparément.
@@ -32,7 +39,7 @@
 - Migration automatique des anciens taux manuels.
 - Cache PWA renouvelé.
 
-## 7.0.4
+## 7.1.0
 - Frankfurter v2 devient la source principale des taux de change.
 - open.er-api.com devient la source de secours.
 - Correction du parseur pour le format tableau `{date, base, quote, rate}` de Frankfurter v2.

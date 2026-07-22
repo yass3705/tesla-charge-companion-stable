@@ -4,6 +4,10 @@ $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString()
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
 function localStations(){return JSON.parse(localStorage.getItem('tccStationsV701')||localStorage.getItem('tccStationsV66')||localStorage.getItem('tccStationsV65')||localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
 function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV25')||'null')}
+const HIDDEN_STATIONS_KEY='tccHiddenStationIdsV1';
+function hiddenStationIds(){return new Set(safeJsonParse(localStorage.getItem(HIDDEN_STATIONS_KEY)||'[]',[])||[])}
+function saveHiddenStationIds(ids){localStorage.setItem(HIDDEN_STATIONS_KEY,JSON.stringify([...ids]))}
+function isPublishedStation(id){return defaultStations.some(st=>st.id===id)}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
  if(pricing.type==='rules')(pricing.rules||[]).forEach(r=>r.currency=(r.currency||pricing.currency||'EUR').toUpperCase());
@@ -280,7 +284,7 @@ const DEFAULT_FX={
  EUR:1,CHF:.93,GBP:.84,NOK:11.7,SEK:11.2,DKK:7.46,PLN:4.25,CZK:24.6,
  HUF:400,RON:5.08,BGN:1.95583,MAD:10.8,DZD:151,TND:3.38
 };
-const FX_PUBLISHED_KEY='tccFxPublishedV2';
+const FX_PUBLISHED_KEY='tccFxPublishedV3';
 const FX_OVERRIDE_KEY='tccFxOverridesV2';
 const FX_MIGRATION_KEY='tccFxMigrationV2Done';
 
@@ -326,10 +330,10 @@ function getFxState(){
    overrides
  };
 }
-async function loadPublishedFx(cacheBust=false){
+async function loadPublishedFx(cacheBust=true){
  try{
-   let suffix=cacheBust?`?v=${Date.now()}`:'';
-   let response=await fetch(`data/exchange_rates.json${suffix}`,{cache:cacheBust?'no-store':'default'});
+   let suffix=`?v=${Date.now()}`;
+   let response=await fetch(`data/exchange_rates.json${suffix}`,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
    if(!response.ok)throw new Error(`Erreur ${response.status}`);
    let data=await response.json();
    let state={
@@ -926,29 +930,55 @@ function saveStation(){
  let st={...existing,id,name:$('fName').value.trim()||'Nouvelle borne',operator:$('fOperator').value.trim(),stalls:totalStalls,address:$('fAddress').value.trim(),kind:first.kind,source:existing.source||'custom',powerKw:first.powerKw,chargingConfigurations:configs,pricing:first.pricing,lastUpdated:$('fUpdated').value,temporarilyUnavailable:$('fTemporarilyUnavailable').checked,access:{limited:$('fAccessMode').value==='schedule',days,afterCloseMode:$('fCloseMode').value,afterCloseNote:$('fCloseNote').value.trim()}};
  if(i>=0)stations[i]=st;else stations.push(st);saveLocal();renderStations();resetForm();alert('Borne enregistrée.');
 }
-function deleteStation(id){if(confirm('Supprimer cette borne ?')){stations=stations.filter(x=>x.id!==id);saveLocal();renderStations()}}
-loadPublishedFx().then(()=>Promise.all([
+function deleteStation(id){
+ let st=stations.find(x=>x.id===id);
+ if(!st)return;
+ let published=isPublishedStation(id);
+ let message=published
+   ?`Masquer « ${st.name} » sur cet appareil ? La station restera dans le fichier GitHub et pourra être restaurée en effaçant les données locales.`
+   :`Supprimer définitivement « ${st.name} » de cet appareil ?`;
+ if(!confirm(message))return;
+ stations=stations.filter(x=>x.id!==id);
+ if(published){
+   let hidden=hiddenStationIds();hidden.add(id);saveHiddenStationIds(hidden);
+ }
+ saveLocal();
+ renderStations();
+ compare();
+}
+loadPublishedFx(true).then(()=>Promise.all([
  fetch('data/tesla_stations.json').then(r=>r.json()),
  fetch('data/custom_stations.json').then(r=>r.json()),
  fetch('data/metadata.json').then(r=>r.json()).catch(()=>({}))
 ])).then(([teslaData,customData,metadata])=>{
  defaultStations=[...teslaData,...customData].map(s=>normalizeStation(s));
+ let hidden=hiddenStationIds();
  let saved=localStations();
  if(saved){
-   stations=saved.map(s=>normalizeStation(s,defaultStations.find(d=>d.id===s.id)||{}));
-   // Add newly published stations that do not yet exist locally.
+   stations=saved
+     .filter(s=>!hidden.has(s.id))
+     .map(s=>normalizeStation(s,defaultStations.find(d=>d.id===s.id)||{}));
+   // Ajouter les nouvelles stations publiées, sauf celles masquées volontairement sur cet appareil.
    for(let official of defaultStations){
-     if(!stations.some(s=>s.id===official.id))stations.push(official);
+     if(!hidden.has(official.id)&&!stations.some(s=>s.id===official.id))stations.push(official);
    }
  }else{
    let old=oldLocalStations();
-   stations=old?old.map(s=>normalizeStation(s,defaultStations.find(d=>d.id===s.id)||{})):defaultStations;
+   stations=(old?old.map(s=>normalizeStation(s,defaultStations.find(d=>d.id===s.id)||{})):defaultStations)
+     .filter(s=>!hidden.has(s.id));
    saveLocal();
  }
  $('results').innerHTML='<div class="small">Saisis une adresse de départ puis touche Simuler pour afficher jusqu’à 20 bornes selon le prix et la distance.</div>';
  if($('dataFreshness')){
-   let teslaDate=metadata.teslaUpdated||'inconnue',fxDate=metadata.fxUpdated||'inconnue';
-   $('dataFreshness').innerHTML=`Base Tesla : ${teslaDate}<br>Taux de change : ${fxDate}`;
+   let teslaDate=metadata.teslaUpdated||'inconnue';
+   let fxState=getFxState();
+   let fxDate=fxState.updated||metadata.fxUpdated||'inconnue';
+   let checked='';
+   if(fxState.checkedAt){
+     let d=new Date(fxState.checkedAt);
+     checked=Number.isNaN(d.getTime())?'':`<br>Dernière vérification : ${d.toLocaleString('fr-FR')}`;
+   }
+   $('dataFreshness').innerHTML=`Base Tesla : ${teslaDate}<br>Taux de change : ${fxDate}${checked}`;
  }
  renderStations();renderFxRates();
 }).catch(err=>{

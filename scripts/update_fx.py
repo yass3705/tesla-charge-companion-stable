@@ -13,7 +13,7 @@ SUPPORTED = (
 )
 PRIMARY_URL = "https://api.frankfurter.dev/v2/rates?base=EUR&quotes=CHF,GBP,NOK,SEK,DKK,PLN,CZK,HUF,RON,BGN,MAD,DZD,TND"
 FALLBACK_URL = "https://open.er-api.com/v6/latest/EUR"
-USER_AGENT = "TeslaChargeCompanion/7.0.4"
+USER_AGENT = "TeslaChargeCompanion/7.1.0"
 
 
 def fetch_json(url: str) -> dict:
@@ -119,7 +119,7 @@ def main() -> int:
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         metadata = {}
-    metadata["version"] = "7.0.4"
+    metadata["version"] = "7.1.0"
     metadata["fxUpdated"] = published_date
     metadata["fxCheckedAt"] = checked_at
     metadata["fxSource"] = source
