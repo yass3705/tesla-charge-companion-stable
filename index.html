@@ -17,7 +17,7 @@
 </datalist>
 <header>
 <h1>⚡ Tesla Charge Companion</h1>
-<p>Version 7.2.1.2 · correctif Safari définitif <span id="globalSyncBadge" class="sync-badge idle">● Synchronisation</span></p>
+<p>Version 7.2.2 test · expérience de synchronisation <span id="globalSyncBadge" class="sync-badge idle">● Synchronisation</span></p>
 <nav>
 <button class="active" data-tab="compare">Comparer</button>
 <button data-tab="stations">Bornes</button>
@@ -152,10 +152,15 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 <div><label>Dépôt</label><input id="ghRepo" autocomplete="off" placeholder="tesla-charge-companion-stable"></div>
 <div><label>Branche</label><input id="ghBranch" autocomplete="off" value="main"></div>
 <div><label>Chemin du fichier</label><input id="ghPath" autocomplete="off" value="data/custom_stations.json"></div>
+<div class="full"><label>Nom de cet appareil</label><input id="ghDevice" autocomplete="off" placeholder="Ex. MacBook Pro ou iPhone"><div class="small" style="margin-top:6px">Ce nom apparaît dans l’état de la dernière synchronisation. Il n’identifie pas ton compte GitHub.</div></div>
 <div class="full"><label>Jeton GitHub à accès fin (Contents : lecture et écriture)</label><input id="ghToken" type="password" autocomplete="new-password" placeholder="Colle un nouveau jeton uniquement pour l’enregistrer ou le remplacer"><div id="ghTokenState" class="small token-state">Aucun jeton enregistré</div></div>
 <div class="full box">
 <label style="margin:0"><input id="ghAutoSync" type="checkbox" style="width:auto"> Synchroniser automatiquement après chaque ajout, modification ou suppression d’une borne tierce</label>
 <div class="small" style="margin-top:6px">Une synchronisation automatique lit d’abord la version GitHub, fusionne les changements puis enregistre le résultat pour éviter d’écraser les modifications d’un autre appareil.</div>
+</div>
+<div class="full box">
+<label style="margin:0"><input id="ghReadOnly" type="checkbox" style="width:auto"> Mode lecture seule sur cet appareil</label>
+<div class="small" style="margin-top:6px">Récupère la version GitHub sans modifier le fichier distant. Pratique sur un appareil utilisé uniquement pour consulter.</div>
 </div>
 </div>
 <div class="row" style="margin-top:12px">
@@ -163,6 +168,11 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 <button class="secondary" onclick="testGithubConnection()">Tester la connexion</button>
 <button class="primary sync-primary" onclick="syncGithubNow()">Synchroniser maintenant</button>
 <button class="danger" onclick="forgetGithubToken()">Effacer le jeton</button>
+</div>
+<div class="row backup-actions" style="margin-top:10px">
+<button class="secondary" onclick="exportGithubBackup()">Exporter une sauvegarde</button>
+<button class="secondary" onclick="chooseGithubBackup()">Importer une sauvegarde</button>
+<input id="ghImportFile" class="hidden" type="file" accept="application/json,.json" onchange="importGithubBackup(this)">
 </div>
 <div id="githubSyncStatus" class="small box" style="margin-top:12px">Synchronisation non configurée.</div>
 <div id="ghLastSync" class="small box" style="margin-top:12px">Aucune synchronisation réussie enregistrée sur cet appareil.</div>
@@ -173,5 +183,5 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 
 </main>
 <script>window.escapeHtml=window.escapeHtml||function(value){return String(value==null?"":value).replace(/[&<>'"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[ch]||ch;});};</script>
-<script src="assets/app.js?v=7212" defer></script>
+<script src="assets/app.js?v=7220" defer></script>
 </body></html>

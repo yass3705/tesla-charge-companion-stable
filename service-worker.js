@@ -1,9 +1,9 @@
-const CACHE = 'tcc-v7212-safari-definitive';
+const CACHE = 'tcc-v7220-sync-ux';
 const SHELL = [
   './',
-  './index.html?v=7212',
-  './assets/style.css?v=7212',
-  './assets/app.js?v=7212',
+  './index.html?v=7220',
+  './assets/style.css?v=7220',
+  './assets/app.js?v=7220',
   './manifest.webmanifest'
 ];
 

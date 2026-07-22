@@ -33,3 +33,6 @@ input,select,textarea{width:100%;font:inherit;color:#fff;background:#101012;bord
 code{background:#101012;border:1px solid var(--line);border-radius:6px;padding:2px 5px}.sync-primary{width:auto;margin:0}.box.good{border-color:#245c33}.box.warn{border-color:#6d4b13}.box.bad{border-color:#6b2228}
 
 .sync-badge{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;background:#29292e;color:#bbb}.sync-badge.good{background:#17351f;color:#8fe5a3}.sync-badge.warn{background:#4b3210;color:#ffc76a}.sync-badge.bad{background:#3a1418;color:#ff9ca1}.token-state{margin-top:7px}.log-entry{padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;line-height:1.4}.log-entry:last-child{border-bottom:0}.log-entry.good b{color:var(--good)}.log-entry.bad b{color:var(--bad)}details summary{cursor:pointer;font-weight:700}
+
+.backup-actions{padding-top:2px}.backup-actions .secondary{font-weight:650}#ghLastSync{cursor:help}
+@media(max-width:560px){.backup-actions{display:grid;grid-template-columns:1fr 1fr}.backup-actions button{width:100%}}

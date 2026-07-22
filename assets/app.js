@@ -16,6 +16,7 @@ const CUSTOM_DELETIONS_KEY='tccCustomStationDeletionsV1';
 const GH_LAST_SYNC_KEY='tccGithubLastSyncV1';
 const GH_SYNC_LOG_KEY='tccGithubSyncLogV1';
 const GH_BACKUP_KEY='tccGithubCustomBackupV1';
+const GH_DEVICE_KEY='tccGithubDeviceNameV1';
 function githubSettings(){return safeJsonParse(localStorage.getItem(GH_SETTINGS_KEY)||'{}',{})||{}}
 function githubToken(){return localStorage.getItem(GH_TOKEN_KEY)||''}
 function customDeletions(){return safeJsonParse(localStorage.getItem(CUSTOM_DELETIONS_KEY)||'{}',{})||{}}
@@ -36,14 +37,17 @@ function loadGithubSettingsForm(){
  if($('ghPath'))$('ghPath').value=cfg.path||'data/custom_stations.json';
  if($('ghToken'))$('ghToken').value='';
  if($('ghAutoSync'))$('ghAutoSync').checked=!!cfg.autoSync;
+ if($('ghReadOnly'))$('ghReadOnly').checked=!!cfg.readOnly;
+ if($('ghDevice'))$('ghDevice').value=cfg.deviceName||localStorage.getItem(GH_DEVICE_KEY)||defaultDeviceName();
  renderGithubTokenState();renderGithubLastSync();renderGithubLog();
  updateGithubStatus(githubToken()&&cfg.owner&&cfg.repo?'Configuration enregistrée sur cet appareil.':'Synchronisation non configurée.',githubToken()?'good':'');
 }
 function saveGithubSettings(){
  let previous=githubSettings(),token=$('ghToken')?.value?.trim();
- let cfg={owner:$('ghOwner').value.trim(),repo:$('ghRepo').value.trim(),branch:$('ghBranch').value.trim()||'main',path:$('ghPath').value.trim()||'data/custom_stations.json',autoSync:!!$('ghAutoSync').checked};
+ let cfg={owner:$('ghOwner').value.trim(),repo:$('ghRepo').value.trim(),branch:$('ghBranch').value.trim()||'main',path:$('ghPath').value.trim()||'data/custom_stations.json',autoSync:!!$('ghAutoSync').checked,readOnly:!!$('ghReadOnly')?.checked,deviceName:$('ghDevice')?.value.trim()||defaultDeviceName()};
  if(!cfg.owner||!cfg.repo){alert('Renseigne le propriétaire et le dépôt GitHub.');return}
  localStorage.setItem(GH_SETTINGS_KEY,JSON.stringify(cfg));
+ localStorage.setItem(GH_DEVICE_KEY,cfg.deviceName);
  if(token)localStorage.setItem(GH_TOKEN_KEY,token);
  $('ghToken').value='';
  renderGithubTokenState();updateGithubStatus(githubToken()?'Configuration enregistrée. Tu peux tester la connexion ou synchroniser.':'Configuration enregistrée, mais aucun jeton n’est disponible.',githubToken()?'good':'warn');
@@ -57,9 +61,11 @@ function updateGithubStatus(message,kind=''){
  let badge=$('globalSyncBadge');if(badge){badge.className=`sync-badge ${kind||'idle'}`;badge.textContent=kind==='good'?'● Synchronisé':kind==='warn'?'● Synchronisation…':kind==='bad'?'● Erreur de synchro':'● Synchronisation'}
 }
 function renderGithubTokenState(){let el=$('ghTokenState');if(!el)return;el.textContent=githubToken()?'Jeton GitHub enregistré ✔️':'Aucun jeton enregistré';el.className=`small token-state ${githubToken()?'good':'warn'}`}
+function defaultDeviceName(){let ua=navigator.userAgent||'';if(/iPhone/i.test(ua))return'iPhone';if(/iPad/i.test(ua))return'iPad';if(/Macintosh/i.test(ua))return'Mac';if(/Android/i.test(ua))return'Android';return'Navigateur';}
+function relativeTime(value){let t=Date.parse(value||'');if(!Number.isFinite(t))return'';let seconds=Math.max(0,Math.round((Date.now()-t)/1000));if(seconds<10)return'à l’instant';if(seconds<60)return`il y a ${seconds} s`;let minutes=Math.round(seconds/60);if(minutes<60)return`il y a ${minutes} min`;let hours=Math.round(minutes/60);if(hours<24)return`il y a ${hours} h`;let days=Math.round(hours/24);if(days<7)return`il y a ${days} j`;return new Date(t).toLocaleDateString('fr-FR');}
 function githubLastSync(){return safeJsonParse(localStorage.getItem(GH_LAST_SYNC_KEY)||'null',null)}
 function setGithubLastSync(data){localStorage.setItem(GH_LAST_SYNC_KEY,JSON.stringify(data));renderGithubLastSync()}
-function renderGithubLastSync(){let el=$('ghLastSync');if(!el)return;let x=githubLastSync();el.textContent=x?.at?`Dernière synchronisation réussie : ${new Date(x.at).toLocaleString('fr-FR')} · ${x.count} borne(s) tierce(s)`:'Aucune synchronisation réussie enregistrée sur cet appareil.'}
+function renderGithubLastSync(){let el=$('ghLastSync');if(!el)return;let x=githubLastSync();if(!x?.at){el.textContent='Aucune synchronisation réussie enregistrée sur cet appareil.';return}let device=x.device?` · ${x.device}`:'';let mode=x.readOnly?' · lecture seule':'';el.textContent=`Dernière synchronisation : ${relativeTime(x.at)}${device}${mode} · ${x.count} borne(s) tierce(s)`;el.title=new Date(x.at).toLocaleString('fr-FR');}
 function githubSyncLog(){return safeJsonParse(localStorage.getItem(GH_SYNC_LOG_KEY)||'[]',[])||[]}
 function addGithubLog(type,message){let log=githubSyncLog();log.unshift({at:new Date().toISOString(),type,message});localStorage.setItem(GH_SYNC_LOG_KEY,JSON.stringify(log.slice(0,8)));renderGithubLog()}
 function renderGithubLog(){let el=$('ghSyncLog');if(!el)return;let log=githubSyncLog();el.innerHTML=log.length?log.map(x=>`<div class="log-entry ${x.type}"><b>${new Date(x.at).toLocaleString('fr-FR')}</b><br>${escapeHtml(x.message)}</div>`).join(''):'<div class="small">Aucun événement de synchronisation.</div>'}
@@ -70,8 +76,8 @@ function isoTime(value){let t=Date.parse(value||'');return Number.isFinite(t)?t:
 function stationSyncTime(st,fallback=''){return st?._syncUpdatedAt||st?.syncUpdatedAt||fallback||((st?.lastUpdated||'')+'T00:00:00Z')}
 function customStationsForSync(){return stations.filter(st=>st.source!=='teslaSupercharger').map(st=>({...st,_syncUpdatedAt:stationSyncTime(st,st.lastUpdated?`${st.lastUpdated}T00:00:00Z`:'1970-01-01T00:00:00Z')}))}
 function parseCustomCloudData(data){
- if(Array.isArray(data))return{schemaVersion:1,updatedAt:'',stations:data,deletedIds:{}};
- return{schemaVersion:Number(data?.schemaVersion||2),updatedAt:data?.updatedAt||'',stations:Array.isArray(data?.stations)?data.stations:[],deletedIds:data?.deletedIds&&typeof data.deletedIds==='object'?data.deletedIds:{}};
+ if(Array.isArray(data))return{schemaVersion:1,updatedAt:'',lastDevice:'',stations:data,deletedIds:{}};
+ return{schemaVersion:Number(data?.schemaVersion||2),updatedAt:data?.updatedAt||'',lastDevice:data?.lastDevice||'',stations:Array.isArray(data?.stations)?data.stations:[],deletedIds:data?.deletedIds&&typeof data.deletedIds==='object'?data.deletedIds:{}};
 }
 function mergeCustomCloudStates(remote){
  let localStations=customStationsForSync(),localDeleted=customDeletions(),remoteState=parseCustomCloudData(remote),records=new Map();
@@ -84,7 +90,7 @@ function mergeCustomCloudStates(remote){
  let mergedStations=[],mergedDeleted={};
  for(let [id,rec] of records){if(rec.type==='delete')mergedDeleted[id]=rec.time;else mergedStations.push(rec.value)}
  mergedStations.sort((x,y)=>(x.name||'').localeCompare(y.name||'','fr'));
- return{schemaVersion:2,updatedAt:new Date().toISOString(),stations:mergedStations,deletedIds:mergedDeleted};
+ let cfg=githubSettings();return{schemaVersion:2,updatedAt:new Date().toISOString(),lastDevice:cfg.deviceName||defaultDeviceName(),stations:mergedStations,deletedIds:mergedDeleted};
 }
 function applyMergedCustomState(state){
  let cloud=parseCustomCloudData(state),teslaOnly=stations.filter(st=>st.source==='teslaSupercharger');
@@ -115,10 +121,18 @@ async function syncGithubNow(silent=false){
   if(!cfg.owner||!cfg.repo||!githubToken())throw new Error('Configure le dépôt et le jeton GitHub sur cet appareil.');
   updateGithubStatus('Synchronisation en cours…','warn');
   localStorage.setItem(GH_BACKUP_KEY,JSON.stringify({at:new Date().toISOString(),stations:customStationsForSync(),deletedIds:customDeletions()}));
-  let remote=await readGithubCustomFile(cfg),merged=mergeCustomCloudStates(remote.data);
-  try{await writeGithubCustomFile(cfg,merged,remote.sha)}catch(err){if(err.status!==409)throw err;remote=await readGithubCustomFile(cfg);merged=mergeCustomCloudStates(remote.data);await writeGithubCustomFile(cfg,merged,remote.sha)}
-  applyMergedCustomState(merged);setGithubLastSync({at:new Date().toISOString(),count:merged.stations.length});
-  let msg=`Synchronisation réussie : ${merged.stations.length} borne(s) tierce(s), ${Object.keys(merged.deletedIds).length} suppression(s) mémorisée(s).`;
+  let remote=await readGithubCustomFile(cfg),merged;
+  if(cfg.readOnly){
+   merged=parseCustomCloudData(remote.data);
+   applyMergedCustomState(merged);
+  }else{
+   merged=mergeCustomCloudStates(remote.data);
+   try{await writeGithubCustomFile(cfg,merged,remote.sha)}catch(err){if(err.status!==409)throw err;remote=await readGithubCustomFile(cfg);merged=mergeCustomCloudStates(remote.data);await writeGithubCustomFile(cfg,merged,remote.sha)}
+   applyMergedCustomState(merged);
+  }
+  let syncDevice=cfg.readOnly?(merged.lastDevice||'GitHub'):(cfg.deviceName||defaultDeviceName());
+  setGithubLastSync({at:new Date().toISOString(),count:merged.stations.length,device:syncDevice,readOnly:!!cfg.readOnly});
+  let msg=cfg.readOnly?`Lecture GitHub réussie : ${merged.stations.length} borne(s) tierce(s) récupérée(s), aucune écriture effectuée.`:`Synchronisation réussie : ${merged.stations.length} borne(s) tierce(s), ${Object.keys(merged.deletedIds).length} suppression(s) mémorisée(s).`;
   updateGithubStatus(msg,'good');addGithubLog('good',msg);return merged;
  })().catch(err=>{let msg=`Échec : ${err.message}`;updateGithubStatus(msg,'bad');addGithubLog('bad',msg);if(!silent)alert(`Synchronisation GitHub impossible : ${err.message}`);throw err}).finally(()=>githubSyncPromise=null);
  return githubSyncPromise;
@@ -127,6 +141,9 @@ async function testGithubConnection(){
  try{let cfg=githubSettings();if(!cfg.owner||!cfg.repo||!githubToken())throw new Error('Enregistre d’abord le dépôt et le jeton.');updateGithubStatus('Test de connexion en cours…','warn');let r=await fetch(`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/branches/${encodeURIComponent(cfg.branch||'main')}`,{headers:githubApiHeaders(),cache:'no-store'});if(!r.ok){let d=await r.json().catch(()=>({}));throw new Error(friendlyGithubError(r.status,d.message))}updateGithubStatus('Connexion GitHub validée : dépôt et branche accessibles.','good');addGithubLog('good','Test de connexion GitHub réussi.')}catch(err){updateGithubStatus(`Échec du test : ${err.message}`,'bad');addGithubLog('bad',`Test de connexion : ${err.message}`);alert(`Test GitHub impossible : ${err.message}`)}
 }
 function queueGithubSync(){let cfg=githubSettings();if(cfg.autoSync&&githubToken())setTimeout(()=>syncGithubNow(true).catch(()=>{}),100)}
+function exportGithubBackup(){let payload={format:'Tesla Charge Companion backup',version:'7.2.2',exportedAt:new Date().toISOString(),device:githubSettings().deviceName||defaultDeviceName(),stations:customStationsForSync(),deletedIds:customDeletions(),settings:{...githubSettings(),token:undefined}};let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`tcc-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);updateGithubStatus('Sauvegarde locale exportée.','good');addGithubLog('good','Sauvegarde locale exportée.')}
+function chooseGithubBackup(){if($('ghImportFile'))$('ghImportFile').click()}
+async function importGithubBackup(input){let file=input?.files?.[0];if(!file)return;try{let data=JSON.parse(await file.text()),cloud=parseCustomCloudData(data?.stations?{schemaVersion:2,stations:data.stations,deletedIds:data.deletedIds||{},updatedAt:data.exportedAt||new Date().toISOString()}:data);if(!Array.isArray(cloud.stations))throw new Error('Format de sauvegarde non reconnu.');if(!confirm(`Importer ${cloud.stations.length} borne(s) tierce(s) sur cet appareil ?`))return;applyMergedCustomState(cloud);updateGithubStatus(`Sauvegarde importée : ${cloud.stations.length} borne(s) tierce(s).`,'good');addGithubLog('good',`Sauvegarde importée : ${cloud.stations.length} borne(s).`)}catch(err){updateGithubStatus(`Import impossible : ${err.message}`,'bad');alert(`Import impossible : ${err.message}`)}finally{input.value=''}}
 
 function isPublishedStation(id){return defaultStations.some(st=>st.id===id)}
 function normalizePricingCurrency(pricing){
@@ -1111,3 +1128,5 @@ loadPublishedFx(true).then(()=>Promise.all([
  $('results').innerHTML=`<div class="bad">Chargement des données impossible : ${err.message}</div>`;
 });
 buildDays();resetForm();
+
+setInterval(()=>renderGithubLastSync(),30000);

@@ -1,3 +1,11 @@
+# Version 7.2.2 test — Expérience de synchronisation
+
+- Affichage relatif de la dernière synchronisation (à l’instant, il y a X min/h/j).
+- Nom local de l’appareil dans le statut de synchronisation.
+- Mode lecture seule : récupération GitHub sans écriture distante.
+- Export et import d’une sauvegarde JSON des bornes tierces.
+- Nouveau cache PWA `7220`.
+
 # V7.2.1.2 — Correctif Safari définitif
 
 - Fonction `escapeHtml` exposée explicitement dans la page et dans `app.js`.
