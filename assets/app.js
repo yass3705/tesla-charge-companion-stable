@@ -1,5 +1,5 @@
 const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];let defaultStations=[],stations=[],routeResults={},fxRowSeq=0;const $=id=>document.getElementById(id);
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates()});
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='stations')renderStations();if(b.dataset.tab==='fx')renderFxRates();if(b.dataset.tab==='sync')loadGithubSettingsForm()});
 $('simDate').valueAsDate=new Date();$('simTime').value=new Date().toTimeString().slice(0,5);$('simUnplugTime').value='';$('fUpdated').valueAsDate=new Date();$('simOrigin').value=localStorage.getItem('tccDefaultOrigin')||'';$('simMaxDistance').value=localStorage.getItem('tccMaxDistanceKm')||'20';
 function oldCustomStations(){let a=JSON.parse(localStorage.getItem('tccStationsV14')||'[]');return a.filter(x=>String(x.id||'').startsWith('station-'))}
 function localStations(){return JSON.parse(localStorage.getItem('tccStationsV701')||localStorage.getItem('tccStationsV66')||localStorage.getItem('tccStationsV65')||localStorage.getItem('tccStationsV64')||localStorage.getItem('tccStationsV63')||localStorage.getItem('tccStationsV62')||localStorage.getItem('tccStationsV61')||localStorage.getItem('tccStationsV60')||'null')}
@@ -7,6 +7,107 @@ function oldLocalStations(){return JSON.parse(localStorage.getItem('tccStationsV
 const HIDDEN_STATIONS_KEY='tccHiddenStationIdsV1';
 function hiddenStationIds(){return new Set(safeJsonParse(localStorage.getItem(HIDDEN_STATIONS_KEY)||'[]',[])||[])}
 function saveHiddenStationIds(ids){localStorage.setItem(HIDDEN_STATIONS_KEY,JSON.stringify([...ids]))}
+
+const GH_SETTINGS_KEY='tccGithubSyncSettingsV1';
+const GH_TOKEN_KEY='tccGithubSyncTokenV1';
+const CUSTOM_DELETIONS_KEY='tccCustomStationDeletionsV1';
+function githubSettings(){return safeJsonParse(localStorage.getItem(GH_SETTINGS_KEY)||'{}',{})||{}}
+function githubToken(){return localStorage.getItem(GH_TOKEN_KEY)||''}
+function customDeletions(){return safeJsonParse(localStorage.getItem(CUSTOM_DELETIONS_KEY)||'{}',{})||{}}
+function saveCustomDeletions(value){localStorage.setItem(CUSTOM_DELETIONS_KEY,JSON.stringify(value||{}))}
+function inferGithubDefaults(){
+ let owner='',repo='';
+ if(location.hostname.endsWith('.github.io')){
+   owner=location.hostname.split('.')[0];
+   repo=location.pathname.split('/').filter(Boolean)[0]||`${owner}.github.io`;
+ }
+ return{owner,repo,branch:'main',path:'data/custom_stations.json',autoSync:false};
+}
+function loadGithubSettingsForm(){
+ let cfg={...inferGithubDefaults(),...githubSettings()};
+ if($('ghOwner'))$('ghOwner').value=cfg.owner||'';
+ if($('ghRepo'))$('ghRepo').value=cfg.repo||'';
+ if($('ghBranch'))$('ghBranch').value=cfg.branch||'main';
+ if($('ghPath'))$('ghPath').value=cfg.path||'data/custom_stations.json';
+ if($('ghToken'))$('ghToken').value='';
+ if($('ghAutoSync'))$('ghAutoSync').checked=!!cfg.autoSync;
+ updateGithubStatus(githubToken()&&cfg.owner&&cfg.repo?'Configuration enregistrée sur cet appareil.':'Synchronisation non configurée.',githubToken()?'good':'');
+}
+function saveGithubSettings(){
+ let previous=githubSettings(),token=$('ghToken')?.value?.trim();
+ let cfg={owner:$('ghOwner').value.trim(),repo:$('ghRepo').value.trim(),branch:$('ghBranch').value.trim()||'main',path:$('ghPath').value.trim()||'data/custom_stations.json',autoSync:!!$('ghAutoSync').checked};
+ if(!cfg.owner||!cfg.repo){alert('Renseigne le propriétaire et le dépôt GitHub.');return}
+ localStorage.setItem(GH_SETTINGS_KEY,JSON.stringify(cfg));
+ if(token)localStorage.setItem(GH_TOKEN_KEY,token);
+ $('ghToken').value='';
+ updateGithubStatus(githubToken()?'Configuration enregistrée. Tu peux lancer la synchronisation.':'Configuration enregistrée, mais aucun jeton n’est disponible.','good');
+}
+function forgetGithubToken(){
+ if(!confirm('Effacer le jeton GitHub enregistré sur cet appareil ?'))return;
+ localStorage.removeItem(GH_TOKEN_KEY);if($('ghToken'))$('ghToken').value='';updateGithubStatus('Jeton GitHub effacé de cet appareil.','warn');
+}
+function updateGithubStatus(message,kind=''){
+ let el=$('githubSyncStatus');if(!el)return;el.className=`small box ${kind}`;el.textContent=message;
+}
+function utf8ToBase64(text){let bytes=new TextEncoder().encode(text),binary='';bytes.forEach(b=>binary+=String.fromCharCode(b));return btoa(binary)}
+function base64ToUtf8(value){let binary=atob((value||'').replace(/\n/g,'')),bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+function isoTime(value){let t=Date.parse(value||'');return Number.isFinite(t)?t:0}
+function stationSyncTime(st,fallback=''){return st?._syncUpdatedAt||st?.syncUpdatedAt||fallback||((st?.lastUpdated||'')+'T00:00:00Z')}
+function customStationsForSync(){return stations.filter(st=>st.source!=='teslaSupercharger').map(st=>({...st,_syncUpdatedAt:stationSyncTime(st,st.lastUpdated?`${st.lastUpdated}T00:00:00Z`:'1970-01-01T00:00:00Z')}))}
+function parseCustomCloudData(data){
+ if(Array.isArray(data))return{schemaVersion:1,updatedAt:'',stations:data,deletedIds:{}};
+ return{schemaVersion:Number(data?.schemaVersion||2),updatedAt:data?.updatedAt||'',stations:Array.isArray(data?.stations)?data.stations:[],deletedIds:data?.deletedIds&&typeof data.deletedIds==='object'?data.deletedIds:{}};
+}
+function mergeCustomCloudStates(remote){
+ let localStations=customStationsForSync(),localDeleted=customDeletions(),remoteState=parseCustomCloudData(remote),records=new Map();
+ function offerStation(st,fallback){let id=st?.id;if(!id)return;let time=stationSyncTime(st,fallback),candidate={type:'station',time,value:{...st,_syncUpdatedAt:time}};let current=records.get(id);if(!current||isoTime(candidate.time)>=isoTime(current.time))records.set(id,candidate)}
+ function offerDelete(id,time){if(!id)return;let candidate={type:'delete',time:time||new Date(0).toISOString()};let current=records.get(id);if(!current||isoTime(candidate.time)>=isoTime(current.time))records.set(id,candidate)}
+ remoteState.stations.forEach(st=>offerStation(st,remoteState.updatedAt));
+ Object.entries(remoteState.deletedIds||{}).forEach(([id,time])=>offerDelete(id,time));
+ localStations.forEach(st=>offerStation(st,''));
+ Object.entries(localDeleted).forEach(([id,time])=>offerDelete(id,time));
+ let mergedStations=[],mergedDeleted={};
+ for(let [id,rec] of records){if(rec.type==='delete')mergedDeleted[id]=rec.time;else mergedStations.push(rec.value)}
+ mergedStations.sort((x,y)=>(x.name||'').localeCompare(y.name||'','fr'));
+ return{schemaVersion:2,updatedAt:new Date().toISOString(),stations:mergedStations,deletedIds:mergedDeleted};
+}
+function applyMergedCustomState(state){
+ let cloud=parseCustomCloudData(state),teslaOnly=stations.filter(st=>st.source==='teslaSupercharger');
+ stations=[...teslaOnly,...cloud.stations.map(st=>normalizeStation(st))];
+ saveCustomDeletions(cloud.deletedIds||{});saveLocal();renderStations();
+}
+function githubApiHeaders(){return{'Accept':'application/vnd.github+json','Authorization':`Bearer ${githubToken()}`,'X-GitHub-Api-Version':'2022-11-28'}}
+function githubContentUrl(cfg){return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(cfg.branch||'main')}`}
+async function readGithubCustomFile(cfg){
+ let response=await fetch(githubContentUrl(cfg),{headers:githubApiHeaders(),cache:'no-store'});
+ if(response.status===404)return{sha:null,data:{schemaVersion:2,stations:[],deletedIds:{}}};
+ if(!response.ok)throw new Error(`Lecture GitHub impossible (${response.status}).`);
+ let payload=await response.json();return{sha:payload.sha,data:JSON.parse(base64ToUtf8(payload.content))};
+}
+async function writeGithubCustomFile(cfg,state,sha){
+ let url=githubContentUrl(cfg).split('?')[0];
+ let body={message:`Synchronisation des bornes tierces (${new Date().toLocaleString('fr-FR')})`,content:utf8ToBase64(JSON.stringify(state,null,2)),branch:cfg.branch||'main'};
+ if(sha)body.sha=sha;
+ let response=await fetch(url,{method:'PUT',headers:{...githubApiHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+ if(!response.ok){let detail=await response.json().catch(()=>({}));throw new Error(detail.message||`Écriture GitHub impossible (${response.status}).`)}
+ return response.json();
+}
+let githubSyncPromise=null;
+async function syncGithubNow(silent=false){
+ if(githubSyncPromise)return githubSyncPromise;
+ githubSyncPromise=(async()=>{
+  let cfg=githubSettings();
+  if(!cfg.owner||!cfg.repo||!githubToken())throw new Error('Configure le dépôt et le jeton GitHub sur cet appareil.');
+  if(!silent)updateGithubStatus('Synchronisation en cours…','warn');
+  let remote=await readGithubCustomFile(cfg),merged=mergeCustomCloudStates(remote.data);
+  await writeGithubCustomFile(cfg,merged,remote.sha);applyMergedCustomState(merged);
+  updateGithubStatus(`Synchronisation réussie : ${merged.stations.length} borne(s) tierce(s), ${Object.keys(merged.deletedIds).length} suppression(s) mémorisée(s).`,'good');
+  return merged;
+ })().catch(err=>{updateGithubStatus(`Échec : ${err.message}`,'bad');if(!silent)alert(`Synchronisation GitHub impossible : ${err.message}`);throw err}).finally(()=>githubSyncPromise=null);
+ return githubSyncPromise;
+}
+function queueGithubSync(){let cfg=githubSettings();if(cfg.autoSync&&githubToken())setTimeout(()=>syncGithubNow(true).catch(()=>{}),100)}
+
 function isPublishedStation(id){return defaultStations.some(st=>st.id===id)}
 function normalizePricingCurrency(pricing){
  if(!pricing)return pricing;
@@ -927,13 +1028,13 @@ function saveStation(){
  for(let i=0;i<7;i++)days[String(i)]={open:$('dOpen'+i).checked,start:$('dStart'+i).value,end:$('dEnd'+i).value};
  let i=stations.findIndex(x=>x.id===id),existing=i>=0?stations[i]:{};
  let configs=readChargingConfigurations(),totalStalls=configs.reduce((sum,c)=>sum+c.stalls,0),first=configs[0];
- let st={...existing,id,name:$('fName').value.trim()||'Nouvelle borne',operator:$('fOperator').value.trim(),stalls:totalStalls,address:$('fAddress').value.trim(),kind:first.kind,source:existing.source||'custom',powerKw:first.powerKw,chargingConfigurations:configs,pricing:first.pricing,lastUpdated:$('fUpdated').value,temporarilyUnavailable:$('fTemporarilyUnavailable').checked,access:{limited:$('fAccessMode').value==='schedule',days,afterCloseMode:$('fCloseMode').value,afterCloseNote:$('fCloseNote').value.trim()}};
- if(i>=0)stations[i]=st;else stations.push(st);saveLocal();renderStations();resetForm();alert('Borne enregistrée.');
+ let st={...existing,id,name:$('fName').value.trim()||'Nouvelle borne',operator:$('fOperator').value.trim(),stalls:totalStalls,address:$('fAddress').value.trim(),kind:first.kind,source:existing.source||'custom',powerKw:first.powerKw,chargingConfigurations:configs,pricing:first.pricing,lastUpdated:$('fUpdated').value,temporarilyUnavailable:$('fTemporarilyUnavailable').checked,_syncUpdatedAt:new Date().toISOString(),access:{limited:$('fAccessMode').value==='schedule',days,afterCloseMode:$('fCloseMode').value,afterCloseNote:$('fCloseNote').value.trim()}};
+ if(i>=0)stations[i]=st;else stations.push(st);let deletions=customDeletions();delete deletions[id];saveCustomDeletions(deletions);saveLocal();renderStations();resetForm();queueGithubSync();alert('Borne enregistrée sur cet appareil.'+(githubSettings().autoSync&&githubToken()?' Synchronisation GitHub lancée.':''));
 }
 function deleteStation(id){
  let st=stations.find(x=>x.id===id);
  if(!st)return;
- let published=isPublishedStation(id);
+ let published=st.source==='teslaSupercharger';
  let message=published
    ?`Masquer « ${st.name} » sur cet appareil ? La station restera dans le fichier GitHub et pourra être restaurée en effaçant les données locales.`
    :`Supprimer définitivement « ${st.name} » de cet appareil ?`;
@@ -941,17 +1042,21 @@ function deleteStation(id){
  stations=stations.filter(x=>x.id!==id);
  if(published){
    let hidden=hiddenStationIds();hidden.add(id);saveHiddenStationIds(hidden);
+ }else{
+   let deletions=customDeletions();deletions[id]=new Date().toISOString();saveCustomDeletions(deletions);
  }
  saveLocal();
  renderStations();
  compare();
+ if(!published)queueGithubSync();
 }
 loadPublishedFx(true).then(()=>Promise.all([
  fetch('data/tesla_stations.json').then(r=>r.json()),
  fetch('data/custom_stations.json').then(r=>r.json()),
  fetch('data/metadata.json').then(r=>r.json()).catch(()=>({}))
 ])).then(([teslaData,customData,metadata])=>{
- defaultStations=[...teslaData,...customData].map(s=>normalizeStation(s));
+ let publishedCustom=parseCustomCloudData(customData);saveCustomDeletions({...publishedCustom.deletedIds,...customDeletions()});
+ defaultStations=[...teslaData,...publishedCustom.stations].map(s=>normalizeStation(s));
  let hidden=hiddenStationIds();
  let saved=localStations();
  if(saved){
@@ -980,7 +1085,8 @@ loadPublishedFx(true).then(()=>Promise.all([
    }
    $('dataFreshness').innerHTML=`Base Tesla : ${teslaDate}<br>Taux de change : ${fxDate}${checked}`;
  }
- renderStations();renderFxRates();
+ renderStations();renderFxRates();loadGithubSettingsForm();
+ let cfg=githubSettings();if(cfg.autoSync&&githubToken())syncGithubNow(true).catch(()=>{});
 }).catch(err=>{
  $('results').innerHTML=`<div class="bad">Chargement des données impossible : ${err.message}</div>`;
 });

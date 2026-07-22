@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Tesla Charge Companion 7.1.0</title>
+<title>Tesla Charge Companion 7.2.0</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -17,12 +17,13 @@
 </datalist>
 <header>
 <h1>⚡ Tesla Charge Companion</h1>
-<p>Version 7.1.0 stable · GPS, devises et suppression fiabilisés</p>
+<p>Version 7.2.0 test · synchronisation GitHub des bornes tierces</p>
 <nav>
 <button class="active" data-tab="compare">Comparer</button>
 <button data-tab="stations">Bornes</button>
 <button data-tab="edit">Ajouter / modifier</button>
 <button data-tab="fx">Devises</button>
+<button data-tab="sync">Synchronisation</button>
 </nav>
 </header>
 <main>
@@ -119,7 +120,7 @@ Les tarifs sont maintenant renseignés directement dans chaque configuration de 
 <section id="fx" class="panel">
 <div class="card">
 <h3>À propos</h3>
-<div class="small">Tesla Charge Companion <b>V7.1.0</b><br>
+<div class="small">Tesla Charge Companion <b>V7.2.0 test</b><br>
 Tarifs Tesla saisis ou importés séparément. Les devises Europe et Maghreb sont actualisées quotidiennement, avec conservation du dernier taux valide.</div>
 <div id="dataFreshness" class="small" style="margin-top:10px"></div>
 </div>
@@ -141,6 +142,32 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 </div>
 </div>
 </section>
+
+<section id="sync" class="panel">
+<div class="card">
+<h3>Synchronisation GitHub</h3>
+<div class="small">Synchronise les bornes tierces du fichier <code>data/custom_stations.json</code> entre tes appareils. Le jeton GitHub reste uniquement dans le stockage local de chaque navigateur et doit être configuré séparément sur chaque appareil.</div>
+<div class="grid" style="margin-top:12px">
+<div><label>Propriétaire GitHub</label><input id="ghOwner" autocomplete="off" placeholder="Ex. yassine"></div>
+<div><label>Dépôt</label><input id="ghRepo" autocomplete="off" placeholder="tesla-charge-companion-stable"></div>
+<div><label>Branche</label><input id="ghBranch" autocomplete="off" value="main"></div>
+<div><label>Chemin du fichier</label><input id="ghPath" autocomplete="off" value="data/custom_stations.json"></div>
+<div class="full"><label>Jeton GitHub à accès fin (Contents : lecture et écriture)</label><input id="ghToken" type="password" autocomplete="new-password" placeholder="Laisse vide pour conserver le jeton déjà enregistré"></div>
+<div class="full box">
+<label style="margin:0"><input id="ghAutoSync" type="checkbox" style="width:auto"> Synchroniser automatiquement après chaque ajout, modification ou suppression d’une borne tierce</label>
+<div class="small" style="margin-top:6px">Une synchronisation automatique lit d’abord la version GitHub, fusionne les changements puis enregistre le résultat pour éviter d’écraser les modifications d’un autre appareil.</div>
+</div>
+</div>
+<div class="row" style="margin-top:12px">
+<button class="secondary" onclick="saveGithubSettings()">Enregistrer la configuration</button>
+<button class="primary sync-primary" onclick="syncGithubNow()">Synchroniser maintenant</button>
+<button class="danger" onclick="forgetGithubToken()">Effacer le jeton</button>
+</div>
+<div id="githubSyncStatus" class="small box" style="margin-top:12px">Synchronisation non configurée.</div>
+<div class="small box" style="margin-top:12px"><b>Sécurité :</b> utilise un jeton à accès fin limité uniquement à ce dépôt, avec la permission <b>Contents: Read and write</b>. Ne partage jamais ce jeton et ne l’inscris pas dans un fichier du dépôt.</div>
+</div>
+</section>
+
 </main>
 <script src="assets/app.js" defer></script>
 </body></html>

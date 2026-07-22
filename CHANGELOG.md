@@ -1,3 +1,13 @@
+# Changelog
+
+## V7.2.0 test — Synchronisation GitHub
+
+- Synchronisation multi-appareils des bornes tierces via `data/custom_stations.json`.
+- Fusion des changements avant écriture pour limiter les écrasements.
+- Propagation des suppressions grâce à des marqueurs horodatés.
+- Synchronisation manuelle ou automatique après modification.
+- Jeton GitHub conservé uniquement dans le navigateur local.
+
 # Version 7.1.0 Stable
 
 - `data/exchange_rates.json` est relu sans cache au démarrage et via le bouton d’actualisation.
