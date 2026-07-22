@@ -1,4 +1,4 @@
-const CACHE = 'tcc-v702';
+const CACHE = 'tcc-v702-display-fix';
 const SHELL = [
   './',
   './index.html',

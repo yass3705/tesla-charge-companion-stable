@@ -1,4 +1,4 @@
-# Tesla Charge Companion V7.0.1 stable
+# Tesla Charge Companion V7.0.2 stable
 
 ## Nouveauté : plusieurs puissances sur un même site
 
