@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -11,19 +12,22 @@ SUPPORTED = (
     "CZK", "HUF", "RON", "BGN", "MAD", "DZD", "TND",
 )
 PRIMARY_URL = "https://open.er-api.com/v6/latest/EUR"
-FALLBACK_URL = "https://api.frankfurter.app/latest?from=EUR"
-USER_AGENT = "TeslaChargeCompanion/7.0"
+FALLBACK_URL = "https://api.frankfurter.dev/v1/latest?from=EUR"
+USER_AGENT = "TeslaChargeCompanion/7.0.2"
+
 
 def fetch_json(url: str) -> dict:
     request = Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
     with urlopen(request, timeout=30) as response:
         return json.loads(response.read().decode("utf-8"))
 
+
 def read_previous(path: Path) -> dict:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         return {"rates": {"EUR": 1}}
+
 
 def filter_rates(raw: dict) -> dict[str, float]:
     rates = {"EUR": 1.0}
@@ -35,7 +39,26 @@ def filter_rates(raw: dict) -> dict[str, float]:
             rates[code] = float(value)
     return rates
 
+
+def provider_date(value: object) -> str | None:
+    if isinstance(value, (int, float)):
+        return datetime.fromtimestamp(value, tz=timezone.utc).date().isoformat()
+    if isinstance(value, str) and value.strip():
+        raw = value.strip()
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00")).date().isoformat()
+        except ValueError:
+            pass
+        try:
+            return parsedate_to_datetime(raw).date().isoformat()
+        except (TypeError, ValueError, OverflowError):
+            return raw[:10] if len(raw) >= 10 else raw
+    return None
+
+
 def main() -> int:
+    now = datetime.now(timezone.utc)
+    checked_at = now.replace(microsecond=0).isoformat().replace("+00:00", "Z")
     data_dir = Path("data")
     data_dir.mkdir(parents=True, exist_ok=True)
     rates_path = data_dir / "exchange_rates.json"
@@ -43,7 +66,7 @@ def main() -> int:
     previous_rates = filter_rates(previous.get("rates", {}))
 
     source = ""
-    remote_date = None
+    remote_raw: object = None
     fresh_rates: dict[str, float] = {}
 
     try:
@@ -51,44 +74,50 @@ def main() -> int:
         if data.get("result") not in (None, "success"):
             raise RuntimeError(data.get("error-type") or "Réponse primaire invalide")
         fresh_rates = filter_rates(data.get("rates", {}))
-        remote_date = data.get("time_last_update_utc") or data.get("time_last_update_unix")
+        remote_raw = data.get("time_last_update_utc") or data.get("time_last_update_unix")
         source = "open.er-api.com"
     except Exception as primary_error:
         data = fetch_json(FALLBACK_URL)
         fresh_rates = filter_rates(data.get("rates", {}))
-        remote_date = data.get("date")
-        source = f"frankfurter.app (secours; primaire indisponible: {type(primary_error).__name__})"
+        remote_raw = data.get("date")
+        source = f"frankfurter.dev (secours; primaire indisponible: {type(primary_error).__name__})"
 
     merged = {**previous_rates, **fresh_rates, "EUR": 1.0}
     missing = [code for code in SUPPORTED if code not in merged]
     if missing:
         raise RuntimeError("Taux manquants sans valeur précédente : " + ", ".join(missing))
 
+    published_date = provider_date(remote_raw) or now.date().isoformat()
     out = {
         "base": "EUR",
-        "date": date.today().isoformat(),
-        "providerDate": remote_date,
+        "date": published_date,
+        "providerDate": remote_raw,
+        "checkedAt": checked_at,
         "source": source,
         "rates": {code: merged[code] for code in SUPPORTED},
     }
-    rates_path.write_text(
-        json.dumps(out, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    rates_path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     metadata_path = data_dir / "metadata.json"
     try:
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         metadata = {}
-    metadata["fxUpdated"] = out["date"]
+    metadata["version"] = "7.0.2"
+    metadata["fxUpdated"] = published_date
+    metadata["fxCheckedAt"] = checked_at
     metadata["fxSource"] = source
-    metadata_path.write_text(
-        json.dumps(metadata, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    print(f"{len(out['rates'])} devises enregistrées via {source}.")
+    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    print(f"Source              : {source}")
+    print(f"Date source         : {published_date}")
+    print(f"Vérification UTC    : {checked_at}")
+    print(f"CHF                 : {out['rates']['CHF']}")
+    print(f"GBP                 : {out['rates']['GBP']}")
+    print(f"MAD                 : {out['rates']['MAD']}")
+    print(f"{len(out['rates'])} devises enregistrées dans {rates_path}.")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

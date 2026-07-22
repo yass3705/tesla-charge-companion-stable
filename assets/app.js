@@ -311,6 +311,8 @@ function getFxState(){
    base:'EUR',
    rates:{...DEFAULT_FX,...(published.rates||{}),...overrides,EUR:1},
    updated:published.updated||null,
+   providerDate:published.providerDate||published.updated||null,
+   checkedAt:published.checkedAt||null,
    source:published.source||'fallback intégré',
    overrides
  };
@@ -325,6 +327,8 @@ async function loadPublishedFx(cacheBust=false){
      base:'EUR',
      rates:{...DEFAULT_FX,EUR:1,...(data.rates||{})},
      updated:data.date||null,
+     providerDate:data.providerDate||data.date||null,
+     checkedAt:data.checkedAt||null,
      source:data.source||'GitHub quotidien'
    };
    window.publishedFxState=state;
@@ -387,9 +391,14 @@ function renderFxRates(){
  }
  let overrideCount=Object.keys(overrides).length;
  let dateText=state.updated?`Taux publiés du ${state.updated}`:'Aucune date de publication';
+ let checkedText='';
+ if(state.checkedAt){
+   let checkedDate=new Date(state.checkedAt);
+   checkedText=Number.isNaN(checkedDate.getTime())?` · Dernière vérification : ${state.checkedAt}`:` · Dernière vérification : ${checkedDate.toLocaleString('fr-FR')}`;
+ }
  let sourceText=state.source||'source inconnue';
  let warning=fallback?'<br><span class="warn">⚠ Valeurs de secours : lance une actualisation avant une comparaison multi-devise.</span>':'';
- $('fxStatus').innerHTML=`${dateText} · Source : ${sourceText}${overrideCount?` · ${overrideCount} correction(s) manuelle(s)`:''}${warning}`;
+ $('fxStatus').innerHTML=`${dateText}${checkedText} · Source : ${sourceText}${overrideCount?` · ${overrideCount} correction(s) manuelle(s)`:''}${warning}`;
 }
 function addFxRow(code='',rate='',name='',sourceState='published'){
  fxRowSeq+=1;let id=`fx-${fxRowSeq}`,disabled=code==='EUR'?'disabled':'';
@@ -433,6 +442,10 @@ async function updateLiveFx(){
    let state=await loadPublishedFx(true);
    if(!state)throw new Error('Aucun fichier de taux disponible');
    renderFxRates();
+   if(state.checkedAt){
+     let d=new Date(state.checkedAt);
+     if(!Number.isNaN(d.getTime())) $('fxStatus').insertAdjacentHTML('beforeend',`<br><span class="ok">✓ Fichier vérifié le ${d.toLocaleString('fr-FR')}.</span>`);
+   }
    if($('dataFreshness')){
      let fxDate=state.updated||'valeurs de secours';
      let current=$('dataFreshness').innerHTML||'';
@@ -764,16 +777,27 @@ async function compare(){
     if(r.truncated)info=`<div class="warn small"><b>Charge arrêtée à ${r.access.close}</b><br>Niveau estimé : ${r.reached.toFixed(0)} %.</div>`;
     let taper=target>80&&st.kind==='DC'?`<div class="warn small">Le ralentissement au-dessus de 80 % est inclus.</div>`:'';
     let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge)?`<div class="small">Parking / fixe : ${(r.pricingDetails.connection||0).toFixed(2)} € · Congestion / après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Frais après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} €</div>`:'';
-    return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies==='EUR'?'EUR':`${currencies} · comparaison EUR`}</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div>${localCostHtml(r.total,r.pricingDetails?.currencies||['EUR'])}</div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access.label}<br><b>${fmtMin(r.allowed)}</b> · fin estimée : <b>${finishTime(date,time,r.allowed)}</b><br>${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st.address)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
+    return`<div class="station"><div class="station-head"><div><h3>${idx+1}. ${st.name} — ${st.configurationLabel||`${st.kind} ${st.powerKw} kW`}</h3><span class="badge operator-badge">${operator}</span><span class="badge">${st.kind}</span><span class="badge">${st.powerKw} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''} sur cette puissance</span>`:''}${st.totalSiteStalls?`<span class="badge">${st.totalSiteStalls} au total sur le site</span>`:''}<span class="badge currency-badge">${currencies==='EUR'?'EUR':`${currencies} · comparaison EUR`}</span><span class="badge">MAJ ${st.lastUpdated||'—'}</span></div>${localCostHtml(r.total,r.pricingDetails?.currencies||['EUR'])}</div><div class="routeinfo"><b>${distance}</b></div><div class="scorebox">Classement combiné prix + distance</div><div class="small">${r.access.label}<br><b>${fmtMin(r.allowed)}</b> · fin estimée : <b>${finishTime(date,time,r.allowed)}</b><br>${r.deliveredBilled.toFixed(1)} kWh facturés · puissance moyenne ≈ ${r.avg.toFixed(0)} kW</div>${breakdown}${info}${taper}<div class="row" style="margin-top:9px"><button class="secondary" onclick="window.open('${mapsUrl(st)}','_blank')">Itinéraire Google Maps</button>${st.teslaUrl?`<button class="secondary" onclick="window.open('${st.teslaUrl}','_blank')">Fiche Tesla</button>`:''}</div></div>`;
    }).join('');
  }catch(err){
    $('results').innerHTML=`<div class="bad">${err.message}</div>`;
    $('routeStatus').innerHTML='<span class="bad">Impossible de calculer le classement. Vérifie l’adresse, la devise et les taux.</span>';
  }
 }
-function mapsUrl(a){
+function stationDestination(stOrAddress){
+ if(stOrAddress&&typeof stOrAddress==='object'){
+   let lat=Number(stOrAddress.latitude),lon=Number(stOrAddress.longitude);
+   if(Number.isFinite(lat)&&lat>=-90&&lat<=90&&Number.isFinite(lon)&&lon>=-180&&lon<=180){
+     return `${lat},${lon}`;
+   }
+   return String(stOrAddress.address||'').trim();
+ }
+ return String(stOrAddress||'').trim();
+}
+function mapsUrl(stOrAddress){
+ let destination=stationDestination(stOrAddress);
  let origin=$('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'';
- let url='https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+encodeURIComponent(a);
+ let url='https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+encodeURIComponent(destination);
  if(origin&&origin.toLowerCase()!=='ma position')url+='&origin='+encodeURIComponent(origin);
  return url
 }
@@ -792,7 +816,7 @@ function renderStations(){
   </div>
  </div>
  <div class="row" style="margin-top:10px">
-  ${st.address?`<button class="secondary" onclick="window.open('${mapsUrl(st.address)}','_blank')">Itinéraire Google Maps</button>`:''}
+  ${st.address?`<button class="secondary" onclick="window.open('${mapsUrl(st)}','_blank')">Itinéraire Google Maps</button>`:''}
   <button class="secondary" onclick="toggleStationAvailability('${st.id}')">${st.temporarilyUnavailable?'Réactiver':'Marquer indisponible'}</button>
   <button class="secondary" onclick="editStation('${st.id}')">Modifier</button>
   <button class="danger" onclick="deleteStation('${st.id}')">Supprimer</button>

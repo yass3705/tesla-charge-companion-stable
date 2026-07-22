@@ -1,3 +1,10 @@
+# Version 7.0.2
+
+- Les coordonnées GPS sont utilisées en priorité pour les itinéraires Google Maps ; l’adresse reste affichée comme libellé.
+- La mise à jour des devises enregistre la date de la source et l’heure de vérification séparément.
+- Le workflow de devises affiche et valide les taux avant de les publier.
+- Le bouton d’actualisation force toujours une lecture sans cache.
+
 # Changelog
 
 ## V7.0.1 stable
