@@ -11,9 +11,9 @@ SUPPORTED = (
     "EUR", "CHF", "GBP", "NOK", "SEK", "DKK", "PLN",
     "CZK", "HUF", "RON", "BGN", "MAD", "DZD", "TND",
 )
-PRIMARY_URL = "https://open.er-api.com/v6/latest/EUR"
-FALLBACK_URL = "https://api.frankfurter.dev/v1/latest?from=EUR"
-USER_AGENT = "TeslaChargeCompanion/7.0.3"
+PRIMARY_URL = "https://api.frankfurter.dev/v2/rates?base=EUR&quotes=CHF,GBP,NOK,SEK,DKK,PLN,CZK,HUF,RON,BGN,MAD,DZD,TND"
+FALLBACK_URL = "https://open.er-api.com/v6/latest/EUR"
+USER_AGENT = "TeslaChargeCompanion/7.0.4"
 
 
 def fetch_json(url: str) -> dict:
@@ -70,17 +70,33 @@ def main() -> int:
     fresh_rates: dict[str, float] = {}
 
     try:
-        data = fetch_json(PRIMARY_URL)
-        if data.get("result") not in (None, "success"):
-            raise RuntimeError(data.get("error-type") or "Réponse primaire invalide")
-        fresh_rates = filter_rates(data.get("rates", {}))
-        remote_raw = data.get("time_last_update_utc") or data.get("time_last_update_unix")
-        source = "open.er-api.com"
+        rows = fetch_json(PRIMARY_URL)
+        if not isinstance(rows, list) or not rows:
+            raise RuntimeError("Réponse Frankfurter v2 invalide")
+        frankfurter_rates = {}
+        dates = []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            quote = row.get("quote")
+            rate = row.get("rate")
+            if quote in SUPPORTED and isinstance(rate, (int, float)) and rate > 0:
+                frankfurter_rates[quote] = float(rate)
+            if isinstance(row.get("date"), str):
+                dates.append(row["date"])
+        fresh_rates = filter_rates(frankfurter_rates)
+        if len(fresh_rates) < len(SUPPORTED):
+            missing_primary = [code for code in SUPPORTED if code not in fresh_rates]
+            raise RuntimeError("Devises absentes chez Frankfurter: " + ", ".join(missing_primary))
+        remote_raw = max(dates) if dates else None
+        source = "api.frankfurter.dev/v2"
     except Exception as primary_error:
         data = fetch_json(FALLBACK_URL)
+        if data.get("result") not in (None, "success"):
+            raise RuntimeError(data.get("error-type") or "Réponse de secours invalide")
         fresh_rates = filter_rates(data.get("rates", {}))
-        remote_raw = data.get("date")
-        source = f"frankfurter.dev (secours; primaire indisponible: {type(primary_error).__name__})"
+        remote_raw = data.get("time_last_update_utc") or data.get("time_last_update_unix")
+        source = f"open.er-api.com (secours; Frankfurter indisponible: {type(primary_error).__name__})"
 
     merged = {**previous_rates, **fresh_rates, "EUR": 1.0}
     missing = [code for code in SUPPORTED if code not in merged]
@@ -103,7 +119,7 @@ def main() -> int:
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         metadata = {}
-    metadata["version"] = "7.0.2"
+    metadata["version"] = "7.0.4"
     metadata["fxUpdated"] = published_date
     metadata["fxCheckedAt"] = checked_at
     metadata["fxSource"] = source

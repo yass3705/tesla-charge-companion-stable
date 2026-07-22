@@ -1,4 +1,4 @@
-# Version 7.0.3
+# Version 7.0.4
 
 - Les coordonnées GPS sont utilisées en priorité pour les itinéraires Google Maps ; l’adresse reste affichée comme libellé.
 - La mise à jour des devises enregistre la date de la source et l’heure de vérification séparément.
@@ -31,3 +31,9 @@
 - Mise à jour quotidienne avec fournisseur principal et fournisseur de secours.
 - Migration automatique des anciens taux manuels.
 - Cache PWA renouvelé.
+
+## 7.0.4
+- Frankfurter v2 devient la source principale des taux de change.
+- open.er-api.com devient la source de secours.
+- Correction du parseur pour le format tableau `{date, base, quote, rate}` de Frankfurter v2.
+- Les logs GitHub Actions indiquent toujours la date source et l'heure de vérification.
