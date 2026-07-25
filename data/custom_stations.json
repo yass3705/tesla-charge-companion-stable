@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "updatedAt": "2026-07-25T15:12:47.603Z",
+  "updatedAt": "2026-07-25T15:21:36.530Z",
   "lastDevice": "iPhone",
   "stations": [
     {
@@ -86,7 +86,7 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.808232,
       "longitude": 2.064844,
-      "_airKm": 1864.7131145318945
+      "_airKm": 0.8473829772705443
     },
     {
       "id": "station-1784735830427",
@@ -229,7 +229,7 @@
       },
       "latitude": 34.84137083382535,
       "longitude": -5.513244634595083,
-      "_airKm": 226.32885054020065
+      "_airKm": 1672.5550864181166
     },
     {
       "id": "izivia-levant",
@@ -336,7 +336,7 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.8087326,
       "longitude": 2.0531525,
-      "_airKm": 1864.3523601676422
+      "_airKm": 0.3038000442758524
     },
     {
       "id": "station-1784735588064",
@@ -479,7 +479,7 @@
       },
       "latitude": 33.48734055426307,
       "longitude": -7.632946346781324,
-      "_airKm": 20.267738996160865
+      "_airKm": 1882.9979609627974
     },
     {
       "id": "lidl-saint-cyr",
@@ -599,7 +599,7 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.7953294,
       "longitude": 2.0533802,
-      "_airKm": 1863.0515579531825
+      "_airKm": 1.1902463437516035
     },
     {
       "id": "one-nation",
@@ -674,7 +674,213 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.8294761,
       "longitude": 1.9825487,
-      "_airKm": 1863.9170757483569
+      "_airKm": 5.829738941935084
+    },
+    {
+      "id": "station-1784992892709",
+      "name": "PARKING CENTRE AQUATIQUE - SAINT-CYR-L'ECOLE",
+      "operator": "55 Electric Charging",
+      "stalls": 2,
+      "address": "Centre Aquatique de Saint-Cyr-l'École, 78210",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 22,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "timeWindow",
+                "start": "07:00",
+                "end": "23:00",
+                "billing": "minute",
+                "currency": "EUR",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.08,
+                "connectionFee": 0.6,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "23:00",
+                "end": "07:00",
+                "billing": "minute",
+                "currency": "EUR",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.06,
+                "connectionFee": 0.6,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "07:00",
+            "end": "23:00",
+            "billing": "minute",
+            "currency": "EUR",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0.08,
+            "connectionFee": 0.6,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          },
+          {
+            "scope": "timeWindow",
+            "start": "23:00",
+            "end": "07:00",
+            "billing": "minute",
+            "currency": "EUR",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0.06,
+            "connectionFee": 0.6,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-25",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-25T15:21:32.712Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      }
     },
     {
       "id": "station-1784736100163",
@@ -817,7 +1023,7 @@
       },
       "latitude": 34.92833254283105,
       "longitude": -2.3279422287176326,
-      "_airKm": 495.39628086082575
+      "_airKm": 1584.5078757086426
     },
     {
       "id": "station-1784735326935",
@@ -1005,7 +1211,7 @@
       },
       "latitude": 33.599604215084355,
       "longitude": -7.56975141775784,
-      "_airKm": 8.399448754249448
+      "_airKm": 1869.2252354224322
     },
     {
       "id": "station-1784730138775",
@@ -1193,7 +1399,7 @@
       },
       "latitude": 33.6281457,
       "longitude": -7.4612544,
-      "_airKm": 2.1706211515315195
+      "_airKm": 1862.478374992005
     },
     {
       "id": "station-1784734841086",
@@ -1381,7 +1587,7 @@
       },
       "latitude": 32.32346800753036,
       "longitude": -6.3806576316325225,
-      "_airKm": 176.9881400240134
+      "_airKm": 1963.426187394332
     },
     {
       "id": "station-1784735169753",
@@ -1524,7 +1730,7 @@
       },
       "latitude": 33.604224575436824,
       "longitude": -7.548013463236728,
-      "_airKm": 6.322031976874932
+      "_airKm": 1867.9842514905106
     },
     {
       "id": "station-1784736341011",
@@ -1757,7 +1963,7 @@
       },
       "latitude": 33.51025445693199,
       "longitude": -7.6078419125230825,
-      "_airKm": 16.817349929694135
+      "_airKm": 1879.756237657541
     },
     {
       "id": "station-1784736487438",
@@ -1945,7 +2151,7 @@
       },
       "latitude": 33.22367532625226,
       "longitude": -7.574768880230265,
-      "_airKm": 44.835931785017564
+      "_airKm": 1908.1174766053668
     },
     {
       "id": "station-1784735966106",
@@ -2088,7 +2294,7 @@
       },
       "latitude": 30.939442718417627,
       "longitude": -6.977596359688337,
-      "_airKm": 301.7518492591254
+      "_airKm": 2127.2999509029987
     }
   ],
   "deletedIds": {
