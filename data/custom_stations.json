@@ -1,373 +1,2097 @@
-[
-  {
-    "id": "lidl-saint-cyr",
-    "name": "Lidl Saint-Cyr",
-    "kind": "AC",
-    "powerKw": 22,
-    "address": "104 Avenue Pierre Curie, 78210 Saint-Cyr-l'École",
-    "pricing": {
-      "type": "rules",
-      "rules": [
+{
+  "schemaVersion": 2,
+  "updatedAt": "2026-07-25T15:12:47.603Z",
+  "lastDevice": "iPhone",
+  "stations": [
+    {
+      "id": "alize-galard",
+      "name": "Alizé – Avenue Geneviève de Galard",
+      "kind": "AC",
+      "powerKw": 7,
+      "address": "Avenue Geneviève de Galard, 78210 Saint-Cyr-l'École",
+      "pricing": {
+        "type": "accessPlusTime",
+        "accessFee": 3.45,
+        "freeMinutes": 60,
+        "dayPerHour": 1.15,
+        "dayStart": "08:00",
+        "dayEnd": "20:00",
+        "nightPerHour": 0,
+        "currency": "EUR"
+      },
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          }
+        },
+        "afterCloseMode": "exit_allowed",
+        "afterCloseNote": "Stationnement nocturne autorisé. Environ 17 min à pied."
+      },
+      "lastUpdated": "2026-07-10",
+      "operator": "",
+      "stalls": 0,
+      "chargingConfigurations": [
         {
-          "scope": "allDay",
-          "start": "00:00",
-          "end": "24:00",
-          "billing": "kwh",
-          "currency": "EUR",
-          "pricePerKwh": 0.29,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0
+          "id": "main",
+          "label": "AC 7 kW",
+          "kind": "AC",
+          "powerKw": 7,
+          "stalls": 0,
+          "pricing": {
+            "type": "accessPlusTime",
+            "accessFee": 3.45,
+            "freeMinutes": 60,
+            "dayPerHour": 1.15,
+            "dayStart": "08:00",
+            "dayEnd": "20:00",
+            "nightPerHour": 0,
+            "currency": "EUR"
+          }
         }
-      ]
+      ],
+      "_syncUpdatedAt": "2026-07-10T00:00:00Z",
+      "latitude": 48.808232,
+      "longitude": 2.064844,
+      "_airKm": 1864.7131145318945
     },
-    "access": {
-      "limited": true,
-      "days": {
-        "0": {
-          "open": false,
-          "start": "08:30",
-          "end": "20:00"
-        },
-        "1": {
-          "open": true,
-          "start": "08:30",
-          "end": "20:00"
-        },
-        "2": {
-          "open": true,
-          "start": "08:30",
-          "end": "20:00"
-        },
-        "3": {
-          "open": true,
-          "start": "08:30",
-          "end": "20:00"
-        },
-        "4": {
-          "open": true,
-          "start": "08:30",
-          "end": "20:00"
-        },
-        "5": {
-          "open": true,
-          "start": "08:30",
-          "end": "20:00"
-        },
-        "6": {
-          "open": true,
-          "start": "08:30",
-          "end": "20:00"
-        }
-      },
-      "afterCloseMode": "must_stop",
-      "afterCloseNote": "Le parking ferme à 20 h : il faut arrêter la charge et sortir avant la fermeture."
-    },
-    "lastUpdated": "2026-07-10",
-    "operator": "",
-    "stalls": 4,
-    "chargingConfigurations": [
-      {
-        "id": "ac-22",
-        "label": "AC 22 kW",
-        "kind": "AC",
-        "powerKw": 22,
-        "stalls": 2,
-        "pricing": {
-          "type": "rules",
-          "rules": [
-            {
-              "scope": "allDay",
-              "start": "00:00",
-              "end": "24:00",
-              "billing": "kwh",
-              "currency": "EUR",
-              "pricePerKwh": 0.29,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0
-            }
-          ]
-        }
-      },
-      {
-        "id": "dc-180",
-        "label": "DC 180 kW",
-        "kind": "DC",
-        "powerKw": 180,
-        "stalls": 2,
-        "pricing": {
-          "type": "rules",
-          "rules": [
-            {
-              "scope": "allDay",
-              "start": "00:00",
-              "end": "24:00",
-              "billing": "kwh",
-              "currency": "EUR",
-              "pricePerKwh": 0.39,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "izivia-levant",
-    "name": "Izivia – Gymnase du Levant",
-    "kind": "AC",
-    "powerKw": 11,
-    "address": "Gymnase du Levant, Saint-Cyr-l'École",
-    "pricing": {
-      "type": "rules",
-      "rules": [
+    {
+      "id": "station-1784735830427",
+      "name": "APIA : Café & Restaurant",
+      "operator": "Kilowatt",
+      "stalls": 2,
+      "address": "34.84137083382535, -5.513244634595083",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 22,
+      "chargingConfigurations": [
         {
-          "scope": "allDay",
-          "start": "00:00",
-          "end": "24:00",
-          "billing": "kwh",
-          "currency": "EUR",
-          "pricePerKwh": 0.39,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "afterMinutesRate": 0.05,
-          "afterMinutesThreshold": 180,
-          "afterMinutesCap": 4.0,
-          "afterMinutesCapStart": "20:00",
-          "afterMinutesCapEnd": "08:00"
+          "id": "config-1",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "MAD",
+                "pricePerKwh": 0,
+                "chargePerMinute": 0,
+                "connectionFee": 8,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
         }
-      ]
-    },
-    "access": {
-      "limited": false,
-      "days": {
-        "0": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "1": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "2": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "3": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "4": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "5": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "6": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "MAD",
+            "pricePerKwh": 0,
+            "chargePerMinute": 0,
+            "connectionFee": 8,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
       },
-      "afterCloseMode": "exit_allowed",
-      "afterCloseNote": "Ouvert 24 h/24."
-    },
-    "lastUpdated": "2026-07-10",
-    "operator": "",
-    "stalls": 0,
-    "chargingConfigurations": [
-      {
-        "id": "main",
-        "label": "AC 11 kW",
-        "kind": "AC",
-        "powerKw": 11,
-        "stalls": 0,
-        "pricing": {
-          "type": "rules",
-          "rules": [
-            {
-              "scope": "allDay",
-              "start": "00:00",
-              "end": "24:00",
-              "billing": "kwh",
-              "currency": "EUR",
-              "pricePerKwh": 0.39,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "afterMinutesRate": 0.05,
-              "afterMinutesThreshold": 180,
-              "afterMinutesCap": 4.0,
-              "afterMinutesCapStart": "20:00",
-              "afterMinutesCapEnd": "08:00"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "alize-galard",
-    "name": "Alizé – Avenue Geneviève de Galard",
-    "kind": "AC",
-    "powerKw": 7,
-    "address": "Avenue Geneviève de Galard, 78210 Saint-Cyr-l'École",
-    "pricing": {
-      "type": "accessPlusTime",
-      "accessFee": 3.45,
-      "freeMinutes": 60,
-      "dayPerHour": 1.15,
-      "dayStart": "08:00",
-      "dayEnd": "20:00",
-      "nightPerHour": 0,
-      "currency": "EUR"
-    },
-    "access": {
-      "limited": false,
-      "days": {
-        "0": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T15:57:10.428Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
         },
-        "1": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "2": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "3": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "4": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "5": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "6": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        }
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
       },
-      "afterCloseMode": "exit_allowed",
-      "afterCloseNote": "Stationnement nocturne autorisé. Environ 17 min à pied."
+      "latitude": 34.84137083382535,
+      "longitude": -5.513244634595083,
+      "_airKm": 226.32885054020065
     },
-    "lastUpdated": "2026-07-10",
-    "operator": "",
-    "stalls": 0,
-    "chargingConfigurations": [
-      {
-        "id": "main",
-        "label": "AC 7 kW",
-        "kind": "AC",
-        "powerKw": 7,
-        "stalls": 0,
-        "pricing": {
-          "type": "accessPlusTime",
-          "accessFee": 3.45,
-          "freeMinutes": 60,
-          "dayPerHour": 1.15,
-          "dayStart": "08:00",
-          "dayEnd": "20:00",
-          "nightPerHour": 0,
-          "currency": "EUR"
-        }
-      }
-    ]
-  },
-  {
-    "id": "one-nation",
-    "name": "One Nation Paris",
-    "kind": "AC",
-    "powerKw": 11,
-    "address": "One Nation Paris Outlet, Les Clayes-sous-Bois",
-    "pricing": {
-      "type": "freeWindowUnknownAfter",
-      "freeMinutes": 120,
-      "currency": "EUR"
-    },
-    "access": {
-      "limited": false,
-      "days": {
-        "0": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "1": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "2": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "3": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "4": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "5": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        },
-        "6": {
-          "open": true,
-          "start": "00:00",
-          "end": "24:00"
-        }
+    {
+      "id": "izivia-levant",
+      "name": "Izivia – Gymnase du Levant",
+      "kind": "AC",
+      "powerKw": 11,
+      "address": "Gymnase du Levant, Saint-Cyr-l'École",
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.39,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "afterMinutesRate": 0.05,
+            "afterMinutesThreshold": 180,
+            "afterMinutesCap": 4,
+            "afterMinutesCapStart": "20:00",
+            "afterMinutesCapEnd": "08:00"
+          }
+        ]
       },
-      "afterCloseMode": "exit_allowed",
-      "afterCloseNote": "Deux premières heures gratuites à confirmer ; tarif au-delà inconnu."
-    },
-    "lastUpdated": "2026-07-10",
-    "operator": "",
-    "stalls": 0,
-    "chargingConfigurations": [
-      {
-        "id": "main",
-        "label": "AC 11 kW",
-        "kind": "AC",
-        "powerKw": 11,
-        "stalls": 0,
-        "pricing": {
-          "type": "freeWindowUnknownAfter",
-          "freeMinutes": 120,
-          "currency": "EUR"
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          }
+        },
+        "afterCloseMode": "exit_allowed",
+        "afterCloseNote": "Ouvert 24 h/24."
+      },
+      "lastUpdated": "2026-07-10",
+      "operator": "",
+      "stalls": 0,
+      "chargingConfigurations": [
+        {
+          "id": "main",
+          "label": "AC 11 kW",
+          "kind": "AC",
+          "powerKw": 11,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.39,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.05,
+                "afterMinutesThreshold": 180,
+                "afterMinutesCap": 4,
+                "afterMinutesCapStart": "20:00",
+                "afterMinutesCapEnd": "08:00"
+              }
+            ]
+          }
         }
-      }
-    ]
+      ],
+      "_syncUpdatedAt": "2026-07-10T00:00:00Z",
+      "latitude": 48.8087326,
+      "longitude": 2.0531525,
+      "_airKm": 1864.3523601676422
+    },
+    {
+      "id": "station-1784735588064",
+      "name": "Jnane Bouskoura",
+      "operator": "Kilowatt",
+      "stalls": 2,
+      "address": "33.48734055426307, -7.632946346781324",
+      "kind": "DC",
+      "source": "custom",
+      "powerKw": 180,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "DC kW",
+          "kind": "DC",
+          "powerKw": 180,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "MAD",
+                "pricePerKwh": 3,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 3,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "MAD",
+            "pricePerKwh": 3,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 3,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T15:53:08.064Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 33.48734055426307,
+      "longitude": -7.632946346781324,
+      "_airKm": 20.267738996160865
+    },
+    {
+      "id": "lidl-saint-cyr",
+      "name": "Lidl Saint-Cyr",
+      "kind": "AC",
+      "powerKw": 22,
+      "address": "104 Avenue Pierre Curie, 78210 Saint-Cyr-l'École",
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0
+          }
+        ]
+      },
+      "access": {
+        "limited": true,
+        "days": {
+          "0": {
+            "open": false,
+            "start": "08:30",
+            "end": "20:00"
+          },
+          "1": {
+            "open": true,
+            "start": "08:30",
+            "end": "20:00"
+          },
+          "2": {
+            "open": true,
+            "start": "08:30",
+            "end": "20:00"
+          },
+          "3": {
+            "open": true,
+            "start": "08:30",
+            "end": "20:00"
+          },
+          "4": {
+            "open": true,
+            "start": "08:30",
+            "end": "20:00"
+          },
+          "5": {
+            "open": true,
+            "start": "08:30",
+            "end": "20:00"
+          },
+          "6": {
+            "open": true,
+            "start": "08:30",
+            "end": "20:00"
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": "Le parking ferme à 20 h : il faut arrêter la charge et sortir avant la fermeture."
+      },
+      "lastUpdated": "2026-07-10",
+      "operator": "",
+      "stalls": 4,
+      "chargingConfigurations": [
+        {
+          "id": "ac-22",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0
+              }
+            ]
+          }
+        },
+        {
+          "id": "dc-180",
+          "label": "DC 180 kW",
+          "kind": "DC",
+          "powerKw": 180,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.39,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0
+              }
+            ]
+          }
+        }
+      ],
+      "_syncUpdatedAt": "2026-07-10T00:00:00Z",
+      "latitude": 48.7953294,
+      "longitude": 2.0533802,
+      "_airKm": 1863.0515579531825
+    },
+    {
+      "id": "one-nation",
+      "name": "One Nation Paris",
+      "kind": "AC",
+      "powerKw": 11,
+      "address": "One Nation Paris Outlet, Les Clayes-sous-Bois",
+      "pricing": {
+        "type": "freeWindowUnknownAfter",
+        "freeMinutes": 120,
+        "currency": "EUR"
+      },
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": "24:00"
+          }
+        },
+        "afterCloseMode": "exit_allowed",
+        "afterCloseNote": "Deux premières heures gratuites à confirmer ; tarif au-delà inconnu."
+      },
+      "lastUpdated": "2026-07-10",
+      "operator": "",
+      "stalls": 0,
+      "chargingConfigurations": [
+        {
+          "id": "main",
+          "label": "AC 11 kW",
+          "kind": "AC",
+          "powerKw": 11,
+          "stalls": 0,
+          "pricing": {
+            "type": "freeWindowUnknownAfter",
+            "freeMinutes": 120,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "_syncUpdatedAt": "2026-07-10T00:00:00Z",
+      "latitude": 48.8294761,
+      "longitude": 1.9825487,
+      "_airKm": 1863.9170757483569
+    },
+    {
+      "id": "station-1784736100163",
+      "name": "Stade Berkane",
+      "operator": "Kilowatt",
+      "stalls": 2,
+      "address": "34.92833254283105, -2.3279422287176326",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 22,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "MAD",
+                "pricePerKwh": 0,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "MAD",
+            "pricePerKwh": 0,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T16:01:40.164Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 34.92833254283105,
+      "longitude": -2.3279422287176326,
+      "_airKm": 495.39628086082575
+    },
+    {
+      "id": "station-1784735326935",
+      "name": "Station Afriquia Bd Moulay Ismaïl",
+      "operator": "Fastvolt",
+      "stalls": 2,
+      "address": "33.599604215084355, -7.56975141775784",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 22,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-2",
+          "label": "DC 50 kW",
+          "kind": "DC",
+          "powerKw": 50,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 2.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "minute",
+            "currency": "MAD",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0.5,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T15:48:46.935Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 33.599604215084355,
+      "longitude": -7.56975141775784,
+      "_airKm": 8.399448754249448
+    },
+    {
+      "id": "station-1784730138775",
+      "name": "Station Afriquia IKEA Zenata",
+      "operator": "Fastvolt",
+      "stalls": 4,
+      "address": "33.6281457, -7.4612544",
+      "kind": "DC",
+      "source": "custom",
+      "powerKw": 60,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "DC 60 kW",
+          "kind": "DC",
+          "powerKw": 60,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 2.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-2",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "minute",
+            "currency": "MAD",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 2.5,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T14:22:18.776Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 33.6281457,
+      "longitude": -7.4612544,
+      "_airKm": 2.1706211515315195
+    },
+    {
+      "id": "station-1784734841086",
+      "name": "Station Afriquia PLM Beni Mellal",
+      "operator": "Fastvolt",
+      "stalls": 2,
+      "address": "32.32346800753036, -6.3806576316325225",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 22,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-2",
+          "label": "DC 50 kW",
+          "kind": "DC",
+          "powerKw": 50,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 2.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "minute",
+            "currency": "MAD",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0.5,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T15:40:41.087Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 32.32346800753036,
+      "longitude": -6.3806576316325225,
+      "_airKm": 176.9881400240134
+    },
+    {
+      "id": "station-1784735169753",
+      "name": "Tafraouti",
+      "operator": "Fastvolt",
+      "stalls": 1,
+      "address": "33.604224575436824, -7.548013463236728",
+      "kind": "DC",
+      "source": "custom",
+      "powerKw": 50,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "DC 50 kW",
+          "kind": "DC",
+          "powerKw": 50,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 2.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "minute",
+            "currency": "MAD",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 2.5,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T15:46:09.754Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 33.604224575436824,
+      "longitude": -7.548013463236728,
+      "_airKm": 6.322031976874932
+    },
+    {
+      "id": "station-1784736341011",
+      "name": "Total Relais Al Baida",
+      "operator": "Total Energies",
+      "stalls": 4,
+      "address": "33.51025445693199, -7.6078419125230825",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 43,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 43 kW",
+          "kind": "AC",
+          "powerKw": 43,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-2",
+          "label": "DC 50 kW",
+          "kind": "DC",
+          "powerKw": 50,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 3,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-3",
+          "label": "DC 180 kW",
+          "kind": "DC",
+          "powerKw": 180,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "minute",
+            "currency": "MAD",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0.5,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T16:05:41.011Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 33.51025445693199,
+      "longitude": -7.6078419125230825,
+      "_airKm": 16.817349929694135
+    },
+    {
+      "id": "station-1784736487438",
+      "name": "TotalEnergies Relais Chaouia",
+      "operator": "Total Energies",
+      "stalls": 2,
+      "address": "33.22367532625226, -7.574768880230265",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 43,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 43 kW",
+          "kind": "AC",
+          "powerKw": 43,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0.5,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-2",
+          "label": "DC 50 kW",
+          "kind": "DC",
+          "powerKw": 50,
+          "stalls": 1,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "MAD",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 3,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "minute",
+            "currency": "MAD",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0.5,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T16:08:07.439Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 33.22367532625226,
+      "longitude": -7.574768880230265,
+      "_airKm": 44.835931785017564
+    },
+    {
+      "id": "station-1784735966106",
+      "name": "Winxo Ouarzazate",
+      "operator": "Kilowatt",
+      "stalls": 2,
+      "address": "30.939442718417627, -6.977596359688337",
+      "kind": "AC",
+      "source": "custom",
+      "powerKw": 22,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "AC 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-07-22",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-07-22T15:59:26.107Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      },
+      "latitude": 30.939442718417627,
+      "longitude": -6.977596359688337,
+      "_airKm": 301.7518492591254
+    }
+  ],
+  "deletedIds": {
+    "station-1784734147996": "2026-07-22T16:14:08.916Z"
   }
-]
+}
