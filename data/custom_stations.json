@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "updatedAt": "2026-08-08T22:47:41.996Z",
+  "updatedAt": "2026-08-08T22:53:09.423Z",
   "lastDevice": "iPhone",
   "stations": [
     {
@@ -230,7 +230,7 @@
       },
       "latitude": 34.84137083382535,
       "longitude": -5.513244634595083,
-      "_airKm": 1672.5550864181166
+      "_airKm": 1672.5683536967229
     },
     {
       "id": "station-1786227827538",
@@ -415,7 +415,10 @@
         },
         "afterCloseMode": "must_stop",
         "afterCloseNote": ""
-      }
+      },
+      "latitude": 48.9235756,
+      "longitude": 1.9844165,
+      "_airKm": 14.010735568337548
     },
     {
       "id": "izivia-levant",
@@ -522,7 +525,7 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.8087326,
       "longitude": 2.0531525,
-      "_airKm": 0.3038000442758524
+      "_airKm": 0.2925179582936165
     },
     {
       "id": "station-1784735588064",
@@ -665,7 +668,7 @@
       },
       "latitude": 33.48734055426307,
       "longitude": -7.632946346781324,
-      "_airKm": 1882.9979609627974
+      "_airKm": 1883.01115923494
     },
     {
       "id": "lidl-saint-cyr",
@@ -785,7 +788,7 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.7953294,
       "longitude": 2.0533802,
-      "_airKm": 1.1902463437516035
+      "_airKm": 1.2026269785746306
     },
     {
       "id": "one-nation",
@@ -907,15 +910,15 @@
         "afterCloseNote": "Deux premières heures gratuites valable uniquement via l’application/badge Swish."
       },
       "lastUpdated": "2026-07-10",
-      "operator": "",
-      "stalls": 8,
+      "operator": "Swish",
+      "stalls": 11,
       "chargingConfigurations": [
         {
           "id": "config-1",
           "label": "AC 22 kW",
           "kind": "AC",
           "powerKw": 22,
-          "stalls": 8,
+          "stalls": 11,
           "pricing": {
             "type": "rules",
             "rules": [
@@ -989,10 +992,10 @@
           }
         }
       ],
-      "_syncUpdatedAt": "2026-08-08T22:47:40.019Z",
+      "_syncUpdatedAt": "2026-08-08T22:53:07.771Z",
       "latitude": 48.8294761,
       "longitude": 1.9825487,
-      "_airKm": 5.829738941935084,
+      "_airKm": 5.828837130503414,
       "source": "custom",
       "temporarilyUnavailable": false
     },
@@ -1200,7 +1203,10 @@
         },
         "afterCloseMode": "must_stop",
         "afterCloseNote": ""
-      }
+      },
+      "latitude": 48.795309,
+      "longitude": 2.0619435,
+      "_airKm": 1.3428584346705492
     },
     {
       "id": "station-1784736100163",
@@ -1343,7 +1349,7 @@
       },
       "latitude": 34.92833254283105,
       "longitude": -2.3279422287176326,
-      "_airKm": 1584.5078757086426
+      "_airKm": 1584.5210253133946
     },
     {
       "id": "station-1784735326935",
@@ -1531,7 +1537,7 @@
       },
       "latitude": 33.599604215084355,
       "longitude": -7.56975141775784,
-      "_airKm": 1869.2252354224322
+      "_airKm": 1869.2384342070632
     },
     {
       "id": "station-1784730138775",
@@ -1719,7 +1725,7 @@
       },
       "latitude": 33.6281457,
       "longitude": -7.4612544,
-      "_airKm": 1862.478374992005
+      "_airKm": 1862.4915799075009
     },
     {
       "id": "station-1784734841086",
@@ -1907,7 +1913,7 @@
       },
       "latitude": 32.32346800753036,
       "longitude": -6.3806576316325225,
-      "_airKm": 1963.426187394332
+      "_airKm": 1963.439458125016
     },
     {
       "id": "station-1784735169753",
@@ -2050,7 +2056,7 @@
       },
       "latitude": 33.604224575436824,
       "longitude": -7.548013463236728,
-      "_airKm": 1867.9842514905106
+      "_airKm": 1867.9974515566557
     },
     {
       "id": "station-1784736341011",
@@ -2283,7 +2289,7 @@
       },
       "latitude": 33.51025445693199,
       "longitude": -7.6078419125230825,
-      "_airKm": 1879.756237657541
+      "_airKm": 1879.769436838314
     },
     {
       "id": "station-1784736487438",
@@ -2471,7 +2477,7 @@
       },
       "latitude": 33.22367532625226,
       "longitude": -7.574768880230265,
-      "_airKm": 1908.1174766053668
+      "_airKm": 1908.1306866581037
     },
     {
       "id": "station-1784735966106",
@@ -2614,7 +2620,7 @@
       },
       "latitude": 30.939442718417627,
       "longitude": -6.977596359688337,
-      "_airKm": 2127.2999509029987
+      "_airKm": 2127.3132207682456
     }
   ],
   "deletedIds": {
