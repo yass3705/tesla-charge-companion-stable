@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "updatedAt": "2026-08-08T22:27:56.387Z",
+  "updatedAt": "2026-08-08T22:47:41.996Z",
   "lastDevice": "iPhone",
   "stations": [
     {
@@ -86,7 +86,8 @@
       "_syncUpdatedAt": "2026-07-10T00:00:00Z",
       "latitude": 48.808232,
       "longitude": 2.064844,
-      "_airKm": 0.8473829772705443
+      "_airKm": 0.8473829772705443,
+      "temporarilyUnavailable": true
     },
     {
       "id": "station-1784735830427",
@@ -790,12 +791,78 @@
       "id": "one-nation",
       "name": "One Nation Paris",
       "kind": "AC",
-      "powerKw": 11,
+      "powerKw": 22,
       "address": "One Nation Paris Outlet, Les Clayes-sous-Bois",
       "pricing": {
-        "type": "freeWindowUnknownAfter",
-        "freeMinutes": 120,
-        "currency": "EUR"
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "10:00",
+            "end": "21:00",
+            "billing": "minute",
+            "currency": "EUR",
+            "pricePerKwh": 0.29,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0.33,
+            "afterMinutesThreshold": 120,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          },
+          {
+            "scope": "timeWindow",
+            "start": "21:00",
+            "end": "10:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.3,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0.033,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
       },
       "access": {
         "limited": false,
@@ -803,63 +870,131 @@
           "0": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           },
           "1": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           },
           "2": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           },
           "3": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           },
           "4": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           },
           "5": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           },
           "6": {
             "open": true,
             "start": "00:00",
-            "end": "24:00"
+            "end": ""
           }
         },
         "afterCloseMode": "exit_allowed",
-        "afterCloseNote": "Deux premières heures gratuites à confirmer ; tarif au-delà inconnu."
+        "afterCloseNote": "Deux premières heures gratuites valable uniquement via l’application/badge Swish."
       },
       "lastUpdated": "2026-07-10",
       "operator": "",
-      "stalls": 0,
+      "stalls": 8,
       "chargingConfigurations": [
         {
-          "id": "main",
-          "label": "AC 11 kW",
+          "id": "config-1",
+          "label": "AC 22 kW",
           "kind": "AC",
-          "powerKw": 11,
-          "stalls": 0,
+          "powerKw": 22,
+          "stalls": 8,
           "pricing": {
-            "type": "freeWindowUnknownAfter",
-            "freeMinutes": 120,
-            "currency": "EUR"
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "timeWindow",
+                "start": "10:00",
+                "end": "21:00",
+                "billing": "minute",
+                "currency": "EUR",
+                "pricePerKwh": 0.29,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0.33,
+                "afterMinutesThreshold": 120,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "21:00",
+                "end": "10:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.3,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0.033,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
           }
         }
       ],
-      "_syncUpdatedAt": "2026-07-10T00:00:00Z",
+      "_syncUpdatedAt": "2026-08-08T22:47:40.019Z",
       "latitude": 48.8294761,
       "longitude": 1.9825487,
-      "_airKm": 5.829738941935084
+      "_airKm": 5.829738941935084,
+      "source": "custom",
+      "temporarilyUnavailable": false
     },
     {
       "id": "station-1784992892709",
