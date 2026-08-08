@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "updatedAt": "2026-08-08T22:20:32.365Z",
+  "updatedAt": "2026-08-08T22:23:51.627Z",
   "lastDevice": "iPhone",
   "stations": [
     {
@@ -230,6 +230,191 @@
       "latitude": 34.84137083382535,
       "longitude": -5.513244634595083,
       "_airKm": 1672.5550864181166
+    },
+    {
+      "id": "station-1786227827538",
+      "name": "IECharge Orgeval",
+      "operator": "IECharge",
+      "stalls": 4,
+      "address": "Chemin des Guetes, 78630 Orgeval",
+      "kind": "DC",
+      "source": "custom",
+      "powerKw": 160,
+      "chargingConfigurations": [
+        {
+          "id": "config-1",
+          "label": "DC 160 kW",
+          "kind": "DC",
+          "powerKw": 160,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.25,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        },
+        {
+          "id": "config-2",
+          "label": "DC 320 kW",
+          "kind": "DC",
+          "powerKw": 320,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.25,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "powerBands": [
+                  {
+                    "minKw": 0,
+                    "maxKw": 60,
+                    "ratePerMinute": 1.1
+                  },
+                  {
+                    "minKw": 60,
+                    "maxKw": 100,
+                    "ratePerMinute": 2.3
+                  },
+                  {
+                    "minKw": 100,
+                    "maxKw": 150,
+                    "ratePerMinute": 3.5
+                  }
+                ],
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ],
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.25,
+            "chargePerMinute": 0,
+            "connectionFee": 0,
+            "idlePerMinute": 0,
+            "powerBands": [
+              {
+                "minKw": 0,
+                "maxKw": 60,
+                "ratePerMinute": 1.1
+              },
+              {
+                "minKw": 60,
+                "maxKw": 100,
+                "ratePerMinute": 2.3
+              },
+              {
+                "minKw": 100,
+                "maxKw": 150,
+                "ratePerMinute": 3.5
+              }
+            ],
+            "afterMinutesRate": 0,
+            "afterMinutesThreshold": 0,
+            "afterMinutesCap": 0,
+            "afterMinutesCapStart": "00:00",
+            "afterMinutesCapEnd": "24:00"
+          }
+        ]
+      },
+      "lastUpdated": "2026-08-08",
+      "temporarilyUnavailable": false,
+      "_syncUpdatedAt": "2026-08-08T22:23:47.540Z",
+      "access": {
+        "limited": false,
+        "days": {
+          "0": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "1": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "2": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "3": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "4": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "5": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          },
+          "6": {
+            "open": true,
+            "start": "00:00",
+            "end": ""
+          }
+        },
+        "afterCloseMode": "must_stop",
+        "afterCloseNote": ""
+      }
     },
     {
       "id": "izivia-levant",
