@@ -1,0 +1,151 @@
+name: Publier les données Tesla validées
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/tesla-global-trigger"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-tesla-global
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruire et valider le fichier global
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import base64
+          import gzip
+          import hashlib
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          payload = Path('.github/tesla-global-payload')
+          manifest_path = payload / 'manifest.json'
+          if not manifest_path.exists():
+              raise SystemExit('Payload Tesla global absent.')
+
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          parts = sorted(payload.glob('part-*.b64'))
+          if len(parts) != int(manifest.get('partCount', 0)):
+              raise SystemExit(f"Nombre de morceaux inattendu: {len(parts)}")
+
+          encoded = ''.join(part.read_text(encoding='ascii').strip() for part in parts)
+          try:
+              raw = gzip.decompress(base64.b64decode(encoded, validate=True))
+          except Exception as exc:
+              raise SystemExit(f'Payload illisible: {exc}')
+
+          digest = hashlib.sha256(raw).hexdigest()
+          if digest != manifest.get('sha256'):
+              raise SystemExit(f"SHA256 incorrect: {digest}")
+
+          stations = json.loads(raw.decode('utf-8'))
+          expected_count = int(manifest['stationCount'])
+          if len(stations) != expected_count:
+              raise SystemExit(f"Nombre de stations incorrect: {len(stations)} != {expected_count}")
+
+          ids = [station.get('id') for station in stations]
+          if None in ids or '' in ids:
+              raise SystemExit('Une station ne possède pas d’identifiant.')
+          duplicates = sorted(station_id for station_id, count in Counter(ids).items() if count > 1)
+          if duplicates:
+              raise SystemExit('IDs dupliqués: ' + ', '.join(duplicates[:20]))
+
+          expected_countries = manifest.get('countryCounts') or {}
+          actual_countries = Counter(station.get('countryCode') for station in stations)
+          if dict(sorted(actual_countries.items())) != dict(sorted(expected_countries.items())):
+              raise SystemExit(
+                  'Comptage pays incorrect: '
+                  + json.dumps({'expected': expected_countries, 'actual': dict(actual_countries)}, ensure_ascii=False)
+              )
+
+          required = ('id','name','kind','source','countryCode','powerKw','stalls','latitude','longitude','pricing','teslaUrl')
+          for station in stations:
+              missing = [key for key in required if station.get(key) in (None, '')]
+              if missing:
+                  raise SystemExit(f"Station {station.get('id')} incomplète: {missing}")
+              pricing = station.get('pricing') or {}
+              if 'teslaCongestionFees' in pricing:
+                  raise SystemExit(f"Champ congestion runtime interdit sur {station['id']}")
+
+          power_minute = []
+          for station in stations:
+              for rule in ((station.get('pricing') or {}).get('rules') or []):
+                  billing = rule.get('billing')
+                  if billing == 'powerMinute':
+                      bands = rule.get('powerBands') or []
+                      if not bands or any(
+                          key not in band for band in bands for key in ('minKw','maxKw','ratePerMinute')
+                      ):
+                          raise SystemExit(f"Tranches powerMinute invalides sur {station['id']}")
+                      power_minute.append(station.get('countryCode'))
+                  elif billing == 'kwh':
+                      if rule.get('pricePerKwh') is None:
+                          raise SystemExit(f"Tarif kWh incomplet sur {station['id']}")
+                  elif billing == 'minute':
+                      if rule.get('chargePerMinute') is None:
+                          raise SystemExit(f"Tarif minute incomplet sur {station['id']}")
+                  else:
+                      raise SystemExit(f"Mode de facturation inconnu sur {station['id']}: {billing}")
+
+          if Counter(power_minute) != Counter(manifest.get('powerMinuteCountries') or []):
+              raise SystemExit(
+                  'Répartition powerMinute inattendue: '
+                  + json.dumps(dict(Counter(power_minute)), ensure_ascii=False)
+              )
+
+          Path('data/tesla_stations.json').write_text(
+              json.dumps(stations, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8',
+          )
+          print(f"Tesla global validé: {len(stations)} stations · SHA256 {digest}")
+          PY
+
+      - name: Corriger les frontières des tarifs à la minute par puissance
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('assets/app.js')
+          text = path.read_text(encoding='utf-8')
+          old = "return powerKw>=min&&(powerKw<max||(i===bands.length-1&&powerKw<=max));"
+          new = "return (i===0?powerKw>=min:powerKw>min)&&powerKw<=max;"
+          if old in text:
+              text = text.replace(old, new, 1)
+              path.write_text(text, encoding='utf-8')
+              print('Frontières powerMinute corrigées: borne supérieure inclusive.')
+          elif new in text:
+              print('Correction powerMinute déjà présente.')
+          else:
+              raise SystemExit('Signature powerBandAt inconnue: publication interrompue.')
+          PY
+
+      - name: Publier atomiquement la base validée
+        shell: bash
+        run: |
+          git config user.name "tesla-charge-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/tesla_stations.json assets/app.js
+          git rm -r .github/tesla-global-payload
+          if git diff --cached --quiet; then
+            echo "Aucune modification à publier."
+            exit 0
+          fi
+          git commit -m "data: publish validated Tesla global refresh"
+          git push origin HEAD:main
