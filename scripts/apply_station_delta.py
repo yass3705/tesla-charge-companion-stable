@@ -41,8 +41,17 @@ def main():
         fail("baseline contains missing or duplicate station IDs")
 
     by_id = {station["id"]: station for station in stations}
-    additions = delta.get("newStations", [])
-    replacements = delta.get("replacements", [])
+    additions = list(delta.get("newStations", []))
+    replacements = list(delta.get("replacements", []))
+
+    for payload_name in delta.get("payloadFiles", []):
+        payload_path = Path(payload_name)
+        if not payload_path.is_file():
+            fail(f"payload file does not exist: {payload_name}")
+        payload = json.loads(payload_path.read_text(encoding="utf-8"))
+        additions.extend(payload.get("newStations", []))
+        replacements.extend(payload.get("replacements", []))
+
     manual_reviews = delta.get("manualReviewKeep", [])
     suspected_keeps = delta.get("suspectedRemovalKeep", [])
     expected_changes = delta.get("expectedChanges", [])
