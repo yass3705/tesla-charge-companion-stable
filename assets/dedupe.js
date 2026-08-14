@@ -90,21 +90,27 @@
     let oldSlug=teslaSlug(legacy),newSlug=teslaSlug(official);
     if(oldSlug&&newSlug&&oldSlug===newSlug)return true;
 
-    let meters=distanceMeters(legacy,official);
-    if(meters>500)return false;
+    let meters=distanceMeters(legacy,official),hasGeo=Number.isFinite(meters);
+    if(hasGeo&&meters>500)return false;
     let oldName=siteName(legacy),newName=siteName(official);
     if(!oldName||!newName)return false;
 
-    // Identical cleaned names remain a strong identity signal.
-    if(oldName===newName)return meters<=250;
+    let tech=technicalEvidence(legacy,official);
+    if(tech.conflict)return false;
+
+    // Identical cleaned names are strong evidence when GPS exists. Without
+    // startup GPS we deliberately require both technical facts as well.
+    if(oldName===newName){
+      if(hasGeo)return meters<=250;
+      return tech.evidence>=2;
+    }
 
     let nested=oldName.includes(newName)||newName.includes(oldName);
     if(!nested)return false;
-    // Tiny geographic differences are safe for historical naming variants.
-    if(meters<=60)return true;
 
-    let tech=technicalEvidence(legacy,official);
-    if(tech.conflict)return false;
+    // Tiny geographic differences are safe for historical naming variants.
+    if(hasGeo&&meters<=60)return true;
+
     let longName=oldName.length>=newName.length?oldName:newName;
     let shortName=oldName.length<newName.length?oldName:newName;
     let shortTokenCount=tokens(shortName).length;
@@ -112,13 +118,14 @@
 
     // For a meaningful multi-token site name, two matching technical facts
     // allow a modest coordinate drift between old/manual and official data.
-    if(meters<=250&&shortTokenCount>=2&&tech.evidence>=2)return true;
+    if(hasGeo&&meters<=250&&shortTokenCount>=2&&tech.evidence>=2)return true;
 
     // A one-word/city alias (e.g. "Casablanca — Onomo" vs "Casablanca")
-    // is intentionally stricter: the extra venue token must also appear in an
-    // address and both power + stall count must agree. This avoids merging two
-    // genuinely distinct Superchargers in the same city.
-    if(meters<=350&&venueMatch&&tech.evidence>=2)return true;
+    // is intentionally strict: the extra venue token must appear in either
+    // address and both power + stall count must agree. Crucially, this rule
+    // also works before geocoding, so legacy records without stored GPS can be
+    // migrated during startup instead of surviving until the first simulation.
+    if(venueMatch&&tech.evidence>=2&&(!hasGeo||meters<=350))return true;
 
     return false;
   }
@@ -146,7 +153,7 @@
   function cleanCurrentStations(){
     if(!Array.isArray(stations)||!publishedTesla().length)return false;
     let before=stations,filtered=filterLegacyDuplicates(before);
-    if(filtered.length===before.length)return true;
+    if(filtered.length===before.length)return false;
     stations=filtered;
     localStorage.setItem('tccStationsV701',JSON.stringify(stations));
     if(typeof renderStations==='function')renderStations();
@@ -194,13 +201,29 @@
     return originalApplyMergedCustomState({...cloud,stations:filterLegacyDuplicates(cloud.stations)});
   };
 
-  // Safety sweep for the unlikely case where the initial data fetch completes
-  // before this deferred script has wrapped localStations(). It also makes the
-  // fix effective immediately in the current session and persists the cleanup.
+  // If a legacy record only acquires latitude/longitude while the user runs a
+  // simulation, re-run the identity cleanup after geocoding and remove any
+  // just-resolved legacy duplicate from the result currently being prepared.
+  if(typeof candidateStations==='function'){
+    const originalCandidateStations=candidateStations;
+    candidateStations=async function(...args){
+      let result=await originalCandidateStations(...args);
+      cleanCurrentStations();
+      if(result&&Array.isArray(result.stations)&&Array.isArray(stations)){
+        let ids=new Set(stations.map(st=>st?.id).filter(Boolean));
+        result.stations=result.stations.filter(st=>ids.has(st?.id));
+      }
+      return result;
+    };
+  }
+
+  // Safety sweep for slow initial data loading. It no longer stops merely
+  // because the first pass found nothing; it keeps trying for 30 seconds.
   let attempts=0;
   const sweepTimer=setInterval(()=>{
     attempts++;
-    if(cleanCurrentStations()||attempts>=120)clearInterval(sweepTimer);
+    cleanCurrentStations();
+    if(attempts>=120)clearInterval(sweepTimer);
   },250);
 
   window.TCCStationDedup={samePublishedTesla,filterLegacyDuplicates,cleanCurrentStations};
