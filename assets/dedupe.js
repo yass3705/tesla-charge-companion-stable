@@ -41,6 +41,10 @@
   function teslaLike(st){
     return st?.source==='teslaSupercharger'||plain(st?.operator)==='tesla'||/^\s*tesla\b/i.test(st?.name||'')||!!teslaSlug(st);
   }
+  function hasCoordinates(st){
+    let lat=Number(st?.latitude),lon=Number(st?.longitude);
+    return Number.isFinite(lat)&&lat>=-90&&lat<=90&&Number.isFinite(lon)&&lon>=-180&&lon<=180;
+  }
   function distanceMeters(a,b){
     let aLat=Number(a?.latitude),aLon=Number(a?.longitude),bLat=Number(b?.latitude),bLon=Number(b?.longitude);
     if(![aLat,aLon,bLat,bLon].every(Number.isFinite))return Infinity;
@@ -76,6 +80,10 @@
     }
     return {evidence,conflict};
   }
+  function countryCompatible(a,b){
+    let ac=String(a?.countryCode||'').toUpperCase(),bc=String(b?.countryCode||'').toUpperCase();
+    return !(ac&&bc&&ac!==bc);
+  }
   function venueCorroborates(longName,shortName,legacy,official){
     let shortTokens=new Set(tokens(shortName));
     let extras=tokens(longName).filter(t=>t.length>=4&&!shortTokens.has(t));
@@ -85,8 +93,7 @@
   }
   function samePublishedTesla(legacy,official){
     if(!legacy||!official||legacy.id===official.id||official.source!=='teslaSupercharger'||!teslaLike(legacy))return false;
-    let lc=String(legacy.countryCode||'').toUpperCase(),oc=String(official.countryCode||'').toUpperCase();
-    if(lc&&oc&&lc!==oc)return false;
+    if(!countryCompatible(legacy,official))return false;
     let oldSlug=teslaSlug(legacy),newSlug=teslaSlug(official);
     if(oldSlug&&newSlug&&oldSlug===newSlug)return true;
 
@@ -129,6 +136,21 @@
 
     return false;
   }
+  function uniqueNoGeoCandidate(legacy,officials){
+    if(!legacy||hasCoordinates(legacy)||!teslaLike(legacy))return null;
+    let oldName=siteName(legacy),oldSlug=teslaSlug(legacy);
+    if(!oldName)return null;
+    let candidates=officials.filter(official=>{
+      if(!official||official.id===legacy.id||!countryCompatible(legacy,official))return false;
+      let newSlug=teslaSlug(official);
+      if(oldSlug&&newSlug&&oldSlug!==newSlug)return false;
+      let newName=siteName(official);
+      if(!newName||!(oldName.includes(newName)||newName.includes(oldName)))return false;
+      let tech=technicalEvidence(legacy,official);
+      return !tech.conflict&&tech.evidence>=2;
+    });
+    return candidates.length===1?candidates[0]:null;
+  }
   function publishedTesla(){
     return Array.isArray(defaultStations)?defaultStations.filter(st=>st?.source==='teslaSupercharger'):[];
   }
@@ -140,7 +162,7 @@
       // Same canonical ID is not a duplicate: normalisation still needs the
       // local record so existing user overrides continue to work as before.
       if(officials.some(o=>o.id===st?.id))return true;
-      let match=officials.find(o=>samePublishedTesla(st,o));
+      let match=officials.find(o=>samePublishedTesla(st,o))||uniqueNoGeoCandidate(st,officials);
       if(!match)return true;
       console.info('[TCC] Legacy Tesla duplicate ignored:',st?.id||st?.name,'→',match.id);
       return false;
