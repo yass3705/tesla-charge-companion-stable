@@ -17414,8 +17414,8 @@
     "source": "teslaSupercharger",
     "countryCode": "DE",
     "department": "",
-    "powerKw": 250,
-    "stalls": 28,
+    "powerKw": 500,
+    "stalls": 36,
     "address": "9 Wittgenstein, Busdorf 24866, Germany",
     "latitude": 54.477801,
     "longitude": 9.544579,
@@ -17518,10 +17518,10 @@
     "chargingConfigurations": [
       {
         "id": "main",
-        "label": "DC 250 kW",
+        "label": "DC 500 kW",
         "kind": "DC",
-        "powerKw": 250,
-        "stalls": 28,
+        "powerKw": 500,
+        "stalls": 36,
         "pricing": {
           "type": "rules",
           "rules": [
@@ -58464,7 +58464,7 @@
     "countryCode": "ES",
     "department": "Málaga",
     "powerKw": 250,
-    "stalls": 8,
+    "stalls": 12,
     "address": "Km 164, salida Parque Antena Ctra. N-340, Estepona 29689, Spain",
     "latitude": 36.457204,
     "longitude": -5.061507,
@@ -58570,7 +58570,7 @@
         "label": "DC 250 kW",
         "kind": "DC",
         "powerKw": 250,
-        "stalls": 8,
+        "stalls": 12,
         "pricing": {
           "type": "rules",
           "rules": [
@@ -67279,33 +67279,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "currency": "EUR",
+          "pricePerKwh": 0.23,
+          "chargePerMinute": 0.0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0.0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "currency": "EUR",
+          "pricePerKwh": 0.23,
+          "chargePerMinute": 0.0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0.0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.38,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "currency": "EUR",
+          "pricePerKwh": 0.34,
+          "chargePerMinute": 0.0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0.0
         }
       ]
     },
@@ -67369,33 +67369,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "currency": "EUR",
+              "pricePerKwh": 0.23,
+              "chargePerMinute": 0.0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0.0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "currency": "EUR",
+              "pricePerKwh": 0.23,
+              "chargePerMinute": 0.0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0.0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.38,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "currency": "EUR",
+              "pricePerKwh": 0.34,
+              "chargePerMinute": 0.0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0.0
             }
           ]
         }
@@ -87118,7 +87118,7 @@
     "countryCode": "FR",
     "department": "",
     "powerKw": 250,
-    "stalls": 9,
+    "stalls": 18,
     "address": "120 Rdpt de la Foux, Gassin 83580, France",
     "latitude": 43.2630793,
     "longitude": 6.580017,
@@ -87224,7 +87224,7 @@
         "label": "DC 250 kW",
         "kind": "DC",
         "powerKw": 250,
-        "stalls": 9,
+        "stalls": 18,
         "pricing": {
           "type": "rules",
           "rules": [
@@ -112429,11 +112429,11 @@
           "start": "00:00",
           "end": "24:00",
           "billing": "kwh",
-          "pricePerKwh": 0.75,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "GBP"
+          "currency": "GBP",
+          "pricePerKwh": 0.72,
+          "chargePerMinute": 0.0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0.0
         }
       ]
     },
@@ -112497,11 +112497,11 @@
               "start": "00:00",
               "end": "24:00",
               "billing": "kwh",
-              "pricePerKwh": 0.75,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "GBP"
+              "currency": "GBP",
+              "pricePerKwh": 0.72,
+              "chargePerMinute": 0.0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0.0
             }
           ]
         }
@@ -114726,11 +114726,11 @@
           "start": "00:00",
           "end": "24:00",
           "billing": "kwh",
-          "pricePerKwh": 0.75,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "GBP"
+          "currency": "GBP",
+          "pricePerKwh": 0.69,
+          "chargePerMinute": 0.0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0.0
         }
       ]
     },
@@ -114794,11 +114794,11 @@
               "start": "00:00",
               "end": "24:00",
               "billing": "kwh",
-              "pricePerKwh": 0.75,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "GBP"
+              "currency": "GBP",
+              "pricePerKwh": 0.69,
+              "chargePerMinute": 0.0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0.0
             }
           ]
         }
@@ -119259,11 +119259,11 @@
           "start": "00:00",
           "end": "24:00",
           "billing": "kwh",
-          "pricePerKwh": 0.77,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "GBP"
+          "currency": "GBP",
+          "pricePerKwh": 0.69,
+          "chargePerMinute": 0.0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0.0
         }
       ]
     },
@@ -119327,11 +119327,11 @@
               "start": "00:00",
               "end": "24:00",
               "billing": "kwh",
-              "pricePerKwh": 0.77,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "GBP"
+              "currency": "GBP",
+              "pricePerKwh": 0.69,
+              "chargePerMinute": 0.0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0.0
             }
           ]
         }
@@ -158077,8 +158077,8 @@
     "source": "teslaSupercharger",
     "countryCode": "NL",
     "department": "",
-    "powerKw": 150,
-    "stalls": 32,
+    "powerKw": 500,
+    "stalls": 24,
     "address": "275 Schipholweg, Badhoevedorp 1171 PK, Netherlands",
     "latitude": 52.329254,
     "longitude": 4.784877,
@@ -158181,10 +158181,10 @@
     "chargingConfigurations": [
       {
         "id": "main",
-        "label": "DC 150 kW",
+        "label": "DC 500 kW",
         "kind": "DC",
-        "powerKw": 150,
-        "stalls": 32,
+        "powerKw": 500,
+        "stalls": 24,
         "pricing": {
           "type": "rules",
           "rules": [
@@ -166170,7 +166170,7 @@
     "countryCode": "PT",
     "department": "",
     "powerKw": 250,
-    "stalls": 8,
+    "stalls": 16,
     "address": "RF4M+JPP Av. Prof. Dr. Egas Moniz, Castelo Branco 6000, Portugal",
     "latitude": 39.80688,
     "longitude": -7.515487,
@@ -166276,7 +166276,7 @@
         "label": "DC 250 kW",
         "kind": "DC",
         "powerKw": 250,
-        "stalls": 8,
+        "stalls": 16,
         "pricing": {
           "type": "rules",
           "rules": [
@@ -167439,5 +167439,3498 @@
       }
     ],
     "teslaCongestionFeePerMinute": 0.5
+  },
+  {
+    "id": "tesla-490357-germany",
+    "name": "Tesla Süderlügum, Germany",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "DE",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 3,
+    "address": "62 Hauptstraße, 25923 Süderlügum, Schleswig-holstein, Germany",
+    "latitude": 54.882555,
+    "longitude": 8.910091,
+    "mapsUrl": "https://maps.google.com/maps?daddr=54.882555,8.910091",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/490357",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.31,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "10:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.31,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "10:00",
+          "end": "22:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.43,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "22:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.31,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 3,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.31,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "10:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.31,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "10:00",
+              "end": "22:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.43,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "22:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.31,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-30384-germany",
+    "name": "Tesla Irschenberg, Germany - Wendling",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "DE",
+    "department": "",
+    "powerKw": 500,
+    "stalls": 8,
+    "address": "16 Wendling, 83737 Irschenberg, BY, Germany",
+    "latitude": 47.828011,
+    "longitude": 11.90308,
+    "mapsUrl": "https://maps.google.com/maps?daddr=47.828011,11.90308",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/30384",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.34,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.42,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "18:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.5,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "18:00",
+          "end": "22:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.42,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "22:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.34,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 500 kW",
+        "kind": "DC",
+        "powerKw": 500,
+        "stalls": 8,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.34,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.42,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "18:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.5,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "18:00",
+              "end": "22:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.42,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "22:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.34,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-30359-germany",
+    "name": "Tesla Würzburg, Germany",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "DE",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 16,
+    "address": "31 Mergentheimer Str., 97084 Würzburg, Germany",
+    "latitude": 49.768865,
+    "longitude": 9.940167,
+    "mapsUrl": "https://maps.google.com/maps?daddr=49.768865,9.940167",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/30359",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.43,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 16,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.43,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-30512-italy",
+    "name": "Tesla Foiano della Chiana, Italy",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "IT",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 12,
+    "address": "527 Via Enzo Ferrari, 52045 Foiano della Chiana, Arezzo, Italy",
+    "latitude": 43.2267823,
+    "longitude": 11.79890299,
+    "mapsUrl": "https://maps.google.com/maps?daddr=43.2267823,11.79890299",
+    "teslaUrl": "https://www.tesla.com/it_IT/findus/location/supercharger/30512",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.47,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-14",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 12,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.47,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-aviaroccobormioliparma-parma43122-italy",
+    "name": "Tesla Parma, Italy - Parma North",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "IT",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 20,
+    "address": "Via Rocco Bormioli, 43122 Parma, Parma, Italy",
+    "latitude": 44.82086204,
+    "longitude": 10.33594405,
+    "mapsUrl": "https://maps.google.com/maps?daddr=44.82086204,10.33594405",
+    "teslaUrl": "https://www.tesla.com/it_IT/findus/location/supercharger/33%2FAViaRoccoBormioliParma%2CPARMA43122",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.5,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-14",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 20,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.5,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-32244-italy",
+    "name": "Tesla Andora, Italy",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "IT",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 8,
+    "address": "90 Via S. Lazzaro, 17020 Andora, LIGURIA, Italy",
+    "latitude": 43.962449,
+    "longitude": 8.142488,
+    "mapsUrl": "https://maps.google.com/maps?daddr=43.962449,8.142488",
+    "teslaUrl": "https://www.tesla.com/it_IT/findus/location/supercharger/32244",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "16:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.47,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "16:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.55,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.47,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-14",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 8,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "16:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.47,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "16:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.55,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.47,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-493454-united_kingdom",
+    "name": "Tesla London, UK - Camberwell Road",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 4,
+    "address": "96-106 Camberwell Rd, SE5 0EG London, United Kingdom",
+    "latitude": 51.480928,
+    "longitude": -0.094865,
+    "mapsUrl": "https://maps.google.com/maps?daddr=51.480928,-0.094865",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/493454",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.55,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 4,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.55,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-dartfordservicecentresuperchargerq122-united_kingdom",
+    "name": "Tesla Dartford, UK - Tesla Centre",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 12,
+    "address": "Unit 2 Capstan Court, DA2 6QG Dartford, United Kingdom",
+    "latitude": 51.453515,
+    "longitude": 0.245882,
+    "mapsUrl": "https://maps.google.com/maps?daddr=51.453515,0.245882",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/dartfordservicecentresuperchargerq122",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.27,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "08:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.27,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "08:00",
+          "end": "23:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.42,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "23:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.27,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 12,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.27,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "08:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.27,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "08:00",
+              "end": "23:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.42,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "23:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.27,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-brentcrosssupercharger-united_kingdom",
+    "name": "Tesla London, UK - Brent Cross",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 130,
+    "stalls": 2,
+    "address": "28 Prince Charles Drive, NW4 3FP London, United Kingdom",
+    "latitude": 51.577968,
+    "longitude": -0.22485,
+    "mapsUrl": "https://maps.google.com/maps?daddr=51.577968,-0.22485",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/brentcrosssupercharger",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.45,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.29,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 130 kW",
+        "kind": "DC",
+        "powerKw": 130,
+        "stalls": 2,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.45,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.29,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-memburyeastboundsupercharger-united_kingdom",
+    "name": "Tesla Membury, UK - Eastbound",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 150,
+    "stalls": 6,
+    "address": "FCMV+H77 14/15 M4, RG17 7TZ Hungerford, United Kingdom",
+    "latitude": 51.484299,
+    "longitude": -1.55755,
+    "mapsUrl": "https://maps.google.com/maps?daddr=51.484299,-1.55755",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/memburyeastboundsupercharger",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "08:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "08:00",
+          "end": "21:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.46,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "21:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150 kW",
+        "kind": "DC",
+        "powerKw": 150,
+        "stalls": 6,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "08:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "08:00",
+              "end": "21:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.46,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "21:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-478553-united_kingdom",
+    "name": "Tesla Newport, UK - Chepstow Road",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 8,
+    "address": "7 Chepstow Rd, NP18 2LX Newport, United Kingdom",
+    "latitude": 51.604022,
+    "longitude": -2.920844,
+    "mapsUrl": "https://maps.google.com/maps?daddr=51.604022,-2.920844",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/478553",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.29,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "08:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.29,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "08:00",
+          "end": "23:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.45,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "23:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.29,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 8,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.29,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "08:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.29,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "08:00",
+              "end": "23:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.45,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "23:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.29,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-northamptonsupercharger-united_kingdom",
+    "name": "Tesla Northampton, UK - Grange Park",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 150,
+    "stalls": 6,
+    "address": "Junction 15, M1 Loake Close, Grange Park, NN4 5EZ Northampton, United Kingdom",
+    "latitude": 52.18607,
+    "longitude": -0.89103,
+    "mapsUrl": "https://maps.google.com/maps?daddr=52.18607,-0.89103",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/northamptonsupercharger",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.23,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "08:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.23,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "08:00",
+          "end": "22:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.45,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "22:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.23,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150 kW",
+        "kind": "DC",
+        "powerKw": 150,
+        "stalls": 6,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.23,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "08:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.23,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "08:00",
+              "end": "22:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.45,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "22:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.23,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-oxfordsupercharger-united_kingdom",
+    "name": "Tesla Oxford, UK",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 150,
+    "stalls": 16,
+    "address": "M40 Motorway, Jct 8a Thame Road, OX33 1LJ Oxford, United Kingdom",
+    "latitude": 51.737393,
+    "longitude": -1.09483,
+    "mapsUrl": "https://maps.google.com/maps?daddr=51.737393,-1.09483",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/oxfordsupercharger",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.2,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "08:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.2,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "08:00",
+          "end": "22:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.46,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "22:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.2,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 150 kW",
+        "kind": "DC",
+        "powerKw": 150,
+        "stalls": 16,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.2,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "08:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.2,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "08:00",
+              "end": "22:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.46,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "22:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.2,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-33248-united_kingdom",
+    "name": "Tesla Tyndrum, UK",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "GB",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 4,
+    "address": "C7QQ+7G3 A82, FK20 8RY Crianlarich, North, United Kingdom",
+    "latitude": 56.438143,
+    "longitude": -4.711201,
+    "mapsUrl": "https://maps.google.com/maps?daddr=56.438143,-4.711201",
+    "teslaUrl": "https://www.tesla.com/en_GB/findus/location/supercharger/33248",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "16:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.43,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "16:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.52,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "GBP",
+          "pricePerKwh": 0.43,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 4,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "16:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.43,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "16:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.52,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "GBP",
+              "pricePerKwh": 0.43,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-34049-france",
+    "name": "Tesla Aime-la-Plagne, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 16,
+    "address": "Rue Val Plagne, 73210 Aime-la-Plagne, France",
+    "latitude": 45.553106,
+    "longitude": 6.645588,
+    "mapsUrl": "https://maps.google.com/maps?daddr=45.553106,6.645588",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/34049",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.23,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 16,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.23,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-331795-france",
+    "name": "Tesla Caen, France - St Contest",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 12,
+    "address": "27 Rue du Clos Barbey, 14280 Saint-Contest, France",
+    "latitude": 49.200795,
+    "longitude": -0.399727,
+    "mapsUrl": "https://maps.google.com/maps?daddr=49.200795,-0.399727",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/331795",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "21:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.42,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "21:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 12,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "21:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.42,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "21:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-413628-france",
+    "name": "Tesla Agde, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 12,
+    "address": "Bd Maurice Pacul, 34300 Agde, France",
+    "latitude": 43.298432,
+    "longitude": 3.4723,
+    "mapsUrl": "https://maps.google.com/maps?daddr=43.298432,3.4723",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/413628",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.15,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.2,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.4,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.2,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 12,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.15,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.2,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.4,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.2,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-albertvilleq222-france",
+    "name": "Tesla Albertville, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 28,
+    "address": "Z.I. du Chiriac, 73200 Albertville, France",
+    "latitude": 45.655436,
+    "longitude": 6.365683,
+    "mapsUrl": "https://maps.google.com/maps?daddr=45.655436,6.365683",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/Albertvilleq222",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.32,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 28,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.32,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-29508-france",
+    "name": "Tesla Annecy, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 16,
+    "address": "Avenue d'Aix-les-Bains, 74600 Seynod, France",
+    "latitude": 45.877092,
+    "longitude": 6.0879,
+    "mapsUrl": "https://maps.google.com/maps?daddr=45.877092,6.0879",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/29508",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.19,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.19,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "21:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.4,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "21:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.19,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 16,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.19,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.19,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "21:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.4,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "21:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.19,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-34831-france",
+    "name": "Tesla Aire de Lafayette, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 22,
+    "address": "Aire de Lafayette A75, 43360 Lorlanges, France",
+    "latitude": 45.338545,
+    "longitude": 3.27382,
+    "mapsUrl": "https://maps.google.com/maps?daddr=45.338545,3.27382",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/34831",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.34,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 22,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.34,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-413456-france",
+    "name": "Tesla Vaux-sur-Mer, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 7,
+    "address": "7 Rue Auguste Râteau, 17640 Vaux-sur-Mer, France",
+    "latitude": 45.647032,
+    "longitude": -1.04895,
+    "mapsUrl": "https://maps.google.com/maps?daddr=45.647032,-1.04895",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/413456",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.35,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-12",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 7,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.35,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-59510-france",
+    "name": "Tesla Aire-sur-l'Adour, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 12,
+    "address": "Chem. de la Pachère, 40800 Aire-sur-l'Adour, France",
+    "latitude": 43.7251455,
+    "longitude": -0.2674916,
+    "mapsUrl": "https://maps.google.com/maps?daddr=43.7251455,-0.2674916",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/59510",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.35,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 12,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.35,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-453483-france",
+    "name": "Tesla Ajaccio, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 16,
+    "address": "Les Hameaux de Pernicaggio, 20167 Sarrola-Carcopino, France",
+    "latitude": 41.951923,
+    "longitude": 8.792809,
+    "mapsUrl": "https://maps.google.com/maps?daddr=41.951923,8.792809",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/453483",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.15,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.42,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.21,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 16,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.15,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.42,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.21,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-34053-france",
+    "name": "Tesla Argenton-sur-Creuse, France",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 20,
+    "address": "Bd du Berry, 36200 Argenton-sur-Creuse, France",
+    "latitude": 46.573166,
+    "longitude": 1.502554,
+    "mapsUrl": "https://maps.google.com/maps?daddr=46.573166,1.502554",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/34053",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.35,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 20,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "allDay",
+              "start": "00:00",
+              "end": "24:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.35,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-438010-france",
+    "name": "Tesla Saint-Julien-en-Genevois, France - Route de Lathoy",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "FR",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 9,
+    "address": "6 Rte de Lathoy, 74160 Saint-Julien-en-Genevois, France",
+    "latitude": 46.141488,
+    "longitude": 6.09553,
+    "mapsUrl": "https://maps.google.com/maps?daddr=46.141488,6.09553",
+    "teslaUrl": "https://www.tesla.com/fr_FR/findus/location/supercharger/438010",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.18,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "09:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.18,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "09:00",
+          "end": "23:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.41,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "23:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "EUR",
+          "pricePerKwh": 0.18,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-08-13",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 9,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.18,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "09:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.18,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "09:00",
+              "end": "23:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.41,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "23:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "EUR",
+              "pricePerKwh": 0.18,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
   }
 ]
