@@ -4,6 +4,15 @@
   const meta=document.querySelector('meta[name="tcc-build"]');
   if(meta)meta.content=CURRENT_BUILD;
 
+  function loadAugustUiFixes(){
+    if(document.querySelector('script[data-tcc-august-fixes]'))return;
+    const fixes=document.createElement('script');
+    fixes.src=`assets/august-ui-fixes.js?v=${CURRENT_BUILD}`;
+    fixes.dataset.tccAugustFixes='1';
+    fixes.onerror=()=>console.error('[TCC] August UI fixes could not be loaded.');
+    document.body.appendChild(fixes);
+  }
+
   function loadAugustRelease(){
     if(document.querySelector('script[data-tcc-august]'))return;
     if(!document.querySelector('link[data-tcc-august]')){
@@ -16,7 +25,10 @@
     const script=document.createElement('script');
     script.src=`assets/august-release.js?v=${CURRENT_BUILD}`;
     script.dataset.tccAugust='1';
-    script.onload=()=>console.info('[TCC] August release layer loaded.');
+    script.onload=()=>{
+      console.info('[TCC] August release layer loaded.');
+      loadAugustUiFixes();
+    };
     script.onerror=()=>console.error('[TCC] August release layer could not be loaded.');
     document.body.appendChild(script);
   }
