@@ -25,6 +25,15 @@
   // app.js and dedupe.js are already installed before the August overrides run.
   document.addEventListener('DOMContentLoaded',()=>setTimeout(loadAugustRelease,0),{once:true});
 
+  // Register the PWA worker explicitly. The manifest alone does not install it.
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg=>reg.update().catch(()=>{}))
+        .catch(err=>console.info('[TCC] Service worker unavailable:',err?.message||err));
+    },{once:true});
+  }
+
   let checking=false;
   async function checkForUpdate(){
     if(checking||!navigator.onLine)return false;
