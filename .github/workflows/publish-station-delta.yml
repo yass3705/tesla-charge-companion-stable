@@ -1,0 +1,76 @@
+name: Publish validated station delta
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/station-updates/*.json'
+  workflow_dispatch:
+    inputs:
+      delta_path:
+        description: 'Validated delta file to publish'
+        required: true
+        default: '.github/station-updates/global-24.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-station-delta
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout production repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve delta file
+        id: delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            DELTA_PATH="${{ inputs.delta_path }}"
+          else
+            DELTA_PATH="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- '.github/station-updates/*.json' | tail -n 1)"
+          fi
+          if [[ -z "$DELTA_PATH" || ! -f "$DELTA_PATH" ]]; then
+            echo "Unable to resolve delta file: $DELTA_PATH" >&2
+            exit 1
+          fi
+          echo "path=$DELTA_PATH" >> "$GITHUB_OUTPUT"
+          echo "Using $DELTA_PATH"
+
+      - name: Apply safety-checked station delta
+        run: |
+          python3 scripts/apply_station_delta.py "${{ steps.delta.outputs.path }}" data/tesla_stations.json
+          python3 -m json.tool data/tesla_stations.json >/dev/null
+          git diff --check
+
+      - name: Commit production station database
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/tesla_stations.json; then
+            echo "No production change required."
+            exit 0
+          fi
+          RUN_NUMBER="$(python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          p = Path(os.environ['DELTA_PATH'])
+          print(json.loads(p.read_text())['source']['runNumber'])
+          PY
+          )"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/tesla_stations.json
+          git commit -m "chore(stations): publish validated global update #${RUN_NUMBER}"
+          git push origin HEAD:main
+        env:
+          DELTA_PATH: ${{ steps.delta.outputs.path }}
