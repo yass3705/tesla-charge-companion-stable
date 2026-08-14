@@ -34,6 +34,63 @@ def fail(message):
     raise SystemExit(f"SAFETY CHECK FAILED: {message}")
 
 
+def always_open_access():
+    return {
+        "limited": False,
+        "days": {
+            str(day): {"open": True, "start": "00:00", "end": "24:00"}
+            for day in range(7)
+        },
+        "afterCloseMode": "exit_allowed",
+        "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla.",
+    }
+
+
+def expand_compact_station(item):
+    required = (
+        "id", "name", "countryCode", "powerKw", "stalls", "address",
+        "latitude", "longitude", "teslaUrl", "pricing", "lastUpdated",
+    )
+    missing = [key for key in required if key not in item]
+    if missing:
+        fail(f"compact station {item.get('id', '?')} missing fields: {missing}")
+    power = int(item["powerKw"])
+    stalls = int(item["stalls"])
+    lat = float(item["latitude"])
+    lon = float(item["longitude"])
+    pricing = copy.deepcopy(item["pricing"])
+    return {
+        "id": item["id"],
+        "name": item["name"],
+        "kind": "DC",
+        "source": "teslaSupercharger",
+        "countryCode": item["countryCode"],
+        "department": "",
+        "powerKw": power,
+        "stalls": stalls,
+        "address": item["address"],
+        "latitude": lat,
+        "longitude": lon,
+        "mapsUrl": f"https://maps.google.com/maps?daddr={lat},{lon}",
+        "teslaUrl": item["teslaUrl"],
+        "pricing": pricing,
+        "access": always_open_access(),
+        "lastUpdated": item["lastUpdated"],
+        "temporarilyUnavailable": bool(item.get("temporarilyUnavailable", False)),
+        "operator": "Tesla",
+        "chargingConfigurations": [
+            {
+                "id": "main",
+                "label": f"DC {power} kW",
+                "kind": "DC",
+                "powerKw": power,
+                "stalls": stalls,
+                "pricing": copy.deepcopy(pricing),
+            }
+        ],
+    }
+
+
 def main_configuration(station):
     configs = station.get("chargingConfigurations") or []
     if not configs:
@@ -47,11 +104,9 @@ def main_configuration(station):
 
 
 def sync_derived_field(station, field):
-    """Keep Charge Companion's duplicated configuration fields coherent."""
     config = main_configuration(station)
     if config is None:
         return
-
     if field == "stalls":
         config["stalls"] = station.get("stalls")
     elif field == "powerKw":
@@ -85,6 +140,7 @@ def main():
 
     by_id = {station["id"]: station for station in stations}
     additions = list(delta.get("newStations", []))
+    additions.extend(expand_compact_station(item) for item in delta.get("compactNewStations", []))
 
     for payload_name in delta.get("payloadFiles", []):
         payload_path = Path(payload_name)
@@ -92,6 +148,7 @@ def main():
             fail(f"payload file does not exist: {payload_name}")
         payload = json.loads(payload_path.read_text(encoding="utf-8"))
         additions.extend(payload.get("newStations", []))
+        additions.extend(expand_compact_station(item) for item in payload.get("compactNewStations", []))
 
     manual_reviews = delta.get("manualReviewKeep", [])
     suspected_keeps = delta.get("suspectedRemovalKeep", [])
@@ -129,12 +186,8 @@ def main():
         if item["id"] not in by_id:
             fail(f"protected suspected-removal station missing from baseline: {item['id']}")
 
-    manual_before = {
-        station_id: copy.deepcopy(by_id[station_id])
-        for station_id in manual_ids
-    }
+    manual_before = {station_id: copy.deepcopy(by_id[station_id]) for station_id in manual_ids}
 
-    # Validate every reported before value against production first.
     for item in expected_changes:
         station_id = item["id"]
         for change in item.get("changes", []):
@@ -149,7 +202,6 @@ def main():
                     f"expected {change['before']!r}, found {current!r}"
                 )
 
-    # Patch only fields explicitly validated by the exporter.
     updated = copy.deepcopy(stations)
     updated_by_id = {station["id"]: station for station in updated}
     for item in expected_changes:
@@ -178,7 +230,6 @@ def main():
         if item["id"] not in after_by_id:
             fail(f"protected station was not preserved: {item['id']}")
 
-    # Confirm reported fields reached the intended after values.
     for item in expected_changes:
         station_id = item["id"]
         for change in item.get("changes", []):
@@ -193,25 +244,18 @@ def main():
                     f"expected {change['after']!r}, found {current!r}"
                 )
 
-    # Verify duplicated configuration fields used by the simulator.
     for item in expected_changes:
         station = after_by_id[item["id"]]
         fields = {change["field"] for change in item.get("changes", [])}
         config = main_configuration(station)
-        if "pricing.rules" in fields and config is not None:
-            if config.get("pricing") != station.get("pricing"):
-                fail(f"pricing/configuration mismatch after publication: {item['id']}")
-        if "stalls" in fields and config is not None:
-            if config.get("stalls") != station.get("stalls"):
-                fail(f"stall/configuration mismatch after publication: {item['id']}")
-        if "powerKw" in fields and config is not None:
-            if config.get("powerKw") != station.get("powerKw"):
-                fail(f"power/configuration mismatch after publication: {item['id']}")
+        if "pricing.rules" in fields and config is not None and config.get("pricing") != station.get("pricing"):
+            fail(f"pricing/configuration mismatch after publication: {item['id']}")
+        if "stalls" in fields and config is not None and config.get("stalls") != station.get("stalls"):
+            fail(f"stall/configuration mismatch after publication: {item['id']}")
+        if "powerKw" in fields and config is not None and config.get("powerKw") != station.get("powerKw"):
+            fail(f"power/configuration mismatch after publication: {item['id']}")
 
-    stations_path.write_text(
-        json.dumps(updated, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    stations_path.write_text(json.dumps(updated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     source = delta.get("source", {})
     print(
