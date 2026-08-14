@@ -1,12 +1,29 @@
-// Tesla Charge Companion — Home Screen web app update checker.
-// Keeps an already-installed iOS Home Screen web app current without deleting
-// and re-adding its icon. A tiny version file is fetched without cache; when a
-// newer build is published, navigation switches to a versioned URL so WebKit
-// cannot reuse the stale main document.
+// Tesla Charge Companion — Home Screen update checker + August release loader.
 (function(){
+  const CURRENT_BUILD='8001';
   const meta=document.querySelector('meta[name="tcc-build"]');
-  const current=String(meta?.content||'').trim();
-  if(!current)return;
+  if(meta)meta.content=CURRENT_BUILD;
+
+  function loadAugustRelease(){
+    if(document.querySelector('script[data-tcc-august]'))return;
+    if(!document.querySelector('link[data-tcc-august]')){
+      const css=document.createElement('link');
+      css.rel='stylesheet';
+      css.href=`assets/august-release.css?v=${CURRENT_BUILD}`;
+      css.dataset.tccAugust='1';
+      document.head.appendChild(css);
+    }
+    const script=document.createElement('script');
+    script.src=`assets/august-release.js?v=${CURRENT_BUILD}`;
+    script.dataset.tccAugust='1';
+    script.onload=()=>console.info('[TCC] August release layer loaded.');
+    script.onerror=()=>console.error('[TCC] August release layer could not be loaded.');
+    document.body.appendChild(script);
+  }
+
+  // Deferred scripts execute before DOMContentLoaded. Loading here guarantees
+  // app.js and dedupe.js are already installed before the August overrides run.
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(loadAugustRelease,0),{once:true});
 
   let checking=false;
   async function checkForUpdate(){
@@ -20,7 +37,7 @@
       if(!response.ok)return false;
       const payload=await response.json();
       const remote=String(payload?.build||'').trim();
-      if(!remote||remote===current)return false;
+      if(!remote||remote===CURRENT_BUILD)return false;
 
       const url=new URL(location.href);
       url.searchParams.set('app',remote);
@@ -35,14 +52,11 @@
     }
   }
 
-  // Opening/resuming the Home Screen app is the important path on iOS.
   window.addEventListener('pageshow',()=>setTimeout(checkForUpdate,250));
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='visible')setTimeout(checkForUpdate,250);
   });
   window.addEventListener('online',checkForUpdate);
-
-  // Long-running sessions also get updated without requiring a restart.
   setInterval(checkForUpdate,5*60*1000);
 
   window.tccCheckForAppUpdate=checkForUpdate;
