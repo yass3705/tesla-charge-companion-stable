@@ -7,7 +7,7 @@ from pathlib import Path
 
 def get_path(obj, path):
     cur = obj
-    for part in path.split('.'):
+    for part in path.split("."):
         if isinstance(cur, list):
             cur = cur[int(part)]
         else:
@@ -15,8 +15,51 @@ def get_path(obj, path):
     return cur
 
 
+def set_path(obj, path, value):
+    parts = path.split(".")
+    cur = obj
+    for part in parts[:-1]:
+        if isinstance(cur, list):
+            cur = cur[int(part)]
+        else:
+            cur = cur[part]
+    last = parts[-1]
+    if isinstance(cur, list):
+        cur[int(last)] = copy.deepcopy(value)
+    else:
+        cur[last] = copy.deepcopy(value)
+
+
 def fail(message):
     raise SystemExit(f"SAFETY CHECK FAILED: {message}")
+
+
+def main_configuration(station):
+    configs = station.get("chargingConfigurations") or []
+    if not configs:
+        return None
+    for config in configs:
+        if config.get("id") == "main":
+            return config
+    if len(configs) == 1:
+        return configs[0]
+    return None
+
+
+def sync_derived_field(station, field):
+    """Keep Charge Companion's duplicated configuration fields coherent."""
+    config = main_configuration(station)
+    if config is None:
+        return
+
+    if field == "stalls":
+        config["stalls"] = station.get("stalls")
+    elif field == "powerKw":
+        config["powerKw"] = station.get("powerKw")
+        if config.get("kind", station.get("kind", "DC")) == "DC":
+            config["label"] = f"DC {station.get('powerKw')} kW"
+    elif field == "pricing.rules":
+        config["pricing"] = copy.deepcopy(station.get("pricing") or {})
 
 
 def main():
@@ -42,7 +85,6 @@ def main():
 
     by_id = {station["id"]: station for station in stations}
     additions = list(delta.get("newStations", []))
-    replacements = list(delta.get("replacements", []))
 
     for payload_name in delta.get("payloadFiles", []):
         payload_path = Path(payload_name)
@@ -50,21 +92,24 @@ def main():
             fail(f"payload file does not exist: {payload_name}")
         payload = json.loads(payload_path.read_text(encoding="utf-8"))
         additions.extend(payload.get("newStations", []))
-        replacements.extend(payload.get("replacements", []))
 
     manual_reviews = delta.get("manualReviewKeep", [])
     suspected_keeps = delta.get("suspectedRemovalKeep", [])
     expected_changes = delta.get("expectedChanges", [])
 
     add_ids = [station["id"] for station in additions]
-    replacement_ids = [station["id"] for station in replacements]
     manual_ids = [item["id"] for item in manual_reviews]
+    change_ids = [item["id"] for item in expected_changes]
 
-    for label, ids in (("addition", add_ids), ("replacement", replacement_ids), ("manual review", manual_ids)):
+    for label, ids in (
+        ("addition", add_ids),
+        ("manual review", manual_ids),
+        ("automatic change", change_ids),
+    ):
         if len(ids) != len(set(ids)):
             fail(f"duplicate ID in {label} set")
 
-    overlap = set(manual_ids) & (set(add_ids) | set(replacement_ids))
+    overlap = set(manual_ids) & (set(add_ids) | set(change_ids))
     if overlap:
         fail(f"manual-review stations would be modified: {sorted(overlap)}")
 
@@ -72,9 +117,9 @@ def main():
     if existing_adds:
         fail(f"new station IDs already exist: {sorted(existing_adds)}")
 
-    missing_replacements = set(replacement_ids) - set(by_id)
-    if missing_replacements:
-        fail(f"replacement station IDs missing from baseline: {sorted(missing_replacements)}")
+    missing_changes = set(change_ids) - set(by_id)
+    if missing_changes:
+        fail(f"automatic-change station IDs missing from baseline: {sorted(missing_changes)}")
 
     missing_manual = set(manual_ids) - set(by_id)
     if missing_manual:
@@ -84,17 +129,14 @@ def main():
         if item["id"] not in by_id:
             fail(f"protected suspected-removal station missing from baseline: {item['id']}")
 
-    manual_before = {station_id: copy.deepcopy(by_id[station_id]) for station_id in manual_ids}
+    manual_before = {
+        station_id: copy.deepcopy(by_id[station_id])
+        for station_id in manual_ids
+    }
 
-    change_ids = set()
-    replacement_id_set = set(replacement_ids)
+    # Validate every reported before value against production first.
     for item in expected_changes:
         station_id = item["id"]
-        change_ids.add(station_id)
-        if station_id not in by_id:
-            fail(f"expected-change station missing: {station_id}")
-        if station_id not in replacement_id_set:
-            fail(f"expected-change station is not in replacement set: {station_id}")
         for change in item.get("changes", []):
             path = change["field"]
             try:
@@ -107,11 +149,16 @@ def main():
                     f"expected {change['before']!r}, found {current!r}"
                 )
 
-    if change_ids != replacement_id_set:
-        fail("replacement set does not exactly match validated automatic-change stations")
+    # Patch only fields explicitly validated by the exporter.
+    updated = copy.deepcopy(stations)
+    updated_by_id = {station["id"]: station for station in updated}
+    for item in expected_changes:
+        station = updated_by_id[item["id"]]
+        for change in item.get("changes", []):
+            field = change["field"]
+            set_path(station, field, change["after"])
+            sync_derived_field(station, field)
 
-    replacement_map = {station["id"]: station for station in replacements}
-    updated = [copy.deepcopy(replacement_map.get(station["id"], station)) for station in stations]
     updated.extend(copy.deepcopy(additions))
 
     after_ids = [station.get("id") for station in updated]
@@ -131,6 +178,7 @@ def main():
         if item["id"] not in after_by_id:
             fail(f"protected station was not preserved: {item['id']}")
 
+    # Confirm reported fields reached the intended after values.
     for item in expected_changes:
         station_id = item["id"]
         for change in item.get("changes", []):
@@ -145,6 +193,21 @@ def main():
                     f"expected {change['after']!r}, found {current!r}"
                 )
 
+    # Verify duplicated configuration fields used by the simulator.
+    for item in expected_changes:
+        station = after_by_id[item["id"]]
+        fields = {change["field"] for change in item.get("changes", [])}
+        config = main_configuration(station)
+        if "pricing.rules" in fields and config is not None:
+            if config.get("pricing") != station.get("pricing"):
+                fail(f"pricing/configuration mismatch after publication: {item['id']}")
+        if "stalls" in fields and config is not None:
+            if config.get("stalls") != station.get("stalls"):
+                fail(f"stall/configuration mismatch after publication: {item['id']}")
+        if "powerKw" in fields and config is not None:
+            if config.get("powerKw") != station.get("powerKw"):
+                fail(f"power/configuration mismatch after publication: {item['id']}")
+
     stations_path.write_text(
         json.dumps(updated, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -154,7 +217,8 @@ def main():
     print(
         "PUBLICATION READY — "
         f"{expected_before} -> {expected_after} stations; "
-        f"added={len(additions)}; automatic stations={len(replacements)}; "
+        f"added={len(additions)}; automatic stations={len(expected_changes)}; "
+        f"automatic fields={sum(len(item.get('changes', [])) for item in expected_changes)}; "
         f"manual reviews preserved={len(manual_reviews)}; "
         f"suspected removals preserved={len(suspected_keeps)}; "
         f"source global run=#{source.get('runNumber', '?')}."
