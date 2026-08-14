@@ -8,6 +8,7 @@ const SHELL = [
   './assets/dedupe.js?v=7305',
   './assets/august-release.css?v=8001',
   './assets/august-release.js?v=8001',
+  './assets/august-ui-fixes.js?v=8001',
   './manifest.webmanifest'
 ];
 
