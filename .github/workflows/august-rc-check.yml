@@ -1,0 +1,41 @@
+name: August RC checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [release/2026-08]
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/app.js
+          node --check assets/dedupe.js
+          node --check assets/update.js
+          node --check assets/august-release.js
+          node --check service-worker.js
+
+      - name: Validate JSON files
+        run: |
+          python -m json.tool app-version.json >/dev/null
+          python -m json.tool data/metadata.json >/dev/null
+          python -m json.tool data/station_templates.json >/dev/null
+          python -m json.tool data/tesla_stations.json >/dev/null
+          python -m json.tool data/custom_stations.json >/dev/null
+          python -m json.tool data/exchange_rates.json >/dev/null
+
+      - name: Verify August build references
+        run: |
+          grep -q "CURRENT_BUILD='8001'" assets/update.js
+          grep -q "tcc-v8001-august" service-worker.js
+          grep -q '"build": "8001"' app-version.json
+          grep -q "teslaCongestionFeePerMinute" data/tesla_stations.json
