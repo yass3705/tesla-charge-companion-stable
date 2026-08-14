@@ -4,13 +4,13 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/station-updates/*.json'
+      - '.github/station-updates/publish.json'
   workflow_dispatch:
     inputs:
       delta_path:
-        description: 'Validated delta file to publish'
+        description: 'Validated delta manifest to publish'
         required: true
-        default: '.github/station-updates/global-24.json'
+        default: '.github/station-updates/publish.json'
 
 permissions:
   contents: write
@@ -36,7 +36,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             DELTA_PATH="${{ inputs.delta_path }}"
           else
-            DELTA_PATH="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- '.github/station-updates/*.json' | tail -n 1)"
+            DELTA_PATH=".github/station-updates/publish.json"
           fi
           if [[ -z "$DELTA_PATH" || ! -f "$DELTA_PATH" ]]; then
             echo "Unable to resolve delta file: $DELTA_PATH" >&2
