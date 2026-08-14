@@ -77,18 +77,43 @@
       return false;
     });
   }
+  function persistCleanedLocal(original,filtered){
+    if(!Array.isArray(original)||!Array.isArray(filtered)||filtered.length===original.length)return;
+    localStorage.setItem('tccStationsV701',JSON.stringify(filtered));
+  }
+  function cleanCurrentStations(){
+    if(!Array.isArray(stations)||!publishedTesla().length)return false;
+    let before=stations,filtered=filterLegacyDuplicates(before);
+    if(filtered.length===before.length)return true;
+    stations=filtered;
+    localStorage.setItem('tccStationsV701',JSON.stringify(stations));
+    if(typeof renderStations==='function')renderStations();
+    console.info('[TCC] Legacy Tesla station cache cleaned:',before.length-filtered.length,'duplicate(s) removed.');
+    return true;
+  }
 
   // Startup migration: defaultStations is populated immediately before these
   // functions are called by app.js, so matching uses the current canonical DB.
   const originalLocalStations=localStations;
   localStations=function(){
     let value=originalLocalStations();
-    return Array.isArray(value)?filterLegacyDuplicates(value):value;
+    if(!Array.isArray(value))return value;
+    let filtered=filterLegacyDuplicates(value);
+    persistCleanedLocal(value,filtered);
+    return filtered;
   };
   const originalOldLocalStations=oldLocalStations;
   oldLocalStations=function(){
     let value=originalOldLocalStations();
     return Array.isArray(value)?filterLegacyDuplicates(value):value;
+  };
+
+  // Every local save also goes through the guard so a stale identity cannot
+  // be persisted again after another operation in the UI.
+  const originalSaveLocal=saveLocal;
+  saveLocal=function(){
+    if(Array.isArray(stations))stations=filterLegacyDuplicates(stations);
+    return originalSaveLocal();
   };
 
   // Do not send a legacy duplicate back to the multi-device sync file.
@@ -107,5 +132,14 @@
     return originalApplyMergedCustomState({...cloud,stations:filterLegacyDuplicates(cloud.stations)});
   };
 
-  window.TCCStationDedup={samePublishedTesla,filterLegacyDuplicates};
+  // Safety sweep for the unlikely case where the initial data fetch completes
+  // before this deferred script has wrapped localStations(). It also makes the
+  // fix effective immediately in the current session and persists the cleanup.
+  let attempts=0;
+  const sweepTimer=setInterval(()=>{
+    attempts++;
+    if(cleanCurrentStations()||attempts>=120)clearInterval(sweepTimer);
+  },250);
+
+  window.TCCStationDedup={samePublishedTesla,filterLegacyDuplicates,cleanCurrentStations};
 })();
