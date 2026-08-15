@@ -1,5 +1,6 @@
 name: Publier le site
 
+# La preview V8 est reconstruite depuis release/2026-08 à chaque déploiement de main.
 on:
   push:
     branches: ["main"]
