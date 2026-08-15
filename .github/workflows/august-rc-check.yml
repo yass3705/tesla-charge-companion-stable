@@ -23,6 +23,7 @@ jobs:
           node --check assets/update.js
           node --check assets/august-release.js
           node --check assets/august-ui-fixes.js
+          node --check assets/august-rc2-fixes.js
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -36,8 +37,9 @@ jobs:
 
       - name: Verify August build references
         run: |
-          grep -q "CURRENT_BUILD='8001'" assets/update.js
+          grep -q "CURRENT_BUILD='8002'" assets/update.js
           grep -q "august-ui-fixes.js" assets/update.js
-          grep -q "tcc-v8001-august" service-worker.js
-          grep -q '"build": "8001"' app-version.json
+          grep -q "august-rc2-fixes.js" assets/update.js
+          grep -q "tcc-v8002-august" service-worker.js
+          grep -q '"build": "8002"' app-version.json
           grep -q "teslaCongestionFeePerMinute" data/tesla_stations.json
