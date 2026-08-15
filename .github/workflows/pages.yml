@@ -2,7 +2,7 @@ name: Publier le site
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "release/2026-08"]
   workflow_dispatch:
 
 permissions:
@@ -21,11 +21,40 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Récupérer la version stable
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+
+      - name: Récupérer la V8 RC
+        uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          path: rc
+
+      - name: Préparer la preview V8
+        shell: bash
+        run: |
+          rm -rf site/v8-preview
+          mkdir -p site/v8-preview
+          rsync -a --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            rc/ site/v8-preview/
+
+          # Les bornes tierces et les taux de change restent ceux de main,
+          # afin que la preview utilise les données vivantes sans dupliquer
+          # ni écraser la synchronisation personnelle.
+          cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
+          cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
+
       - uses: actions/configure-pages@v5
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "site"
+
       - name: Publier
         id: deployment
         uses: actions/deploy-pages@v4
