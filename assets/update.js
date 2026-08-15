@@ -1,15 +1,28 @@
 // Tesla Charge Companion — Home Screen update checker + August release loader.
 (function(){
-  const CURRENT_BUILD='8001';
+  const CURRENT_BUILD='8002';
   const meta=document.querySelector('meta[name="tcc-build"]');
   if(meta)meta.content=CURRENT_BUILD;
+
+  function loadAugustRc2Fixes(){
+    if(document.querySelector('script[data-tcc-august-rc2]'))return;
+    const fixes=document.createElement('script');
+    fixes.src=`assets/august-rc2-fixes.js?v=${CURRENT_BUILD}`;
+    fixes.dataset.tccAugustRc2='1';
+    fixes.onerror=()=>console.error('[TCC] August RC2 fixes could not be loaded.');
+    document.body.appendChild(fixes);
+  }
 
   function loadAugustUiFixes(){
     if(document.querySelector('script[data-tcc-august-fixes]'))return;
     const fixes=document.createElement('script');
     fixes.src=`assets/august-ui-fixes.js?v=${CURRENT_BUILD}`;
     fixes.dataset.tccAugustFixes='1';
-    fixes.onerror=()=>console.error('[TCC] August UI fixes could not be loaded.');
+    fixes.onload=loadAugustRc2Fixes;
+    fixes.onerror=()=>{
+      console.error('[TCC] August UI fixes could not be loaded.');
+      loadAugustRc2Fixes();
+    };
     document.body.appendChild(fixes);
   }
 
