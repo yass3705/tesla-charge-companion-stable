@@ -2,7 +2,7 @@ name: Publier le site
 
 on:
   push:
-    branches: ["main", "release/2026-08"]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
