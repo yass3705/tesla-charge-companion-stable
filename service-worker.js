@@ -1,10 +1,15 @@
-const CACHE = 'tcc-v7301-stable';
+const CACHE = 'tcc-v8002-august';
 const SHELL = [
   './',
-  './index.html?v=7300',
-  './assets/style.css?v=7300',
-  './assets/app.js?v=7300',
-  './assets/dedupe.js?v=7301',
+  './index.html',
+  './assets/style.css?v=7305',
+  './assets/update.js?v=1',
+  './assets/app.js?v=7305',
+  './assets/dedupe.js?v=7305',
+  './assets/august-release.css?v=8002',
+  './assets/august-release.js?v=8002',
+  './assets/august-ui-fixes.js?v=8002',
+  './assets/august-rc2-fixes.js?v=8002',
   './manifest.webmanifest'
 ];
 
@@ -27,6 +32,7 @@ self.addEventListener('fetch', event => {
   const networkFirst = sameOrigin && (
     url.pathname.includes('/data/') ||
     url.pathname.includes('/assets/') ||
+    url.pathname.endsWith('/app-version.json') ||
     url.pathname.endsWith('/index.html') ||
     url.pathname.endsWith('/')
   );
