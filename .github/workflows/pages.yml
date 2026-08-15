@@ -44,10 +44,52 @@ jobs:
             rc/ site/v8-preview/
 
           # Les bornes tierces et les taux de change restent ceux de main,
-          # afin que la preview utilise les données vivantes sans dupliquer
-          # ni écraser la synchronisation personnelle.
+          # afin que la preview parte des données vivantes sans recopier
+          # une ancienne synchronisation de la branche de test.
           cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
+
+          # La preview partage le même domaine que la stable. On isole donc
+          # son localStorage avant le chargement de l'application pour qu'un
+          # test V8 ne modifie pas les réglages/cache locaux de la V7.3.
+          cat > site/v8-preview/assets/preview-storage.js <<'JS'
+          (function(){
+            if(!location.pathname.includes('/v8-preview/'))return;
+            const prefix='tcc:v8-preview:';
+            const proto=Storage.prototype;
+            const rawGet=proto.getItem,rawSet=proto.setItem,rawRemove=proto.removeItem;
+            function scoped(storage,key){
+              return storage===window.localStorage?prefix+String(key):key;
+            }
+            proto.getItem=function(key){return rawGet.call(this,scoped(this,key));};
+            proto.setItem=function(key,value){return rawSet.call(this,scoped(this,key),value);};
+            proto.removeItem=function(key){return rawRemove.call(this,scoped(this,key));};
+            window.TCC_PREVIEW=true;
+            document.addEventListener('DOMContentLoaded',function(){
+              const header=document.querySelector('header');
+              if(!header||document.getElementById('tccPreviewBanner'))return;
+              const banner=document.createElement('div');
+              banner.id='tccPreviewBanner';
+              banner.textContent='V8 Preview · données locales isolées de la V7.3';
+              banner.style.cssText='margin-top:8px;padding:7px 10px;border-radius:10px;background:#4b3210;color:#ffc76a;font-size:11px;font-weight:800;text-align:center';
+              header.appendChild(banner);
+            });
+          })();
+          JS
+
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('site/v8-preview/index.html')
+          html=p.read_text(encoding='utf-8')
+          tag='<script src="assets/preview-storage.js?v=1"></script>\n'
+          marker='<script>window.escapeHtml'
+          if tag not in html:
+              if marker in html:
+                  html=html.replace(marker,tag+marker,1)
+              else:
+                  html=html.replace('</head>',tag+'</head>',1)
+          p.write_text(html,encoding='utf-8')
+          PY
 
       - uses: actions/configure-pages@v5
 
