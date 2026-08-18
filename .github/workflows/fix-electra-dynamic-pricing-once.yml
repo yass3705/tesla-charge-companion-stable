@@ -45,26 +45,27 @@ jobs:
           from pathlib import Path
           p=Path('scripts/build_france_runtime_catalog.mjs')
           s=p.read_text(encoding='utf-8')
-          old="""      let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,add:emptyRate(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}
-                if(threshold>0){const surcharge=rate.time+rate.parking;if(surcharge>0&&(w.afterThreshold===0||threshold<w.afterThreshold)){w.afterThreshold=threshold;w.afterRate=surcharge;}}
-                else for(const k of present)w.add[k]+=rate[k];
-          """
-          new="""      let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,values:emptyRate(),present:new Set(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}
-                if(threshold>0){const surcharge=rate.time+rate.parking;if(surcharge>0&&(w.afterThreshold===0||threshold<w.afterThreshold)){w.afterThreshold=threshold;w.afterRate=surcharge;}}
-                else for(const k of present){w.values[k]+=rate[k];w.present.add(k);}
-          """
-          if old not in s: raise SystemExit('Electra window collection marker missing')
-          s=s.replace(old,new,1)
-          old2="""  for(const w of windows.values()){
-              w.rate={...base}; for(const k of Object.keys(w.add))w.rate[k]+=w.add[k]; rules.push(compactRule(w));
-            }
-          """
-          new2="""  for(const w of windows.values()){
-              w.rate={...base}; for(const k of w.present)w.rate[k]=w.values[k]; rules.push(compactRule(w));
-            }
-          """
-          if old2 not in s: raise SystemExit('Electra window application marker missing')
-          s=s.replace(old2,new2,1)
+
+          replacements=[
+            (
+              "let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,add:emptyRate(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}",
+              "let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,values:emptyRate(),present:new Set(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}"
+            ),
+            (
+              "else for(const k of present)w.add[k]+=rate[k];",
+              "else for(const k of present){w.values[k]+=rate[k];w.present.add(k);}"
+            ),
+            (
+              "w.rate={...base}; for(const k of Object.keys(w.add))w.rate[k]+=w.add[k]; rules.push(compactRule(w));",
+              "w.rate={...base}; for(const k of w.present)w.rate[k]=w.values[k]; rules.push(compactRule(w));"
+            )
+          ]
+
+          for old,new in replacements:
+            if old not in s:
+              raise SystemExit(f'Electra patch marker missing: {old}')
+            s=s.replace(old,new,1)
+
           p.write_text(s,encoding='utf-8')
           PY
           node --check scripts/build_france_runtime_catalog.mjs
