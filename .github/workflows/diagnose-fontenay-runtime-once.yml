@@ -1,0 +1,47 @@
+name: Diagnose Fontenay runtime — one shot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-fontenay-runtime-once.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Inspect Fontenay runtime rows
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import gzip,json,re
+          from pathlib import Path
+          p=Path('data/non_tesla_france/t_97_4.json.gz')
+          rows=json.load(gzip.open(p,'rt',encoding='utf-8'))
+          hits=[]
+          for row in rows:
+            blob=' '.join(str(x) for x in row[:3]).lower()
+            if 'fontenay' in blob and ('8 mai' in blob or '1945' in blob or 'sigeif' in blob):
+              hits.append(row)
+          out={'tile':'t_97_4','matches':hits,'count':len(hits)}
+          Path('diagnostics').mkdir(exist_ok=True)
+          Path('diagnostics/fontenay_runtime.json').write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          if not hits: raise SystemExit('No Fontenay match found')
+          PY
+      - name: Commit diagnostic
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add diagnostics/fontenay_runtime.json
+          git commit -m 'diagnostic: inspect Fontenay runtime offers'
+          git push
