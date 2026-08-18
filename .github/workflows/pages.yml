@@ -92,7 +92,7 @@ jobs:
               '<script src="assets/v8-area-workflow.js?v=rc44-20260818" defer></script>\n'
               '<script src="assets/v8-sync-guard.js?v=rc44-20260818" defer></script>\n'
               '<script src="assets/v8-rc4-extensions.js?v=rc44-20260818" defer></script>\n'
-              '<script src="assets/v8-rc4-toggle-fix.js?v=rc44-20260818" defer></script>\n'
+              '<script src="assets/v8-rc4-toggle-fix.js?v=rc44b-20260818" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
           p.write_text(html,encoding='utf-8')
@@ -131,6 +131,7 @@ jobs:
           node --check site/v8-preview/assets/v8-rc4-toggle-fix.js
           node --check site/v8-preview/assets/update.js
           grep -q 'v8-area-workflow.js?v=rc44-20260818' site/v8-preview/index.html
+          grep -q 'v8-rc4-toggle-fix.js?v=rc44b-20260818' site/v8-preview/index.html
           grep -q 'V8 Preview · RC4.4' site/v8-preview/assets/preview-storage.js
           echo "V8 RC4.4 preview prepared from release/2026-08"
 
