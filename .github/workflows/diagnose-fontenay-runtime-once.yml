@@ -1,4 +1,4 @@
-name: Diagnose Fontenay runtime — one shot
+name: Fix France runtime Electra attribution — one shot
 
 on:
   push:
@@ -11,37 +11,124 @@ permissions:
   contents: write
 
 jobs:
-  diagnose:
+  patch:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
-      - name: Inspect Fontenay runtime rows
+
+      - name: Patch source semantics and runtime data
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import gzip,json,re
           from pathlib import Path
-          p=Path('data/non_tesla_france/t_97_4.json.gz')
-          rows=json.load(gzip.open(p,'rt',encoding='utf-8'))
-          hits=[]
-          for row in rows:
-            blob=' '.join(str(x) for x in row[:3]).lower()
-            if 'fontenay' in blob and ('8 mai' in blob or '1945' in blob or 'sigeif' in blob):
-              hits.append(row)
-          out={'tile':'t_97_4','matches':hits,'count':len(hits)}
-          Path('diagnostics').mkdir(exist_ok=True)
-          Path('diagnostics/fontenay_runtime.json').write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf-8')
-          print(json.dumps(out,ensure_ascii=False,indent=2))
-          if not hits: raise SystemExit('No Fontenay match found')
+          import gzip,json,hashlib,datetime
+
+          # Missing opening hours must remain unknown.
+          p=Path('assets/france-catalog.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("if(!Array.isArray(rows)||!rows.length)return {limited:false,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non restreints dans la source.'};","if(!Array.isArray(rows)||!rows.length)return {limited:false,unknown:true,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non fournis par la source.'};")
+          s=s.replace("return {limited:true,days,afterCloseMode:'must_stop',afterCloseNote:'Horaires publiés par la source de données.'};","return {limited:true,unknown:false,days,afterCloseMode:'must_stop',afterCloseNote:'Horaires publiés par la source de données.'};")
+          s=s.replace("const version=manifest.generatedAt||manifest.allSha256||'';","const version=manifest.runtimePatchedAt||manifest.allSha256||manifest.generatedAt||'';")
+          p.write_text(s,encoding='utf-8')
+
+          # Future builds: if Electra returns several distinct site-level tariffs but
+          # no connector/EVSE/power attribution, do not fan them across every plug.
+          p=Path('scripts/build_france_runtime_catalog.mjs')
+          s=p.read_text(encoding='utf-8')
+          marker='function connectorGroupsForOffer(st,offer){'
+          helper="""function electraOfferHasExplicitAttribution(offer){
+  if(Array.isArray(offer?.connectorIds)&&offer.connectorIds.length)return true;
+  if(Array.isArray(offer?.evseIds)&&offer.evseIds.length)return true;
+  return (offer?.elements||[]).some(el=>el?.restrictions&&(el.restrictions.minPower!=null||el.restrictions.maxPower!=null));
+}
+function suppressUnattributedElectraAtStation(st){
+  const offers=(st.offers||[]).filter(o=>o?.source==='electra');
+  return offers.length>1&&offers.every(o=>!electraOfferHasExplicitAttribution(o));
+}
+"""
+          if 'function suppressUnattributedElectraAtStation' not in s:
+              if marker not in s: raise SystemExit('builder marker missing')
+              s=s.replace(marker,helper+marker,1)
+          old="function configRows(st){\n  const out=[];const seen=new Set();\n  for(const offer of st.offers||[]){\n"
+          new="function configRows(st){\n  const out=[];const seen=new Set();\n  const suppressAmbiguousElectra=suppressUnattributedElectraAtStation(st);\n  for(const offer of st.offers||[]){\n    if(suppressAmbiguousElectra&&offer.source==='electra')continue;\n"
+          if old in s:s=s.replace(old,new,1)
+          elif 'const suppressAmbiguousElectra=suppressUnattributedElectraAtStation(st);' not in s:raise SystemExit('configRows anchor missing')
+          p.write_text(s,encoding='utf-8')
+
+          root=Path('data/non_tesla_france')
+          manifest_path=root/'manifest.json'
+          manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
+
+          def provider(cfg): return str(cfg[1] if len(cfg)>1 else '').split('·',1)[0].strip()
+          def key(cfg): return (str(cfg[2] if len(cfg)>2 else '').upper(),round(float(cfg[3] or 0),2))
+          def patch_rows(rows):
+              stations=groups=removed=0
+              for row in rows:
+                  if len(row)<9 or not isinstance(row[8],list):continue
+                  buckets={}
+                  for i,cfg in enumerate(row[8]):
+                      if provider(cfg).lower()=='electra':buckets.setdefault(key(cfg),[]).append((i,cfg))
+                  drop=set()
+                  for items in buckets.values():
+                      sigs={json.dumps(c[5] if len(c)>5 else [],sort_keys=True,separators=(',',':')) for _,c in items}
+                      if len(items)>1 and len(sigs)>1:
+                          groups+=1;drop.update(i for i,_ in items)
+                  if drop:
+                      stations+=1;removed+=len(drop);row[8]=[c for i,c in enumerate(row[8]) if i not in drop]
+              return stations,groups,removed
+
+          stats=(0,0,0)
+          for f in sorted(root.glob('*.json.gz')):
+              with gzip.open(f,'rt',encoding='utf-8') as h:rows=json.load(h)
+              st=patch_rows(rows)
+              if f.name=='all.json.gz':stats=st
+              raw=json.dumps(rows,separators=(',',':'),ensure_ascii=False).encode()
+              with open(f,'wb') as out:
+                  out.write(gzip.compress(raw,compresslevel=9,mtime=0))
+
+          allp=root/'all.json.gz';b=allp.read_bytes()
+          with gzip.open(allp,'rt',encoding='utf-8') as h:allrows=json.load(h)
+          manifest.setdefault('sourceGeneratedAt',manifest.get('generatedAt'))
+          manifest['runtimePatchedAt']=datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')
+          manifest['configurationCount']=sum(len(r[8]) for r in allrows)
+          manifest['allBytes']=len(b);manifest['allSha256']=hashlib.sha256(b).hexdigest()
+          manifest['sourceFirstTariffDisplay']=True
+          manifest['unknownOpeningHoursPolicy']='unknown-not-24x7'
+          manifest['evseStatusPolicy']='snapshot-informational-only-not-used-for-station-removal-or-access'
+          manifest['electraConnectorAttributionPolicy']='suppress-multiple-distinct-unattributed-electra-tariffs-for-same-station-kind-power'
+          manifest['ambiguousElectraStationsAffected'],manifest['ambiguousElectraGroupsSuppressed'],manifest['ambiguousElectraConfigurationsSuppressed']=stats
+          for t in manifest.get('tiles',[]):
+              p=root/t['file'];bb=p.read_bytes();t['bytes']=len(bb);t['sha256']=hashlib.sha256(bb).hexdigest()
+          manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+          # Regressions: Fontenay DC32 has no un-attributed Electra option; Ozoir keeps exact composite tariff.
+          font=next((r for r in allrows if r[0]=='electroverse:4525305'),None)
+          ozoir=next((r for r in allrows if r[0]=='electroverse:389598'),None)
+          if not font or not ozoir:raise SystemExit('regression station missing')
+          dc=[c for c in font[8] if str(c[2]).upper()=='DC' and abs(float(c[3])-32)<0.1]
+          if any(provider(c).lower()=='electra' for c in dc):raise SystemExit(f'Fontenay ambiguous Electra remains: {dc}')
+          if not any(provider(c).lower()=='electroverse' and abs(float(c[5][0][5])-0.45)<1e-9 for c in dc):raise SystemExit(f'Fontenay EV DC unexpected: {dc}')
+          oz=[c for c in ozoir[8] if provider(c).lower()=='electroverse' and str(c[2]).upper()=='AC' and abs(float(c[3])-22)<0.1]
+          if not oz:raise SystemExit('Ozoir EV AC22 missing')
+          r=oz[0][5][0]
+          if not (abs(float(r[5])-.30)<1e-9 and abs(float(r[6])-.03)<1e-9 and abs(float(r[7])-.60)<1e-9):raise SystemExit(f'Ozoir composite changed: {r}')
+          print({'stats':stats,'configurationCount':manifest['configurationCount'],'fontenayDC':dc,'ozoirRule':r})
           PY
-      - name: Commit diagnostic
+          node --check assets/france-catalog.js
+          node --check scripts/build_france_runtime_catalog.mjs
+
+      - name: Commit and publish runtime correction
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add diagnostics/fontenay_runtime.json
-          git commit -m 'diagnostic: inspect Fontenay runtime offers'
-          git push
+          git add assets/france-catalog.js scripts/build_france_runtime_catalog.mjs data/non_tesla_france
+          git commit -m 'fix(data): suppress ambiguous Electra connector tariffs conservatively'
+          git pull --rebase origin main
+          git push origin HEAD:main
