@@ -120,6 +120,8 @@ jobs:
           # Forcer Safari à reprendre le nouveau regroupement multi-offres même si
           # le numéro général de RC reste 8004 pendant cette phase de validation.
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=8004-offers3', html)
+          html=re.sub(r'<script src="assets/v8-sync-guard\.js\?v=[^"]+" defer></script>\n?','',html)
+          html=html.replace('</body>','<script src="assets/v8-sync-guard.js?v=1" defer></script>\n</body>',1)
           p.write_text(html,encoding='utf-8')
 
           # La couche August affichait encore RC1 et réécrivait le meta build.
@@ -149,9 +151,11 @@ jobs:
 
           node --check site/v8-preview/assets/update.js
           node --check site/v8-preview/assets/v8-offer-selection.js
+          node --check site/v8-preview/assets/v8-sync-guard.js
           node --check site/v8-preview/assets/august-release.js
           grep -q 'france-catalog-reset-20260818b' site/v8-preview/assets/preview-storage.js
           grep -q '8004-offers3' site/v8-preview/index.html
+          grep -q 'v8-sync-guard.js?v=1' site/v8-preview/index.html
           grep -q 'if(window.TCC_PREVIEW)' site/v8-preview/assets/update.js
 
       - uses: actions/configure-pages@v5
