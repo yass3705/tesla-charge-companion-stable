@@ -68,7 +68,7 @@ jobs:
             proto.removeItem=function(key){return rawRemove.call(this,scoped(this,key));};
             document.addEventListener('DOMContentLoaded',function(){
               const header=document.querySelector('header');if(!header||document.getElementById('tccPreviewBanner'))return;
-              const banner=document.createElement('div');banner.id='tccPreviewBanner';banner.textContent='V8 Preview · RC4.7 · auto-mise à jour désactivée';banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';header.appendChild(banner);
+              const banner=document.createElement('div');banner.id='tccPreviewBanner';banner.textContent='V8 Preview · RC4.8 · auto-mise à jour désactivée';banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';header.appendChild(banner);
             });
           })();
           JS
@@ -79,22 +79,22 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc47"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48c"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
-          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-tariff-display-fix'):
+          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-tariff-display-fix'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc47-20260818', html)
+          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48c-20260818', html)
           scripts=(
-              '<script src="assets/v8-vehicle-profiles.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-redesign.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-dynamic-filter.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-area-workflow.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-sync-guard.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-rc4-extensions.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-rc4-toggle-fix.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-combined-tariff-fix.js?v=rc47-20260818" defer></script>\n'
-              '<script src="assets/v8-tariff-display-fix.js?v=rc47-20260818" defer></script>\n'
+              '<script src="assets/v8-vehicle-profiles.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-redesign.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-dynamic-filter.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-area-workflow.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-sync-guard.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-rc4-extensions.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-rc4-toggle-fix.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-combined-tariff-fix.js?v=rc48c-20260818" defer></script>\n'
+              '<script src="assets/v8-source-first-offers.js?v=rc48c-20260818" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
           p.write_text(html,encoding='utf-8')
@@ -108,9 +108,9 @@ jobs:
 
           p=Path('site/v8-preview/assets/august-release.js')
           s=p.read_text(encoding='utf-8')
-          s=s.replace('V8.0 RC1','V8.0 RC4.7').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC4.7';")
+          s=s.replace('V8.0 RC1','V8.0 RC4.8').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC4.8';")
           s=s.replace("meta.content='8001'","meta.content='8004'")
-          s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC4.7')
+          s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC4.8')
           p.write_text(s,encoding='utf-8')
 
           p=Path('site/v8-preview/assets/update.js')
@@ -132,12 +132,16 @@ jobs:
           node --check site/v8-preview/assets/v8-rc4-extensions.js
           node --check site/v8-preview/assets/v8-rc4-toggle-fix.js
           node --check site/v8-preview/assets/v8-combined-tariff-fix.js
-          node --check site/v8-preview/assets/v8-tariff-display-fix.js
+          node --check site/v8-preview/assets/v8-source-first-offers.js
           node --check site/v8-preview/assets/update.js
-          grep -q 'v8-area-workflow.js?v=rc47-20260818' site/v8-preview/index.html
-          grep -q 'v8-tariff-display-fix.js?v=rc47-20260818' site/v8-preview/index.html
-          grep -q 'V8 Preview · RC4.7' site/v8-preview/assets/preview-storage.js
-          echo "V8 RC4.7 preview prepared from release/2026-08"
+          grep -q 'v8-area-workflow.js?v=rc48c-20260818' site/v8-preview/index.html
+          grep -q 'v8-source-first-offers.js?v=rc48c-20260818' site/v8-preview/index.html
+          grep -q 'V8 Preview · RC4.8' site/v8-preview/assets/preview-storage.js
+          if grep -q 'v8-tariff-display-fix.js' site/v8-preview/index.html; then
+            echo 'Ancien rematching tarifaire encore chargé' >&2
+            exit 1
+          fi
+          echo "V8 RC4.8 preview prepared from release/2026-08"
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
