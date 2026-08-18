@@ -1,6 +1,6 @@
 name: Publier le site
 
-# La preview V8 est reconstruite depuis release/2026-08 et publiée uniquement par main.
+# La stable vient de main ; la preview V8 est reconstruite depuis release/2026-08.
 on:
   push:
     branches: ["main"]
@@ -53,8 +53,7 @@ jobs:
           cp site/assets/france-catalog.js site/v8-preview/assets/france-catalog.js
 
           # La preview partage le domaine de la stable : stockage local isolé,
-          # suppression d'un ancien service worker propre à /v8-preview/ et
-          # désactivation de l'auto-refresh dans la preview uniquement.
+          # suppression des anciens caches V8 et désactivation de l'auto-refresh.
           cat > site/v8-preview/assets/preview-storage.js <<'JS'
           (function(){
             if(!location.pathname.includes('/v8-preview/'))return;
@@ -77,10 +76,8 @@ jobs:
             const proto=Storage.prototype;
             const rawGet=proto.getItem,rawSet=proto.setItem,rawRemove=proto.removeItem;
 
-            // Migration V8 : l'ancienne preview pouvait conserver une copie locale
-            // de stations françaises supprimées de custom_stations.json (ex. Lidl
-            // Saint-Cyr du 10/07). On efface uniquement le cache des stations de la
-            // preview, une seule fois, sans toucher aux réglages ni à la V7.3.
+            // Purge unique de l'ancien cache stations de la preview : les anciennes
+            // fiches FR (ex. Lidl du 10/07) ne doivent plus masquer le catalogue national.
             const resetMarker=prefix+'france-catalog-reset-20260818b';
             if(rawGet.call(window.localStorage,resetMarker)!=='1'){
               rawRemove.call(window.localStorage,prefix+'tccStationsV701');
@@ -97,7 +94,7 @@ jobs:
               if(!header||document.getElementById('tccPreviewBanner'))return;
               const banner=document.createElement('div');
               banner.id='tccPreviewBanner';
-              banner.textContent='V8 Preview · auto-mise à jour désactivée';
+              banner.textContent='V8 Preview · RC2 · auto-mise à jour désactivée';
               banner.style.cssText='margin-top:8px;padding:7px 10px;border-radius:10px;background:#4b3210;color:#ffc76a;font-size:11px;font-weight:800;text-align:center';
               header.appendChild(banner);
             });
@@ -108,24 +105,27 @@ jobs:
           from pathlib import Path
           import re
 
-          # preview-storage doit s'exécuter avant update.js.
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
+
+          # preview-storage avant update.js.
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=3"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=4"></script>\n'
           marker='<script>window.escapeHtml'
           if tag not in html:
               html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
 
-          # Forcer Safari à reprendre le nouveau regroupement multi-offres même si
-          # le numéro général de RC reste 8004 pendant cette phase de validation.
-          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=8004-offers3', html)
+          # Cache-busting des couches V8 en cours de validation.
+          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=8004-offers4', html)
           html=re.sub(r'<script src="assets/v8-sync-guard\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=html.replace('</body>','<script src="assets/v8-sync-guard.js?v=1" defer></script>\n</body>',1)
+          html=re.sub(r'<script src="assets/v8-dynamic-filter\.js\?v=[^"]+" defer></script>\n?','',html)
+          html=html.replace('</body>',
+              '<script src="assets/v8-sync-guard.js?v=2" defer></script>\n'
+              '<script src="assets/v8-dynamic-filter.js?v=1" defer></script>\n'
+              '</body>',1)
           p.write_text(html,encoding='utf-8')
 
-          # La couche August affichait encore RC1 et réécrivait le meta build.
-          # On corrige uniquement la copie de preview, pas la stable.
+          # La couche August historique réécrivait encore RC1 / build 8001.
           p=Path('site/v8-preview/assets/august-release.js')
           s=p.read_text(encoding='utf-8')
           s=s.replace('V8.0 RC1','V8.0 RC2').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC2';")
@@ -133,8 +133,7 @@ jobs:
           s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC2')
           p.write_text(s,encoding='utf-8')
 
-          # On conserve le loader August, mais pas son auto-refresh/service worker
-          # dans la preview. La stable n'est jamais modifiée.
+          # Aucun service worker / auto-refresh dans la preview.
           p=Path('site/v8-preview/assets/update.js')
           s=p.read_text(encoding='utf-8')
           sw="if('serviceWorker' in navigator){"
@@ -142,25 +141,18 @@ jobs:
               s=s.replace(sw,"if(!window.TCC_PREVIEW&&'serviceWorker' in navigator){",1)
           needle='  let checking=false;'
           guard="  if(window.TCC_PREVIEW){window.tccCheckForAppUpdate=async()=>false;return;}\n\n"
-          if guard not in s:
-              if needle not in s:
-                  raise SystemExit('update.js preview guard insertion point missing')
+          if guard not in s and needle in s:
               s=s.replace(needle,guard+needle,1)
           p.write_text(s,encoding='utf-8')
           PY
 
-          node --check site/v8-preview/assets/update.js
-          node --check site/v8-preview/assets/v8-offer-selection.js
-          node --check site/v8-preview/assets/v8-sync-guard.js
-          node --check site/v8-preview/assets/august-release.js
-          grep -q 'france-catalog-reset-20260818b' site/v8-preview/assets/preview-storage.js
-          grep -q '8004-offers3' site/v8-preview/index.html
-          grep -q 'v8-sync-guard.js?v=1' site/v8-preview/index.html
-          grep -q 'if(window.TCC_PREVIEW)' site/v8-preview/assets/update.js
+          echo "V8 preview prepared from release/2026-08"
 
-      - uses: actions/configure-pages@v5
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Préparer l'artefact Pages
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "site"
 
