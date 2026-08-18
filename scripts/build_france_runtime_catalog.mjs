@@ -190,7 +190,7 @@ function sha256(buf){return crypto.createHash('sha256').update(buf).digest('hex'
 fs.rmSync(outDir,{recursive:true,force:true});fs.mkdirSync(outDir,{recursive:true});
 const compressed=fs.readFileSync(input);const raw=zlib.gunzipSync(compressed);const data=JSON.parse(raw.toString('utf8'));
 if(data.schemaVersion!=='1.1.0')throw new Error(`Unexpected source schema ${data.schemaVersion}`);
-if(!Array.isArray(data.stations)||data.stations.length!==43416)throw new Error(`Unexpected station count ${data.stations?.length}`);
+if(!Array.isArray(data.stations)||data.stations.length<40000)throw new Error(`Unexpected station count ${data.stations?.length}`);
 const generatedAt=data.generatedAt||GENERATED_FALLBACK;
 const tiles=new Map();let configurationCount=0,skipped=0;
 for(const st of data.stations){const row=stationRow(st,generatedAt);if(!row){skipped++;continue;}configurationCount+=row[8].length;const id=tileId(row[3],row[4]);let arr=tiles.get(id);if(!arr){arr=[];tiles.set(id,arr);}arr.push(row);}

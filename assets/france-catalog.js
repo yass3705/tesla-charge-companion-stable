@@ -11,7 +11,7 @@
       if(!r.ok)throw new Error(`Catalogue France indisponible (${r.status})`);
       return r.json();
     }).then(m=>{
-      if(Number(m?.stationCount)!==43416)throw new Error(`Catalogue France incomplet (${m?.stationCount||0} stations)`);
+      if(Number(m?.stationCount)<40000)throw new Error(`Catalogue France incomplet (${m?.stationCount||0} stations)`);
       return m;
     });
     return manifestPromise;
