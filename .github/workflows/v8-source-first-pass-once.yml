@@ -1,0 +1,174 @@
+name: V8 source-first field pass — one shot
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/v8-source-first-pass-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+          fetch-depth: 0
+
+      - name: Checkout V8 release
+        uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          path: release
+          fetch-depth: 0
+
+      - name: Patch V8 pricing core from source data
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('release/assets/app.js')
+          s=p.read_text(encoding='utf-8')
+          if 'energyChargeCost=0,timeChargeCost=0' not in s:
+              s,n=re.subn(
+                  r"let currencies=new Set\(\),connection=0,chargeCost=0,idleCost=0,durationSurcharge=0,energyPerMinute=chargeMinutes>0\?billedEnergy/chargeMinutes:0;",
+                  "let currencies=new Set(),connection=0,chargeCost=0,energyChargeCost=0,timeChargeCost=0,idleCost=0,durationSurcharge=0,energyPerMinute=chargeMinutes>0?billedEnergy/chargeMinutes:0;",
+                  s,count=1)
+              if n!=1: raise SystemExit('price declaration not found')
+          old="""if(rule.billing==='kwh'){
+       raw=energyPerMinute*fraction*(rule.pricePerKwh||0);
+     }"""
+          new="""if(rule.billing==='kwh'){
+       let rawEnergy=energyPerMinute*fraction*(rule.pricePerKwh||0);
+       let rawTime=fraction*(rule.chargePerMinute||0);
+       energyChargeCost+=fxToEur(rawEnergy,currency);
+       timeChargeCost+=fxToEur(rawTime,currency);
+       raw=rawEnergy+rawTime;
+     }"""
+          if old in s:s=s.replace(old,new,1)
+          elif 'rawEnergy=energyPerMinute*fraction' not in s: raise SystemExit('kWh source pricing branch not found')
+          old="""connection,chargeCost,idleCost,durationSurcharge,
+     occupiedMinutes:occupied,currencies:[...currencies]"""
+          new="""connection,chargeCost,energyChargeCost,timeChargeCost,idleCost,durationSurcharge,
+     occupiedMinutes:occupied,currencies:[...currencies]"""
+          if old in s:s=s.replace(old,new,1)
+          elif 'energyChargeCost,timeChargeCost' not in s: raise SystemExit('pricing return not found')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('release/assets/august-release.js')
+          s=p.read_text(encoding='utf-8')
+          pattern=r"  function tariffLabel\(st,time\)\{.*?\n  \}\n  function congestionInfo"
+          replacement="""  function tariffLabel(st,time){
+    let rules=legacyPricingToRules(st.pricing),rule=ruleForMinute(rules,mins(time));
+    if(!rule)return'Tarif non disponible';
+    let c=(rule.currency||'EUR').toUpperCase(),parts=[];
+    const fmt=(v,d=3)=>Number(v||0).toFixed(d).replace(/0+$/,'').replace(/\\.$/,'');
+    if(rule.billing==='kwh'&&Number(rule.pricePerKwh||0)>0)parts.push(`${fmt(rule.pricePerKwh)} ${c}/kWh`);
+    if(Number(rule.chargePerMinute||0)>0)parts.push(`${fmt(rule.chargePerMinute)} ${c}/min`);
+    if(rule.billing==='minute'&&!Number(rule.chargePerMinute||0))parts.push(`tarif à la minute (${c})`);
+    if(rule.billing==='powerMinute')parts.push(`tarif/min selon puissance (${c})`);
+    if(Number(rule.connectionFee||0)>0)parts.push(`${fmt(rule.connectionFee,2)} ${c} fixe`);
+    if(Number(rule.idlePerMinute||0)>0)parts.push(`${fmt(rule.idlePerMinute)} ${c}/min occupation`);
+    if(Number(rule.afterMinutesRate||0)>0&&Number(rule.afterMinutesThreshold||0)>0)parts.push(`${fmt(rule.afterMinutesRate)} ${c}/min après ${Math.round(rule.afterMinutesThreshold)} min`);
+    if(rule.scope==='timeWindow'&&(rule.start||rule.end))parts.push(`créneau ${rule.start||'00:00'}–${rule.end||'24:00'}`);
+    return parts.length?parts.join(' + '):'Tarif variable';
+  }
+  function congestionInfo"""
+          s2,n=re.subn(pattern,replacement,s,count=1,flags=re.S)
+          if n!=1: raise SystemExit('tariffLabel replacement failed')
+          s=s2
+
+          s,n=re.subn(
+              r"      let breakdown=r\.pricingDetails&&\(r\.pricingDetails\.connection\|\|r\.pricingDetails\.idleCost\|\|r\.pricingDetails\.durationSurcharge\|\|r\.pricingDetails\.congestionCost\)\?`<div class=\\\"small cost-breakdown\\\">.*?</div>`:'';",
+              "      let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.energyChargeCost||r.pricingDetails.timeChargeCost||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge||r.pricingDetails.congestionCost)?`<div class=\\\"small cost-breakdown\\\"><b>Détail tarifaire</b> · Énergie : ${(r.pricingDetails.energyChargeCost||0).toFixed(2)} € · Durée pendant charge : ${(r.pricingDetails.timeChargeCost||0).toFixed(2)} € · Fixe : ${(r.pricingDetails.connection||0).toFixed(2)} € · Occupation/après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} € · Congestion ≥${r.congestion?.threshold??80}% : ${(r.pricingDetails.congestionCost||0).toFixed(2)} €</div>`:'';",
+              s,count=1,flags=re.S)
+          if n!=1 and 'Durée pendant charge' not in s: raise SystemExit('August pricing breakdown not found')
+
+          target_pattern=r"  function targetStatusHtml\(row,target\)\{.*?\n  \}"
+          target_replacement="""  function targetStatusHtml(row,target){
+    let r=row.r;
+    let accessNote=row.st?.access?.availabilityKnown===false?`<div class=\"warn small\">⚠ Horaires d’accès non fournis par la source.</div>`:'';
+    if(r.unavailable)return accessNote+`<div class=\"bad small\">${esc(r.message||'Indisponible')}</div>`;
+    if(Number.isFinite(target)&&!r.targetReached){
+      let why=r.truncatedByUnplug?'heure de débranchement':(r.truncatedByClose?'fermeture du site':'temps disponible');
+      return accessNote+`<div class=\"warn small\"><b>Objectif ${target.toFixed(0)} % non atteint (${why}).</b> Niveau estimé au départ : ${r.reached.toFixed(1)} %.</div>`;
+    }
+    if(Number.isFinite(target))return accessNote+`<div class=\"good small\">✓ Objectif ${target.toFixed(0)} % atteignable.</div>`;
+    return accessNote+`<div class=\"good small\">✓ Charge maximisée jusqu’à l’heure de débranchement.</div>`;
+  }"""
+          s2,n=re.subn(target_pattern,target_replacement,s,count=1,flags=re.S)
+          if n!=1: raise SystemExit('targetStatusHtml not found')
+          p.write_text(s2,encoding='utf-8')
+          PY
+          node --check release/assets/app.js
+          node --check release/assets/august-release.js
+          grep -q 'energyChargeCost' release/assets/app.js
+          grep -q 'Durée pendant charge' release/assets/august-release.js
+          grep -q 'Horaires d’accès non fournis' release/assets/august-release.js
+
+      - name: Commit source-first V8 core
+        shell: bash
+        working-directory: release
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/app.js assets/august-release.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(v8): use source pricing and source access semantics'
+            git push origin HEAD:release/2026-08
+          fi
+
+      - name: Patch main catalogue semantics and publish RC4.8
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('main/assets/france-catalog.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("if(!Array.isArray(rows)||!rows.length)return {limited:false,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non restreints dans la source.'};",
+                      "if(!Array.isArray(rows)||!rows.length)return {limited:false,availabilityKnown:false,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires d’accès non fournis par la source.'};")
+          s=s.replace("return {limited:true,days,afterCloseMode:'must_stop',afterCloseNote:'Horaires publiés par la source de données.'};",
+                      "return {limited:true,availabilityKnown:true,days,afterCloseMode:'must_stop',afterCloseNote:'Horaires publiés par la source de données.'};")
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('main/.github/workflows/pages.yml')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('RC4.7','RC4.8').replace('rc47-20260818','rc48-20260818').replace('rc47','rc48')
+          s=s.replace(",'v8-combined-tariff-fix','v8-tariff-display-fix'","")
+          s=re.sub(r"\s*'<script src=\"assets/v8-combined-tariff-fix\.js\?v=[^\n]+\n",'',s)
+          s=re.sub(r"\s*'<script src=\"assets/v8-tariff-display-fix\.js\?v=[^\n]+\n",'',s)
+          s=re.sub(r"\s*node --check site/v8-preview/assets/v8-combined-tariff-fix\.js\n",'\n',s)
+          s=re.sub(r"\s*node --check site/v8-preview/assets/v8-tariff-display-fix\.js\n",'\n',s)
+          s=re.sub(r"\s*grep -q 'v8-tariff-display-fix\.js\?v=[^']+' site/v8-preview/index\.html\n",'\n',s)
+          p.write_text(s,encoding='utf-8')
+          PY
+          node --check main/assets/france-catalog.js
+          grep -q 'availabilityKnown:false' main/assets/france-catalog.js
+          grep -q 'V8 Preview · RC4.8' main/.github/workflows/pages.yml
+
+      - name: Commit main RC4.8
+        shell: bash
+        working-directory: main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f .github/workflows/v8-source-tariffs-direct-once.yml
+          rm -f .github/workflows/v8-source-first-pass-once.yml
+          git add assets/france-catalog.js .github/workflows/pages.yml .github/workflows || true
+          git commit -m 'fix(pages): publish RC4.8 source-first data semantics'
+          git push origin HEAD:main
