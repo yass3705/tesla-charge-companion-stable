@@ -61,7 +61,7 @@
   }
 
   function accessFromRows(rows){
-    if(!Array.isArray(rows)||!rows.length)return {limited:false,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non restreints dans la source.'};
+    if(!Array.isArray(rows)||!rows.length)return {limited:false,unknown:true,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non fournis par la source — accès à vérifier.'};
     const days={};for(let i=0;i<7;i++)days[String(i)]={open:false,start:'00:00',end:'00:00'};
     for(const r of rows){
       const day=Number(r?.[0]);if(!Number.isInteger(day)||day<0||day>6)continue;
@@ -69,7 +69,7 @@
       if(!current.open){days[String(day)]={open:true,start,end};continue;}
       if(start<current.start)current.start=start;if(end>current.end)current.end=end;
     }
-    return {limited:true,days,afterCloseMode:'must_stop',afterCloseNote:'Horaires publiés par la source de données.'};
+    return {limited:true,unknown:false,days,afterCloseMode:'must_stop',afterCloseNote:'Horaires publiés par la source de données.'};
   }
 
   function stationFromRow(row,dayIndex){
