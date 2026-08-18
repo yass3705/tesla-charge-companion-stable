@@ -1,0 +1,67 @@
+name: Fix V8 combined kWh + minute tariffs — one shot
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/fix-v8-combined-kwh-minute-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+
+      - name: Patch combined energy + time pricing
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p=Path('assets/app.js')
+          s=p.read_text(encoding='utf-8')
+          old="raw=energyPerMinute*fraction*(rule.pricePerKwh||0);"
+          new="raw=energyPerMinute*fraction*(rule.pricePerKwh||0)+fraction*(rule.chargePerMinute||0);"
+          if old not in s:
+              raise SystemExit('priceWithRules kWh marker missing')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('assets/august-release.js')
+          s=p.read_text(encoding='utf-8')
+          old="if(rule.billing==='kwh')return`${Number(rule.pricePerKwh||0).toFixed(3).replace(/0+$/,'').replace(/\\.$/,'')} ${c}/kWh`;"
+          new="""if(rule.billing==='kwh'){
+      let parts=[`${Number(rule.pricePerKwh||0).toFixed(3).replace(/0+$/,'').replace(/\\.$/,'')} ${c}/kWh`];
+      if(Number(rule.chargePerMinute||0)>0)parts.push(`${Number(rule.chargePerMinute||0).toFixed(3).replace(/0+$/,'').replace(/\\.$/,'')} ${c}/min`);
+      if(Number(rule.connectionFee||0)>0)parts.push(`${Number(rule.connectionFee||0).toFixed(2).replace(/0+$/,'').replace(/\\.$/,'')} ${c} fixe`);
+      return parts.join(' + ');
+    }"""
+          if old not in s:
+              raise SystemExit('August tariffLabel kWh marker missing')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          node --check assets/app.js
+          node --check assets/august-release.js
+          grep -q "fraction.*chargePerMinute" assets/app.js
+          grep -q "parts.join(' + ')" assets/august-release.js
+
+      - name: Commit V8 fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/app.js assets/august-release.js
+          git commit -m 'fix(v8): add minute fee to kWh tariffs'
+          git push origin HEAD:release/2026-08
