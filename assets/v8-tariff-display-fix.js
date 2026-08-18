@@ -2,7 +2,7 @@
 (function(){
   'use strict';
   const text=v=>String(v==null?'':v).trim();
-  const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+  const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const euro=v=>Number.isFinite(v)?new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(v):'—';
 
   function normId(v){
@@ -21,23 +21,33 @@
     const m=h.match(/^(.*?)\s+—\s+(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);
     return m?{name:m[1].trim(),kind:m[2].toUpperCase(),power:Number(m[3].replace(',','.'))}:{name:h.split('—')[0].trim(),kind:'',power:0};
   }
-  function samePhysical(card,st){
+  function nameScore(a,b){
+    const aa=norm(a),bb=norm(b);if(!aa||!bb)return 0;if(aa===bb)return 1;
+    const A=new Set(aa.split(' ').filter(x=>x.length>1)),B=new Set(bb.split(' ').filter(x=>x.length>1));
+    if(!A.size||!B.size)return 0;
+    let hit=0;for(const x of A)if(B.has(x))hit++;
+    return hit/Math.max(A.size,B.size);
+  }
+  function idMatches(card,st){
     const cardId=normId(card.dataset.resultId);
     const ids=[st?.baseStationId,st?.catalogStationId,st?.id].map(normId).filter(Boolean);
-    if(cardId&&ids.some(id=>id===cardId||id.endsWith(cardId)||cardId.endsWith(id)))return true;
-    const info=cardInfo(card);
-    return !!info.name&&norm(st?.name)===norm(info.name);
+    return !!cardId&&ids.some(id=>id===cardId||id.endsWith(cardId)||cardId.endsWith(id));
   }
   function findVariant(card,provider){
     const info=cardInfo(card),wanted=norm(normalizeProvider(provider));
     const all=window.TCC_V8_AREA_CACHE?.prepared?.stations||[];
-    const matches=all.filter(st=>{
-      if(!samePhysical(card,st))return false;
+    const eligible=all.filter(st=>{
       if(info.kind&&text(st?.kind).toUpperCase()!==info.kind)return false;
       if(info.power&&Math.abs(Number(st?.powerKw||0)-info.power)>.25)return false;
       return norm(providerFromStation(st))===wanted;
     });
-    return matches[0]||null;
+    if(!eligible.length)return null;
+    const byId=eligible.find(st=>idMatches(card,st));if(byId)return byId;
+    const exactName=eligible.find(st=>norm(st?.name)===norm(info.name));if(exactName)return exactName;
+    const ranked=eligible.map(st=>({st,score:nameScore(st?.name,info.name)})).sort((a,b)=>b.score-a.score);
+    if(ranked[0]&&ranked[0].score>=0.45)return ranked[0].st;
+    if(eligible.length===1)return eligible[0];
+    return null;
   }
   function activeRule(st,time){
     if(!st||typeof window.legacyPricingToRules!=='function'||typeof window.ruleForMinute!=='function'||typeof window.mins!=='function')return null;
@@ -90,6 +100,7 @@
       const st=findVariant(card,provider),label=commercialLabel(activeRule(st,time));
       const price=row.querySelector('.v8-offer-price');
       if(price&&label&&text(price.textContent)!==label)price.textContent=label;
+      if(!st)row.title='Détail tarifaire non associé à la configuration source';else row.removeAttribute('title');
     }
 
     const best=card.querySelector('.v8-offer-row.best');
@@ -106,8 +117,8 @@
     let box=card.querySelector('.v8-component-breakdown');
     if(costs&&(costs.duration>0||costs.connection>0)){
       const parts=[];
-      if(costs.energy>0)parts.push(`énergie ${euro(costs.energy)}`);
-      if(costs.duration>0)parts.push(`durée ${euro(costs.duration)}`);
+      if(costs.energy>0)parts.push(`énergie ≈ ${euro(costs.energy)}`);
+      if(costs.duration>0)parts.push(`durée ≈ ${euro(costs.duration)}`);
       if(costs.connection>0)parts.push(`connexion ${euro(costs.connection)}`);
       if(!box){box=document.createElement('div');box.className='v8-component-breakdown small';box.style.cssText='margin:8px 0;padding:9px 11px;border:1px solid #2d2d31;border-radius:10px;color:#b9b9c0';const offer=card.querySelector('.v8-offer-box');if(offer)offer.insertAdjacentElement('afterend',box);}
       if(box)box.innerHTML=`<b>Détail tarifaire</b> · ${parts.join(' · ')}`;
