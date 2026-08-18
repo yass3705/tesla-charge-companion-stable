@@ -1,0 +1,161 @@
+name: Align France catalog with canonical run 32139644174 — one shot
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/align-france-canonical-32139644174-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: align-france-canonical-32139644174-once
+  cancel-in-progress: false
+
+jobs:
+  align:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SOURCE_URL: 'https://sdmntprsoutheastus3.oaiusercontent.com/files/00000000-4e5c-820c-ad9f-23d63a687c80/raw?se=2026-08-18T13%3A04%3A04Z&sp=r&sv=2026-02-06&sr=b&scid=8ac7c943-473e-5ab0-9ccf-f1a77114b8a4&skoid=002823aa-689d-47ca-9347-108c20f4f00d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-18T07%3A22%3A47Z&ske=2026-08-19T07%3A22%3A47Z&sks=b&skv=2026-02-06&sig=fHd1YfuNNFaRWLhGGBAT4lOBS51yjmR5YSBLc5P5luA%3D'
+      EXPECTED_ZIP_SHA256: '44e9370628c453229ebbde1799a5c8e3599bc1eb782f9a4b167716a5f1d41461'
+      EXPECTED_DATA_SHA256: '19d600ba24688402ed39d7c10b6c0295ace03751da3a4bb7b03dbf8b097f63b8'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and validate canonical corrected artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/france-canonical
+          curl -L --fail --retry 3 --retry-delay 2 "$SOURCE_URL" -o /tmp/france-canonical.zip
+          echo "$EXPECTED_ZIP_SHA256  /tmp/france-canonical.zip" | sha256sum -c -
+          unzip -q /tmp/france-canonical.zip -d /tmp/france-canonical
+          echo "$EXPECTED_DATA_SHA256  /tmp/france-canonical/france_non_tesla_final.json.gz" | sha256sum -c -
+          node - <<'NODE'
+          const fs=require('fs');
+          const s=JSON.parse(fs.readFileSync('/tmp/france-canonical/france_non_tesla_final.summary.json','utf8'));
+          if(s.schemaVersion!=='1.1.0'||s.stations!==42720)throw new Error(JSON.stringify(s));
+          if(s.legacyElectraOnlyDedup?.collapsedLegacyElectraOnlyStations!==696)throw new Error('Canonical legacy dedup missing');
+          console.log(`Canonical source validated: ${s.stations} stations, ${s.offers} offers, ${s.connectors} connectors.`);
+          NODE
+
+      - name: Version tile cache by manifest generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/france-catalog.js')
+          s=p.read_text(encoding='utf-8')
+          old="""  async function readGzipJson(file){
+            if(rawCache.has(file))return rawCache.get(file);
+            const promise=(async()=>{
+              const response=await fetch(BASE+file,{cache:'force-cache'});
+          """
+          new="""  async function readGzipJson(file,version=''){
+            const cacheKey=`${file}|${version}`;
+            if(rawCache.has(cacheKey))return rawCache.get(cacheKey);
+            const promise=(async()=>{
+              const url=BASE+file+(version?`?v=${encodeURIComponent(version)}`:'');
+              const response=await fetch(url,{cache:'force-cache'});
+          """
+          if old not in s: raise SystemExit('readGzipJson marker not found')
+          s=s.replace(old,new,1)
+          s=s.replace('    rawCache.set(file,promise);\n    try{return await promise}catch(err){rawCache.delete(file);throw err}', '    rawCache.set(cacheKey,promise);\n    try{return await promise}catch(err){rawCache.delete(cacheKey);throw err}',1)
+          old="""    if(!(radiusKm>0))return readGzipJson(manifest.allFile);
+            const tiles=(manifest.tiles||[]).filter(t=>intersects(t,lat,lon,radiusKm));
+            const chunks=await Promise.all(tiles.map(t=>readGzipJson(t.file)));
+          """
+          new="""    const version=manifest.generatedAt||manifest.allSha256||'';
+            if(!(radiusKm>0))return readGzipJson(manifest.allFile,version);
+            const tiles=(manifest.tiles||[]).filter(t=>intersects(t,lat,lon,radiusKm));
+            const chunks=await Promise.all(tiles.map(t=>readGzipJson(t.file,version)));
+          """
+          if old not in s: raise SystemExit('rowsNear marker not found')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          node --check assets/france-catalog.js
+
+      - name: Rebuild runtime directly from canonical artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build_france_runtime_catalog.mjs \
+            /tmp/france-canonical/france_non_tesla_final.json.gz \
+            data/non_tesla_france
+          node - <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('data/non_tesla_france/manifest.json','utf8'));
+          if(m.stationCount!==42720)throw new Error(`stationCount ${m.stationCount}`);
+          if(m.configurationCount!==157881)throw new Error(`configurationCount ${m.configurationCount}`);
+          if(m.tileCount!==338||m.skippedWithoutCoordinates!==0)throw new Error(JSON.stringify(m));
+          NODE
+
+      - name: Publish canonical provenance and build 7310
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          source=json.loads(Path('/tmp/france-canonical/france_non_tesla_final.summary.json').read_text(encoding='utf-8'))
+          mp=Path('data/non_tesla_france/manifest.json')
+          m=json.loads(mp.read_text(encoding='utf-8'))
+          m['integration']={
+              'appBuild':'7310',
+              'mode':'lazy-geographic-runtime',
+              'customFranceCleanup':True,
+              'teslaDatasetModified':False,
+              'sourceArtifactRunId':32139644174,
+              'sourceArtifactId':9325368400,
+              'sourceArtifactSha256':'44e9370628c453229ebbde1799a5c8e3599bc1eb782f9a4b167716a5f1d41461',
+              'sourceDataSha256':'19d600ba24688402ed39d7c10b6c0295ace03751da3a4bb7b03dbf8b097f63b8',
+              'parkingTimeRateFix':True,
+              'tileCacheVersioned':True,
+              'legacyElectraOnlyDedup':{
+                  'policy':'unique structured EVSE + <=100m + (<=15m or exact normalized address/name)',
+                  'collapsedStations':source['legacyElectraOnlyDedup']['collapsedLegacyElectraOnlyStations'],
+                  'targetStations':source['legacyElectraOnlyDedup']['targetElectroverseStations'],
+                  'beforeStations':source['legacyElectraOnlyDedup']['beforeStations'],
+                  'afterStations':source['legacyElectraOnlyDedup']['afterStations'],
+              }
+          }
+          mp.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+          p=Path('index.html')
+          html=p.read_text(encoding='utf-8').replace('7309','7310')
+          p.write_text(html,encoding='utf-8')
+          vp=Path('app-version.json')
+          v=json.loads(vp.read_text(encoding='utf-8'))
+          v['build']='7310';v['updatedAt']=datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
+          vp.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+          grep -q 'assets/france-catalog.js?v=7310' index.html
+          node - <<'NODE'
+          const fs=require('fs');
+          const custom=JSON.parse(fs.readFileSync('data/custom_stations.json','utf8'));
+          if(custom.stations.length!==10)throw new Error('Custom stations changed');
+          const tesla=JSON.parse(fs.readFileSync('data/tesla_stations.json','utf8'));
+          if(!Array.isArray(tesla)||tesla.length<100)throw new Error('Tesla dataset unexpected');
+          const m=JSON.parse(fs.readFileSync('data/non_tesla_france/manifest.json','utf8'));
+          if(m.integration?.sourceArtifactRunId!==32139644174||!m.integration?.tileCacheVersioned)throw new Error('Canonical provenance missing');
+          console.log(`Ready build 7310: Tesla ${tesla.length} · custom ${custom.stations.length} · France ${m.stationCount}`);
+          NODE
+
+      - name: Commit atomically and remove this one-shot workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/align-france-canonical-32139644174-once.yml
+          git add data/non_tesla_france assets/france-catalog.js index.html app-version.json
+          git commit -m 'feat: align France catalog to canonical corrected artifact'
+          git push origin HEAD:main
