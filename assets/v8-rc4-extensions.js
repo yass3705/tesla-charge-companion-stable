@@ -1,10 +1,10 @@
-// Tesla Charge Companion V8 RC4 — véhicule personnalisé + Electra+.
+// Tesla Charge Companion V8 RC4.1 — véhicule personnalisé + Electra+ affiché en permanence.
 (function(){
   'use strict';
   const VEHICLE_KEY='tccVehicleProfileV1';
   const ELECTRA_KEY='tccElectraPlusV1';
   const defaultCustom={customReference:16,customCity:12,customFast:14,customMotorway:18,customAcMaxKw:11,customDcMaxKw:250};
-  const defaultElectra={plan:'none',includeRanking:false};
+  const defaultElectra={includeRanking:false};
   const $=id=>document.getElementById(id);
   const num=(v,f=0)=>{const n=Number(v);return Number.isFinite(n)?n:f};
   const text=v=>String(v??'').trim();
@@ -13,15 +13,15 @@
   const euro=v=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(v);
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   function vehicleState(){return{...defaultCustom,...parseJson(VEHICLE_KEY,{})}}
-  function electraState(){return parseJson(ELECTRA_KEY,defaultElectra)}
+  function electraState(){const s=parseJson(ELECTRA_KEY,defaultElectra);return{includeRanking:!!s.includeRanking}}
   function isCustom(){return vehicleState().model==='custom'}
 
   function injectStyle(){if($('v8Rc4Style'))return;const s=document.createElement('style');s.id='v8Rc4Style';s.textContent=`
     .v8-custom-box,.v8-electra-box{margin-top:12px;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13}
     .v8-custom-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.v8-custom-grid label{font-size:10px;color:#aaaab2}
-    .v8-electra-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:end}.v8-electra-check{display:flex;gap:8px;align-items:center;padding:10px;border:1px solid #33333a;border-radius:11px;font-size:11px}.v8-electra-check input{width:auto!important}
-    .v8-electra-plus-row{border-color:#765d1f!important;background:rgba(126,95,21,.10)!important}.v8-electra-plus-row.best{border-color:#2d6b43!important;background:rgba(39,120,70,.13)!important}.v8-electra-tag{display:inline-block;margin-left:6px;color:#e9bd54;font-size:10px;font-weight:900}.v8-electra-saving{color:#55d984;font-size:10px;font-weight:800;margin-left:6px}
-    @media(max-width:680px){.v8-custom-grid,.v8-electra-controls{grid-template-columns:1fr}}
+    .v8-electra-controls{display:block}.v8-electra-check{display:flex;gap:8px;align-items:center;padding:10px;border:1px solid #33333a;border-radius:11px;font-size:11px}.v8-electra-check input{width:auto!important}
+    .v8-electra-plus-row{border-color:#765d1f!important;background:rgba(126,95,21,.10)!important}.v8-electra-plus-row.best{border-color:#2d6b43!important;background:rgba(39,120,70,.13)!important}.v8-electra-tag{display:inline-block;margin-left:6px;color:#e9bd54;font-size:10px;font-weight:900}.v8-electra-saving{color:#55d984;font-size:10px;font-weight:800;margin-left:6px}.v8-electra-planfee{color:#8f8f96;font-size:9px;margin-left:6px}
+    @media(max-width:680px){.v8-custom-grid{grid-template-columns:1fr}}
   `;document.head.appendChild(s);}
 
   function injectCustomFields(){
@@ -53,7 +53,6 @@
     const spec=$('v8VehicleSpec');if(spec)spec.innerHTML=`Configuration personnalisée · <b>${st.customReference.toFixed(1)} kWh/100 km</b> · AC <b>${st.customAcMaxKw} kW</b> · DC <b>${st.customDcMaxKw} kW max</b> · capacité batterie <b>saisie utilisateur</b>.`;
     const summary=$('v8VehicleSummary');const span=summary?.querySelector('span:not(.v8-eyebrow)');if(span)span.textContent=`${window.TCCV8Vehicle?.getUsableCapacity?.().toFixed?.(1)||''} kWh utiles · AC ${st.customAcMaxKw} kW · DC ${st.customDcMaxKw} kW max`;
   }
-
   function installCustomPower(){
     if(!window.TCCV8Vehicle||window.dcCurvePower?.__tccRc4Custom)return false;
     const baseAc=window.acPowerAtSoc,baseDc=window.dcCurvePower;
@@ -68,38 +67,46 @@
 
   function injectElectraControls(){
     const body=$('v8FilterBody');if(!body||$('v8ElectraBox'))return false;const box=document.createElement('div');box.id='v8ElectraBox';box.className='v8-electra-box';
-    box.innerHTML=`<div class="v8-eyebrow">Abonnement Electra+</div><div class="v8-electra-controls"><div><label>Mon offre</label><select id="v8ElectraPlan"><option value="none">Aucun abonnement</option><option value="essential">Electra+ Essential · -0,10 €/kWh</option><option value="smart">Electra+ Smart · -0,20 €/kWh</option></select></div><label class="v8-electra-check"><input id="v8ElectraRanking" type="checkbox"> Utiliser le tarif abonnement dans le coût final et le classement</label></div><div class="small" style="margin-top:7px">Essential : 1,99 €/mois. Smart : 4,99 €/mois. Le forfait mensuel n’est pas imputé à chaque session. Les remises s’appliquent sur le réseau Electra ; Smart applique aussi le tarif partenaire prévu pour Atlante, Fastned et Ionity en France.</div>`;
-    body.appendChild(box);const st=electraState();$('v8ElectraPlan').value=st.plan;$('v8ElectraRanking').checked=!!st.includeRanking;
-    $('v8ElectraPlan').addEventListener('change',saveElectra);$('v8ElectraRanking').addEventListener('change',saveElectra);return true;
+    box.innerHTML=`<div class="v8-eyebrow">Electra+</div><div class="v8-electra-controls"><label class="v8-electra-check"><input id="v8ElectraRanking" type="checkbox"> Prendre le meilleur tarif Electra+ affiché en compte dans le coût final et le tri</label></div><div class="small" style="margin-top:7px">Les tarifs Electra+ Essential et Smart sont toujours affichés dans les résultats lorsqu’ils s’appliquent. Le forfait mensuel n’est pas imputé à chaque session. Si cette option est activée, le meilleur tarif abonnement affiché participe au classement final.</div>`;
+    body.appendChild(box);$('v8ElectraRanking').checked=electraState().includeRanking;
+    $('v8ElectraRanking').addEventListener('change',saveElectra);return true;
   }
-  function saveElectra(){const st={plan:$('v8ElectraPlan')?.value||'none',includeRanking:!!$('v8ElectraRanking')?.checked};saveJson(ELECTRA_KEY,st);decorateElectra();}
+  function saveElectra(){saveJson(ELECTRA_KEY,{includeRanking:!!$('v8ElectraRanking')?.checked});decorateElectra();}
   function parseNumber(v){const m=text(v).replace(/\u00a0/g,' ').match(/-?\d[\d\s]*(?:[.,]\d+)?/);return m?num(m[0].replace(/\s/g,'').replace(',','.'),NaN):NaN}
   function wallKwh(card){const m=text(card.textContent).match(/([0-9]+(?:[.,][0-9]+)?)\s*kWh\s+au compteur/i);return m?num(m[1].replace(',','.'),NaN):NaN}
   function physicalOperator(card){return text(card.querySelector('.operator-badge')?.textContent)}
-  function applicablePrice(operator,basePrice,plan){
-    const op=norm(operator);if(plan==='none')return null;
+  function subscriptionPrice(operator,basePrice,plan){
+    const op=norm(operator);
     if(op==='electra')return Math.max(0,basePrice-(plan==='smart'?.20:.10));
     if(plan==='smart'&&['atlante','fastned','ionity'].includes(op))return .49;
     return null;
+  }
+  function clearBest(rows){rows.forEach(r=>{r.classList.remove('best');r.querySelectorAll('.v8-offer-best').forEach(x=>x.remove())})}
+  function markBest(rows){
+    const priced=rows.map(r=>({r,total:parseNumber(r.querySelector('.v8-offer-total')?.textContent)})).filter(x=>Number.isFinite(x.total));if(!priced.length)return Infinity;
+    const min=Math.min(...priced.map(x=>x.total));priced.forEach(x=>{if(Math.abs(x.total-min)<.01){x.r.classList.add('best');const p=x.r.querySelector('.v8-offer-provider');if(p&&!p.querySelector('.v8-offer-best'))p.insertAdjacentHTML('beforeend','<span class="v8-offer-best">✓ moins cher</span>')}});return min;
   }
   function decorateElectra(){
     const root=$('results');if(!root)return;const st=electraState();
     root.querySelectorAll('.v8-electra-plus-row').forEach(x=>x.remove());
     root.querySelectorAll('.result-card[data-result-id]').forEach(card=>{
       delete card.dataset.electraEffectiveCost;
-      const box=card.querySelector('.v8-offer-box');if(!box||st.plan==='none')return;
-      const rows=[...box.querySelectorAll('.v8-offer-row:not(.v8-electra-plus-row)')];
+      const cost=card.querySelector('.cost');if(cost?.dataset.baseCost)cost.textContent=cost.dataset.baseCost;
+      const box=card.querySelector('.v8-offer-box');if(!box)return;
+      const rows=[...box.querySelectorAll('.v8-offer-row:not(.v8-electra-plus-row)')];clearBest(rows);const baseMin=markBest(rows);
       const electraRows=rows.filter(r=>/\bElectra\b/i.test(text(r.querySelector('.v8-offer-provider')?.textContent))&&!/Electroverse/i.test(text(r.querySelector('.v8-offer-provider')?.textContent)));
       if(!electraRows.length)return;
       const kwh=wallKwh(card),op=physicalOperator(card);if(!Number.isFinite(kwh))return;
       let candidates=[];
-      electraRows.forEach(row=>{const price=parseNumber(row.querySelector('.v8-offer-price')?.textContent),total=parseNumber(row.querySelector('.v8-offer-total')?.textContent);if(!Number.isFinite(price)||!Number.isFinite(total))return;const subPrice=applicablePrice(op,price,st.plan);if(subPrice==null)return;const fees=Math.max(0,total-price*kwh),subTotal=fees+subPrice*kwh;candidates.push({price,total,subPrice,subTotal,row});});
-      if(!candidates.length)return;candidates.sort((a,b)=>a.subTotal-b.subTotal);const c=candidates[0],name=st.plan==='smart'?'Electra+ Smart':'Electra+ Essential';
-      const row=document.createElement('div');row.className='v8-offer-row v8-electra-plus-row';row.dataset.subscriptionTotal=String(c.subTotal);row.innerHTML=`<div class="v8-offer-provider">${name}<span class="v8-electra-tag">abonnement</span>${c.total-c.subTotal>.005?`<span class="v8-electra-saving">− ${euro(c.total-c.subTotal)}</span>`:''}</div><div class="v8-offer-price">${c.subPrice.toFixed(2)} EUR/kWh</div><div class="v8-offer-total">${euro(c.subTotal)}</div>`;box.querySelector('.v8-offer-note')?.before(row);
-      if(st.includeRanking){rows.forEach(r=>{r.classList.remove('best');r.querySelector('.v8-offer-best')?.remove();});const all=[...rows,row].map(r=>({r,total:r===row?c.subTotal:parseNumber(r.querySelector('.v8-offer-total')?.textContent)})).filter(x=>Number.isFinite(x.total));const min=Math.min(...all.map(x=>x.total));all.forEach(x=>{if(Math.abs(x.total-min)<.01){x.r.classList.add('best');const p=x.r.querySelector('.v8-offer-provider');if(p&&!p.querySelector('.v8-offer-best'))p.insertAdjacentHTML('beforeend','<span class="v8-offer-best">✓ moins cher</span>');}});if(c.subTotal<=min+.01){const cost=card.querySelector('.cost');if(cost){cost.dataset.baseCost=cost.dataset.baseCost||text(cost.textContent);cost.textContent=euro(c.subTotal);}card.dataset.electraEffectiveCost=String(c.subTotal);}}
+      electraRows.forEach(row=>{const price=parseNumber(row.querySelector('.v8-offer-price')?.textContent),total=parseNumber(row.querySelector('.v8-offer-total')?.textContent);if(!Number.isFinite(price)||!Number.isFinite(total))return;const fees=Math.max(0,total-price*kwh);for(const plan of ['essential','smart']){const subPrice=subscriptionPrice(op,price,plan);if(subPrice==null)continue;const subTotal=fees+subPrice*kwh;candidates.push({plan,price,total,subPrice,subTotal});}});
+      if(!candidates.length)return;candidates.sort((a,b)=>a.subTotal-b.subTotal||a.plan.localeCompare(b.plan));
+      const note=box.querySelector('.v8-offer-note');
+      for(const c of candidates){const name=c.plan==='smart'?'Electra+ Smart':'Electra+ Essential',fee=c.plan==='smart'?'4,99 €/mois':'1,99 €/mois';const row=document.createElement('div');row.className='v8-offer-row v8-electra-plus-row';row.dataset.subscriptionTotal=String(c.subTotal);row.dataset.plan=c.plan;row.innerHTML=`<div class="v8-offer-provider">${name}<span class="v8-electra-tag">abonnement</span><span class="v8-electra-planfee">${fee}</span>${c.total-c.subTotal>.005?`<span class="v8-electra-saving">− ${euro(c.total-c.subTotal)}</span>`:''}</div><div class="v8-offer-price">${c.subPrice.toFixed(2)} EUR/kWh</div><div class="v8-offer-total">${euro(c.subTotal)}</div>`;note?.before(row);}
+      const subRows=[...box.querySelectorAll('.v8-electra-plus-row')];
+      if(st.includeRanking){clearBest([...rows,...subRows]);const allMin=markBest([...rows,...subRows]);const bestSub=candidates[0];const effective=Math.min(baseMin,bestSub.subTotal);card.dataset.electraEffectiveCost=String(effective);if(cost){cost.dataset.baseCost=cost.dataset.baseCost||text(cost.textContent);cost.textContent=euro(effective);}if(Math.abs(bestSub.subTotal-allMin)<.01)card.dataset.electraRankingPlan=bestSub.plan;}
     });
-    if(st.includeRanking&&$('simRanking')?.value==='cost'){
-      const cards=[...root.querySelectorAll('.result-card[data-result-id]')];cards.sort((a,b)=>effectiveCost(a)-effectiveCost(b)).forEach(c=>root.appendChild(c));cards.forEach((c,i)=>{const h=c.querySelector('h3');if(h)h.textContent=text(h.textContent).replace(/^\d+\.\s*/,`${i+1}. `);});
+    if($('simRanking')?.value==='cost'){
+      const cards=[...root.querySelectorAll('.result-card[data-result-id]')];cards.sort((a,b)=>effectiveCost(a)-effectiveCost(b)).forEach(c=>root.appendChild(c));cards.forEach((c,i)=>{const h=c.querySelector('h3');if(h)h.textContent=text(h.textContent).replace(/^\d+\.\s*/,`${i+1}. `)});
     }
   }
   function effectiveCost(card){const sub=num(card.dataset.electraEffectiveCost,NaN);if(Number.isFinite(sub))return sub;return parseNumber(card.querySelector('.cost')?.textContent)||Infinity}
