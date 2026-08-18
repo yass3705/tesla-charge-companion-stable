@@ -20,7 +20,7 @@ jobs:
           ref: release/2026-08
           fetch-depth: 0
 
-      - name: Patch pricing core and source display
+      - name: Patch tariffLabel to read simulated source pricing directly
         shell: bash
         run: |
           set -euo pipefail
@@ -28,38 +28,13 @@ jobs:
           from pathlib import Path
           import re
 
-          p=Path('assets/app.js')
-          s=p.read_text(encoding='utf-8')
-          old="let currencies=new Set(),connection=0,chargeCost=0,idleCost=0,durationSurcharge=0,energyPerMinute=chargeMinutes>0?billedEnergy/chargeMinutes:0;"
-          new="let currencies=new Set(),connection=0,chargeCost=0,energyChargeCost=0,timeChargeCost=0,idleCost=0,durationSurcharge=0,energyPerMinute=chargeMinutes>0?billedEnergy/chargeMinutes:0;"
-          if old not in s: raise SystemExit('priceWithRules declaration marker missing')
-          s=s.replace(old,new,1)
-
-          old="""if(rule.billing==='kwh'){
-       raw=energyPerMinute*fraction*(rule.pricePerKwh||0);
-     }"""
-          new="""if(rule.billing==='kwh'){
-       let rawEnergy=energyPerMinute*fraction*(rule.pricePerKwh||0);
-       let rawTime=fraction*(rule.chargePerMinute||0);
-       energyChargeCost+=fxToEur(rawEnergy,currency);
-       timeChargeCost+=fxToEur(rawTime,currency);
-       raw=rawEnergy+rawTime;
-     }"""
-          if old not in s: raise SystemExit('kWh billing marker missing')
-          s=s.replace(old,new,1)
-
-          old="""total:connection+chargeCost+idleCost+durationSurcharge,
-     connection,chargeCost,idleCost,durationSurcharge,"""
-          new="""total:connection+chargeCost+idleCost+durationSurcharge,
-     connection,chargeCost,energyChargeCost,timeChargeCost,idleCost,durationSurcharge,"""
-          if old not in s: raise SystemExit('pricing return marker missing')
-          s=s.replace(old,new,1)
-          p.write_text(s,encoding='utf-8')
-
           p=Path('assets/august-release.js')
           s=p.read_text(encoding='utf-8')
-          pattern=r"function tariffLabel\(st,time\)\{.*?\n  \}\n  function congestionInfo"
-          replacement="""function tariffLabel(st,time){
+          start=s.find('  function tariffLabel(st,time){')
+          end=s.find('  function congestionInfo(', start)
+          if start < 0 or end < 0:
+              raise SystemExit(f'tariffLabel boundaries missing: start={start} end={end}')
+          replacement="""  function tariffLabel(st,time){
     let rules=legacyPricingToRules(st.pricing),rule=ruleForMinute(rules,mins(time));
     if(!rule)return'Tarif non disponible';
     let c=(rule.currency||'EUR').toUpperCase(),parts=[];
@@ -74,30 +49,22 @@ jobs:
     if(rule.scope==='timeWindow'&&(rule.start||rule.end))parts.push(`créneau ${rule.start||'00:00'}–${rule.end||'24:00'}`);
     return parts.length?parts.join(' + '):'Tarif variable';
   }
-  function congestionInfo"""
-          s2,n=re.subn(pattern,replacement,s,count=1,flags=re.S)
-          if n!=1: raise SystemExit(f'tariffLabel replacement failed: {n}')
-          s=s2
-
-          old="let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge||r.pricingDetails.congestionCost)?`<div class=\"small cost-breakdown\">Fixe/parking : ${(r.pricingDetails.connection||0).toFixed(2)} € · Après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} € · Congestion ≥${r.congestion?.threshold??80}% : ${(r.pricingDetails.congestionCost||0).toFixed(2)} €</div>`:'';"
-          new="let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.energyChargeCost||r.pricingDetails.timeChargeCost||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge||r.pricingDetails.congestionCost)?`<div class=\"small cost-breakdown\"><b>Détail tarifaire</b> · Énergie : ${(r.pricingDetails.energyChargeCost||0).toFixed(2)} € · Durée pendant charge : ${(r.pricingDetails.timeChargeCost||0).toFixed(2)} € · Fixe : ${(r.pricingDetails.connection||0).toFixed(2)} € · Occupation/après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} € · Congestion ≥${r.congestion?.threshold??80}% : ${(r.pricingDetails.congestionCost||0).toFixed(2)} €</div>`:'';"
-          if old not in s: raise SystemExit('August breakdown marker missing')
-          s=s.replace(old,new,1)
+"""
+          s=s[:start]+replacement+s[end:]
           p.write_text(s,encoding='utf-8')
           PY
 
-          node --check assets/app.js
           node --check assets/august-release.js
-          grep -q "timeChargeCost" assets/app.js
-          grep -q "Durée pendant charge" assets/august-release.js
+          grep -q "connectionFee" assets/august-release.js
+          grep -q "afterMinutesThreshold" assets/august-release.js
           grep -q "créneau" assets/august-release.js
 
-      - name: Commit release source-first pricing
+      - name: Commit release source-first tariff display
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/app.js assets/august-release.js
-          git commit -m 'fix(v8): render tariff components from simulated source data'
+          git add assets/august-release.js
+          git commit -m 'fix(v8): display tariff components from source pricing'
           git push origin HEAD:release/2026-08
