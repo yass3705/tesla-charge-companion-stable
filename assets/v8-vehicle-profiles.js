@@ -4,7 +4,7 @@
   'use strict';
   const years=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
   window.TCC_VEHICLE_CATALOG={
-    schemaVersion:1,
+    schemaVersion:2,
     note:'Profils Companion : consommations et courbes de charge sont des valeurs de simulation modifiables. La capacité utile est saisie par l’utilisateur.',
     models:[
       {id:'S',label:'Model S',trims:[
@@ -26,9 +26,13 @@
       ]},
       {id:'Y',label:'Model Y',trims:[
         {id:'rwd',label:'Propulsion',years:[2022,2023,2024,2025,2026],referenceConsumption:15.5,cityConsumption:12.5,fastConsumption:14.0,motorwayConsumption:18.0,acMaxKw:11,dcMaxKw:175,curve:'dc175'},
+        {id:'lr-standard-rwd',label:'Long Range RWD Standard (historique)',years:[2026],referenceConsumption:16.0,cityConsumption:12.5,fastConsumption:14.5,motorwayConsumption:18.5,acMaxKw:11,dcMaxKw:250,curve:'dc250',historical:true},
         {id:'lr-rwd',label:'Premium Grande Autonomie Propulsion',years:[2024,2025,2026],referenceConsumption:16.0,cityConsumption:12.0,fastConsumption:14.0,motorwayConsumption:18.0,acMaxKw:11,dcMaxKw:250,curve:'dc250'},
         {id:'lr-awd',label:'Grande Autonomie / Premium Grande Autonomie AWD',years:years(2020,2026),referenceConsumption:17.0,cityConsumption:13.5,fastConsumption:15.5,motorwayConsumption:19.5,acMaxKw:11,dcMaxKw:250,curve:'dc250'},
         {id:'performance',label:'Performance',years:[2021,2022,2023,2024,2025,2026],referenceConsumption:18.2,cityConsumption:14.5,fastConsumption:16.5,motorwayConsumption:21.0,acMaxKw:11,dcMaxKw:250,curve:'dc250'}
+      ]},
+      {id:'custom',label:'Autre / configuration personnalisée',trims:[
+        {id:'custom',label:'Configuration personnalisée',years:years(2020,2026),referenceConsumption:16.0,cityConsumption:12.0,fastConsumption:14.0,motorwayConsumption:18.0,acMaxKw:22,dcMaxKw:350,curve:'dc250',custom:true}
       ]}
     ]
   };
