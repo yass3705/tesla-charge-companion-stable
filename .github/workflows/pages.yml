@@ -89,7 +89,7 @@ jobs:
               '<script src="assets/v8-vehicle-profiles.js?v=rc42-20260818" defer></script>\n'
               '<script src="assets/v8-redesign.js?v=rc42-20260818" defer></script>\n'
               '<script src="assets/v8-dynamic-filter.js?v=rc42-20260818" defer></script>\n'
-              '<script src="assets/v8-area-workflow.js?v=rc42-20260818" defer></script>\n'
+              '<script src="assets/v8-area-workflow.js?v=rc42b-20260818" defer></script>\n'
               '<script src="assets/v8-sync-guard.js?v=rc42-20260818" defer></script>\n'
               '<script src="assets/v8-rc4-extensions.js?v=rc42-20260818" defer></script>\n'
               '<script src="assets/v8-rc4-toggle-fix.js?v=rc42-20260818" defer></script>\n'
@@ -130,7 +130,7 @@ jobs:
           node --check site/v8-preview/assets/v8-rc4-extensions.js
           node --check site/v8-preview/assets/v8-rc4-toggle-fix.js
           node --check site/v8-preview/assets/update.js
-          grep -q 'v8-area-workflow.js?v=rc42-20260818' site/v8-preview/index.html
+          grep -q 'v8-area-workflow.js?v=rc42b-20260818' site/v8-preview/index.html
           grep -q 'V8 Preview · RC4.2' site/v8-preview/assets/preview-storage.js
           echo "V8 RC4.2 preview prepared from release/2026-08"
 
