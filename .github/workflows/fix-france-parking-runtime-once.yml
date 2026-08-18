@@ -1,0 +1,107 @@
+name: Corriger ParkingTimeRate France — one shot
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/fix-france-parking-runtime-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fix-france-parking-runtime-once
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SOURCE_URL: 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-1e20-81f4-8a99-0d716246669b/raw?se=2026-08-18T12%3A43%3A21Z&sp=r&sv=2026-02-06&sr=b&scid=d64239f0-897e-5f2d-adea-8e9e782b24c6&skoid=002823aa-689d-47ca-9347-108c20f4f00d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-18T08%3A01%3A07Z&ske=2026-08-19T08%3A01%3A07Z&sks=b&skv=2026-02-06&sig=Ewr6SXdOM0f3OQ6VsC9fFjy1dYyOySz05BH2LNwIvOc%3D'
+      EXPECTED_ZIP_SHA256: 'f8cef538e3ccf9a43b88bef54388fcee79e7398bc48b9607d7f499d268c078de'
+      EXPECTED_DATA_SHA256: 'c23285db0e62b2c8dffb287fc7a087d6f34f77ebbc9f14e6efaf79ae08c94b65'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Corriger la classification parking Electroverse
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/build_france_runtime_catalog.mjs')
+          s=p.read_text(encoding='utf-8')
+          old="  if(t==='TIME'||t.includes('TIMERATE'))return 'time';\n  if(t==='PARKING_TIME'||t.includes('PARKINGTIMERATE'))return 'parking';"
+          new="  if(t==='PARKING_TIME'||t.includes('PARKINGTIMERATE'))return 'parking';\n  if(t==='TIME'||t.includes('TIMERATE'))return 'time';"
+          if old not in s:
+              raise SystemExit('Signature componentKind inattendue')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+          PY
+          node --check scripts/build_france_runtime_catalog.mjs
+
+      - name: Télécharger et revalider l’artefact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/france-source
+          curl -L --fail --retry 3 --retry-delay 2 "$SOURCE_URL" -o /tmp/france-final.zip
+          echo "$EXPECTED_ZIP_SHA256  /tmp/france-final.zip" | sha256sum -c -
+          unzip -q /tmp/france-final.zip -d /tmp/france-source
+          echo "$EXPECTED_DATA_SHA256  /tmp/france-source/france_non_tesla_final.json.gz" | sha256sum -c -
+
+      - name: Régénérer et valider le catalogue
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build_france_runtime_catalog.mjs /tmp/france-source/france_non_tesla_final.json.gz data/non_tesla_france
+          node - <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('data/non_tesla_france/manifest.json','utf8'));
+          if(m.stationCount!==43416||m.tileCount!==338||m.skippedWithoutCoordinates!==0)throw new Error(JSON.stringify(m));
+          if(m.configurationCount<150000)throw new Error(`Configurations insuffisantes: ${m.configurationCount}`);
+          console.log(`France runtime corrigé: ${m.stationCount} stations · ${m.configurationCount} configurations`);
+          NODE
+
+      - name: Publier build 7308 et tracer le correctif
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          p=Path('index.html')
+          html=p.read_text(encoding='utf-8').replace('7307','7308')
+          p.write_text(html,encoding='utf-8')
+          vp=Path('app-version.json')
+          v=json.loads(vp.read_text(encoding='utf-8'))
+          v['build']='7308';v['updatedAt']=datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
+          vp.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          mp=Path('data/non_tesla_france/manifest.json')
+          m=json.loads(mp.read_text(encoding='utf-8'))
+          m['integration']={'appBuild':'7308','mode':'lazy-geographic-runtime','customFranceCleanup':True,'teslaDatasetModified':False,'sourceArtifactRunId':32134067174,'parkingTimeRateFix':True}
+          mp.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+          grep -q 'assets/france-catalog.js?v=7308' index.html
+
+      - name: Vérifier les bases protégées et publier
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const custom=JSON.parse(fs.readFileSync('data/custom_stations.json','utf8'));
+          if(custom.stations.length!==10)throw new Error('custom_stations modifié');
+          const tesla=JSON.parse(fs.readFileSync('data/tesla_stations.json','utf8'));
+          if(!Array.isArray(tesla)||tesla.length<100)throw new Error('tesla_stations inattendu');
+          NODE
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/fix-france-parking-runtime-once.yml
+          git add scripts/build_france_runtime_catalog.mjs data/non_tesla_france index.html app-version.json
+          git commit -m 'fix: preserve Electroverse parking fees in France catalog'
+          git push origin HEAD:main
