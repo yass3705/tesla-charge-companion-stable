@@ -1,0 +1,29 @@
+/* Tesla Charge Companion V8 RC3 — refonte mobile-first */
+body.v8-redesign{background:#09090b}
+body.v8-redesign header{position:sticky;top:0;z-index:20;padding:12px max(14px,env(safe-area-inset-left));background:rgba(9,9,11,.94);backdrop-filter:blur(18px);border-bottom:1px solid #242429}
+body.v8-redesign header h1{font-size:20px;margin:0 0 2px}
+body.v8-redesign header>p{font-size:11px;margin:0 0 9px;color:#8e8e96}
+body.v8-redesign nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:1px;scrollbar-width:none}
+body.v8-redesign nav::-webkit-scrollbar{display:none}
+body.v8-redesign nav button{flex:0 0 auto;padding:8px 11px;border-radius:10px;font-size:12px}
+body.v8-redesign main{max-width:1040px;margin:0 auto;padding:14px 12px 70px}
+body.v8-redesign .card{border-radius:18px;border-color:#29292f;background:#121216;box-shadow:none}
+#v8CompareCard{padding:14px}
+.v8-vehicle-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;margin-bottom:12px;border:1px solid #303038;border-radius:14px;background:#18181d}
+.v8-vehicle-summary>div{display:grid;gap:2px;min-width:0}.v8-vehicle-summary b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v8-vehicle-summary span:not(.v8-eyebrow){font-size:10px;color:#9999a2}
+.v8-eyebrow{display:block;color:#8b8b95;font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;margin-bottom:2px}
+.v8-core-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}.v8-span-2{grid-column:1/-1}.v8-field{min-width:0}.v8-field label{font-size:10px;color:#aaaab2;margin-bottom:5px}.v8-field input,.v8-field select{min-height:42px}
+.v8-details{margin-top:9px;border:1px solid #2d2d34;border-radius:13px;background:#101014;overflow:hidden}.v8-details summary{cursor:pointer;list-style:none;padding:11px 12px;font-size:12px;font-weight:800;display:flex;justify-content:space-between;gap:10px}.v8-details summary::-webkit-details-marker{display:none}.v8-details summary span{font-size:9px;color:#85858e;font-weight:600}.v8-details[open] summary{border-bottom:1px solid #29292f}.v8-details-body{padding:11px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.v8-details-body>.v8-field{margin:0}.v8-aug-filters{grid-column:1/-1;margin:0!important;padding:10px!important}.v8-hidden-capacity{display:none!important}
+.v8-actions{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:12px}.v8-actions button{width:100%!important;margin:0!important;min-height:42px;padding:8px 10px}.v8-simulate{font-weight:900}
+.operator-choices{display:flex!important;flex-wrap:wrap;gap:7px!important;margin-top:8px}.operator-choice{display:inline-flex!important;align-items:center;gap:6px;padding:7px 9px!important;border:1px solid #34343c;border-radius:999px;background:#18181d;font-size:11px!important;margin:0!important}.operator-choice input{width:auto!important;margin:0!important;accent-color:#fff}.operator-choice:has(input:checked){background:#eeeeef;color:#111;border-color:#eeeeef}.operator-choice:has(input:checked) input{accent-color:#111}
+#results{padding:0;background:transparent;border:0}.result-card{margin-bottom:10px!important;border-radius:16px!important;padding:13px!important}.result-card h3{font-size:14px!important;line-height:1.25}.result-card .station-head{gap:10px}.result-card .cost{font-size:19px!important}.result-metrics{gap:7px!important}.result-metrics>div{padding:9px!important;border-radius:10px!important}.result-metrics span{font-size:9px!important}.result-metrics b{font-size:12px!important}.v8-offer-box{margin:10px 0!important}.v8-offer-row{padding:7px 8px!important}
+.v8-card-title{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.v8-card-title h3{margin:0}.v8-settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.v8-spec{margin-top:11px}.v8-capacity-box{margin:12px 0;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13}.v8-segmented{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;margin-bottom:12px;background:#1c1c21;border-radius:11px}.v8-segmented button{border:0;background:transparent;padding:8px;border-radius:8px;color:#aaaab2;font-size:11px;font-weight:800}.v8-segmented button.active{background:#f1f1f2;color:#111}.v8-vehicle-card{scroll-margin-top:100px}
+body.v8-redesign #edit .card>button{width:auto!important;margin:12px 8px 0 0!important}body.v8-redesign #stationList .station{border-radius:14px}
+@media(max-width:680px){
+ body.v8-redesign main{padding:10px 9px 60px}body.v8-redesign .card{padding:12px}
+ .v8-core-grid{grid-template-columns:1fr 1fr;gap:8px}.v8-core-grid .v8-span-2{grid-column:1/-1}
+ .v8-details-body{grid-template-columns:1fr 1fr;padding:9px;gap:8px}.v8-actions{grid-template-columns:1fr 1fr}.v8-actions .v8-simulate{grid-column:1/-1;grid-row:1}.v8-actions button{font-size:11px}
+ .v8-settings-grid{grid-template-columns:1fr}.v8-vehicle-summary{padding:9px 10px}.v8-vehicle-summary button{padding:7px 9px;font-size:10px}
+ .result-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v8-offer-row{grid-template-columns:1fr auto!important}.v8-offer-price{grid-column:1/-1!important}
+}
+@media(max-width:390px){.v8-core-grid{grid-template-columns:1fr}.v8-core-grid .v8-span-2{grid-column:auto}.v8-details-body{grid-template-columns:1fr}.v8-aug-filters{grid-column:auto}.v8-actions{grid-template-columns:1fr}.v8-actions .v8-simulate{grid-column:auto}.v8-vehicle-summary span:not(.v8-eyebrow){display:none}}
