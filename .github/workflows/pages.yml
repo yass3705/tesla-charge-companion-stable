@@ -45,7 +45,6 @@ jobs:
             --exclude='.github/' \
             rc/ site/v8-preview/
 
-          # Les données vivantes restent celles de main.
           cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
           rm -rf site/v8-preview/data/non_tesla_france
@@ -83,7 +82,7 @@ jobs:
           tag='<script src="assets/preview-storage.js?v=rc4"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
-          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-sync-guard','v8-rc4-extensions'):
+          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc4-20260818', html)
           scripts=(
@@ -92,6 +91,7 @@ jobs:
               '<script src="assets/v8-dynamic-filter.js?v=rc4-20260818" defer></script>\n'
               '<script src="assets/v8-sync-guard.js?v=rc4-20260818" defer></script>\n'
               '<script src="assets/v8-rc4-extensions.js?v=rc4-20260818" defer></script>\n'
+              '<script src="assets/v8-rc4-toggle-fix.js?v=rc4-20260818" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
           p.write_text(html,encoding='utf-8')
@@ -126,8 +126,9 @@ jobs:
           node --check site/v8-preview/assets/v8-dynamic-filter.js
           node --check site/v8-preview/assets/v8-sync-guard.js
           node --check site/v8-preview/assets/v8-rc4-extensions.js
+          node --check site/v8-preview/assets/v8-rc4-toggle-fix.js
           node --check site/v8-preview/assets/update.js
-          grep -q 'v8-rc4-extensions.js?v=rc4-20260818' site/v8-preview/index.html
+          grep -q 'v8-rc4-toggle-fix.js?v=rc4-20260818' site/v8-preview/index.html
           grep -q 'V8 Preview · RC4' site/v8-preview/assets/preview-storage.js
           echo "V8 RC4 preview prepared from release/2026-08"
 
