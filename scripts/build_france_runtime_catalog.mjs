@@ -26,8 +26,8 @@ function parseMoney(text){
 function componentKind(type){
   const t=String(type||'').toUpperCase();
   if(t.includes('CONSUMPTION')||t==='ENERGY')return 'energy';
-  if(t==='TIME'||t.includes('TIMERATE'))return 'time';
   if(t==='PARKING_TIME'||t.includes('PARKINGTIMERATE'))return 'parking';
+  if(t==='TIME'||t.includes('TIMERATE'))return 'time';
   if(t==='FLAT'||t.includes('CONNECTIONFEE'))return 'flat';
   return null;
 }
