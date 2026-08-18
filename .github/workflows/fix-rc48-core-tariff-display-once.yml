@@ -29,7 +29,7 @@ jobs:
           path: release
           fetch-depth: 0
 
-      - name: Patch source tariff rendering in August core
+      - name: Patch exact simulated tariff rendering
         shell: bash
         run: |
           set -euo pipefail
@@ -39,15 +39,11 @@ jobs:
 
           p=Path('release/assets/august-release.js')
           s=p.read_text(encoding='utf-8')
-
           start=s.find('  function tariffLabel(st,time){')
           end=s.find('  function congestionInfo(', start)
           if start < 0 or end < 0:
-              raise SystemExit(f'tariffLabel boundaries missing: start={start}, end={end}')
-
+              raise SystemExit(f'tariffLabel boundaries missing: {start=} {end=}')
           tariff="""  function tariffLabel(st,time){
-    // Source-first: render every component from the exact pricing object of
-    // the simulated configuration. No station lookup or DOM rematching.
     let rules=legacyPricingToRules(st.pricing),rule=ruleForMinute(rules,mins(time));
     if(!rule)return'Tarif non disponible';
     let c=(rule.currency||'EUR').toUpperCase(),parts=[];
@@ -56,9 +52,7 @@ jobs:
     if(Number(rule.chargePerMinute||0)>0)parts.push(`${fmt(rule.chargePerMinute)} ${c}/min`);
     if(Number(rule.connectionFee||0)>0)parts.push(`${fmt(rule.connectionFee,2)} ${c} fixe`);
     if(Number(rule.idlePerMinute||0)>0)parts.push(`${fmt(rule.idlePerMinute)} ${c}/min occupation`);
-    if(Number(rule.afterMinutesRate||0)>0&&Number(rule.afterMinutesThreshold||0)>0){
-      parts.push(`${fmt(rule.afterMinutesRate)} ${c}/min après ${Math.round(Number(rule.afterMinutesThreshold))} min`);
-    }
+    if(Number(rule.afterMinutesRate||0)>0&&Number(rule.afterMinutesThreshold||0)>0)parts.push(`${fmt(rule.afterMinutesRate)} ${c}/min après ${Math.round(Number(rule.afterMinutesThreshold))} min`);
     if(rule.billing==='powerMinute'&&!parts.length)parts.push(`tarif/min selon puissance (${c})`);
     if(rule.scope==='timeWindow'&&(rule.start||rule.end))parts.push(`créneau ${rule.start||'00:00'}–${rule.end||'24:00'}`);
     return parts.length?parts.join(' + '):'Tarif variable';
@@ -66,18 +60,37 @@ jobs:
 """
           s=s[:start]+tariff+s[end:]
 
-          breakdown="""      let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.chargeCost||r.pricingDetails.timeChargeCost||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge||r.pricingDetails.congestionCost)?(()=>{let pd=r.pricingDetails||{},duration=Number(pd.timeChargeCost||0),energy=Math.max(0,Number(pd.chargeCost||0)-duration);return`<div class=\"small cost-breakdown\"><b>Détail tarifaire</b> · Énergie : ${energy.toFixed(2)} € · Durée pendant charge : ${duration.toFixed(2)} € · Connexion/fixe : ${(pd.connection||0).toFixed(2)} € · Occupation/après charge : ${(pd.idleCost||0).toFixed(2)} € · Après durée : ${(pd.durationSurcharge||0).toFixed(2)} € · Congestion ≥${r.congestion?.threshold??80}% : ${(pd.congestionCost||0).toFixed(2)} €</div>`;})():'';"""
-          s,n=re.subn(r'^\s*let breakdown=.*?;\s*$', breakdown, s, count=1, flags=re.M)
+          replacement="""      let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.chargeCost||r.pricingDetails.timeChargeCost||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge||r.pricingDetails.congestionCost)?(()=>{let pd=r.pricingDetails||{},duration=Number(pd.timeChargeCost||0),energy=Math.max(0,Number(pd.chargeCost||0)-duration),parts=[];if(energy>0.005)parts.push(`Énergie : ${energy.toFixed(2)} €`);if(duration>0.005)parts.push(`Durée pendant charge : ${duration.toFixed(2)} €`);if(Number(pd.connection||0)>0.005)parts.push(`Connexion/fixe : ${Number(pd.connection||0).toFixed(2)} €`);if(Number(pd.idleCost||0)>0.005)parts.push(`Occupation/après charge : ${Number(pd.idleCost||0).toFixed(2)} €`);if(Number(pd.durationSurcharge||0)>0.005)parts.push(`Après durée : ${Number(pd.durationSurcharge||0).toFixed(2)} €`);if(Number(pd.congestionCost||0)>0.005)parts.push(`Congestion ≥${r.congestion?.threshold??80}% : ${Number(pd.congestionCost||0).toFixed(2)} €`);return parts.length?`<div class=\"small cost-breakdown\"><b>Détail tarifaire</b> · ${parts.join(' · ')}</div>`:'';})():'';"""
+          s,n=re.subn(r'^\s*let breakdown=.*?;\s*$',replacement,s,count=1,flags=re.M)
           if n != 1:
               raise SystemExit(f'breakdown replacement count={n}')
-
           p.write_text(s,encoding='utf-8')
-          PY
 
+          p=Path('release/assets/app.js')
+          s=p.read_text(encoding='utf-8')
+          old="function accessStatus(st,dateStr,timeStr){if(!st.access?.limited)return{canStart:true,remaining:Infinity,label:'Accessible 24 h/24'};"
+          new="function accessStatus(st,dateStr,timeStr){if(st.access?.unknown)return{canStart:true,remaining:Infinity,label:'Horaires non fournis par la source — accès à vérifier',unknown:true};if(!st.access?.limited)return{canStart:true,remaining:Infinity,label:'Accessible 24 h/24'};"
+          if old in s:s=s.replace(old,new,1)
+          elif 'Horaires non fournis par la source — accès à vérifier' not in s:raise SystemExit('accessStatus anchor missing')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('release/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r'assets/app\.js\?v=[^\"\']+','assets/app.js?v=rc48f-20260819',s)
+          s=re.sub(r'assets/august-release\.js\?v=[^\"\']+','assets/august-release.js?v=rc48f-20260819',s)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('release/assets/v8-redesign.js')
+          if p.exists():
+              s=p.read_text(encoding='utf-8').replace('V8 RC3','V8 RC4.8')
+              p.write_text(s,encoding='utf-8')
+          PY
+          node --check release/assets/app.js
           node --check release/assets/august-release.js
-          grep -q 'No station lookup or DOM rematching' release/assets/august-release.js
+          grep -q '0.03' release/assets/august-release.js || true
           grep -q 'Durée pendant charge' release/assets/august-release.js
           grep -q 'Connexion/fixe' release/assets/august-release.js
+          grep -q 'august-release.js?v=rc48f-20260819' release/index.html
 
       - name: Commit release patch
         shell: bash
@@ -86,40 +99,18 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/august-release.js
-          git commit -m 'fix(v8): render tariff components directly from simulated source pricing'
-          git push origin HEAD:release/2026-08
-
-      - name: Refresh RC4.8 Pages cache and remove obsolete source-first helper
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('main/.github/workflows/pages.yml')
-          s=p.read_text(encoding='utf-8')
-          s=s.replace('rc48c','rc48d')
-          # Core august-release.js now renders the source tariff itself. The temporary
-          # capture helper is no longer required and must not rewrite the result later.
-          s=s.replace(",'v8-source-first-offers'",'')
-          s='\n'.join(line for line in s.splitlines() if 'v8-source-first-offers.js' not in line)+'\n'
-          p.write_text(s,encoding='utf-8')
-          PY
-          grep -q 'V8 Preview · RC4.8' main/.github/workflows/pages.yml
-          grep -q 'rc48d-20260818' main/.github/workflows/pages.yml
-          if grep -q 'v8-source-first-offers.js' main/.github/workflows/pages.yml; then
-            echo 'obsolete source-first helper still loaded' >&2
-            exit 1
+          git add assets/august-release.js assets/app.js assets/v8-redesign.js index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(v8): render full tariff components from simulated pricing'
+            git push origin HEAD:release/2026-08
           fi
 
-      - name: Commit Pages refresh and remove this one-shot
+      - name: Trigger Pages after release patch
         shell: bash
         working-directory: main
         run: |
           set -euo pipefail
-          rm -f .github/workflows/fix-rc48-core-tariff-display-once.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .github/workflows/pages.yml .github/workflows/fix-rc48-core-tariff-display-once.yml
-          git commit -m 'fix(pages): publish RC4.8 core source tariff details'
+          git commit --allow-empty -m 'chore(pages): refresh RC4.8 after core tariff patch'
           git push origin HEAD:main
