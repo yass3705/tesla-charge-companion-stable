@@ -1,15 +1,15 @@
-const CACHE = 'tcc-v8002-august';
+const CACHE = 'tcc-v8004-august';
 const SHELL = [
   './',
   './index.html',
-  './assets/style.css?v=7305',
+  './assets/style.css?v=8004',
   './assets/update.js?v=1',
-  './assets/app.js?v=7305',
-  './assets/dedupe.js?v=7305',
-  './assets/august-release.css?v=8002',
-  './assets/august-release.js?v=8002',
-  './assets/august-ui-fixes.js?v=8002',
-  './assets/august-rc2-fixes.js?v=8002',
+  './assets/app.js?v=8004',
+  './assets/dedupe.js?v=8004',
+  './assets/august-release.css?v=8004',
+  './assets/august-release.js?v=8004',
+  './assets/august-ui-fixes.js?v=8004',
+  './assets/august-rc2-fixes.js?v=8004',
   './manifest.webmanifest'
 ];
 

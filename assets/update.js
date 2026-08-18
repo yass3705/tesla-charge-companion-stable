@@ -1,6 +1,6 @@
 // Tesla Charge Companion — Home Screen update checker + August release loader.
 (function(){
-  const CURRENT_BUILD='8002';
+  const CURRENT_BUILD='8004';
   const meta=document.querySelector('meta[name="tcc-build"]');
   if(meta)meta.content=CURRENT_BUILD;
 
