@@ -76,6 +76,17 @@ jobs:
             const prefix='tcc:v8-preview:';
             const proto=Storage.prototype;
             const rawGet=proto.getItem,rawSet=proto.setItem,rawRemove=proto.removeItem;
+
+            // Migration V8 : l'ancienne preview pouvait conserver une copie locale
+            // de stations françaises supprimées de custom_stations.json (ex. Lidl
+            // Saint-Cyr du 10/07). On efface uniquement le cache des stations de la
+            // preview, une seule fois, sans toucher aux réglages ni à la V7.3.
+            const resetMarker=prefix+'france-catalog-reset-20260818b';
+            if(rawGet.call(window.localStorage,resetMarker)!=='1'){
+              rawRemove.call(window.localStorage,prefix+'tccStationsV701');
+              rawSet.call(window.localStorage,resetMarker,'1');
+            }
+
             function scoped(storage,key){return storage===window.localStorage?prefix+String(key):key;}
             proto.getItem=function(key){return rawGet.call(this,scoped(this,key));};
             proto.setItem=function(key,value){return rawSet.call(this,scoped(this,key),value);};
@@ -95,16 +106,30 @@ jobs:
 
           python - <<'PY'
           from pathlib import Path
+          import re
 
           # preview-storage doit s'exécuter avant update.js.
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
-          tag='<script src="assets/preview-storage.js?v=2"></script>\n'
+          html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
+          tag='<script src="assets/preview-storage.js?v=3"></script>\n'
           marker='<script>window.escapeHtml'
-          html=html.replace('<script src="assets/preview-storage.js?v=1"></script>\n','')
           if tag not in html:
               html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
+
+          # Forcer Safari à reprendre le nouveau regroupement multi-offres même si
+          # le numéro général de RC reste 8004 pendant cette phase de validation.
+          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=8004-offers3', html)
           p.write_text(html,encoding='utf-8')
+
+          # La couche August affichait encore RC1 et réécrivait le meta build.
+          # On corrige uniquement la copie de preview, pas la stable.
+          p=Path('site/v8-preview/assets/august-release.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('V8.0 RC1','V8.0 RC2').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC2';")
+          s=s.replace("meta.content='8001'","meta.content='8004'")
+          s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC2')
+          p.write_text(s,encoding='utf-8')
 
           # On conserve le loader August, mais pas son auto-refresh/service worker
           # dans la preview. La stable n'est jamais modifiée.
@@ -123,7 +148,10 @@ jobs:
           PY
 
           node --check site/v8-preview/assets/update.js
-          grep -q 'auto-mise à jour désactivée' site/v8-preview/assets/preview-storage.js
+          node --check site/v8-preview/assets/v8-offer-selection.js
+          node --check site/v8-preview/assets/august-release.js
+          grep -q 'france-catalog-reset-20260818b' site/v8-preview/assets/preview-storage.js
+          grep -q '8004-offers3' site/v8-preview/index.html
           grep -q 'if(window.TCC_PREVIEW)' site/v8-preview/assets/update.js
 
       - uses: actions/configure-pages@v5
