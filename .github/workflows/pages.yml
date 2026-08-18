@@ -123,6 +123,16 @@ jobs:
           html=html.replace('</body>',scripts+'</body>',1)
           p.write_text(html,encoding='utf-8')
 
+          # Correctif final de composition : masquer uniquement l'ancien champ
+          # capacité du moteur, pas tout le bloc de réglages avancés.
+          p=Path('site/v8-preview/assets/v8-redesign.js')
+          s=p.read_text(encoding='utf-8')
+          old="const capWrap=wrapperFor('simBatteryCapacity');if(capWrap)capWrap.classList.add('v8-hidden-capacity');"
+          new="const capWrap=$('simBatteryCapacity')?.parentElement;if(capWrap)capWrap.classList.add('v8-hidden-capacity');"
+          if old not in s:
+              raise SystemExit('RC3 capacity layout patch point missing')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+
           # La couche August historique réécrivait encore RC1 / build 8001.
           p=Path('site/v8-preview/assets/august-release.js')
           s=p.read_text(encoding='utf-8')
