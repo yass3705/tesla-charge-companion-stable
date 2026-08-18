@@ -17,27 +17,13 @@ concurrency:
 jobs:
   fix:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
-    env:
-      SOURCE_URL: 'https://sdmntprsoutheastus3.oaiusercontent.com/files/00000000-4e5c-820c-ad9f-23d63a687c80/raw?se=2026-08-18T13%3A04%3A04Z&sp=r&sv=2026-02-06&sr=b&scid=8ac7c943-473e-5ab0-9ccf-f1a77114b8a4&skoid=002823aa-689d-47ca-9347-108c20f4f00d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-18T07%3A22%3A47Z&ske=2026-08-19T07%3A22%3A47Z&sks=b&skv=2026-02-06&sig=fHd1YfuNNFaRWLhGGBAT4lOBS51yjmR5YSBLc5P5luA%3D'
-      EXPECTED_ZIP_SHA256: '44e9370628c453229ebbde1799a5c8e3599bc1eb782f9a4b167716a5f1d41461'
-      EXPECTED_DATA_SHA256: '19d600ba24688402ed39d7c10b6c0295ace03751da3a4bb7b03dbf8b097f63b8'
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Download canonical France artifact
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/france-canonical
-          curl -L --fail --retry 3 --retry-delay 2 "$SOURCE_URL" -o /tmp/france-canonical.zip
-          echo "$EXPECTED_ZIP_SHA256  /tmp/france-canonical.zip" | sha256sum -c -
-          unzip -q /tmp/france-canonical.zip -d /tmp/france-canonical
-          echo "$EXPECTED_DATA_SHA256  /tmp/france-canonical/france_non_tesla_final.json.gz" | sha256sum -c -
-
-      - name: Correct Electra time-window semantics
+      - name: Make future runtime builds preserve Electra time-window overrides
         shell: bash
         run: |
           set -euo pipefail
@@ -45,7 +31,6 @@ jobs:
           from pathlib import Path
           p=Path('scripts/build_france_runtime_catalog.mjs')
           s=p.read_text(encoding='utf-8')
-
           replacements=[
             (
               "let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,add:emptyRate(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}",
@@ -60,50 +45,114 @@ jobs:
               "w.rate={...base}; for(const k of w.present)w.rate[k]=w.values[k]; rules.push(compactRule(w));"
             )
           ]
-
           for old,new in replacements:
-            if old not in s:
-              raise SystemExit(f'Electra patch marker missing: {old}')
-            s=s.replace(old,new,1)
-
+            if old in s:
+              s=s.replace(old,new,1)
+            elif new not in s:
+              raise SystemExit(f'Electra builder marker missing: {old}')
           p.write_text(s,encoding='utf-8')
           PY
           node --check scripts/build_france_runtime_catalog.mjs
 
-      - name: Rebuild France runtime catalog
-        shell: bash
-        run: |
-          set -euo pipefail
-          node scripts/build_france_runtime_catalog.mjs \
-            /tmp/france-canonical/france_non_tesla_final.json.gz \
-            data/non_tesla_france
-
-      - name: Verify Bois-d'Arcy Electra dynamic tariff
+      - name: Repair existing France runtime in place
         shell: bash
         run: |
           set -euo pipefail
           node - <<'NODE'
-          const fs=require('fs'),zlib=require('zlib');
-          const rows=JSON.parse(zlib.gunzipSync(fs.readFileSync('data/non_tesla_france/all.json.gz')));
-          const st=rows.find(r=>r[0]==='electroverse:4051990');
-          if(!st)throw new Error("Bois-d'Arcy E.Leclerc missing");
-          const configs=st[8]||[];
-          const direct=configs.find(c=>String(c[1]).startsWith('Electra · DC 400 kW'));
-          const roaming=configs.find(c=>String(c[1]).startsWith('Electroverse · DC 400 kW'));
-          if(!direct||!roaming)throw new Error('Expected Electra/Electroverse configurations missing');
-          const dr=direct[5]||[],er=roaming[5]||[];
-          const window=(start,end)=>dr.find(r=>r[0]==='timeWindow'&&r[1]===start&&r[2]===end);
-          const p15=window('15:00','20:00')?.[5];
-          const p20=window('20:00','00:00')?.[5];
-          const p05=window('05:00','15:00')?.[5];
-          if(Math.abs(p15-.61)>.000001||Math.abs(p20-.49)>.000001||Math.abs(p05-.49)>.000001){throw new Error(`Bad Electra windows: ${JSON.stringify(dr)}`)}
-          const evBase=er.find(r=>r[0]==='allDay')?.[5];
-          if(Math.abs(evBase-.64)>.000001)throw new Error(`Bad Electroverse tariff ${evBase}`);
-          const manifest=JSON.parse(fs.readFileSync('data/non_tesla_france/manifest.json','utf8'));
-          if(manifest.stationCount!==42720||manifest.configurationCount!==157881)throw new Error(JSON.stringify(manifest));
-          manifest.integration={...(manifest.integration||{}),electraTimeWindowOverrideFix:true,electraTimeWindowVerifiedStation:'electroverse:4051990'};
-          fs.writeFileSync('data/non_tesla_france/manifest.json',JSON.stringify(manifest,null,2)+'\n');
-          console.log(`Verified Bois-d'Arcy: Electra 18h=${p15} €/kWh · 20h=${p20} €/kWh · Electroverse=${evBase} €/kWh`);
+          const fs=require('fs');
+          const path=require('path');
+          const zlib=require('zlib');
+          const crypto=require('crypto');
+          const dir='data/non_tesla_france';
+          const manifestPath=path.join(dir,'manifest.json');
+          const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+          const sha256=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const round=v=>Number(Number(v).toFixed(6));
+
+          function directConfig(rows){
+            const st=rows.find(r=>r[0]==='electroverse:4051990');
+            if(!st)throw new Error("Bois-d'Arcy E.Leclerc missing from runtime");
+            const configs=st[8]||[];
+            const direct=configs.find(c=>String(c[1]).startsWith('Electra · DC 400 kW'));
+            const roaming=configs.find(c=>String(c[1]).startsWith('Electroverse · DC 400 kW'));
+            if(!direct||!roaming)throw new Error('Expected Electra/Electroverse configurations missing');
+            return {direct,roaming};
+          }
+          function windowPrice(rules,start,end){return rules.find(r=>r[0]==='timeWindow'&&r[1]===start&&r[2]===end)?.[5];}
+          function patchRows(rows){
+            let components=0,windows=0,configs=0;
+            for(const st of rows){
+              for(const c of st[8]||[]){
+                if(!String(c[1]||'').startsWith('Electra ·'))continue;
+                const rules=c[5]||[];
+                const base=rules.find(r=>r[0]==='allDay');
+                if(!base)continue;
+                configs++;
+                for(const r of rules){
+                  if(r[0]!=='timeWindow')continue;
+                  windows++;
+                  for(const idx of [5,6,7,8]){
+                    const b=Number(base[idx]||0),v=Number(r[idx]||0);
+                    // Old runtime encoded a window override as base + window value.
+                    // If a component was absent from the window, v===b and must stay unchanged.
+                    if(b>0&&v>b+1e-9){r[idx]=round(v-b);components++;}
+                  }
+                }
+              }
+            }
+            return {components,windows,configs};
+          }
+          function readGz(file){return JSON.parse(zlib.gunzipSync(fs.readFileSync(file)).toString('utf8'));}
+          function writeGz(file,rows){const gz=zlib.gzipSync(Buffer.from(JSON.stringify(rows)),{level:9});fs.writeFileSync(file,gz);return gz;}
+
+          const allPath=path.join(dir,manifest.allFile||'all.json.gz');
+          let allRows=readGz(allPath);
+          const before=directConfig(allRows);
+          const dr0=before.direct[5]||[];
+          const before15=Number(windowPrice(dr0,'15:00','20:00'));
+          const alreadyFixed=Math.abs(before15-.61)<1e-6;
+          const knownBroken=Math.abs(before15-1.10)<1e-6;
+          if(!alreadyFixed&&!knownBroken)throw new Error(`Unexpected Bois-d'Arcy pre-fix 15-20 tariff: ${before15}`);
+
+          let stats={components:0,windows:0,configs:0};
+          if(!alreadyFixed){
+            stats=patchRows(allRows);
+            const allGz=writeGz(allPath,allRows);
+            manifest.allBytes=allGz.length;
+            manifest.allSha256=sha256(allGz);
+
+            for(const tile of manifest.tiles||[]){
+              const file=path.join(dir,tile.file);
+              const rows=readGz(file);
+              patchRows(rows);
+              const gz=writeGz(file,rows);
+              tile.bytes=gz.length;
+              tile.sha256=sha256(gz);
+            }
+          }
+
+          const after=directConfig(allRows);
+          const dr=after.direct[5]||[],er=after.roaming[5]||[];
+          const p05=Number(windowPrice(dr,'05:00','15:00'));
+          const p15=Number(windowPrice(dr,'15:00','20:00'));
+          const p20=Number(windowPrice(dr,'20:00','00:00'));
+          const evBase=Number(er.find(r=>r[0]==='allDay')?.[5]);
+          if(Math.abs(p15-.61)>1e-6||Math.abs(p20-.49)>1e-6||Math.abs(p05-.49)>1e-6){
+            throw new Error(`Bad corrected Electra windows: 05-15=${p05}, 15-20=${p15}, 20-00=${p20}`);
+          }
+          if(Math.abs(evBase-.64)>1e-6)throw new Error(`Bad Electroverse tariff ${evBase}`);
+          if(manifest.stationCount!==42720||manifest.configurationCount!==157881)throw new Error('Runtime population changed unexpectedly');
+
+          manifest.integration={
+            ...(manifest.integration||{}),
+            electraTimeWindowOverrideFix:true,
+            electraTimeWindowVerifiedStation:'electroverse:4051990',
+            electraTimeWindowVerifiedAt:new Date().toISOString(),
+            electraRuntimePatchedInPlace:true
+          };
+          fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+          console.log(`Verified Bois-d'Arcy: Electra 05-15=${p05} €/kWh · 15-20=${p15} €/kWh · 20-00=${p20} €/kWh · Electroverse=${evBase} €/kWh`);
+          console.log(`Runtime repair: ${stats.components} component(s) corrected across ${stats.windows} Electra window(s) in all.json.gz.`);
           NODE
 
       - name: Commit corrected runtime and remove one-shot
