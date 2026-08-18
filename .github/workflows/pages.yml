@@ -1,6 +1,6 @@
 name: Publier le site
 
-# La preview V8 RC2 est reconstruite depuis release/2026-08 à chaque déploiement de main.
+# La preview V8 RC2 build 8004 est reconstruite depuis release/2026-08 à chaque déploiement de main.
 on:
   push:
     branches: ["main"]
