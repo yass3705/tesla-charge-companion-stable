@@ -52,47 +52,24 @@ jobs:
           cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france
           cp site/assets/france-catalog.js site/v8-preview/assets/france-catalog.js
 
-          # La preview partage le domaine de la stable : stockage local isolé,
-          # suppression des anciens caches V8 et désactivation de l'auto-refresh.
           cat > site/v8-preview/assets/preview-storage.js <<'JS'
           (function(){
             if(!location.pathname.includes('/v8-preview/'))return;
             window.TCC_PREVIEW=true;
-
-            if('serviceWorker' in navigator){
-              navigator.serviceWorker.getRegistrations().then(function(regs){
-                regs.forEach(function(reg){
-                  if(String(reg.scope||'').includes('/v8-preview/'))reg.unregister().catch(function(){});
-                });
-              }).catch(function(){});
-            }
-            if('caches' in window){
-              caches.keys().then(function(keys){
-                return Promise.all(keys.filter(function(k){return /^tcc-v8|^tcc-v800/.test(k);}).map(function(k){return caches.delete(k);}));
-              }).catch(function(){});
-            }
-
+            if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(reg){if(String(reg.scope||'').includes('/v8-preview/'))reg.unregister().catch(function(){});});}).catch(function(){});}
+            if('caches' in window){caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return /^tcc-v8|^tcc-v800/.test(k);}).map(function(k){return caches.delete(k);}));}).catch(function(){});}
             const prefix='tcc:v8-preview:';
             const proto=Storage.prototype;
             const rawGet=proto.getItem,rawSet=proto.setItem,rawRemove=proto.removeItem;
             const resetMarker=prefix+'france-catalog-reset-20260818b';
-            if(rawGet.call(window.localStorage,resetMarker)!=='1'){
-              rawRemove.call(window.localStorage,prefix+'tccStationsV701');
-              rawSet.call(window.localStorage,resetMarker,'1');
-            }
+            if(rawGet.call(window.localStorage,resetMarker)!=='1'){rawRemove.call(window.localStorage,prefix+'tccStationsV701');rawSet.call(window.localStorage,resetMarker,'1');}
             function scoped(storage,key){return storage===window.localStorage?prefix+String(key):key;}
             proto.getItem=function(key){return rawGet.call(this,scoped(this,key));};
             proto.setItem=function(key,value){return rawSet.call(this,scoped(this,key),value);};
             proto.removeItem=function(key){return rawRemove.call(this,scoped(this,key));};
-
             document.addEventListener('DOMContentLoaded',function(){
-              const header=document.querySelector('header');
-              if(!header||document.getElementById('tccPreviewBanner'))return;
-              const banner=document.createElement('div');
-              banner.id='tccPreviewBanner';
-              banner.textContent='V8 Preview · RC3 · auto-mise à jour désactivée';
-              banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';
-              header.appendChild(banner);
+              const header=document.querySelector('header');if(!header||document.getElementById('tccPreviewBanner'))return;
+              const banner=document.createElement('div');banner.id='tccPreviewBanner';banner.textContent='V8 Preview · RC4 · auto-mise à jour désactivée';banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';header.appendChild(banner);
             });
           })();
           JS
@@ -100,57 +77,46 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import re
-
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
-
-          # preview-storage doit précéder update.js.
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc3"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc4"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
-
-          # Les couches V8 sont chargées en une seule passe, avec cache-busting RC3.
-          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-sync-guard'):
+          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-sync-guard','v8-rc4-extensions'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc3-20260818', html)
+          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc4-20260818', html)
           scripts=(
-              '<script src="assets/v8-vehicle-profiles.js?v=rc3-20260818" defer></script>\n'
-              '<script src="assets/v8-redesign.js?v=rc3-20260818" defer></script>\n'
-              '<script src="assets/v8-dynamic-filter.js?v=rc3-20260818" defer></script>\n'
-              '<script src="assets/v8-sync-guard.js?v=rc3-20260818" defer></script>\n'
+              '<script src="assets/v8-vehicle-profiles.js?v=rc4-20260818" defer></script>\n'
+              '<script src="assets/v8-redesign.js?v=rc4-20260818" defer></script>\n'
+              '<script src="assets/v8-dynamic-filter.js?v=rc4-20260818" defer></script>\n'
+              '<script src="assets/v8-sync-guard.js?v=rc4-20260818" defer></script>\n'
+              '<script src="assets/v8-rc4-extensions.js?v=rc4-20260818" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
           p.write_text(html,encoding='utf-8')
 
-          # Correctif final de composition : masquer uniquement l'ancien champ
-          # capacité du moteur, pas tout le bloc de réglages avancés.
           p=Path('site/v8-preview/assets/v8-redesign.js')
           s=p.read_text(encoding='utf-8')
           old="const capWrap=wrapperFor('simBatteryCapacity');if(capWrap)capWrap.classList.add('v8-hidden-capacity');"
           new="const capWrap=$('simBatteryCapacity')?.parentElement;if(capWrap)capWrap.classList.add('v8-hidden-capacity');"
-          if old not in s:
-              raise SystemExit('RC3 capacity layout patch point missing')
-          p.write_text(s.replace(old,new,1),encoding='utf-8')
-
-          # La couche August historique réécrivait encore RC1 / build 8001.
-          p=Path('site/v8-preview/assets/august-release.js')
-          s=p.read_text(encoding='utf-8')
-          s=s.replace('V8.0 RC1','V8.0 RC3').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC3';")
-          s=s.replace("meta.content='8001'","meta.content='8004'")
-          s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC3')
+          if old in s:s=s.replace(old,new,1)
           p.write_text(s,encoding='utf-8')
 
-          # Aucun service worker / auto-refresh dans la preview.
+          p=Path('site/v8-preview/assets/august-release.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('V8.0 RC1','V8.0 RC4').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC4';")
+          s=s.replace("meta.content='8001'","meta.content='8004'")
+          s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC4')
+          p.write_text(s,encoding='utf-8')
+
           p=Path('site/v8-preview/assets/update.js')
           s=p.read_text(encoding='utf-8')
           sw="if('serviceWorker' in navigator){"
-          if sw in s:
-              s=s.replace(sw,"if(!window.TCC_PREVIEW&&'serviceWorker' in navigator){",1)
+          if sw in s:s=s.replace(sw,"if(!window.TCC_PREVIEW&&'serviceWorker' in navigator){",1)
           needle='  let checking=false;'
           guard="  if(window.TCC_PREVIEW){window.tccCheckForAppUpdate=async()=>false;return;}\n\n"
-          if guard not in s and needle in s:
-              s=s.replace(needle,guard+needle,1)
+          if guard not in s and needle in s:s=s.replace(needle,guard+needle,1)
           p.write_text(s,encoding='utf-8')
           PY
 
@@ -159,10 +125,11 @@ jobs:
           node --check site/v8-preview/assets/v8-offer-selection.js
           node --check site/v8-preview/assets/v8-dynamic-filter.js
           node --check site/v8-preview/assets/v8-sync-guard.js
+          node --check site/v8-preview/assets/v8-rc4-extensions.js
           node --check site/v8-preview/assets/update.js
-          grep -q 'v8-redesign.js?v=rc3-20260818' site/v8-preview/index.html
-          grep -q 'V8 Preview · RC3' site/v8-preview/assets/preview-storage.js
-          echo "V8 RC3 preview prepared from release/2026-08"
+          grep -q 'v8-rc4-extensions.js?v=rc4-20260818' site/v8-preview/index.html
+          grep -q 'V8 Preview · RC4' site/v8-preview/assets/preview-storage.js
+          echo "V8 RC4 preview prepared from release/2026-08"
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
