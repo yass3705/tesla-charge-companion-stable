@@ -1,6 +1,6 @@
 // Tesla Charge Companion V8 — workflow zone -> simulation Top 20.
-// Une mise à jour explicite prépare les bornes + distances routières une seule fois ;
-// la simulation suivante réutilise ce jeu préparé au lieu de refaire le même travail.
+// La mise à jour des bornes est placée directement à côté de l'adresse ;
+// la simulation reste à son emplacement principal et réutilise la zone préparée.
 (function(){
   'use strict';
   const $=id=>document.getElementById(id);
@@ -34,8 +34,13 @@
     const sim=document.querySelector('#v8CompareCard .v8-simulate')||document.querySelector('#compare button.primary');
     if(sim){sim.disabled=!on;sim.classList.toggle('v8-area-not-ready',!on);}
   }
+  function setUpdateLabel(button,loading=false){
+    if(!button)return;
+    if(loading){button.textContent='Mise à jour…';return;}
+    button.innerHTML='<span class="v8-update-long">Mettre à jour les bornes</span><span class="v8-update-short">Mettre à jour</span>';
+  }
   function invalidate(reason='Zone à mettre à jour.'){
-    areaCache=null;setReady(false);status(`${reason} Appuie sur « Mettre à jour les bornes » avant de simuler.`,'warn');
+    areaCache=null;setReady(false);status(`${reason} Utilise « Mettre à jour les bornes » à côté de l’adresse avant de simuler.`,'warn');
   }
 
   async function refreshArea(){
@@ -43,7 +48,7 @@
     const update=$('routeButton');
     const radius=radiusValue();
     busy=true;setReady(false);
-    if(update){update.disabled=true;update.classList.add('loading');update.textContent='Mise à jour en cours…';}
+    if(update){update.disabled=true;update.classList.add('loading');setUpdateLabel(update,true);}
     status('Chargement des bornes du périmètre et calcul des distances routières…');
     try{
       // Appel direct à la vraie fonction : elle résout l’adresse, charge le catalogue France,
@@ -55,7 +60,7 @@
       }
       const count=physicalCount(prepared?.stations);
       const radiusText=radius>0?` dans un rayon routier maximal de ${radius} km`:' sans limite de rayon';
-      status(`✓ ${count} borne(s) mise(s) à jour${radiusText}. Prêt à simuler les 20 meilleures.`,'good');
+      status(`✓ ${count} borne(s) mise(s) à jour${radiusText}. Tu peux lancer la simulation.`,'good');
       setReady(true);
       window.TCC_V8_AREA_CACHE=areaCache;
     }catch(err){
@@ -63,7 +68,7 @@
       status(`Mise à jour impossible : ${err?.message||err}`,'bad');
     }finally{
       busy=false;
-      if(update){update.disabled=false;update.classList.remove('loading');update.textContent='1 · Mettre à jour les bornes';}
+      if(update){update.disabled=false;update.classList.remove('loading');setUpdateLabel(update,false);}
     }
   }
 
@@ -89,20 +94,35 @@
   function wireButtons(){
     const card=$('v8CompareCard')||$('compare')?.querySelector('.card');
     const update=$('routeButton');
+    const origin=$('simOrigin');
     const sim=card?.querySelector('.v8-simulate')||card?.querySelector('button.primary');
-    if(!card||!update||!sim||update.__tccAreaWorkflow)return false;
+    if(!card||!update||!origin||!sim||update.__tccAreaWorkflow)return false;
 
+    // Le bouton de mise à jour appartient visuellement au champ d'adresse.
+    const originWrap=origin.closest('.v8-field')||origin.parentElement;
+    let line=$('v8OriginRefreshRow');
+    if(!line){
+      line=document.createElement('div');
+      line.id='v8OriginRefreshRow';
+      line.className='v8-origin-refresh';
+      origin.parentNode.insertBefore(line,origin);
+      line.appendChild(origin);
+    }
+    update.style.cssText='';
+    update.classList.add('v8-area-refresh-btn');
+    line.appendChild(update);
+
+    // Le bouton de simulation reste dans la zone d'actions principale.
     const actions=sim.closest('.v8-actions')||sim.parentElement;
     if(actions){
       actions.classList.add('v8-area-actions');
-      actions.insertBefore(update,sim);
       const save=[...actions.querySelectorAll('button')].find(b=>/Enregistrer cette adresse/i.test(text(b.textContent))||String(b.getAttribute('onclick')||'').includes('saveDefaultOrigin'));
       if(save)save.classList.add('v8-save-origin');
     }
 
-    update.removeAttribute('onclick');update.onclick=refreshArea;update.textContent='1 · Mettre à jour les bornes';
+    update.removeAttribute('onclick');update.onclick=refreshArea;setUpdateLabel(update,false);
     sim.removeAttribute('onclick');
-    sim.textContent='2 · Simuler les 20 meilleures';
+    sim.textContent='Simuler les 20 meilleures';
     sim.onclick=async()=>{
       if(!areaCache||areaCache.key!==areaKey()){
         invalidate('La zone n’est pas prête.');return;
@@ -112,10 +132,10 @@
     };
     update.__tccAreaWorkflow=true;
     setReady(false);
-    status('1. Renseigne l’adresse et le rayon, puis mets à jour les bornes. 2. Lance la simulation des 20 meilleures.');
+    status('Renseigne l’adresse et le rayon, puis mets à jour les bornes avant de lancer la simulation.');
 
     const invalidateAddress=()=>invalidate('Adresse ou périmètre modifié.');
-    $('simOrigin')?.addEventListener('input',invalidateAddress);
+    origin.addEventListener('input',invalidateAddress);
     $('simMaxDistance')?.addEventListener('change',invalidateAddress);
     $('simDate')?.addEventListener('change',()=>invalidate('Date modifiée.'));
     return true;
@@ -125,17 +145,22 @@
     if($('tccV8AreaStyle'))return;
     const s=document.createElement('style');s.id='tccV8AreaStyle';
     s.textContent=`
-      .v8-area-actions{grid-template-columns:1fr 1fr!important;align-items:stretch}
-      .v8-area-actions #routeButton{grid-column:1;grid-row:1;min-height:46px;border-color:#555560;font-weight:850}
-      .v8-area-actions .v8-simulate{grid-column:2!important;grid-row:1!important;min-height:46px}
-      .v8-area-actions .v8-save-origin{grid-column:1/-1!important;grid-row:2!important}
+      .v8-origin-refresh{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+      .v8-origin-refresh #simOrigin{min-width:0;width:100%}
+      .v8-area-refresh-btn{width:auto!important;margin:0!important;min-height:42px;padding:0 14px!important;white-space:nowrap;border-color:#555560!important;font-size:11px!important;font-weight:850!important}
+      .v8-update-short{display:none}
+      .v8-area-actions{grid-template-columns:2fr 1fr!important;align-items:stretch}
+      .v8-area-actions .v8-simulate{grid-column:1!important;grid-row:1!important;min-height:46px}
+      .v8-area-actions .v8-save-origin{grid-column:2!important;grid-row:1!important}
       .v8-area-actions .v8-area-not-ready{opacity:.46;cursor:not-allowed}
       #routeStatus.good{color:#55d984}#routeStatus.warn{color:#e9bd54}#routeStatus.bad{color:#ff7474}
       @media(max-width:680px){
+        .v8-origin-refresh{grid-template-columns:minmax(0,1fr) auto;gap:6px}
+        .v8-area-refresh-btn{padding:0 10px!important;min-width:104px}
+        .v8-update-long{display:none}.v8-update-short{display:inline}
         .v8-area-actions{grid-template-columns:1fr!important}
-        .v8-area-actions #routeButton{grid-column:1!important;grid-row:1!important}
-        .v8-area-actions .v8-simulate{grid-column:1!important;grid-row:2!important}
-        .v8-area-actions .v8-save-origin{grid-column:1!important;grid-row:3!important}
+        .v8-area-actions .v8-simulate{grid-column:1!important;grid-row:1!important}
+        .v8-area-actions .v8-save-origin{grid-column:1!important;grid-row:2!important}
       }
     `;document.head.appendChild(s);
   }
