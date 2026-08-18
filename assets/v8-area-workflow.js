@@ -1,6 +1,6 @@
 // Tesla Charge Companion V8 — workflow zone -> simulation Top 20.
-// La mise à jour des bornes est placée directement à côté de l'adresse ;
-// la simulation reste à son emplacement principal et réutilise la zone préparée.
+// Adresse, rayon et mise à jour des bornes sont regroupés ; les filtres bornes
+// restent séparés des paramètres batterie / calcul.
 (function(){
   'use strict';
   const $=id=>document.getElementById(id);
@@ -15,7 +15,6 @@
   }
   function originValue(){return text($('simOrigin')?.value)||text(localStorage.getItem('tccDefaultOrigin'))||'Ma position';}
   function areaKey(radius=radiusValue()){
-    // La date est incluse : le catalogue compact filtre certains tarifs selon le jour de semaine.
     return JSON.stringify([originValue().toLowerCase(),Number(radius)||0,text($('simDate')?.value)]);
   }
   function status(message,kind=''){
@@ -51,8 +50,6 @@
     if(update){update.disabled=true;update.classList.add('loading');setUpdateLabel(update,true);}
     status('Chargement des bornes du périmètre et calcul des distances routières…');
     try{
-      // Appel direct à la vraie fonction : elle résout l’adresse, charge le catalogue France,
-      // calcule les distances OSRM et applique strictement le rayon routier.
       const prepared=await originalCandidateStations('all',radius);
       areaCache={key:areaKey(radius),prepared,at:Date.now()};
       if(window.TCCV8DynamicOperators?.refresh&&prepared?.stations){
@@ -77,11 +74,7 @@
     originalCandidateStations=candidateStations;
     const wrapped=async function(filterMode='tesla',maxDistanceKm=0){
       const radius=Number(maxDistanceKm)||0;
-      if(filterMode==='all'&&areaCache&&areaCache.key===areaKey(radius)){
-        // candidateStations a déjà rempli routeResults lors de la mise à jour de zone.
-        // On conserve donc exactement les mêmes distances pour la simulation finale.
-        return areaCache.prepared;
-      }
+      if(filterMode==='all'&&areaCache&&areaCache.key===areaKey(radius))return areaCache.prepared;
       return originalCandidateStations(filterMode,maxDistanceKm);
     };
     wrapped.__tccAreaCacheWrapped=true;
@@ -91,28 +84,79 @@
     return true;
   }
 
+  function moveSearchControls(){
+    const origin=$('simOrigin'),radius=$('simMaxDistance'),update=$('routeButton');
+    if(!origin||!radius||!update)return false;
+    const originWrap=origin.closest('.v8-field')||origin.parentElement;
+    const radiusWrap=radius.closest('.v8-field')||radius.parentElement;
+    if(!originWrap||!radiusWrap)return false;
+
+    let line=$('v8OriginRefreshRow');
+    if(!line){
+      line=document.createElement('div');
+      line.id='v8OriginRefreshRow';
+      line.className='v8-location-row';
+
+      const addressBox=document.createElement('div');
+      addressBox.className='v8-location-address';
+      const originLabel=[...originWrap.children].find(x=>x.tagName==='LABEL');
+      if(originLabel)addressBox.appendChild(originLabel);
+      addressBox.appendChild(origin);
+      line.appendChild(addressBox);
+
+      radiusWrap.classList.add('v8-location-radius');
+      const radiusLabel=radiusWrap.querySelector('label');
+      if(radiusLabel)radiusLabel.textContent='Rayon (km)';
+      const radiusHelp=radiusWrap.querySelector('.small');
+      if(radiusHelp)radiusHelp.classList.add('v8-location-help-hidden');
+      line.appendChild(radiusWrap);
+
+      update.style.cssText='';
+      update.classList.add('v8-area-refresh-btn');
+      line.appendChild(update);
+
+      originWrap.appendChild(line);
+      originWrap.classList.add('v8-location-shell');
+    }else if(update.parentElement!==line){
+      line.appendChild(update);
+    }
+    setUpdateLabel(update,false);
+    return true;
+  }
+
+  function separateFiltersAndBattery(){
+    const filterBody=$('v8FilterBody'),calcBody=$('v8CalcBody');
+    if(!filterBody||!calcBody)return false;
+
+    const filterDetails=filterBody.closest('details');
+    const calcDetails=calcBody.closest('details');
+    const filterSummary=filterDetails?.querySelector(':scope > summary');
+    const calcSummary=calcDetails?.querySelector(':scope > summary');
+    if(filterSummary)filterSummary.innerHTML='Filtres bornes <span>type, opérateurs, classement</span>';
+    if(calcSummary)calcSummary.innerHTML='Batterie & calcul <span>température, consommation, préconditionnement</span>';
+
+    for(const id of ['simCondition','simProfile']){
+      const el=$(id),wrap=el?.closest('.v8-field')||el?.parentElement;
+      if(wrap&&wrap.parentElement!==calcBody){wrap.className='v8-field';calcBody.insertBefore(wrap,calcBody.firstChild);}
+    }
+
+    const augFilters=$('augCompareFilters');
+    const title=augFilters?.querySelector('.aug-section-title b');
+    if(title)title.textContent='Opérateurs et type de recharge';
+    return true;
+  }
+
   function wireButtons(){
     const card=$('v8CompareCard')||$('compare')?.querySelector('.card');
     const update=$('routeButton');
     const origin=$('simOrigin');
     const sim=card?.querySelector('.v8-simulate')||card?.querySelector('button.primary');
-    if(!card||!update||!origin||!sim||update.__tccAreaWorkflow)return false;
+    if(!card||!update||!origin||!sim)return false;
 
-    // Le bouton de mise à jour appartient visuellement au champ d'adresse.
-    const originWrap=origin.closest('.v8-field')||origin.parentElement;
-    let line=$('v8OriginRefreshRow');
-    if(!line){
-      line=document.createElement('div');
-      line.id='v8OriginRefreshRow';
-      line.className='v8-origin-refresh';
-      origin.parentNode.insertBefore(line,origin);
-      line.appendChild(origin);
-    }
-    update.style.cssText='';
-    update.classList.add('v8-area-refresh-btn');
-    line.appendChild(update);
+    moveSearchControls();
+    separateFiltersAndBattery();
 
-    // Le bouton de simulation reste dans la zone d'actions principale.
+    if(update.__tccAreaWorkflow)return true;
     const actions=sim.closest('.v8-actions')||sim.parentElement;
     if(actions){
       actions.classList.add('v8-area-actions');
@@ -145,27 +189,44 @@
     if($('tccV8AreaStyle'))return;
     const s=document.createElement('style');s.id='tccV8AreaStyle';
     s.textContent=`
-      .v8-origin-refresh{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
-      .v8-origin-refresh #simOrigin{min-width:0;width:100%}
-      .v8-area-refresh-btn{width:auto!important;margin:0!important;min-height:42px;padding:0 14px!important;white-space:nowrap;border-color:#555560!important;font-size:11px!important;font-weight:850!important}
+      .v8-location-shell{grid-column:1/-1!important}
+      .v8-location-row{display:grid;grid-template-columns:minmax(0,1fr) 105px auto;gap:8px;align-items:end}
+      .v8-location-address,.v8-location-radius{min-width:0}
+      .v8-location-address label,.v8-location-radius label{display:block;font-size:10px;color:#aaaab2;margin-bottom:5px}
+      .v8-location-address #simOrigin,.v8-location-radius #simMaxDistance{width:100%;min-width:0;min-height:42px}
+      .v8-location-radius{margin:0!important}
+      .v8-location-help-hidden{display:none!important}
+      .v8-area-refresh-btn{width:auto!important;margin:0!important;min-height:42px;padding:0 13px!important;white-space:nowrap;border-color:#555560!important;font-size:11px!important;font-weight:850!important}
       .v8-update-short{display:none}
       .v8-area-actions{grid-template-columns:2fr 1fr!important;align-items:stretch}
       .v8-area-actions .v8-simulate{grid-column:1!important;grid-row:1!important;min-height:46px}
       .v8-area-actions .v8-save-origin{grid-column:2!important;grid-row:1!important}
       .v8-area-actions .v8-area-not-ready{opacity:.46;cursor:not-allowed}
       #routeStatus.good{color:#55d984}#routeStatus.warn{color:#e9bd54}#routeStatus.bad{color:#ff7474}
+      #v8FilterBody #augCompareFilters{grid-column:1/-1}
+      #v8CalcBody #augVehicleBox{grid-column:1/-1}
       @media(max-width:680px){
-        .v8-origin-refresh{grid-template-columns:minmax(0,1fr) auto;gap:6px}
-        .v8-area-refresh-btn{padding:0 10px!important;min-width:104px}
+        .v8-location-row{grid-template-columns:minmax(0,1fr) 76px 96px;gap:6px}
+        .v8-area-refresh-btn{padding:0 8px!important;min-width:0}
         .v8-update-long{display:none}.v8-update-short{display:inline}
         .v8-area-actions{grid-template-columns:1fr!important}
         .v8-area-actions .v8-simulate{grid-column:1!important;grid-row:1!important}
         .v8-area-actions .v8-save-origin{grid-column:1!important;grid-row:2!important}
       }
+      @media(max-width:360px){
+        .v8-location-row{grid-template-columns:minmax(0,1fr) 68px 82px;gap:5px}
+        .v8-area-refresh-btn{font-size:10px!important;padding:0 5px!important}
+      }
     `;document.head.appendChild(s);
   }
 
-  function install(){injectStyle();const cache=installCandidateCache();const ui=wireButtons();return cache&&ui;}
+  function install(){
+    injectStyle();
+    const cache=installCandidateCache();
+    const ui=wireButtons();
+    separateFiltersAndBattery();
+    return cache&&ui;
+  }
   let attempts=0;const timer=setInterval(()=>{attempts++;if(install()||attempts>180)clearInterval(timer);},100);
   window.TCCV8AreaWorkflow={refresh:refreshArea,invalidate,get cache(){return areaCache;}};
 })();
