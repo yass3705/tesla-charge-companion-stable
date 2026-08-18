@@ -42,14 +42,39 @@
     areaCache=null;setReady(false);status(`${reason} Utilise « Mettre à jour les bornes » à côté de l’adresse avant de simuler.`,'warn');
   }
 
+  function collapseFiltersForRefresh(){
+    const details=$('v8FilterBody')?.closest('details');
+    if(!details)return()=>{};
+    const wasOpen=!!details.open;
+    if(wasOpen){
+      details.open=false;
+      details.classList.add('v8-refresh-collapsed');
+      details.setAttribute('aria-busy','true');
+    }
+    return()=>{
+      details.removeAttribute('aria-busy');
+      details.classList.remove('v8-refresh-collapsed');
+      if(wasOpen){
+        requestAnimationFrame(()=>{details.open=true;});
+      }
+    };
+  }
+  function letBrowserPaint(){
+    return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  }
+
   async function refreshArea(){
     if(busy||typeof originalCandidateStations!=='function')return;
     const update=$('routeButton');
     const radius=radiusValue();
+    const restoreFilters=collapseFiltersForRefresh();
     busy=true;setReady(false);
+    document.body.classList.add('v8-area-refreshing');
     if(update){update.disabled=true;update.classList.add('loading');setUpdateLabel(update,true);}
     status('Chargement des bornes du périmètre et calcul des distances routières…');
     try{
+      // Laisse Safari appliquer le repli du panneau avant le travail lourd.
+      await letBrowserPaint();
       const prepared=await originalCandidateStations('all',radius);
       areaCache={key:areaKey(radius),prepared,at:Date.now()};
       if(window.TCCV8DynamicOperators?.refresh&&prepared?.stations){
@@ -65,7 +90,9 @@
       status(`Mise à jour impossible : ${err?.message||err}`,'bad');
     }finally{
       busy=false;
+      document.body.classList.remove('v8-area-refreshing');
       if(update){update.disabled=false;update.classList.remove('loading');setUpdateLabel(update,false);}
+      restoreFilters();
     }
   }
 
@@ -205,6 +232,8 @@
       #routeStatus.good{color:#55d984}#routeStatus.warn{color:#e9bd54}#routeStatus.bad{color:#ff7474}
       #v8FilterBody #augCompareFilters{grid-column:1/-1}
       #v8CalcBody #augVehicleBox{grid-column:1/-1}
+      details.v8-refresh-collapsed>summary{opacity:.72}
+      body.v8-area-refreshing .operator-choices{pointer-events:none}
       @media(max-width:680px){
         .v8-location-row{grid-template-columns:minmax(0,1fr) 76px 96px;gap:6px}
         .v8-area-refresh-btn{padding:0 8px!important;min-width:0}
