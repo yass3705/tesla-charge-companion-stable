@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
-<meta name="tcc-build" content="7305">
+<meta name="tcc-build" content="8003">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Tesla Charge Companion 7.3 Stable</title>
-<link rel="stylesheet" href="assets/style.css?v=7305">
+<title>Tesla Charge Companion V8 RC2</title>
+<link rel="stylesheet" href="assets/style.css?v=8003">
 </head>
 <body>
 <datalist id="currencyCodes">
@@ -18,13 +18,12 @@
 </datalist>
 <header>
 <h1>⚡ Tesla Charge Companion</h1>
-<p>Version 7.3 Stable · synchronisation multi-appareils <span id="globalSyncBadge" class="sync-badge idle">● Synchronisation</span></p>
+<p>V8 RC2 · validation août 2026</p>
 <nav>
 <button class="active" data-tab="compare">Comparer</button>
 <button data-tab="stations">Bornes</button>
 <button data-tab="edit">Ajouter / modifier</button>
-<button data-tab="fx">Devises</button>
-<button data-tab="sync">Synchronisation</button>
+<button data-tab="fx">Paramètres</button>
 </nav>
 </header>
 <main>
@@ -88,7 +87,7 @@
     <b>Configurations de recharge du site</b>
     <button type="button" class="secondary" onclick="addChargingConfiguration()">Ajouter une puissance</button>
   </div>
-  <div class="small" style="margin-top:7px">Un même site reste sur une seule fiche. Chaque configuration possède sa puissance, son nombre de points et sa propre tarification, puis apparaît séparément dans les résultats.</div>
+  <div class="small" style="margin-top:7px">Un même site reste sur une seule fiche. Les offres d’une même puissance sont simulées ensemble : Charge Companion n’affiche qu’un seul résultat et retient automatiquement le meilleur tarif disponible.</div>
   <div id="chargingConfigurations"></div>
 </div>
 <div><label>Dernière mise à jour</label><input id="fUpdated" type="date"></div>
@@ -121,7 +120,7 @@ Les tarifs sont maintenant renseignés directement dans chaque configuration de 
 <section id="fx" class="panel">
 <div class="card">
 <h3>À propos</h3>
-<div class="small">Tesla Charge Companion <b>V7.3 Stable</b><br>
+<div class="small">Tesla Charge Companion <b>V8 RC2</b><br>
 Tarifs Tesla saisis ou importés séparément. Les devises Europe et Maghreb sont actualisées quotidiennement, avec conservation du dernier taux valide.</div>
 <div id="dataFreshness" class="small" style="margin-top:10px"></div>
 </div>
@@ -142,12 +141,18 @@ Un taux signifie « 1 EUR = X unités de la devise ».
 Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas d’échec réseau, le dernier taux publié ou enregistré reste utilisé.
 </div>
 </div>
+
+<div class="card">
+<h3>Sauvegarde personnelle</h3>
+<div class="small">La synchronisation GitHub n’est plus nécessaire pour les catalogues Tesla, Electroverse ou Electra. Elle reste disponible uniquement pour sauvegarder et retrouver entre tes appareils les bornes que tu ajoutes manuellement.</div>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="openAdvancedSync()">Ouvrir la sauvegarde / synchronisation personnelle</button>
+</div>
 </section>
 
 <section id="sync" class="panel">
 <div class="card">
-<h3>Synchronisation GitHub</h3>
-<div class="small">Synchronise les bornes tierces du fichier <code>data/custom_stations.json</code> entre tes appareils. Le jeton GitHub reste uniquement dans le stockage local de chaque navigateur et doit être configuré séparément sur chaque appareil.</div>
+<div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">Sauvegarde / synchronisation personnelle</h3><button class="secondary" onclick="openSettingsPanel()">Retour aux paramètres</button></div>
+<div class="small" style="margin-top:10px">Fonction avancée réservée aux bornes ajoutées manuellement. Les catalogues Tesla, Electroverse et Electra ne sont jamais envoyés dans <code>custom_stations.json</code>. Le jeton GitHub reste uniquement dans le stockage local de ce navigateur.</div>
 <div class="grid" style="margin-top:12px">
 <div><label>Propriétaire GitHub</label><input id="ghOwner" autocomplete="off" placeholder="Ex. yassine"></div>
 <div><label>Dépôt</label><input id="ghRepo" autocomplete="off" placeholder="tesla-charge-companion-stable"></div>
@@ -185,6 +190,8 @@ Les corrections manuelles sont prioritaires uniquement sur cet appareil. En cas 
 </main>
 <script>window.escapeHtml=window.escapeHtml||function(value){return String(value==null?"":value).replace(/[&<>'"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[ch]||ch;});};</script>
 <script src="assets/update.js?v=1" defer></script>
-<script src="assets/app.js?v=7305" defer></script>
-<script src="assets/dedupe.js?v=7305" defer></script>
+<script src="assets/app.js?v=8003" defer></script>
+<script src="assets/dedupe.js?v=8003" defer></script>
+<script src="assets/france-catalog.js?v=8003" defer></script>
+<script src="assets/v8-offer-selection.js?v=8003" defer></script>
 </body></html>
