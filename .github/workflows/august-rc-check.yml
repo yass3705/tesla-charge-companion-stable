@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   static-checks:
@@ -24,6 +25,7 @@ jobs:
           node --check assets/august-release.js
           node --check assets/august-ui-fixes.js
           node --check assets/august-rc2-fixes.js
+          node --check assets/v8-offer-selection.js
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -36,10 +38,23 @@ jobs:
           python -m json.tool data/exchange_rates.json >/dev/null
 
       - name: Verify August build references
+        shell: bash
         run: |
-          grep -q "CURRENT_BUILD='8002'" assets/update.js
+          set -euo pipefail
+          BUILD="$(node -p "require('./app-version.json').build")"
+          test -n "$BUILD"
+          grep -q "CURRENT_BUILD='$BUILD'" assets/update.js
+          grep -q "tcc-v${BUILD}-august" service-worker.js
+          grep -q "content=\"${BUILD}\"" index.html
+          grep -q "assets/update.js?v=${BUILD}" index.html
+          grep -q "assets/v8-offer-selection.js?v=${BUILD}" index.html
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
-          grep -q "tcc-v8002-august" service-worker.js
-          grep -q '"build": "8002"' app-version.json
           grep -q "teslaCongestionFeePerMinute" data/tesla_stations.json
+          echo "V8 build ${BUILD} references are consistent."
+
+      - name: Redeploy V8 preview through main Pages workflow
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "${{ github.repository }}" --ref main
