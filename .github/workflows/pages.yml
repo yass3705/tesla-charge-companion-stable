@@ -1,6 +1,6 @@
 name: Publier le site
 
-# La preview V8 RC2 build 8004 est reconstruite depuis release/2026-08 à chaque déploiement de main.
+# La preview V8 est reconstruite depuis release/2026-08 et publiée uniquement par main.
 on:
   push:
     branches: ["main"]
@@ -37,6 +37,7 @@ jobs:
       - name: Préparer la preview V8
         shell: bash
         run: |
+          set -euo pipefail
           rm -rf site/v8-preview
           mkdir -p site/v8-preview
           rsync -a --delete \
@@ -44,36 +45,48 @@ jobs:
             --exclude='.github/' \
             rc/ site/v8-preview/
 
-          # Les données vivantes restent celles de main : la V8 teste le code
-          # de la RC sans figer une ancienne copie des catalogues.
+          # Les données vivantes restent celles de main.
           cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
           rm -rf site/v8-preview/data/non_tesla_france
           cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france
           cp site/assets/france-catalog.js site/v8-preview/assets/france-catalog.js
 
-          # La preview partage le même domaine que la stable. On isole donc
-          # son localStorage avant le chargement de l'application pour qu'un
-          # test V8 ne modifie pas les réglages/cache locaux de la V7.3.
+          # La preview partage le domaine de la stable : stockage local isolé,
+          # suppression d'un ancien service worker propre à /v8-preview/ et
+          # désactivation de l'auto-refresh dans la preview uniquement.
           cat > site/v8-preview/assets/preview-storage.js <<'JS'
           (function(){
             if(!location.pathname.includes('/v8-preview/'))return;
+            window.TCC_PREVIEW=true;
+
+            if('serviceWorker' in navigator){
+              navigator.serviceWorker.getRegistrations().then(function(regs){
+                regs.forEach(function(reg){
+                  if(String(reg.scope||'').includes('/v8-preview/'))reg.unregister().catch(function(){});
+                });
+              }).catch(function(){});
+            }
+            if('caches' in window){
+              caches.keys().then(function(keys){
+                return Promise.all(keys.filter(function(k){return /^tcc-v8|^tcc-v800/.test(k);}).map(function(k){return caches.delete(k);}));
+              }).catch(function(){});
+            }
+
             const prefix='tcc:v8-preview:';
             const proto=Storage.prototype;
             const rawGet=proto.getItem,rawSet=proto.setItem,rawRemove=proto.removeItem;
-            function scoped(storage,key){
-              return storage===window.localStorage?prefix+String(key):key;
-            }
+            function scoped(storage,key){return storage===window.localStorage?prefix+String(key):key;}
             proto.getItem=function(key){return rawGet.call(this,scoped(this,key));};
             proto.setItem=function(key,value){return rawSet.call(this,scoped(this,key),value);};
             proto.removeItem=function(key){return rawRemove.call(this,scoped(this,key));};
-            window.TCC_PREVIEW=true;
+
             document.addEventListener('DOMContentLoaded',function(){
               const header=document.querySelector('header');
               if(!header||document.getElementById('tccPreviewBanner'))return;
               const banner=document.createElement('div');
               banner.id='tccPreviewBanner';
-              banner.textContent='V8 Preview · données locales isolées de la V7.3';
+              banner.textContent='V8 Preview · auto-mise à jour désactivée';
               banner.style.cssText='margin-top:8px;padding:7px 10px;border-radius:10px;background:#4b3210;color:#ffc76a;font-size:11px;font-weight:800;text-align:center';
               header.appendChild(banner);
             });
@@ -82,17 +95,36 @@ jobs:
 
           python - <<'PY'
           from pathlib import Path
+
+          # preview-storage doit s'exécuter avant update.js.
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
-          tag='<script src="assets/preview-storage.js?v=1"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=2"></script>\n'
           marker='<script>window.escapeHtml'
+          html=html.replace('<script src="assets/preview-storage.js?v=1"></script>\n','')
           if tag not in html:
-              if marker in html:
-                  html=html.replace(marker,tag+marker,1)
-              else:
-                  html=html.replace('</head>',tag+'</head>',1)
+              html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           p.write_text(html,encoding='utf-8')
+
+          # On conserve le loader August, mais pas son auto-refresh/service worker
+          # dans la preview. La stable n'est jamais modifiée.
+          p=Path('site/v8-preview/assets/update.js')
+          s=p.read_text(encoding='utf-8')
+          sw="if('serviceWorker' in navigator){"
+          if sw in s:
+              s=s.replace(sw,"if(!window.TCC_PREVIEW&&'serviceWorker' in navigator){",1)
+          needle='  let checking=false;'
+          guard="  if(window.TCC_PREVIEW){window.tccCheckForAppUpdate=async()=>false;return;}\n\n"
+          if guard not in s:
+              if needle not in s:
+                  raise SystemExit('update.js preview guard insertion point missing')
+              s=s.replace(needle,guard+needle,1)
+          p.write_text(s,encoding='utf-8')
           PY
+
+          node --check site/v8-preview/assets/update.js
+          grep -q 'auto-mise à jour désactivée' site/v8-preview/assets/preview-storage.js
+          grep -q 'if(window.TCC_PREVIEW)' site/v8-preview/assets/update.js
 
       - uses: actions/configure-pages@v5
 
