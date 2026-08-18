@@ -107,9 +107,9 @@ function electraPricing(offer){
     if(hasWindow){
       const start=normTime(rr.startTime,'00:00'),end=normTime(rr.endTime,'24:00');
       const key=`${start}|${end}|${(days||[]).join(',')}`;
-      let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,add:emptyRate(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}
+      let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,values:emptyRate(),present:new Set(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}
       if(threshold>0){const surcharge=rate.time+rate.parking;if(surcharge>0&&(w.afterThreshold===0||threshold<w.afterThreshold)){w.afterThreshold=threshold;w.afterRate=surcharge;}}
-      else for(const k of present)w.add[k]+=rate[k];
+      else for(const k of present){w.values[k]+=rate[k];w.present.add(k);}
     }else if(threshold>0){
       const surcharge=rate.time+rate.parking;if(surcharge>0)durationCandidates.push({threshold,delta:surcharge});
     }else{
@@ -121,7 +121,7 @@ function electraPricing(offer){
   if(durationCandidates.length){durationCandidates.sort((a,b)=>a.threshold-b.threshold);baseRule.afterThreshold=durationCandidates[0].threshold;baseRule.afterRate=durationCandidates[0].delta;}
   const rules=[compactRule(baseRule)];
   for(const w of windows.values()){
-    w.rate={...base}; for(const k of Object.keys(w.add))w.rate[k]+=w.add[k]; rules.push(compactRule(w));
+    w.rate={...base}; for(const k of w.present)w.rate[k]=w.values[k]; rules.push(compactRule(w));
   }
   return rules;
 }
