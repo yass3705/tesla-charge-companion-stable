@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "dataset": "france-non-tesla-runtime",
-  "generatedAt": "2026-08-18T11:55:00.540Z",
+  "generatedAt": "2026-08-18T12:58:10.541Z",
   "sourceSchemaVersion": "1.1.0",
   "sourceRuns": {
     "physicalBaselineRunId": 31984129726,
@@ -3737,12 +3737,16 @@
     }
   ],
   "integration": {
-    "appBuild": "7309",
+    "appBuild": "7310",
     "mode": "lazy-geographic-runtime",
     "customFranceCleanup": true,
     "teslaDatasetModified": false,
-    "sourceArtifactRunId": 32134067174,
+    "sourceArtifactRunId": 32139644174,
+    "sourceArtifactId": 9325368400,
+    "sourceArtifactSha256": "44e9370628c453229ebbde1799a5c8e3599bc1eb782f9a4b167716a5f1d41461",
+    "sourceDataSha256": "19d600ba24688402ed39d7c10b6c0295ace03751da3a4bb7b03dbf8b097f63b8",
     "parkingTimeRateFix": true,
+    "tileCacheVersioned": true,
     "legacyElectraOnlyDedup": {
       "policy": "unique structured EVSE + <=100m + (<=15m or exact normalized address/name)",
       "collapsedStations": 696,

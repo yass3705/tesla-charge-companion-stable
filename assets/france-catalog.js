@@ -17,10 +17,12 @@
     return manifestPromise;
   }
 
-  async function readGzipJson(file){
-    if(rawCache.has(file))return rawCache.get(file);
+  async function readGzipJson(file,version=''){
+    const cacheKey=`${file}|${version}`;
+    if(rawCache.has(cacheKey))return rawCache.get(cacheKey);
     const promise=(async()=>{
-      const response=await fetch(BASE+file,{cache:'force-cache'});
+      const url=BASE+file+(version?`?v=${encodeURIComponent(version)}`:'');
+      const response=await fetch(url,{cache:'force-cache'});
       if(!response.ok)throw new Error(`Fragment France indisponible (${response.status})`);
       const bytes=new Uint8Array(await response.arrayBuffer());
       let text;
@@ -31,8 +33,8 @@
       }else text=new TextDecoder().decode(bytes);
       return JSON.parse(text);
     })();
-    rawCache.set(file,promise);
-    try{return await promise}catch(err){rawCache.delete(file);throw err}
+    rawCache.set(cacheKey,promise);
+    try{return await promise}catch(err){rawCache.delete(cacheKey);throw err}
   }
 
   function intersects(tile,lat,lon,radiusKm){
@@ -82,9 +84,10 @@
 
   async function rowsNear(lat,lon,radiusKm){
     const manifest=await loadManifest();
-    if(!(radiusKm>0))return readGzipJson(manifest.allFile);
+    const version=manifest.generatedAt||manifest.allSha256||'';
+    if(!(radiusKm>0))return readGzipJson(manifest.allFile,version);
     const tiles=(manifest.tiles||[]).filter(t=>intersects(t,lat,lon,radiusKm));
-    const chunks=await Promise.all(tiles.map(t=>readGzipJson(t.file)));
+    const chunks=await Promise.all(tiles.map(t=>readGzipJson(t.file,version)));
     return chunks.flat();
   }
 
