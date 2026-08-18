@@ -1,0 +1,117 @@
+name: Fix Electra dynamic pricing runtime — one shot
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/fix-electra-dynamic-pricing-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fix-electra-dynamic-pricing-once
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SOURCE_URL: 'https://sdmntprsoutheastus3.oaiusercontent.com/files/00000000-4e5c-820c-ad9f-23d63a687c80/raw?se=2026-08-18T13%3A04%3A04Z&sp=r&sv=2026-02-06&sr=b&scid=8ac7c943-473e-5ab0-9ccf-f1a77114b8a4&skoid=002823aa-689d-47ca-9347-108c20f4f00d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-18T07%3A22%3A47Z&ske=2026-08-19T07%3A22%3A47Z&sks=b&skv=2026-02-06&sig=fHd1YfuNNFaRWLhGGBAT4lOBS51yjmR5YSBLc5P5luA%3D'
+      EXPECTED_ZIP_SHA256: '44e9370628c453229ebbde1799a5c8e3599bc1eb782f9a4b167716a5f1d41461'
+      EXPECTED_DATA_SHA256: '19d600ba24688402ed39d7c10b6c0295ace03751da3a4bb7b03dbf8b097f63b8'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download canonical France artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/france-canonical
+          curl -L --fail --retry 3 --retry-delay 2 "$SOURCE_URL" -o /tmp/france-canonical.zip
+          echo "$EXPECTED_ZIP_SHA256  /tmp/france-canonical.zip" | sha256sum -c -
+          unzip -q /tmp/france-canonical.zip -d /tmp/france-canonical
+          echo "$EXPECTED_DATA_SHA256  /tmp/france-canonical/france_non_tesla_final.json.gz" | sha256sum -c -
+
+      - name: Correct Electra time-window semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/build_france_runtime_catalog.mjs')
+          s=p.read_text(encoding='utf-8')
+          old="""      let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,add:emptyRate(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}
+                if(threshold>0){const surcharge=rate.time+rate.parking;if(surcharge>0&&(w.afterThreshold===0||threshold<w.afterThreshold)){w.afterThreshold=threshold;w.afterRate=surcharge;}}
+                else for(const k of present)w.add[k]+=rate[k];
+          """
+          new="""      let w=windows.get(key);if(!w){w={scope:'timeWindow',start,end,currency,rate:null,values:emptyRate(),present:new Set(),afterRate:0,afterThreshold:0,days};windows.set(key,w);}
+                if(threshold>0){const surcharge=rate.time+rate.parking;if(surcharge>0&&(w.afterThreshold===0||threshold<w.afterThreshold)){w.afterThreshold=threshold;w.afterRate=surcharge;}}
+                else for(const k of present){w.values[k]+=rate[k];w.present.add(k);}
+          """
+          if old not in s: raise SystemExit('Electra window collection marker missing')
+          s=s.replace(old,new,1)
+          old2="""  for(const w of windows.values()){
+              w.rate={...base}; for(const k of Object.keys(w.add))w.rate[k]+=w.add[k]; rules.push(compactRule(w));
+            }
+          """
+          new2="""  for(const w of windows.values()){
+              w.rate={...base}; for(const k of w.present)w.rate[k]=w.values[k]; rules.push(compactRule(w));
+            }
+          """
+          if old2 not in s: raise SystemExit('Electra window application marker missing')
+          s=s.replace(old2,new2,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          node --check scripts/build_france_runtime_catalog.mjs
+
+      - name: Rebuild France runtime catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build_france_runtime_catalog.mjs \
+            /tmp/france-canonical/france_non_tesla_final.json.gz \
+            data/non_tesla_france
+
+      - name: Verify Bois-d'Arcy Electra dynamic tariff
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs'),zlib=require('zlib');
+          const rows=JSON.parse(zlib.gunzipSync(fs.readFileSync('data/non_tesla_france/all.json.gz')));
+          const st=rows.find(r=>r[0]==='electroverse:4051990');
+          if(!st)throw new Error("Bois-d'Arcy E.Leclerc missing");
+          const configs=st[8]||[];
+          const direct=configs.find(c=>String(c[1]).startsWith('Electra · DC 400 kW'));
+          const roaming=configs.find(c=>String(c[1]).startsWith('Electroverse · DC 400 kW'));
+          if(!direct||!roaming)throw new Error('Expected Electra/Electroverse configurations missing');
+          const dr=direct[5]||[],er=roaming[5]||[];
+          const window=(start,end)=>dr.find(r=>r[0]==='timeWindow'&&r[1]===start&&r[2]===end);
+          const p15=window('15:00','20:00')?.[5];
+          const p20=window('20:00','00:00')?.[5];
+          const p05=window('05:00','15:00')?.[5];
+          if(Math.abs(p15-.61)>.000001||Math.abs(p20-.49)>.000001||Math.abs(p05-.49)>.000001){throw new Error(`Bad Electra windows: ${JSON.stringify(dr)}`)}
+          const evBase=er.find(r=>r[0]==='allDay')?.[5];
+          if(Math.abs(evBase-.64)>.000001)throw new Error(`Bad Electroverse tariff ${evBase}`);
+          const manifest=JSON.parse(fs.readFileSync('data/non_tesla_france/manifest.json','utf8'));
+          if(manifest.stationCount!==42720||manifest.configurationCount!==157881)throw new Error(JSON.stringify(manifest));
+          manifest.integration={...(manifest.integration||{}),electraTimeWindowOverrideFix:true,electraTimeWindowVerifiedStation:'electroverse:4051990'};
+          fs.writeFileSync('data/non_tesla_france/manifest.json',JSON.stringify(manifest,null,2)+'\n');
+          console.log(`Verified Bois-d'Arcy: Electra 18h=${p15} €/kWh · 20h=${p20} €/kWh · Electroverse=${evBase} €/kWh`);
+          NODE
+
+      - name: Commit corrected runtime and remove one-shot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/fix-electra-dynamic-pricing-once.yml
+          git add scripts/build_france_runtime_catalog.mjs data/non_tesla_france
+          git commit -m 'fix: preserve Electra dynamic tariff windows in France runtime'
+          git push origin HEAD:main
