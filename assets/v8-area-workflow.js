@@ -62,6 +62,21 @@
   function letBrowserPaint(){
     return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   }
+  function refreshOperatorsFromPrepared(prepared){
+    if(!prepared?.stations?.length||!window.TCCV8DynamicOperators?.refresh)return;
+    const apply=()=>{
+      try{window.TCCV8DynamicOperators.refresh(prepared.stations);}
+      catch(err){console.warn('[TCC V8] Mise à jour opérateurs :',err?.message||err);}
+    };
+    // L'initialisation August historique peut réécrire la liste des opérateurs juste
+    // après le premier chargement. On réapplique donc la zone préparée sans refaire
+    // les trajets. Cela supprime le besoin d'appuyer une deuxième fois sur « Mettre à jour ».
+    apply();
+    requestAnimationFrame(apply);
+    setTimeout(apply,180);
+    setTimeout(apply,550);
+    setTimeout(apply,1000);
+  }
 
   async function refreshArea(){
     if(busy||typeof originalCandidateStations!=='function')return;
@@ -77,9 +92,7 @@
       await letBrowserPaint();
       const prepared=await originalCandidateStations('all',radius);
       areaCache={key:areaKey(radius),prepared,at:Date.now()};
-      if(window.TCCV8DynamicOperators?.refresh&&prepared?.stations){
-        window.TCCV8DynamicOperators.refresh(prepared.stations);
-      }
+      refreshOperatorsFromPrepared(prepared);
       const count=physicalCount(prepared?.stations);
       const radiusText=radius>0?` dans un rayon routier maximal de ${radius} km`:' sans limite de rayon';
       status(`✓ ${count} borne(s) mise(s) à jour${radiusText}. Tu peux lancer la simulation.`,'good');
