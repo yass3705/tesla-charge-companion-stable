@@ -1,11 +1,13 @@
-// Tesla Charge Companion V8 RC4.8 — afficher les tarifs Electra ambigus sans les classer.
+// Tesla Charge Companion V8 RC4.8 — tarifs Electra ambigus visibles mais hors classement.
 (function(){
   'use strict';
-  const VERSION='rc48l';
+  const VERSION='rc48m';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
   const normId=v=>text(v).replace(/^france-catalog:/i,'').split('::')[0];
   const fmt=(v,d=3)=>Number(v||0).toFixed(d).replace(/0+$/,'').replace(/\.$/,'');
+  const euro=v=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0));
+
   function mins(v){const m=text(v).match(/^(\d{1,2}):(\d{2})/);return m?((Number(m[1])*60+Number(m[2]))%1440):0;}
   function inWindow(t,start,end){const a=mins(start||'00:00'),b=end==='24:00'?1440:mins(end||'24:00');if(a===b)return true;if(a<b)return t>=a&&t<b;return t>=a||t<b;}
   function activeRule(pricing,time){
@@ -25,43 +27,44 @@
     return parts.length?parts.join(' + '):'Tarif Electra variable';
   }
   function shortLabel(value){
-    return text(value)
-      .replace(/(\d)\.(\d)/g,'$1,$2')
-      .replace(/\s+EUR\/kWh/g,' €/kWh')
-      .replace(/\s+EUR\/min/g,' €/min')
-      .replace(/\s+EUR\s+fixe/g,' € fixe');
+    return text(value).replace(/(\d)\.(\d)/g,'$1,$2').replace(/\s+EUR\/kWh/g,' €/kWh').replace(/\s+EUR\/min/g,' €/min').replace(/\s+EUR\s+fixe/g,' € fixe');
   }
   function sig(pricing){
     return JSON.stringify((pricing?.rules||[]).map(r=>[r.scope||'',r.start||'',r.end||'',r.currency||'EUR',Number(r.pricePerKwh||0),Number(r.chargePerMinute||0),Number(r.connectionFee||0),Number(r.idlePerMinute||0),Number(r.afterMinutesRate||0),Number(r.afterMinutesThreshold||0)]));
   }
   function provider(c,st){
-    const l=text(c?.label||c?.configurationLabel);const m=l.match(/^(.+?)\s*·\s*(?:AC|DC)\b/i);
+    const l=text(c?.label||c?.configurationLabel),m=l.match(/^(.+?)\s*·\s*(?:AC|DC)\b/i);
     return m?.[1]?.trim()||text(c?.offerProvider)||text(st?.operator)||'';
   }
   function cardInfo(card){
-    const raw=text(card.querySelector('h3')?.textContent).replace(/^\d+\.\s*/,'');
-    const m=raw.match(/^(.*?)\s+—\s+(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);
+    const raw=text(card.querySelector('h3')?.textContent).replace(/^\d+\.\s*/,''),m=raw.match(/^(.*?)\s+—\s+(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);
     return{id:normId(card.dataset.resultId),kind:m?.[2]?.toUpperCase()||'',power:m?Number(m[3].replace(',','.')):0};
   }
   function electraVariants(card){
     const info=cardInfo(card),all=window.TCC_SOURCE_INTEGRITY_STATIONS||[];
     const st=all.find(s=>normId(s?.id||s?.catalogStationId||s?.baseStationId)===info.id);if(!st)return[];
-
-    // Priorité aux tarifs ambigus explicitement préservés par le loader : ils ne font
-    // pas partie des configurations simulables et ne peuvent donc jamais influencer le classement.
     const preserved=Array.isArray(st.ambiguousSourceOffers)?st.ambiguousSourceOffers:[];
     const sourceMatches=preserved.filter(a=>norm(a?.provider)==='electra'&&(!info.kind||text(a?.kind).toUpperCase()===info.kind)&&(!info.power||Math.abs(Number(a?.powerKw||0)-info.power)<.25));
     if(sourceMatches.length){
-      const unique=new Map();
-      for(const a of sourceMatches)for(const p of (a?.pricings||[])){const k=sig(p);if(k&&!unique.has(k))unique.set(k,p);}
-      return [...unique.values()];
+      const unique=new Map();for(const a of sourceMatches)for(const p of (a?.pricings||[])){const k=sig(p);if(k&&!unique.has(k))unique.set(k,p);}return [...unique.values()];
     }
-
-    // Compatibilité avec les anciens snapshots où les variantes étaient encore dans chargingConfigurations.
     const configs=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations:[];
     const matches=configs.filter(c=>norm(provider(c,st))==='electra'&&(!info.kind||text(c?.kind||st.kind).toUpperCase()===info.kind)&&(!info.power||Math.abs(Number(c?.powerKw||st.powerKw||0)-info.power)<.25));
-    const unique=new Map();for(const c of matches){const p=c?.pricing||st.pricing,k=sig(p);if(k&&!unique.has(k))unique.set(k,p);}
-    return [...unique.values()];
+    const unique=new Map();for(const c of matches){const p=c?.pricing||st.pricing,k=sig(p);if(k&&!unique.has(k))unique.set(k,p);}return [...unique.values()];
+  }
+  function parseChargeMinutes(card){
+    const m=text(card.textContent).match(/Recharge\s*(?:(\d+)\s*h)?\s*(\d+)?(?:\s*min)?/i);if(!m)return NaN;
+    const h=Number(m[1]||0),mn=Number(m[2]||0),total=h*60+mn;return total>0?total:NaN;
+  }
+  function parseBilledEnergy(card){const m=text(card.textContent).match(/([0-9]+(?:[.,][0-9]+)?)\s*kWh\s+au compteur/i);return m?Number(m[1].replace(',','.')):NaN;}
+  function calculatedTotal(pricing,card,time){
+    const chargeMinutes=parseChargeMinutes(card),billedEnergy=parseBilledEnergy(card);
+    if(!Number.isFinite(chargeMinutes)||!Number.isFinite(billedEnergy)||typeof priceWithRules!=='function')return NaN;
+    try{
+      const unplug=document.getElementById('simUnplugTime')?.value||'';
+      const result=priceWithRules(pricing,mins(time),chargeMinutes,billedEnergy,unplug,time,[]);
+      return Number.isFinite(result?.total)?Number(result.total):NaN;
+    }catch(e){return NaN;}
   }
   function decorateCard(card){
     const box=card.querySelector('.v8-offer-box');if(!box)return;
@@ -72,25 +75,26 @@
       const p=text(row.querySelector('.v8-offer-provider')?.textContent).replace(/\s*✓.*$/,'').trim();
       if(/^Electra(?:\s|$)/i.test(p)&&!/^Electra\+/i.test(p))row.remove();
     }
-    if(box.querySelector('.v8-electra-ambiguous-warning'))return;
+    box.querySelector('.v8-electra-ambiguous-warning')?.remove();
+    box.querySelector('.v8-electra-ambiguous-note')?.remove();
+
+    const totals=variants.map(p=>calculatedTotal(p,card,time));
+    const calculated=totals.map(v=>Number.isFinite(v)?euro(v):'—');
     const row=document.createElement('div');row.className='v8-offer-row v8-offer-ambiguous v8-electra-ambiguous-warning';row.style.borderColor='#a97816';row.style.background='rgba(169,120,22,.10)';
     row.innerHTML='<div class="v8-offer-provider">Electra <span style="color:#ffc45f">⚠ prix à vérifier</span></div><div class="v8-offer-price"></div><div class="v8-offer-total"></div>';
-    row.querySelector('.v8-offer-price').textContent='Plusieurs tarifs source non attribués avec certitude à cette prise';
-    const total=row.querySelector('.v8-offer-total');
-    total.textContent=labels.map(shortLabel).join(' / ');
-    total.style.whiteSpace='normal';total.style.maxWidth='48%';total.style.lineHeight='1.25';
+    const total=row.querySelector('.v8-offer-total');total.textContent=calculated.every(x=>x==='—')?'coût à vérifier':calculated.join(' / ');total.style.whiteSpace='normal';total.style.maxWidth='48%';total.style.lineHeight='1.25';
+    row.querySelector('.v8-offer-price').textContent=`Tarifs source : ${labels.map(shortLabel).join(' · ')}`;
     const note=box.querySelector('.v8-offer-note');if(note)note.insertAdjacentElement('beforebegin',row);else box.appendChild(row);
-    if(!box.querySelector('.v8-electra-ambiguous-note')){
-      const n=document.createElement('div');n.className='v8-offer-note v8-electra-ambiguous-note';n.style.color='#d6a84a';n.textContent='⚠ Electra fournit plusieurs tarifs au niveau du site sans attribution certaine à cette prise. Vérifie le prix dans Electra avant de charger. Ces tarifs restent affichés à titre informatif mais ne sont pas pris en compte dans le classement.';box.appendChild(n);
-    }
-    card.dataset.tccElectraWarning=VERSION;
+
+    const n=document.createElement('div');n.className='v8-offer-note v8-electra-ambiguous-note';n.style.color='#d6a84a';
+    n.textContent='⚠ Les montants affichés sont les coûts calculés pour la session simulée à partir des différents tarifs Electra source. Ils restent indicatifs, doivent être vérifiés dans Electra et ne sont pas pris en compte dans le classement.';
+    box.appendChild(n);card.dataset.tccElectraWarning=VERSION;
   }
   function decorate(){document.querySelectorAll('#results .result-card[data-result-id]').forEach(decorateCard);}
   function install(){
     const root=document.getElementById('results');if(!root||root.__tccElectraAmbiguousObserver)return false;
-    let timer=null;const obs=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(decorate,550);});obs.observe(root,{childList:true,subtree:true,characterData:true});root.__tccElectraAmbiguousObserver=obs;
-    setTimeout(decorate,700);return true;
+    let timer=null;const obs=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(decorate,550);});obs.observe(root,{childList:true,subtree:true,characterData:true});root.__tccElectraAmbiguousObserver=obs;setTimeout(decorate,700);return true;
   }
   let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>200)clearInterval(timer);},100);
-  console.info('[TCC V8] Tarifs Electra ambigus affichés avec alerte, valeurs visibles et exclus du classement.');
+  console.info('[TCC V8] Tarifs Electra ambigus : coûts de session visibles, tarifs source conservés, classement exclu.');
 })();
