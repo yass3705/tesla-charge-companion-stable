@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — afficher les tarifs Electra ambigus sans les classer.
 (function(){
   'use strict';
-  const VERSION='rc48j';
+  const VERSION='rc48k';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
   const normId=v=>text(v).replace(/^france-catalog:/i,'').split('::')[0];
@@ -39,6 +39,18 @@
   function electraVariants(card){
     const info=cardInfo(card),all=window.TCC_SOURCE_INTEGRITY_STATIONS||[];
     const st=all.find(s=>normId(s?.id||s?.catalogStationId||s?.baseStationId)===info.id);if(!st)return[];
+
+    // Priorité aux tarifs ambigus explicitement préservés par le loader : ils ne font
+    // pas partie des configurations simulables et ne peuvent donc jamais influencer le classement.
+    const preserved=Array.isArray(st.ambiguousSourceOffers)?st.ambiguousSourceOffers:[];
+    const sourceMatches=preserved.filter(a=>norm(a?.provider)==='electra'&&(!info.kind||text(a?.kind).toUpperCase()===info.kind)&&(!info.power||Math.abs(Number(a?.powerKw||0)-info.power)<.25));
+    if(sourceMatches.length){
+      const unique=new Map();
+      for(const a of sourceMatches)for(const p of (a?.pricings||[])){const k=sig(p);if(k&&!unique.has(k))unique.set(k,p);}
+      return [...unique.values()];
+    }
+
+    // Compatibilité avec les anciens snapshots où les variantes étaient encore dans chargingConfigurations.
     const configs=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations:[];
     const matches=configs.filter(c=>norm(provider(c,st))==='electra'&&(!info.kind||text(c?.kind||st.kind).toUpperCase()===info.kind)&&(!info.power||Math.abs(Number(c?.powerKw||st.powerKw||0)-info.power)<.25));
     const unique=new Map();for(const c of matches){const p=c?.pricing||st.pricing,k=sig(p);if(k&&!unique.has(k))unique.set(k,p);}
