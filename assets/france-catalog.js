@@ -60,6 +60,37 @@
     return {type:'rules',rules};
   }
 
+  function providerFromConfigLabel(label){
+    const s=String(label||'').trim();
+    const i=s.indexOf('·');
+    return (i>=0?s.slice(0,i):s).trim();
+  }
+
+  function pricingSignature(pricing){
+    return JSON.stringify((pricing?.rules||[]).map(r=>({
+      scope:r.scope||'',start:r.start||'',end:r.end||'',billing:r.billing||'',currency:(r.currency||'EUR').toUpperCase(),
+      k:Number(r.pricePerKwh||0),m:Number(r.chargePerMinute||0),f:Number(r.connectionFee||0),i:Number(r.idlePerMinute||0),
+      ar:Number(r.afterMinutesRate||0),at:Number(r.afterMinutesThreshold||0)
+    })));
+  }
+
+  // Electra peut publier plusieurs tarifs distincts au niveau d'une localisation sans
+  // indiquer à quelle EVSE/prise/puissance chacun appartient. Le runtime compact actuel
+  // ne transporte pas cette attribution : dans ce cas, on préfère supprimer ces offres
+  // du classement plutôt que d'appliquer arbitrairement le tarif le moins cher à chaque prise.
+  function suppressAmbiguousElectra(configs){
+    const groups=new Map();
+    (configs||[]).forEach((c,index)=>{
+      if(providerFromConfigLabel(c.label).toLowerCase()!=='electra')return;
+      const key=`${String(c.kind||'').toUpperCase()}|${Number(c.powerKw||0).toFixed(2)}`;
+      let g=groups.get(key);if(!g){g={indices:[],sigs:new Set()};groups.set(key,g);}
+      g.indices.push(index);g.sigs.add(pricingSignature(c.pricing));
+    });
+    const drop=new Set();
+    for(const g of groups.values())if(g.indices.length>1&&g.sigs.size>1)for(const i of g.indices)drop.add(i);
+    return {configs:(configs||[]).filter((_,i)=>!drop.has(i)),suppressed:drop.size};
+  }
+
   function accessFromRows(rows){
     if(!Array.isArray(rows)||!rows.length)return {limited:false,unknown:true,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non fournis par la source — accès à vérifier.'};
     const days={};for(let i=0;i<7;i++)days[String(i)]={open:false,start:'00:00',end:'00:00'};
@@ -73,18 +104,20 @@
   }
 
   function stationFromRow(row,dayIndex){
-    const configs=(row[8]||[]).map(c=>({id:c[0],label:c[1],kind:c[2]||'AC',powerKw:Number(c[3]||11),stalls:Number(c[4]||0),pricing:pricingFromRows(c[5],dayIndex)}));
-    const first=configs[0]||{kind:'AC',powerKw:11,stalls:0,pricing:{type:'rules',rules:[]}};
+    const rawConfigs=(row[8]||[]).map(c=>({id:c[0],label:c[1],kind:c[2]||'AC',powerKw:Number(c[3]||11),stalls:Number(c[4]||0),pricing:pricingFromRows(c[5],dayIndex)}));
+    const filtered=suppressAmbiguousElectra(rawConfigs),configs=filtered.configs;
+    const first=configs[0]||rawConfigs.find(c=>providerFromConfigLabel(c.label).toLowerCase()!=='electra')||{kind:'AC',powerKw:11,stalls:0,pricing:{type:'rules',rules:[]}};
     return {
       id:`france-catalog:${row[0]}`,catalogStationId:row[0],name:row[1]||row[2]||'Borne France',address:row[2]||'',latitude:Number(row[3]),longitude:Number(row[4]),
       operator:row[5]||'Autre',stalls:Number(row[6]||0),kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configs,
-      access:accessFromRows(row[7]),lastUpdated:row[9]||'',source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true
+      access:accessFromRows(row[7]),lastUpdated:row[9]||'',source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,
+      ambiguousElectraConfigurationsSuppressed:filtered.suppressed
     };
   }
 
   async function rowsNear(lat,lon,radiusKm){
     const manifest=await loadManifest();
-    const version=manifest.generatedAt||manifest.allSha256||'';
+    const version=manifest.runtimePatchedAt||manifest.allSha256||manifest.generatedAt||'';
     if(!(radiusKm>0))return readGzipJson(manifest.allFile,version);
     const tiles=(manifest.tiles||[]).filter(t=>intersects(t,lat,lon,radiusKm));
     const chunks=await Promise.all(tiles.map(t=>readGzipJson(t.file,version)));
