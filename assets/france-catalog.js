@@ -75,10 +75,9 @@
   }
 
   // Electra peut publier plusieurs tarifs distincts au niveau d'une localisation sans
-  // indiquer à quelle EVSE/prise/puissance chacun appartient. Le runtime compact actuel
-  // ne transporte pas cette attribution : dans ce cas, on préfère supprimer ces offres
-  // du classement plutôt que d'appliquer arbitrairement le tarif le moins cher à chaque prise.
-  function suppressAmbiguousElectra(configs){
+  // indiquer à quelle EVSE/prise/puissance chacun appartient. Ils sont exclus des
+  // configurations simulables, mais conservés séparément pour affichage avec avertissement.
+  function separateAmbiguousElectra(configs){
     const groups=new Map();
     (configs||[]).forEach((c,index)=>{
       if(providerFromConfigLabel(c.label).toLowerCase()!=='electra')return;
@@ -86,9 +85,19 @@
       let g=groups.get(key);if(!g){g={indices:[],sigs:new Set()};groups.set(key,g);}
       g.indices.push(index);g.sigs.add(pricingSignature(c.pricing));
     });
-    const drop=new Set();
-    for(const g of groups.values())if(g.indices.length>1&&g.sigs.size>1)for(const i of g.indices)drop.add(i);
-    return {configs:(configs||[]).filter((_,i)=>!drop.has(i)),suppressed:drop.size};
+    const drop=new Set(),ambiguous=[];
+    for(const [key,g] of groups.entries()){
+      if(!(g.indices.length>1&&g.sigs.size>1))continue;
+      const unique=new Map();
+      for(const i of g.indices){
+        drop.add(i);
+        const c=configs[i],sig=pricingSignature(c.pricing);
+        if(sig&&!unique.has(sig))unique.set(sig,c.pricing);
+      }
+      const [kind,power]=key.split('|');
+      ambiguous.push({provider:'Electra',kind,powerKw:Number(power),pricings:[...unique.values()]});
+    }
+    return {configs:(configs||[]).filter((_,i)=>!drop.has(i)),ambiguous,suppressed:drop.size};
   }
 
   function accessFromRows(rows){
@@ -105,13 +114,13 @@
 
   function stationFromRow(row,dayIndex){
     const rawConfigs=(row[8]||[]).map(c=>({id:c[0],label:c[1],kind:c[2]||'AC',powerKw:Number(c[3]||11),stalls:Number(c[4]||0),pricing:pricingFromRows(c[5],dayIndex)}));
-    const filtered=suppressAmbiguousElectra(rawConfigs),configs=filtered.configs;
+    const separated=separateAmbiguousElectra(rawConfigs),configs=separated.configs;
     const first=configs[0]||rawConfigs.find(c=>providerFromConfigLabel(c.label).toLowerCase()!=='electra')||{kind:'AC',powerKw:11,stalls:0,pricing:{type:'rules',rules:[]}};
     return {
       id:`france-catalog:${row[0]}`,catalogStationId:row[0],name:row[1]||row[2]||'Borne France',address:row[2]||'',latitude:Number(row[3]),longitude:Number(row[4]),
       operator:row[5]||'Autre',stalls:Number(row[6]||0),kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configs,
       access:accessFromRows(row[7]),lastUpdated:row[9]||'',source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,
-      ambiguousElectraConfigurationsSuppressed:filtered.suppressed
+      ambiguousElectraConfigurationsSuppressed:separated.suppressed,ambiguousSourceOffers:separated.ambiguous
     };
   }
 
