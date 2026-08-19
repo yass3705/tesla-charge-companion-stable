@@ -9,6 +9,10 @@
     'tesla':'Tesla','swish':'Swish','izivia':'Izivia','alize':'Alizé','alizé':'Alizé',
     'kilowatt':'Kilowatt','iecharge':'IECharge','fastvolt':'FastVolt','lidl france':'Lidl','lidl':'Lidl'
   };
+  let lastSourceStations=null;
+  let rendering=false;
+  let restoreTimer=null;
+  let hostObserver=null;
 
   function plain(v){return text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();}
   function operatorOf(st){
@@ -17,37 +21,72 @@
     const key=plain(raw);
     return aliases[key]||raw||'Autre / opérateur non renseigné';
   }
+  function operatorsFor(sourceStations){
+    return [...new Set((sourceStations||[]).map(operatorOf).filter(Boolean))]
+      .sort((a,b)=>a.localeCompare(b,'fr'));
+  }
+  function currentOperators(host){
+    return [...host.querySelectorAll('input[type=checkbox]')].map(x=>x.value).sort((a,b)=>a.localeCompare(b,'fr'));
+  }
+  function sameOperators(a,b){
+    return a.length===b.length&&a.every((v,i)=>v===b[i]);
+  }
 
-  function refreshOperatorChoicesDynamic(sourceStations){
+  function ensureHostObserver(host){
+    if(!host||hostObserver)return;
+    hostObserver=new MutationObserver(()=>{
+      if(rendering||!lastSourceStations)return;
+      clearTimeout(restoreTimer);
+      restoreTimer=setTimeout(()=>{
+        if(rendering||!lastSourceStations)return;
+        const expected=operatorsFor(lastSourceStations);
+        const actual=currentOperators(host);
+        // Le init August historique peut réécrire la liste juste après la première
+        // mise à jour avec les seules bornes locales. On restaure alors la liste de
+        // la zone déjà préparée, sans refaire le calcul des trajets.
+        if(!sameOperators(actual,expected))refreshOperatorChoicesDynamic(lastSourceStations,{remember:false});
+      },80);
+    });
+    hostObserver.observe(host,{childList:true,subtree:true});
+  }
+
+  function refreshOperatorChoicesDynamic(sourceStations,options={}){
+    if(Array.isArray(sourceStations)&&options.remember!==false)lastSourceStations=sourceStations.slice();
+    const source=Array.isArray(sourceStations)?sourceStations:lastSourceStations;
     const host=document.getElementById('augOperatorChoices');
-    if(!host)return;
+    if(!host||!source)return;
+    ensureHostObserver(host);
+
     const current=[...host.querySelectorAll('input[type=checkbox]')];
     const previous=new Map(current.map(x=>[x.value,x.checked]));
     const previousAll=current.length>0&&current.every(x=>x.checked);
     const touched=host.dataset.tccUserTouched==='1';
+    const ops=operatorsFor(source);
 
-    const ops=[...new Set((sourceStations||[]).map(operatorOf).filter(Boolean))]
-      .sort((a,b)=>a.localeCompare(b,'fr'));
+    rendering=true;
+    try{
+      host.innerHTML=ops.map(op=>{
+        let checked;
+        if(previous.has(op))checked=previous.get(op);
+        else if(previousAll)checked=true;
+        else if(!touched)checked=(op==='Tesla');
+        else checked=false;
+        return `<label class="operator-choice"><input type="checkbox" value="${esc(op)}" ${checked?'checked':''}> ${esc(op)}</label>`;
+      }).join('');
 
-    host.innerHTML=ops.map(op=>{
-      let checked;
-      if(previous.has(op))checked=previous.get(op);
-      else if(previousAll)checked=true;
-      else if(!touched)checked=(op==='Tesla');
-      else checked=false;
-      return `<label class="operator-choice"><input type="checkbox" value="${esc(op)}" ${checked?'checked':''}> ${esc(op)}</label>`;
-    }).join('');
-
-    host.dataset.tccDynamic='1';
-    let hint=document.getElementById('tccDynamicOperatorHint');
-    if(!hint){
-      hint=document.createElement('div');
-      hint.id='tccDynamicOperatorHint';
-      hint.className='small';
-      hint.style.margin='8px 0';
-      host.parentNode.insertBefore(hint,host);
+      host.dataset.tccDynamic='1';
+      let hint=document.getElementById('tccDynamicOperatorHint');
+      if(!hint){
+        hint=document.createElement('div');
+        hint.id='tccDynamicOperatorHint';
+        hint.className='small';
+        hint.style.margin='8px 0';
+        host.parentNode.insertBefore(hint,host);
+      }
+      hint.textContent=`${ops.length} opérateur(s) disponibles dans la zone chargée.`;
+    }finally{
+      requestAnimationFrame(()=>{rendering=false;});
     }
-    hint.textContent=`${ops.length} opérateur(s) disponibles dans la zone chargée.`;
   }
 
   async function preloadAreaOperators(){
@@ -69,6 +108,7 @@
     if(host&&!host.__tccDynamicBound){
       host.addEventListener('change',markOperatorInteraction);
       host.__tccDynamicBound=true;
+      ensureHostObserver(host);
     }
     if(typeof window.augSelectAllOperators==='function'&&!window.augSelectAllOperators.__tccDynamicWrapped){
       const original=window.augSelectAllOperators;
@@ -111,6 +151,6 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',waitForAugust,{once:true});
   else waitForAugust();
 
-  window.TCCV8DynamicOperators={refresh:refreshOperatorChoicesDynamic,preload:preloadAreaOperators};
-  console.info('[TCC V8] Filtre opérateurs dynamique prêt.');
+  window.TCCV8DynamicOperators={refresh:refreshOperatorChoicesDynamic,preload:preloadAreaOperators,get lastStations(){return lastSourceStations;}};
+  console.info('[TCC V8] Filtre opérateurs dynamique prêt, restauration automatique après init tardif.');
 })();
