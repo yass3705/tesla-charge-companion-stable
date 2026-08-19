@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — afficher les tarifs Electra ambigus sans les classer.
 (function(){
   'use strict';
-  const VERSION='rc48k';
+  const VERSION='rc48l';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
   const normId=v=>text(v).replace(/^france-catalog:/i,'').split('::')[0];
@@ -23,6 +23,13 @@
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`${fmt(r.afterMinutesRate)} ${c}/min après ${Math.round(Number(r.afterMinutesThreshold))} min`);
     if(r.scope==='timeWindow'&&(r.start||r.end))parts.push(`créneau ${r.start||'00:00'}–${r.end||'24:00'}`);
     return parts.length?parts.join(' + '):'Tarif Electra variable';
+  }
+  function shortLabel(value){
+    return text(value)
+      .replace(/(\d)\.(\d)/g,'$1,$2')
+      .replace(/\s+EUR\/kWh/g,' €/kWh')
+      .replace(/\s+EUR\/min/g,' €/min')
+      .replace(/\s+EUR\s+fixe/g,' € fixe');
   }
   function sig(pricing){
     return JSON.stringify((pricing?.rules||[]).map(r=>[r.scope||'',r.start||'',r.end||'',r.currency||'EUR',Number(r.pricePerKwh||0),Number(r.chargePerMinute||0),Number(r.connectionFee||0),Number(r.idlePerMinute||0),Number(r.afterMinutesRate||0),Number(r.afterMinutesThreshold||0)]));
@@ -67,11 +74,14 @@
     }
     if(box.querySelector('.v8-electra-ambiguous-warning'))return;
     const row=document.createElement('div');row.className='v8-offer-row v8-offer-ambiguous v8-electra-ambiguous-warning';row.style.borderColor='#a97816';row.style.background='rgba(169,120,22,.10)';
-    row.innerHTML='<div class="v8-offer-provider">Electra <span style="color:#ffc45f">⚠ prix à vérifier</span></div><div class="v8-offer-price"></div><div class="v8-offer-total">non classé</div>';
-    row.querySelector('.v8-offer-price').textContent=`Tarifs source : ${labels.join(' · ')}`;
+    row.innerHTML='<div class="v8-offer-provider">Electra <span style="color:#ffc45f">⚠ prix à vérifier</span></div><div class="v8-offer-price"></div><div class="v8-offer-total"></div>';
+    row.querySelector('.v8-offer-price').textContent='Plusieurs tarifs source non attribués avec certitude à cette prise';
+    const total=row.querySelector('.v8-offer-total');
+    total.textContent=labels.map(shortLabel).join(' / ');
+    total.style.whiteSpace='normal';total.style.maxWidth='48%';total.style.lineHeight='1.25';
     const note=box.querySelector('.v8-offer-note');if(note)note.insertAdjacentElement('beforebegin',row);else box.appendChild(row);
     if(!box.querySelector('.v8-electra-ambiguous-note')){
-      const n=document.createElement('div');n.className='v8-offer-note v8-electra-ambiguous-note';n.style.color='#d6a84a';n.textContent='⚠ Electra fournit plusieurs tarifs au niveau du site sans attribution certaine à cette prise. Vérifie le prix dans Electra avant de charger. Ces tarifs ne sont pas pris en compte dans le classement.';box.appendChild(n);
+      const n=document.createElement('div');n.className='v8-offer-note v8-electra-ambiguous-note';n.style.color='#d6a84a';n.textContent='⚠ Electra fournit plusieurs tarifs au niveau du site sans attribution certaine à cette prise. Vérifie le prix dans Electra avant de charger. Ces tarifs restent affichés à titre informatif mais ne sont pas pris en compte dans le classement.';box.appendChild(n);
     }
     card.dataset.tccElectraWarning=VERSION;
   }
@@ -82,5 +92,5 @@
     setTimeout(decorate,700);return true;
   }
   let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>200)clearInterval(timer);},100);
-  console.info('[TCC V8] Tarifs Electra ambigus affichés avec alerte et exclus du classement.');
+  console.info('[TCC V8] Tarifs Electra ambigus affichés avec alerte, valeurs visibles et exclus du classement.');
 })();
