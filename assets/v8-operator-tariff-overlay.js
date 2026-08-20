@@ -3,13 +3,13 @@
   'use strict';
   const OVERLAY_URL='data/tariff_overlay_v1.json';
   const EVADEA_MAP_URL='data/evadea_evse_tariffs_v1.json';
-  const REVISION='rc48ai';
+  const REVISION='rc48aj';
   let overlayPromise=null,evadeaPromise=null,evadeaAddressIndexCache=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260821a`,{cache:'no-store'}).then(r=>{
+    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260821b`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -23,7 +23,7 @@
   }
 
   async function loadEvadeaMap(){
-    if(!evadeaPromise)evadeaPromise=fetch(`${EVADEA_MAP_URL}?v=20260821a`,{cache:'no-store'}).then(r=>{
+    if(!evadeaPromise)evadeaPromise=fetch(`${EVADEA_MAP_URL}?v=20260821b`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`carte e-Vadea indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -126,26 +126,56 @@
     evadeaAddressIndexCache={map,index};
     return index;
   }
-  function consistentEvadea(records,matchMode,matchedEvseIds=[]){
+  function geoDistanceKm(aLat,aLon,bLat,bLon){
+    const r=6371,toRad=x=>Number(x)*Math.PI/180;
+    const p1=toRad(aLat),p2=toRad(bLat),dp=toRad(Number(bLat)-Number(aLat)),dl=toRad(Number(bLon)-Number(aLon));
+    const h=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
+    return 2*r*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));
+  }
+  function configCompatible(rec,cfg){
+    if(Math.abs(Number(rec?.powerKw||0)-Number(cfg?.powerKw||0))>=.25)return false;
+    const hint=text(rec?.kindHint).toUpperCase();
+    return !hint||hint===text(cfg?.kind).toUpperCase();
+  }
+  function consistentEvadea(records,matchMode,matchedEvseIds=[],matchDistanceMeters=null){
     if(!records.length)return null;
     const signatures=new Set(records.map(r=>[
       r.context,Number(r.pricePerKwhEur).toFixed(6),Number(r?.occupancy?.blockFeeEur).toFixed(6),Number(r?.occupancy?.graceMinutes),Number(r?.occupancy?.startedBlockMinutes)
     ].join('|')));
     if(signatures.size!==1)return null;
-    return {...records[0],matchMode,matchedEvseIds};
+    return {...records[0],matchMode,matchedEvseIds,matchDistanceMeters};
   }
   function resolveEvadea(st,cfg,map){
     const evses=map?.evses||{};
     const ids=collectEvadeaIds(st);
-    const exact=ids.map(id=>evses[id]?{...evses[id],evseId:id}:null).filter(Boolean).filter(r=>Math.abs(Number(r.powerKw||0)-Number(cfg.powerKw||0))<.25);
+    const exact=ids.map(id=>evses[id]?{...evses[id],evseId:id}:null).filter(Boolean).filter(r=>configCompatible(r,cfg));
     const exactResolved=consistentEvadea(exact,'evse',ids.filter(id=>!!evses[id]));
     if(exactResolved)return exactResolved;
 
     if(!isEvadeaOperator(st))return null;
     const address=norm(st?.address||st?._sourceAddress||'');
-    if(address.length<8)return null;
-    const fallback=(evadeaAddressIndex(map).get(address)||[]).filter(r=>Math.abs(Number(r.powerKw||0)-Number(cfg.powerKw||0))<.25);
-    return consistentEvadea(fallback,'address_power',[]);
+    if(address.length>=8){
+      const fallback=(evadeaAddressIndex(map).get(address)||[]).filter(r=>configCompatible(r,cfg));
+      const addressResolved=consistentEvadea(fallback,'address_power',[]);
+      if(addressResolved)return addressResolved;
+    }
+
+    const lat=Number(st?.latitude),lon=Number(st?.longitude);
+    if(!Number.isFinite(lat)||!Number.isFinite(lon))return null;
+    const maxMeters=Math.max(10,Number(map?.validatedInventory?.geoPowerFallbackMaxDistanceMeters||150));
+    const geo=[];
+    let nearest=Infinity;
+    for(const [evseId,rec] of Object.entries(evses)){
+      if(!configCompatible(rec,cfg))continue;
+      const rlat=Number(rec?.latitude),rlon=Number(rec?.longitude);
+      if(!Number.isFinite(rlat)||!Number.isFinite(rlon))continue;
+      const meters=geoDistanceKm(lat,lon,rlat,rlon)*1000;
+      if(meters<=maxMeters+1e-6){geo.push({...rec,evseId});nearest=Math.min(nearest,meters);}
+    }
+    if(!geo.length)return null;
+    const stationIds=new Set(geo.map(r=>text(r.stationId)).filter(Boolean));
+    if(stationIds.size!==1)return null;
+    return consistentEvadea(geo,'geo_power',[],Number.isFinite(nearest)?Math.round(nearest):null);
   }
   function evadeaPricing(rec){
     return {type:'rules',rules:[{
@@ -170,7 +200,8 @@
         kind:cfg.kind,powerKw:cfg.powerKw,stalls:cfg.stalls,
         pricing:evadeaPricing(rec),offerProvider:provider,offerType:'operator_direct',
         overlayOfferId:'evadea-direct-evse',overlaySource:'data-lab/evadea_official_france.json',
-        evadeaMatchMode:rec.matchMode,evadeaContext:rec.context,evadeaMatchedEvseIds:rec.matchedEvseIds||[],
+        evadeaMatchMode:rec.matchMode,evadeaMatchDistanceMeters:rec.matchDistanceMeters,
+        evadeaContext:rec.context,evadeaMatchedEvseIds:rec.matchedEvseIds||[],
         evadeaStationId:rec.stationId||'',evadeaReferenceAddress:rec.address||''
       });
     }
@@ -257,7 +288,8 @@
       if(!(exposureEnd>exposureStart))return out;
 
       let extra=0,blockCount=0;
-      const exposureRule=typeof window.ruleForMinute==='function'?window.ruleForMinute(rules,((Number(startMin||0)+exposureStart)%1440+1440)%1440):(typeof ruleForMinute==='function'?ruleForMinute(rules,((Number(startMin||0)+exposureStart)%1440+1440)%1440):null);
+      const localAtExposure=((Number(startMin||0)+exposureStart)%1440+1440)%1440;
+      const exposureRule=typeof window.ruleForMinute==='function'?window.ruleForMinute(rules,localAtExposure):(typeof ruleForMinute==='function'?ruleForMinute(rules,localAtExposure):null);
       const blockFee=Math.max(0,Number(exposureRule?.postChargeBlockFee||0));
       const blockMinutes=Math.max(0,Number(exposureRule?.postChargeBlockMinutes||0));
       if(blockFee>0&&blockMinutes>0){
@@ -327,7 +359,7 @@
     wrapped.__tccOperatorOverlay=true;wrapped.__tccOriginal=current;
     window.candidateStations=wrapped;
     try{candidateStations=wrapped}catch(e){}
-    console.info('[TCC V8] Overlay opérateur direct V1 + e-Vadea EVSE actif.');
+    console.info('[TCC V8] Overlay opérateur direct V1 + e-Vadea EVSE/geo actif.');
     return true;
   }
 
