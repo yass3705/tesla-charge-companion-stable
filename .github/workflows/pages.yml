@@ -55,7 +55,7 @@ jobs:
           (function(){
             if(!location.pathname.includes('/v8-preview/'))return;
             window.TCC_PREVIEW=true;
-            const uiGuardKey='tcc-preview-area-ui-reload-rc48w';
+            const uiGuardKey='tcc-preview-area-ui-reload-rc48y';
             window.addEventListener('pageshow',function(event){
               if(event.persisted){location.reload();}
             });
@@ -71,7 +71,7 @@ jobs:
             proto.setItem=function(key,value){return rawSet.call(this,scoped(this,key),value);};
             proto.removeItem=function(key){return rawRemove.call(this,scoped(this,key));};
             document.addEventListener('DOMContentLoaded',function(){
-              const header=document.querySelector('header');if(header&&!document.getElementById('tccPreviewBanner')){const banner=document.createElement('div');banner.id='tccPreviewBanner';banner.textContent='V8 Preview · RC4.8 · rc48w · multi-tarifs · auto-mise à jour désactivée';banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';header.appendChild(banner);}
+              const header=document.querySelector('header');if(header&&!document.getElementById('tccPreviewBanner')){const banner=document.createElement('div');banner.id='tccPreviewBanner';banner.textContent='V8 Preview · RC4.8 · rc48y · multi-tarifs · auto-mise à jour désactivée';banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';header.appendChild(banner);}
               setTimeout(function(){
                 const row=document.getElementById('v8OriginRefreshRow');
                 const button=document.getElementById('routeButton');
@@ -94,29 +94,29 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc48w"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48y"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48w-20260820', html)
-          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48w-20260820', html)
-          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48w-20260820', html)
+          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48y-20260820', html)
+          html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48y-20260820', html)
+          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48y-20260820', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
-          offer_tag='<script src="assets/v8-offer-selection.js?v=rc48w-20260820" defer></script>'
-          html=html.replace(offer_tag,'<script src="assets/v8-operator-tariff-overlay.js?v=rc48w-20260820" defer></script>\n'+offer_tag,1)
+          offer_tag='<script src="assets/v8-offer-selection.js?v=rc48y-20260820" defer></script>'
+          html=html.replace(offer_tag,'<script src="assets/v8-operator-tariff-overlay.js?v=rc48y-20260820" defer></script>\n'+offer_tag,1)
           scripts=(
-              '<script src="assets/v8-vehicle-profiles.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-redesign.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-dynamic-filter.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-area-workflow.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-sync-guard.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-rc4-extensions.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-rc4-toggle-fix.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-combined-tariff-fix.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-source-integrity.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-ambiguous-electra-warning.js?v=rc48w-20260820" defer></script>\n'
-              '<script src="assets/v8-subscription-selection.js?v=rc48w-20260820" defer></script>\n'
+              '<script src="assets/v8-vehicle-profiles.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-redesign.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-dynamic-filter.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-area-workflow.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-sync-guard.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-rc4-extensions.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-rc4-toggle-fix.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-combined-tariff-fix.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-source-integrity.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-ambiguous-electra-warning.js?v=rc48y-20260820" defer></script>\n'
+              '<script src="assets/v8-subscription-selection.js?v=rc48y-20260820" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
           p.write_text(html,encoding='utf-8')
@@ -133,6 +133,61 @@ jobs:
           s=s.replace('V8.0 RC1','V8.0 RC4.8').replace("const AUG_VERSION='8.0 RC1';","const AUG_VERSION='8.0 RC4.8';")
           s=s.replace("meta.content='8001'","meta.content='8004'")
           s=s.replace('Tesla Charge Companion 8.0 RC1','Tesla Charge Companion 8.0 RC4.8')
+          old_sort="""  function sortRows(rows,mode){
+    let available=rows.filter(x=>!x.r.unavailable);
+    const finite=(n,fallback=1e12)=>Number.isFinite(n)?n:fallback;
+    available.sort((a,b)=>{
+      if(mode==='finish')return finite(a.totalDuration)-finite(b.totalDuration);
+      if(mode==='chargeFinish')return finite(a.r.allowed)-finite(b.r.allowed);
+      if(mode==='arrival')return finite(b.arrivalSoc,-1)-finite(a.arrivalSoc,-1);
+      if(mode==='distance')return finite(a.distanceKm)-finite(b.distanceKm);
+      return finite(a.r.total)-finite(b.r.total);
+    });
+    return available.slice(0,20);
+  }"""
+          new_sort="""  function rowPhysicalKey(row){
+    const st=row?.st||{};
+    const base=String(st.catalogStationId||st.baseStationId||st.id||'').split('::')[0];
+    const kind=String(st.kind||'').toUpperCase();
+    const power=Number(st.powerKw||0);
+    return `${base}|${kind}|${Number.isFinite(power)?power.toFixed(2):'0'}`;
+  }
+  function sortRows(rows,mode){
+    let available=rows.filter(x=>!x.r.unavailable);
+    const finite=(n,fallback=1e12)=>Number.isFinite(n)?n:fallback;
+    const compare=(a,b)=>{
+      if(mode==='finish')return finite(a.totalDuration)-finite(b.totalDuration);
+      if(mode==='chargeFinish')return finite(a.r.allowed)-finite(b.r.allowed);
+      if(mode==='arrival')return finite(b.arrivalSoc,-1)-finite(a.arrivalSoc,-1);
+      if(mode==='distance')return finite(a.distanceKm)-finite(b.distanceKm);
+      return finite(a.r.total)-finite(b.r.total);
+    };
+    const groups=new Map();
+    for(const row of available){
+      const key=rowPhysicalKey(row);
+      if(!groups.has(key))groups.set(key,[]);
+      groups.get(key).push(row);
+    }
+    const topGroups=[...groups.entries()].map(([key,items])=>({
+      key,
+      representative:items.slice().sort(compare)[0]
+    })).sort((a,b)=>compare(a.representative,b.representative)).slice(0,20);
+    const groupOrder=new Map(topGroups.map((g,i)=>[g.key,i]));
+    return available.filter(row=>groupOrder.has(rowPhysicalKey(row))).sort((a,b)=>{
+      const ga=groupOrder.get(rowPhysicalKey(a)),gb=groupOrder.get(rowPhysicalKey(b));
+      if(ga!==gb)return ga-gb;
+      return finite(a.r.total)-finite(b.r.total);
+    });
+  }"""
+          if old_sort not in s:
+              raise SystemExit('sortRows physical Top 20 patch target not found')
+          s=s.replace(old_sort,new_sort,1)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('site/v8-preview/assets/v8-operator-tariff-overlay.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("const REVISION='rc48w';","const REVISION='rc48y';",1)
+          s=s.replace('?v=20260820e','?v=20260820f',1)
           p.write_text(s,encoding='utf-8')
 
           p=Path('site/v8-preview/assets/update.js')
@@ -147,6 +202,7 @@ jobs:
 
           node --check site/v8-preview/assets/france-catalog.js
           node --check site/v8-preview/assets/v8-operator-tariff-overlay.js
+          node --check site/v8-preview/assets/august-release.js
           node --check site/v8-preview/assets/v8-vehicle-profiles.js
           node --check site/v8-preview/assets/v8-redesign.js
           node --check site/v8-preview/assets/v8-offer-selection.js
@@ -160,20 +216,22 @@ jobs:
           node --check site/v8-preview/assets/v8-ambiguous-electra-warning.js
           node --check site/v8-preview/assets/v8-subscription-selection.js
           node --check site/v8-preview/assets/update.js
-          grep -q 'france-catalog.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'v8-operator-tariff-overlay.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'v8-area-workflow.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'v8-overlay-area-bridge.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'v8-source-integrity.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'v8-ambiguous-electra-warning.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'v8-subscription-selection.js?v=rc48w-20260820' site/v8-preview/index.html
-          grep -q 'tcc-preview-area-ui-reload-rc48w' site/v8-preview/assets/preview-storage.js
-          grep -q 'V8 Preview · RC4.8 · rc48w · multi-tarifs' site/v8-preview/assets/preview-storage.js
+          grep -q 'france-catalog.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'v8-operator-tariff-overlay.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'v8-area-workflow.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'v8-overlay-area-bridge.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'v8-source-integrity.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'v8-ambiguous-electra-warning.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'v8-subscription-selection.js?v=rc48y-20260820' site/v8-preview/index.html
+          grep -q 'tcc-preview-area-ui-reload-rc48y' site/v8-preview/assets/preview-storage.js
+          grep -q 'V8 Preview · RC4.8 · rc48y · multi-tarifs' site/v8-preview/assets/preview-storage.js
+          grep -q 'function rowPhysicalKey(row)' site/v8-preview/assets/august-release.js
+          grep -q "const REVISION='rc48y'" site/v8-preview/assets/v8-operator-tariff-overlay.js
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo "V8 RC4.8 preview prepared from release/2026-08 · rc48w · forced operator overlay refresh across SIGEIF power classes"
+          echo "V8 RC4.8 preview prepared from release/2026-08 · rc48y · Top 20 physical first, then all tariff variants"
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
