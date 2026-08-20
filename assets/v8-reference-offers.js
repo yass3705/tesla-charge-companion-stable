@@ -3,7 +3,7 @@
 // de la station / du contexte. Ces lignes ne participent jamais au classement.
 (function(){
   'use strict';
-  const VERSION='rc48-reference-1';
+  const VERSION='rc48-reference-2';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const esc=v=>(window.escapeHtml?window.escapeHtml(String(v??'')):String(v??''));
@@ -65,13 +65,20 @@
     return true;
   }
   function labelFor(r,ctx){return typeof r.label==='function'?r.label(ctx):r.label;}
+  function hasRankableProvider(box,provider){
+    const wanted=norm(provider);
+    return [...box.querySelectorAll('.v8-offer-row:not(.v8-reference-row) .v8-offer-provider')]
+      .some(el=>norm(el.textContent).startsWith(wanted));
+  }
   function ensureCard(card){
     const box=card.querySelector('.v8-offer-box');if(!box)return;
     injectStyle();
     const ctx=cardContext(card),note=box.querySelector('.v8-offer-note');
     for(const r of refs){
       if(!matches(ctx,r))continue;
-      if(box.querySelector(`[data-reference-offer-id="${r.id}"]`))continue;
+      const existing=box.querySelector(`[data-reference-offer-id="${r.id}"]`);
+      if(r.id==='evadea-grid'&&hasRankableProvider(box,'e-Vadea direct')){existing?.remove();continue;}
+      if(existing)continue;
       const row=document.createElement('div');
       row.className='v8-offer-row v8-reference-row v8-offer-ambiguous';
       row.dataset.referenceOfferId=r.id;row.dataset.tccProvider=r.provider;
