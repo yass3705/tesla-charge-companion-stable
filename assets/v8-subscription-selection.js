@@ -3,7 +3,7 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-2';
+  const VERSION='rc48-multi-subs-3';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
@@ -84,6 +84,37 @@
   function operatorMatches(card,p){const op=norm(physicalOperator(card));return (p.operatorAliases||[]).some(a=>op===norm(a))}
   function kindPower(card){const h=text(card.querySelector('h3')?.textContent);const m=h.match(/\b(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);return{kind:m?.[1]?.toUpperCase()||'',power:m?Number(m[2].replace(',','.')):0}}
   function planApplies(card,p){const kp=kindPower(card);if(p.kind&&kp.kind!==text(p.kind).toUpperCase())return false;if(Number.isFinite(Number(p.minPowerKw))&&kp.power<Number(p.minPowerKw))return false;if(Number.isFinite(Number(p.maxPowerKw))&&kp.power>Number(p.maxPowerKw))return false;return operatorMatches(card,p)}
+  function hmToMinutes(v){const m=text(v).match(/^(\d{1,2}):(\d{2})$/);return m?Number(m[1])*60+Number(m[2]):NaN}
+  function chargeMinutes(card){
+    const t=text(card.textContent).replace(/\s+/g,' ');
+    const m=t.match(/Recharge\s+(?:(\d+)\s*h(?:\s*(\d{1,2}))?|(\d+)\s*min)/i);
+    if(!m)return NaN;
+    if(m[1]!=null)return Number(m[1])*60+Number(m[2]||0);
+    return Number(m[3]||0);
+  }
+  function occupiedMinutes(card){
+    const start=hmToMinutes($('simTime')?.value),unplug=hmToMinutes($('simUnplugTime')?.value);
+    if(Number.isFinite(start)&&Number.isFinite(unplug)){
+      let d=unplug-start;if(d<0)d+=1440;return d;
+    }
+    return chargeMinutes(card);
+  }
+  function generatedPlanTotal(card,p,kwh){
+    let total=kwh*Number(p.pricePerKwh)+Number(p.sessionFeeEur||0);
+    const rate=Number(p.afterMinutesRate||0),threshold=Number(p.afterMinutesThreshold||0),occ=occupiedMinutes(card);
+    if(rate>0&&threshold>=0&&Number.isFinite(occ)){
+      let surcharge=Math.max(0,occ-threshold)*rate;
+      const cap=Number(p.afterMinutesCap||0);if(cap>0)surcharge=Math.min(surcharge,cap);
+      total+=surcharge;
+    }
+    return total;
+  }
+  function generatedPlanPriceLabel(p){
+    const c=p.currency||'EUR',parts=[`${Number(p.pricePerKwh).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${c}/kWh`];
+    if(Number(p.sessionFeeEur||0)>0)parts.push(`${Number(p.sessionFeeEur).toFixed(2).replace('.',',')} ${c} fixe`);
+    if(Number(p.afterMinutesRate||0)>0)parts.push(`${Number(p.afterMinutesRate).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${c}/min après ${Math.round(Number(p.afterMinutesThreshold||0))} min`);
+    return parts.join(' + ');
+  }
   function ensureGeneratedRows(card,box){
     const kwh=wallKwh(card);if(!Number.isFinite(kwh))return;
     const note=box.querySelector('.v8-offer-note');
@@ -91,9 +122,9 @@
       if(p.runtime==='existing_electra_plus'||!Number.isFinite(Number(p.pricePerKwh))||!planApplies(card,p))continue;
       const offerId=text(p.id),sid=selectionId(p);if(!offerId||!sid)continue;
       if(box.querySelector(`[data-subscription-offer-id="${offerId}"]`))continue;
-      const fee=Number(p.sessionFeeEur||0),total=kwh*Number(p.pricePerKwh)+fee,row=document.createElement('div');
+      const total=generatedPlanTotal(card,p,kwh),row=document.createElement('div');
       row.className='v8-offer-row';row.dataset.subscriptionId=sid;row.dataset.subscriptionOfferId=offerId;row.dataset.tccProvider=p.provider;
-      row.innerHTML=`<div class="v8-offer-provider">${p.provider}<span class="v8-electra-tag">abonnement</span><span class="v8-electra-planfee">${planLabel(p)}</span></div><div class="v8-offer-price">${Number(p.pricePerKwh).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${p.currency||'EUR'}/kWh</div><div class="v8-offer-total">${euro(total)}</div>`;
+      row.innerHTML=`<div class="v8-offer-provider">${p.provider}<span class="v8-electra-tag">abonnement</span><span class="v8-electra-planfee">${planLabel(p)}</span></div><div class="v8-offer-price">${generatedPlanPriceLabel(p)}</div><div class="v8-offer-total">${euro(total)}</div>`;
       note?.before(row);
     }
   }
@@ -148,5 +179,5 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
   window.TCCV8Subscriptions={state,applyAll,get plans(){return plans.slice()}};
-  console.info('[TCC V8] Sélection multi-abonnements active : affichage permanent, classement opt-in, forfaits multi-réseaux supportés.');
+  console.info('[TCC V8] Sélection multi-abonnements active : affichage permanent, classement opt-in, forfaits multi-réseaux et frais de durée supportés.');
 })();
