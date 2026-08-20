@@ -2,13 +2,13 @@
 (function(){
   'use strict';
   const OVERLAY_URL='data/tariff_overlay_v1.json';
-  const REVISION='rc48ac';
+  const REVISION='rc48ae';
   let overlayPromise=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820g`,{cache:'no-store'}).then(r=>{
+    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820h`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -27,9 +27,13 @@
   function isSigeifOperator(st){
     return operatorCandidates(st).some(v=>v==='sigeif'||v.includes('sigeif')||v.includes('syndicat intercommunal pour le gaz et l electricite en idf'));
   }
+  function isPlenitudeOperator(st){
+    return operatorCandidates(st).some(v=>v==='be charge'||v.includes('plenitude')||v.includes('plentitude'));
+  }
   function operatorMatches(st,offer){
-    const values=operatorCandidates(st);
-    if(String(offer?.id||'').startsWith('sigeif-')&&isSigeifOperator(st))return true;
+    const values=operatorCandidates(st),id=String(offer?.id||'');
+    if(id.startsWith('sigeif-')&&isSigeifOperator(st))return true;
+    if(id.startsWith('plenitude-')&&isPlenitudeOperator(st))return true;
     return (offer?.operatorAliases||[]).some(alias=>values.includes(norm(alias)));
   }
   function powerMatches(kind,power,offer){
@@ -169,5 +173,5 @@
   loadOverlay();
   let tries=0;const timer=setInterval(()=>{tries++;const a=install(),b=installPostChargePricing();if((a&&b)||tries>160)clearInterval(timer);},100);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(markRevision,0),{once:true});else setTimeout(markRevision,0);
-  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator,installPostChargePricing,revision:REVISION};
+  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator,isPlenitudeOperator,installPostChargePricing,revision:REVISION};
 })();
