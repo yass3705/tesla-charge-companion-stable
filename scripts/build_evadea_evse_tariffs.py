@@ -4,7 +4,7 @@
 Conservative rules:
 - exact EVSE is the primary mapping key;
 - road context must resolve from the published station name/address;
-- power must be present;
+- power and public coordinates must be present;
 - any new/unknown context makes the build fail instead of guessing.
 """
 from __future__ import annotations
@@ -64,6 +64,17 @@ def number(value: str) -> float | None:
     return float(m.group(0).replace(",", ".")) if m else None
 
 
+def coordinates(value: str) -> tuple[float, float] | None:
+    nums = re.findall(r"-?\d+(?:[.,]\d+)?", str(value or ""))
+    if len(nums) < 2:
+        return None
+    lon = float(nums[0].replace(",", "."))
+    lat = float(nums[1].replace(",", "."))
+    if not (-180 <= lon <= 180 and -90 <= lat <= 90):
+        return None
+    return lat, lon
+
+
 def truthy(value: str) -> bool:
     return str(value or "").strip().lower() in {"1", "true", "vrai", "oui", "yes"}
 
@@ -108,6 +119,7 @@ def main() -> None:
     evses: dict[str, dict] = {}
     contexts: Counter[str] = Counter()
     station_ids: set[str] = set()
+    coordinate_rows = 0
 
     for row in rows:
         station_id = pick(row, "id_station_itinerance", "id_station_local")
@@ -115,10 +127,11 @@ def main() -> None:
         address = pick(row, "adresse_station")
         evse_id = pick(row, "id_pdc_itinerance", "id_pdc_local").upper().replace("*", "")
         power_kw = number(pick(row, "puissance_nominale"))
+        coords = coordinates(pick(row, "coordonneesxy"))
         context = context_for(station_name, address)
 
-        if not station_name or not address or not evse_id or power_kw is None or power_kw <= 0:
-            raise SystemExit(f"incomplete published row: station={station_name!r} evse={evse_id!r} power={power_kw!r}")
+        if not station_name or not address or not evse_id or power_kw is None or power_kw <= 0 or coords is None:
+            raise SystemExit(f"incomplete published row: station={station_name!r} evse={evse_id!r} power={power_kw!r} coords={coords!r}")
         if not re.fullmatch(r"FREVAE[A-Z0-9]+", evse_id):
             raise SystemExit(f"unexpected e-Vadea EVSE id: {evse_id}")
         if context == "unknown":
@@ -127,7 +140,9 @@ def main() -> None:
             raise SystemExit(f"duplicate EVSE id: {evse_id}")
 
         price, occupancy_block_fee = tariff(context, power_kw)
+        lat, lon = coords
         contexts[context] += 1
+        coordinate_rows += 1
         if station_id:
             station_ids.add(station_id)
 
@@ -135,6 +150,8 @@ def main() -> None:
             "stationId": station_id,
             "stationName": station_name,
             "address": address,
+            "latitude": lat,
+            "longitude": lon,
             "powerKw": power_kw,
             "kindHint": kind_hint(row),
             "context": context,
@@ -158,9 +175,11 @@ def main() -> None:
     }
     if actual != expected:
         raise SystemExit(f"validated inventory fingerprint changed: expected={expected}, actual={actual}")
+    if coordinate_rows != len(rows):
+        raise SystemExit(f"missing public coordinates: {coordinate_rows}/{len(rows)}")
 
     payload = {
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "1.1.0",
         "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "operator": "e-Vadea",
         "country": "FR",
@@ -170,9 +189,12 @@ def main() -> None:
             "rowCount": len(rows),
             "uniqueEvseCount": len(evses),
             "uniqueStationCount": len(station_ids),
+            "rowsWithCoordinates": coordinate_rows,
             "contextCounts": dict(sorted(contexts.items())),
             "rankableOnlyWhenMapped": True,
             "addressPowerFallbackRequiresExactNormalizedAddress": True,
+            "geoPowerFallbackRequiresOperatorMatch": True,
+            "geoPowerFallbackMaxDistanceMeters": 150,
         },
         "tariffGrid": {
             "motorway": {"lt100Kw": 0.48, "gte100Kw": 0.62},
@@ -193,7 +215,7 @@ def main() -> None:
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(
         f"e-Vadea map built: {len(evses)} EVSE / "
-        f"{contexts['motorway']} motorway / {contexts['off_motorway']} off-motorway"
+        f"{contexts['motorway']} motorway / {contexts['off_motorway']} off-motorway / {coordinate_rows} geocoded"
     )
 
 
