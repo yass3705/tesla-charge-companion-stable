@@ -8,7 +8,7 @@
   function loadReferenceOffers(){
     if(window.TCCV8ReferenceOffers||document.querySelector('script[data-tcc-reference-offers]'))return;
     const s=document.createElement('script');
-    s.src='assets/v8-reference-offers.js?v=20260820a';
+    s.src='assets/v8-reference-offers.js?v=20260821b';
     s.defer=true;s.dataset.tccReferenceOffers='1';
     document.head.appendChild(s);
   }
