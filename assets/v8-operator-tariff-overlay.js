@@ -2,6 +2,7 @@
 (function(){
   'use strict';
   const OVERLAY_URL='data/tariff_overlay_v1.json';
+  const REVISION='rc48w';
   let overlayPromise=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -112,7 +113,13 @@
     return true;
   }
 
+  function markRevision(){
+    const banner=document.getElementById('tccPreviewBanner');
+    if(banner&&/RC4\.8/.test(text(banner.textContent))){banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · multi-tarifs · auto-mise à jour désactivée`;}
+  }
+
   loadOverlay();
   let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>120)clearInterval(timer);},100);
-  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(markRevision,0),{once:true});else setTimeout(markRevision,0);
+  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator,revision:REVISION};
 })();
