@@ -1,5 +1,6 @@
 name: Build e-Vadea EVSE tariff map
 
+# Integration trigger: RC4.8 e-Vadea mapped direct tariff.
 on:
   workflow_dispatch:
   push:
