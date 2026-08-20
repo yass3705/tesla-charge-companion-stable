@@ -3,7 +3,7 @@
 // Aucun rapprochement externe par URL/nom. Les tarifs source ambigus ne participent pas au classement.
 (function(){
   'use strict';
-  const VERSION='rc48g';
+  const VERSION='rc48-postcharge-1';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
   const fmt=(v,d=3)=>Number(v||0).toFixed(d).replace(/0+$/,'').replace(/\.$/,'');
@@ -19,7 +19,7 @@
   }
   function pricingSig(p){
     if(!p)return'';
-    const rules=(p.rules||[]).map(r=>({scope:r.scope||'',start:r.start||'',end:r.end||'',billing:r.billing||'',currency:(r.currency||'EUR').toUpperCase(),k:Number(r.pricePerKwh||0),m:Number(r.chargePerMinute||0),f:Number(r.connectionFee||0),i:Number(r.idlePerMinute||0),ar:Number(r.afterMinutesRate||0),at:Number(r.afterMinutesThreshold||0)}));
+    const rules=(p.rules||[]).map(r=>({scope:r.scope||'',start:r.start||'',end:r.end||'',billing:r.billing||'',currency:(r.currency||'EUR').toUpperCase(),k:Number(r.pricePerKwh||0),m:Number(r.chargePerMinute||0),f:Number(r.connectionFee||0),i:Number(r.idlePerMinute||0),ar:Number(r.afterMinutesRate||0),at:Number(r.afterMinutesThreshold||0),pc:Number(r.postChargeRate||0),pg:Number(r.postChargeGraceMinutes||0)}));
     return JSON.stringify({type:p.type||'',rules});
   }
   function expandedPrepared(){
@@ -63,6 +63,15 @@
     const t=mins(time),windows=rules.filter(r=>r?.scope==='timeWindow'&&inWindow(t,r.start,r.end));
     return windows.at(-1)||rules.find(r=>r?.scope==='allDay')||rules[0];
   }
+  function postChargeDescription(pricing,active,c,source=false){
+    const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
+    const rates=rules.map(r=>Number(r?.postChargeRate||0)).filter(x=>x>0);
+    if(!rates.length)return'';
+    const maxRate=Math.max(...rates),graces=rules.map(r=>Number(r?.postChargeGraceMinutes)).filter(Number.isFinite),grace=graces.length?Math.max(...graces):0;
+    const activeRate=Number(active?.postChargeRate||0);
+    if(activeRate>0)return source?`après fin de charge + ${Math.round(grace)} min : ${fmt(activeRate)} ${c}/min`:`${fmt(activeRate)} ${c}/min ${Math.round(grace)} min après fin de charge`;
+    return source?`après fin de charge + ${Math.round(grace)} min : jusqu'à ${fmt(maxRate)} ${c}/min selon horaire`:`jusqu'à ${fmt(maxRate)} ${c}/min ${Math.round(grace)} min après fin de charge selon horaire`;
+  }
   function tariffLabel(pricing,time){
     const r=activeRule(pricing,time);if(!r)return'Tarif non disponible';
     const c=text(r.currency||'EUR').toUpperCase(),parts=[];
@@ -71,6 +80,7 @@
     if(Number(r.connectionFee||0)>0)parts.push(`${fmt(r.connectionFee,2)} ${c} fixe`);
     if(Number(r.idlePerMinute||0)>0)parts.push(`${fmt(r.idlePerMinute)} ${c}/min occupation`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`${fmt(r.afterMinutesRate)} ${c}/min après ${Math.round(Number(r.afterMinutesThreshold))} min`);
+    const post=postChargeDescription(pricing,r,c,false);if(post)parts.push(post);
     if(r.scope==='timeWindow'&&(r.start||r.end))parts.push(`créneau ${r.start||'00:00'}–${r.end||'24:00'}`);
     return parts.length?parts.join(' + '):'Tarif variable';
   }
@@ -82,6 +92,7 @@
     if(Number(r.connectionFee||0)>0)parts.push(`connexion ${fmt(r.connectionFee,2)} ${c}`);
     if(Number(r.idlePerMinute||0)>0)parts.push(`occupation ${fmt(r.idlePerMinute)} ${c}/min`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`après ${Math.round(Number(r.afterMinutesThreshold))} min : ${fmt(r.afterMinutesRate)} ${c}/min`);
+    const post=postChargeDescription(pricing,r,c,true);if(post)parts.push(post);
     if(r.scope==='timeWindow'&&(r.start||r.end))parts.push(`créneau ${r.start||'00:00'}–${r.end||'24:00'}`);
     return parts;
   }
@@ -172,5 +183,5 @@
     let timer=null;const obs=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(decorate,420);});obs.observe(root,{childList:true,subtree:true,characterData:true});root.__tccIntegrityObserver=obs;setTimeout(decorate,500);return true;
   }
   let tries=0;const timer=setInterval(()=>{tries++;const a=installCandidateCapture(),b=installUnknownAccess(),c=installObserver();if((a&&b&&c)||tries>200)clearInterval(timer);},100);
-  console.info('[TCC V8] Intégrité source-first active : tarifs détaillés, offres ambiguës exclues, horaires inconnus signalés.');
+  console.info('[TCC V8] Intégrité source-first active : tarifs détaillés, frais après fin de charge, offres ambiguës exclues, horaires inconnus signalés.');
 })();
