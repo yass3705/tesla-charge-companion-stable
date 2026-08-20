@@ -7,7 +7,7 @@
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820c`,{cache:'no-store'}).then(r=>{
+    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820d`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -84,16 +84,23 @@
       }
     }
     if(!added.length)return st;
-    return {...st,chargingConfigurations:[...base,...added],_tariffOverlayOffers:added.map(x=>x.overlayOfferId)};
+    return {...st,chargingConfigurations:[...base,...added],_tariffOverlayOffers:[...(st._tariffOverlayOffers||[]),...added.map(x=>x.overlayOfferId)]};
+  }
+
+  async function applyToPrepared(result){
+    if(!result||!Array.isArray(result.stations))return result;
+    const overlay=await loadOverlay();
+    result.stations=result.stations.map(st=>addOperatorOffers(st,overlay));
+    result.tariffOverlayApplied=true;
+    return result;
   }
 
   function install(){
     const current=window.candidateStations;
     if(typeof current!=='function'||current.__tccOperatorOverlay)return false;
     const wrapped=async function(...args){
-      const [result,overlay]=await Promise.all([current.apply(this,args),loadOverlay()]);
-      if(Array.isArray(result?.stations))result.stations=result.stations.map(st=>addOperatorOffers(st,overlay));
-      return result;
+      const result=await current.apply(this,args);
+      return applyToPrepared(result);
     };
     wrapped.__tccOperatorOverlay=true;wrapped.__tccOriginal=current;
     window.candidateStations=wrapped;
@@ -104,5 +111,5 @@
 
   loadOverlay();
   let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>120)clearInterval(timer);},100);
-  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers};
+  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared};
 })();
