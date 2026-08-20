@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.1.0",
-  "generatedAt": "2026-08-20T20:38:00+02:00",
+  "schemaVersion": "1.2.0",
+  "generatedAt": "2026-08-20T20:48:00+02:00",
   "country": "FR",
   "mode": "conservative",
   "notes": [
@@ -17,12 +17,7 @@
       "offerType": "operator_direct",
       "operatorAliases": ["Fastned"],
       "kind": "DC",
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.61,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
-        ]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.61,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
       "source": "data-lab/fastned_official_france.json"
     },
     {
@@ -31,12 +26,7 @@
       "offerType": "operator_direct",
       "operatorAliases": ["Fastned"],
       "kind": "DC",
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.549,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
-        ]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.549,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
       "source": "data-lab/fastned_official_france.json",
       "note": "10% official app discount applied to the 0.61 EUR/kWh France standard tariff."
     },
@@ -46,14 +36,36 @@
       "offerType": "operator_direct",
       "operatorAliases": ["IECharge", "IE Charge"],
       "kind": "DC",
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.25,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
-        ]
-      },
-      "source": "data-lab/iecharge_official_france.json",
-      "note": "Current published IECharge direct France tariff; no subscription required."
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.25,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
+      "source": "data-lab/iecharge_official_france.json"
+    },
+    {
+      "id": "lidl-plus-ac",
+      "provider": "Lidl Plus",
+      "offerType": "operator_direct_app",
+      "operatorAliases": ["Lidl", "Lidl Plus", "LIDL"],
+      "kind": "AC",
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.29,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
+      "source": "data-lab/lidl_plus_france.json"
+    },
+    {
+      "id": "lidl-plus-dc",
+      "provider": "Lidl Plus",
+      "offerType": "operator_direct_app",
+      "operatorAliases": ["Lidl", "Lidl Plus", "LIDL"],
+      "kind": "DC",
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.29,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
+      "source": "data-lab/lidl_plus_france.json",
+      "note": "Current official DC price is promotional; no end date is stated on the current official page."
+    },
+    {
+      "id": "pluginn-direct",
+      "provider": "Plug Inn direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Plug Inn fast charge", "Plug Inn Fast Charge", "Mobilize Fast Charge", "Plug Inn"],
+      "kind": "DC",
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.59,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
+      "source": "data-lab/pluginn_fastcharge_official_france.json"
     },
     {
       "id": "shell-recharge-card-fast",
@@ -62,12 +74,7 @@
       "operatorAliases": ["Shell Recharge", "Shell"],
       "kind": "DC",
       "minPowerKw": 50,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.64,"chargePerMinute":0,"connectionFee":0.35,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
-        ]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.64,"chargePerMinute":0,"connectionFee":0.35,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
       "source": "data-lab/shell_recharge_official_france.json"
     },
     {
@@ -76,12 +83,7 @@
       "offerType": "operator_direct",
       "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA", "Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],
       "maxPowerKw": 22,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.39,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.05,"afterMinutesThreshold":180,"afterMinutesCap":4,"afterMinutesCapStart":"20:00","afterMinutesCapEnd":"08:00"}
-        ]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.39,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.05,"afterMinutesThreshold":180,"afterMinutesCap":4,"afterMinutesCapStart":"20:00","afterMinutesCapEnd":"08:00"}]},
       "source": "data-lab/sigeif_official_ile_de_france.json"
     },
     {
@@ -91,12 +93,7 @@
       "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA", "Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],
       "minPowerKw": 22.01,
       "maxPowerKw": 24,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.45,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.20,"afterMinutesThreshold":120,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
-        ]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.45,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.20,"afterMinutesThreshold":120,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
       "source": "data-lab/sigeif_official_ile_de_france.json"
     },
     {
@@ -106,107 +103,24 @@
       "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA", "Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],
       "minPowerKw": 24.01,
       "maxPowerKw": 100,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.49,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
-        ]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.49,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
       "source": "data-lab/sigeif_official_ile_de_france.json"
     }
   ],
   "subscriptions": [
-    {
-      "id": "electra-essential",
-      "provider": "Electra+ Essential",
-      "offerType": "subscription",
-      "runtime": "existing_electra_plus",
-      "monthlyFeeEur": 1.99,
-      "defaultSelected": false
-    },
-    {
-      "id": "electra-smart",
-      "provider": "Electra+ Smart",
-      "offerType": "subscription",
-      "runtime": "existing_electra_plus",
-      "monthlyFeeEur": 4.99,
-      "defaultSelected": false
-    },
-    {
-      "id": "fastned-gold",
-      "provider": "Fastned Gold",
-      "offerType": "subscription",
-      "operatorAliases": ["Fastned"],
-      "kind": "DC",
-      "pricePerKwh": 0.43,
-      "currency": "EUR",
-      "monthlyFeeEur": 5.99,
-      "monthlyFeePromotionEnd": "2026-09-30",
-      "monthlyFeeLabel": "5,99 €/mois jusqu'au 30/09/2026",
-      "defaultSelected": false,
-      "source": "data-lab/fastned_official_france.json"
-    },
-    {
-      "id": "atlante-go-atlante",
-      "selectionId": "atlante-go",
-      "control": true,
-      "provider": "Atlante Go",
-      "offerType": "subscription_emsp",
-      "operatorAliases": ["Atlante"],
-      "pricePerKwh": 0.29,
-      "currency": "EUR",
-      "monthlyFeeEur": 9.99,
-      "defaultSelected": false,
-      "source": "data-lab/atlante_official_france.json"
-    },
-    {
-      "id": "atlante-go-powerdot",
-      "selectionId": "atlante-go",
-      "control": false,
-      "provider": "Atlante Go",
-      "offerType": "subscription_emsp",
-      "operatorAliases": ["Powerdot", "Power Dot"],
-      "pricePerKwh": 0.42,
-      "currency": "EUR",
-      "monthlyFeeEur": 9.99,
-      "defaultSelected": false,
-      "source": "data-lab/atlante_official_france.json"
-    },
-    {
-      "id": "atlante-go-charge-league",
-      "selectionId": "atlante-go",
-      "control": false,
-      "provider": "Atlante Go",
-      "offerType": "subscription_emsp",
-      "operatorAliases": ["Electra", "Fastned", "IONITY", "Ionity"],
-      "pricePerKwh": 0.49,
-      "currency": "EUR",
-      "monthlyFeeEur": 9.99,
-      "defaultSelected": false,
-      "source": "data-lab/atlante_official_france.json"
-    },
-    {
-      "id": "zunder-easy",
-      "provider": "Zunder Easy",
-      "offerType": "subscription",
-      "operatorAliases": ["Zunder"],
-      "pricePerKwh": 0.51,
-      "currency": "EUR",
-      "monthlyFeeEur": 1.99,
-      "defaultSelected": false,
-      "source": "data-lab/zunder_official_france.json"
-    },
-    {
-      "id": "zunder-pro",
-      "provider": "Zunder Pro",
-      "offerType": "subscription",
-      "operatorAliases": ["Zunder"],
-      "pricePerKwh": 0.39,
-      "currency": "EUR",
-      "monthlyFeeEur": 11.99,
-      "defaultSelected": false,
-      "source": "data-lab/zunder_official_france.json"
-    }
+    {"id":"electra-essential","provider":"Electra+ Essential","offerType":"subscription","runtime":"existing_electra_plus","monthlyFeeEur":1.99,"defaultSelected":false},
+    {"id":"electra-smart","provider":"Electra+ Smart","offerType":"subscription","runtime":"existing_electra_plus","monthlyFeeEur":4.99,"defaultSelected":false},
+    {"id":"fastned-gold","provider":"Fastned Gold","offerType":"subscription","operatorAliases":["Fastned"],"kind":"DC","pricePerKwh":0.43,"currency":"EUR","monthlyFeeEur":5.99,"monthlyFeePromotionEnd":"2026-09-30","monthlyFeeLabel":"5,99 €/mois jusqu'au 30/09/2026","defaultSelected":false,"source":"data-lab/fastned_official_france.json"},
+
+    {"id":"atlante-go-atlante","selectionId":"atlante-go","control":true,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Atlante"],"pricePerKwh":0.29,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
+    {"id":"atlante-go-powerdot","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Powerdot","Power Dot"],"pricePerKwh":0.42,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
+    {"id":"atlante-go-charge-league","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Electra","Fastned","IONITY","Ionity"],"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
+
+    {"id":"pluginn-chargepass-basic","provider":"Charge Pass Basic","offerType":"subscription_emsp","operatorAliases":["Plug Inn fast charge","Plug Inn Fast Charge","Mobilize Fast Charge","Plug Inn"],"kind":"DC","pricePerKwh":0.46,"currency":"EUR","monthlyFeeEur":0.0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"defaultSelected":false,"source":"data-lab/pluginn_fastcharge_official_france.json"},
+    {"id":"pluginn-chargepass-intense","provider":"Charge Pass Intense","offerType":"subscription_emsp","operatorAliases":["Plug Inn fast charge","Plug Inn Fast Charge","Mobilize Fast Charge","Plug Inn"],"kind":"DC","pricePerKwh":0.39,"currency":"EUR","monthlyFeeEur":5.99,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"defaultSelected":false,"source":"data-lab/pluginn_fastcharge_official_france.json"},
+
+    {"id":"zunder-easy","provider":"Zunder Easy","offerType":"subscription","operatorAliases":["Zunder"],"pricePerKwh":0.51,"currency":"EUR","monthlyFeeEur":1.99,"defaultSelected":false,"source":"data-lab/zunder_official_france.json"},
+    {"id":"zunder-pro","provider":"Zunder Pro","offerType":"subscription","operatorAliases":["Zunder"],"pricePerKwh":0.39,"currency":"EUR","monthlyFeeEur":11.99,"defaultSelected":false,"source":"data-lab/zunder_official_france.json"}
   ],
   "deferredValidated": [
     {"operator":"Plenitude On The Road","reason":"direct kWh tariff is validated, but the 60-minute post-charge blocking fee must be modeled from end-of-charge before ranking"},
