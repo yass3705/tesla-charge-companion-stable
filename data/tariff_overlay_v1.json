@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.3.0",
-  "generatedAt": "2026-08-20T20:55:00+02:00",
+  "schemaVersion": "1.3.1",
+  "generatedAt": "2026-08-20T21:18:00+02:00",
   "country": "FR",
   "mode": "conservative",
   "notes": [
@@ -62,7 +62,7 @@
       "id": "plenitude-ac-up-to-22",
       "provider": "Plenitude direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["Plenitude On The Road", "Plenitude", "Eni Plenitude", "Be Charge"],
+      "operatorAliases": ["Plenitude On The Road", "PLENITUDE ON THE ROAD FRANCE", "Plenitude On The Road France", "Plenitude", "Eni Plenitude", "Be Charge"],
       "kind": "AC",
       "maxPowerKw": 22,
       "pricing": {"type":"rules","rules":[
@@ -75,7 +75,7 @@
       "id": "plenitude-dc-under-75",
       "provider": "Plenitude direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["Plenitude On The Road", "Plenitude", "Eni Plenitude", "Be Charge"],
+      "operatorAliases": ["Plenitude On The Road", "PLENITUDE ON THE ROAD FRANCE", "Plenitude On The Road France", "Plenitude", "Eni Plenitude", "Be Charge"],
       "kind": "DC",
       "maxPowerKw": 74.99,
       "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.55,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.20,"postChargeGraceMinutes":60}]},
@@ -85,7 +85,7 @@
       "id": "plenitude-dc-over-75",
       "provider": "Plenitude direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["Plenitude On The Road", "Plenitude", "Eni Plenitude", "Be Charge"],
+      "operatorAliases": ["Plenitude On The Road", "PLENITUDE ON THE ROAD FRANCE", "Plenitude On The Road France", "Plenitude", "Eni Plenitude", "Be Charge"],
       "kind": "DC",
       "minPowerKw": 75.01,
       "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.55,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.30,"postChargeGraceMinutes":60}]},
@@ -96,7 +96,7 @@
       "id": "pluginn-direct",
       "provider": "Plug Inn direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["Plug Inn fast charge", "Plug Inn Fast Charge", "Mobilize Fast Charge", "Plug Inn"],
+      "operatorAliases": ["Plug Inn fast charge", "Plug Inn Fast Charge", "Plug Inn Fast Charge (Mobilize)", "Mobilize Fast Charge", "Plug Inn"],
       "kind": "DC",
       "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.59,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},
       "source": "data-lab/pluginn_fastcharge_official_france.json"
@@ -148,8 +148,8 @@
     {"id":"atlante-go-atlante","selectionId":"atlante-go","control":true,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Atlante"],"pricePerKwh":0.29,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
     {"id":"atlante-go-powerdot","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Powerdot","Power Dot"],"pricePerKwh":0.42,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
     {"id":"atlante-go-charge-league","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Electra","Fastned","IONITY","Ionity"],"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
-    {"id":"pluginn-chargepass-basic","provider":"Charge Pass Basic","offerType":"subscription_emsp","operatorAliases":["Plug Inn fast charge","Plug Inn Fast Charge","Mobilize Fast Charge","Plug Inn"],"kind":"DC","pricePerKwh":0.46,"currency":"EUR","monthlyFeeEur":0.0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"defaultSelected":false,"source":"data-lab/pluginn_fastcharge_official_france.json"},
-    {"id":"pluginn-chargepass-intense","provider":"Charge Pass Intense","offerType":"subscription_emsp","operatorAliases":["Plug Inn fast charge","Plug Inn Fast Charge","Mobilize Fast Charge","Plug Inn"],"kind":"DC","pricePerKwh":0.39,"currency":"EUR","monthlyFeeEur":5.99,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"defaultSelected":false,"source":"data-lab/pluginn_fastcharge_official_france.json"},
+    {"id":"pluginn-chargepass-basic","provider":"Charge Pass Basic","offerType":"subscription_emsp","operatorAliases":["Plug Inn fast charge","Plug Inn Fast Charge","Plug Inn Fast Charge (Mobilize)","Mobilize Fast Charge","Plug Inn"],"kind":"DC","pricePerKwh":0.46,"currency":"EUR","monthlyFeeEur":0.0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"defaultSelected":false,"source":"data-lab/pluginn_fastcharge_official_france.json"},
+    {"id":"pluginn-chargepass-intense","provider":"Charge Pass Intense","offerType":"subscription_emsp","operatorAliases":["Plug Inn fast charge","Plug Inn Fast Charge","Plug Inn Fast Charge (Mobilize)","Mobilize Fast Charge","Plug Inn"],"kind":"DC","pricePerKwh":0.39,"currency":"EUR","monthlyFeeEur":5.99,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"defaultSelected":false,"source":"data-lab/pluginn_fastcharge_official_france.json"},
     {"id":"zunder-easy","provider":"Zunder Easy","offerType":"subscription","operatorAliases":["Zunder"],"pricePerKwh":0.51,"currency":"EUR","monthlyFeeEur":1.99,"defaultSelected":false,"source":"data-lab/zunder_official_france.json"},
     {"id":"zunder-pro","provider":"Zunder Pro","offerType":"subscription","operatorAliases":["Zunder"],"pricePerKwh":0.39,"currency":"EUR","monthlyFeeEur":11.99,"defaultSelected":false,"source":"data-lab/zunder_official_france.json"}
   ],
