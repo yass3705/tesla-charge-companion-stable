@@ -7,7 +7,7 @@
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820d`,{cache:'no-store'}).then(r=>{
+    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820e`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -20,14 +20,16 @@
     return overlayPromise;
   }
 
+  function operatorCandidates(st){
+    return [st?.operator,st?._sourceOperator,st?.name].map(norm).filter(Boolean);
+  }
   function isSigeifOperator(st){
-    const op=norm(st?.operator);
-    return op.includes('sigeif')||op.includes('syndicat intercommunal pour le gaz et l electricite en idf');
+    return operatorCandidates(st).some(v=>v==='sigeif'||v.includes('sigeif')||v.includes('syndicat intercommunal pour le gaz et l electricite en idf'));
   }
   function operatorMatches(st,offer){
-    const op=norm(st?.operator);
+    const values=operatorCandidates(st);
     if(String(offer?.id||'').startsWith('sigeif-')&&isSigeifOperator(st))return true;
-    return (offer?.operatorAliases||[]).some(alias=>op===norm(alias));
+    return (offer?.operatorAliases||[]).some(alias=>values.includes(norm(alias)));
   }
   function powerMatches(kind,power,offer){
     if(offer?.kind&&text(kind).toUpperCase()!==text(offer.kind).toUpperCase())return false;
@@ -92,6 +94,7 @@
     const overlay=await loadOverlay();
     result.stations=result.stations.map(st=>addOperatorOffers(st,overlay));
     result.tariffOverlayApplied=true;
+    result.tariffOverlayAppliedAt=Date.now();
     return result;
   }
 
@@ -111,5 +114,5 @@
 
   loadOverlay();
   let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>120)clearInterval(timer);},100);
-  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared};
+  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator};
 })();
