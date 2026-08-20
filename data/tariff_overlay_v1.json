@@ -1,13 +1,14 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-20T18:20:00+02:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-08-20T20:38:00+02:00",
   "country": "FR",
   "mode": "conservative",
   "notes": [
-    "Only operator-direct rules that are sufficiently explicit to apply without station-by-station guessing are included.",
+    "Only operator-direct rules that are sufficiently explicit to apply without station-by-station guessing are included as rankable operator offers.",
     "Electroverse and Electra station-level prices continue to come from the national France catalogue.",
     "Subscription offers are always displayable but are excluded from cost ranking unless the user selects the plan.",
-    "Monthly subscription fees are never allocated to an individual charging session."
+    "Monthly subscription fees are never allocated to an individual charging session.",
+    "Validated operators whose exact consumer tariff still depends on station, network, concession, road context or post-charge rules remain intentionally outside the rankable overlay until those conditions can be represented safely."
   ],
   "operatorOffers": [
     {
@@ -40,6 +41,21 @@
       "note": "10% official app discount applied to the 0.61 EUR/kWh France standard tariff."
     },
     {
+      "id": "iecharge-direct",
+      "provider": "IECharge direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["IECharge", "IE Charge"],
+      "kind": "DC",
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.25,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
+        ]
+      },
+      "source": "data-lab/iecharge_official_france.json",
+      "note": "Current published IECharge direct France tariff; no subscription required."
+    },
+    {
       "id": "shell-recharge-card-fast",
       "provider": "Shell Recharge direct",
       "offerType": "operator_direct",
@@ -58,7 +74,7 @@
       "id": "sigeif-7-22",
       "provider": "SIGEIF direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA"],
+      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA", "Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],
       "maxPowerKw": 22,
       "pricing": {
         "type": "rules",
@@ -72,7 +88,7 @@
       "id": "sigeif-24",
       "provider": "SIGEIF direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA"],
+      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA", "Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],
       "minPowerKw": 22.01,
       "maxPowerKw": 24,
       "pricing": {
@@ -87,7 +103,7 @@
       "id": "sigeif-50-100",
       "provider": "SIGEIF direct",
       "offerType": "operator_direct",
-      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA"],
+      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA", "Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],
       "minPowerKw": 24.01,
       "maxPowerKw": 100,
       "pricing": {
@@ -128,7 +144,83 @@
       "monthlyFeePromotionEnd": "2026-09-30",
       "monthlyFeeLabel": "5,99 €/mois jusqu'au 30/09/2026",
       "defaultSelected": false,
-      "source": "Fastned France official tariffs page"
+      "source": "data-lab/fastned_official_france.json"
+    },
+    {
+      "id": "atlante-go-atlante",
+      "selectionId": "atlante-go",
+      "control": true,
+      "provider": "Atlante Go",
+      "offerType": "subscription_emsp",
+      "operatorAliases": ["Atlante"],
+      "pricePerKwh": 0.29,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "defaultSelected": false,
+      "source": "data-lab/atlante_official_france.json"
+    },
+    {
+      "id": "atlante-go-powerdot",
+      "selectionId": "atlante-go",
+      "control": false,
+      "provider": "Atlante Go",
+      "offerType": "subscription_emsp",
+      "operatorAliases": ["Powerdot", "Power Dot"],
+      "pricePerKwh": 0.42,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "defaultSelected": false,
+      "source": "data-lab/atlante_official_france.json"
+    },
+    {
+      "id": "atlante-go-charge-league",
+      "selectionId": "atlante-go",
+      "control": false,
+      "provider": "Atlante Go",
+      "offerType": "subscription_emsp",
+      "operatorAliases": ["Electra", "Fastned", "IONITY", "Ionity"],
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "defaultSelected": false,
+      "source": "data-lab/atlante_official_france.json"
+    },
+    {
+      "id": "zunder-easy",
+      "provider": "Zunder Easy",
+      "offerType": "subscription",
+      "operatorAliases": ["Zunder"],
+      "pricePerKwh": 0.51,
+      "currency": "EUR",
+      "monthlyFeeEur": 1.99,
+      "defaultSelected": false,
+      "source": "data-lab/zunder_official_france.json"
+    },
+    {
+      "id": "zunder-pro",
+      "provider": "Zunder Pro",
+      "offerType": "subscription",
+      "operatorAliases": ["Zunder"],
+      "pricePerKwh": 0.39,
+      "currency": "EUR",
+      "monthlyFeeEur": 11.99,
+      "defaultSelected": false,
+      "source": "data-lab/zunder_official_france.json"
     }
+  ],
+  "deferredValidated": [
+    {"operator":"Plenitude On The Road","reason":"direct kWh tariff is validated, but the 60-minute post-charge blocking fee must be modeled from end-of-charge before ranking"},
+    {"operator":"IONITY","reason":"official France prices are published as minimums; exact station price may be higher"},
+    {"operator":"Allego","reason":"France country prices are defaults and exact charger price may vary"},
+    {"operator":"ENGIE Vianeo","reason":"Vianeo Max energy tariff is national but station-specific minute fees can still apply"},
+    {"operator":"TotalEnergies","reason":"station-service tariff is validated but must not be applied to every TotalEnergies concession"},
+    {"operator":"e-Vadea","reason":"exact tariff depends on motorway/off-motorway context plus power class"},
+    {"operator":"Powerdot","reason":"consumer tariff remains station-specific"},
+    {"operator":"Qovoltis","reason":"consumer tariff remains station-specific"},
+    {"operator":"Bump","reason":"consumer tariff remains station-specific"},
+    {"operator":"Electric 55 Charging","reason":"published minute grid is CPO-to-eMSP pricing, not guaranteed end-user price"},
+    {"operator":"e-Totem","reason":"current exact direct tariff is network/site-specific"},
+    {"operator":"DRIVECO","reason":"published national values are references, exact charger tariff is station-specific"},
+    {"operator":"Freshmile","reason":"direct price is network/station-specific"}
   ]
 }
