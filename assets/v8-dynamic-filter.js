@@ -7,21 +7,40 @@
   const aliases={
     'total energies':'TotalEnergies','totalenergies':'TotalEnergies','total energie':'TotalEnergies',
     'tesla':'Tesla','swish':'Swish','izivia':'Izivia','alize':'Alizé','alizé':'Alizé',
-    'kilowatt':'Kilowatt','iecharge':'IECharge','fastvolt':'FastVolt','lidl france':'Lidl','lidl':'Lidl'
+    'kilowatt':'Kilowatt','iecharge':'IECharge','fastvolt':'FastVolt','lidl france':'Lidl','lidl':'Lidl',
+    'sigeif':'SIGEIF','sigeif izivia':'SIGEIF','sigeif / izivia':'SIGEIF',
+    'syndicat intercommunal pour le gaz et l electricite en idf (sigeif)':'SIGEIF',
+    'syndicat intercommunal pour le gaz et l electricite en idf':'SIGEIF'
   };
   let lastSourceStations=null;
   let rendering=false;
   let restoreTimer=null;
   let hostObserver=null;
 
-  function plain(v){return text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();}
+  function plain(v){return text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();}
+  function canonicalOperatorName(raw){
+    const value=text(raw);
+    const key=plain(value);
+    if(key.includes('sigeif')||key.includes('syndicat intercommunal pour le gaz et l electricite en idf'))return'SIGEIF';
+    return aliases[key]||value||'Autre / opérateur non renseigné';
+  }
+  function normalizeSourceStations(sourceStations){
+    for(const st of sourceStations||[]){
+      if(!st||st.source==='teslaSupercharger')continue;
+      const canonical=canonicalOperatorName(st.operator);
+      if(canonical&&canonical!==st.operator){
+        if(!st._sourceOperator)st._sourceOperator=st.operator||'';
+        st.operator=canonical;
+      }
+    }
+    return sourceStations;
+  }
   function operatorOf(st){
     if(st?.source==='teslaSupercharger')return'Tesla';
-    const raw=text(st?.operator);
-    const key=plain(raw);
-    return aliases[key]||raw||'Autre / opérateur non renseigné';
+    return canonicalOperatorName(st?.operator);
   }
   function operatorsFor(sourceStations){
+    normalizeSourceStations(sourceStations);
     return [...new Set((sourceStations||[]).map(operatorOf).filter(Boolean))]
       .sort((a,b)=>a.localeCompare(b,'fr'));
   }
@@ -51,14 +70,16 @@
   }
 
   function refreshOperatorChoicesDynamic(sourceStations,options={}){
+    if(Array.isArray(sourceStations))normalizeSourceStations(sourceStations);
     if(Array.isArray(sourceStations)&&options.remember!==false)lastSourceStations=sourceStations.slice();
     const source=Array.isArray(sourceStations)?sourceStations:lastSourceStations;
     const host=document.getElementById('augOperatorChoices');
     if(!host||!source)return;
+    normalizeSourceStations(source);
     ensureHostObserver(host);
 
     const current=[...host.querySelectorAll('input[type=checkbox]')];
-    const previous=new Map(current.map(x=>[x.value,x.checked]));
+    const previous=new Map(current.map(x=>[canonicalOperatorName(x.value),x.checked]));
     const previousAll=current.length>0&&current.every(x=>x.checked);
     const touched=host.dataset.tccUserTouched==='1';
     const ops=operatorsFor(source);
@@ -94,7 +115,10 @@
     const raw=String(document.getElementById('simMaxDistance')?.value??'').trim();
     const maxDistanceKm=raw===''?0:Math.max(0,Number(raw)||0);
     const prepared=await candidateStations('all',maxDistanceKm);
-    if(prepared?.stations)refreshOperatorChoicesDynamic(prepared.stations);
+    if(prepared?.stations){
+      normalizeSourceStations(prepared.stations);
+      refreshOperatorChoicesDynamic(prepared.stations);
+    }
     return prepared;
   }
 
@@ -151,6 +175,6 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',waitForAugust,{once:true});
   else waitForAugust();
 
-  window.TCCV8DynamicOperators={refresh:refreshOperatorChoicesDynamic,preload:preloadAreaOperators,get lastStations(){return lastSourceStations;}};
-  console.info('[TCC V8] Filtre opérateurs dynamique prêt, restauration automatique après init tardif.');
+  window.TCCV8DynamicOperators={refresh:refreshOperatorChoicesDynamic,preload:preloadAreaOperators,canonicalOperatorName,normalizeSourceStations,get lastStations(){return lastSourceStations;}};
+  console.info('[TCC V8] Filtre opérateurs dynamique prêt, alias opérateurs canoniques actifs.');
 })();
