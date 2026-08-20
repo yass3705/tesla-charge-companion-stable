@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.3.2",
-  "generatedAt": "2026-08-20T21:21:00+02:00",
+  "schemaVersion": "1.4.0",
+  "generatedAt": "2026-08-21T01:25:00+02:00",
   "country": "FR",
   "mode": "conservative",
   "notes": [
@@ -8,7 +8,8 @@
     "Electroverse and Electra station-level prices continue to come from the national France catalogue.",
     "Subscription offers are always displayable but are excluded from cost ranking unless the user selects the plan.",
     "Monthly subscription fees are never allocated to an individual charging session.",
-    "Validated operators whose exact consumer tariff still depends on station, network, concession or road context remain intentionally outside the rankable overlay until those conditions can be represented safely."
+    "e-Vadea direct pricing is rankable only when the station/configuration resolves against the separately validated EVSE map; unmatched e-Vadea stations stay reference-only.",
+    "Validated operators whose exact consumer tariff still depends on station, network, concession or unresolved context remain intentionally outside the rankable overlay until those conditions can be represented safely."
   ],
   "operatorOffers": [
     {"id":"fastned-standard","provider":"Fastned direct","offerType":"operator_direct","operatorAliases":["Fastned"],"kind":"DC","pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.61,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/fastned_official_france.json"},
@@ -24,6 +25,9 @@
     {"id":"sigeif-7-22","provider":"SIGEIF direct","offerType":"operator_direct","operatorAliases":["SIGEIF","SIGEIF / IZIVIA","Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],"maxPowerKw":22,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.39,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.05,"afterMinutesThreshold":180,"afterMinutesCap":4,"afterMinutesCapStart":"20:00","afterMinutesCapEnd":"08:00"}]},"source":"data-lab/sigeif_official_ile_de_france.json"},
     {"id":"sigeif-24","provider":"SIGEIF direct","offerType":"operator_direct","operatorAliases":["SIGEIF","SIGEIF / IZIVIA","Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],"minPowerKw":22.01,"maxPowerKw":24,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.45,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.20,"afterMinutesThreshold":120,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/sigeif_official_ile_de_france.json"},
     {"id":"sigeif-50-100","provider":"SIGEIF direct","offerType":"operator_direct","operatorAliases":["SIGEIF","SIGEIF / IZIVIA","Syndicat Intercommunal pour le Gaz et l'Électricité en IDF (SIGEIF)"],"minPowerKw":24.01,"maxPowerKw":100,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.49,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/sigeif_official_ile_de_france.json"}
+  ],
+  "mappedOperatorOffers": [
+    {"id":"evadea-direct-evse","provider":"e-Vadea direct","offerType":"operator_direct","operatorAliases":["e-Vadea","eVadea","E-Vadea"],"mappingFile":"data/evadea_evse_tariffs_v1.json","matchPolicy":"exact EVSE first; exact normalized address + power fallback only when the operator is e-Vadea","pricingModel":"road context + power; started kWh; occupancy after 5 minutes without energy billed by started 15-minute blocks","source":"data-lab/evadea_official_france.json"}
   ],
   "subscriptions": [
     {"id":"electra-essential","provider":"Electra+ Essential","offerType":"subscription","runtime":"existing_electra_plus","monthlyFeeEur":1.99,"defaultSelected":false},
@@ -43,7 +47,6 @@
     {"operator":"Allego","reason":"France country prices are defaults and exact charger price may vary"},
     {"operator":"ENGIE Vianeo","reason":"Vianeo Max energy tariff is national but station-specific minute fees can still apply"},
     {"operator":"TotalEnergies","reason":"station-service tariff is validated but must not be applied to every TotalEnergies concession"},
-    {"operator":"e-Vadea","reason":"exact tariff depends on motorway/off-motorway context plus power class"},
     {"operator":"Powerdot","reason":"consumer tariff remains station-specific"},
     {"operator":"Qovoltis","reason":"consumer tariff remains station-specific"},
     {"operator":"Bump","reason":"consumer tariff remains station-specific"},
