@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-20T17:18:00+02:00",
+  "country": "FR",
+  "mode": "conservative",
+  "notes": [
+    "Only operator-direct rules that are sufficiently explicit to apply without station-by-station guessing are included.",
+    "Electroverse and Electra station-level prices continue to come from the national France catalogue.",
+    "Subscription offers are always displayable but are excluded from cost ranking unless the user selects the plan.",
+    "Monthly subscription fees are never allocated to an individual charging session."
+  ],
+  "operatorOffers": [
+    {
+      "id": "fastned-standard",
+      "provider": "Fastned direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.61,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
+        ]
+      },
+      "source": "data-lab/fastned_official_france.json"
+    },
+    {
+      "id": "fastned-app",
+      "provider": "Fastned App",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.549,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
+        ]
+      },
+      "source": "data-lab/fastned_official_france.json",
+      "note": "10% official app discount applied to the 0.61 EUR/kWh France standard tariff."
+    },
+    {
+      "id": "shell-recharge-card-fast",
+      "provider": "Shell Recharge direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Shell Recharge", "Shell"],
+      "kind": "DC",
+      "minPowerKw": 50,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.64,"chargePerMinute":0,"connectionFee":0.35,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
+        ]
+      },
+      "source": "data-lab/shell_recharge_official_france.json"
+    },
+    {
+      "id": "sigeif-7-22",
+      "provider": "SIGEIF direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA"],
+      "maxPowerKw": 22,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.39,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.05,"afterMinutesThreshold":180,"afterMinutesCap":4,"afterMinutesCapStart":"20:00","afterMinutesCapEnd":"08:00"}
+        ]
+      },
+      "source": "data-lab/sigeif_official_ile_de_france.json"
+    },
+    {
+      "id": "sigeif-24",
+      "provider": "SIGEIF direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA"],
+      "minPowerKw": 22.01,
+      "maxPowerKw": 24,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.45,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.20,"afterMinutesThreshold":120,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
+        ]
+      },
+      "source": "data-lab/sigeif_official_ile_de_france.json"
+    },
+    {
+      "id": "sigeif-50-100",
+      "provider": "SIGEIF direct",
+      "offerType": "operator_direct",
+      "operatorAliases": ["SIGEIF", "SIGEIF / IZIVIA"],
+      "minPowerKw": 24.01,
+      "maxPowerKw": 100,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.49,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0.30,"afterMinutesThreshold":60,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}
+        ]
+      },
+      "source": "data-lab/sigeif_official_ile_de_france.json"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "electra-essential",
+      "provider": "Electra+ Essential",
+      "offerType": "subscription",
+      "runtime": "existing_electra_plus",
+      "monthlyFeeEur": 1.99,
+      "defaultSelected": false
+    },
+    {
+      "id": "electra-smart",
+      "provider": "Electra+ Smart",
+      "offerType": "subscription",
+      "runtime": "existing_electra_plus",
+      "monthlyFeeEur": 4.99,
+      "defaultSelected": false
+    },
+    {
+      "id": "fastned-gold",
+      "provider": "Fastned Gold",
+      "offerType": "subscription",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.43,
+      "currency": "EUR",
+      "monthlyFeeEur": null,
+      "monthlyFeeLabel": "coût mensuel non publié sur la page France actuelle",
+      "defaultSelected": false,
+      "source": "data-lab/fastned_official_france.json"
+    }
+  ]
+}
