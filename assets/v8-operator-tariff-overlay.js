@@ -2,13 +2,13 @@
 (function(){
   'use strict';
   const OVERLAY_URL='data/tariff_overlay_v1.json';
-  const REVISION='rc48w';
+  const REVISION='rc48ac';
   let overlayPromise=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820e`,{cache:'no-store'}).then(r=>{
+    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820g`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -99,9 +99,57 @@
     return result;
   }
 
+  // Extension minimale du moteur de règles : certains CPO (ex. Plenitude)
+  // accordent une franchise qui commence à la FIN de la charge, et non au début
+  // de la session. Les champs historiques afterMinutes* restent inchangés.
+  function installPostChargePricing(){
+    const current=window.priceWithRules;
+    if(typeof current!=='function')return false;
+    if(current.__tccPostChargeGrace)return true;
+    const wrapped=function(pp,startMin,chargeMinutes,billedEnergy,unplugTime,startTime,powerSegments=[]){
+      const out=current.apply(this,arguments);
+      const rules=Array.isArray(pp?.rules)?pp.rules:[];
+      if(!out||out.error||!rules.some(r=>Number(r?.postChargeRate||0)>0))return out;
+      const occupied=Number(out.occupiedMinutes),charge=Math.max(0,Number(chargeMinutes||0));
+      if(!(occupied>charge))return out;
+      const graceValues=rules.map(r=>Number(r?.postChargeGraceMinutes)).filter(Number.isFinite);
+      const grace=graceValues.length?Math.max(0,Math.max(...graceValues)):0;
+      const exposureStart=charge+grace,exposureEnd=occupied;
+      if(!(exposureEnd>exposureStart))return out;
+      let extra=0;
+      for(let i=Math.floor(exposureStart);i<Math.ceil(exposureEnd);i++){
+        const a=Math.max(exposureStart,i),b=Math.min(exposureEnd,i+1),fraction=Math.max(0,b-a);
+        if(!(fraction>0))continue;
+        const sessionMinute=a;
+        const localMinute=((Number(startMin||0)+sessionMinute)%1440+1440)%1440;
+        const rule=typeof window.ruleForMinute==='function'?window.ruleForMinute(rules,localMinute):(typeof ruleForMinute==='function'?ruleForMinute(rules,localMinute):null);
+        if(!rule)continue;
+        const rate=Math.max(0,Number(rule.postChargeRate||0));
+        if(!(rate>0))continue;
+        const currency=rule.currency||'EUR',raw=rate*fraction;
+        const converted=typeof window.fxToEur==='function'?window.fxToEur(raw,currency):(typeof fxToEur==='function'?fxToEur(raw,currency):raw);
+        extra+=Number(converted||0);
+      }
+      if(extra>0){
+        out.total=Number(out.total||0)+extra;
+        out.idleCost=Number(out.idleCost||0)+extra;
+        out.postChargeCost=Number(out.postChargeCost||0)+extra;
+      }
+      return out;
+    };
+    wrapped.__tccPostChargeGrace=true;
+    wrapped.__tccOriginal=current;
+    window.priceWithRules=wrapped;
+    try{priceWithRules=wrapped}catch(e){}
+    console.info('[TCC V8] Frais après fin de charge avec franchise actifs.');
+    return true;
+  }
+
   function install(){
+    installPostChargePricing();
     const current=window.candidateStations;
-    if(typeof current!=='function'||current.__tccOperatorOverlay)return false;
+    if(typeof current!=='function')return false;
+    if(current.__tccOperatorOverlay)return true;
     const wrapped=async function(...args){
       const result=await current.apply(this,args);
       return applyToPrepared(result);
@@ -119,7 +167,7 @@
   }
 
   loadOverlay();
-  let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>120)clearInterval(timer);},100);
+  let tries=0;const timer=setInterval(()=>{tries++;const a=install(),b=installPostChargePricing();if((a&&b)||tries>160)clearInterval(timer);},100);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(markRevision,0),{once:true});else setTimeout(markRevision,0);
-  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator,revision:REVISION};
+  window.TCCV8OperatorOverlay={loadOverlay,addOperatorOffers,applyToPrepared,isSigeifOperator,installPostChargePricing,revision:REVISION};
 })();
