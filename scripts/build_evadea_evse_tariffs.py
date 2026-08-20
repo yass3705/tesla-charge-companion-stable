@@ -65,14 +65,24 @@ def number(value: str) -> float | None:
 
 
 def coordinates(value: str) -> tuple[float, float] | None:
+    """Return (latitude, longitude) and fail closed on ambiguous coordinates.
+
+    The current e-Vadea CSV publishes coordonneesXY in latitude,longitude order,
+    while other IRVE exports are often longitude,latitude. Resolve the orientation
+    from mainland/Corsica France bounds instead of assuming a fixed order.
+    """
     nums = re.findall(r"-?\d+(?:[.,]\d+)?", str(value or ""))
     if len(nums) < 2:
         return None
-    lon = float(nums[0].replace(",", "."))
-    lat = float(nums[1].replace(",", "."))
-    if not (-180 <= lon <= 180 and -90 <= lat <= 90):
+    a = float(nums[0].replace(",", "."))
+    b = float(nums[1].replace(",", "."))
+    candidates = []
+    for lat, lon in ((a, b), (b, a)):
+        if 41.0 <= lat <= 52.0 and -6.0 <= lon <= 10.5:
+            candidates.append((lat, lon))
+    if len(candidates) != 1:
         return None
-    return lat, lon
+    return candidates[0]
 
 
 def truthy(value: str) -> bool:
@@ -178,8 +188,13 @@ def main() -> None:
     if coordinate_rows != len(rows):
         raise SystemExit(f"missing public coordinates: {coordinate_rows}/{len(rows)}")
 
+    # Guard against a silent lat/lon inversion on the known Jasseron control EVSE.
+    control = evses.get("FREVAE01195AB1CCS")
+    if not control or not (45.5 <= control["latitude"] <= 46.8 and 4.5 <= control["longitude"] <= 6.0):
+        raise SystemExit(f"Jasseron coordinate sanity check failed: {control}")
+
     payload = {
-        "schemaVersion": "1.1.0",
+        "schemaVersion": "1.1.1",
         "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "operator": "e-Vadea",
         "country": "FR",
