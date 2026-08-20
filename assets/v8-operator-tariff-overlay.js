@@ -7,7 +7,7 @@
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820b`,{cache:'no-store'}).then(r=>{
+    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260820c`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
@@ -43,21 +43,6 @@
   }
   function providerLabel(offer){return String(offer?.id||'').startsWith('sigeif-')?'SIGEIF / IZIVIA direct':offer?.provider;}
 
-  // Correction conservatrice d'une incohérence connue du catalogue source :
-  // la station SIGEIF du 16 avenue de la République à Gennevilliers est une AC 7 kW,
-  // pas une DC 32 kW. La correction est limitée à cette station vérifiée.
-  function correctKnownSourceErrors(st){
-    if(!isSigeifOperator(st))return st;
-    const n=norm(st?.name),a=norm(st?.address);
-    const isGennevilliers16=(n.includes('16 avenue de la republique')||a.includes('16 avenue de la republique'))&&(n.includes('gennevilliers')||a.includes('gennevilliers'));
-    if(!isGennevilliers16)return st;
-    const configs=(Array.isArray(st?.chargingConfigurations)?st.chargingConfigurations:[]).map(c=>{
-      const provider=providerOfConfig(c)||text(c?.offerProvider)||'Tarif disponible';
-      return {...c,label:`${provider} · AC 7 kW`,kind:'AC',powerKw:7};
-    });
-    return {...st,kind:'AC',powerKw:7,chargingConfigurations:configs,_catalogCorrection:'sigeif-gennevilliers-16-republique-ac7'};
-  }
-
   function physicalConfigs(st){
     const configs=Array.isArray(st?.chargingConfigurations)&&st.chargingConfigurations.length?st.chargingConfigurations:[{id:'main',label:`${st?.kind||'AC'} ${Number(st?.powerKw||0)} kW`,kind:st?.kind||'AC',powerKw:Number(st?.powerKw||0),stalls:Number(st?.stalls||0),pricing:st?.pricing}];
     const seen=new Set(),out=[];
@@ -74,9 +59,8 @@
     const p=norm(provider);
     return (configs||[]).some(c=>norm(providerOfConfig(c))===p&&text(c?.kind).toUpperCase()===kind&&Math.abs(Number(c?.powerKw||0)-power)<.25);
   }
-  function addOperatorOffers(input,overlay){
-    if(!input||String(input.countryCode||'FR').toUpperCase()!=='FR')return input;
-    const st=correctKnownSourceErrors(input);
+  function addOperatorOffers(st,overlay){
+    if(!st||String(st.countryCode||'FR').toUpperCase()!=='FR')return st;
     const base=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations.map(c=>({...c})):[];
     const physical=physicalConfigs(st),added=[];
     for(const offer of overlay?.operatorOffers||[]){
@@ -99,9 +83,8 @@
         });
       }
     }
-    if(!added.length&&st===input)return input;
-    const merged=[...base,...added];
-    return {...st,chargingConfigurations:merged,_tariffOverlayOffers:added.map(x=>x.overlayOfferId)};
+    if(!added.length)return st;
+    return {...st,chargingConfigurations:[...base,...added],_tariffOverlayOffers:added.map(x=>x.overlayOfferId)};
   }
 
   function install(){
