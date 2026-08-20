@@ -1,0 +1,142 @@
+// Tesla Charge Companion V8 RC4.8 — sélection multi-abonnements.
+// Les offres avec abonnement restent visibles mais ne participent au tri coût
+// que si l'utilisateur a explicitement sélectionné le forfait correspondant.
+(function(){
+  'use strict';
+  const VERSION='rc48-multi-subs-1';
+  const KEY='tccSubscriptionsV1';
+  const OLD_ELECTRA_KEY='tccElectraPlusV1';
+  const $=id=>document.getElementById(id);
+  const text=v=>String(v==null?'':v).trim();
+  const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+  const euro=v=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0));
+  let plans=[];let busy=false;let observer=null;
+
+  function readJson(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
+  function state(){
+    let s=readJson(KEY,null);
+    if(!s){
+      const old=readJson(OLD_ELECTRA_KEY,{})||{};
+      s={selected:old.includeRanking?['electra-essential','electra-smart']:[]};
+      localStorage.setItem(KEY,JSON.stringify(s));
+    }
+    return {selected:Array.isArray(s.selected)?s.selected:[]};
+  }
+  function selectedSet(){return new Set(state().selected)}
+  function saveSelected(ids){localStorage.setItem(KEY,JSON.stringify({selected:[...ids],updatedAt:new Date().toISOString()}));}
+  function forceLegacyElectraOff(){const old=readJson(OLD_ELECTRA_KEY,{})||{};if(old.includeRanking){old.includeRanking=false;localStorage.setItem(OLD_ELECTRA_KEY,JSON.stringify(old));}const box=$('v8ElectraBox');if(box)box.style.display='none';}
+
+  async function loadPlans(){
+    const overlay=window.TCC_TARIFF_OVERLAY_V1||await window.TCCV8OperatorOverlay?.loadOverlay?.()||{};
+    plans=Array.isArray(overlay.subscriptions)?overlay.subscriptions:[];
+    return plans;
+  }
+  function planLabel(p){
+    if(Number.isFinite(Number(p.monthlyFeeEur)))return `${Number(p.monthlyFeeEur).toFixed(2).replace('.',',')} €/mois`;
+    return p.monthlyFeeLabel||'abonnement';
+  }
+  function injectStyle(){
+    if($('v8SubscriptionStyle'))return;
+    const s=document.createElement('style');s.id='v8SubscriptionStyle';s.textContent=`
+      .v8-subscriptions-box{margin-top:12px;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13}
+      .v8-subscriptions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:9px}
+      .v8-subscription-choice{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid #33333a;border-radius:11px;font-size:11px}
+      .v8-subscription-choice input{width:auto!important;margin-top:2px}.v8-subscription-choice b{display:block}.v8-subscription-choice span{display:block;color:#8f8f96;font-size:9px;margin-top:2px}
+      .v8-offer-row.v8-sub-inactive{opacity:.62;border-style:dashed}.v8-offer-row.v8-sub-active{border-color:#765d1f;background:rgba(126,95,21,.10)}
+      .v8-sub-status{display:inline-block;margin-left:6px;font-size:9px;font-weight:900}.v8-sub-status.active{color:#55d984}.v8-sub-status.inactive{color:#d4a94c}
+      .v8-ranking-offer-note{margin-top:8px;padding:8px 10px;border-radius:10px;background:#121820;border:1px solid #2b3948;font-size:10px;color:#bfc9d5}
+      @media(max-width:680px){.v8-subscriptions-grid{grid-template-columns:1fr}}
+    `;document.head.appendChild(s);
+  }
+  function injectControls(){
+    const host=$('v8FilterBody');if(!host||!plans.length)return false;
+    forceLegacyElectraOff();injectStyle();
+    let box=$('v8SubscriptionsBox');
+    if(!box){box=document.createElement('div');box.id='v8SubscriptionsBox';box.className='v8-subscriptions-box';host.appendChild(box);}
+    const selected=selectedSet();
+    box.innerHTML=`<div class="v8-eyebrow">Mes abonnements</div><div style="font-size:12px;font-weight:800;margin-top:3px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût mensuel n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${plans.map(p=>`<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${p.id}" ${selected.has(p.id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`).join('')}</div>`;
+    box.querySelectorAll('[data-subscription-choice]').forEach(input=>input.addEventListener('change',()=>{
+      const ids=new Set([...box.querySelectorAll('[data-subscription-choice]:checked')].map(x=>x.dataset.subscriptionChoice));
+      saveSelected(ids);applyAll(true);
+    }));
+    return true;
+  }
+
+  function cleanProvider(row){
+    if(row.dataset.tccProvider)return row.dataset.tccProvider;
+    const el=row.querySelector('.v8-offer-provider');if(!el)return'';
+    const clone=el.cloneNode(true);clone.querySelectorAll('.v8-offer-best,.v8-sub-status,.v8-electra-tag,.v8-electra-saving,.v8-electra-planfee').forEach(x=>x.remove());
+    const p=text(clone.textContent).replace(/\s+abonnement$/i,'').trim();row.dataset.tccProvider=p;return p;
+  }
+  function numberFrom(v){const m=text(v).replace(/\u00a0/g,' ').match(/-?\d[\d\s]*(?:[.,]\d+)?/);return m?Number(m[0].replace(/\s/g,'').replace(',','.')):NaN}
+  function rowTotal(row){return numberFrom(row.querySelector('.v8-offer-total')?.textContent)}
+  function wallKwh(card){const m=text(card.textContent).match(/([0-9]+(?:[.,][0-9]+)?)\s*kWh\s+au compteur/i);return m?Number(m[1].replace(',','.')):NaN}
+  function physicalOperator(card){return text(card.querySelector('.operator-badge')?.textContent)}
+  function operatorMatches(card,p){const op=norm(physicalOperator(card));return (p.operatorAliases||[]).some(a=>op===norm(a))}
+  function kindPower(card){const h=text(card.querySelector('h3')?.textContent);const m=h.match(/\b(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);return{kind:m?.[1]?.toUpperCase()||'',power:m?Number(m[2].replace(',','.')):0}}
+  function planApplies(card,p){const kp=kindPower(card);if(p.kind&&kp.kind!==text(p.kind).toUpperCase())return false;return operatorMatches(card,p)}
+  function ensureGeneratedRows(card,box){
+    const kwh=wallKwh(card);if(!Number.isFinite(kwh))return;
+    const note=box.querySelector('.v8-offer-note');
+    for(const p of plans){
+      if(p.runtime==='existing_electra_plus'||!Number.isFinite(Number(p.pricePerKwh))||!planApplies(card,p))continue;
+      if(box.querySelector(`[data-subscription-id="${p.id}"]`))continue;
+      const fee=Number(p.sessionFeeEur||0),total=kwh*Number(p.pricePerKwh)+fee,row=document.createElement('div');
+      row.className='v8-offer-row';row.dataset.subscriptionId=p.id;row.dataset.tccProvider=p.provider;
+      row.innerHTML=`<div class="v8-offer-provider">${p.provider}<span class="v8-electra-tag">abonnement</span><span class="v8-electra-planfee">${planLabel(p)}</span></div><div class="v8-offer-price">${Number(p.pricePerKwh).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${p.currency||'EUR'}/kWh</div><div class="v8-offer-total">${euro(total)}</div>`;
+      note?.before(row);
+    }
+  }
+  function mapExistingSubscriptions(box){
+    box.querySelectorAll('.v8-electra-plus-row').forEach(row=>{
+      const plan=text(row.dataset.plan).toLowerCase();row.dataset.subscriptionId=plan==='smart'?'electra-smart':'electra-essential';
+      cleanProvider(row);
+    });
+  }
+  function clearBest(rows){rows.forEach(row=>{row.classList.remove('best');row.querySelectorAll('.v8-offer-best').forEach(x=>x.remove())})}
+  function setStatus(row,active){
+    row.classList.toggle('v8-sub-active',active);row.classList.toggle('v8-sub-inactive',!active);
+    const el=row.querySelector('.v8-offer-provider');if(!el)return;el.querySelectorAll('.v8-sub-status').forEach(x=>x.remove());
+    const s=document.createElement('span');s.className=`v8-sub-status ${active?'active':'inactive'}`;s.textContent=active?'✓ inclus':'hors classement';el.appendChild(s);
+  }
+  function markBest(row,tie){const p=row.querySelector('.v8-offer-provider');row.classList.add('best');if(p&&!p.querySelector('.v8-offer-best'))p.insertAdjacentHTML('beforeend',`<span class="v8-offer-best">${tie?'✓ meilleur ex æquo':'✓ moins cher'}</span>`)}
+
+  function applyCard(card,force=false){
+    const box=card.querySelector('.v8-offer-box');if(!box)return;
+    ensureGeneratedRows(card,box);mapExistingSubscriptions(box);
+    const selected=selectedSet(),rows=[...box.querySelectorAll('.v8-offer-row')];
+    const sig=`${[...selected].sort().join(',')}|${rows.map(r=>`${r.dataset.subscriptionId||'-'}:${cleanProvider(r)}:${rowTotal(r)}`).join('|')}`;
+    if(!force&&card.dataset.tccSubsSig===sig)return;
+    clearBest(rows);
+    for(const row of rows){const id=row.dataset.subscriptionId;if(id)setStatus(row,selected.has(id));else{row.classList.remove('v8-sub-active','v8-sub-inactive');row.querySelectorAll('.v8-sub-status').forEach(x=>x.remove())}}
+    const eligible=rows.filter(r=>!r.classList.contains('v8-offer-ambiguous')&&(!r.dataset.subscriptionId||selected.has(r.dataset.subscriptionId))&&Number.isFinite(rowTotal(r)));
+    const min=eligible.length?Math.min(...eligible.map(rowTotal)):NaN,ties=eligible.filter(r=>Math.abs(rowTotal(r)-min)<.01);
+    ties.forEach(r=>markBest(r,ties.length>1));
+    const winner=eligible.slice().sort((a,b)=>rowTotal(a)-rowTotal(b))[0],cost=card.querySelector('.station-head .cost')||card.querySelector('.cost');
+    if(winner&&Number.isFinite(min)){
+      if(cost)cost.textContent=euro(min);card.dataset.tccEffectiveCost=String(min);
+      let note=card.querySelector('.v8-ranking-offer-note');if(!note){note=document.createElement('div');note.className='v8-ranking-offer-note';box.insertAdjacentElement('afterend',note);}
+      const sub=winner.dataset.subscriptionId?` · abonnement sélectionné`:'';note.innerHTML=`Tarif retenu pour le classement : <b>${cleanProvider(winner)}</b>${sub}`;
+    }
+    card.dataset.tccSubsSig=sig;
+  }
+  function sortCost(){
+    if($('simRanking')?.value!=='cost')return;
+    const root=$('results');if(!root)return;const cards=[...root.querySelectorAll('.result-card[data-result-id]')];
+    cards.sort((a,b)=>Number(a.dataset.tccEffectiveCost||Infinity)-Number(b.dataset.tccEffectiveCost||Infinity)).forEach(c=>root.appendChild(c));
+    cards.forEach((c,i)=>{const h=c.querySelector('h3');if(h)h.textContent=text(h.textContent).replace(/^\d+\.\s*/,`${i+1}. `)});
+  }
+  function applyAll(force=false){if(busy)return;busy=true;try{document.querySelectorAll('#results .result-card[data-result-id]').forEach(c=>applyCard(c,force));sortCost();}finally{busy=false}}
+
+  function installObserver(){
+    const root=$('results');if(!root||observer)return false;
+    let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>applyAll(false),700)});observer.observe(root,{childList:true,subtree:true,characterData:true});
+    $('simRanking')?.addEventListener('change',()=>setTimeout(()=>applyAll(true),50));return true;
+  }
+  async function boot(){
+    await loadPlans();forceLegacyElectraOff();let tries=0;const timer=setInterval(()=>{tries++;const a=injectControls(),b=installObserver();forceLegacyElectraOff();if((a&&b)||tries>160){clearInterval(timer);setTimeout(()=>applyAll(true),900)}},100);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.TCCV8Subscriptions={state,applyAll,get plans(){return plans.slice()}};
+  console.info('[TCC V8] Sélection multi-abonnements active : affichage permanent, classement opt-in.');
+})();
