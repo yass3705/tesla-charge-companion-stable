@@ -2,13 +2,13 @@
 (function(){
   'use strict';
   const DATA_URL='data/regional_tariff_overlay_v1.json';
-  const VERSION='rc48am-regional-1';
+  const VERSION='rc48am-regional-2';
   let dataPromise=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
   async function loadData(){
-    if(!dataPromise)dataPromise=fetch(`${DATA_URL}?v=20260821m`,{cache:'no-store'}).then(r=>{
+    if(!dataPromise)dataPromise=fetch(`${DATA_URL}?v=20260821m2`,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error(`overlay régional indisponible (${r.status})`);
       return r.json();
     }).then(d=>{window.TCC_REGIONAL_TARIFF_OVERLAY_V1=d;return d;}).catch(err=>{
@@ -26,7 +26,7 @@
     const src=Array.isArray(st?.chargingConfigurations)&&st.chargingConfigurations.length?st.chargingConfigurations:[{kind:st?.kind,powerKw:st?.powerKw,stalls:st?.stalls}];
     const seen=new Set(),out=[];
     for(const c of src){
-      if(norm(providerOf(c)).includes('belib visiteur'))continue;
+      if(c?.regionalOfferId)continue;
       const kind=text(c?.kind||st?.kind||'').toUpperCase(),power=Number(c?.powerKw??st?.powerKw??0);
       if(!['AC','DC'].includes(kind)||!(power>0))continue;
       const key=`${kind}|${power.toFixed(2)}`;if(seen.has(key))continue;seen.add(key);
@@ -44,13 +44,24 @@
     if(Number.isFinite(Number(offer?.maxPowerKw))&&cfg.powerKw>Number(offer.maxPowerKw)+1e-9)return false;
     return true;
   }
+  function offerMatchesStation(st,offer,physical){
+    const location=norm(`${text(st?.name)} ${text(st?.address)} ${text(st?._sourceAddress)}`);
+    const include=Array.isArray(offer?.addressContainsAny)?offer.addressContainsAny.map(norm).filter(Boolean):[];
+    if(include.length&&!include.some(v=>location.includes(v)))return false;
+    const exclude=Array.isArray(offer?.excludeAddressContainsAny)?offer.excludeAddressContainsAny.map(norm).filter(Boolean):[];
+    if(exclude.some(v=>location.includes(v)))return false;
+    const maxPower=Math.max(0,...physical.map(c=>Number(c.powerKw||0)));
+    if(Number.isFinite(Number(offer?.requiresSitePowerGteKw))&&maxPower<Number(offer.requiresSitePowerGteKw)-1e-9)return false;
+    if(Number.isFinite(Number(offer?.excludeIfSiteHasPowerGteKw))&&maxPower>=Number(offer.excludeIfSiteHasPowerGteKw)-1e-9)return false;
+    return true;
+  }
   function hasProvider(configs,provider,cfg){return(configs||[]).some(c=>norm(providerOf(c))===norm(provider)&&text(c?.kind).toUpperCase()===cfg.kind&&Math.abs(Number(c?.powerKw||0)-cfg.powerKw)<.25);}
   function addOffers(st,data){
     if(!st||String(st.countryCode||'FR').toUpperCase()!=='FR')return st;
-    const base=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations.map(c=>({...c})):[],added=[];
+    const base=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations.map(c=>({...c})):[],added=[],physical=physicalConfigs(st);
     for(const offer of data?.offers||[]){
-      if(!operatorMatches(st,offer))continue;
-      for(const cfg of physicalConfigs(st)){
+      if(!operatorMatches(st,offer)||!offerMatchesStation(st,offer,physical))continue;
+      for(const cfg of physical){
         if(!offerMatchesConfig(offer,cfg)||hasProvider([...base,...added],offer.provider,cfg))continue;
         added.push({
           id:`regional-overlay:${offer.id}:${cfg.kind}:${cfg.powerKw}`,
