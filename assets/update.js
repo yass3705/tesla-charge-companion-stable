@@ -26,6 +26,16 @@
     document.body.appendChild(fixes);
   }
 
+  function loadValidatedRegionalPatches(){
+    if(document.querySelector('script[data-tcc-ecocharge77]'))return;
+    const script=document.createElement('script');
+    script.src='assets/v8-ecocharge77-overlay.js?v=20260821a';
+    script.dataset.tccEcocharge77='1';
+    script.onload=()=>console.info('[TCC] Ecocharge77 validated tariff overlay loaded.');
+    script.onerror=()=>console.error('[TCC] Ecocharge77 validated tariff overlay could not be loaded.');
+    document.body.appendChild(script);
+  }
+
   function loadAugustRelease(){
     if(document.querySelector('script[data-tcc-august]'))return;
     if(!document.querySelector('link[data-tcc-august]')){
@@ -40,9 +50,13 @@
     script.dataset.tccAugust='1';
     script.onload=()=>{
       console.info('[TCC] August release layer loaded.');
+      loadValidatedRegionalPatches();
       loadAugustUiFixes();
     };
-    script.onerror=()=>console.error('[TCC] August release layer could not be loaded.');
+    script.onerror=()=>{
+      console.error('[TCC] August release layer could not be loaded.');
+      loadValidatedRegionalPatches();
+    };
     document.body.appendChild(script);
   }
 
