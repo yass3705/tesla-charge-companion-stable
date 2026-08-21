@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-21T12:30:00+02:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-08-21T12:42:00+02:00",
   "country": "FR",
   "region": "Ile-de-France",
   "mode": "conservative",
@@ -13,15 +13,7 @@
       "kind": "AC",
       "targetPowerKw": 3.7,
       "powerToleranceKw": 0.6,
-      "pricing": {
-        "type": "rules",
-        "rules": [{
-          "scope": "allDay", "start": "00:00", "end": "24:00", "billing": "minute", "currency": "EUR",
-          "pricePerKwh": 0, "chargePerMinute": 0.0146666667, "connectionFee": 0, "idlePerMinute": 0.0146666667,
-          "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00",
-          "regionalEnergyPerKwh": 0.33, "regionalLongAfterMinutes": 840, "regionalLongPerMinute": 0.1666666667
-        }]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"minute","currency":"EUR","pricePerKwh":0,"chargePerMinute":0.0146666667,"connectionFee":0,"idlePerMinute":0.0146666667,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","regionalEnergyPerKwh":0.33,"regionalLongAfterMinutes":840,"regionalLongPerMinute":0.1666666667}]},
       "source": "data-lab/belib_official_paris.json",
       "verifiedAt": "2026-08-21",
       "note": "Visitor Moto: 0.33 EUR/kWh + 0.22 EUR/15min connected; billing continues until unplugging; 10 EUR/h after 14h connection."
@@ -34,15 +26,7 @@
       "kind": "AC",
       "targetPowerKw": 7,
       "powerToleranceKw": 1.0,
-      "pricing": {
-        "type": "rules",
-        "rules": [{
-          "scope": "allDay", "start": "00:00", "end": "24:00", "billing": "minute", "currency": "EUR",
-          "pricePerKwh": 0, "chargePerMinute": 0.038, "connectionFee": 0, "idlePerMinute": 0.038,
-          "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00",
-          "regionalEnergyPerKwh": 0.33, "regionalLongAfterMinutes": 840, "regionalLongPerMinute": 0.1666666667
-        }]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"minute","currency":"EUR","pricePerKwh":0,"chargePerMinute":0.038,"connectionFee":0,"idlePerMinute":0.038,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","regionalEnergyPerKwh":0.33,"regionalLongAfterMinutes":840,"regionalLongPerMinute":0.1666666667}]},
       "source": "data-lab/belib_official_paris.json",
       "verifiedAt": "2026-08-21",
       "note": "Visitor Flex: 0.33 EUR/kWh + 0.57 EUR/15min connected; billing continues until unplugging; 10 EUR/h after 14h connection."
@@ -55,30 +39,77 @@
       "kind": "AC",
       "targetPowerKw": 22,
       "powerToleranceKw": 2.0,
-      "pricing": {
-        "type": "rules",
-        "rules": [{
-          "scope": "allDay", "start": "00:00", "end": "24:00", "billing": "minute", "currency": "EUR",
-          "pricePerKwh": 0, "chargePerMinute": 0.1533333333, "connectionFee": 0, "idlePerMinute": 0.1533333333,
-          "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00",
-          "regionalEnergyPerKwh": 0, "regionalLongAfterMinutes": 840, "regionalLongPerMinute": 0.1666666667
-        }]
-      },
+      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"minute","currency":"EUR","pricePerKwh":0,"chargePerMinute":0.1533333333,"connectionFee":0,"idlePerMinute":0.1533333333,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","regionalEnergyPerKwh":0,"regionalLongAfterMinutes":840,"regionalLongPerMinute":0.1666666667}]},
       "source": "data-lab/belib_official_paris.json",
       "verifiedAt": "2026-08-21",
       "note": "Visitor Boost: 2.30 EUR/15min connected; billing continues until unplugging; 10 EUR/h after 14h connection."
+    },
+    {
+      "id":"metropolis-public-proximity",
+      "provider":"Métropolis direct",
+      "offerType":"operator_direct",
+      "operatorAliases":["Métropolis Recharge","Metropolis Recharge","Métropolis","Metropolis"],
+      "maxPowerKw":3.7,
+      "excludeAddressContainsAny":["Neuilly-sur-Seine","Neuilly sur Seine"],
+      "pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.44,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.10,"postChargeGraceMinutes":10}]},
+      "source":"data-lab/metropolis_official_grand_paris.json","verifiedAt":"2026-08-21"
+    },
+    {
+      "id":"metropolis-public-proximity-neuilly",
+      "provider":"Métropolis direct",
+      "offerType":"operator_direct",
+      "operatorAliases":["Métropolis Recharge","Metropolis Recharge","Métropolis","Metropolis"],
+      "maxPowerKw":3.7,
+      "addressContainsAny":["Neuilly-sur-Seine","Neuilly sur Seine"],
+      "pricing":{"type":"rules","rules":[{"scope":"timeWindow","start":"08:00","end":"20:00","billing":"kwh","currency":"EUR","pricePerKwh":0.44,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.20,"postChargeGraceMinutes":10},{"scope":"timeWindow","start":"20:00","end":"08:00","billing":"kwh","currency":"EUR","pricePerKwh":0.44,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.10,"postChargeGraceMinutes":10}]},
+      "source":"data-lab/metropolis_official_grand_paris.json","verifiedAt":"2026-08-21"
+    },
+    {
+      "id":"metropolis-public-city",
+      "provider":"Métropolis direct",
+      "offerType":"operator_direct",
+      "operatorAliases":["Métropolis Recharge","Metropolis Recharge","Métropolis","Metropolis"],
+      "minPowerKw":3.71,"maxPowerKw":25,
+      "excludeAddressContainsAny":["Neuilly-sur-Seine","Neuilly sur Seine"],
+      "excludeIfSiteHasPowerGteKw":150,
+      "pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.53,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.10,"postChargeGraceMinutes":10}]},
+      "source":"data-lab/metropolis_official_grand_paris.json","verifiedAt":"2026-08-21"
+    },
+    {
+      "id":"metropolis-public-city-neuilly",
+      "provider":"Métropolis direct",
+      "offerType":"operator_direct",
+      "operatorAliases":["Métropolis Recharge","Metropolis Recharge","Métropolis","Metropolis"],
+      "minPowerKw":3.71,"maxPowerKw":25,
+      "addressContainsAny":["Neuilly-sur-Seine","Neuilly sur Seine"],
+      "pricing":{"type":"rules","rules":[{"scope":"timeWindow","start":"08:00","end":"20:00","billing":"kwh","currency":"EUR","pricePerKwh":0.53,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.20,"postChargeGraceMinutes":10},{"scope":"timeWindow","start":"20:00","end":"08:00","billing":"kwh","currency":"EUR","pricePerKwh":0.53,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.10,"postChargeGraceMinutes":10}]},
+      "source":"data-lab/metropolis_official_grand_paris.json","verifiedAt":"2026-08-21"
+    },
+    {
+      "id":"metropolis-public-city-on-express",
+      "provider":"Métropolis direct",
+      "offerType":"operator_direct",
+      "operatorAliases":["Métropolis Recharge","Metropolis Recharge","Métropolis","Metropolis"],
+      "minPowerKw":20,"maxPowerKw":25,
+      "requiresSitePowerGteKw":150,
+      "excludeAddressContainsAny":["Neuilly-sur-Seine","Neuilly sur Seine"],
+      "pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.53,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.20,"postChargeGraceMinutes":10}]},
+      "source":"data-lab/metropolis_official_grand_paris.json","verifiedAt":"2026-08-21"
+    },
+    {
+      "id":"metropolis-public-express",
+      "provider":"Métropolis direct",
+      "offerType":"operator_direct",
+      "operatorAliases":["Métropolis Recharge","Metropolis Recharge","Métropolis","Metropolis"],
+      "kind":"DC","minPowerKw":150,"maxPowerKw":180,
+      "pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.63,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00","postChargeRate":0.20,"postChargeGraceMinutes":10}]},
+      "source":"data-lab/metropolis_official_grand_paris.json","verifiedAt":"2026-08-21"
     }
   ],
   "deferred": [
-    {
-      "operator": "Belib'",
-      "case": "Boost+ 50 kW",
-      "reason": "Charging rate is validated at 0.42 EUR/min, but private-parking charge-time credits are site-specific and must be resolved before cost ranking."
-    },
-    {
-      "operator": "Belib'",
-      "case": "Resident and non-resident subscriptions",
-      "reason": "Annual 7 EUR plans and their tariffs are validated; selectable annual-plan UI integration is deferred to avoid displaying an annual fee as a monthly fee."
-    }
+    {"operator":"Belib'","case":"Boost+ 50 kW","reason":"Charging rate is validated at 0.42 EUR/min, but private-parking charge-time credits are site-specific and must be resolved before cost ranking."},
+    {"operator":"Belib'","case":"Resident and non-resident subscriptions","reason":"Annual 7 EUR plans and their tariffs are validated; selectable annual-plan UI integration is deferred to avoid displaying an annual fee as a monthly fee."},
+    {"operator":"Métropolis","case":"Liberté annual plan","reason":"Validated at 10 EUR/year, but annual-fee subscription UI is not represented yet."},
+    {"operator":"Métropolis","case":"Mensuel plan","reason":"Validated at 9.90 EUR/month with Express at 0.53 EUR/kWh; subscription integration will follow after direct regional offer smoke tests."}
   ]
 }
