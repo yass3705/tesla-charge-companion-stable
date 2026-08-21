@@ -1,16 +1,23 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlay tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48al';
+  const REVISION='rc48aq-volti-sieely-idf';
   let applying=false;
   let lastPrepared=null;
 
   function loadReferenceOffers(){
-    if(window.TCCV8ReferenceOffers||document.querySelector('script[data-tcc-reference-offers]'))return;
-    const s=document.createElement('script');
-    s.src='assets/v8-reference-offers.js?v=20260821l';
-    s.defer=true;s.dataset.tccReferenceOffers='1';
-    document.head.appendChild(s);
+    if(!window.TCCV8ReferenceOffers&&!document.querySelector('script[data-tcc-reference-offers]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-reference-offers.js?v=20260821q1';
+      s.defer=true;s.dataset.tccReferenceOffers='1';
+      document.head.appendChild(s);
+    }
+    if(!window.TCCV8IDFExtraReferenceOffers&&!document.querySelector('script[data-tcc-idf-extra-reference-offers]')){
+      const x=document.createElement('script');
+      x.src='assets/v8-idf-extra-reference-offers.js?v=20260821q1';
+      x.defer=true;x.dataset.tccIdfExtraReferenceOffers='1';
+      document.head.appendChild(x);
+    }
   }
   loadReferenceOffers();
 
@@ -88,5 +95,5 @@
   else setTimeout(()=>{markRevision();loadReferenceOffers();},0);
 
   window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + références opérateur rc48al.');
+  console.info('[TCC V8] Pont overlay/cache actif + références opérateur rc48aq.');
 })();
