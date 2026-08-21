@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-21T12:30:00+02:00",
+  "country": "FR",
+  "region": "Ile-de-France",
+  "mode": "conservative",
+  "offers": [
+    {
+      "id": "belib-visitor-moto",
+      "provider": "Belib' visiteur",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Belib", "Belib'", "Belib’", "Belib Paris"],
+      "kind": "AC",
+      "targetPowerKw": 3.7,
+      "powerToleranceKw": 0.6,
+      "pricing": {
+        "type": "rules",
+        "rules": [{
+          "scope": "allDay", "start": "00:00", "end": "24:00", "billing": "minute", "currency": "EUR",
+          "pricePerKwh": 0, "chargePerMinute": 0.0146666667, "connectionFee": 0, "idlePerMinute": 0.0146666667,
+          "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00",
+          "regionalEnergyPerKwh": 0.33, "regionalLongAfterMinutes": 840, "regionalLongPerMinute": 0.1666666667
+        }]
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "verifiedAt": "2026-08-21",
+      "note": "Visitor Moto: 0.33 EUR/kWh + 0.22 EUR/15min connected; billing continues until unplugging; 10 EUR/h after 14h connection."
+    },
+    {
+      "id": "belib-visitor-flex",
+      "provider": "Belib' visiteur",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Belib", "Belib'", "Belib’", "Belib Paris"],
+      "kind": "AC",
+      "targetPowerKw": 7,
+      "powerToleranceKw": 1.0,
+      "pricing": {
+        "type": "rules",
+        "rules": [{
+          "scope": "allDay", "start": "00:00", "end": "24:00", "billing": "minute", "currency": "EUR",
+          "pricePerKwh": 0, "chargePerMinute": 0.038, "connectionFee": 0, "idlePerMinute": 0.038,
+          "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00",
+          "regionalEnergyPerKwh": 0.33, "regionalLongAfterMinutes": 840, "regionalLongPerMinute": 0.1666666667
+        }]
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "verifiedAt": "2026-08-21",
+      "note": "Visitor Flex: 0.33 EUR/kWh + 0.57 EUR/15min connected; billing continues until unplugging; 10 EUR/h after 14h connection."
+    },
+    {
+      "id": "belib-visitor-boost",
+      "provider": "Belib' visiteur",
+      "offerType": "operator_direct",
+      "operatorAliases": ["Belib", "Belib'", "Belib’", "Belib Paris"],
+      "kind": "AC",
+      "targetPowerKw": 22,
+      "powerToleranceKw": 2.0,
+      "pricing": {
+        "type": "rules",
+        "rules": [{
+          "scope": "allDay", "start": "00:00", "end": "24:00", "billing": "minute", "currency": "EUR",
+          "pricePerKwh": 0, "chargePerMinute": 0.1533333333, "connectionFee": 0, "idlePerMinute": 0.1533333333,
+          "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00",
+          "regionalEnergyPerKwh": 0, "regionalLongAfterMinutes": 840, "regionalLongPerMinute": 0.1666666667
+        }]
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "verifiedAt": "2026-08-21",
+      "note": "Visitor Boost: 2.30 EUR/15min connected; billing continues until unplugging; 10 EUR/h after 14h connection."
+    }
+  ],
+  "deferred": [
+    {
+      "operator": "Belib'",
+      "case": "Boost+ 50 kW",
+      "reason": "Charging rate is validated at 0.42 EUR/min, but private-parking charge-time credits are site-specific and must be resolved before cost ranking."
+    },
+    {
+      "operator": "Belib'",
+      "case": "Resident and non-resident subscriptions",
+      "reason": "Annual 7 EUR plans and their tariffs are validated; selectable annual-plan UI integration is deferred to avoid displaying an annual fee as a monthly fee."
+    }
+  ]
+}
