@@ -1,14 +1,14 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlay tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48ak';
+  const REVISION='rc48al';
   let applying=false;
   let lastPrepared=null;
 
   function loadReferenceOffers(){
     if(window.TCCV8ReferenceOffers||document.querySelector('script[data-tcc-reference-offers]'))return;
     const s=document.createElement('script');
-    s.src='assets/v8-reference-offers.js?v=20260821k';
+    s.src='assets/v8-reference-offers.js?v=20260821l';
     s.defer=true;s.dataset.tccReferenceOffers='1';
     document.head.appendChild(s);
   }
@@ -88,5 +88,5 @@
   else setTimeout(()=>{markRevision();loadReferenceOffers();},0);
 
   window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + références opérateur rc48ak.');
+  console.info('[TCC V8] Pont overlay/cache actif + références opérateur rc48al.');
 })();
