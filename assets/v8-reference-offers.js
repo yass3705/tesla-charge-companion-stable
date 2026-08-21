@@ -3,7 +3,7 @@
 // de la station / du contexte. Ces lignes ne participent jamais au classement.
 (function(){
   'use strict';
-  const VERSION='rc48-reference-2';
+  const VERSION='rc48-reference-3';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const esc=v=>(window.escapeHtml?window.escapeHtml(String(v??'')):String(v??''));
@@ -30,6 +30,9 @@
       const off=p<30?'0,40 €/kWh':p<60?'0,48 €/kWh':'0,58 €/kWh';
       return `autoroute ${motorway} · hors autoroute ${off} · frais d’occupation après 5 min sans énergie`;
     },note:'Le contexte autoroute / hors autoroute doit être identifié avant de classer le prix.'},
+
+    {id:'sey-maborne-ac22',aliases:['SEY Ma Borne','SEY ma borne','Sey Ma Borne','Sey ma borne'],provider:'SEY Ma Borne direct',kind:'AC',minPowerKw:20,maxPowerKw:24,label:'0,36 €/kWh · temps gratuit 2 h · puis 4 €/h (8h–20h) / 0,30 €/h (20h–8h)',note:'Tarif officiel depuis le 1er mars 2026. La nuit, le paiement par carte bancaire reste à 4 €/h ; itinérance susceptible d’ajouter une surcharge. Hors classement tant que le mode de paiement et la règle jour/nuit ne sont pas modélisés sans ambiguïté.'},
+    {id:'sey-maborne-dc36',aliases:['SEY Ma Borne','SEY ma borne','Sey Ma Borne','Sey ma borne'],provider:'SEY Ma Borne direct',kind:'DC',minPowerKw:30,maxPowerKw:40,label:'0,46 €/kWh + 4 €/h (8h–20h) / 1 €/h (20h–8h)',note:'Tarif officiel depuis le 1er mars 2026. La nuit, le paiement par carte bancaire reste à 4 €/h ; itinérance susceptible d’ajouter une surcharge. Hors classement tant que le mode de paiement et la règle jour/nuit ne sont pas modélisés sans ambiguïté.'},
 
     {id:'powerdot-direct',aliases:['Powerdot','Power Dot'],provider:'Powerdot direct',label:'prix exact par connecteur via QR / application de mobilité',note:'Aucun tarif CPO direct national unique n’est publié.'},
     {id:'qovoltis-direct',aliases:['Qovoltis','QOVOLTIS'],provider:'Qovoltis direct',label:'prix exact dans Qovoltis / ChargeNow',note:'Nomad Open, Nomad Gold et paiement ad hoc utilisent un tarif station spécifique.'},
