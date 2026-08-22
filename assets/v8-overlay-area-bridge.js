@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48au-tariff-clarity';
+  const REVISION='rc48av-fee-breakdown-fix';
   let applying=false;
   let lastPrepared=null;
 
@@ -41,7 +41,7 @@
   function loadDirectSmokeFix(){
     if(!window.TCCV8DirectSmokeFix&&!document.querySelector('script[data-tcc-direct-smoke-fix]')){
       const s=document.createElement('script');
-      s.src='assets/v8-direct-resolver-followup.js?v=rc48au-20260822';
+      s.src='assets/v8-direct-resolver-followup.js?v=rc48av-20260822';
       s.defer=true;s.dataset.tccDirectSmokeFix='1';
       document.head.appendChild(s);
     }
@@ -112,7 +112,7 @@
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(String(banner.textContent||''))){
-      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · détail frais clarifié · données canoniques France · auto-mise à jour désactivée`;
+      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · détail frais stabilisé · données canoniques France · auto-mise à jour désactivée`;
     }
   }
 
@@ -149,5 +149,5 @@
   else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0);
 
   window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48au.');
+  console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48av.');
 })();
