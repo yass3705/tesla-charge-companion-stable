@@ -57,7 +57,7 @@ jobs:
           if(p.safety?.automaticTariffOverrideEnabled!==false)throw new Error('automatic tariff override must stay disabled');
           const c=p.counts||{};
           if(c.stationVerifications<30)throw new Error(`canonical evidence unexpectedly small: ${c.stationVerifications}`);
-          if(c.matched+c.unmatched+c.ambiguous!==c.stationVerifications)throw new Error('station verification accounting mismatch');
+          if(c.matched+c.unmatched+c.ambiguous+c.identityConflicts!==c.stationVerifications)throw new Error('station verification accounting mismatch');
           if(Number(p.sources?.runtime?.stationCount)<40000)throw new Error('current France runtime catalogue unexpectedly incomplete');
           if(c.remainingTrueGaps!==(p.remainingTrueGaps||[]).length)throw new Error('remaining gap accounting mismatch');
           if(c.potentialEnergyConflicts>c.matched)throw new Error('invalid conflict count');
