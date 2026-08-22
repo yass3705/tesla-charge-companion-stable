@@ -1,0 +1,400 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "france-canonical-tariff-overlay-pilot",
+  "generatedAt": "2026-08-22",
+  "enabledByDefault": false,
+  "mode": "append_only",
+  "purpose": "Append exact manually verified canonical tariff configurations to exact matched runtime stations without replacing current runtime/eMSP offers.",
+  "activation": {
+    "localStorageKey": "tccFranceCanonicalOverlayV1",
+    "enabledValue": "enabled",
+    "urlParameter": "canonicalOverlay=1"
+  },
+  "safety": {
+    "replaceExistingConfigurations": false,
+    "replaceExistingStations": false,
+    "touchTeslaStations": false,
+    "touchCustomStations": false,
+    "directAndRoamingRemainSeparate": true,
+    "onlyExactAuditedRuntimeStationIds": true,
+    "unsupportedCanonicalSemanticsExcluded": true
+  },
+  "pilotSelection": {
+    "modelExactStationCount": 6,
+    "reason": "Only station-level rules representable exactly by the current V7.3 pricing engine are activated in this pilot. Minimum-fee, post-charge grace/block rounding, delayed startup-fee and unresolved/ambiguous cases remain excluded."
+  },
+  "entries": [
+    {
+      "runtimeStationId": "electroverse:4547054",
+      "station": "BOURG-MADAME - Avenue des Guinguettes",
+      "sourcePath": "data/station_verifications/aqui_bourg_madame_avenue_des_guinguettes_ccs180_app_2026_08_22.json",
+      "canonicalDataset": "aqui-bourg-madame-avenue-des-guinguettes-ccs180-app-verification",
+      "verifiedAt": "2026-08-22",
+      "profileScope": "registered_user_tariff_displayed_in_alize_app",
+      "configurations": [
+        {
+          "id": "canonical-aqui-registered-ccs180",
+          "label": "CANONIQUE · AQUÍ inscrit · CCS 180 kW",
+          "kind": "DC",
+          "powerKw": 180,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.52,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.20,
+                "afterMinutesThreshold": 45,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          },
+          "notes": "Preauthorisation 30 EUR is a payment condition, not a tariff fee."
+        }
+      ]
+    },
+    {
+      "runtimeStationId": "electroverse:984345",
+      "station": "Saint-Flour, Allée Georges Pompidou",
+      "sourcePath": "data/station_verifications/freshmile_sdec15_saint_flour_allee_georges_pompidou_app_2026_08_22.json",
+      "canonicalDataset": "freshmile-sdec15-saint-flour-allee-georges-pompidou-app-verification",
+      "verifiedAt": "2026-08-22",
+      "profileScope": "freshmile_app_station_tariff",
+      "configurations": [
+        {
+          "id": "canonical-sdec15-type2-22",
+          "label": "CANONIQUE · SDEC15/Freshmile · Type 2 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "EUR",
+                "pricePerKwh": 0,
+                "chargePerMinute": 0,
+                "connectionFee": 6.0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.15,
+                "afterMinutesThreshold": 15,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          },
+          "notes": "6 EUR for the first 15 minutes, then 0.15 EUR/min; no kWh price displayed. Billing continues while connected."
+        },
+        {
+          "id": "canonical-sdec15-ccs50",
+          "label": "CANONIQUE · SDEC15/Freshmile · CCS 50 kW",
+          "kind": "DC",
+          "powerKw": 50,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "minute",
+                "currency": "EUR",
+                "pricePerKwh": 0,
+                "chargePerMinute": 0,
+                "connectionFee": 6.0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.15,
+                "afterMinutesThreshold": 15,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          },
+          "notes": "Same displayed time-only tariff as Type 2 22 kW."
+        }
+      ]
+    },
+    {
+      "runtimeStationId": "electroverse:3945377",
+      "station": "107 Rue Commandant Abadie, Le Havre, [AN  0]",
+      "sourcePath": "data/station_verifications/le_havre_ubitricity_107_commandant_abadie_app_2026_08_22.json",
+      "canonicalDataset": "le-havre-ubitricity-107-commandant-abadie-app-verification",
+      "verifiedAt": "2026-08-22",
+      "profileScope": "shell_recharge_direct_displayed_tariff",
+      "configurations": [
+        {
+          "id": "canonical-ubitricity-type2-22-1",
+          "label": "CANONIQUE · Shell/ubitricity · Type 2 22,1 kW",
+          "kind": "AC",
+          "powerKw": 22.1,
+          "stalls": 2,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.52,
+                "chargePerMinute": 0,
+                "connectionFee": 0.35,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "runtimeStationId": "electroverse:391642",
+      "station": "Montauban, Mandoune",
+      "sourcePath": "data/station_verifications/sde82_freshmile_montauban_mandoune_type2_2026_08_22.json",
+      "canonicalDataset": "sde82-freshmile-montauban-mandoune-type2-app-verification",
+      "verifiedAt": "2026-08-22",
+      "profileScope": "freshmile_app_type2_tariff",
+      "configurations": [
+        {
+          "id": "canonical-sde82-type2-22",
+          "label": "CANONIQUE · SDE82/Freshmile · Type 2 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.45,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "06:00",
+                "end": "22:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.45,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.045,
+                "afterMinutesThreshold": 180,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              }
+            ]
+          },
+          "notes": "Minimum wallet balance 25 EUR and payment authorization 50 EUR are payment conditions, not tariff fees."
+        }
+      ]
+    },
+    {
+      "runtimeStationId": "electroverse:589463",
+      "station": "FAUQUEMBERGUES - Avenue Roland Huguet",
+      "sourcePath": "data/station_verifications/passpass_fauquembergues_avenue_roland_huguet_app_2026_08_22.json",
+      "canonicalDataset": "passpass-fauquembergues-avenue-roland-huguet-app-verification",
+      "verifiedAt": "2026-08-22",
+      "profileScope": "registered_user_only_not_guest",
+      "configurations": [
+        {
+          "id": "canonical-passpass-registered-normal-type2-22",
+          "label": "CANONIQUE · Pass Pass inscrit · Type 2 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.32,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "07:00",
+                "end": "21:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.32,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.04,
+                "afterMinutesThreshold": 180,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "21:00",
+                "end": "07:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.32,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.01,
+                "afterMinutesThreshold": 180,
+                "afterMinutesCap": 1.20,
+                "afterMinutesCapStart": "21:00",
+                "afterMinutesCapEnd": "07:00"
+              }
+            ]
+          },
+          "notes": "Registered user tariff only. Temporary 20 EUR card reservation is not a tariff fee."
+        }
+      ]
+    },
+    {
+      "runtimeStationId": "electroverse:2962209",
+      "station": "WARGNIES LE GRAND - Zac de la vallée",
+      "sourcePath": "data/station_verifications/passpass_wargnies_le_grand_zac_vallee_app_2026_08_22.json",
+      "canonicalDataset": "passpass-wargnies-le-grand-zac-vallee-app-verification",
+      "verifiedAt": "2026-08-22",
+      "profileScope": "registered_user_only_not_guest",
+      "configurations": [
+        {
+          "id": "canonical-passpass-registered-normal-type2-22",
+          "label": "CANONIQUE · Pass Pass inscrit · Type 2 22 kW",
+          "kind": "AC",
+          "powerKw": 22,
+          "stalls": 0,
+          "pricing": {
+            "type": "rules",
+            "rules": [
+              {
+                "scope": "allDay",
+                "start": "00:00",
+                "end": "24:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.32,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0,
+                "afterMinutesThreshold": 0,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "07:00",
+                "end": "21:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.32,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.04,
+                "afterMinutesThreshold": 180,
+                "afterMinutesCap": 0,
+                "afterMinutesCapStart": "00:00",
+                "afterMinutesCapEnd": "24:00"
+              },
+              {
+                "scope": "timeWindow",
+                "start": "21:00",
+                "end": "07:00",
+                "billing": "kwh",
+                "currency": "EUR",
+                "pricePerKwh": 0.32,
+                "chargePerMinute": 0,
+                "connectionFee": 0,
+                "idlePerMinute": 0,
+                "afterMinutesRate": 0.01,
+                "afterMinutesThreshold": 180,
+                "afterMinutesCap": 1.20,
+                "afterMinutesCapStart": "21:00",
+                "afterMinutesCapEnd": "07:00"
+              }
+            ]
+          },
+          "notes": "Registered user tariff only. EF 4 kW connector was observed but is not covered by this Type 2 tariff verification."
+        }
+      ]
+    }
+  ],
+  "excludedExamples": [
+    {
+      "reason": "current pricing engine cannot represent delayed startup fee exactly",
+      "dataset": "ozecar-bonifacio-parking-p1-app-verification"
+    },
+    {
+      "reason": "current pricing engine cannot represent post-charge grace plus block rounding exactly",
+      "dataset": "la-rochelle-place-jb-marcet-etotem-g10-app-verification"
+    },
+    {
+      "reason": "current pricing engine cannot represent post-charge grace plus block rounding exactly",
+      "dataset": "etotem-montargis-commissariat-app-verification"
+    },
+    {
+      "reason": "current pricing engine cannot cap the general per-minute charge component exactly",
+      "dataset": "station-manual-verification / Qwello Viré"
+    },
+    {
+      "reason": "minimum fee not represented by V7.3 pricing engine",
+      "dataset": "Modulo guest/non-subscriber station verifications"
+    },
+    {
+      "reason": "ambiguous runtime station identity",
+      "dataset": "electric55 Lons-le-Saunier and Modulo Chartres"
+    },
+    {
+      "reason": "runtime/canonical identity conflict",
+      "dataset": "Chargelec36 Châteauroux Colbert"
+    }
+  ]
+}
