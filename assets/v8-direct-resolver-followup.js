@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — corrections après smoke test multi-opérateurs.
 (function(){
   'use strict';
-  const REVISION='rc48au-tariff-clarity';
+  const REVISION='rc48av-fee-breakdown-fix';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const deepClone=v=>JSON.parse(JSON.stringify(v));
@@ -82,6 +82,7 @@
   }
   function activeTime(){return document.getElementById('simTime')?.value||'00:00'}
   function minuteOfDay(v){const m=String(v).match(/^(\d{1,2}):(\d{2})$/);return m?Number(m[1])*60+Number(m[2]):0}
+  function setPriceText(price,label){if(price&&label&&text(price.textContent)!==label)price.textContent=label}
   function decorateDirectRows(){
     const t=minuteOfDay(activeTime());
     document.querySelectorAll('#results .result-card[data-result-id]').forEach(card=>{
@@ -90,25 +91,44 @@
         const provider=text(row.querySelector('.v8-offer-provider')?.textContent).replace(/✓.*$/,'').trim();
         const price=row.querySelector('.v8-offer-price');if(!price)continue;
         if(/^Chargezy direct/i.test(provider)){
-          if(info.kind==='AC'&&info.power<=22.01)price.textContent=t>=420&&t<1380?'0,59 €/kWh + 2 € fixe + 0,10 €/min après 180 min':'0,59 €/kWh + 2 € fixe';
-          else if(info.kind==='DC'&&info.power<=25.01)price.textContent='0,59 €/kWh + 2 € fixe + 0,10 €/min après 90 min';
-          else if(info.kind==='DC'&&info.power>25&&info.power<=50.01)price.textContent='0,69 €/kWh + 2 € fixe + 0,20 €/min après 45 min';
+          if(info.kind==='AC'&&info.power<=22.01)setPriceText(price,t>=420&&t<1380?'0,59 €/kWh + 2 € fixe + 0,10 €/min après 180 min':'0,59 €/kWh + 2 € fixe');
+          else if(info.kind==='DC'&&info.power<=25.01)setPriceText(price,'0,59 €/kWh + 2 € fixe + 0,10 €/min après 90 min');
+          else if(info.kind==='DC'&&info.power>25&&info.power<=50.01)setPriceText(price,'0,69 €/kWh + 2 € fixe + 0,20 €/min après 45 min');
         }
         if(/^Pass Pass direct/i.test(provider)){
-          price.textContent=t>=420&&t<1260?'0,32 €/kWh + 0,04 €/min après 180 min':'0,32 €/kWh + 0,01 €/min après 180 min · plafond nuit 1,20 €';
+          setPriceText(price,t>=420&&t<1260?'0,32 €/kWh + 0,04 €/min après 180 min':'0,32 €/kWh + 0,01 €/min après 180 min · plafond nuit 1,20 €');
         }
       }
     });
   }
 
+  function feeValue(source,patterns){
+    for(const pattern of patterns){
+      const m=source.match(pattern);
+      if(m?.[1])return text(m[1]);
+    }
+    return '';
+  }
+
   function relabelBreakdowns(){
     document.querySelectorAll('#results .cost-breakdown').forEach(el=>{
       const before=text(el.textContent);
-      const after=before
-        .replace(/Fixe\/parking\s*:/i,'Connexion / frais fixe :')
-        .replace(/Après charge\s*:/i,'Occupation après charge :')
-        .replace(/Après durée\s*:/i,'Frais après durée :');
-      if(after&&after!==before)el.textContent=after;
+      if(!before)return;
+
+      // Déjà normalisé : ne jamais repasser les remplacements sur nos propres libellés.
+      if(el.dataset.tccFeeLabels==='1'&&/Connexion \/ frais fixe\s*:/i.test(before)&&/Occupation après charge\s*:/i.test(before)&&/Frais après durée\s*:/i.test(before))return;
+
+      // Reconstruit toute la ligne depuis les valeurs afin que l'opération soit idempotente,
+      // même si une ancienne version a déjà répété « Occupation » ou « Frais ».
+      const fixed=feeValue(before,[/(?:Fixe\/parking|Connexion \/ frais fixe)\s*:\s*([^·]+)/i]);
+      const afterCharge=feeValue(before,[/(?:Occupation\s+)*Occupation après charge\s*:\s*([^·]+)/i,/(?:Occupation\s+)*Après charge\s*:\s*([^·]+)/i]);
+      const afterDuration=feeValue(before,[/(?:Frais\s+)*Frais après durée\s*:\s*([^·]+)/i,/(?:Frais\s+)*Après durée\s*:\s*([^·]+)/i]);
+      const congestion=feeValue(before,[/Congestion\s*≥?\s*80\s*%\s*:\s*([^·]+)/i]);
+      if(!fixed||!afterCharge||!afterDuration||!congestion)return;
+
+      const rebuilt=`Connexion / frais fixe : ${fixed} · Occupation après charge : ${afterCharge} · Frais après durée : ${afterDuration} · Congestion ≥80% : ${congestion}`;
+      el.dataset.tccFeeLabels='1';
+      if(text(el.textContent)!==rebuilt)el.textContent=rebuilt;
     });
   }
 
@@ -142,12 +162,12 @@
 
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
-    if(banner&&/RC4\.8/.test(text(banner.textContent)))banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · détail frais clarifié · données canoniques France · auto-mise à jour désactivée`;
+    if(banner&&/RC4\.8/.test(text(banner.textContent)))banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · détail frais stabilisé · données canoniques France · auto-mise à jour désactivée`;
   }
 
   let tries=0;const timer=setInterval(()=>{tries++;const a=installExpansionPatch(),b=installObserver(),c=installEditorObserver();decorateUiClarity();markRevision();if((a&&b&&c)||tries>220)clearInterval(timer)},120);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{installExpansionPatch();installObserver();installEditorObserver();decorateUiClarity();markRevision()},0),{once:true});
   else setTimeout(()=>{installExpansionPatch();installObserver();installEditorObserver();decorateUiClarity();markRevision()},0);
   window.TCCV8DirectSmokeFix={revision:REVISION,addPassPassDirect,decorateDirectRows,relabelBreakdowns,relabelEditorFees};
-  console.info(`[TCC V8] ${REVISION} actif : libellés directs complets + séparation connexion/occupation/durée.`);
+  console.info(`[TCC V8] ${REVISION} actif : détail des frais idempotent + libellés directs complets.`);
 })();
