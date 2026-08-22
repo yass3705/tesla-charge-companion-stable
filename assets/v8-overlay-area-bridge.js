@@ -1,7 +1,7 @@
-// Tesla Charge Companion V8 RC4.8 — pont déterministe overlay tarifs -> cache de zone.
+// Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48aq-volti-sieely-idf';
+  const REVISION='rc48ar-canonical-fr';
   let applying=false;
   let lastPrepared=null;
 
@@ -19,16 +19,30 @@
       document.head.appendChild(x);
     }
   }
+
+  function loadCanonicalStationOverlay(){
+    if(!window.TCCV8CanonicalStationOverlay&&!document.querySelector('script[data-tcc-canonical-stations]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-canonical-station-overlay.js?v=rc48ar-20260822';
+      s.defer=true;s.dataset.tccCanonicalStations='1';
+      document.head.appendChild(s);
+    }
+  }
+
   loadReferenceOffers();
+  loadCanonicalStationOverlay();
 
   async function apply(force=false){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
-    const api=window.TCCV8OperatorOverlay;
-    if(!prepared||!api?.applyToPrepared||applying)return false;
-    if(!force&&prepared===lastPrepared&&prepared.tariffOverlayApplied)return true;
+    const operatorApi=window.TCCV8OperatorOverlay;
+    const canonicalApi=window.TCCV8CanonicalStationOverlay;
+    if(!prepared||!operatorApi?.applyToPrepared||applying)return false;
+    const canonicalReady=!!canonicalApi?.applyToPrepared;
+    if(!force&&prepared===lastPrepared&&prepared.tariffOverlayApplied&&(!canonicalReady||prepared.canonicalStationOverlayApplied))return true;
     applying=true;
     try{
-      await api.applyToPrepared(prepared);
+      await operatorApi.applyToPrepared(prepared);
+      if(canonicalReady)await canonicalApi.applyToPrepared(prepared);
       lastPrepared=prepared;
       window.TCC_V8_AREA_CACHE.prepared=prepared;
       return true;
@@ -40,17 +54,22 @@
 
   // Dernier garde-fou juste avant la simulation : expandConfigurations est la
   // frontière exacte entre une station physique et ses variantes tarifaires.
-  // On y réapplique donc l'overlay de façon synchrone, une station à la fois.
+  // On y réapplique les overlays de façon synchrone, une station à la fois.
   // Cela couvre aussi les stations ajoutées/normalisées après la création du cache.
   function installExpansionGuard(){
     const current=window.expandConfigurations;
     if(typeof current!=='function'||current.__tccOverlayExpansionGuard)return false;
     const wrapped=function(baseStations){
       let source=baseStations;
-      const api=window.TCCV8OperatorOverlay;
+      const operatorApi=window.TCCV8OperatorOverlay;
       const overlay=window.TCC_TARIFF_OVERLAY_V1;
-      if(Array.isArray(baseStations)&&overlay&&typeof api?.addOperatorOffers==='function'){
-        source=baseStations.map(st=>api.addOperatorOffers(st,overlay));
+      const canonicalApi=window.TCCV8CanonicalStationOverlay;
+      const canonicalData=window.TCC_V8_CANONICAL_STATION_OVERLAY;
+      if(Array.isArray(source)&&overlay&&typeof operatorApi?.addOperatorOffers==='function'){
+        source=source.map(st=>operatorApi.addOperatorOffers(st,overlay));
+      }
+      if(Array.isArray(source)&&canonicalData&&typeof canonicalApi?.applyStation==='function'){
+        source=source.map(st=>canonicalApi.applyStation(st,canonicalData));
       }
       return current.call(this,source);
     };
@@ -64,23 +83,30 @@
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(String(banner.textContent||''))){
-      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · multi-tarifs · auto-mise à jour désactivée`;
+      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · multi-tarifs · données canoniques France · auto-mise à jour désactivée`;
     }
   }
 
-  // Première synchronisation dès que le cache de zone existe.
-  const timer=setInterval(()=>{apply(false);installExpansionGuard();markRevision();loadReferenceOffers();},120);
+  // Première synchronisation dès que le cache de zone et les couches tarifaires existent.
+  const timer=setInterval(()=>{
+    loadCanonicalStationOverlay();
+    apply(false);
+    installExpansionGuard();
+    markRevision();
+    loadReferenceOffers();
+  },120);
   setTimeout(()=>clearInterval(timer),120000);
 
-  // Avant chaque simulation, réappliquer une fois l'overlay. C'est volontairement
-  // idempotent : cela permet de prendre en compte une normalisation tardive du nom
-  // opérateur sans dupliquer les offres déjà présentes.
+  // Avant chaque simulation, réappliquer une fois les overlays. C'est volontairement
+  // idempotent : cela permet de prendre en compte une normalisation tardive sans
+  // dupliquer les offres déjà présentes.
   document.addEventListener('click',async event=>{
     const button=event.target?.closest?.('.v8-simulate');
     if(!button||button.dataset.tccOverlayReplay==='1')return;
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
+    loadCanonicalStationOverlay();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -91,9 +117,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + références opérateur rc48aq.');
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache actif + données canoniques France rc48ar.');
 })();
