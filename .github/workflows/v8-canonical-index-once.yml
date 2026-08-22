@@ -1,0 +1,55 @@
+name: Wire V8 canonical station overlay once
+
+on:
+  push:
+    branches: ["release/2026-08"]
+    paths:
+      - ".github/workflows/v8-canonical-index-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+
+      - name: Wire canonical overlay and validate V8 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="assets/v8-canonical-station-overlay.js?v=rc48ar-20260822" defer></script>'
+          if tag not in s:
+              marker='<script src="assets/v8-overlay-area-bridge.js?v=rc48t-20260820" defer></script>'
+              if marker in s:
+                  s=s.replace(marker,marker+'\n'+tag,1)
+              else:
+                  s=s.replace('</body>',tag+'\n</body>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          node --check assets/v8-canonical-station-overlay.js
+          node --check assets/v8-overlay-area-bridge.js
+          python3 -m json.tool data/v8_canonical_station_overlay_v1.json >/dev/null
+          grep -q 'v8-canonical-station-overlay.js?v=rc48ar-20260822' index.html
+          grep -q 'activeInV73' data/v8_canonical_station_overlay_v1.json
+
+      - name: Commit V8-only wiring and remove one-shot
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/v8-canonical-index-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/v8-canonical-index-once.yml
+          git commit -m "feat(v8): wire verified canonical station overlay rc48ar"
+          git push origin HEAD:release/2026-08
