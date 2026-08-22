@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48as-direct-resolver-ui';
+  const REVISION='rc48at-direct-smoke-fix';
   let applying=false;
   let lastPrepared=null;
 
@@ -38,9 +38,19 @@
     }
   }
 
+  function loadDirectSmokeFix(){
+    if(!window.TCCV8DirectSmokeFix&&!document.querySelector('script[data-tcc-direct-smoke-fix]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-direct-resolver-followup.js?v=rc48at-20260822';
+      s.defer=true;s.dataset.tccDirectSmokeFix='1';
+      document.head.appendChild(s);
+    }
+  }
+
   loadReferenceOffers();
   loadCanonicalStationOverlay();
   loadDirectResolverUi();
+  loadDirectSmokeFix();
 
   async function apply(force=false){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
@@ -99,6 +109,7 @@
   const timer=setInterval(()=>{
     loadCanonicalStationOverlay();
     loadDirectResolverUi();
+    loadDirectSmokeFix();
     apply(false);
     installExpansionGuard();
     markRevision();
@@ -112,7 +123,7 @@
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    loadCanonicalStationOverlay();loadDirectResolverUi();
+    loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -123,9 +134,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48as.');
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48at.');
 })();
