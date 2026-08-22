@@ -2,9 +2,11 @@ name: August RC checks
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, release/2026-08]
   push:
-    branches: [release/2026-08]
+    branches:
+      - release/2026-08
+      - 'codex/v8-*'
 
 permissions:
   contents: read
@@ -26,6 +28,10 @@ jobs:
           node --check assets/august-ui-fixes.js
           node --check assets/august-rc2-fixes.js
           node --check assets/v8-offer-selection.js
+          node --check assets/v8-overlay-area-bridge.js
+          node --check assets/v8-canonical-station-overlay.js
+          node --check assets/v8-direct-resolver-ui.js
+          node --check assets/v8-subscription-selection.js
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -36,6 +42,8 @@ jobs:
           python -m json.tool data/tesla_stations.json >/dev/null
           python -m json.tool data/custom_stations.json >/dev/null
           python -m json.tool data/exchange_rates.json >/dev/null
+          python -m json.tool data/tariff_overlay_v1.json >/dev/null
+          python -m json.tool data/v8_canonical_station_overlay_v1.json >/dev/null
 
       - name: Verify August build references
         shell: bash
@@ -50,11 +58,13 @@ jobs:
           grep -q "assets/v8-offer-selection.js?v=${BUILD}" index.html
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
+          grep -q "v8-direct-resolver-ui.js" assets/v8-overlay-area-bridge.js
+          grep -q "rc48as-direct-resolver-ui" assets/v8-direct-resolver-ui.js
           grep -q "teslaCongestionFeePerMinute" data/tesla_stations.json
           echo "V8 build ${BUILD} references are consistent."
 
       - name: Redeploy V8 preview through main Pages workflow
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/release/2026-08'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run pages.yml --repo "${{ github.repository }}" --ref main
