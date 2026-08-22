@@ -1,0 +1,2207 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "france-canonical-overlay-preview",
+  "generatedAt": "2026-08-22T13:43:07.678Z",
+  "mode": "audit_only",
+  "activeInApp": false,
+  "safety": {
+    "currentRuntimeCatalogUntouched": true,
+    "teslaStationsUntouched": true,
+    "customStationsUntouched": true,
+    "canonicalEvidenceNeverGeneralizedBeyondMatchedScope": true,
+    "directCpoAndRoamingKeptSeparate": true,
+    "automaticTariffOverrideEnabled": false
+  },
+  "sources": {
+    "canonical": {
+      "dataset": "france-public-charging-canonical",
+      "sourceSnapshotAt": "2026-08-22T14:52:00+02:00",
+      "stationVerificationCount": 39,
+      "operatorDirectSourceCount": 123,
+      "regionalCoverageSourceCount": 12
+    },
+    "runtime": {
+      "dataset": "france-non-tesla-runtime",
+      "generatedAt": "2026-08-18T12:58:10.541Z",
+      "stationCount": 42720,
+      "configurationCount": 157881,
+      "sourceRuns": {
+        "physicalBaselineRunId": 31984129726,
+        "electroverseCorrectedRunId": 32051001347,
+        "electraRichRunId": 32124061027
+      }
+    }
+  },
+  "counts": {
+    "stationVerifications": 39,
+    "tariffApplicableVerifications": 35,
+    "negativeOrReferenceOnlyVerifications": 4,
+    "matched": 22,
+    "unmatched": 14,
+    "ambiguous": 2,
+    "identityConflicts": 1,
+    "energyOverlap": 6,
+    "potentialEnergyConflicts": 9,
+    "remainingTrueGaps": 5
+  },
+  "remainingTrueGaps": [
+    "Brest Métropole / Easy Charge Service live app price",
+    "Prise de Nice direct public/ad-hoc tariff",
+    "Mayenne e-Totem rollout visibility/tariff",
+    "Sarthe IRVE rapid live app tariff",
+    "SDE2A/Andà direct tariff"
+  ],
+  "decision": {
+    "safeToActivateAutomatically": false,
+    "nextStep": "review exact matches, identity conflicts and price conflicts, then build a separate opt-in runtime tariff overlay; do not replace the existing France station catalogue"
+  },
+  "matches": [
+    {
+      "sourcePath": "data/station_verifications/aqui_bourg_madame_avenue_des_guinguettes_ccs180_app_2026_08_22.json",
+      "dataset": "aqui-bourg-madame-avenue-des-guinguettes-ccs180-app-verification",
+      "region": "Occitanie",
+      "department": "Pyrénées-Orientales",
+      "operator": "AQUI",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address"
+      },
+      "canonicalStation": {
+        "names": [
+          "AQUI - Bourg-Madame"
+        ],
+        "addresses": [
+          "19 Avenue des Guinguettes, 66760 Bourg-Madame"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "AQUI"
+      },
+      "runtimeStation": {
+        "id": "electroverse:4547054",
+        "name": "BOURG-MADAME - Avenue des Guinguettes",
+        "address": "Avenue des Guinguettes, 66760, Bourg-Madame",
+        "lat": 42.433434,
+        "lon": 1.946662,
+        "operator": "Alizé Liberté",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.52
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": [
+            0.4,
+            0.200333
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "tariff.energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "tariff.preauthorizationEur",
+          "value": 30
+        },
+        {
+          "path": "tariff.timeComponent.eurPerMinAfterFreePeriod",
+          "value": 0.2
+        },
+        {
+          "path": "tariff.timeComponent.freeMinutes",
+          "value": 45
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.52
+      ],
+      "comparison": "energy_overlap"
+    },
+    {
+      "sourcePath": "data/station_verifications/brest_easycharge_place_des_delisseurs_app_visibility_2026_08_22.json",
+      "dataset": "manual-station-verification",
+      "region": "Bretagne",
+      "department": "Finistère",
+      "operator": "Easy Charge Service",
+      "tariffApplicable": false,
+      "match": {
+        "score": 101,
+        "reason": "address+name_city+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "Place des Délisseurs"
+        ],
+        "addresses": [
+          "Place des Délisseurs, 29200 Brest"
+        ],
+        "cities": [
+          "Brest"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Easy Charge Service"
+      },
+      "runtimeStation": {
+        "id": "electroverse:4570072",
+        "name": "BREST - Place Des Délisseurs",
+        "address": "Place des Délisseurs, 29200, Brest",
+        "lat": 48.395386,
+        "lon": -4.482026,
+        "operator": "Easy Charge",
+        "configurationCount": 2,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.4,
+            0.39
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.05
+          ],
+          "afterThresholdEurPerMinute": [
+            0.133333
+          ]
+        }
+      },
+      "canonicalPriceSignals": [],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "canonical_tariff_not_applicable"
+    },
+    {
+      "sourcePath": "data/station_verifications/etotem_montargis_commissariat_app_2026_08_22.json",
+      "dataset": "etotem-montargis-commissariat-app-verification",
+      "region": "Centre-Val de Loire",
+      "department": "Loiret",
+      "operator": "e-Totem",
+      "tariffApplicable": true,
+      "match": {
+        "score": 95,
+        "reason": "name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "AGGLOMERATION MONTARGOISE - COMMISSARIAT"
+        ],
+        "addresses": [],
+        "cities": [
+          "Montargis"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "e-Totem"
+      },
+      "runtimeStation": {
+        "id": "electroverse:1043520",
+        "name": "AGGLOMERATION MONTARGOISE - COMMISSARIAT",
+        "address": "2 Rue du Port, 45200, Montargis",
+        "lat": 48.000244,
+        "lon": 2.729775,
+        "operator": "E-Totem",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.59,
+            0.3
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.1
+          ],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "tariff.energyEurPerKwh",
+          "value": 0.3
+        },
+        {
+          "path": "tariff.postChargeBillingBlockMinutes",
+          "value": 5
+        },
+        {
+          "path": "tariff.postChargeFeeEurPerBlock",
+          "value": 0.5
+        },
+        {
+          "path": "tariff.postChargeGraceMinutes",
+          "value": 30
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.3
+      ],
+      "comparison": "energy_overlap"
+    },
+    {
+      "sourcePath": "data/station_verifications/freshmile_sdec15_saint_flour_allee_georges_pompidou_app_2026_08_22.json",
+      "dataset": "freshmile-sdec15-saint-flour-allee-georges-pompidou-app-verification",
+      "region": "Auvergne-Rhône-Alpes",
+      "department": "Cantal",
+      "operator": "SDEC15 public IRVE",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address+name"
+      },
+      "canonicalStation": {
+        "names": [
+          "Saint-Flour, Allée Georges Pompidou"
+        ],
+        "addresses": [
+          "Allée Georges Pompidou, 15100 Saint-Flour"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "SDEC15 public IRVE"
+      },
+      "runtimeStation": {
+        "id": "electroverse:984345",
+        "name": "Saint-Flour, Allée Georges Pompidou",
+        "address": "Allée Georges Pompidou, 15100, Saint-Flour",
+        "lat": 45.033314,
+        "lon": 3.088854,
+        "operator": "Freshmile",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.3,
+            0.54
+          ],
+          "minuteEur": [
+            0.03,
+            0.06
+          ],
+          "flatEur": [
+            0.6,
+            1.2,
+            6
+          ],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": [
+            0.15
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "connectors[0].tariff.after15MinutesEurPerMinute",
+          "value": 0.15
+        },
+        {
+          "path": "connectors[0].tariff.first15MinutesFlatEur",
+          "value": 6
+        },
+        {
+          "path": "connectors[1].tariff.after15MinutesEurPerMinute",
+          "value": 0.15
+        },
+        {
+          "path": "connectors[1].tariff.first15MinutesFlatEur",
+          "value": 6
+        },
+        {
+          "path": "paymentConditions.minimumWalletBalanceEur",
+          "value": 25
+        },
+        {
+          "path": "paymentConditions.paymentAuthorizationEur",
+          "value": 50
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "runtime_energy_only"
+    },
+    {
+      "sourcePath": "data/station_verifications/jura_champagnole_cassin_lidl_negative_mapping.json",
+      "dataset": "jura-champagnole-cassin-negative-modulo-mapping",
+      "region": "Bourgogne-Franche-Comté",
+      "department": "Jura",
+      "operator": "",
+      "tariffApplicable": false,
+      "match": {
+        "score": 94,
+        "reason": "address_in_station_text"
+      },
+      "canonicalStation": {
+        "names": [],
+        "addresses": [
+          "Rue René Cassin 615, Champagnole"
+        ],
+        "cities": [
+          "Champagnole"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [
+          "FR*LDL*E00003243",
+          "FR*LDL*E00003244"
+        ],
+        "operator": ""
+      },
+      "runtimeStation": {
+        "id": "electroverse:821501",
+        "name": "Rue René Cassin 615 · Champagnole",
+        "address": "Rue René Cassin 615, 39300, Champagnole",
+        "lat": 46.748281,
+        "lon": 5.919137,
+        "operator": "Lidl",
+        "configurationCount": 6,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.29,
+            0.39
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "canonical_tariff_not_applicable"
+    },
+    {
+      "sourcePath": "data/station_verifications/la_rochelle_place_jb_marcet_etotem_g10_app_2026_08_22.json",
+      "dataset": "la-rochelle-place-jb-marcet-etotem-g10-app-verification",
+      "region": "Nouvelle-Aquitaine",
+      "department": "Charente-Maritime",
+      "operator": "E-TOTEM G10",
+      "tariffApplicable": true,
+      "match": {
+        "score": 92,
+        "reason": "name"
+      },
+      "canonicalStation": {
+        "names": [
+          "VILLE DE LA ROCHELLE - PLACE JB MARCET"
+        ],
+        "addresses": [],
+        "cities": [
+          "La Rochelle"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "E-TOTEM G10"
+      },
+      "runtimeStation": {
+        "id": "electroverse:651335",
+        "name": "VILLE DE LA ROCHELLE - PLACE JB MARCET",
+        "address": "Rue de l'Arsenal, 17000, La Rochelle",
+        "lat": 46.1598,
+        "lon": -1.14858,
+        "operator": "E-Totem",
+        "configurationCount": 6,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.59,
+            0.69
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.200167
+          ],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "tariff.energyEurPerKwh",
+          "value": 0.69
+        },
+        {
+          "path": "tariff.postChargeFeeBlockMinutes",
+          "value": 5
+        },
+        {
+          "path": "tariff.postChargeFeeEurPerBlock",
+          "value": 1
+        },
+        {
+          "path": "tariff.postChargeGraceMinutes",
+          "value": 15
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.69
+      ],
+      "comparison": "energy_overlap"
+    },
+    {
+      "sourcePath": "data/station_verifications/le_havre_ubitricity_107_commandant_abadie_app_2026_08_22.json",
+      "dataset": "le-havre-ubitricity-107-commandant-abadie-app-verification",
+      "region": "Normandie",
+      "department": "Seine-Maritime",
+      "operator": "Shell Recharge - ubitricity",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address+name"
+      },
+      "canonicalStation": {
+        "names": [
+          "107 Rue Commandant Abadie, Le Havre, [AN 0]"
+        ],
+        "addresses": [
+          "107 Rue Commandant Abadie, 76600 Le Havre, France"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [
+          "FR*UBI*E10027440-setp0100000111",
+          "FR*UBI*E10084451-setp0100000111"
+        ],
+        "operator": "Shell Recharge - ubitricity"
+      },
+      "runtimeStation": {
+        "id": "electroverse:3945377",
+        "name": "107 Rue Commandant Abadie, Le Havre, [AN  0]",
+        "address": "107 Rue Commandant Abadie, 76600, Le Havre",
+        "lat": 49.501492,
+        "lon": 0.171157,
+        "operator": "Shell Ubitricity",
+        "configurationCount": 2,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.63
+          ],
+          "minuteEur": [],
+          "flatEur": [
+            1
+          ],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "directDisplayedTariff.energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "directDisplayedTariff.transactionFeeEur",
+          "value": 0.35
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.52
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/modulo_bourges_maurice_roy_adhoc_2026_08_22.json",
+      "dataset": "modulo-station-tariff-verification",
+      "region": "Centre-Val de Loire",
+      "department": "Cher",
+      "operator": "Modulo Energies",
+      "tariffApplicable": true,
+      "match": {
+        "score": 86,
+        "reason": "name_city"
+      },
+      "canonicalStation": {
+        "names": [
+          "MODULO - BOURGES - Rue Maurice Roy"
+        ],
+        "addresses": [],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [
+          "FR*S18*E186239"
+        ],
+        "operator": "Modulo Energies"
+      },
+      "runtimeStation": {
+        "id": "electroverse:682967",
+        "name": "MODULO - BOURGES - Rue Maurice Roy (SDE18)",
+        "address": "7 Rue Maurice Roy, 18000, Bourges",
+        "lat": 47.081654,
+        "lon": 2.414504,
+        "operator": "Syndicat Départemental d’Energie du Cher (SDE18)",
+        "configurationCount": 1,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.36
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "nonSubscriber.bankCardPreauthorisationEur",
+          "value": 25
+        },
+        {
+          "path": "nonSubscriber.periods[0].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[0].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "nonSubscriber.periods[1].energyEurPerKwh",
+          "value": 0.51
+        },
+        {
+          "path": "nonSubscriber.periods[1].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "nonSubscriber.periods[1].timeFee.afterFirstHoursEurPerHour",
+          "value": 1.56
+        },
+        {
+          "path": "nonSubscriber.periods[1].timeFee.firstHours",
+          "value": 4
+        },
+        {
+          "path": "nonSubscriber.periods[1].timeFee.firstHoursEurPerHour",
+          "value": 0
+        },
+        {
+          "path": "nonSubscriber.periods[2].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[2].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "subscriber.periods[0].energyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "subscriber.periods[1].energyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "subscriber.periods[1].timeFee.afterFirstHoursEurPerHour",
+          "value": 1.2
+        },
+        {
+          "path": "subscriber.periods[1].timeFee.firstHours",
+          "value": 4
+        },
+        {
+          "path": "subscriber.periods[1].timeFee.firstHoursEurPerHour",
+          "value": 0
+        },
+        {
+          "path": "subscriber.periods[2].energyEurPerKwh",
+          "value": 0.4
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.52,
+        0.51,
+        0.4
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/modulo_sidelc41_nouan_le_fuzelier_avenue_toulouse_app_2026_08_22.json",
+      "dataset": "modulo-sidelc41-nouan-le-fuzelier-avenue-toulouse-app-verification",
+      "region": "Centre-Val de Loire",
+      "department": "Loir-et-Cher",
+      "operator": "Modulo",
+      "tariffApplicable": true,
+      "match": {
+        "score": 101,
+        "reason": "address+name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "MODULO - NOUAN LE FUZELIER - Av. de Toulouse"
+        ],
+        "addresses": [
+          "16 Avenue de Toulouse, 41600 Nouan-le-Fuzelier"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Modulo"
+      },
+      "runtimeStation": {
+        "id": "electroverse:687653",
+        "name": "MODULO - NOUAN LE FUZELIER - Av. de Toulouse",
+        "address": "Avenue de Toulouse, 41600, Nouan-le-Fuzelier",
+        "lat": 47.533779,
+        "lon": 2.033293,
+        "operator": "Modulo",
+        "configurationCount": 1,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.47
+          ],
+          "minuteEur": [
+            0.02
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "nonSubscriber.periods[0].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[0].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "nonSubscriber.periods[1].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[1].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "nonSubscriber.periods[2].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[2].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "subscriber.periods[0].energyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "subscriber.periods[1].energyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "subscriber.periods[2].energyEurPerKwh",
+          "value": 0.4
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.52,
+        0.4
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/modulo_sieil37_sainte_maure_ronsard_app_2026_08_22.json",
+      "dataset": "modulo-sieil37-sainte-maure-ronsard-app-verification",
+      "region": "Centre-Val de Loire",
+      "department": "Indre-et-Loire",
+      "operator": "Modulo",
+      "tariffApplicable": true,
+      "match": {
+        "score": 101,
+        "reason": "address+name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "MODULO - STE MAURE DE TOURAINE - Ronsard"
+        ],
+        "addresses": [
+          "Avenue Ronsard, 37800 Sainte-Maure-de-Touraine"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Modulo"
+      },
+      "runtimeStation": {
+        "id": "electroverse:573298",
+        "name": "MODULO - STE MAURE DE TOURAINE – Ronsard",
+        "address": "Avenue Ronsard, 37800, Sainte-Maure-de-Touraine",
+        "lat": 47.111292,
+        "lon": 0.616451,
+        "operator": "Modulo",
+        "configurationCount": 1,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.47
+          ],
+          "minuteEur": [
+            0.02
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "nonSubscriber.periods[0].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[0].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "nonSubscriber.periods[1].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[1].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "nonSubscriber.periods[2].energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "nonSubscriber.periods[2].minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "subscriber.periods[0].energyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "subscriber.periods[1].energyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "subscriber.periods[2].energyEurPerKwh",
+          "value": 0.4
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.52,
+        0.4
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/modulo_siem51_fagnieres_parc_tilleuls_app_2026_08_22.json",
+      "dataset": "modulo-siem51-fagnieres-parc-tilleuls-app-verification",
+      "region": "Grand Est",
+      "department": "Marne",
+      "operator": "Modulo",
+      "tariffApplicable": true,
+      "match": {
+        "score": 95,
+        "reason": "name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "MODULO - FAGNIERES - Parc des Tilleuls"
+        ],
+        "addresses": [
+          "1C Avenue Charles de Gaulle, 51510 Fagnières"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Modulo"
+      },
+      "runtimeStation": {
+        "id": "electroverse:560299",
+        "name": "MODULO - FAGNIERES - Parc des Tilleuls",
+        "address": "Boulevard Hélène Boucher Parc des Tilleuls, 51510, Fagnières",
+        "lat": 48.961659,
+        "lon": 4.319038,
+        "operator": "Modulo",
+        "configurationCount": 2,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.36
+          ],
+          "minuteEur": [
+            0.02
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "guest.energyEurPerKwh",
+          "value": 0.52
+        },
+        {
+          "path": "guest.minimumFeeEur",
+          "value": 0.5
+        },
+        {
+          "path": "registered.energyEurPerKwh",
+          "value": 0.4
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.52,
+        0.4
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json",
+      "dataset": "nantes-etotem-sainte-luce-planchonnais-ac-dc-app-verification",
+      "region": "Pays de la Loire",
+      "department": "Loire-Atlantique",
+      "operator": "e-Totem",
+      "tariffApplicable": true,
+      "match": {
+        "score": 95,
+        "reason": "name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "e-Totem - NANTES - St-Luce/Loire - Planchonnais"
+        ],
+        "addresses": [],
+        "cities": [
+          "Sainte-Luce-sur-Loire"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "e-Totem"
+      },
+      "runtimeStation": {
+        "id": "electroverse:2366506",
+        "name": "e-Totem - NANTES - St-Luce/Loire - Planchonnais",
+        "address": "Rue de la Planchonnais, 44980, Sainte-Luce-sur-Loire",
+        "lat": 47.253347,
+        "lon": -1.474569,
+        "operator": "E-Totem",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.45,
+            0.49,
+            0.5
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.2
+          ],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "ac.ecoModeEnergyEurPerKwh",
+          "value": 0.3
+        },
+        {
+          "path": "ac.postChargeBillingBlockMinutes",
+          "value": 15
+        },
+        {
+          "path": "ac.postChargeFeeEurPerBlock",
+          "value": 1
+        },
+        {
+          "path": "ac.postChargeGraceMinutes",
+          "value": 10
+        },
+        {
+          "path": "ac.standardEnergyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "dc.ecoModeEnergyEurPerKwh",
+          "value": 0.4
+        },
+        {
+          "path": "dc.postChargeBillingBlockMinutes",
+          "value": 15
+        },
+        {
+          "path": "dc.postChargeFeeEurPerBlock",
+          "value": 3
+        },
+        {
+          "path": "dc.postChargeGraceMinutes",
+          "value": 10
+        },
+        {
+          "path": "dc.standardEnergyEurPerKwh",
+          "value": 0.5
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.3,
+        0.4,
+        0.5
+      ],
+      "comparison": "energy_overlap"
+    },
+    {
+      "sourcePath": "data/station_verifications/nantes_etotem_sainte_luce_salle_le_bonniec_app_2026_08_22.json",
+      "dataset": "nantes-etotem-sainte-luce-salle-le-bonniec-app-verification",
+      "region": "Pays de la Loire",
+      "department": "Loire-Atlantique",
+      "operator": "e-Totem",
+      "tariffApplicable": true,
+      "match": {
+        "score": 95,
+        "reason": "name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "e-Totem - NANTES - St-Luce/Loire - Sal. Le Bonniec"
+        ],
+        "addresses": [],
+        "cities": [
+          "Sainte-Luce-sur-Loire"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "e-Totem"
+      },
+      "runtimeStation": {
+        "id": "electroverse:2366462",
+        "name": "e-Totem - NANTES - St-Luce/Loire - Sal. Le Bonniec",
+        "address": "Boulevard Louis Pasteur, 44980, Sainte-Luce-sur-Loire",
+        "lat": 47.2583,
+        "lon": -1.49086,
+        "operator": "E-Totem",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.45,
+            0.4
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.066667
+          ],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "tariff.ecoModeEnergyEurPerKwh",
+          "value": 0.3
+        },
+        {
+          "path": "tariff.postChargeBillingBlockMinutes",
+          "value": 15
+        },
+        {
+          "path": "tariff.postChargeFeeEurPerBlock",
+          "value": 1
+        },
+        {
+          "path": "tariff.postChargeGraceMinutes",
+          "value": 10
+        },
+        {
+          "path": "tariff.standardEnergyEurPerKwh",
+          "value": 0.4
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.3,
+        0.4
+      ],
+      "comparison": "energy_overlap"
+    },
+    {
+      "sourcePath": "data/station_verifications/ozecar_bonifacio_parking_p1_app_2026_08_22.json",
+      "dataset": "ozecar-bonifacio-parking-p1-app-verification",
+      "region": "Corse",
+      "department": "Corse-du-Sud",
+      "operator": "OZECAR",
+      "tariffApplicable": true,
+      "match": {
+        "score": 95,
+        "reason": "name+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "Parking Public P1 - OZECAR Charging Station"
+        ],
+        "addresses": [],
+        "cities": [
+          "Bonifacio"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "OZECAR"
+      },
+      "runtimeStation": {
+        "id": "electroverse:4225662",
+        "name": "Parking Public P1 - OZECAR Charging Station",
+        "address": "Rue Paul Boyer, 20169, Bonifacio",
+        "lat": 41.389001,
+        "lon": 9.165897,
+        "operator": "OZECAR",
+        "configurationCount": 1,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.6
+          ],
+          "minuteEur": [],
+          "flatEur": [
+            0.6
+          ],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "tariff.energyEurPerKwh",
+          "value": 0.58
+        },
+        {
+          "path": "tariff.inactivityEurPerMin",
+          "value": 0.16
+        },
+        {
+          "path": "tariff.inactivityGraceAfterChargeMinutes",
+          "value": 60
+        },
+        {
+          "path": "tariff.startupFeeEur",
+          "value": 1.5
+        },
+        {
+          "path": "tariff.startupFeeTriggerAfterMinutes",
+          "value": 5
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.58
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/passpass_fauquembergues_avenue_roland_huguet_app_2026_08_22.json",
+      "dataset": "passpass-fauquembergues-avenue-roland-huguet-app-verification",
+      "region": "Hauts-de-France",
+      "department": "Pas-de-Calais",
+      "operator": "Pass Pass Electrique",
+      "tariffApplicable": true,
+      "match": {
+        "score": 101,
+        "reason": "address+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "pass pass électrique - Avenue Roland Huguet"
+        ],
+        "addresses": [
+          "28 Avenue Roland Huguet, 62560 Fauquembergues"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Pass Pass Electrique"
+      },
+      "runtimeStation": {
+        "id": "electroverse:589463",
+        "name": "FAUQUEMBERGUES - Avenue Roland Huguet",
+        "address": "Avenue Roland Huguet, 62560, Fauquembergues",
+        "lat": 50.603489,
+        "lon": 2.096668,
+        "operator": "Pass Pass Electrique",
+        "configurationCount": 11,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.36,
+            0.47
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": [
+            0.2,
+            0.01,
+            0.04
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "comparisonWithOfficialPassPassNormalCategory.matchesNightCapEur",
+          "value": 1.2
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[0].afterFreeEurPerMinute",
+          "value": 0.04
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[0].freeConnectedMinutes",
+          "value": 180
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[1].afterFreeEurPerMinute",
+          "value": 0.01
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[1].derivedMaximumTimeComponentEur",
+          "value": 1.2
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[1].freeConnectedMinutes",
+          "value": 180
+        },
+        {
+          "path": "registeredUser.energyEurPerKwh",
+          "value": 0.32
+        },
+        {
+          "path": "registeredUser.temporaryCardReservationEur",
+          "value": 20
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.32
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/passpass_wargnies_le_grand_zac_vallee_app_2026_08_22.json",
+      "dataset": "passpass-wargnies-le-grand-zac-vallee-app-verification",
+      "region": "Hauts-de-France",
+      "department": "Nord",
+      "operator": "Pass Pass Electrique",
+      "tariffApplicable": true,
+      "match": {
+        "score": 101,
+        "reason": "address+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "pass pass électrique - ZAC de la vallée"
+        ],
+        "addresses": [
+          "ZAC de la Vallée, 59144 Wargnies-le-Grand"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Pass Pass Electrique"
+      },
+      "runtimeStation": {
+        "id": "electroverse:2962209",
+        "name": "WARGNIES LE GRAND - Zac de la vallée",
+        "address": "Zac de la vallée, 59144, Wargnies-le-Grand",
+        "lat": 50.30438,
+        "lon": 3.643271,
+        "operator": "Pass Pass Electrique",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.36
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": [
+            0.01,
+            0.04
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "comparisonWithOfficialPassPassNormalCategory.matchesNightCapEur",
+          "value": 1.2
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[0].afterFreeEurPerMinute",
+          "value": 0.04
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[0].freeConnectedMinutes",
+          "value": 180
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[1].afterFreeEurPerMinute",
+          "value": 0.01
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[1].derivedMaximumTimeComponentEur",
+          "value": 1.2
+        },
+        {
+          "path": "registeredUser.connectedTimeRules[1].freeConnectedMinutes",
+          "value": 180
+        },
+        {
+          "path": "registeredUser.energyEurPerKwh",
+          "value": 0.32
+        },
+        {
+          "path": "registeredUser.temporaryCardReservationEur",
+          "value": 20
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.32
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/prise_de_nice_cagnes_bir_hakeim_3kw_izivia_app_2026_08_22.json",
+      "dataset": "prise-de-nice-cagnes-bir-hakeim-3kw-izivia-app-verification",
+      "region": "Provence-Alpes-Côte d’Azur",
+      "department": "Alpes-Maritimes",
+      "operator": "Prise de Nice",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address"
+      },
+      "canonicalStation": {
+        "names": [],
+        "addresses": [
+          "8 Rue Bir Hakeim, 06800 Cagnes-sur-Mer"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Prise de Nice"
+      },
+      "runtimeStation": {
+        "id": "electroverse:1081704",
+        "name": "Cagnes-sur-Mer - Bir Hakeim",
+        "address": "8 Rue Bir Hakeim, 06800, Cagnes-sur-Mer",
+        "lat": 43.657225,
+        "lon": 7.151874,
+        "operator": "Métropole Nice Côte D'Azure",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [],
+          "minuteEur": [
+            0.03,
+            0.06,
+            0.058333,
+            0.033333
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.058333,
+            0.033333
+          ],
+          "afterThresholdEurPerMinute": [
+            0.04,
+            0.066667
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "displayedPricing.dayWindow.steps[0].durationHours",
+          "value": 1
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[0].eurPerHour",
+          "value": 3.5
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[1].durationHours",
+          "value": 2
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[1].eurPerHour",
+          "value": 4
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[2].durationHours",
+          "value": 2
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[2].eurPerHour",
+          "value": 5
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[3].afterHours",
+          "value": 5
+        },
+        {
+          "path": "displayedPricing.dayWindow.steps[3].eurPerHour",
+          "value": 7
+        },
+        {
+          "path": "displayedPricing.nightWindow.eurPerHour",
+          "value": 2
+        },
+        {
+          "path": "displayedPricing.nightWindow.maxEur",
+          "value": 12
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "not_comparable"
+    },
+    {
+      "sourcePath": "data/station_verifications/prise_de_nice_cagnes_bir_hakeim_app_tariff_display_2026_08_22.json",
+      "dataset": "prise-de-nice-cagnes-bir-hakeim-app-tariff-display-verification",
+      "region": "Provence-Alpes-Cote d'Azur",
+      "department": "Alpes-Maritimes",
+      "operator": "Prise de Nice",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address"
+      },
+      "canonicalStation": {
+        "names": [],
+        "addresses": [
+          "8 Rue Bir Hakeim, 06800 Cagnes-sur-Mer"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Prise de Nice"
+      },
+      "runtimeStation": {
+        "id": "electroverse:1081704",
+        "name": "Cagnes-sur-Mer - Bir Hakeim",
+        "address": "8 Rue Bir Hakeim, 06800, Cagnes-sur-Mer",
+        "lat": 43.657225,
+        "lon": 7.151874,
+        "operator": "Métropole Nice Côte D'Azure",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [],
+          "minuteEur": [
+            0.03,
+            0.06,
+            0.058333,
+            0.033333
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.058333,
+            0.033333
+          ],
+          "afterThresholdEurPerMinute": [
+            0.04,
+            0.066667
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[0].durationHours",
+          "value": 1
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[0].eurPerHour",
+          "value": 3.5
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[1].durationHours",
+          "value": 2
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[1].eurPerHour",
+          "value": 4
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[2].durationHours",
+          "value": 2
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[2].eurPerHour",
+          "value": 5
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.08:00-20:00[3].thereafterEurPerHour",
+          "value": 7
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.20:00-08:00.eurPerHour",
+          "value": 2
+        },
+        {
+          "path": "appTariffDisplay.displayedTimeSchedule.20:00-08:00.maximumEur",
+          "value": 12
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "not_comparable"
+    },
+    {
+      "sourcePath": "data/station_verifications/prise_de_nice_cagnes_docteur_feraud_no_dc_app_2026_08_22.json",
+      "dataset": "prise-de-nice-cagnes-docteur-feraud-no-dc-app-verification",
+      "region": "Provence-Alpes-Cote d'Azur",
+      "department": "Alpes-Maritimes",
+      "operator": "Prise de Nice",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address"
+      },
+      "canonicalStation": {
+        "names": [],
+        "addresses": [
+          "13 Rue du Docteur Feraud, 06800 Cagnes-sur-Mer"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Prise de Nice"
+      },
+      "runtimeStation": {
+        "id": "electroverse:1212434",
+        "name": "Cagnes-sur-Mer - Docteur Feraud",
+        "address": "13 Rue du Docteur Féraud, 06800, Cagnes-sur-Mer",
+        "lat": 43.660785,
+        "lon": 7.150284,
+        "operator": "Métropole Nice Côte D'Azure",
+        "configurationCount": 4,
+        "priceSignals": {
+          "energyEurPerKwh": [],
+          "minuteEur": [
+            0.03,
+            0.06,
+            0.058333,
+            0.033333
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.058333,
+            0.033333
+          ],
+          "afterThresholdEurPerMinute": [
+            0.04,
+            0.066667
+          ]
+        }
+      },
+      "canonicalPriceSignals": [],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "not_comparable"
+    },
+    {
+      "sourcePath": "data/station_verifications/prise_de_nice_fast_50kw_ad_hoc_tariff_unavailable_2026_08_22.json",
+      "dataset": "prise-de-nice-fast-50kw-ad-hoc-tariff-unavailable",
+      "region": "Provence-Alpes-Cote d'Azur",
+      "department": "Alpes-Maritimes",
+      "operator": "IZIVIA",
+      "tariffApplicable": true,
+      "match": {
+        "score": 98,
+        "reason": "address"
+      },
+      "canonicalStation": {
+        "names": [],
+        "addresses": [
+          "72 Boulevard Comte de Falicon, 06100 Nice"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "IZIVIA"
+      },
+      "runtimeStation": {
+        "id": "electroverse:347665",
+        "name": "Nice - Comte de Falicon",
+        "address": "72 Boulevard Comte de Falicon, 06100, Nice",
+        "lat": 43.726325,
+        "lon": 7.25542,
+        "operator": "Métropole Nice Côte D'Azure",
+        "configurationCount": 15,
+        "priceSignals": {
+          "energyEurPerKwh": [],
+          "minuteEur": [
+            0.33,
+            0.03,
+            0.06,
+            0.333333,
+            0.058333,
+            0.033333
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.333333,
+            0.058333,
+            0.033333
+          ],
+          "afterThresholdEurPerMinute": [
+            0.04,
+            0.666667,
+            0.066667
+          ]
+        }
+      },
+      "canonicalPriceSignals": [],
+      "canonicalEnergyEurPerKwh": [],
+      "comparison": "not_comparable"
+    },
+    {
+      "sourcePath": "data/station_verifications/qwello_vire_place_14_juillet_app_2026_08_22.json",
+      "dataset": "station-manual-verification",
+      "region": "Bourgogne-Franche-Comté",
+      "department": "Saône-et-Loire",
+      "operator": "Qwello",
+      "tariffApplicable": true,
+      "match": {
+        "score": 97,
+        "reason": "address_in_station_text+operator"
+      },
+      "canonicalStation": {
+        "names": [
+          "Place du 14 juillet"
+        ],
+        "addresses": [
+          "Rue du Petit Molard, Viré"
+        ],
+        "cities": [
+          "Viré"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Qwello"
+      },
+      "runtimeStation": {
+        "id": "electroverse:4569697",
+        "name": "Rue du Petit Molard · Viré",
+        "address": "Rue du Petit Molard, 71260, Viré",
+        "lat": 46.447086,
+        "lon": 4.855718,
+        "operator": "Qwello",
+        "configurationCount": 2,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.45
+          ],
+          "minuteEur": [
+            0.02,
+            0.024
+          ],
+          "flatEur": [],
+          "parkingEurPerMinute": [
+            0.02,
+            0.024
+          ],
+          "afterThresholdEurPerMinute": []
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "directTariff.energyEurPerKwh",
+          "value": 0.3
+        },
+        {
+          "path": "directTariff.nightMinuteComponentCapEur",
+          "value": 3.6
+        },
+        {
+          "path": "directTariff.timeEurPerMinute",
+          "value": 0.02
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.3
+      ],
+      "comparison": "potential_energy_conflict"
+    },
+    {
+      "sourcePath": "data/station_verifications/sde82_freshmile_montauban_mandoune_type2_2026_08_22.json",
+      "dataset": "sde82-freshmile-montauban-mandoune-type2-app-verification",
+      "region": "Occitanie",
+      "department": "Tarn-et-Garonne",
+      "operator": "SDE82",
+      "tariffApplicable": true,
+      "match": {
+        "score": 92,
+        "reason": "name"
+      },
+      "canonicalStation": {
+        "names": [
+          "Montauban, Mandoune"
+        ],
+        "addresses": [],
+        "cities": [
+          "Montauban"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "SDE82"
+      },
+      "runtimeStation": {
+        "id": "electroverse:391642",
+        "name": "Montauban, Mandoune",
+        "address": "3 Rue de la Mandoune, 82000, Montauban",
+        "lat": 44.0197,
+        "lon": 1.35363,
+        "operator": "Syndicat Départemental d'Énergie de Tarn-et-Garonne (SDE82)",
+        "configurationCount": 6,
+        "priceSignals": {
+          "energyEurPerKwh": [
+            0.52,
+            0.45,
+            0.46
+          ],
+          "minuteEur": [],
+          "flatEur": [],
+          "parkingEurPerMinute": [],
+          "afterThresholdEurPerMinute": [
+            0.045
+          ]
+        }
+      },
+      "canonicalPriceSignals": [
+        {
+          "path": "payment.minimumBalanceEur",
+          "value": 25
+        },
+        {
+          "path": "payment.paymentAuthorizationEur",
+          "value": 50
+        },
+        {
+          "path": "tariff.energyEurPerKwh",
+          "value": 0.45
+        },
+        {
+          "path": "tariff.freeConnectedMinutes",
+          "value": 180
+        },
+        {
+          "path": "tariff.timeEurPerMinAfterFreePeriod",
+          "value": 0.045
+        }
+      ],
+      "canonicalEnergyEurPerKwh": [
+        0.45
+      ],
+      "comparison": "energy_overlap"
+    }
+  ],
+  "identityConflicts": [
+    {
+      "sourcePath": "data/station_verifications/chargelec36_chateauroux_colbert_2026_08_22.json",
+      "dataset": "chargelec36-station-positive-verification",
+      "operator": "Chargelec36 / SDEI36",
+      "identity": {
+        "names": [
+          "CHATEAUROUX - Colbert"
+        ],
+        "addresses": [],
+        "cities": [],
+        "lat": 46.811115,
+        "lon": 1.7041603,
+        "evse": [],
+        "operator": "Chargelec36 / SDEI36"
+      },
+      "tariffApplicable": true,
+      "nearbyRuntimeStations": [
+        {
+          "distanceMeters": 0,
+          "station": {
+            "id": "electroverse:368645",
+            "name": "Châteauroux | Rue Alfred Dauvergne",
+            "address": "Rue Alfred Dauvergne, 36000, Châteauroux",
+            "lat": 46.811116,
+            "lon": 1.70416,
+            "operator": "Syndicat Départemental d'Energies de l'Indre (SDEI)",
+            "configurationCount": 4,
+            "priceSignals": {
+              "energyEurPerKwh": [],
+              "minuteEur": [],
+              "flatEur": [
+                10
+              ],
+              "parkingEurPerMinute": [],
+              "afterThresholdEurPerMinute": []
+            }
+          }
+        },
+        {
+          "distanceMeters": 150,
+          "station": {
+            "id": "electroverse:4073399",
+            "name": "Hôtel Colbert - Châteauroux",
+            "address": "4 Rue Alfred Dauvergne, 36000, Châteauroux",
+            "lat": 46.80977,
+            "lon": 1.70414,
+            "operator": "Qovoltis",
+            "configurationCount": 2,
+            "priceSignals": {
+              "energyEurPerKwh": [
+                0.44
+              ],
+              "minuteEur": [],
+              "flatEur": [
+                2
+              ],
+              "parkingEurPerMinute": [],
+              "afterThresholdEurPerMinute": []
+            }
+          }
+        },
+        {
+          "distanceMeters": 170,
+          "station": {
+            "id": "electroverse:1908040",
+            "name": "e-Vadea - Châteauroux - Châtre",
+            "address": "1 Avenue de la Châtre, 36000, Châteauroux",
+            "lat": 46.81029,
+            "lon": 1.702273,
+            "operator": "e-Vadea",
+            "configurationCount": 4,
+            "priceSignals": {
+              "energyEurPerKwh": [
+                0.62,
+                0.48,
+                0.58
+              ],
+              "minuteEur": [],
+              "flatEur": [],
+              "parkingEurPerMinute": [
+                0.333333
+              ],
+              "afterThresholdEurPerMinute": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "ambiguous": [
+    {
+      "sourcePath": "data/station_verifications/electric55_lons_le_saunier_rue_lecourbe_alize_2026_08_22.json",
+      "dataset": "electric55-lons-le-saunier-rue-lecourbe-verification",
+      "operator": "",
+      "identity": {
+        "names": [
+          "Electric 55"
+        ],
+        "addresses": [
+          "Rue Lecourbe, 39000 Lons-le-Saunier"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [
+          "FR*55C*EFR39000*P7PPFG*1"
+        ],
+        "operator": ""
+      },
+      "tariffApplicable": true,
+      "candidates": [
+        {
+          "score": 98,
+          "reason": "address",
+          "station": {
+            "id": "electroverse:4531101",
+            "name": "PARKING PLACE GUILLERMET - LONS-LE-SAUNIER",
+            "address": "Rue Lecourbe, 39000, Lons-le-Saunier",
+            "lat": 46.674931,
+            "lon": 5.548529,
+            "operator": "Electric 55 Charging",
+            "configurationCount": 2,
+            "priceSignals": {
+              "energyEurPerKwh": [],
+              "minuteEur": [
+                0.06,
+                0.08,
+                0.084,
+                0.062333
+              ],
+              "flatEur": [],
+              "parkingEurPerMinute": [
+                0.084,
+                0.062333
+              ],
+              "afterThresholdEurPerMinute": []
+            }
+          }
+        },
+        {
+          "score": 98,
+          "reason": "address",
+          "station": {
+            "id": "electroverse:572979",
+            "name": "Lons-le-Saulnier, Start'N Move",
+            "address": "58B Rue Lecourbe, 39000, Lons-le-Saunier",
+            "lat": 46.6752,
+            "lon": 5.54762,
+            "operator": "Freshmile",
+            "configurationCount": 4,
+            "priceSignals": {
+              "energyEurPerKwh": [
+                0.3
+              ],
+              "minuteEur": [
+                0.03,
+                0.025
+              ],
+              "flatEur": [
+                0.6
+              ],
+              "parkingEurPerMinute": [
+                0.025
+              ],
+              "afterThresholdEurPerMinute": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourcePath": "data/station_verifications/modulo_te28_chartres_grand_faubourg_app_2026_08_22.json",
+      "dataset": "modulo-te28-chartres-grand-faubourg-app-verification",
+      "operator": "Modulo",
+      "identity": {
+        "names": [
+          "MODULO - CHARTRES - Rue du Grand Faubourg"
+        ],
+        "addresses": [
+          "27 Rue du Grand Faubourg, 28000 Chartres"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Modulo"
+      },
+      "tariffApplicable": true,
+      "candidates": [
+        {
+          "score": 98,
+          "reason": "address+name",
+          "station": {
+            "id": "electroverse:551549",
+            "name": "MODULO - CHARTRES - Rue du grand faubourg",
+            "address": "Rue du Grand Faubourg, 28000, Chartres",
+            "lat": 48.443547,
+            "lon": 1.481391,
+            "operator": "Energie Eure-et-Loir (SDE28)",
+            "configurationCount": 2,
+            "priceSignals": {
+              "energyEurPerKwh": [
+                0.36
+              ],
+              "minuteEur": [
+                0.02,
+                0.024
+              ],
+              "flatEur": [],
+              "parkingEurPerMinute": [
+                0.024
+              ],
+              "afterThresholdEurPerMinute": []
+            }
+          }
+        },
+        {
+          "score": 98,
+          "reason": "address",
+          "station": {
+            "id": "electroverse:605465",
+            "name": "Rue du grand Faubourg · Chartres",
+            "address": "Rue du grand Faubourg, 28000, Chartres",
+            "lat": 48.443547,
+            "lon": 1.481391,
+            "operator": "Virta",
+            "configurationCount": 1,
+            "priceSignals": {
+              "energyEurPerKwh": [
+                0.67
+              ],
+              "minuteEur": [],
+              "flatEur": [],
+              "parkingEurPerMinute": [],
+              "afterThresholdEurPerMinute": [
+                0.12
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "unmatched": [
+    {
+      "sourcePath": "data/station_verifications/aqui_sydeel66_perpignan_rue_des_embruns_type2_app_2026_08_22.json",
+      "dataset": "aqui-sydeel66-perpignan-rue-des-embruns-type2-app-verification",
+      "operator": "AQUÍ",
+      "identity": {
+        "names": [
+          "AQUÍ - Rue des Embruns"
+        ],
+        "addresses": [
+          "Rue des Embruns, 66180 Perpignan"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "AQUÍ"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/chargelec36_chateauroux_jules_chauvin_negative_2026_08_22.json",
+      "dataset": "chargelec36-station-negative-verification",
+      "operator": "Chargelec36 / SDEI36",
+      "identity": {
+        "names": [
+          "Rue Jules Chauvin / Parking Hôpital"
+        ],
+        "addresses": [
+          "4 rue Jules Chauvin, 36000 Châteauroux"
+        ],
+        "cities": [
+          "Châteauroux"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Chargelec36 / SDEI36"
+      },
+      "tariffApplicable": false
+    },
+    {
+      "sourcePath": "data/station_verifications/emotum_ajaccio_port_ornano_cala_di_sole_app_2026_08_22.json",
+      "dataset": "emotum-ajaccio-port-ornano-cala-di-sole-app-verification",
+      "operator": "E-Motum",
+      "identity": {
+        "names": [],
+        "addresses": [],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "E-Motum"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/etotem_mayenne_bonchamp_visibility_2026_08_22.json",
+      "dataset": "etotem-mayenne-bonchamp-visibility-check",
+      "operator": "e-Totem AIP rollout 2025-2026",
+      "identity": {
+        "names": [],
+        "addresses": [],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "e-Totem AIP rollout 2025-2026"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/mamp_izivia_gemenos_boulevard_vessiot_app_2026_08_22.json",
+      "dataset": "mamp-izivia-gemenos-boulevard-vessiot-app-verification",
+      "operator": "IZIVIA",
+      "identity": {
+        "names": [],
+        "addresses": [],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "IZIVIA"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/ouestcharge_sde22_pledaran_app_2026_08_22.json",
+      "dataset": "station-verification-ouestcharge-sde22-app",
+      "operator": "",
+      "identity": {
+        "names": [],
+        "addresses": [],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": ""
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/passpass_espaubourg_route_nationale31_app_2026_08_22.json",
+      "dataset": "passpass-espaubourg-route-nationale31-app-verification",
+      "operator": "Pass Pass Electrique",
+      "identity": {
+        "names": [
+          "pass pass électrique - Route Nationale 31"
+        ],
+        "addresses": [
+          "Route Nationale 31, 60650 Espaubourg"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Pass Pass Electrique"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/qwello_autun_12_petite_rue_marchaux.json",
+      "dataset": "station-manual-verification",
+      "operator": "Qwello",
+      "identity": {
+        "names": [
+          "12 Petite Rue Marchaux"
+        ],
+        "addresses": [
+          "12 Petite Rue Marchaux, Autun"
+        ],
+        "cities": [
+          "Autun"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Qwello"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/reveo_ariege_foix_allee_villote_app_2026_08_22.json",
+      "dataset": "reveo-ariege-foix-allee-villote-app-verification",
+      "operator": "REVEO 2025",
+      "identity": {
+        "names": [
+          "REVEO 2025 - Allée de Villote"
+        ],
+        "addresses": [
+          "Allée de Villote, 09000 Foix"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "REVEO 2025"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/reveo_aveyron_rodez_rue_aubrac_app_2026_08_22.json",
+      "dataset": "reveo-aveyron-rodez-rue-aubrac-app-verification",
+      "operator": "REVEO",
+      "identity": {
+        "names": [
+          "REVE0 - Rue De l'Aubrac 15"
+        ],
+        "addresses": [
+          "15 Rue de l'Aubrac, 12000 Rodez"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "REVEO"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/sarthe_irve_la_fleche_allee_du_loir_alize_visibility_2026_08_22.json",
+      "dataset": "sarthe-irve-la-fleche-allee-du-loir-alize-visibility",
+      "operator": "Sarthe IRVE",
+      "identity": {
+        "names": [
+          "Sarthe IRVE - Allée du Loir"
+        ],
+        "addresses": [
+          "9 Allée du Loir, 72200 La Flèche"
+        ],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Sarthe IRVE"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/sde2a_loadstations_app_visibility_2026_08_22.json",
+      "dataset": "sde2a-loadstations-app-visibility",
+      "operator": "SDE2A / Andà",
+      "identity": {
+        "names": [],
+        "addresses": [],
+        "cities": [],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "SDE2A / Andà"
+      },
+      "tariffApplicable": true
+    },
+    {
+      "sourcePath": "data/station_verifications/valenciennes_place_verte_totalenergies_negative_passpass_mapping_2026_08_22.json",
+      "dataset": "valenciennes-place-verte-totalenergies-negative-passpass-mapping",
+      "operator": "TotalEnergies",
+      "identity": {
+        "names": [
+          "TotalEnergies",
+          "Place Verte"
+        ],
+        "addresses": [],
+        "cities": [
+          "Valenciennes"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "TotalEnergies"
+      },
+      "tariffApplicable": false
+    },
+    {
+      "sourcePath": "data/station_verifications/vaucluselec_avignon_nord_vedene_app_2026_08_22.json",
+      "dataset": "vaucluselec-avignon-nord-vedene-app-verification",
+      "operator": "Vauclus'Elec",
+      "identity": {
+        "names": [
+          "Aire de covoiturage Avignon Nord"
+        ],
+        "addresses": [],
+        "cities": [
+          "Vedène"
+        ],
+        "lat": null,
+        "lon": null,
+        "evse": [],
+        "operator": "Vauclus'Elec"
+      },
+      "tariffApplicable": true
+    }
+  ]
+}
