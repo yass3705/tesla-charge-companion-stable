@@ -1,0 +1,313 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "v8-canonical-station-tariff-overlay",
+  "revision": "rc48an",
+  "generatedAt": "2026-08-22T16:17:00+02:00",
+  "target": "Tesla Charge Companion V8 RC4.8 preview only",
+  "activeInV73": false,
+  "source": {
+    "canonicalDataset": "yass3705/tesla-charge-companion-data-lab:data/national/france_public_charging_canonical.json",
+    "sourceSnapshotAt": "2026-08-22T14:52:00+02:00",
+    "precedence": "exact manual station verification over roaming/runtime price for the exact matched station and access profile"
+  },
+  "safety": {
+    "exactCatalogStationIdOnly": true,
+    "appendOnlyOffers": true,
+    "neverReplaceRuntimeOffer": true,
+    "neverTouchTeslaStations": true,
+    "neverTouchCustomStations": true,
+    "directAndRoamingRemainSeparate": true,
+    "unknownDirectTariffsRemainUnranked": true
+  },
+  "stations": [
+    {
+      "catalogStationId": "electroverse:4547054",
+      "name": "BOURG-MADAME - Avenue des Guinguettes",
+      "sourcePath": "data/station_verifications/aqui_bourg_madame_avenue_des_guinguettes_ccs180_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "aqui-bourg-madame-ccs180-verified",
+          "provider": "AQUÍ direct vérifié",
+          "offerType": "operator_direct_registered",
+          "match": {"kind": "DC", "powerKw": 180, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.52, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.20, "afterMinutesThreshold": 45, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:1043520",
+      "name": "AGGLOMERATION MONTARGOISE - COMMISSARIAT",
+      "sourcePath": "data/station_verifications/etotem_montargis_commissariat_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "etotem-montargis-standard-verified",
+          "provider": "e-Totem direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"allPhysical": true},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.30, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "postChargeGraceMinutes": 30, "postChargeBlockMinutes": 5, "postChargeBlockFee": 0.50}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:984345",
+      "name": "Saint-Flour, Allée Georges Pompidou",
+      "sourcePath": "data/station_verifications/freshmile_sdec15_saint_flour_allee_georges_pompidou_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "sdec15-saint-flour-ac22-verified",
+          "provider": "SDEC15 / Freshmile direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC", "powerKw": 22, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0, "chargePerMinute": 0, "connectionFee": 6.0, "idlePerMinute": 0, "afterMinutesRate": 0.15, "afterMinutesThreshold": 15, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"}
+          ]}
+        },
+        {
+          "id": "sdec15-saint-flour-dc50-verified",
+          "provider": "SDEC15 / Freshmile direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "DC", "powerKw": 50, "toleranceKw": 3},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0, "chargePerMinute": 0, "connectionFee": 6.0, "idlePerMinute": 0, "afterMinutesRate": 0.15, "afterMinutesThreshold": 15, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:651335",
+      "name": "VILLE DE LA ROCHELLE - PLACE JB MARCET",
+      "sourcePath": "data/station_verifications/la_rochelle_place_jb_marcet_etotem_g10_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "la-rochelle-jb-marcet-verified",
+          "provider": "e-Totem G10 direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"allPhysical": true},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.69, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "postChargeGraceMinutes": 15, "postChargeBlockMinutes": 5, "postChargeBlockFee": 1.0}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:3945377",
+      "name": "107 Rue Commandant Abadie, Le Havre",
+      "sourcePath": "data/station_verifications/le_havre_ubitricity_107_commandant_abadie_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "ubitricity-le-havre-abadie-verified",
+          "provider": "Shell Recharge / ubitricity direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC", "powerKw": 22.1, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.52, "chargePerMinute": 0, "connectionFee": 0.35, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:682967",
+      "name": "MODULO - BOURGES - Rue Maurice Roy",
+      "sourcePath": "data/station_verifications/modulo_bourges_maurice_roy_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "modulo-bourges-guest-verified",
+          "provider": "Modulo direct non-abonné vérifié",
+          "offerType": "operator_direct_guest",
+          "match": {"kind": "AC", "minPowerKw": 20, "maxPowerKw": 24},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "timeWindow", "start": "07:00", "end": "20:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.51, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.026, "afterMinutesThreshold": 240, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "minimumSessionFee": 0.50},
+            {"scope": "timeWindow", "start": "20:00", "end": "07:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.52, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "minimumSessionFee": 0.50}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:687653",
+      "name": "MODULO - NOUAN LE FUZELIER - Av. de Toulouse",
+      "sourcePath": "data/station_verifications/modulo_sidelc41_nouan_le_fuzelier_avenue_toulouse_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "modulo-nouan-guest-verified",
+          "provider": "Modulo direct non-abonné vérifié",
+          "offerType": "operator_direct_guest",
+          "match": {"kind": "AC", "minPowerKw": 20, "maxPowerKw": 24},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.52, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "minimumSessionFee": 0.50}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:573298",
+      "name": "MODULO - STE MAURE DE TOURAINE – Ronsard",
+      "sourcePath": "data/station_verifications/modulo_sieil37_sainte_maure_ronsard_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "modulo-sainte-maure-guest-verified",
+          "provider": "Modulo direct non-abonné vérifié",
+          "offerType": "operator_direct_guest",
+          "match": {"kind": "AC", "minPowerKw": 20, "maxPowerKw": 24},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.52, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "minimumSessionFee": 0.50}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:560299",
+      "name": "MODULO - FAGNIERES - Parc des Tilleuls",
+      "sourcePath": "data/station_verifications/modulo_siem51_fagnieres_parc_tilleuls_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "modulo-fagnieres-guest-verified",
+          "provider": "Modulo direct non-abonné vérifié",
+          "offerType": "operator_direct_guest",
+          "match": {"kind": "AC", "minPowerKw": 20, "maxPowerKw": 24},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.52, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "minimumSessionFee": 0.50}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:2366506",
+      "name": "e-Totem - NANTES - St-Luce/Loire - Planchonnais",
+      "sourcePath": "data/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "nantes-planchonnais-ac-standard-verified",
+          "provider": "e-Totem standard direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC"},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.40, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "postChargeGraceMinutes": 10, "postChargeBlockMinutes": 15, "postChargeBlockFee": 1.0}
+          ]}
+        },
+        {
+          "id": "nantes-planchonnais-dc-standard-verified",
+          "provider": "e-Totem standard direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "DC"},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.50, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "postChargeGraceMinutes": 10, "postChargeBlockMinutes": 15, "postChargeBlockFee": 3.0}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:2366462",
+      "name": "e-Totem - NANTES - St-Luce/Loire - Sal. Le Bonniec",
+      "sourcePath": "data/station_verifications/nantes_etotem_sainte_luce_salle_le_bonniec_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "nantes-le-bonniec-ac-standard-verified",
+          "provider": "e-Totem standard direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC"},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.40, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "postChargeGraceMinutes": 10, "postChargeBlockMinutes": 15, "postChargeBlockFee": 1.0}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:4225662",
+      "name": "Parking Public P1 - OZECAR Charging Station",
+      "sourcePath": "data/station_verifications/ozecar_bonifacio_parking_p1_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "ozecar-bonifacio-p1-ac22-verified",
+          "provider": "OZECAR direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC", "powerKw": 22, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.58, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00", "delayedConnectionFee": 1.50, "delayedConnectionFeeAfterChargeMinutes": 5, "postChargeGraceMinutes": 60, "postChargeRate": 0.16}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:589463",
+      "name": "FAUQUEMBERGUES - Avenue Roland Huguet",
+      "sourcePath": "data/station_verifications/passpass_fauquembergues_avenue_roland_huguet_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "passpass-fauquembergues-registered-verified",
+          "provider": "Pass Pass enregistré vérifié",
+          "offerType": "operator_direct_registered",
+          "match": {"kind": "AC", "powerKw": 22, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "timeWindow", "start": "07:00", "end": "21:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.32, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.04, "afterMinutesThreshold": 180, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"},
+            {"scope": "timeWindow", "start": "21:00", "end": "07:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.32, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.01, "afterMinutesThreshold": 180, "afterMinutesCap": 1.20, "afterMinutesCapStart": "21:00", "afterMinutesCapEnd": "07:00"}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:2962209",
+      "name": "WARGNIES LE GRAND - Zac de la vallée",
+      "sourcePath": "data/station_verifications/passpass_wargnies_le_grand_zac_vallee_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "passpass-wargnies-registered-verified",
+          "provider": "Pass Pass enregistré vérifié",
+          "offerType": "operator_direct_registered",
+          "match": {"kind": "AC", "powerKw": 22, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "timeWindow", "start": "07:00", "end": "21:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.32, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.04, "afterMinutesThreshold": 180, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"},
+            {"scope": "timeWindow", "start": "21:00", "end": "07:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.32, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.01, "afterMinutesThreshold": 180, "afterMinutesCap": 1.20, "afterMinutesCapStart": "21:00", "afterMinutesCapEnd": "07:00"}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:4569697",
+      "name": "Rue du Petit Molard · Viré",
+      "sourcePath": "data/station_verifications/qwello_vire_place_14_juillet_app_2026_08_22.json",
+      "offers": [
+        {
+          "id": "qwello-vire-ac22-verified",
+          "provider": "Qwello direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC", "powerKw": 22, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "timeWindow", "start": "07:00", "end": "21:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.30, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.02, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"},
+            {"scope": "timeWindow", "start": "21:00", "end": "07:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.30, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.02, "afterMinutesThreshold": 0, "afterMinutesCap": 3.60, "afterMinutesCapStart": "21:00", "afterMinutesCapEnd": "07:00"}
+          ]}
+        }
+      ]
+    },
+    {
+      "catalogStationId": "electroverse:391642",
+      "name": "Montauban, Mandoune",
+      "sourcePath": "data/station_verifications/sde82_freshmile_montauban_mandoune_type2_2026_08_22.json",
+      "offers": [
+        {
+          "id": "sde82-montauban-mandoune-ac22-verified",
+          "provider": "SDE82 / Freshmile direct vérifié",
+          "offerType": "operator_direct",
+          "match": {"kind": "AC", "powerKw": 22, "toleranceKw": 2},
+          "pricing": {"type": "rules", "rules": [
+            {"scope": "allDay", "start": "00:00", "end": "24:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.45, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0, "afterMinutesThreshold": 0, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"},
+            {"scope": "timeWindow", "start": "06:00", "end": "22:00", "billing": "kwh", "currency": "EUR", "pricePerKwh": 0.45, "chargePerMinute": 0, "connectionFee": 0, "idlePerMinute": 0, "afterMinutesRate": 0.045, "afterMinutesThreshold": 180, "afterMinutesCap": 0, "afterMinutesCapStart": "00:00", "afterMinutesCapEnd": "24:00"}
+          ]}
+        }
+      ]
+    }
+  ],
+  "notActivatedYet": [
+    "Prise de Nice direct public/ad-hoc tariff unavailable",
+    "Electric55 Lons-le-Saunier exact runtime identity ambiguous",
+    "TE28 Chartres exact runtime identity ambiguous",
+    "Brest Easy Charge live app price unavailable",
+    "Mayenne e-Totem rollout not visible",
+    "Sarthe IRVE rapid not visible in Alizé",
+    "SDE2A / Andà direct tariff unavailable",
+    "station verifications without a deterministic runtime station id remain excluded until exact identity is resolved"
+  ]
+}
