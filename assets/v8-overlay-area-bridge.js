@@ -47,10 +47,20 @@
     }
   }
 
+  function loadTariffDisplay(){
+    if(!window.TCCV8TariffDisplay&&!document.querySelector('script[data-tcc-tariff-display]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-tariff-display-fix.js?v=rc48au-20260822';
+      s.defer=true;s.dataset.tccTariffDisplay='1';
+      document.head.appendChild(s);
+    }
+  }
+
   loadReferenceOffers();
   loadCanonicalStationOverlay();
   loadDirectResolverUi();
   loadDirectSmokeFix();
+  loadTariffDisplay();
 
   async function apply(force=false){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
@@ -110,6 +120,7 @@
     loadCanonicalStationOverlay();
     loadDirectResolverUi();
     loadDirectSmokeFix();
+    loadTariffDisplay();
     apply(false);
     installExpansionGuard();
     markRevision();
@@ -123,7 +134,7 @@
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();
+    loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -134,9 +145,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,revision:REVISION};
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,revision:REVISION};
   console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48au.');
 })();
