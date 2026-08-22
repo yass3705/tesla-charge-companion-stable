@@ -116,12 +116,13 @@
     const rawConfigs=(row[8]||[]).map(c=>({id:c[0],label:c[1],kind:c[2]||'AC',powerKw:Number(c[3]||11),stalls:Number(c[4]||0),pricing:pricingFromRows(c[5],dayIndex)}));
     const separated=separateAmbiguousElectra(rawConfigs),configs=separated.configs;
     const first=configs[0]||rawConfigs.find(c=>providerFromConfigLabel(c.label).toLowerCase()!=='electra')||{kind:'AC',powerKw:11,stalls:0,pricing:{type:'rules',rules:[]}};
-    return {
+    const station={
       id:`france-catalog:${row[0]}`,catalogStationId:row[0],name:row[1]||row[2]||'Borne France',address:row[2]||'',latitude:Number(row[3]),longitude:Number(row[4]),
       operator:row[5]||'Autre',stalls:Number(row[6]||0),kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configs,
       access:accessFromRows(row[7]),lastUpdated:row[9]||'',source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,
       ambiguousElectraConfigurationsSuppressed:separated.suppressed,ambiguousSourceOffers:separated.ambiguous
     };
+    return window.TCCFranceCanonicalOverlay?.apply?.(station)||station;
   }
 
   async function rowsNear(lat,lon,radiusKm){
@@ -139,6 +140,9 @@
   const originalCandidateStations=candidateStations;
   candidateStations=async function(filterMode='tesla',maxDistanceKm=0){
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
+    if(window.TCCFranceCanonicalOverlay?.enabled?.()){
+      try{await window.TCCFranceCanonicalOverlay.prepare()}catch(err){console.warn('[TCC] Overlay canonique ignoré :',err)}
+    }
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
     const rows=await rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0);
@@ -150,7 +154,11 @@
     try{
       stations=[...originalStations,...extra];
       const result=await originalCandidateStations(filterMode,maxDistanceKm);
-      if(result)result.franceCatalogLoaded=extra.length;
+      if(result){
+        result.franceCatalogLoaded=extra.length;
+        result.canonicalOverlayEnabled=!!window.TCCFranceCanonicalOverlay?.enabled?.();
+        result.canonicalOverlayStations=extra.filter(s=>s.canonicalOverlayApplied).length;
+      }
       return result;
     }finally{stations=originalStations;}
   };
