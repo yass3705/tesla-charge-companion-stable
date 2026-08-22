@@ -1,0 +1,104 @@
+name: France canonical opt-in overlay
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "data/non_tesla_france/canonical_tariff_overlay.json"
+      - "assets/france-canonical-overlay.js"
+      - "assets/france-catalog.js"
+      - ".github/workflows/france-canonical-optin-overlay.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "data/non_tesla_france/canonical_tariff_overlay.json"
+      - "assets/france-canonical-overlay.js"
+      - "assets/france-catalog.js"
+      - ".github/workflows/france-canonical-optin-overlay.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JavaScript syntax
+        run: |
+          node --check assets/france-canonical-overlay.js
+          node --check assets/france-catalog.js
+
+      - name: Validate overlay schema and safeguards
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p=JSON.parse(fs.readFileSync('data/non_tesla_france/canonical_tariff_overlay.json','utf8'));
+          if(p.dataset!=='france-canonical-tariff-overlay-pilot')throw new Error('unexpected dataset');
+          if(p.enabledByDefault!==false)throw new Error('overlay must be disabled by default');
+          if(p.mode!=='append_only')throw new Error('overlay must remain append-only');
+          if(p.safety?.replaceExistingConfigurations!==false||p.safety?.replaceExistingStations!==false)throw new Error('replacement guard missing');
+          if(p.safety?.touchTeslaStations!==false||p.safety?.touchCustomStations!==false)throw new Error('Tesla/custom guard missing');
+          if(p.safety?.directAndRoamingRemainSeparate!==true)throw new Error('direct/roaming separation missing');
+          if(!Array.isArray(p.entries)||p.entries.length!==6)throw new Error(`expected 6 pilot stations, got ${p.entries?.length}`);
+          const stationIds=new Set(),configKeys=new Set();
+          for(const e of p.entries){
+            if(!/^electroverse:\d+$/.test(e.runtimeStationId||''))throw new Error(`bad runtime id ${e.runtimeStationId}`);
+            if(stationIds.has(e.runtimeStationId))throw new Error(`duplicate runtime station ${e.runtimeStationId}`);stationIds.add(e.runtimeStationId);
+            if(!String(e.sourcePath||'').startsWith('data/station_verifications/'))throw new Error(`bad source path ${e.sourcePath}`);
+            if(!Array.isArray(e.configurations)||!e.configurations.length)throw new Error(`no canonical configs for ${e.runtimeStationId}`);
+            for(const c of e.configurations){
+              const key=`${e.runtimeStationId}|${c.id}`;if(configKeys.has(key))throw new Error(`duplicate config ${key}`);configKeys.add(key);
+              if(!String(c.label||'').startsWith('CANONIQUE · '))throw new Error(`canonical label missing for ${key}`);
+              if(!['AC','DC'].includes(c.kind)||!(Number(c.powerKw)>0))throw new Error(`invalid power config ${key}`);
+              if(c.pricing?.type!=='rules'||!Array.isArray(c.pricing.rules)||!c.pricing.rules.length)throw new Error(`pricing rules missing ${key}`);
+              for(const r of c.pricing.rules){
+                if(!['allDay','timeWindow'].includes(r.scope))throw new Error(`bad scope ${key}`);
+                if(!['kwh','minute','powerMinute'].includes(r.billing))throw new Error(`bad billing ${key}`);
+                if((r.currency||'EUR')!=='EUR')throw new Error(`pilot expected EUR only ${key}`);
+                for(const f of ['pricePerKwh','chargePerMinute','connectionFee','idlePerMinute','afterMinutesRate','afterMinutesThreshold','afterMinutesCap']){
+                  if(Number(r[f]||0)<0)throw new Error(`negative ${f} ${key}`);
+                }
+              }
+            }
+          }
+          if(p.pilotSelection?.modelExactStationCount!==p.entries.length)throw new Error('pilot count mismatch');
+          console.log(`Validated ${p.entries.length} exact station mappings / ${configKeys.size} canonical configurations.`);
+          NODE
+
+      - name: Smoke-test append-only loader
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          globalThis.window=globalThis;
+          globalThis.location={search:'?canonicalOverlay=1'};
+          const store=new Map();
+          globalThis.localStorage={getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+          globalThis.fetch=async()=>({ok:true,status:200,json:async()=>JSON.parse(fs.readFileSync('data/non_tesla_france/canonical_tariff_overlay.json','utf8'))});
+          await import('./assets/france-canonical-overlay.js');
+          if(!window.TCCFranceCanonicalOverlay?.enabled())throw new Error('query opt-in not detected');
+          await window.TCCFranceCanonicalOverlay.prepare();
+          const existing={id:'france-catalog:electroverse:4547054',catalogStationId:'electroverse:4547054',chargingConfigurations:[{id:'existing-roaming',label:'Electroverse · CCS 180 kW',kind:'DC',powerKw:180,stalls:2,pricing:{type:'rules',rules:[{scope:'allDay',billing:'kwh',pricePerKwh:.61,currency:'EUR'}]}}]};
+          const applied=window.TCCFranceCanonicalOverlay.apply(existing);
+          if(applied===existing)throw new Error('overlay was not applied');
+          if(applied.chargingConfigurations.length!==2)throw new Error('append-only configuration missing');
+          if(applied.chargingConfigurations[0].id!=='existing-roaming')throw new Error('existing runtime offer was replaced');
+          const canonical=applied.chargingConfigurations.find(c=>c.id==='canonical-aqui-registered-ccs180');
+          if(!canonical||canonical.pricing.rules[0].pricePerKwh!==.52||canonical.pricing.rules[0].afterMinutesRate!==.2)throw new Error('canonical AQUI tariff mismatch');
+          if(canonical.stalls!==2)throw new Error('matching runtime stall count should be inherited when sidecar stalls is zero');
+          const untouched={catalogStationId:'electroverse:999999',chargingConfigurations:[{id:'x'}]};
+          if(window.TCCFranceCanonicalOverlay.apply(untouched)!==untouched)throw new Error('unknown station must remain untouched');
+          console.log('Append-only smoke test passed.');
+          NODE
+
+      - name: Verify lazy opt-in wiring
+        run: |
+          grep -q "canonicalOverlayRequested" assets/france-catalog.js
+          grep -q "import('./france-canonical-overlay.js?v=1')" assets/france-catalog.js
+          grep -q "return window.TCCFranceCanonicalOverlay?.apply?.(station)||station" assets/france-catalog.js
+          if grep -q "france-canonical-overlay.js" index.html; then
+            echo "Overlay must not be loaded unconditionally from index.html" >&2
+            exit 1
+          fi
