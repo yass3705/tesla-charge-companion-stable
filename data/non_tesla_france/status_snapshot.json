@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-22T22:25:17.099Z",
+  "maxAgeHours": 48,
+  "provenance": {
+    "repository": "yass3705/tesla-charge-companion-data-lab",
+    "workflowRun": "https://github.com/yass3705/tesla-charge-companion-data-lab/actions/runs/32602344058"
+  },
+  "stations": {
+    "electra-only:e006af07-6b4e-4e11-badd-3ce499ff7b86": {
+      "status": "out_of_service",
+      "source": "electra",
+      "checkedAt": "2026-08-22T22:25:03.112Z",
+      "rawStatuses": ["OUTOFORDER", "OUTOFORDER", "OUTOFORDER", "OUTOFORDER"],
+      "scheduledClosureOverride": false
+    },
+    "electra-only:3dcddb20-3132-4488-ad13-e98985032e56": {
+      "status": "available",
+      "source": "electra",
+      "checkedAt": "2026-08-22T22:25:03.366Z",
+      "rawStatuses": ["CHARGING", "CHARGING"],
+      "scheduledClosureOverride": false
+    },
+    "electroverse:2423238": {
+      "status": "out_of_service",
+      "source": "electroverse",
+      "checkedAt": "2026-08-22T22:25:13.228Z",
+      "rawStatuses": ["OUTOFORDER", "OUTOFORDER", "OUTOFORDER", "OUTOFORDER"],
+      "scheduledClosureOverride": false
+    },
+    "electroverse:4402244": {
+      "status": "available",
+      "source": "electroverse",
+      "checkedAt": "2026-08-22T22:25:15.199Z",
+      "rawStatuses": ["CHARGING", "CHARGING", "AVAILABLE", "AVAILABLE"],
+      "scheduledClosureOverride": false
+    },
+    "electroverse:1813284": {
+      "status": "available",
+      "source": "electroverse",
+      "checkedAt": "2026-08-22T22:25:17.019Z",
+      "rawStatuses": ["OUTOFORDER", "OUTOFORDER", "OUTOFORDER", "OUTOFORDER"],
+      "scheduledClosureOverride": true
+    }
+  }
+}
