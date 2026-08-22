@@ -5,6 +5,36 @@
   const BASE='data/non_tesla_france/';
   const rawCache=new Map();
   let manifestPromise=null;
+  let statusPromise=null;
+  const STATUS_MAX_AGE_MS=48*60*60*1000;
+
+  async function loadStatusSnapshot(){
+    if(!statusPromise)statusPromise=fetch(BASE+'status_snapshot.json',{cache:'no-cache'}).then(async r=>{
+      if(r.status===404)return {stations:{}};
+      if(!r.ok)throw new Error(`Statuts France indisponibles (${r.status})`);
+      return r.json();
+    }).catch(err=>{
+      console.warn('[TCC] Snapshot de statut ignoré :',err?.message||err);
+      return {stations:{}};
+    });
+    return statusPromise;
+  }
+
+  function applyOperationalStatus(station,statuses){
+    const entry=statuses?.stations?.[station.catalogStationId];
+    if(!entry)return station;
+    const checkedAt=entry.checkedAt||statuses.generatedAt||'';
+    const checkedMs=Date.parse(checkedAt);
+    const stale=!Number.isFinite(checkedMs)||(Date.now()-checkedMs)>STATUS_MAX_AGE_MS;
+    const value=stale?'unknown':(entry.status==='out_of_service'?'out_of_service':entry.status==='available'?'available':'unknown');
+    station.operationalStatus=value;
+    station.operationalStatusRaw=entry.rawStatuses||[];
+    station.operationalStatusCheckedAt=checkedAt;
+    station.operationalStatusSource=entry.source||'';
+    station.operationalStatusStale=stale;
+    station.scheduledClosureOverride=!!entry.scheduledClosureOverride;
+    return station;
+  }
 
   async function loadManifest(){
     if(!manifestPromise)manifestPromise=fetch(BASE+'manifest.json',{cache:'no-cache'}).then(r=>{
@@ -141,9 +171,9 @@
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
-    const rows=await rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0);
+    const [rows,statuses]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot()]);
     const dayIndex=dayIndexFromSimulation();
-    const catalog=rows.map(r=>stationFromRow(r,dayIndex));
+    const catalog=rows.map(r=>applyOperationalStatus(stationFromRow(r,dayIndex),statuses));
     const originalStations=stations;
     const ids=new Set(originalStations.map(s=>s.id));
     const extra=catalog.filter(s=>!ids.has(s.id));
@@ -155,6 +185,6 @@
     }finally{stations=originalStations;}
   };
 
-  window.TCCFranceCatalog={loadManifest,clearCache(){rawCache.clear();manifestPromise=null;},get cachedFragments(){return rawCache.size;}};
+  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;},get cachedFragments(){return rawCache.size;}};
   console.info('[TCC] Catalogue national France hors Tesla prêt (chargement géographique à la demande).');
 })();
