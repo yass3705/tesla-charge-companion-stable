@@ -9,7 +9,7 @@ const outputPath=process.argv[5]||'diagnostics/france_canonical_overlay_preview.
 function readJson(path){return JSON.parse(fs.readFileSync(path,'utf8'));}
 function readRuntime(path){return JSON.parse(zlib.gunzipSync(fs.readFileSync(path)).toString('utf8'));}
 function text(v){return String(v??'').trim();}
-function n(v){const x=Number(v);return Number.isFinite(x)?x:null;}
+function n(v){if(v==null||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null;}
 function norm(v){return text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(saint|sainte)\b/g,'st').replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();}
 function uniq(values){return [...new Set(values.filter(Boolean))];}
 function containsUseful(a,b){return a.length>=8&&b.length>=8&&(a.includes(b)||b.includes(a));}
@@ -81,15 +81,38 @@ function runtimeStation(row){
     priceSignals:{energyEurPerKwh:uniq(energy.map(String)).map(Number),minuteEur:uniq(minute.map(String)).map(Number),flatEur:uniq(flat.map(String)).map(Number),parkingEurPerMinute:uniq(parking.map(String)).map(Number),afterThresholdEurPerMinute:uniq(after.map(String)).map(Number)}
   };
 }
+function runtimeCity(r){const parts=text(r.address).split(',').map(text).filter(Boolean);if(!parts.length)return '';return norm(parts[parts.length-1].replace(/^\d{5}\s*/,''));}
 function operatorMatches(a,b){a=norm(a);b=norm(b);return a&&b&&(a===b||containsUseful(a,b));}
+function genericName(name,operator){
+  const x=norm(name),o=norm(operator);
+  if(!x||x.length<7)return true;
+  if(o&&x===o)return true;
+  return ['totalenergies','izivia','qwello','electra','freshmile','modulo','pass pass electrique','prise de nice','e totem','easy charge service'].includes(x);
+}
 function matchScore(ev,r){
-  let score=0,reason=[];
-  if(ev.lat!=null&&ev.lon!=null&&r.lat!=null&&r.lon!=null){const d=km(ev.lat,ev.lon,r.lat,r.lon);if(d<=0.08){score=Math.max(score,110);reason.push(`coordinates_${Math.round(d*1000)}m`);}else if(d<=0.18){score=Math.max(score,100);reason.push(`coordinates_${Math.round(d*1000)}m`);}}
-  const rn=norm(r.name),ra=norm(r.address),rc=norm(`${r.name} ${r.address}`);
-  for(const a0 of ev.addresses){const a=norm(a0);if(!a)continue;if(a===ra||containsUseful(a,ra)){score=Math.max(score,98);reason.push('address');}else if(rc.includes(a)&&a.length>=10){score=Math.max(score,94);reason.push('address_in_station_text');}}
-  for(const name0 of ev.names){const name=norm(name0);if(!name)continue;if(name===rn){score=Math.max(score,92);reason.push('name');}else if(containsUseful(name,rn)){const cityHit=!ev.cities.length||ev.cities.some(c=>rc.includes(norm(c)));if(cityHit){score=Math.max(score,86);reason.push('name_city');}}}
+  let textScore=0,reason=[];
+  const rn=norm(r.name),ra=norm(r.address),rc=norm(`${r.name} ${r.address}`),rCity=runtimeCity(r);
+  for(const a0 of ev.addresses){
+    const a=norm(a0);if(!a)continue;
+    if(a===ra||containsUseful(a,ra)){textScore=Math.max(textScore,98);reason.push('address');}
+    else if(rc.includes(a)&&a.length>=10){textScore=Math.max(textScore,94);reason.push('address_in_station_text');}
+  }
+  for(const name0 of ev.names){
+    const name=norm(name0);if(!name||genericName(name0,ev.operator))continue;
+    const cityExact=!ev.cities.length||ev.cities.some(c=>norm(c)===rCity);
+    if(name===rn&&cityExact){textScore=Math.max(textScore,92);reason.push('name');}
+    else if(containsUseful(name,rn)&&cityExact){textScore=Math.max(textScore,86);reason.push('name_city');}
+  }
+  let coordinateDistanceKm=null,coordinateConflict=false,score=textScore;
+  if(ev.lat!=null&&ev.lon!=null&&r.lat!=null&&r.lon!=null){
+    const d=km(ev.lat,ev.lon,r.lat,r.lon);coordinateDistanceKm=d;
+    if(d<=0.18){
+      if(textScore>=80){score=Math.max(score,d<=0.08?110:100);reason.push(`coordinates_${Math.round(d*1000)}m`);}
+      else if(ev.names.length||ev.addresses.length){coordinateConflict=true;}
+    }
+  }
   if(score>=80&&operatorMatches(ev.operator,r.operator)){score+=3;reason.push('operator');}
-  return {score,reason:uniq(reason).join('+')};
+  return {score,reason:uniq(reason).join('+'),coordinateDistanceKm,coordinateConflict};
 }
 function canonicalEnergySignals(money){return uniq(money.filter(x=>/(energy.*kwh|eurPerKwh|pricePerKwh)/i.test(x.path)).map(x=>String(x.value))).map(Number);}
 function overlap(a,b,tol=0.0006){return a.some(x=>b.some(y=>Math.abs(x-y)<=tol));}
@@ -100,16 +123,26 @@ if(!Array.isArray(canonical.stationVerifications))throw new Error('Canonical sta
 if(!Array.isArray(rows)||rows.length!==Number(manifest.stationCount))throw new Error(`Runtime row count mismatch ${rows.length} != ${manifest.stationCount}`);
 
 const runtime=rows.map(runtimeStation);
-const matches=[],unmatched=[],ambiguous=[];
+const matches=[],unmatched=[],ambiguous=[],identityConflicts=[];
 let applicableCount=0,negativeCount=0,energyMatchCount=0,energyConflictCount=0;
 for(const item of canonical.stationVerifications){
   const identity=stationIdentity(item),applicable=tariffApplicable(item),money=collectMoneySignals(item.payload||{});
   if(applicable)applicableCount++;else negativeCount++;
-  const scored=[];
-  for(const r of runtime){const m=matchScore(identity,r);if(m.score>=80)scored.push({r,...m});}
+  const scored=[],coordConflicts=[];
+  for(const r of runtime){
+    const m=matchScore(identity,r);
+    if(m.score>=80)scored.push({r,...m});
+    else if(m.coordinateConflict)coordConflicts.push({r,...m});
+  }
   scored.sort((a,b)=>b.score-a.score||a.r.id.localeCompare(b.r.id));
+  coordConflicts.sort((a,b)=>(a.coordinateDistanceKm??999)-(b.coordinateDistanceKm??999));
   const top=scored[0];
-  if(!top){unmatched.push({sourcePath:item.sourcePath,dataset:item.dataset,operator:identity.operator,identity,tariffApplicable:applicable});continue;}
+  if(!top){
+    if(coordConflicts.length){
+      identityConflicts.push({sourcePath:item.sourcePath,dataset:item.dataset,operator:identity.operator,identity,tariffApplicable:applicable,nearbyRuntimeStations:coordConflicts.slice(0,5).map(x=>({distanceMeters:Math.round(x.coordinateDistanceKm*1000),station:x.r}))});
+    }else unmatched.push({sourcePath:item.sourcePath,dataset:item.dataset,operator:identity.operator,identity,tariffApplicable:applicable});
+    continue;
+  }
   const tied=scored.filter(x=>x.score>=top.score-1);
   if(tied.length>1){ambiguous.push({sourcePath:item.sourcePath,dataset:item.dataset,operator:identity.operator,identity,tariffApplicable:applicable,candidates:tied.slice(0,8).map(x=>({score:x.score,reason:x.reason,station:x.r}))});continue;}
   const canonicalEnergy=canonicalEnergySignals(money),runtimeEnergy=top.r.priceSignals.energyEurPerKwh;
@@ -132,10 +165,10 @@ const out={
     canonical:{dataset:canonical.dataset,sourceSnapshotAt:canonical.sourceSnapshotAt||'',stationVerificationCount:canonical.stationVerifications.length,operatorDirectSourceCount:canonical.operatorDirectSources?.length||0,regionalCoverageSourceCount:canonical.regionalCoverageSources?.length||0},
     runtime:{dataset:manifest.dataset,generatedAt:manifest.generatedAt,stationCount:manifest.stationCount,configurationCount:manifest.configurationCount,sourceRuns:manifest.sourceRuns}
   },
-  counts:{stationVerifications:canonical.stationVerifications.length,tariffApplicableVerifications:applicableCount,negativeOrReferenceOnlyVerifications:negativeCount,matched:matches.length,unmatched:unmatched.length,ambiguous:ambiguous.length,energyOverlap:energyMatchCount,potentialEnergyConflicts:energyConflictCount,remainingTrueGaps:canonical.remainingTrueGaps?.length||0},
+  counts:{stationVerifications:canonical.stationVerifications.length,tariffApplicableVerifications:applicableCount,negativeOrReferenceOnlyVerifications:negativeCount,matched:matches.length,unmatched:unmatched.length,ambiguous:ambiguous.length,identityConflicts:identityConflicts.length,energyOverlap:energyMatchCount,potentialEnergyConflicts:energyConflictCount,remainingTrueGaps:canonical.remainingTrueGaps?.length||0},
   remainingTrueGaps:canonical.remainingTrueGaps||[],
-  decision:{safeToActivateAutomatically:false,nextStep:'review exact matches and potential conflicts, then build a separate opt-in runtime tariff overlay; do not replace the existing France station catalogue'},
-  matches,ambiguous,unmatched
+  decision:{safeToActivateAutomatically:false,nextStep:'review exact matches, identity conflicts and price conflicts, then build a separate opt-in runtime tariff overlay; do not replace the existing France station catalogue'},
+  matches,identityConflicts,ambiguous,unmatched
 };
 const slash=outputPath.lastIndexOf('/');if(slash>=0)fs.mkdirSync(outputPath.slice(0,slash),{recursive:true});
 fs.writeFileSync(outputPath,JSON.stringify(out,null,2)+'\n');
