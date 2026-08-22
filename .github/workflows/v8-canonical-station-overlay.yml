@@ -1,0 +1,75 @@
+name: V8 canonical station overlay
+
+on:
+  pull_request:
+    branches: ["release/2026-08"]
+    paths:
+      - "assets/v8-canonical-station-overlay.js"
+      - "assets/v8-overlay-area-bridge.js"
+      - "data/v8_canonical_station_overlay_v1.json"
+      - ".github/workflows/v8-canonical-station-overlay.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JavaScript syntax
+        run: |
+          node --check assets/v8-canonical-station-overlay.js
+          node --check assets/v8-overlay-area-bridge.js
+
+      - name: Validate V8-only dataset safeguards
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('data/v8_canonical_station_overlay_v1.json','utf8'));
+          if(d.dataset!=='v8-canonical-station-tariff-overlay')throw new Error('unexpected dataset');
+          if(d.activeInV73!==false)throw new Error('V7.3 must stay excluded');
+          if(!/V8 RC4\.8/i.test(d.target||''))throw new Error('V8 RC target missing');
+          const s=d.safety||{};
+          for(const k of ['exactCatalogStationIdOnly','appendOnlyOffers','neverReplaceRuntimeOffer','neverTouchTeslaStations','neverTouchCustomStations','directAndRoamingRemainSeparate','unknownDirectTariffsRemainUnranked'])if(s[k]!==true)throw new Error(`safety flag missing: ${k}`);
+          const stations=d.stations||[];
+          if(stations.length<10)throw new Error(`too few station overlays: ${stations.length}`);
+          const ids=new Set(),offerIds=new Set();
+          for(const st of stations){
+            if(!/^electroverse:\d+$/.test(st.catalogStationId||''))throw new Error(`non deterministic station id: ${st.catalogStationId}`);
+            if(ids.has(st.catalogStationId))throw new Error(`duplicate station id: ${st.catalogStationId}`);ids.add(st.catalogStationId);
+            for(const o of st.offers||[]){if(!o.id||offerIds.has(o.id))throw new Error(`duplicate/missing offer id: ${o.id}`);offerIds.add(o.id);if(!o.provider||!o.pricing?.rules?.length)throw new Error(`incomplete offer ${o.id}`);}
+          }
+          console.log(JSON.stringify({stations:stations.length,offers:offerIds.size,deferred:(d.notActivatedYet||[]).length},null,2));
+          NODE
+
+      - name: Smoke-test exact append-only station matching
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const data=JSON.parse(fs.readFileSync('data/v8_canonical_station_overlay_v1.json','utf8'));
+          const code=fs.readFileSync('assets/v8-canonical-station-overlay.js','utf8');
+          const sandbox={console,setInterval:()=>0,clearInterval:()=>{},setTimeout:()=>0,document:{readyState:'complete',getElementById:()=>null,addEventListener:()=>{}},localStorage:{},fetch:async()=>({ok:true,json:async()=>data}),window:{}};
+          sandbox.window=sandbox;sandbox.window.window=sandbox;
+          vm.createContext(sandbox);vm.runInContext(code,sandbox);
+          const api=sandbox.TCCV8CanonicalStationOverlay;if(!api)throw new Error('canonical API missing');
+          const existing={id:'runtime-existing',label:'Electroverse · DC 180 kW',kind:'DC',powerKw:180,stalls:1,pricing:{type:'rules',rules:[{billing:'kwh',pricePerKwh:.99,currency:'EUR'}]}};
+          const target={catalogStationId:'electroverse:4547054',countryCode:'FR',source:'franceNationalCatalog',chargingConfigurations:[existing]};
+          const out=api.applyStation(target,data);
+          if(out.chargingConfigurations.length!==2)throw new Error('canonical offer was not appended');
+          if(out.chargingConfigurations[0].id!=='runtime-existing'||out.chargingConfigurations[0].pricing.rules[0].pricePerKwh!==.99)throw new Error('existing runtime offer mutated');
+          if(out.chargingConfigurations[1].canonicalVerified!==true)throw new Error('verified marker missing');
+          const twice=api.applyStation(out,data);if(twice.chargingConfigurations.length!==2)throw new Error('overlay is not idempotent');
+          const tesla=api.applyStation({catalogStationId:'electroverse:4547054',countryCode:'FR',source:'teslaSupercharger',chargingConfigurations:[existing]},data);if(tesla.chargingConfigurations.length!==1)throw new Error('Tesla touched');
+          const other=api.applyStation({catalogStationId:'electroverse:99999999',countryCode:'FR',source:'franceNationalCatalog',chargingConfigurations:[existing]},data);if(other.chargingConfigurations.length!==1)throw new Error('unmatched station touched');
+          console.log('append-only exact matching OK');
+          NODE
+
+      - name: Verify bridge loads canonical layer
+        run: |
+          grep -q 'v8-canonical-station-overlay.js?v=rc48ar-20260822' assets/v8-overlay-area-bridge.js
+          grep -q 'canonicalStationOverlayApplied' assets/v8-overlay-area-bridge.js
+          grep -q 'TCCV8CanonicalStationOverlay' assets/v8-overlay-area-bridge.js
