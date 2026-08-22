@@ -31,6 +31,7 @@ jobs:
           node --check assets/v8-overlay-area-bridge.js
           node --check assets/v8-canonical-station-overlay.js
           node --check assets/v8-direct-resolver-ui.js
+          node --check assets/v8-direct-resolver-followup.js
           node --check assets/v8-subscription-selection.js
           node --check service-worker.js
 
@@ -59,7 +60,8 @@ jobs:
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
           grep -q "v8-direct-resolver-ui.js" assets/v8-overlay-area-bridge.js
-          grep -q "rc48as-direct-resolver-ui" assets/v8-direct-resolver-ui.js
+          grep -q "v8-direct-resolver-followup.js" assets/v8-overlay-area-bridge.js
+          grep -q "rc48at-direct-smoke-fix" assets/v8-direct-resolver-followup.js
           grep -q "teslaCongestionFeePerMinute" data/tesla_stations.json
           echo "V8 build ${BUILD} references are consistent."
 
