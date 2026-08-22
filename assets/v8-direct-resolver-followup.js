@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — corrections après smoke test multi-opérateurs.
 (function(){
   'use strict';
-  const REVISION='rc48at-direct-smoke-fix';
+  const REVISION='rc48au-tariff-clarity';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const deepClone=v=>JSON.parse(JSON.stringify(v));
@@ -100,19 +100,54 @@
       }
     });
   }
-  function installObserver(){
-    const root=document.getElementById('results');if(!root)return false;if(root.__tccDirectSmokeFixObs)return true;
-    let timer=null;const obs=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(decorateDirectRows,250)});
-    obs.observe(root,{childList:true,subtree:true,characterData:true});root.__tccDirectSmokeFixObs=obs;setTimeout(decorateDirectRows,400);return true;
-  }
-  function markRevision(){
-    const banner=document.getElementById('tccPreviewBanner');
-    if(banner&&/RC4\.8/.test(text(banner.textContent)))banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · filtre puissance · données canoniques France · auto-mise à jour désactivée`;
+
+  function relabelBreakdowns(){
+    document.querySelectorAll('#results .cost-breakdown').forEach(el=>{
+      const before=text(el.textContent);
+      const after=before
+        .replace(/Fixe\/parking\s*:/i,'Connexion / frais fixe :')
+        .replace(/Après charge\s*:/i,'Occupation après charge :')
+        .replace(/Après durée\s*:/i,'Frais après durée :');
+      if(after&&after!==before)el.textContent=after;
+    });
   }
 
-  let tries=0;const timer=setInterval(()=>{tries++;const a=installExpansionPatch(),b=installObserver();markRevision();if((a&&b)||tries>220)clearInterval(timer)},120);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{installExpansionPatch();installObserver();markRevision()},0),{once:true});
-  else setTimeout(()=>{installExpansionPatch();installObserver();markRevision()},0);
-  window.TCCV8DirectSmokeFix={revision:REVISION,addPassPassDirect,decorateDirectRows};
-  console.info(`[TCC V8] ${REVISION} actif : Pass Pass normal calculable + libellés directs complets.`);
+  function relabelEditorFees(){
+    document.querySelectorAll('.pr-connection').forEach(input=>{
+      const host=input.closest('div');
+      const label=host?.querySelector('label');
+      if(label&&text(label.textContent)!=='Frais de connexion / frais fixe')label.textContent='Frais de connexion / frais fixe';
+      if(host&&!host.querySelector('.tcc-fee-separation-note')){
+        const note=document.createElement('div');
+        note.className='small tcc-fee-separation-note';
+        note.textContent='Champ réservé au coût fixe de session/connexion ; ne pas y mélanger un éventuel parking externe.';
+        host.appendChild(note);
+      }
+    });
+  }
+
+  function decorateUiClarity(){decorateDirectRows();relabelBreakdowns();relabelEditorFees()}
+
+  function installObserver(){
+    const root=document.getElementById('results');if(!root)return false;if(root.__tccDirectSmokeFixObs)return true;
+    let timer=null;const obs=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(decorateUiClarity,180)});
+    obs.observe(root,{childList:true,subtree:true,characterData:true});root.__tccDirectSmokeFixObs=obs;setTimeout(decorateUiClarity,350);return true;
+  }
+
+  function installEditorObserver(){
+    const root=document.getElementById('chargingConfigurations');if(!root)return false;if(root.__tccFeeClarityObs)return true;
+    let timer=null;const obs=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(relabelEditorFees,60)});
+    obs.observe(root,{childList:true,subtree:true});root.__tccFeeClarityObs=obs;relabelEditorFees();return true;
+  }
+
+  function markRevision(){
+    const banner=document.getElementById('tccPreviewBanner');
+    if(banner&&/RC4\.8/.test(text(banner.textContent)))banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · détail frais clarifié · données canoniques France · auto-mise à jour désactivée`;
+  }
+
+  let tries=0;const timer=setInterval(()=>{tries++;const a=installExpansionPatch(),b=installObserver(),c=installEditorObserver();decorateUiClarity();markRevision();if((a&&b&&c)||tries>220)clearInterval(timer)},120);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{installExpansionPatch();installObserver();installEditorObserver();decorateUiClarity();markRevision()},0),{once:true});
+  else setTimeout(()=>{installExpansionPatch();installObserver();installEditorObserver();decorateUiClarity();markRevision()},0);
+  window.TCCV8DirectSmokeFix={revision:REVISION,addPassPassDirect,decorateDirectRows,relabelBreakdowns,relabelEditorFees};
+  console.info(`[TCC V8] ${REVISION} actif : libellés directs complets + séparation connexion/occupation/durée.`);
 })();
