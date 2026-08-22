@@ -134,15 +134,32 @@
     return chunks.flat();
   }
 
+  function canonicalOverlayRequested(){
+    try{
+      if(new URLSearchParams(location.search).get('canonicalOverlay')==='1')return true;
+      return localStorage.getItem('tccFranceCanonicalOverlayV1')==='enabled';
+    }catch(_){return false}
+  }
+
+  async function prepareCanonicalOverlay(){
+    if(!canonicalOverlayRequested())return false;
+    try{
+      if(!window.TCCFranceCanonicalOverlay)await import('./france-canonical-overlay.js?v=1');
+      if(window.TCCFranceCanonicalOverlay?.enabled?.()){
+        await window.TCCFranceCanonicalOverlay.prepare();
+        return true;
+      }
+    }catch(err){console.warn('[TCC] Overlay canonique ignoré :',err)}
+    return false;
+  }
+
   if(typeof candidateStations!=='function'){
     console.warn('[TCC] Catalogue France non chargé : candidateStations indisponible.');return;
   }
   const originalCandidateStations=candidateStations;
   candidateStations=async function(filterMode='tesla',maxDistanceKm=0){
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
-    if(window.TCCFranceCanonicalOverlay?.enabled?.()){
-      try{await window.TCCFranceCanonicalOverlay.prepare()}catch(err){console.warn('[TCC] Overlay canonique ignoré :',err)}
-    }
+    const canonicalEnabled=await prepareCanonicalOverlay();
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
     const rows=await rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0);
@@ -156,7 +173,7 @@
       const result=await originalCandidateStations(filterMode,maxDistanceKm);
       if(result){
         result.franceCatalogLoaded=extra.length;
-        result.canonicalOverlayEnabled=!!window.TCCFranceCanonicalOverlay?.enabled?.();
+        result.canonicalOverlayEnabled=canonicalEnabled;
         result.canonicalOverlayStations=extra.filter(s=>s.canonicalOverlayApplied).length;
       }
       return result;
