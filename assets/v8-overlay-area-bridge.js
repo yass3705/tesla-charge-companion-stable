@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48ar-canonical-fr';
+  const REVISION='rc48as-direct-resolver-ui';
   let applying=false;
   let lastPrepared=null;
 
@@ -29,8 +29,18 @@
     }
   }
 
+  function loadDirectResolverUi(){
+    if(!window.TCCV8DirectResolver&&!document.querySelector('script[data-tcc-direct-resolver-ui]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-direct-resolver-ui.js?v=rc48as-20260822';
+      s.defer=true;s.dataset.tccDirectResolverUi='1';
+      document.head.appendChild(s);
+    }
+  }
+
   loadReferenceOffers();
   loadCanonicalStationOverlay();
+  loadDirectResolverUi();
 
   async function apply(force=false){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
@@ -55,7 +65,6 @@
   // Dernier garde-fou juste avant la simulation : expandConfigurations est la
   // frontière exacte entre une station physique et ses variantes tarifaires.
   // On y réapplique les overlays de façon synchrone, une station à la fois.
-  // Cela couvre aussi les stations ajoutées/normalisées après la création du cache.
   function installExpansionGuard(){
     const current=window.expandConfigurations;
     if(typeof current!=='function'||current.__tccOverlayExpansionGuard)return false;
@@ -83,13 +92,13 @@
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(String(banner.textContent||''))){
-      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · multi-tarifs · données canoniques France · auto-mise à jour désactivée`;
+      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · filtre puissance · données canoniques France · auto-mise à jour désactivée`;
     }
   }
 
-  // Première synchronisation dès que le cache de zone et les couches tarifaires existent.
   const timer=setInterval(()=>{
     loadCanonicalStationOverlay();
+    loadDirectResolverUi();
     apply(false);
     installExpansionGuard();
     markRevision();
@@ -97,16 +106,13 @@
   },120);
   setTimeout(()=>clearInterval(timer),120000);
 
-  // Avant chaque simulation, réappliquer une fois les overlays. C'est volontairement
-  // idempotent : cela permet de prendre en compte une normalisation tardive sans
-  // dupliquer les offres déjà présentes.
   document.addEventListener('click',async event=>{
     const button=event.target?.closest?.('.v8-simulate');
     if(!button||button.dataset.tccOverlayReplay==='1')return;
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    loadCanonicalStationOverlay();
+    loadCanonicalStationOverlay();loadDirectResolverUi();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -117,9 +123,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + données canoniques France rc48ar.');
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48as.');
 })();
