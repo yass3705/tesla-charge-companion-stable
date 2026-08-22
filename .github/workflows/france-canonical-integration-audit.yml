@@ -1,0 +1,86 @@
+name: France canonical integration audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "scripts/audit_france_canonical_overlay.mjs"
+      - ".github/workflows/france-canonical-integration-audit.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "scripts/audit_france_canonical_overlay.mjs"
+      - ".github/workflows/france-canonical-integration-audit.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: france-canonical-integration-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check audit script
+        run: node --check scripts/audit_france_canonical_overlay.mjs
+
+      - name: Download canonical France source
+        run: |
+          curl --fail --silent --show-error --location \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/france_public_charging_canonical.json \
+            --output /tmp/france_public_charging_canonical.json
+
+      - name: Build non-destructive comparison preview
+        run: |
+          node scripts/audit_france_canonical_overlay.mjs \
+            /tmp/france_public_charging_canonical.json \
+            data/non_tesla_france/all.json.gz \
+            data/non_tesla_france/manifest.json \
+            diagnostics/france_canonical_overlay_preview.json
+
+      - name: Validate safety and accounting
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p=JSON.parse(fs.readFileSync('diagnostics/france_canonical_overlay_preview.json','utf8'));
+          if(p.dataset!=='france-canonical-overlay-preview')throw new Error('unexpected preview dataset');
+          if(p.mode!=='audit_only'||p.activeInApp!==false)throw new Error('preview must remain inactive');
+          if(p.safety?.currentRuntimeCatalogUntouched!==true)throw new Error('runtime protection missing');
+          if(p.safety?.teslaStationsUntouched!==true||p.safety?.customStationsUntouched!==true)throw new Error('existing data protection missing');
+          if(p.safety?.automaticTariffOverrideEnabled!==false)throw new Error('automatic tariff override must stay disabled');
+          const c=p.counts||{};
+          if(c.stationVerifications<30)throw new Error(`canonical evidence unexpectedly small: ${c.stationVerifications}`);
+          if(c.matched+c.unmatched+c.ambiguous!==c.stationVerifications)throw new Error('station verification accounting mismatch');
+          if(Number(p.sources?.runtime?.stationCount)<40000)throw new Error('current France runtime catalogue unexpectedly incomplete');
+          if(c.remainingTrueGaps!==(p.remainingTrueGaps||[]).length)throw new Error('remaining gap accounting mismatch');
+          if(c.potentialEnergyConflicts>c.matched)throw new Error('invalid conflict count');
+          console.log(JSON.stringify(c,null,2));
+          NODE
+
+      - name: Upload comparison preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-canonical-overlay-preview
+          path: diagnostics/france_canonical_overlay_preview.json
+          if-no-files-found: error
+
+      - name: Publish preview on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/france_canonical_overlay_preview.json
+          if ! git diff --cached --quiet; then
+            git commit -m "diagnostics(france): refresh canonical integration preview [run ${GITHUB_RUN_ID}]"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
