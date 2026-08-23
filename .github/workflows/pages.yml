@@ -102,7 +102,7 @@ jobs:
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48am-20260821', html)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48am-20260821', html)
-          html=re.sub(r'assets/august-release\.js\?v=[^"]+', 'assets/august-release.js?v=rc48bg-20260823', html)
+          html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bi-20260823', html)
           html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bd-20260823', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-evadea-band-fallback\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -196,10 +196,12 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           index=Path('site/v8-preview/index.html').read_text(encoding='utf-8')
+          updater=Path('site/v8-preview/assets/update.js').read_text(encoding='utf-8')
           august=Path('site/v8-preview/assets/august-release.js').read_text(encoding='utf-8')
           subscriptions=Path('site/v8-preview/assets/v8-subscription-selection.js').read_text(encoding='utf-8')
           checks={
-              'cache august-release rc48bg':'august-release.js?v=rc48bg-20260823' in index,
+              'cache update.js rc48bi':'update.js?v=rc48bi-20260823' in index,
+              'chargeur august-release rc48bg':'august-release.js?v=rc48bg-20260823' in updater,
               'option coût/km':'<option value="costPerKm">Coût au km récupéré</option>' in august,
               'tri coût/km':"mode==='costPerKm'" in august,
               'kilomètres récupérés exposés':'data-recovered-km' in august,
@@ -232,7 +234,7 @@ jobs:
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo 'V8 RC4.8 rc48bh preview prepared successfully'
+          echo 'V8 RC4.8 rc48bi preview prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
