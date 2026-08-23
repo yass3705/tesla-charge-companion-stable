@@ -196,7 +196,19 @@
     moveSearchControls();
     separateFiltersAndBattery();
 
-    if(update.__tccAreaWorkflow)return true;
+    if(update.__tccAreaWorkflow){
+      // August peut réécrire le libellé et les handlers après notre première passe.
+      // On restaure alors l'état final sans ajouter une seconde fois les listeners.
+      moveSearchControls();separateFiltersAndBattery();
+      update.removeAttribute('onclick');update.onclick=refreshArea;setUpdateLabel(update,false);
+      sim.removeAttribute('onclick');sim.textContent='Simuler les 20 meilleures';
+      sim.onclick=async()=>{
+        if(!areaCache||areaCache.key!==areaKey()){invalidate('La zone n’est pas prête.');return;}
+        if(typeof window.compare==='function')await window.compare();
+        else if(typeof compare==='function')await compare();
+      };
+      return true;
+    }
     const actions=sim.closest('.v8-actions')||sim.parentElement;
     if(actions){
       actions.classList.add('v8-area-actions');
@@ -269,6 +281,15 @@
     separateFiltersAndBattery();
     return cache&&ui;
   }
-  let attempts=0;const timer=setInterval(()=>{attempts++;if(install()||attempts>180)clearInterval(timer);},100);
-  window.TCCV8AreaWorkflow={refresh:refreshArea,invalidate,get cache(){return areaCache;}};
+  let attempts=0,stablePasses=0;
+  const timer=setInterval(()=>{
+    attempts++;
+    const ok=install(),update=$('routeButton');
+    const stable=ok&&/Mettre à jour/i.test(text(update?.textContent))&&update?.__tccAreaWorkflow;
+    stablePasses=stable?stablePasses+1:0;
+    // Plusieurs couches August terminent leur initialisation après DOMContentLoaded.
+    // Trente passes stables empêchent une réécriture tardive de survivre.
+    if(stablePasses>=30||attempts>180)clearInterval(timer);
+  },100);
+  window.TCCV8AreaWorkflow={refresh:refreshArea,invalidate,repair:install,get cache(){return areaCache;}};
 })();
