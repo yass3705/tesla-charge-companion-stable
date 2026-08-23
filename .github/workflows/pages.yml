@@ -115,7 +115,7 @@ jobs:
           html=html.replace(offer_tag,injected+offer_tag,1)
           scripts=(
               '<script src="assets/v8-vehicle-profiles.js?v=rc48am-20260821" defer></script>\n'
-              '<script src="assets/v8-redesign.js?v=rc48bc-20260823" defer></script>\n'
+              '<script src="assets/v8-redesign.js?v=rc48be-20260823" defer></script>\n'
               '<script src="assets/v8-dynamic-filter.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-area-workflow.js?v=rc48bc-20260823" defer></script>\n'
               '<script src="assets/v8-sync-guard.js?v=rc48am-20260821" defer></script>\n'
@@ -194,9 +194,12 @@ jobs:
           grep -q 'v8-subscription-selection.js?v=rc48ay-20260823' site/v8-preview/index.html
           grep -q "document.createElement('details')" site/v8-preview/assets/v8-subscription-selection.js
           grep -q 'scheduledClosureOverride' site/v8-preview/data/non_tesla_france/status_snapshot.json
-          grep -q 'v8-redesign.js?v=rc48bc-20260823' site/v8-preview/index.html
+          grep -q 'v8-redesign.js?v=rc48be-20260823' site/v8-preview/index.html
           grep -q 'v8-area-workflow.js?v=rc48bc-20260823' site/v8-preview/index.html
           grep -q '@media(max-width:520px)' site/v8-preview/assets/v8-redesign.css
+          grep -q 'v8-date-time-grid' site/v8-preview/assets/v8-redesign.css
+          grep -q "dateTime.className='v8-date-time-grid'" site/v8-preview/assets/v8-redesign.js
+          grep -q 'appearance:none' site/v8-preview/assets/v8-redesign.css
           grep -q 'grid-template-columns:92px minmax(0,1fr)' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'v8-direct-resolver-ui.js?v=rc48bd-20260823' site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q 'id="v8PowerMinNumber"' site/v8-preview/assets/v8-direct-resolver-ui.js
@@ -209,7 +212,7 @@ jobs:
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo 'V8 RC4.8 rc48bd preview prepared successfully'
+          echo 'V8 RC4.8 rc48be preview prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
