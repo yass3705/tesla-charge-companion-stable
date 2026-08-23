@@ -27,10 +27,10 @@ body.v8-redesign #edit .card>button{width:auto!important;margin:12px 8px 0 0!imp
  .result-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v8-offer-row{grid-template-columns:1fr auto!important}.v8-offer-price{grid-column:1/-1!important}
 }
 @media(max-width:520px){
- .v8-core-grid>.v8-field:has(#simUnplugTime),.v8-core-grid>.v8-field:has(#simDate),.v8-core-grid>.v8-field:has(#simTime){grid-column:1/-1}
+ .v8-core-grid>.v8-field:has(#simUnplugTime){grid-column:1/-1}.v8-core-grid>.v8-field:has(#simDate),.v8-core-grid>.v8-field:has(#simTime){grid-column:auto}
  .v8-core-grid input,.v8-core-grid select{display:block;width:100%;min-width:0;max-width:100%}
  .v8-core-grid input[type="date"],.v8-core-grid input[type="time"]{-webkit-min-logical-width:0}
  .v8-details-body{grid-template-columns:minmax(0,1fr)}.v8-aug-filters{grid-column:auto}
  .v8-aug-filters .filter-grid,.v8-aug-filters .compact-grid{grid-template-columns:minmax(0,1fr)!important}
 }
-@media(max-width:390px){.v8-core-grid{grid-template-columns:1fr}.v8-core-grid .v8-span-2{grid-column:auto}.v8-core-grid>.v8-field:has(#simUnplugTime),.v8-core-grid>.v8-field:has(#simDate),.v8-core-grid>.v8-field:has(#simTime){grid-column:auto}.v8-actions{grid-template-columns:1fr}.v8-actions .v8-simulate{grid-column:auto}.v8-vehicle-summary span:not(.v8-eyebrow){display:none}}
+@media(max-width:390px){.v8-core-grid{grid-template-columns:1fr}.v8-core-grid .v8-span-2{grid-column:auto}.v8-core-grid>.v8-field:has(#simUnplugTime){grid-column:auto}.v8-core-grid>.v8-field:has(#simDate),.v8-core-grid>.v8-field:has(#simTime){grid-column:auto}.v8-actions{grid-template-columns:1fr}.v8-actions .v8-simulate{grid-column:auto}.v8-vehicle-summary span:not(.v8-eyebrow){display:none}}
