@@ -102,7 +102,7 @@ jobs:
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48am-20260821', html)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48am-20260821', html)
-          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bc-20260823', html)
+          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bd-20260823', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-evadea-band-fallback\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-regional-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -186,7 +186,7 @@ jobs:
           grep -q 'v8-operator-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
-          grep -q 'v8-overlay-area-bridge.js?v=rc48bc-20260823' site/v8-preview/index.html
+          grep -q 'v8-overlay-area-bridge.js?v=rc48bd-20260823' site/v8-preview/index.html
           grep -q "const REVISION='rc48am'" site/v8-preview/assets/v8-operator-tariff-overlay.js
           grep -q "const REVISION='rc48av-fee-breakdown-fix'" site/v8-preview/assets/v8-direct-resolver-followup.js
           grep -q 'const physicalKey=x=>' site/v8-preview/assets/august-release.js
@@ -198,17 +198,18 @@ jobs:
           grep -q 'v8-area-workflow.js?v=rc48bc-20260823' site/v8-preview/index.html
           grep -q '@media(max-width:520px)' site/v8-preview/assets/v8-redesign.css
           grep -q 'grid-template-columns:92px minmax(0,1fr)' site/v8-preview/assets/v8-area-workflow.js
-          grep -q 'v8-direct-resolver-ui.js?v=rc48bc-20260823' site/v8-preview/assets/v8-overlay-area-bridge.js
+          grep -q 'v8-direct-resolver-ui.js?v=rc48bd-20260823' site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q 'id="v8PowerMinNumber"' site/v8-preview/assets/v8-direct-resolver-ui.js
           grep -q 'max="250"' site/v8-preview/assets/v8-direct-resolver-ui.js
-          grep -q '250 kW' site/v8-preview/assets/v8-direct-resolver-ui.js
+          grep -q '250+ kW' site/v8-preview/assets/v8-direct-resolver-ui.js
+          grep -q 'p.max>=250' site/v8-preview/assets/v8-direct-resolver-ui.js
           grep -q 'stablePasses>=30' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'TCCV8AreaWorkflow?.repair' site/v8-preview/assets/preview-storage.js
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo 'V8 RC4.8 rc48bc preview prepared successfully'
+          echo 'V8 RC4.8 rc48bd preview prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
