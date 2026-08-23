@@ -124,6 +124,18 @@
     return true;
   }
 
+  let locationObserver=null,locationRepairQueued=false;
+  function ensureLocationObserver(card){
+    if(locationObserver||!card)return;
+    locationObserver=new MutationObserver(()=>{
+      const line=$('v8OriginRefreshRow'),radius=$('simMaxDistance');
+      if(!line||!radius||line.contains(radius)||locationRepairQueued)return;
+      locationRepairQueued=true;
+      requestAnimationFrame(()=>{locationRepairQueued=false;moveSearchControls();});
+    });
+    locationObserver.observe(card,{childList:true,subtree:true});
+  }
+
   function moveSearchControls(){
     const origin=$('simOrigin'),radius=$('simMaxDistance'),update=$('routeButton');
     if(!origin||!radius||!update)return false;
@@ -136,32 +148,35 @@
       line=document.createElement('div');
       line.id='v8OriginRefreshRow';
       line.className='v8-location-row';
-
-      const addressBox=document.createElement('div');
-      addressBox.className='v8-location-address';
-      const originLabel=[...originWrap.children].find(x=>x.tagName==='LABEL');
-      if(originLabel)addressBox.appendChild(originLabel);
-      addressBox.appendChild(origin);
-      line.appendChild(addressBox);
-
-      radiusWrap.classList.add('v8-location-radius');
-      const radiusLabel=radiusWrap.querySelector('label');
-      if(radiusLabel)radiusLabel.textContent='Rayon (km)';
-      const radiusHelp=radiusWrap.querySelector('.small');
-      if(radiusHelp)radiusHelp.classList.add('v8-location-help-hidden');
-      line.appendChild(radiusWrap);
-
-      update.style.cssText='';
-      update.classList.add('v8-area-refresh-btn');
-      line.appendChild(update);
-
       originWrap.appendChild(line);
-      originWrap.classList.add('v8-location-shell');
-    }else if(update.parentElement!==line){
-      line.appendChild(update);
     }
+
+    let addressBox=line.querySelector('.v8-location-address');
+    if(!addressBox){
+      addressBox=document.createElement('div');
+      addressBox.className='v8-location-address';
+      line.insertBefore(addressBox,line.firstChild);
+    }
+    const originLabel=[...originWrap.children].find(x=>x.tagName==='LABEL');
+    if(originLabel&&originLabel.parentElement!==addressBox)addressBox.appendChild(originLabel);
+    if(origin.parentElement!==addressBox)addressBox.appendChild(origin);
+
+    radiusWrap.classList.add('v8-location-radius');
+    const radiusLabel=radiusWrap.querySelector('label');
+    if(radiusLabel)radiusLabel.textContent='Rayon (km)';
+    const radiusHelp=radiusWrap.querySelector('.small');
+    if(radiusHelp)radiusHelp.classList.add('v8-location-help-hidden');
+    if(radiusWrap.parentElement!==line)line.insertBefore(radiusWrap,update.parentElement===line?update:null);
+
+    update.style.cssText='';
+    update.classList.add('v8-area-refresh-btn');
+    if(update.parentElement!==line)line.appendChild(update);
+
+    const shell=line.closest('.v8-field')||originWrap;
+    shell.classList.add('v8-location-shell');
+    ensureLocationObserver(shell.closest('.card')||$('v8CompareCard'));
     setUpdateLabel(update,false);
-    return true;
+    return line.contains(origin)&&line.contains(radius)&&line.contains(update);
   }
 
   function separateFiltersAndBattery(){
@@ -293,7 +308,7 @@
   const timer=setInterval(()=>{
     attempts++;
     const ok=install(),update=$('routeButton');
-    const stable=ok&&/Mettre à jour/i.test(text(update?.textContent))&&update?.__tccAreaWorkflow;
+    const row=$('v8OriginRefreshRow'),radius=$('simMaxDistance');const stable=ok&&/Mettre à jour/i.test(text(update?.textContent))&&update?.__tccAreaWorkflow&&!!row&&!!radius&&row.contains(radius);
     stablePasses=stable?stablePasses+1:0;
     // Plusieurs couches August terminent leur initialisation après DOMContentLoaded.
     // Trente passes stables empêchent une réécriture tardive de survivre.
