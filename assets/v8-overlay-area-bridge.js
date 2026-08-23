@@ -32,7 +32,7 @@
   function loadDirectResolverUi(){
     if(!window.TCCV8DirectResolver&&!document.querySelector('script[data-tcc-direct-resolver-ui]')){
       const s=document.createElement('script');
-      s.src='assets/v8-direct-resolver-ui.js?v=rc48as-20260822';
+      s.src='assets/v8-direct-resolver-ui.js?v=rc48bc-20260823';
       s.defer=true;s.dataset.tccDirectResolverUi='1';
       document.head.appendChild(s);
     }
