@@ -4,7 +4,7 @@
   const BUILD='8004';
   const STORAGE_KEY='tccVehicleProfileV1';
   const CATALOG=window.TCC_VEHICLE_CATALOG||{models:[]};
-  if(!document.querySelector('link[data-v8-redesign]')){const link=document.createElement('link');link.rel='stylesheet';link.href='assets/v8-redesign.css?v=rc3-20260818';link.dataset.v8Redesign='1';document.head.appendChild(link);}
+  if(!document.querySelector('link[data-v8-redesign]')){const link=document.createElement('link');link.rel='stylesheet';link.href='assets/v8-redesign.css?v=rc48bb-20260823';link.dataset.v8Redesign='1';document.head.appendChild(link);}
   const DEFAULT_STATE={model:'Y',trim:'lr-rwd',year:2026,capacityMode:'simple',usableCapacity:75,newCapacity:75,degradation:0,consumptionOverride:null};
   const $=id=>document.getElementById(id);
   const num=(v,f=0)=>{const n=Number(v);return Number.isFinite(n)?n:f};
