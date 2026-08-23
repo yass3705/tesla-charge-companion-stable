@@ -267,9 +267,17 @@
         .v8-area-actions .v8-simulate{grid-column:1!important;grid-row:1!important}
         .v8-area-actions .v8-save-origin{grid-column:1!important;grid-row:2!important}
       }
+      @media(max-width:520px){
+        .v8-location-row{grid-template-columns:minmax(0,1fr) 96px;gap:6px}
+        .v8-location-address{grid-column:1/-1}
+        .v8-location-radius{grid-column:1}
+        .v8-area-refresh-btn{grid-column:2}
+      }
       @media(max-width:360px){
-        .v8-location-row{grid-template-columns:minmax(0,1fr) 68px 82px;gap:5px}
-        .v8-area-refresh-btn{font-size:10px!important;padding:0 5px!important}
+        .v8-location-row{grid-template-columns:minmax(0,1fr) 82px;gap:5px}
+        .v8-location-address{grid-column:1/-1}
+        .v8-location-radius{grid-column:1}
+        .v8-area-refresh-btn{grid-column:2;font-size:10px!important;padding:0 5px!important}
       }
     `;document.head.appendChild(s);
   }
