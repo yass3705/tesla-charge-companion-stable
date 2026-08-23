@@ -51,8 +51,8 @@ jobs:
           (function(){
             if(!location.pathname.includes('/v8-preview/'))return;
             window.TCC_PREVIEW=true;
-            const uiGuardKey='tcc-preview-area-ui-reload-rc48ax';
-            window.addEventListener('pageshow',function(event){if(event.persisted)location.reload();});
+            const uiGuardKey='tcc-preview-area-ui-repair-rc48ba';
+            window.addEventListener('pageshow',function(event){if(event.persisted)setTimeout(function(){window.TCCV8AreaWorkflow?.repair?.();},0);});
             if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(reg){if(String(reg.scope||'').includes('/v8-preview/'))reg.unregister().catch(function(){});});}).catch(function(){});}
             if('caches' in window){caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return /^tcc-v8|^tcc-v800/.test(k);}).map(function(k){return caches.delete(k);}));}).catch(function(){});}
             const prefix='tcc:v8-preview:';
@@ -74,10 +74,14 @@ jobs:
                 header.appendChild(banner);
               }
               setTimeout(function(){
-                const row=document.getElementById('v8OriginRefreshRow');
-                const button=document.getElementById('routeButton');
-                const ready=!!row&&!!button&&/Mettre à jour/i.test(String(button.textContent||''));
-                if(ready){try{sessionStorage.removeItem(uiGuardKey);}catch(e){}return;}
+                const ready=function(){const row=document.getElementById('v8OriginRefreshRow');const button=document.getElementById('routeButton');return !!row&&!!button&&/Mettre à jour/i.test(String(button.textContent||''));};
+                if(ready()){try{sessionStorage.removeItem(uiGuardKey);}catch(e){}return;}
+                const repair=window.TCCV8AreaWorkflow?.repair;
+                if(typeof repair==='function'){
+                  repair();
+                  setTimeout(function(){if(ready())try{sessionStorage.removeItem(uiGuardKey);}catch(e){}},600);
+                  return;
+                }
                 try{if(sessionStorage.getItem(uiGuardKey)!=='1'){sessionStorage.setItem(uiGuardKey,'1');location.reload();}}catch(e){location.reload();}
               },2500);
             });
@@ -91,14 +95,14 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc48ax"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48ba"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48am-20260821', html)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48am-20260821', html)
-          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48ax-20260823', html)
+          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48ba-20260823', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-evadea-band-fallback\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-regional-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -113,7 +117,7 @@ jobs:
               '<script src="assets/v8-vehicle-profiles.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-redesign.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-dynamic-filter.js?v=rc48am-20260821" defer></script>\n'
-              '<script src="assets/v8-area-workflow.js?v=rc48am-20260821" defer></script>\n'
+              '<script src="assets/v8-area-workflow.js?v=rc48ba-20260823" defer></script>\n'
               '<script src="assets/v8-sync-guard.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-rc4-extensions.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-rc4-toggle-fix.js?v=rc48am-20260821" defer></script>\n'
@@ -188,6 +192,9 @@ jobs:
           grep -q 'v8-subscription-selection.js?v=rc48ay-20260823' site/v8-preview/index.html
           grep -q "document.createElement('details')" site/v8-preview/assets/v8-subscription-selection.js
           grep -q 'scheduledClosureOverride' site/v8-preview/data/non_tesla_france/status_snapshot.json
+          grep -q 'v8-area-workflow.js?v=rc48ba-20260823' site/v8-preview/index.html
+          grep -q 'stablePasses>=30' site/v8-preview/assets/v8-area-workflow.js
+          grep -q 'TCCV8AreaWorkflow?.repair' site/v8-preview/assets/preview-storage.js
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
