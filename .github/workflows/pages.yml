@@ -193,11 +193,22 @@ jobs:
           grep -q 'const physicalKey=x=>' site/v8-preview/assets/august-release.js
           grep -q 'v8-station-status.js?v=rc48ax-20260823' site/v8-preview/index.html
           grep -q 'v8-subscription-selection.js?v=rc48bg-20260823' site/v8-preview/index.html
-          grep -q 'august-release.js?v=rc48bg-20260823' site/v8-preview/index.html
-          grep -q '<option value="costPerKm">Coût au km récupéré</option>' site/v8-preview/assets/august-release.js
-          grep -q "mode==='costPerKm'" site/v8-preview/assets/august-release.js
-          grep -q 'data-recovered-km' site/v8-preview/assets/august-release.js
-          grep -q "mode!=='costPerKm'" site/v8-preview/assets/v8-subscription-selection.js
+          python - <<'PY'
+          from pathlib import Path
+          index=Path('site/v8-preview/index.html').read_text(encoding='utf-8')
+          august=Path('site/v8-preview/assets/august-release.js').read_text(encoding='utf-8')
+          subscriptions=Path('site/v8-preview/assets/v8-subscription-selection.js').read_text(encoding='utf-8')
+          checks={
+              'cache august-release rc48bg':'august-release.js?v=rc48bg-20260823' in index,
+              'option coût/km':'<option value="costPerKm">Coût au km récupéré</option>' in august,
+              'tri coût/km':"mode==='costPerKm'" in august,
+              'kilomètres récupérés exposés':'data-recovered-km' in august,
+              'reclassement abonnements':"mode!=='costPerKm'" in subscriptions,
+          }
+          missing=[name for name,ok in checks.items() if not ok]
+          if missing: raise SystemExit('Contrôles coût/km manquants: '+', '.join(missing))
+          print('Contrôles coût/km validés.')
+          PY
           grep -q "document.createElement('details')" site/v8-preview/assets/v8-subscription-selection.js
           grep -q 'scheduledClosureOverride' site/v8-preview/data/non_tesla_france/status_snapshot.json
           grep -q 'v8-redesign.js?v=rc48be-20260823' site/v8-preview/index.html
@@ -221,7 +232,7 @@ jobs:
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo 'V8 RC4.8 rc48bg preview prepared successfully'
+          echo 'V8 RC4.8 rc48bh preview prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
