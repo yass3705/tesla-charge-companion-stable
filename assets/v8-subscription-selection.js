@@ -3,7 +3,7 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-3';
+  const VERSION='rc48-multi-subs-4';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
@@ -47,7 +47,11 @@
   function injectStyle(){
     if($('v8SubscriptionStyle'))return;
     const s=document.createElement('style');s.id='v8SubscriptionStyle';s.textContent=`
-      .v8-subscriptions-box{margin-top:12px;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13}
+      .v8-subscriptions-box{margin-top:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13;overflow:hidden}
+      .v8-subscriptions-box>summary{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;cursor:pointer;font-size:12px;font-weight:900;list-style:none}
+      .v8-subscriptions-box>summary::-webkit-details-marker{display:none}.v8-subscriptions-box>summary:after{content:'▾';color:#a9a9b0;font-size:14px}.v8-subscriptions-box[open]>summary:after{content:'▴'}
+      .v8-subscriptions-count{color:#9a9aa2;font-size:10px;font-weight:700;margin-left:auto}
+      .v8-subscriptions-body{padding:0 12px 12px;border-top:1px solid #292930}
       .v8-subscriptions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:9px}
       .v8-subscription-choice{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid #33333a;border-radius:11px;font-size:11px}
       .v8-subscription-choice input{width:auto!important;margin-top:2px}.v8-subscription-choice b{display:block}.v8-subscription-choice span{display:block;color:#8f8f96;font-size:9px;margin-top:2px}
@@ -61,11 +65,12 @@
     const host=$('v8FilterBody'),controls=controlPlans();if(!host||!controls.length)return false;
     forceLegacyElectraOff();injectStyle();
     let box=$('v8SubscriptionsBox');
-    if(!box){box=document.createElement('div');box.id='v8SubscriptionsBox';box.className='v8-subscriptions-box';host.appendChild(box);}
-    const selected=selectedSet();
-    box.innerHTML=`<div class="v8-eyebrow">Mes abonnements</div><div style="font-size:12px;font-weight:800;margin-top:3px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût mensuel n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${controls.map(p=>{const id=selectionId(p);return `<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${id}" ${selected.has(id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`}).join('')}</div>`;
+    if(!box){box=document.createElement('details');box.id='v8SubscriptionsBox';box.className='v8-subscriptions-box';host.appendChild(box);}
+    const selected=selectedSet(),countLabel=selected.size?`${selected.size} sélectionné${selected.size>1?'s':''}`:'Aucun sélectionné';
+    box.innerHTML=`<summary><span>Mes abonnements</span><span class="v8-subscriptions-count">${countLabel}</span></summary><div class="v8-subscriptions-body"><div style="font-size:12px;font-weight:800;margin-top:10px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût mensuel n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${controls.map(p=>{const id=selectionId(p);return `<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${id}" ${selected.has(id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`}).join('')}</div></div>`;
     box.querySelectorAll('[data-subscription-choice]').forEach(input=>input.addEventListener('change',()=>{
       const ids=new Set([...box.querySelectorAll('[data-subscription-choice]:checked')].map(x=>x.dataset.subscriptionChoice));
+      const label=box.querySelector('.v8-subscriptions-count');if(label)label.textContent=ids.size?`${ids.size} sélectionné${ids.size>1?'s':''}`:'Aucun sélectionné';
       saveSelected(ids);applyAll(true);
     }));
     return true;
@@ -179,5 +184,5 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
   window.TCCV8Subscriptions={state,applyAll,get plans(){return plans.slice()}};
-  console.info('[TCC V8] Sélection multi-abonnements active : affichage permanent, classement opt-in, forfaits multi-réseaux et frais de durée supportés.');
+  console.info('[TCC V8] Sélection multi-abonnements active : panneau repliable, classement opt-in, forfaits multi-réseaux et frais de durée supportés.');
 })();
