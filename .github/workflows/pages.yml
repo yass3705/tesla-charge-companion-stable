@@ -120,7 +120,7 @@ jobs:
               '<script src="assets/v8-combined-tariff-fix.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-source-integrity.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-ambiguous-electra-warning.js?v=rc48am-20260821" defer></script>\n'
-              '<script src="assets/v8-subscription-selection.js?v=rc48am-20260821" defer></script>\n'
+              '<script src="assets/v8-subscription-selection.js?v=rc48ay-20260823" defer></script>\n'
               '<script src="assets/v8-station-status.js?v=rc48ax-20260823" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
@@ -171,6 +171,7 @@ jobs:
           node --check site/v8-preview/assets/v8-offer-selection.js
           node --check site/v8-preview/assets/v8-area-workflow.js
           node --check site/v8-preview/assets/v8-source-integrity.js
+          node --check site/v8-preview/assets/v8-subscription-selection.js
           node --check site/v8-preview/assets/v8-station-status.js
           node --check site/v8-preview/assets/update.js
           python -m json.tool site/v8-preview/data/non_tesla_france/status_snapshot.json >/dev/null
@@ -184,6 +185,8 @@ jobs:
           grep -q "const REVISION='rc48av-fee-breakdown-fix'" site/v8-preview/assets/v8-direct-resolver-followup.js
           grep -q 'const physicalKey=x=>' site/v8-preview/assets/august-release.js
           grep -q 'v8-station-status.js?v=rc48ax-20260823' site/v8-preview/index.html
+          grep -q 'v8-subscription-selection.js?v=rc48ay-20260823' site/v8-preview/index.html
+          grep -q "document.createElement('details')" site/v8-preview/assets/v8-subscription-selection.js
           grep -q 'scheduledClosureOverride' site/v8-preview/data/non_tesla_france/status_snapshot.json
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
