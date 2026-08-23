@@ -33,13 +33,14 @@
     return true;
   }
   function injectFilter(){
-    if(document.getElementById('simStatusFilter'))return;
+    if(document.getElementById('simStatusFilter'))return true;
     const kind=document.getElementById('simKindFilter');
     const grid=kind?.closest('.filter-grid');
-    if(!grid)return;
+    if(!grid)return false;
     const box=document.createElement('div');
     box.innerHTML='<label>Statut de la station</label><select id="simStatusFilter"><option value="available" selected>Disponible</option><option value="all">Tous les statuts</option><option value="out_of_service">Hors service</option></select><div class="small" style="margin-top:5px">Disponible inclut les bornes occupées et celles sans statut publié. Les horaires restent appliqués séparément au Top 20.</div>';
     grid.appendChild(box);
+    return true;
   }
   function badge(st){
     const status=normalized(st);
@@ -63,10 +64,26 @@
     document.head.appendChild(style);
   }
   function boot(){
-    injectFilter();installStyles();installCandidateFilter();
-    const results=document.getElementById('results');if(results)new MutationObserver(decorate).observe(results,{childList:true,subtree:true});
-    document.getElementById('simStatusFilter')?.addEventListener('change',()=>{if(typeof window.compare==='function')window.compare();});
+    installStyles();
+    const uiReady=injectFilter();
+    const candidateReady=installCandidateFilter();
+    const results=document.getElementById('results');
+    if(results&&!results.__tccStatusObserver){
+      results.__tccStatusObserver=new MutationObserver(decorate);
+      results.__tccStatusObserver.observe(results,{childList:true,subtree:true});
+    }
+    const filter=document.getElementById('simStatusFilter');
+    if(filter&&!filter.__tccStatusBound){
+      filter.addEventListener('change',()=>{if(typeof window.compare==='function')window.compare();});
+      filter.__tccStatusBound=true;
+    }
+    return uiReady&&candidateReady;
+  }
+  function start(){
+    let attempts=0;
+    boot();
+    const timer=setInterval(()=>{attempts++;if(boot()||attempts>240)clearInterval(timer);},250);
   }
   window.TCCStationStatus={normalized,matches,decorate};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0));else setTimeout(boot,0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,0));else setTimeout(start,0);
 })();
