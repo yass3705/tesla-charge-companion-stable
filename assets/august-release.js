@@ -253,6 +253,7 @@
     available.sort((a,b)=>{
       if(mode==='finish')return finite(a.totalDuration)-finite(b.totalDuration);
       if(mode==='chargeFinish')return finite(a.r.allowed)-finite(b.r.allowed);
+      if(mode==='costPerKm')return finite(a.centsPerKm)-finite(b.centsPerKm);
       if(mode==='arrival')return finite(b.arrivalSoc,-1)-finite(a.arrivalSoc,-1);
       if(mode==='distance')return finite(a.distanceKm)-finite(b.distanceKm);
       return finite(a.r.total)-finite(b.r.total);
@@ -354,7 +355,7 @@
       let breakdown=r.pricingDetails&&(r.pricingDetails.connection||r.pricingDetails.idleCost||r.pricingDetails.durationSurcharge||r.pricingDetails.congestionCost)?`<div class="small cost-breakdown">Fixe/parking : ${(r.pricingDetails.connection||0).toFixed(2)} € · Après charge : ${(r.pricingDetails.idleCost||0).toFixed(2)} € · Après durée : ${(r.pricingDetails.durationSurcharge||0).toFixed(2)} € · Congestion ≥${r.congestion?.threshold??80}% : ${(r.pricingDetails.congestionCost||0).toFixed(2)} €</div>`:'';
       let congestion=r.congestion?.available?`<div class="congestion-toggle"><label><input type="checkbox" ${r.congestion.enabled?'checked':''} onchange="augSetCongestion('${esc(st.baseStationId||st.id)}',this.checked)"> Appliquer les frais de congestion Tesla au-delà de ${Number(r.congestion.threshold||80).toFixed(0)} %</label><span class="small">${Number(r.congestion.rate||0).toFixed(2)} ${esc(r.congestion.currency||currencies[0]||'EUR')}/min · ${r.congestion.enabled?`${Math.round(r.congestion.minutes||0)} min exposées`:'désactivés pour cette simulation'}</span></div>`:'';
       let taper=r.reached>80&&st.kind==='DC'?'<div class="warn small">Le ralentissement de charge au-dessus de 80 % est inclus.</div>':'';
-      return`<div class="station result-card" data-result-id="${esc(st.baseStationId||st.id)}">
+      return`<div class="station result-card" data-result-id="${esc(st.baseStationId||st.id)}" data-recovered-km="${Number(row.recoveredKm||0).toFixed(6)}" data-cents-per-km="${Number.isFinite(row.centsPerKm)?row.centsPerKm.toFixed(6):''}">
         <div class="station-head"><div><h3>${idx+1}. ${esc(st.name)} — ${esc(st.configurationLabel||`${st.kind} ${st.powerKw} kW`)}</h3>
         <span class="badge operator-badge">${esc(operator)}</span><span class="badge">${esc(st.kind)}</span><span class="badge">${Number(st.powerKw)} kW</span>${st.stalls?`<span class="badge">${st.stalls} point${st.stalls>1?'s':''}</span>`:''}<span class="badge">MAJ ${esc(st.lastUpdated||'—')}</span></div>${cost}</div>
         <div class="routeinfo"><b>${route}</b><br>Départ ${num('simNow',20).toFixed(0)} % → trajet ${row.tripEnergy.toFixed(1)} kWh${precond} → <span class="${arrivalClass}"><b>arrivée ${Math.max(0,row.arrivalSoc).toFixed(1)} %</b></span>${tripProfile}</div>
@@ -665,7 +666,7 @@
     let scope=$('simOperatorFilter');if(scope){scope.closest('div').classList.add('hidden')}
     let ranking=$('simRanking');if(ranking){
       ranking.previousElementSibling.textContent='Trier les résultats par';
-      ranking.innerHTML='<option value="cost" selected>Coût final</option><option value="finish">Temps trajet + recharge</option><option value="chargeFinish">Durée de recharge</option><option value="arrival">Batterie à l’arrivée</option><option value="distance">Distance</option>';
+      ranking.innerHTML='<option value="cost" selected>Coût final</option><option value="costPerKm">Coût au km récupéré</option><option value="finish">Temps trajet + recharge</option><option value="chargeFinish">Durée de recharge</option><option value="arrival">Batterie à l’arrivée</option><option value="distance">Distance</option>';
     }
     let grid=card.querySelector('.grid'),box=document.createElement('div');box.id='augVehicleBox';box.className='full box';
     box.innerHTML=`<div class="aug-section-title"><b>Véhicule & consommation</b><span class="small">La batterie actuelle correspond au niveau au départ.</span></div>
