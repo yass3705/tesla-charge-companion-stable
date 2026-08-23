@@ -184,7 +184,7 @@ jobs:
           grep -q 'v8-operator-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
-          grep -q 'v8-overlay-area-bridge.js?v=rc48ax-20260823' site/v8-preview/index.html
+          grep -q 'v8-overlay-area-bridge.js?v=rc48ba-20260823' site/v8-preview/index.html
           grep -q "const REVISION='rc48am'" site/v8-preview/assets/v8-operator-tariff-overlay.js
           grep -q "const REVISION='rc48av-fee-breakdown-fix'" site/v8-preview/assets/v8-direct-resolver-followup.js
           grep -q 'const physicalKey=x=>' site/v8-preview/assets/august-release.js
@@ -199,7 +199,7 @@ jobs:
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo 'V8 RC4.8 rc48ax preview prepared successfully'
+          echo 'V8 RC4.8 rc48ba preview prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
