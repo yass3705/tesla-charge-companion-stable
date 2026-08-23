@@ -46,7 +46,7 @@
       document.head.appendChild(css);
     }
     const script=document.createElement('script');
-    script.src=`assets/august-release.js?v=${CURRENT_BUILD}`;
+    script.src='assets/august-release.js?v=rc48bg-20260823';
     script.dataset.tccAugust='1';
     script.onload=()=>{
       console.info('[TCC] August release layer loaded.');
