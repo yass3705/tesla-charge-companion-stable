@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48ax-station-status';
+  const REVISION='rc48ba-ui-stable';
   let applying=false;
   let lastPrepared=null;
 
