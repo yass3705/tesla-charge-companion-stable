@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — résolution tarif direct + filtre puissance + UI abonnements.
 (function(){
   'use strict';
-  const REVISION='rc48bc-power-window';
+  const REVISION='rc48bd-power-window';
   const POWER_KEY='tccPowerWindowV1';
   const SUB_KEY='tccSubscriptionsV1';
   const $=id=>document.getElementById(id);
@@ -64,14 +64,14 @@
   }
   function injectPowerWindow(){
     const filters=$('augCompareFilters')||$('v8FilterBody');if(!filters)return false;if($('v8PowerWindow'))return true;injectPowerStyle();const kind=$('simKindFilter')?.closest('div'),box=document.createElement('div');box.id='v8PowerWindow';box.className='v8-power-window';const s=powerState();
-    box.innerHTML=`<div class="v8-power-head"><div><b>Fenêtre de puissance</b><div class="small">Filtre supplémentaire au choix AC / DC</div></div><div id="v8PowerValue" class="v8-power-value"></div></div><div class="v8-power-track"><input id="v8PowerMin" type="range" min="0" max="250" step="1" value="${s.min}"><input id="v8PowerMax" type="range" min="0" max="250" step="1" value="${s.max}"></div><div class="v8-power-scale"><span>0 kW</span><span>250 kW</span></div><div class="v8-power-inputs"><label>Minimum (kW)<input id="v8PowerMinNumber" type="number" min="0" max="250" step="1" inputmode="numeric" value="${s.min}"></label><label>Maximum (kW)<input id="v8PowerMaxNumber" type="number" min="0" max="250" step="1" inputmode="numeric" value="${s.max}"></label></div>`;
+    box.innerHTML=`<div class="v8-power-head"><div><b>Fenêtre de puissance</b><div class="small">Filtre supplémentaire au choix AC / DC</div></div><div id="v8PowerValue" class="v8-power-value"></div></div><div class="v8-power-track"><input id="v8PowerMin" type="range" min="0" max="250" step="1" value="${s.min}"><input id="v8PowerMax" type="range" min="0" max="250" step="1" value="${s.max}"></div><div class="v8-power-scale"><span>0 kW</span><span>250+ kW</span></div><div class="v8-power-inputs"><label>Minimum (kW)<input id="v8PowerMinNumber" type="number" min="0" max="250" step="1" inputmode="numeric" value="${s.min}"></label><label>Maximum (kW)<input id="v8PowerMaxNumber" type="number" min="0" max="250" step="1" inputmode="numeric" value="${s.max}"></label></div>`;
     if(kind)kind.parentElement?.insertAdjacentElement('afterend',box);else filters.prepend(box);
-    const minEl=$('v8PowerMin'),maxEl=$('v8PowerMax'),minNumber=$('v8PowerMinNumber'),maxNumber=$('v8PowerMaxNumber'),val=$('v8PowerValue');const clamp=v=>Math.max(0,Math.min(250,Math.round(Number(v)||0)));const sync=(changed,source)=>{let min=clamp(source==='number'?minNumber.value:minEl.value),max=clamp(source==='number'?maxNumber.value:maxEl.value);if(changed==='min'&&min>max)max=min;if(changed==='max'&&max<min)min=max;minEl.value=minNumber.value=String(min);maxEl.value=maxNumber.value=String(max);val.textContent=`${min} — ${max} kW`;savePowerState(min,max)};
+    const minEl=$('v8PowerMin'),maxEl=$('v8PowerMax'),minNumber=$('v8PowerMinNumber'),maxNumber=$('v8PowerMaxNumber'),val=$('v8PowerValue');const clamp=v=>Math.max(0,Math.min(250,Math.round(Number(v)||0)));const sync=(changed,source)=>{let min=clamp(source==='number'?minNumber.value:minEl.value),max=clamp(source==='number'?maxNumber.value:maxEl.value);if(changed==='min'&&min>max)max=min;if(changed==='max'&&max<min)min=max;minEl.value=minNumber.value=String(min);maxEl.value=maxNumber.value=String(max);val.textContent=`${min} — ${max>=250?'250+':max} kW`;savePowerState(min,max)};
     minEl.addEventListener('input',()=>sync('min','range'));maxEl.addEventListener('input',()=>sync('max','range'));minNumber.addEventListener('change',()=>sync('min','number'));maxNumber.addEventListener('change',()=>sync('max','number'));sync('max','range');return true;
   }
   function installExpansionResolver(){
     const current=window.expandConfigurations;if(typeof current!=='function')return false;if(current.__tccDirectResolverPowerV1)return true;
-    const wrapped=function(baseStations){const source=Array.isArray(baseStations)?baseStations.map(addChargezyDirect):baseStations,expanded=current.call(this,source),p=powerState();return (expanded||[]).filter(st=>{const kw=Number(st?.powerKw||0);return Number.isFinite(kw)&&kw>=p.min-1e-9&&(kw<=p.max+1e-9)})};
+    const wrapped=function(baseStations){const source=Array.isArray(baseStations)?baseStations.map(addChargezyDirect):baseStations,expanded=current.call(this,source),p=powerState();return (expanded||[]).filter(st=>{const kw=Number(st?.powerKw||0);return Number.isFinite(kw)&&kw>=p.min-1e-9&&((p.max>=250||kw<=p.max+1e-9))})};
     wrapped.__tccDirectResolverPowerV1=true;wrapped.__tccOverlayExpansionGuard=!!current.__tccOverlayExpansionGuard;wrapped.__tccOriginal=current;window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}return true;
   }
 
