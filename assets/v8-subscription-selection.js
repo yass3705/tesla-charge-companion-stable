@@ -167,9 +167,10 @@
     card.dataset.tccSubsSig=sig;
   }
   function sortCost(){
-    if($('simRanking')?.value!=='cost')return;
+    const mode=$('simRanking')?.value;if(mode!=='cost'&&mode!=='costPerKm')return;
     const root=$('results');if(!root)return;const cards=[...root.querySelectorAll('.result-card[data-result-id]')];
-    cards.sort((a,b)=>Number(a.dataset.tccEffectiveCost||Infinity)-Number(b.dataset.tccEffectiveCost||Infinity)).forEach(c=>root.appendChild(c));
+    const score=card=>{const cost=Number(card.dataset.tccEffectiveCost||Infinity);if(mode==='cost')return cost;const km=Number(card.dataset.recoveredKm||0);return Number.isFinite(cost)&&km>0?cost/km*100:Infinity;};
+    cards.sort((a,b)=>score(a)-score(b)).forEach(c=>root.appendChild(c));
     cards.forEach((c,i)=>{const h=c.querySelector('h3');if(h)h.textContent=text(h.textContent).replace(/^\d+\.\s*/,`${i+1}. `)});
   }
   function applyAll(force=false){if(busy)return;busy=true;try{document.querySelectorAll('#results .result-card[data-result-id]').forEach(c=>applyCard(c,force));sortCost();}finally{busy=false}}
