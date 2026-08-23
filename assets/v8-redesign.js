@@ -4,7 +4,7 @@
   const BUILD='8004';
   const STORAGE_KEY='tccVehicleProfileV1';
   const CATALOG=window.TCC_VEHICLE_CATALOG||{models:[]};
-  if(!document.querySelector('link[data-v8-redesign]')){const link=document.createElement('link');link.rel='stylesheet';link.href='assets/v8-redesign.css?v=rc48bc-20260823';link.dataset.v8Redesign='1';document.head.appendChild(link);}
+  if(!document.querySelector('link[data-v8-redesign]')){const link=document.createElement('link');link.rel='stylesheet';link.href='assets/v8-redesign.css?v=rc48be-20260823';link.dataset.v8Redesign='1';document.head.appendChild(link);}
   const DEFAULT_STATE={model:'Y',trim:'lr-rwd',year:2026,capacityMode:'simple',usableCapacity:75,newCapacity:75,degradation:0,consumptionOverride:null};
   const $=id=>document.getElementById(id);
   const num=(v,f=0)=>{const n=Number(v);return Number.isFinite(n)?n:f};
@@ -83,7 +83,9 @@
 
     const summary=document.createElement('div');summary.id='v8VehicleSummary';summary.className='v8-vehicle-summary';card.insertBefore(summary,grid);
     const core=document.createElement('div');core.className='v8-core-grid';card.insertBefore(core,grid);
-    ['simOrigin','simNow','simTarget','simUnplugTime','simDate','simTime'].forEach(id=>moveControl(id,core,id==='simOrigin'?'v8-field v8-span-2':'v8-field'));
+    ['simOrigin','simNow','simTarget','simUnplugTime'].forEach(id=>moveControl(id,core,id==='simOrigin'?'v8-field v8-span-2':'v8-field'));
+    const dateTime=document.createElement('div');dateTime.className='v8-date-time-grid';core.appendChild(dateTime);
+    moveControl('simDate',dateTime);moveControl('simTime',dateTime);
 
     const filterDetails=document.createElement('details');filterDetails.className='v8-details v8-filter-details';filterDetails.open=false;
     filterDetails.innerHTML='<summary>Filtres & classement <span>type, rayon, opérateurs</span></summary><div class="v8-details-body" id="v8FilterBody"></div>';
