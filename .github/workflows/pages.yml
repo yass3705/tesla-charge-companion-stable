@@ -45,6 +45,7 @@ jobs:
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
           cp site/data/e55c_station_tariffs_v1.json.gz site/v8-preview/data/e55c_station_tariffs_v1.json.gz
           cp site/data/belib_station_tariffs_v1.json.gz site/v8-preview/data/belib_station_tariffs_v1.json.gz
+          cp site/data/ionity_direct_stations_france.json.gz site/v8-preview/data/ionity_direct_stations_france.json.gz
           rm -rf site/v8-preview/data/non_tesla_france
           cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france
           cp site/assets/france-catalog-v8.js site/v8-preview/assets/france-catalog.js
@@ -72,7 +73,7 @@ jobs:
               if(header&&!document.getElementById('tccPreviewBanner')){
                 const banner=document.createElement('div');
                 banner.id='tccPreviewBanner';
-                banner.textContent='V8 Preview · RC4.8 · rc48bj · Belib’ direct · parking exclu · auto-mise à jour désactivée';
+                banner.textContent='V8 Preview · RC4.8 · rc48bk · Belib’ direct · parking exclu · IONITY Direct · auto-mise à jour désactivée';
                 banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';
                 header.appendChild(banner);
               }
@@ -98,15 +99,15 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc48bf"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48bk"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-belib-idle-20260824', html)
+          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-belib-ionity-20260824', html)
           html=re.sub(r'<script src="assets/v8-e55c-pricing\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-belib-pricing\.js\?v=[^"]+" defer></script>\n?','',html)
-          france_tag='<script src="assets/france-catalog.js?v=rc48-belib-idle-20260824" defer></script>'
+          france_tag='<script src="assets/france-catalog.js?v=rc48-belib-ionity-20260824" defer></script>'
           html=html.replace(france_tag,france_tag+'\n<script src="assets/v8-belib-pricing.js?v=rc48-belib-1" defer></script>',1)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48am-20260821', html)
           html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bi-20260823', html)
@@ -195,8 +196,9 @@ jobs:
           (cd site && node scripts/test_e55c_v8_runtime.mjs)
           node site/scripts/test_belib_v8_overlay.mjs site/v8-preview/data/belib_station_tariffs_v1.json.gz
           (cd site && node scripts/test_belib_v8_runtime.mjs v8-preview/data/belib_station_tariffs_v1.json.gz)
-          grep -q 'V8 Preview · RC4.8 · rc48bj · Belib’ direct · parking exclu' site/v8-preview/assets/preview-storage.js
-          grep -q 'france-catalog.js?v=rc48-belib-idle-20260824' site/v8-preview/index.html
+          (cd site && node scripts/test_ionity_v8_runtime.mjs)
+          grep -q 'V8 Preview · RC4.8 · rc48bk · Belib’ direct · parking exclu · IONITY Direct' site/v8-preview/assets/preview-storage.js
+          grep -q 'france-catalog.js?v=rc48-belib-ionity-20260824' site/v8-preview/index.html
           ! grep -q 'v8-e55c-pricing.js' site/v8-preview/index.html
           grep -q 'v8-belib-pricing.js?v=rc48-belib-1' site/v8-preview/index.html
           grep -q 'v8-operator-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
@@ -257,13 +259,15 @@ jobs:
           grep -q 'stablePasses>=30' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'locationObserver.observe' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'row.contains(radius)' site/v8-preview/assets/v8-area-workflow.js
-          grep -q 'preview-storage.js?v=rc48bf' site/v8-preview/index.html
+          grep -q 'preview-storage.js?v=rc48bk' site/v8-preview/index.html
           grep -q 'TCCV8AreaWorkflow?.repair' site/v8-preview/assets/preview-storage.js
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
             exit 1
           fi
-          echo 'V8 RC4.8 rc48bi preview prepared successfully'
+          grep -q 'IONITY_URL' site/v8-preview/assets/france-catalog.js
+          grep -q "r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct')" site/v8-preview/assets/v8-reference-offers.js
+          echo 'V8 RC4.8 rc48bk preview E55C + Belib + IONITY Direct prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5

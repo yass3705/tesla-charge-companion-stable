@@ -1,6 +1,6 @@
-// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib'.
-// E55C conserve les statuts Electroverse/Electra. Belib' utilise son inventaire
-// officiel strict et joint la disponibilité officielle Paris Open Data par EVSE.
+// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib' + IONITY.
+// Le socle Electroverse/Electra reste l'autorité des statuts. Les inventaires CPO
+// stricts ajoutent les stations manquantes et leurs tarifs directs vérifiés.
 (function(){
   'use strict';
   const BASE='data/non_tesla_france/';
@@ -8,8 +8,9 @@
   const BELIB_URL='data/belib_station_tariffs_v1.json.gz';
   const BELIB_LIVE_URL='https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-disponibilite-temps-reel/exports/json';
   const BELIB_LIVE_TTL_MS=5*60*1000;
+  const IONITY_URL='data/ionity_direct_stations_france.json.gz';
   const rawCache=new Map();
-  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0;
+  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0,ionityPromise=null;
   const STATUS_MAX_AGE_MS=48*60*60*1000;
   const text=value=>String(value==null?'':value).trim();
   const norm=value=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -122,6 +123,31 @@
     return belibLivePromise;
   }
 
+  async function readStandaloneGzip(url,label){
+    const response=await fetch(`${url}?v=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)throw new Error(`${label} indisponible (${response.status})`);
+    const bytes=new Uint8Array(await response.arrayBuffer());
+    if(bytes[0]!==0x1f||bytes[1]!==0x8b)throw new Error(`Compression ${label} invalide`);
+    if(typeof DecompressionStream!=='function')throw new Error(`Décompression ${label} indisponible dans ce navigateur`);
+    return JSON.parse(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text());
+  }
+
+  async function loadIonityCatalog(){
+    if(!ionityPromise)ionityPromise=readStandaloneGzip(IONITY_URL,'IONITY').then(data=>{
+      if(data?.dataset!=='ionity-direct-operated-stations-france')throw new Error('Dataset IONITY inattendu');
+      if(data?.scope?.requiredCpoIdentifier!=='IONITY_CPO'||data?.scope?.onlyOperatedLocations!==true)throw new Error('Filtre CPO IONITY invalide');
+      if(data?.scope?.tariffFamily!=='IONITY DIRECT'||data?.scope?.subscriberTariffsIncluded!==false||data?.scope?.roamingTariffsIncluded!==false)throw new Error('Périmètre tarifaire IONITY invalide');
+      if(!Array.isArray(data?.locations)||Number(data?.counts?.franceLocationCount)!==data.locations.length||data.locations.length<100)throw new Error('Inventaire IONITY France incomplet');
+      if(data.locations.some(location=>location?.country!=='FR'||location?.cpoIdentifier!=='IONITY_CPO'))throw new Error('Station hors périmètre IONITY_CPO');
+      window.TCC_IONITY_DIRECT_CATALOG_V1=data;
+      return data;
+    }).catch(error=>{
+      console.warn('[TCC V8] Base IONITY Direct ignorée :',error?.message||error);
+      return {locations:[],counts:{}};
+    });
+    return ionityPromise;
+  }
+
   async function readGzipJson(file,version=''){
     const cacheKey=`${file}|${version}`;
     if(rawCache.has(cacheKey))return rawCache.get(cacheKey);
@@ -231,6 +257,9 @@
   function isE55cOperator(station){
     const value=norm(station?.operator);
     return value==='electric 55'||value==='electric 55 charging'||value==='electric 55 charging e55c'||value==='e55c';
+  }
+  function isIonityOperator(station){
+    return norm(station?.operator)==='ionity';
   }
   function stationInArea(record,origin,radiusKm){
     if(!(radiusKm>0))return true;
@@ -489,6 +518,83 @@
     return output;
   }
 
+  function ionityPricing(pricePerKwhEur){
+    return {type:'rules',rules:[{
+      scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:Number(pricePerKwhEur),
+      chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0,
+      afterMinutesCap:0,afterMinutesCapStart:'00:00',afterMinutesCapEnd:'24:00'
+    }]};
+  }
+  function ionityDirectConfigurations(location){
+    const groups=new Map(),powerVariants=new Map();
+    for(const connector of location.connectors||[]){
+      const kind=text(connector.kind).toUpperCase(),power=Number(connector.powerKw),price=Number(connector.pricePerKwhEur);
+      if(!['AC','DC'].includes(kind)||!(power>0)||!(price>0))continue;
+      const powerKey=`${kind}|${power.toFixed(3)}`,key=`${powerKey}|${price.toFixed(6)}`;
+      if(!groups.has(key))groups.set(key,{kind,power,price,connectors:[]});
+      groups.get(key).connectors.push(connector);
+      if(!powerVariants.has(powerKey))powerVariants.set(powerKey,new Set());
+      powerVariants.get(powerKey).add(price.toFixed(6));
+    }
+    return [...groups.values()].map((group,index)=>{
+      const refs=[...new Set(group.connectors.map(connector=>text(connector.physicalReference)||text(connector.number)).filter(Boolean))];
+      const powerKey=`${group.kind}|${group.power.toFixed(3)}`;
+      const provider=powerVariants.get(powerKey)?.size>1?`IONITY Direct (bornes ${refs.join(', ')})`:'IONITY Direct';
+      return {
+        id:`ionity-direct-${location.uuid}-${index}`,
+        label:`${provider} · ${group.kind} ${group.power} kW`,kind:group.kind,powerKw:group.power,stalls:group.connectors.length,
+        pricing:ionityPricing(group.price),offerProvider:provider,offerType:'operator_direct',ionityDirect:true,ionityVerified:true,
+        ionityLocationUuid:location.uuid,ionityLocationId:location.locationId||'',ionityConnectorUuids:group.connectors.map(connector=>connector.uuid).filter(Boolean),
+        ionityPhysicalReferences:refs,ionityPricePerKwhEur:group.price
+      };
+    });
+  }
+  function mergedIonityStation(location,data,matches=[]){
+    const direct=ionityDirectConfigurations(location);
+    const existing=matches.flatMap(station=>station.chargingConfigurations||[]);
+    const configurations=mergeConfigurations([...existing,...direct]);
+    const first=configurations[0]||direct[0]||{kind:'DC',powerKw:350,pricing:{type:'rules',rules:[]}};
+    const base=matches.length?{...primaryStation(matches)}:{
+      id:`france-catalog:ionity:${location.uuid}`,catalogStationId:`ionity:${location.uuid}`,source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,
+      access:{limited:false,unknown:true,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non fournis par la fiche IONITY — accès à vérifier.'}
+    };
+    const merged={
+      ...base,name:location.name||base.name,address:[location.address,location.postalCode,location.city].filter(Boolean).join(', ')||base.address,
+      latitude:Number(location.latitude),longitude:Number(location.longitude),operator:'IONITY',stalls:Number(location.pricedConnectorCount||location.connectorCount||0),
+      kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configurations,lastUpdated:String(data.generatedAt||'').slice(0,10),
+      ionityStrictCpo:true,ionityCpoIdentifier:'IONITY_CPO',ionityLocationUuid:location.uuid,ionityLocationId:location.locationId||'',
+      ionitySourceCatalogStationIds:matches.map(station=>station.catalogStationId).filter(Boolean),ionityStatusJoinedExternally:matches.length>0,
+      ionityDirectConnectorCount:Number(location.pricedConnectorCount||0)
+    };
+    return mergeStatus(merged,matches);
+  }
+  function mergeIonityCatalog(catalog,data,origin={lat:0,lon:0},radiusKm=0){
+    if(!Array.isArray(data?.locations)||!data.locations.length)return catalog;
+    const locations=data.locations.filter(location=>!(radiusKm>0)||geoDistanceKm(origin.lat,origin.lon,location.latitude,location.longitude)<=radiusKm+.2);
+    const assignments=new Map(),consumed=new Set();
+    for(let index=0;index<catalog.length;index++){
+      const station=catalog[index];
+      if(!isIonityOperator(station)||!Number.isFinite(Number(station.latitude))||!Number.isFinite(Number(station.longitude)))continue;
+      let best=null;
+      for(const location of locations){
+        const distance=geoDistanceKm(station.latitude,station.longitude,location.latitude,location.longitude);
+        if(distance<=.15+1e-9&&(!best||distance<best.distance))best={location,distance};
+      }
+      if(!best)continue;
+      if(!assignments.has(best.location.uuid))assignments.set(best.location.uuid,[]);
+      assignments.get(best.location.uuid).push({index,station});consumed.add(index);
+    }
+    let matched=0,added=0,collapsed=0;
+    const merged=locations.map(location=>{
+      const matches=assignments.get(location.uuid)||[];
+      if(matches.length){matched++;collapsed+=Math.max(0,matches.length-1);}else added++;
+      return mergedIonityStation(location,data,matches.map(match=>match.station));
+    });
+    const output=[...catalog.filter((_,index)=>!consumed.has(index)),...merged];
+    window.TCC_IONITY_MERGE_STATS={strictStations:data.locations.length,inAreaStations:locations.length,matched,added,collapsedSourceDuplicates:collapsed,outputStations:output.length};
+    return output;
+  }
+
   async function rowsNear(lat,lon,radiusKm){
     const manifest=await loadManifest();
     const version=manifest.runtimePatchedAt||manifest.allSha256||manifest.generatedAt||'';
@@ -506,10 +612,12 @@
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
-    const [rows,statuses,e55c,belib,belibLive]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive()]);
+    const [rows,statuses,e55c,belib,belibLive,ionity]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive(),loadIonityCatalog()]);
     const dayIndex=dayIndexFromSimulation();
     const baseCatalog=rows.map(row=>applyOperationalStatus(stationFromRow(row,dayIndex),statuses));
-    const catalog=mergeBelibCatalog(mergeE55cCatalog(baseCatalog,e55c,origin,Number(maxDistanceKm)||0),belib,belibLive,origin,Number(maxDistanceKm)||0);
+    const e55cCatalog=mergeE55cCatalog(baseCatalog,e55c,origin,Number(maxDistanceKm)||0);
+    const belibCatalog=mergeBelibCatalog(e55cCatalog,belib,belibLive,origin,Number(maxDistanceKm)||0);
+    const catalog=mergeIonityCatalog(belibCatalog,ionity,origin,Number(maxDistanceKm)||0);
     const originalStations=stations;
     const ids=new Set(originalStations.map(station=>station.id));
     const extra=catalog.filter(station=>!ids.has(station.id));
@@ -523,12 +631,14 @@
         result.belibCatalogLoaded=Number(window.TCC_BELIB_MERGE_STATS?.strictStationsInArea||0);
         result.belibMergeStats={...(window.TCC_BELIB_MERGE_STATS||{})};
         result.belibLiveLoaded=Object.keys(belibLive?.evses||{}).length>0;
+        result.ionityDirectCatalogLoaded=true;
+        result.ionityMergeStats={...(window.TCC_IONITY_MERGE_STATS||{})};
       }
       return result;
     }finally{stations=originalStations;}
   };
 
-  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;},get cachedFragments(){return rawCache.size;}};
-  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,geoDistanceKm};
-  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu).');
+  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,loadIonityCatalog,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;ionityPromise=null;},get cachedFragments(){return rawCache.size;}};
+  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,mergeIonityCatalog,mergedIonityStation,ionityDirectConfigurations,isIonityOperator,geoDistanceKm};
+  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu) + IONITY.');
 })();
