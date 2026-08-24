@@ -19,7 +19,7 @@
   }
   function pricingSig(p){
     if(!p)return'';
-    const rules=(p.rules||[]).map(r=>({scope:r.scope||'',start:r.start||'',end:r.end||'',billing:r.billing||'',currency:(r.currency||'EUR').toUpperCase(),k:Number(r.pricePerKwh||0),m:Number(r.chargePerMinute||0),f:Number(r.connectionFee||0),i:Number(r.idlePerMinute||0),ar:Number(r.afterMinutesRate||0),at:Number(r.afterMinutesThreshold||0),pc:Number(r.postChargeRate||0),pg:Number(r.postChargeGraceMinutes||0)}));
+    const rules=(p.rules||[]).map(r=>({scope:r.scope||'',start:r.start||'',end:r.end||'',billing:r.billing||'',currency:(r.currency||'EUR').toUpperCase(),k:Number(r.pricePerKwh||0),m:Number(r.chargePerMinute||0),p:Number(r.parkingPerMinute||0),f:Number(r.connectionFee||0),i:Number(r.idlePerMinute||0),ar:Number(r.afterMinutesRate||0),at:Number(r.afterMinutesThreshold||0),pc:Number(r.postChargeRate||0),pg:Number(r.postChargeGraceMinutes||0)}));
     return JSON.stringify({type:p.type||'',rules});
   }
   function expandedPrepared(){
@@ -77,6 +77,7 @@
     const c=text(r.currency||'EUR').toUpperCase(),parts=[];
     if(Number(r.pricePerKwh||0)>0)parts.push(`${fmt(r.pricePerKwh)} ${c}/kWh`);
     if(Number(r.chargePerMinute||0)>0)parts.push(`${fmt(r.chargePerMinute)} ${c}/min`);
+    if(Number(r.parkingPerMinute||0)>0)parts.push(`${fmt(r.parkingPerMinute)} ${c}/min stationnement`);
     if(Number(r.connectionFee||0)>0)parts.push(`${fmt(r.connectionFee,2)} ${c} fixe`);
     if(Number(r.idlePerMinute||0)>0)parts.push(`${fmt(r.idlePerMinute)} ${c}/min occupation`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`${fmt(r.afterMinutesRate)} ${c}/min après ${Math.round(Number(r.afterMinutesThreshold))} min`);
@@ -89,6 +90,7 @@
     const c=text(r.currency||'EUR').toUpperCase(),parts=[];
     if(Number(r.pricePerKwh||0)>0)parts.push(`énergie ${fmt(r.pricePerKwh)} ${c}/kWh`);
     if(Number(r.chargePerMinute||0)>0)parts.push(`durée ${fmt(r.chargePerMinute)} ${c}/min`);
+    if(Number(r.parkingPerMinute||0)>0)parts.push(`stationnement ${fmt(r.parkingPerMinute)} ${c}/min pendant la connexion`);
     if(Number(r.connectionFee||0)>0)parts.push(`connexion ${fmt(r.connectionFee,2)} ${c}`);
     if(Number(r.idlePerMinute||0)>0)parts.push(`occupation ${fmt(r.idlePerMinute)} ${c}/min`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`après ${Math.round(Number(r.afterMinutesThreshold))} min : ${fmt(r.afterMinutesRate)} ${c}/min`);

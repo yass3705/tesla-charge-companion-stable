@@ -28,6 +28,7 @@ jobs:
           node --check assets/august-ui-fixes.js
           node --check assets/august-rc2-fixes.js
           node --check assets/v8-offer-selection.js
+          node --check assets/v8-e55c-pricing.js
           node --check assets/v8-overlay-area-bridge.js
           node --check assets/v8-canonical-station-overlay.js
           node --check assets/v8-direct-resolver-ui.js
@@ -46,6 +47,9 @@ jobs:
           python -m json.tool data/tariff_overlay_v1.json >/dev/null
           python -m json.tool data/v8_canonical_station_overlay_v1.json >/dev/null
 
+      - name: Smoke-test E55C pricing dimensions
+        run: node scripts/test_e55c_pricing.mjs
+
       - name: Verify August build references
         shell: bash
         run: |
@@ -57,6 +61,7 @@ jobs:
           grep -q "content=\"${BUILD}\"" index.html
           grep -q "assets/update.js?v=${BUILD}" index.html
           grep -q "assets/v8-offer-selection.js?v=${BUILD}" index.html
+          grep -q "assets/v8-e55c-pricing.js?v=rc48-e55c-1" index.html
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
           grep -q "v8-direct-resolver-ui.js" assets/v8-overlay-area-bridge.js

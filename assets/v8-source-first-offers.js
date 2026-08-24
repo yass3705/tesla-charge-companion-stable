@@ -57,6 +57,7 @@
     const c=text(r.currency||'EUR').toUpperCase(),parts=[];
     if(Number(r.pricePerKwh||0)>0)parts.push(`${fmt(r.pricePerKwh)} ${c}/kWh`);
     if(Number(r.chargePerMinute||0)>0)parts.push(`${fmt(r.chargePerMinute)} ${c}/min`);
+    if(Number(r.parkingPerMinute||0)>0)parts.push(`${fmt(r.parkingPerMinute)} ${c}/min stationnement`);
     if(Number(r.connectionFee||0)>0)parts.push(`${fmt(r.connectionFee,2)} ${c} fixe`);
     if(Number(r.idlePerMinute||0)>0)parts.push(`${fmt(r.idlePerMinute)} ${c}/min occupation`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`${fmt(r.afterMinutesRate)} ${c}/min après ${Math.round(Number(r.afterMinutesThreshold))} min`);

@@ -1,5 +1,18 @@
 # Tesla Charge Companion V7.1.0 stable
 
+## V8 Preview RC4.8 — réseau E55C
+
+La Preview V8 intègre le catalogue strict des stations exploitées par Electric 55 Charging :
+
+- 601 stations et 1 875 points de charge au premier import ;
+- tarifs directs E55C Scan & Pay affectés au point de charge exact ;
+- frais de recharge et de stationnement calculés comme deux dimensions simultanées ;
+- offres Electroverse/Electra conservées séparément pour la comparaison ;
+- statuts opérationnels fournis uniquement par Electroverse/Electra ;
+- tarifs non résolus conservés comme non classés, sans extrapolation.
+
+Les stations déjà présentes sont rapprochées par opérateur strict et coordonnées. Les doublons Electroverse/Electra d’un même site E55C sont fusionnés ; les stations E55C manquantes sont ajoutées avec un statut inconnu jusqu’à leur rapprochement externe.
+
 ## Nouveauté : plusieurs puissances sur un même site
 
 Une borne/site peut contenir plusieurs configurations de recharge.
