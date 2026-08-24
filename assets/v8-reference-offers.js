@@ -3,7 +3,7 @@
 // de la station / du contexte. Ces lignes ne participent jamais au classement.
 (function(){
   'use strict';
-  const VERSION='rc48-reference-4';
+  const VERSION='rc48-reference-5';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const esc=v=>(window.escapeHtml?window.escapeHtml(String(v??'')):String(v??''));
@@ -82,7 +82,7 @@
     for(const r of refs){
       if(!matches(ctx,r))continue;
       const existing=box.querySelector(`[data-reference-offer-id="${r.id}"]`);
-      if(r.id==='evadea-grid'&&hasRankableProvider(box,'e-Vadea direct')){existing?.remove();continue;}
+      const exactAvailable=(r.id==='evadea-grid'&&hasRankableProvider(box,'e-Vadea direct'))\n        ||(r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct'));\n      if(exactAvailable){existing?.remove();continue;}
       if(existing)continue;
       const row=document.createElement('div');
       row.className='v8-offer-row v8-reference-row v8-offer-ambiguous';
