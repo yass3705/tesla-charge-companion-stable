@@ -8,6 +8,14 @@
 - Frais de parking et de réservation exclus ; frais de longue connexion conservés.
 - Couche chargée uniquement dans la V8 Preview, sans modification de la V7.3 stable.
 
+# V8 Preview RC4.8 — IONITY Direct par station
+
+- Inventaire France strictement limité aux sites `IONITY_CPO` exploités par IONITY.
+- Tarif public IONITY Direct ajouté au niveau du connecteur, avec distinction des puissances et prix d'un même site.
+- Conservation des statuts Electroverse/Electra lors du rapprochement avec la station officielle.
+- IONITY Go, Motion et Power restent volontairement exclus du calcul exact.
+- Synchronisation quotidienne depuis Tesla Charge Companion Data Lab.
+
 # V8 Preview RC4.8 — pipeline E55C
 
 - Base compacte des stations strictement exploitées par E55C.

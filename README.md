@@ -16,6 +16,14 @@ Les disponibilités sont jointes à l’exécution par identifiant EVSE depuis l
 
 Cette base est réservée à la V8 Preview : la V7.3 stable ne la charge pas.
 
+## Données V8 Preview — IONITY Direct
+
+La Preview V8 charge également la base officielle des stations françaises dont le CPO est strictement `IONITY_CPO`. Le prix IONITY Direct est conservé séparément pour chaque groupe de connecteurs et de puissance ; les tarifs Electroverse, Electra et autres itinérances restent des offres distinctes.
+
+Les statuts disponibles dans Electroverse/Electra sont conservés lors du rapprochement avec la station officielle. Les stations IONITY absentes de ces sources sont ajoutées depuis l'inventaire CPO, sans inventer de statut.
+
+IONITY Go, Motion et Power ne sont pas utilisés dans le classement : l'API anonyme ne renvoie pas leur prix exact pour chaque station. La base Direct est reconstruite quotidiennement depuis le Data Lab.
+
 ## Nouveauté : plusieurs puissances sur un même site
 
 Une borne/site peut contenir plusieurs configurations de recharge.
