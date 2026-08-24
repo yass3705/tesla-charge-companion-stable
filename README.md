@@ -4,6 +4,8 @@
 
 La V7.3 stable reste inchangée. Le pipeline de publication de la Preview V8 utilise désormais une base compacte dédiée aux seules stations dont `nom_operateur` identifie Electric 55 Charging. Elle conserve les offres Electroverse/Electra, ajoute le tarif direct E55C Scan & Pay et laisse les statuts opérationnels aux sources Electroverse/Electra.
 
+La dimension E55C `PARKING_TIME` est appliquée uniquement lorsque le véhicule reste branché sans recharger, après la fin de charge. Elle n'est jamais cumulée avec le tarif de recharge à la minute.
+
 La base est reconstruite automatiquement chaque jour depuis le Data Lab. Les tarifs non résolus restent non classés et aucune tarification n’est déduite de la seule puissance.
 
 ## Nouveauté : plusieurs puissances sur un même site

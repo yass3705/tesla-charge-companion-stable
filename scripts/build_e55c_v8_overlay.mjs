@@ -36,15 +36,16 @@ function normalizeProfile(profile){
       currency:text(rule.currency||profile.currency||'EUR').toUpperCase(),
       pricePerKwh:round(energy),
       chargePerMinute:round(charging),
-      parkingPerMinute:round(parking),
+      parkingPerMinute:0,
       connectionFee:round(flat),
-      idlePerMinute:0,
+      idlePerMinute:round(parking),
       afterMinutesRate:0,
       afterMinutesThreshold:0,
       afterMinutesCap:0,
       afterMinutesCapStart:'00:00',
       afterMinutesCapEnd:'24:00',
       e55cDirect:true,
+      e55cParkingPhase:'parked_not_charging',
       e55cTaxIncluded:profile.taxIncluded===true,
       e55cSourceDefinitionId:text(rule.sourceDefinitionId)
     };
@@ -56,6 +57,8 @@ function normalizeProfile(profile){
     taxIncluded:profile.taxIncluded===true,
     displayTextFr:text(profile.displayTextFr),
     chargingAndParkingDimensionsSeparated:true,
+    parkingTimeSemantics:'parked_not_charging',
+    simultaneousChargingAndParking:false,
     rules
   };
 }
@@ -155,6 +158,7 @@ const payload={
     thirdPartyEmspTariffsExcluded:true,
     dynamicStatusIncluded:false,
     dynamicStatusAuthorityForTcc:['Electroverse','Electra'],
+    parkingTimeSemantics:'parked_not_charging',
     unresolvedTariffsRemainUnranked:true
   },
   stats:{

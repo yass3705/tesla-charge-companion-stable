@@ -66,6 +66,17 @@ assert(cessy,'Station E55C Cessy absente');
 const cessyPowers=new Set(cessy.chargingConfigurations.filter(c=>c.kind==='AC').map(c=>Number(c.powerKw).toFixed(2)));
 assert(cessyPowers.size===1&&cessyPowers.has('22.08'),'Les offres externes et directes 22 kW ne sont pas regroupées');
 
+const sainteJulitte=strict.find(st=>st.e55cStationId==='FR55CP78210SA1P9PESJ');
+assert(sainteJulitte,'Station E55C Sainte-Julitte absente');
+const sainteJulitteDirect=sainteJulitte.chargingConfigurations.find(config=>config.e55cDirect&&config.e55cVerified);
+assert(sainteJulitteDirect,'Tarif direct Sainte-Julitte absent');
+const nightRule=sainteJulitteDirect.pricing?.rules?.find(rule=>rule.start==='23:00'&&rule.end==='07:00');
+assert(nightRule,'Créneau de nuit Sainte-Julitte absent');
+assert(Math.abs(Number(nightRule.chargePerMinute)-.0624)<1e-9,'Tarif de recharge nocturne Sainte-Julitte invalide');
+assert(Math.abs(Number(nightRule.idlePerMinute)-.0624)<1e-9,'Tarif de stationnement après charge Sainte-Julitte invalide');
+assert(Number(nightRule.parkingPerMinute||0)===0,'Double comptage pendant la recharge à Sainte-Julitte');
+assert(nightRule.e55cParkingPhase==='parked_not_charging','Phase PARKING_TIME Sainte-Julitte invalide');
+
 const mixedSource=e55c.stations.find(station=>{
   const groups=new Map();
   for(const config of station.configurations||[]){

@@ -4,6 +4,7 @@
 - Rapprochement déterministe avec le catalogue Electroverse/Electra avant calcul des routes.
 - Ajout des stations absentes et fusion des doublons de sources.
 - Synchronisation quotidienne depuis le Data Lab, sans statut dynamique E55C.
+- Correction de `PARKING_TIME` : stationnement facturé uniquement après la fin de charge, jamais en parallèle de la recharge.
 - La V7.3 stable ne charge pas cette couche V8.
 
 # V7.3 Stable — Phase de test grandeur nature

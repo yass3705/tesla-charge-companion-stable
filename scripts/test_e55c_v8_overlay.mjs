@@ -13,6 +13,7 @@ assert(data?.scope?.strictOperatorField==='nom_operateur','Filtre opérateur str
 assert(data?.scope?.strictOperatorValue==='ELECTRIC 55 CHARGING','Valeur opérateur stricte invalide');
 assert(data?.scope?.thirdPartySupervisedStationsExcluded===true,'Les stations tierces supervisées doivent être exclues');
 assert(data?.scope?.dynamicStatusIncluded===false,'Aucun statut dynamique E55C ne doit être embarqué');
+assert(data?.scope?.parkingTimeSemantics==='parked_not_charging','Sémantique PARKING_TIME E55C invalide');
 assert(data?.scope?.unresolvedTariffsRemainUnranked===true,'Les tarifs non résolus doivent rester non classés');
 assert(Array.isArray(data.stations)&&data.stations.length>=500,'Inventaire E55C trop petit');
 assert(data.stats.stationCount===data.stations.length,'Comptage stations incohérent');
@@ -22,13 +23,16 @@ let points=0,resolved=0,unresolved=0,payments=0;
 for(const [profileId,profile] of Object.entries(profiles)){
   assert(profile.profileId===profileId,`Profil mal indexé : ${profileId}`);
   assert(profile.taxIncluded===true,`TVA non incluse : ${profileId}`);
+  assert(profile.parkingTimeSemantics==='parked_not_charging',`Sémantique stationnement absente : ${profileId}`);
+  assert(profile.simultaneousChargingAndParking===false,`Charge et stationnement ne doivent jamais être simultanés : ${profileId}`);
   assert(Array.isArray(profile.rules)&&profile.rules.length,'Règles absentes');
   for(const rule of profile.rules){
     assert(rule.e55cDirect===true,`Marqueur direct absent : ${profileId}`);
     assert(Number(rule.connectionFee)>=0,'Frais fixe invalide');
     assert(Number(rule.pricePerKwh)>0||Number(rule.chargePerMinute)>0,'Dimension de charge absente');
-    assert(Number(rule.parkingPerMinute)>0,'Dimension stationnement E55C absente');
-    assert(Number(rule.idlePerMinute||0)===0,'Le stationnement E55C ne doit pas être converti en après-charge');
+    assert(Number(rule.parkingPerMinute||0)===0,'Le stationnement E55C ne doit jamais être facturé pendant la charge');
+    assert(Number(rule.idlePerMinute)>0,'Dimension stationnement après charge E55C absente');
+    assert(rule.e55cParkingPhase==='parked_not_charging','Marqueur PARKING_TIME E55C absent');
   }
 }
 for(const station of data.stations){
