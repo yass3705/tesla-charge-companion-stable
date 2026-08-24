@@ -1,0 +1,47 @@
+name: Synchroniser Atlante direct dans TCC V8
+
+on:
+  schedule:
+    - cron: "41 11 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-atlante-direct-v8
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer TCC
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Télécharger la base FRATL vérifiée
+        run: |
+          curl --fail --location --retry 4 --retry-delay 5 \
+            --output data/atlante_direct_stations_france.json.gz \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/atlante_direct_stations_france.json.gz
+
+      - name: Valider le périmètre et les prix directs
+        run: |
+          node scripts/test_atlante_v8_runtime.mjs
+          node --check assets/france-catalog-v8.js
+
+      - name: Publier uniquement en cas de changement
+        shell: bash
+        run: |
+          if git diff --quiet -- data/atlante_direct_stations_france.json.gz; then
+            echo "Aucun changement Atlante direct à publier."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/atlante_direct_stations_france.json.gz
+          git commit -m "data(atlante): refresh V8 direct France station tariffs"
+          git push origin HEAD:main

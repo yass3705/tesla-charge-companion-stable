@@ -1,4 +1,4 @@
-// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib' + IONITY.
+// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib' + IONITY + Atlante.
 // Le socle Electroverse/Electra reste l'autorité des statuts. Les inventaires CPO
 // stricts ajoutent les stations manquantes et leurs tarifs directs vérifiés.
 (function(){
@@ -9,8 +9,9 @@
   const BELIB_LIVE_URL='https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-disponibilite-temps-reel/exports/json';
   const BELIB_LIVE_TTL_MS=5*60*1000;
   const IONITY_URL='data/ionity_direct_stations_france.json.gz';
+  const ATLANTE_URL='data/atlante_direct_stations_france.json.gz';
   const rawCache=new Map();
-  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0,ionityPromise=null;
+  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0,ionityPromise=null,atlantePromise=null;
   const STATUS_MAX_AGE_MS=48*60*60*1000;
   const text=value=>String(value==null?'':value).trim();
   const norm=value=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -148,6 +149,23 @@
     return ionityPromise;
   }
 
+  async function loadAtlanteCatalog(){
+    if(!atlantePromise)atlantePromise=readStandaloneGzip(ATLANTE_URL,'Atlante').then(data=>{
+      if(data?.dataset!=='atlante-direct-operated-stations-france')throw new Error('Dataset Atlante inattendu');
+      if(data?.scope?.requiredCpo!=='FRATL'||data?.scope?.requiredCountryCode!=='FR'||data?.scope?.requiredPartyId!=='ATL'||data?.scope?.onlyOperatedLocations!==true)throw new Error('Filtre CPO Atlante invalide');
+      if(data?.scope?.partnerLocationsIncluded!==false||data?.scope?.atlanteGoIncluded!==false||data?.scope?.roamingTariffsIncluded!==false)throw new Error('Périmètre tarifaire Atlante invalide');
+      if(data?.scope?.priceGranularity!=='connector'||data?.scope?.onlyUnconditionalEnergyPrices!==true)throw new Error('Granularité tarifaire Atlante invalide');
+      if(!Array.isArray(data?.locations)||Number(data?.counts?.franceLocationCount)!==data.locations.length||data.locations.length<100)throw new Error('Inventaire Atlante France incomplet');
+      if(data.locations.some(location=>location?.countryCode!=='FR'||location?.partyId!=='ATL'||location?.operatorName!=='Atlante'))throw new Error('Station partenaire présente dans la base Atlante directe');
+      window.TCC_ATLANTE_DIRECT_CATALOG_V1=data;
+      return data;
+    }).catch(error=>{
+      console.warn('[TCC V8] Base Atlante directe ignorée :',error?.message||error);
+      return {locations:[],counts:{}};
+    });
+    return atlantePromise;
+  }
+
   async function readGzipJson(file,version=''){
     const cacheKey=`${file}|${version}`;
     if(rawCache.has(cacheKey))return rawCache.get(cacheKey);
@@ -261,6 +279,10 @@
   function isIonityOperator(station){
     return norm(station?.operator)==='ionity';
   }
+  function isAtlanteOperator(station){
+    const value=norm(station?.operator);
+    return value==='atlante'||value==='atlante france';
+  }
   function stationInArea(record,origin,radiusKm){
     if(!(radiusKm>0))return true;
     return geoDistanceKm(origin.lat,origin.lon,record.coordinates?.[0],record.coordinates?.[1])<=radiusKm+1e-6;
@@ -323,6 +345,8 @@
       if(config.e55cEvseIds)existing.e55cEvseIds=[...new Set([...(existing.e55cEvseIds||[]),...config.e55cEvseIds])];
       if(config.e55cPaymentUrls)existing.e55cPaymentUrls=[...new Set([...(existing.e55cPaymentUrls||[]),...config.e55cPaymentUrls])];
       if(config.belibEvseIds)existing.belibEvseIds=[...new Set([...(existing.belibEvseIds||[]),...config.belibEvseIds])];
+      if(config.atlanteEvseIds)existing.atlanteEvseIds=[...new Set([...(existing.atlanteEvseIds||[]),...config.atlanteEvseIds])];
+      if(config.atlanteConnectorIds)existing.atlanteConnectorIds=[...new Set([...(existing.atlanteConnectorIds||[]),...config.atlanteConnectorIds])];
     }
     return [...map.values()];
   }
@@ -595,6 +619,76 @@
     return output;
   }
 
+  function atlanteDirectConfigurations(location){
+    const groups=new Map(),powerVariants=new Map();
+    for(const connector of location.connectors||[]){
+      const kind=text(connector.kind).toUpperCase(),power=Number(connector.powerKw),price=Number(connector.pricePerKwhEur);
+      if(!['AC','DC'].includes(kind)||!(power>0)||!(price>0))continue;
+      const powerKey=`${kind}|${power.toFixed(3)}`,key=`${powerKey}|${price.toFixed(6)}`;
+      if(!groups.has(key))groups.set(key,{kind,power,price,connectors:[]});
+      groups.get(key).connectors.push(connector);
+      if(!powerVariants.has(powerKey))powerVariants.set(powerKey,new Set());
+      powerVariants.get(powerKey).add(price.toFixed(6));
+    }
+    return [...groups.values()].map((group,index)=>{
+      const references=[...new Set(group.connectors.map(connector=>text(connector.evseId).split('*').at(-1)||text(connector.externalConnectorId)).filter(Boolean))];
+      const powerKey=`${group.kind}|${group.power.toFixed(3)}`;
+      const provider=powerVariants.get(powerKey)?.size>1?`Atlante direct (bornes ${references.join(', ')})`:'Atlante direct';
+      return {
+        id:`atlante-direct-${location.id}-${index}`,
+        label:`${provider} · ${group.kind} ${group.power} kW`,kind:group.kind,powerKw:group.power,stalls:group.connectors.length,
+        pricing:ionityPricing(group.price),offerProvider:provider,offerType:'operator_direct',atlanteDirect:true,atlanteVerified:true,
+        atlanteLocationUuid:location.id,atlanteLocationId:location.locationId||'',atlanteEvseIds:group.connectors.map(connector=>connector.evseId).filter(Boolean),
+        atlanteConnectorIds:group.connectors.map(connector=>connector.connectorId).filter(Boolean),atlantePricePerKwhEur:group.price
+      };
+    });
+  }
+  function mergedAtlanteStation(location,data,matches=[]){
+    const direct=atlanteDirectConfigurations(location);
+    const existing=matches.flatMap(station=>station.chargingConfigurations||[]);
+    const configurations=mergeConfigurations([...existing,...direct]);
+    const first=configurations.find(config=>config.atlanteDirect)||configurations[0]||{kind:'DC',powerKw:150,pricing:{type:'rules',rules:[]}};
+    const base=matches.length?{...primaryStation(matches)}:{
+      id:`france-catalog:atlante:${location.id}`,catalogStationId:`atlante:${location.id}`,source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,
+      access:{limited:false,unknown:!location.openTwentyFourSeven,days:{},afterCloseMode:'exit_allowed',afterCloseNote:location.openTwentyFourSeven?'Accès Atlante 24/7.':'Horaires à vérifier dans myAtlante.'}
+    };
+    const merged={
+      ...base,name:location.name||base.name,address:[location.address,location.postalCode,location.city].filter(Boolean).join(', ')||base.address,
+      latitude:Number(location.latitude),longitude:Number(location.longitude),operator:'Atlante',stalls:Number(location.pricedConnectorCount||location.connectorCount||0),
+      kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configurations,lastUpdated:String(data.generatedAt||'').slice(0,10),
+      atlanteStrictCpo:true,atlanteCpo:'FRATL',atlanteCountryCode:'FR',atlantePartyId:'ATL',atlanteLocationUuid:location.id,atlanteLocationId:location.locationId||'',
+      atlanteSourceCatalogStationIds:matches.map(station=>station.catalogStationId).filter(Boolean),atlanteStatusJoinedExternally:matches.length>0,
+      atlanteDirectConnectorCount:Number(location.pricedConnectorCount||0)
+    };
+    return mergeStatus(merged,matches);
+  }
+  function mergeAtlanteCatalog(catalog,data,origin={lat:0,lon:0},radiusKm=0){
+    if(!Array.isArray(data?.locations)||!data.locations.length)return catalog;
+    const locations=data.locations.filter(location=>!(radiusKm>0)||geoDistanceKm(origin.lat,origin.lon,location.latitude,location.longitude)<=radiusKm+.2);
+    const assignments=new Map(),consumed=new Set();
+    for(let index=0;index<catalog.length;index++){
+      const station=catalog[index];
+      if(!isAtlanteOperator(station)||!Number.isFinite(Number(station.latitude))||!Number.isFinite(Number(station.longitude)))continue;
+      let best=null;
+      for(const location of locations){
+        const distance=geoDistanceKm(station.latitude,station.longitude,location.latitude,location.longitude);
+        if(distance<=.15+1e-9&&(!best||distance<best.distance))best={location,distance};
+      }
+      if(!best)continue;
+      if(!assignments.has(best.location.id))assignments.set(best.location.id,[]);
+      assignments.get(best.location.id).push({index,station});consumed.add(index);
+    }
+    let matched=0,added=0,collapsed=0;
+    const merged=locations.map(location=>{
+      const matches=assignments.get(location.id)||[];
+      if(matches.length){matched++;collapsed+=Math.max(0,matches.length-1);}else added++;
+      return mergedAtlanteStation(location,data,matches.map(match=>match.station));
+    });
+    const output=[...catalog.filter((_,index)=>!consumed.has(index)),...merged];
+    window.TCC_ATLANTE_MERGE_STATS={strictStations:data.locations.length,inAreaStations:locations.length,matched,added,collapsedSourceDuplicates:collapsed,outputStations:output.length};
+    return output;
+  }
+
   async function rowsNear(lat,lon,radiusKm){
     const manifest=await loadManifest();
     const version=manifest.runtimePatchedAt||manifest.allSha256||manifest.generatedAt||'';
@@ -612,12 +706,13 @@
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
-    const [rows,statuses,e55c,belib,belibLive,ionity]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive(),loadIonityCatalog()]);
+    const [rows,statuses,e55c,belib,belibLive,ionity,atlante]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive(),loadIonityCatalog(),loadAtlanteCatalog()]);
     const dayIndex=dayIndexFromSimulation();
     const baseCatalog=rows.map(row=>applyOperationalStatus(stationFromRow(row,dayIndex),statuses));
     const e55cCatalog=mergeE55cCatalog(baseCatalog,e55c,origin,Number(maxDistanceKm)||0);
     const belibCatalog=mergeBelibCatalog(e55cCatalog,belib,belibLive,origin,Number(maxDistanceKm)||0);
-    const catalog=mergeIonityCatalog(belibCatalog,ionity,origin,Number(maxDistanceKm)||0);
+    const ionityCatalog=mergeIonityCatalog(belibCatalog,ionity,origin,Number(maxDistanceKm)||0);
+    const catalog=mergeAtlanteCatalog(ionityCatalog,atlante,origin,Number(maxDistanceKm)||0);
     const originalStations=stations;
     const ids=new Set(originalStations.map(station=>station.id));
     const extra=catalog.filter(station=>!ids.has(station.id));
@@ -633,12 +728,14 @@
         result.belibLiveLoaded=Object.keys(belibLive?.evses||{}).length>0;
         result.ionityDirectCatalogLoaded=true;
         result.ionityMergeStats={...(window.TCC_IONITY_MERGE_STATS||{})};
+        result.atlanteDirectCatalogLoaded=true;
+        result.atlanteMergeStats={...(window.TCC_ATLANTE_MERGE_STATS||{})};
       }
       return result;
     }finally{stations=originalStations;}
   };
 
-  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,loadIonityCatalog,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;ionityPromise=null;},get cachedFragments(){return rawCache.size;}};
-  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,mergeIonityCatalog,mergedIonityStation,ionityDirectConfigurations,isIonityOperator,geoDistanceKm};
-  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu) + IONITY.');
+  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,loadIonityCatalog,loadAtlanteCatalog,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;ionityPromise=null;atlantePromise=null;},get cachedFragments(){return rawCache.size;}};
+  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,mergeIonityCatalog,mergedIonityStation,ionityDirectConfigurations,isIonityOperator,mergeAtlanteCatalog,mergedAtlanteStation,atlanteDirectConfigurations,isAtlanteOperator,geoDistanceKm};
+  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu) + IONITY + Atlante.');
 })();
