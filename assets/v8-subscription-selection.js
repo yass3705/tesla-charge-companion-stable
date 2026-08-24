@@ -3,7 +3,7 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-5';
+  const VERSION='rc48-multi-subs-6';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
@@ -24,6 +24,25 @@
   }
   function selectedSet(){return new Set(state().selected)}
   function saveSelected(ids){localStorage.setItem(KEY,JSON.stringify({selected:[...ids],updatedAt:new Date().toISOString()}));}
+  function subscriptionIdForProvider(value){
+    const provider=norm(value);
+    if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';
+    if(provider.includes('belib direct abonne resident'))return'belib-resident';
+    return'';
+  }
+  function subscriptionIdForStation(st){
+    const explicit=text(st?.subscriptionId||st?.subscriptionSelectionId);if(explicit)return explicit;
+    return subscriptionIdForProvider(st?.configurationLabel||st?.label||st?.offerProvider);
+  }
+  function isStationEligible(st,selected=selectedSet()){
+    const id=subscriptionIdForStation(st);return !id||selected.has(id);
+  }
+  function selectionChanged(){
+    applyAll(true);
+    const root=$('results'),run=window.compare;
+    if(typeof run!=='function'||!root?.querySelector('.result-card'))return;
+    setTimeout(()=>{try{Promise.resolve(run()).then(()=>setTimeout(()=>applyAll(true),80)).catch(err=>console.warn('[TCC V8] Reclassement abonnements impossible :',err?.message||err))}catch(err){console.warn('[TCC V8] Reclassement abonnements impossible :',err?.message||err)}},0);
+  }
   function forceLegacyElectraOff(){const old=readJson(OLD_ELECTRA_KEY,{})||{};if(old.includeRanking){old.includeRanking=false;localStorage.setItem(OLD_ELECTRA_KEY,JSON.stringify(old));}const box=$('v8ElectraBox');if(box)box.style.display='none';}
   function selectionId(p){return text(p?.selectionId||p?.id)}
 
@@ -71,7 +90,7 @@
     box.querySelectorAll('[data-subscription-choice]').forEach(input=>input.addEventListener('change',()=>{
       const ids=new Set([...box.querySelectorAll('[data-subscription-choice]:checked')].map(x=>x.dataset.subscriptionChoice));
       const label=box.querySelector('.v8-subscriptions-count');if(label)label.textContent=ids.size?`${ids.size} sélectionné${ids.size>1?'s':''}`:'Aucun sélectionné';
-      saveSelected(ids);applyAll(true);
+      saveSelected(ids);selectionChanged();
     }));
     return true;
   }
@@ -139,9 +158,7 @@
       cleanProvider(row);
     });
     box.querySelectorAll('.v8-offer-row').forEach(row=>{
-      const provider=norm(cleanProvider(row));
-      if(provider.includes('belib direct abonne non resident'))row.dataset.subscriptionId='belib-nonresident';
-      else if(provider.includes('belib direct abonne resident paris'))row.dataset.subscriptionId='belib-resident';
+      const id=subscriptionIdForProvider(cleanProvider(row));if(id)row.dataset.subscriptionId=id;
     });
   }
   function clearBest(rows){rows.forEach(row=>{row.classList.remove('best');row.querySelectorAll('.v8-offer-best').forEach(x=>x.remove())})}
@@ -189,6 +206,6 @@
     await loadPlans();forceLegacyElectraOff();let tries=0;const timer=setInterval(()=>{tries++;const a=injectControls(),b=installObserver();forceLegacyElectraOff();if((a&&b)||tries>160){clearInterval(timer);setTimeout(()=>applyAll(true),900)}},100);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.TCCV8Subscriptions={state,applyAll,get plans(){return plans.slice()}};
+  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,get plans(){return plans.slice()}};
   console.info('[TCC V8] Sélection multi-abonnements active : panneau repliable, classement opt-in, forfaits multi-réseaux et frais de durée supportés.');
 })();

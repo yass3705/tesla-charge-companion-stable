@@ -247,18 +247,31 @@
   window.augSelectAllOperators=selectAllOperators;
 
   function currentSortMode(){return val('simRanking','cost')}
+  function rankingSubscriptionEligible(st){
+    if(window.TCCV8Subscriptions?.isStationEligible)return window.TCCV8Subscriptions.isStationEligible(st);
+    let selected=[];try{const saved=JSON.parse(localStorage.getItem('tccSubscriptionsV1')||'{}');selected=Array.isArray(saved.selected)?saved.selected:[]}catch(e){}
+    const provider=plain(st?.configurationLabel||st?.label||st?.offerProvider||'');
+    let id='';if(provider.includes('belib direct abonne non resident'))id='belib-nonresident';else if(provider.includes('belib direct abonne resident'))id='belib-resident';
+    return !id||selected.includes(id);
+  }
+  function physicalResultKey(row){return`${String(row?.st?.catalogStationId||row?.st?.baseStationId||row?.st?.id||'').split('::')[0]}|${String(row?.st?.kind||'').toUpperCase()}|${Number(row?.st?.powerKw||0).toFixed(2)}`}
   function sortRows(rows,mode){
     let available=rows.filter(x=>!x.r.unavailable);
     const finite=(n,fallback=1e12)=>Number.isFinite(n)?n:fallback;
-    available.sort((a,b)=>{
+    const compareRows=(a,b)=>{
       if(mode==='finish')return finite(a.totalDuration)-finite(b.totalDuration);
       if(mode==='chargeFinish')return finite(a.r.allowed)-finite(b.r.allowed);
       if(mode==='costPerKm')return finite(a.centsPerKm)-finite(b.centsPerKm);
       if(mode==='arrival')return finite(b.arrivalSoc,-1)-finite(a.arrivalSoc,-1);
       if(mode==='distance')return finite(a.distanceKm)-finite(b.distanceKm);
       return finite(a.r.total)-finite(b.r.total);
+    };
+    const eligible=available.filter(x=>rankingSubscriptionEligible(x.st)).sort(compareRows);
+    const topPhysical=[...new Set(eligible.map(physicalResultKey))].slice(0,20),physicalOrder=new Map(topPhysical.map((key,index)=>[key,index]));
+    return available.filter(x=>physicalOrder.has(physicalResultKey(x))).sort((a,b)=>{
+      const group=physicalOrder.get(physicalResultKey(a))-physicalOrder.get(physicalResultKey(b));if(group)return group;
+      const eligibility=Number(!rankingSubscriptionEligible(a.st))-Number(!rankingSubscriptionEligible(b.st));return eligibility||compareRows(a,b);
     });
-    return available.slice(0,20);
   }
   function routeTripData(st,s){
     let route=routeResults[st.baseStationId||st.id];

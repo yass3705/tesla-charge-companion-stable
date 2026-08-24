@@ -1,3 +1,11 @@
+# V8 Preview RC4.8 — abonnements Belib’ opt-in
+
+- Les tarifs « Abonné résident Paris » et « Abonné non-résident » restent visibles, mais sont exclus du coût retenu et du Top 20 par défaut.
+- Chaque tarif abonné ne participe au classement que si l’abonnement correspondant est sélectionné dans « Mes abonnements ».
+- Toute sélection ou suppression d’un abonnement relance la comparaison complète afin de recalculer les 20 stations classées.
+- Le tarif Visiteur reste la référence Belib’ lorsqu’aucun abonnement Belib’ n’est sélectionné.
+- Correction limitée à la V8 Preview ; la V7.3 Stable reste inchangée.
+
 # V8 Preview RC4.8 — intégration E55C
 
 - Ajout du calcul tarifaire direct E55C Scan & Pay.

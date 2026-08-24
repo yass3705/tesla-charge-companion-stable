@@ -34,6 +34,7 @@ jobs:
           node --check assets/v8-direct-resolver-ui.js
           node --check assets/v8-direct-resolver-followup.js
           node --check assets/v8-subscription-selection.js
+          node --check assets/v8-source-integrity.js
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -49,6 +50,9 @@ jobs:
 
       - name: Smoke-test E55C PARKING_TIME semantics
         run: node scripts/test_e55c_pricing.mjs
+
+      - name: Smoke-test subscription ranking semantics
+        run: node scripts/test_v8_subscription_ranking.mjs
 
       - name: Verify August build references
         shell: bash

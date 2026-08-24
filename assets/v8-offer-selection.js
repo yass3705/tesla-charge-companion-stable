@@ -19,16 +19,33 @@
     return `${base}|${text(st.kind).toUpperCase()}|${Number.isFinite(power)?power.toFixed(2):'0'}`;
   }
   function finiteCost(row){return !row?.r?.unavailable&&!row?.r?.unknown&&Number.isFinite(row?.r?.total);}
+  function subscriptionIdForProvider(value){
+    const api=window.TCCV8Subscriptions;if(api?.subscriptionIdForProvider)return api.subscriptionIdForProvider(value);
+    const provider=text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+    if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';
+    if(provider.includes('belib direct abonne resident'))return'belib-resident';
+    return'';
+  }
+  function selectedSubscriptions(){
+    if(window.TCCV8Subscriptions?.selectedSet)return window.TCCV8Subscriptions.selectedSet();
+    try{const value=JSON.parse(localStorage.getItem('tccSubscriptionsV1')||'{}');return new Set(Array.isArray(value.selected)?value.selected:[])}catch(e){return new Set()}
+  }
+  function providerEligible(provider){const id=subscriptionIdForProvider(provider);return !id||selectedSubscriptions().has(id);}
+  function stationEligible(st){
+    if(window.TCCV8Subscriptions?.isStationEligible)return window.TCCV8Subscriptions.isStationEligible(st);
+    return providerEligible(providerFromStation(st));
+  }
   function gPower(st){const p=Number(st?.powerKw);return Number.isFinite(p)?p:0;}
   function cloneWinner(row,variants){
     const known=variants.filter(finiteCost).sort((a,b)=>a.r.total-b.r.total||providerFromStation(a.st).localeCompare(providerFromStation(b.st),'fr'));
-    let winner=known[0]||variants.slice().sort((a,b)=>(a.distanceKm??Infinity)-(b.distanceKm??Infinity))[0];
+    const eligibleKnown=known.filter(v=>stationEligible(v.st));
+    let winner=eligibleKnown[0]||known[0]||variants.slice().sort((a,b)=>(a.distanceKm??Infinity)-(b.distanceKm??Infinity))[0];
     if(!winner)return null;
     const st={...winner.st};
-    const offers=(known.length?known:variants).map(v=>({provider:providerFromStation(v.st),total:Number.isFinite(v?.r?.total)?v.r.total:null,configurationId:v?.st?.configurationId||null,configurationLabel:v?.st?.configurationLabel||''})).sort((a,b)=>(a.total??Infinity)-(b.total??Infinity)||a.provider.localeCompare(b.provider,'fr'));
+    const offers=(known.length?known:variants).map(v=>({provider:providerFromStation(v.st),total:Number.isFinite(v?.r?.total)?v.r.total:null,configurationId:v?.st?.configurationId||null,configurationLabel:v?.st?.configurationLabel||'',subscriptionId:subscriptionIdForProvider(providerFromStation(v.st))||null})).sort((a,b)=>(a.total??Infinity)-(b.total??Infinity)||a.provider.localeCompare(b.provider,'fr'));
     const uniqueProviders=[...new Set(offers.map(o=>o.provider).filter(Boolean))];
-    const min=known.length?known[0].r.total:null;
-    const cheapest=min==null?[]:[...new Set(known.filter(v=>Math.abs(v.r.total-min)<0.01).map(v=>providerFromStation(v.st)))];
+    const min=eligibleKnown.length?eligibleKnown[0].r.total:null;
+    const cheapest=min==null?[]:[...new Set(eligibleKnown.filter(v=>Math.abs(v.r.total-min)<0.01).map(v=>providerFromStation(v.st)))];
     const power=Number(st.powerKw||0);
     const baseLabel=`${st.kind||''} ${Number.isFinite(power)?power:gPower(st)} kW`.trim();
     if(known.length>1)st.configurationLabel=cheapest.length>1?`${baseLabel} · meilleur tarif ex æquo ${cheapest.join(' / ')}`:`${baseLabel} · meilleur tarif ${cheapest[0]||providerFromStation(st)}`;
@@ -113,9 +130,9 @@
     if((!current||current.includes('non renseign')||current==='autre')&&/^lidl\b/i.test(stationName))badge.textContent='Lidl';
   }
   function renderOfferBox(entries,minCost){
-    const cheapest=entries.filter(x=>Number.isFinite(x.cost)&&Number.isFinite(minCost)&&Math.abs(x.cost-minCost)<0.01);
+    const cheapest=entries.filter(x=>providerEligible(x.provider)&&Number.isFinite(x.cost)&&Number.isFinite(minCost)&&Math.abs(x.cost-minCost)<0.01);
     return `<div class="v8-offer-box"><div class="v8-offer-title">Tarifs disponibles pour cette puissance</div>${entries.map(x=>{
-      const best=Number.isFinite(x.cost)&&Number.isFinite(minCost)&&Math.abs(x.cost-minCost)<0.01;
+      const best=providerEligible(x.provider)&&Number.isFinite(x.cost)&&Number.isFinite(minCost)&&Math.abs(x.cost-minCost)<0.01;
       const bestText=best?(cheapest.length>1?'✓ meilleur ex æquo':'✓ moins cher'):'';
       return `<div class="v8-offer-row${best?' best':''}"><div class="v8-offer-provider">${esc(x.provider)}${bestText?`<span class="v8-offer-best">${bestText}</span>`:''}</div><div class="v8-offer-price">${esc(x.tariff)}</div><div class="v8-offer-total">${esc(formatEuro(x.cost))}</div></div>`;
     }).join('')}<div class="v8-offer-note">Le meilleur tarif est choisi sur le coût total de la session simulée (énergie + frais éventuels), pas uniquement sur le €/kWh.</div></div>`;
@@ -130,8 +147,9 @@
     for(const entries of groups.values()){
       entries.forEach(e=>e.provider=providerName(e.info,e.card));
       const known=entries.filter(e=>Number.isFinite(e.cost));
-      const minCost=known.length?Math.min(...known.map(e=>e.cost)):null;
-      let winner=known.length?known.slice().sort((a,b)=>a.cost-b.cost||a.index-b.index)[0]:entries[0];
+      const eligibleKnown=known.filter(e=>providerEligible(e.provider));
+      const minCost=eligibleKnown.length?Math.min(...eligibleKnown.map(e=>e.cost)):null;
+      let winner=eligibleKnown.length?eligibleKnown.slice().sort((a,b)=>a.cost-b.cost||a.index-b.index)[0]:(known[0]||entries[0]);
       const anchor=entries.slice().sort((a,b)=>a.index-b.index)[0];
       if(winner.card!==anchor.card)anchor.card.parentNode.insertBefore(winner.card,anchor.card);
 
@@ -184,6 +202,6 @@
   window.openAdvancedSync=function(){document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));const panel=document.getElementById('sync');if(panel)panel.classList.add('active');if(typeof loadGithubSettingsForm==='function')loadGithubSettingsForm();window.scrollTo({top:0,behavior:'smooth'});};
   window.openSettingsPanel=function(){document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));const button=document.querySelector('nav button[data-tab="fx"]');if(button)button.classList.add('active');const panel=document.getElementById('fx');if(panel)panel.classList.add('active');if(typeof renderFxRates==='function')renderFxRates();window.scrollTo({top:0,behavior:'smooth'});};
 
-  window.TCCV8OfferSelection={collapseOfferVariants,providerFromStation,decorateAndCollapseAugustResults};
+  window.TCCV8OfferSelection={collapseOfferVariants,providerFromStation,decorateAndCollapseAugustResults,subscriptionIdForProvider,providerEligible,stationEligible};
   console.info('[TCC V8] Comparaison multi-offres par station physique + puissance prête.');
 })();

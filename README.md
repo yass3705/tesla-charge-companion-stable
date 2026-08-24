@@ -13,6 +13,18 @@ La Preview V8 intègre le catalogue strict des stations exploitées par Electric
 
 Les stations déjà présentes sont rapprochées par opérateur strict et coordonnées. Les doublons Electroverse/Electra d’un même site E55C sont fusionnés ; les stations E55C manquantes sont ajoutées avec un statut inconnu jusqu’à leur rapprochement externe.
 
+## V8 Preview RC4.8 — abonnements Belib’
+
+Les offres Belib’ « Abonné résident Paris » et « Abonné non-résident » sont des abonnements optionnels :
+
+- elles restent affichées dans le détail des tarifs disponibles ;
+- elles sont hors classement tant que l’abonnement correspondant n’est pas sélectionné ;
+- sans abonnement Belib’, le tarif Visiteur détermine le coût retenu et le Top 20 ;
+- ajouter ou retirer un abonnement relance la comparaison complète ;
+- le coût annuel de l’abonnement n’est jamais imputé à une recharge.
+
+Cette règle est limitée à la V8 Preview. Elle ne modifie ni les données ni le comportement de la V7.3 Stable.
+
 ## Nouveauté : plusieurs puissances sur un même site
 
 Une borne/site peut contenir plusieurs configurations de recharge.

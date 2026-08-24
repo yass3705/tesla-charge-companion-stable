@@ -3,7 +3,7 @@
 // Aucun rapprochement externe par URL/nom. Les tarifs source ambigus ne participent pas au classement.
 (function(){
   'use strict';
-  const VERSION='rc48-postcharge-1';
+  const VERSION='rc48-postcharge-subs-2';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
   const fmt=(v,d=3)=>Number(v||0).toFixed(d).replace(/0+$/,'').replace(/\.$/,'');
@@ -11,6 +11,21 @@
   const cleanProvider=v=>text(v).replace(/\s*✓.*$/,'').replace(/\s+abonnement.*$/i,'').trim();
   const normId=v=>text(v).replace(/^france-catalog:/i,'').split('::')[0];
   let prepared=[];
+
+  function selectedSubscriptions(){
+    if(window.TCCV8Subscriptions?.selectedSet)return window.TCCV8Subscriptions.selectedSet();
+    try{const saved=JSON.parse(localStorage.getItem('tccSubscriptionsV1')||'{}');return new Set(Array.isArray(saved.selected)?saved.selected:[])}catch(e){return new Set()}
+  }
+  function subscriptionId(row,provider){
+    const explicit=text(row?.dataset?.subscriptionId);if(explicit)return explicit;
+    if(window.TCCV8Subscriptions?.subscriptionIdForProvider)return window.TCCV8Subscriptions.subscriptionIdForProvider(provider);
+    const value=norm(provider).replace(/[^a-z0-9]+/g,' ');
+    if(value.includes('belib direct abonne non resident'))return'belib-nonresident';
+    if(value.includes('belib direct abonne resident'))return'belib-resident';
+    if(value.includes('electra smart'))return'electra-smart';
+    if(value.includes('electra essential'))return'electra-essential';
+    return'';
+  }
 
   function providerFromConfig(c,st){
     const label=text(c?.label||c?.configurationLabel);
@@ -153,15 +168,16 @@
     let electraAmbiguous=false;
     for(const row of rows){
       const provider=cleanProvider(row.querySelector('.v8-offer-provider')?.textContent);
-      if(/^Electra\+/i.test(provider)){meta.push({row,provider,total:totalFromRow(row),subscription:true});continue;}
+      const subscription=subscriptionId(row,provider);if(subscription)row.dataset.subscriptionId=subscription;
+      if(/^Electra\+/i.test(provider)){meta.push({row,provider,total:totalFromRow(row),subscriptionId:subscription});continue;}
       const matches=configsFor(card,provider),bySig=new Map();for(const x of matches){const sig=pricingSig(x.pricing);if(sig&&!bySig.has(sig))bySig.set(sig,x);}
       const unique=[...bySig.values()],ambiguous=unique.length>1;
       if(ambiguous&&/^Electra$/i.test(provider))electraAmbiguous=true;
       const chosen=unique.length===1?unique[0]:null;
       if(chosen){const el=row.querySelector('.v8-offer-price');if(el)el.textContent=tariffLabel(chosen.pricing,time);}
-      meta.push({row,provider,total:totalFromRow(row),chosen,ambiguous});
+      meta.push({row,provider,total:totalFromRow(row),chosen,ambiguous,subscriptionId:subscription});
     }
-    if(electraAmbiguous){for(const m of meta){if(m.subscription&&/^Electra\+/i.test(m.provider))m.ambiguous=true;}}
+    if(electraAmbiguous){for(const m of meta){if(m.subscriptionId&&/^Electra\+/i.test(m.provider))m.ambiguous=true;}}
     const grouped=new Map();
     for(const m of meta.filter(x=>x.ambiguous)){const key=norm(x.provider.replace(/^Electra\+.*/i,'Electra'));if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(m);}
     for(const group of grouped.values()){
@@ -171,9 +187,10 @@
       const pr=first.row.querySelector('.v8-offer-price');if(pr)pr.textContent='Tarifs source multiples non attribués à cette prise';
       const tot=first.row.querySelector('.v8-offer-total');if(tot)tot.textContent='non classé';
     }
-    const eligible=meta.filter(m=>!m.ambiguous&&m.row.isConnected&&Number.isFinite(m.total));
+    const selected=selectedSubscriptions();
+    const eligible=meta.filter(m=>!m.ambiguous&&m.row.isConnected&&Number.isFinite(m.total)&&(!m.subscriptionId||selected.has(m.subscriptionId)));
     const min=eligible.length?Math.min(...eligible.map(m=>m.total)):NaN,ties=eligible.filter(m=>Math.abs(m.total-min)<.01);
-    for(const m of meta){if(m.row.isConnected)setBest(m.row,Number.isFinite(min)&&!m.ambiguous&&Math.abs(m.total-min)<.01,ties.length>1);}
+    for(const m of meta){if(m.row.isConnected)setBest(m.row,Number.isFinite(min)&&!m.ambiguous&&(!m.subscriptionId||selected.has(m.subscriptionId))&&Math.abs(m.total-min)<.01,ties.length>1);}
     const winner=eligible.sort((a,b)=>a.total-b.total)[0];
     if(winner)updateSummary(card,winner.chosen,winner.total,time);
     addAccessNote(card,physical);
