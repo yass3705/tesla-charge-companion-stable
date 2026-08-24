@@ -2,43 +2,38 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 function assert(condition,message){if(!condition)throw new Error(message);}
-const code=fs.readFileSync('assets/v8-e55c-pricing.js','utf8');
+const source=fs.readFileSync('assets/app.js','utf8');
+const start=source.indexOf('function minuteOfSession');
+const end=source.indexOf('function daySchedule',start);
+assert(start>=0&&end>start,'Moteur priceWithRules introuvable');
 const sandbox={
   console,
-  setInterval:()=>0,
-  clearInterval:()=>{},
+  mins:value=>{const [h,m]=String(value||'00:00').split(':').map(Number);return h*60+m;},
   fxToEur:value=>Number(value),
-  priceWithRules:(pricing,startMinute,chargeMinutes)=>({
-    total:.6+chargeMinutes*.084,
-    connection:.6,
-    chargeCost:chargeMinutes*.084,
-    idleCost:0,
-    durationSurcharge:0,
-    occupiedMinutes:90,
-    currencies:['EUR']
-  }),
-  window:null
+  powerAtElapsed:()=>0,
+  powerBandAt:()=>null
 };
-sandbox.window=sandbox;
 vm.createContext(sandbox);
-vm.runInContext(code,sandbox);
-const api=sandbox.TCCV8E55CPricing;
-assert(api&&api.installPricing(),'Extension tarifaire E55C non installée');
+vm.runInContext(source.slice(start,end),sandbox);
+assert(typeof sandbox.priceWithRules==='function','Moteur tarifaire TCC absent');
 
 const pricing={type:'rules',rules:[
-  {scope:'timeWindow',start:'07:00',end:'23:00',currency:'EUR',e55cDirect:true,parkingPerMinute:.084},
-  {scope:'timeWindow',start:'23:00',end:'07:00',currency:'EUR',e55cDirect:true,parkingPerMinute:.0624}
+  {scope:'timeWindow',start:'07:00',end:'23:00',billing:'minute',currency:'EUR',chargePerMinute:.084,idlePerMinute:.084,connectionFee:.6,e55cDirect:true,e55cParkingPhase:'parked_not_charging'},
+  {scope:'timeWindow',start:'23:00',end:'07:00',billing:'minute',currency:'EUR',chargePerMinute:.0624,idlePerMinute:.0624,connectionFee:.6,e55cDirect:true,e55cParkingPhase:'parked_not_charging'}
 ]};
-const result=sandbox.priceWithRules(pricing,7*60,60,10,'08:30','07:00');
-assert(Math.abs(result.parkingCost-7.56)<1e-9,`Stationnement 90 min incorrect : ${result.parkingCost}`);
-assert(Math.abs(result.total-13.2)<1e-9,`Total E55C incorrect : ${result.total}`);
-assert(result.e55cDirectPricing===true,'Marqueur tarif direct absent');
 
-const crossing=api.parkingCost(pricing,22*60+30,60);
-assert(Math.abs(crossing-(30*.084+30*.0624))<1e-9,`Passage jour/nuit incorrect : ${crossing}`);
-const unrelated=api.parkingCost({rules:[{scope:'allDay',parkingPerMinute:1}]},0,60);
-assert(unrelated===0,'Un tarif non-E55C a été modifié');
-const current=sandbox.priceWithRules;
-assert(api.installPricing()&&sandbox.priceWithRules===current,'Extension E55C installée deux fois');
+const sainteJulitte=sandbox.priceWithRules(pricing,2*60+23,273,45.1,'','02:23');
+const expectedChargeOnly=.6+273*.0624;
+assert(Math.abs(sainteJulitte.chargeCost-273*.0624)<1e-9,`Recharge Sainte-Julitte incorrecte : ${sainteJulitte.chargeCost}`);
+assert(sainteJulitte.idleCost===0,`Stationnement facturé pendant la recharge : ${sainteJulitte.idleCost}`);
+assert(Math.abs(sainteJulitte.total-expectedChargeOnly)<1e-9,`Total sans attente incorrect : ${sainteJulitte.total}`);
 
-console.log(JSON.stringify({parking90Minutes:result.parkingCost,total:result.total,crossingDayNight:crossing,unrelated},null,2));
+const noWait=sandbox.priceWithRules(pricing,22*60+30,30,8,'','22:30');
+assert(noWait.idleCost===0,'Double comptage E55C détecté sans attente');
+assert(Math.abs(noWait.total-(.6+30*.084))<1e-9,`Total recharge seule incorrect : ${noWait.total}`);
+
+const thirtyMinutesParked=sandbox.priceWithRules(pricing,22*60+30,30,8,'23:30','22:30');
+assert(Math.abs(thirtyMinutesParked.idleCost-30*.0624)<1e-9,`Stationnement après charge incorrect : ${thirtyMinutesParked.idleCost}`);
+assert(Math.abs(thirtyMinutesParked.total-(noWait.total+30*.0624))<1e-9,`Total avec attente incorrect : ${thirtyMinutesParked.total}`);
+
+console.log(JSON.stringify({sainteJulitteChargeOnly:sainteJulitte.total,noWait:noWait.total,parked30Minutes:thirtyMinutesParked.total,parkingAfterCharge:thirtyMinutesParked.idleCost},null,2));

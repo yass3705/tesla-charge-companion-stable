@@ -77,9 +77,8 @@
     const c=text(r.currency||'EUR').toUpperCase(),parts=[];
     if(Number(r.pricePerKwh||0)>0)parts.push(`${fmt(r.pricePerKwh)} ${c}/kWh`);
     if(Number(r.chargePerMinute||0)>0)parts.push(`${fmt(r.chargePerMinute)} ${c}/min`);
-    if(Number(r.parkingPerMinute||0)>0)parts.push(`${fmt(r.parkingPerMinute)} ${c}/min stationnement`);
     if(Number(r.connectionFee||0)>0)parts.push(`${fmt(r.connectionFee,2)} ${c} fixe`);
-    if(Number(r.idlePerMinute||0)>0)parts.push(`${fmt(r.idlePerMinute)} ${c}/min occupation`);
+    if(Number(r.idlePerMinute||0)>0)parts.push(`${fmt(r.idlePerMinute)} ${c}/min stationnement après charge`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`${fmt(r.afterMinutesRate)} ${c}/min après ${Math.round(Number(r.afterMinutesThreshold))} min`);
     const post=postChargeDescription(pricing,r,c,false);if(post)parts.push(post);
     if(r.scope==='timeWindow'&&(r.start||r.end))parts.push(`créneau ${r.start||'00:00'}–${r.end||'24:00'}`);
@@ -90,9 +89,8 @@
     const c=text(r.currency||'EUR').toUpperCase(),parts=[];
     if(Number(r.pricePerKwh||0)>0)parts.push(`énergie ${fmt(r.pricePerKwh)} ${c}/kWh`);
     if(Number(r.chargePerMinute||0)>0)parts.push(`durée ${fmt(r.chargePerMinute)} ${c}/min`);
-    if(Number(r.parkingPerMinute||0)>0)parts.push(`stationnement ${fmt(r.parkingPerMinute)} ${c}/min pendant la connexion`);
     if(Number(r.connectionFee||0)>0)parts.push(`connexion ${fmt(r.connectionFee,2)} ${c}`);
-    if(Number(r.idlePerMinute||0)>0)parts.push(`occupation ${fmt(r.idlePerMinute)} ${c}/min`);
+    if(Number(r.idlePerMinute||0)>0)parts.push(`stationnement après charge ${fmt(r.idlePerMinute)} ${c}/min`);
     if(Number(r.afterMinutesRate||0)>0&&Number(r.afterMinutesThreshold||0)>0)parts.push(`après ${Math.round(Number(r.afterMinutesThreshold))} min : ${fmt(r.afterMinutesRate)} ${c}/min`);
     const post=postChargeDescription(pricing,r,c,true);if(post)parts.push(post);
     if(r.scope==='timeWindow'&&(r.start||r.end))parts.push(`créneau ${r.start||'00:00'}–${r.end||'24:00'}`);

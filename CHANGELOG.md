@@ -1,8 +1,8 @@
 # V8 Preview RC4.8 — intégration E55C
 
 - Ajout du calcul tarifaire direct E55C Scan & Pay.
-- Conservation distincte du temps de charge et du temps de stationnement, facturés simultanément.
-- Affichage explicite du stationnement pendant la connexion dans les tarifs et le détail du coût.
+- Correction de `PARKING_TIME` : le stationnement commence uniquement après la fin de charge.
+- Suppression du double comptage recharge + stationnement pendant une même minute.
 - Aucun statut E55C embarqué : Electroverse/Electra restent les autorités opérationnelles.
 - Les profils différents sur des PDC de même puissance restent distinguables.
 

@@ -6,7 +6,7 @@ La Preview V8 intègre le catalogue strict des stations exploitées par Electric
 
 - 601 stations et 1 875 points de charge au premier import ;
 - tarifs directs E55C Scan & Pay affectés au point de charge exact ;
-- frais de recharge et de stationnement calculés comme deux dimensions simultanées ;
+- `PARKING_TIME` appliqué uniquement au temps branché sans recharge, après la fin de charge ;
 - offres Electroverse/Electra conservées séparément pour la comparaison ;
 - statuts opérationnels fournis uniquement par Electroverse/Electra ;
 - tarifs non résolus conservés comme non classés, sans extrapolation.
