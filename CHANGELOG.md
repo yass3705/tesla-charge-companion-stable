@@ -1,3 +1,11 @@
+# V8 Preview RC4.8 — pipeline E55C
+
+- Base compacte des stations strictement exploitées par E55C.
+- Rapprochement déterministe avec le catalogue Electroverse/Electra avant calcul des routes.
+- Ajout des stations absentes et fusion des doublons de sources.
+- Synchronisation quotidienne depuis le Data Lab, sans statut dynamique E55C.
+- La V7.3 stable ne charge pas cette couche V8.
+
 # V7.3 Stable — Phase de test grandeur nature
 
 - Promotion de la V7.2.2 validée en version stable.

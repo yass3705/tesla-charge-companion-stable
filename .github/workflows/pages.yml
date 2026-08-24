@@ -43,9 +43,10 @@ jobs:
 
           cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
+          cp site/data/e55c_station_tariffs_v1.json.gz site/v8-preview/data/e55c_station_tariffs_v1.json.gz
           rm -rf site/v8-preview/data/non_tesla_france
           cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france
-          cp site/assets/france-catalog.js site/v8-preview/assets/france-catalog.js
+          cp site/assets/france-catalog-v8.js site/v8-preview/assets/france-catalog.js
 
           cat > site/v8-preview/assets/preview-storage.js <<'JS'
           (function(){
@@ -100,7 +101,11 @@ jobs:
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48am-20260821', html)
+          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-e55c-20260824', html)
+          html=re.sub(r'assets/v8-e55c-pricing\.js\?v=[^"]+', 'assets/v8-e55c-pricing.js?v=rc48-e55c-1', html)
+          if 'assets/v8-e55c-pricing.js?' not in html:
+              france_tag='<script src="assets/france-catalog.js?v=rc48-e55c-20260824" defer></script>'
+              html=html.replace(france_tag,france_tag+'\n<script src="assets/v8-e55c-pricing.js?v=rc48-e55c-1" defer></script>',1)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48am-20260821', html)
           html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bi-20260823', html)
           html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bd-20260823', html)
@@ -166,6 +171,7 @@ jobs:
           PY
 
           node --check site/v8-preview/assets/france-catalog.js
+          node --check site/v8-preview/assets/v8-e55c-pricing.js
           node --check site/v8-preview/assets/v8-operator-tariff-overlay.js
           node --check site/v8-preview/assets/v8-evadea-band-fallback.js
           node --check site/v8-preview/assets/v8-regional-tariff-overlay.js
@@ -182,8 +188,11 @@ jobs:
           node --check site/v8-preview/assets/v8-station-status.js
           node --check site/v8-preview/assets/update.js
           python -m json.tool site/v8-preview/data/non_tesla_france/status_snapshot.json >/dev/null
+          node site/scripts/test_e55c_v8_overlay.mjs site/v8-preview/data/e55c_station_tariffs_v1.json.gz
+          (cd site && node scripts/test_e55c_v8_runtime.mjs)
           grep -q 'V8 Preview · RC4.8 · rc48ax · statuts live' site/v8-preview/assets/preview-storage.js
-          grep -q 'france-catalog.js?v=rc48am-20260821' site/v8-preview/index.html
+          grep -q 'france-catalog.js?v=rc48-e55c-20260824' site/v8-preview/index.html
+          grep -q 'v8-e55c-pricing.js?v=rc48-e55c-1' site/v8-preview/index.html
           grep -q 'v8-operator-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html

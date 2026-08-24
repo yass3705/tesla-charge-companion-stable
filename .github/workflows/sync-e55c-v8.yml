@@ -1,0 +1,51 @@
+name: Synchroniser E55C dans TCC V8
+
+on:
+  schedule:
+    - cron: "17 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-e55c-v8
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer TCC
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Télécharger la base E55C vérifiée
+        run: |
+          curl --fail --location --retry 4 --retry-delay 5 \
+            --output /tmp/electric55_stations_france.json \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/electric55_stations_france.json
+
+      - name: Construire l’overlay compact V8
+        run: node scripts/build_e55c_v8_overlay.mjs /tmp/electric55_stations_france.json data/e55c_station_tariffs_v1.json.gz
+
+      - name: Valider le périmètre et les tarifs
+        run: |
+          node scripts/test_e55c_v8_overlay.mjs data/e55c_station_tariffs_v1.json.gz
+          node scripts/test_e55c_v8_runtime.mjs
+          node --check assets/france-catalog-v8.js
+
+      - name: Publier uniquement en cas de changement
+        shell: bash
+        run: |
+          if git diff --quiet -- data/e55c_station_tariffs_v1.json.gz; then
+            echo "Aucun changement E55C à publier."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/e55c_station_tariffs_v1.json.gz
+          git commit -m "data(e55c): refresh V8 operated station overlay"
+          git push origin HEAD:main

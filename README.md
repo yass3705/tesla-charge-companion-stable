@@ -1,5 +1,11 @@
 # Tesla Charge Companion V7.1.0 stable
 
+## Données V8 Preview — E55C
+
+La V7.3 stable reste inchangée. Le pipeline de publication de la Preview V8 utilise désormais une base compacte dédiée aux seules stations dont `nom_operateur` identifie Electric 55 Charging. Elle conserve les offres Electroverse/Electra, ajoute le tarif direct E55C Scan & Pay et laisse les statuts opérationnels aux sources Electroverse/Electra.
+
+La base est reconstruite automatiquement chaque jour depuis le Data Lab. Les tarifs non résolus restent non classés et aucune tarification n’est déduite de la seule puissance.
+
 ## Nouveauté : plusieurs puissances sur un même site
 
 Une borne/site peut contenir plusieurs configurations de recharge.
