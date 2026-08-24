@@ -82,7 +82,9 @@
     for(const r of refs){
       if(!matches(ctx,r))continue;
       const existing=box.querySelector(`[data-reference-offer-id="${r.id}"]`);
-      const exactAvailable=(r.id==='evadea-grid'&&hasRankableProvider(box,'e-Vadea direct'))\n        ||(r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct'));\n      if(exactAvailable){existing?.remove();continue;}
+      const exactAvailable=(r.id==='evadea-grid'&&hasRankableProvider(box,'e-Vadea direct'))
+        ||(r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct'));
+      if(exactAvailable){existing?.remove();continue;}
       if(existing)continue;
       const row=document.createElement('div');
       row.className='v8-offer-row v8-reference-row v8-offer-ambiguous';
