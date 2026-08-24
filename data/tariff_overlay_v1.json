@@ -32,6 +32,8 @@
   "subscriptions": [
     {"id":"electra-essential","provider":"Electra+ Essential","offerType":"subscription","runtime":"existing_electra_plus","monthlyFeeEur":1.99,"defaultSelected":false},
     {"id":"electra-smart","provider":"Electra+ Smart","offerType":"subscription","runtime":"existing_electra_plus","monthlyFeeEur":4.99,"defaultSelected":false},
+    {"id":"belib-nonresident","provider":"Belib’ abonné non-résident","offerType":"subscription","runtime":"existing_belib_direct","monthlyFeeLabel":"7 €/an","defaultSelected":false,"source":"data-lab/belib_official_paris.json"},
+    {"id":"belib-resident","provider":"Belib’ abonné résident Paris","offerType":"subscription","runtime":"existing_belib_direct","monthlyFeeLabel":"7 €/an","defaultSelected":false,"source":"data-lab/belib_official_paris.json"},
     {"id":"fastned-gold","provider":"Fastned Gold","offerType":"subscription","operatorAliases":["Fastned"],"kind":"DC","pricePerKwh":0.43,"currency":"EUR","monthlyFeeEur":5.99,"monthlyFeePromotionEnd":"2026-09-30","monthlyFeeLabel":"5,99 €/mois jusqu'au 30/09/2026","defaultSelected":false,"source":"data-lab/fastned_official_france.json"},
     {"id":"atlante-go-atlante","selectionId":"atlante-go","control":true,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Atlante"],"pricePerKwh":0.29,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
     {"id":"atlante-go-powerdot","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Powerdot","Power Dot"],"pricePerKwh":0.42,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},

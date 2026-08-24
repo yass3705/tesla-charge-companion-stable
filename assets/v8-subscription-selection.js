@@ -3,7 +3,7 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-4';
+  const VERSION='rc48-multi-subs-5';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
@@ -67,7 +67,7 @@
     let box=$('v8SubscriptionsBox');
     if(!box){box=document.createElement('details');box.id='v8SubscriptionsBox';box.className='v8-subscriptions-box';host.appendChild(box);}
     const selected=selectedSet(),countLabel=selected.size?`${selected.size} sélectionné${selected.size>1?'s':''}`:'Aucun sélectionné';
-    box.innerHTML=`<summary><span>Mes abonnements</span><span class="v8-subscriptions-count">${countLabel}</span></summary><div class="v8-subscriptions-body"><div style="font-size:12px;font-weight:800;margin-top:10px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût mensuel n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${controls.map(p=>{const id=selectionId(p);return `<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${id}" ${selected.has(id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`}).join('')}</div></div>`;
+    box.innerHTML=`<summary><span>Mes abonnements</span><span class="v8-subscriptions-count">${countLabel}</span></summary><div class="v8-subscriptions-body"><div style="font-size:12px;font-weight:800;margin-top:10px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût de l'abonnement n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${controls.map(p=>{const id=selectionId(p);return `<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${id}" ${selected.has(id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`}).join('')}</div></div>`;
     box.querySelectorAll('[data-subscription-choice]').forEach(input=>input.addEventListener('change',()=>{
       const ids=new Set([...box.querySelectorAll('[data-subscription-choice]:checked')].map(x=>x.dataset.subscriptionChoice));
       const label=box.querySelector('.v8-subscriptions-count');if(label)label.textContent=ids.size?`${ids.size} sélectionné${ids.size>1?'s':''}`:'Aucun sélectionné';
@@ -137,6 +137,11 @@
     box.querySelectorAll('.v8-electra-plus-row').forEach(row=>{
       const plan=text(row.dataset.plan).toLowerCase();row.dataset.subscriptionId=plan==='smart'?'electra-smart':'electra-essential';
       cleanProvider(row);
+    });
+    box.querySelectorAll('.v8-offer-row').forEach(row=>{
+      const provider=norm(cleanProvider(row));
+      if(provider.includes('belib direct abonne non resident'))row.dataset.subscriptionId='belib-nonresident';
+      else if(provider.includes('belib direct abonne resident paris'))row.dataset.subscriptionId='belib-resident';
     });
   }
   function clearBest(rows){rows.forEach(row=>{row.classList.remove('best');row.querySelectorAll('.v8-offer-best').forEach(x=>x.remove())})}

@@ -58,6 +58,7 @@
     const c=text(rule.currency||'EUR').toUpperCase(),parts=[];
     if(Number(rule.pricePerKwh||0)>0)parts.push(`${Number(rule.pricePerKwh).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${c}/kWh`);
     if(Number(rule.chargePerMinute||0)>0)parts.push(`${Number(rule.chargePerMinute).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${c}/min`);
+    if(Number(rule.belibConnectedTimePerMinute||0)>0)parts.push(`${Number(rule.belibConnectedTimePerMinute).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${c}/min de branchement`);
     if(Number(rule.connectionFee||0)>0)parts.push(`${Number(rule.connectionFee).toFixed(2).replace(/0+$/,'').replace(/\.$/,'')} ${c} fixe`);
     if(Number(rule.idlePerMinute||0)>0)parts.push(`${Number(rule.idlePerMinute).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')} ${c}/min après charge`);
     return parts.join(' + ');
