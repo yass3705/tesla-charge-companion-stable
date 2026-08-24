@@ -1,12 +1,15 @@
-// Tesla Charge Companion V8 — catalogue national France hors Tesla enrichi E55C.
-// Le socle Electroverse/Electra reste l'autorité des statuts. L'inventaire E55C
-// strict ajoute les stations manquantes et les tarifs directs Scan & Pay.
+// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib'.
+// E55C conserve les statuts Electroverse/Electra. Belib' utilise son inventaire
+// officiel strict et joint la disponibilité officielle Paris Open Data par EVSE.
 (function(){
   'use strict';
   const BASE='data/non_tesla_france/';
   const E55C_URL='data/e55c_station_tariffs_v1.json.gz';
+  const BELIB_URL='data/belib_station_tariffs_v1.json.gz';
+  const BELIB_LIVE_URL='https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-disponibilite-temps-reel/exports/json';
+  const BELIB_LIVE_TTL_MS=5*60*1000;
   const rawCache=new Map();
-  let manifestPromise=null,statusPromise=null,e55cPromise=null;
+  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0;
   const STATUS_MAX_AGE_MS=48*60*60*1000;
   const text=value=>String(value==null?'':value).trim();
   const norm=value=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -72,6 +75,53 @@
     return e55cPromise;
   }
 
+  async function loadBelibCatalog(){
+    if(!belibPromise)belibPromise=fetch(`${BELIB_URL}?v=${Date.now()}`,{cache:'no-store'}).then(async response=>{
+      if(!response.ok)throw new Error(`Base Belib indisponible (${response.status})`);
+      const bytes=new Uint8Array(await response.arrayBuffer());
+      if(bytes[0]!==0x1f||bytes[1]!==0x8b)throw new Error('Compression Belib invalide');
+      if(typeof DecompressionStream!=='function')throw new Error('Décompression Belib indisponible dans ce navigateur');
+      return JSON.parse(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text());
+    }).then(data=>{
+      if(data?.dataset!=='belib-operated-paris-tcc-v8')throw new Error('Dataset Belib inattendu');
+      if(data?.scope?.activeInV73!==false||data?.scope?.dynamicStatusIncluded!==false)throw new Error('Garde-fou Belib V8 invalide');
+      if(data?.scope?.strictOperatorField!=='nom_operateur'||data?.scope?.strictOperatorValue!=='TOTALENERGIES')throw new Error('Filtre opérateur Belib invalide');
+      if(data?.scope?.strictBrandField!=='nom_enseigne'||data?.scope?.strictBrandValue!=="Belib'")throw new Error('Filtre enseigne Belib invalide');
+      if(data?.scope?.parkingFeesIncluded!==false)throw new Error('Le parking Belib ne doit pas être intégré');
+      if(!Array.isArray(data?.stations)||Number(data?.stats?.stationCount)!==data.stations.length||data.stations.length<350)throw new Error('Inventaire Belib incomplet');
+      window.TCC_BELIB_CATALOG_V1=data;
+      return data;
+    }).catch(error=>{
+      console.warn('[TCC V8] Base Belib ignorée :',error?.message||error);
+      return {profiles:{},stations:[],stats:{}};
+    });
+    return belibPromise;
+  }
+
+  async function loadBelibLive(force=false){
+    if(force||!belibLivePromise||Date.now()-belibLiveLoadedAt>BELIB_LIVE_TTL_MS){
+      belibLiveLoadedAt=Date.now();
+      belibLivePromise=fetch(`${BELIB_LIVE_URL}?v=${belibLiveLoadedAt}`,{cache:'no-store'}).then(async response=>{
+        if(!response.ok)throw new Error(`Statuts Belib indisponibles (${response.status})`);
+        const rows=await response.json();
+        if(!Array.isArray(rows)||rows.length<1000)throw new Error(`Flux Belib incomplet (${rows?.length||0} EVSE)`);
+        const evses={};
+        for(const row of rows){
+          const id=text(row?.id_pdc);if(!id)continue;
+          const previous=evses[id],currentTime=Date.parse(row?.last_updated||'')||0,previousTime=Date.parse(previous?.last_updated||'')||0;
+          if(!previous||currentTime>=previousTime)evses[id]={status:text(row?.statut_pdc),last_updated:text(row?.last_updated)};
+        }
+        const result={fetchedAt:new Date().toISOString(),source:BELIB_LIVE_URL,evses};
+        window.TCC_BELIB_LIVE_V1=result;
+        return result;
+      }).catch(error=>{
+        console.warn('[TCC V8] Statuts directs Belib ignorés :',error?.message||error);
+        return {fetchedAt:'',source:BELIB_LIVE_URL,evses:{},error:text(error?.message||error)};
+      });
+    }
+    return belibLivePromise;
+  }
+
   async function readGzipJson(file,version=''){
     const cacheKey=`${file}|${version}`;
     if(rawCache.has(cacheKey))return rawCache.get(cacheKey);
@@ -122,7 +172,7 @@
     return JSON.stringify((pricing?.rules||[]).map(rule=>({
       scope:rule.scope||'',start:rule.start||'',end:rule.end||'',billing:rule.billing||'',currency:(rule.currency||'EUR').toUpperCase(),
       k:Number(rule.pricePerKwh||0),m:Number(rule.chargePerMinute||0),p:Number(rule.parkingPerMinute||0),f:Number(rule.connectionFee||0),i:Number(rule.idlePerMinute||0),
-      ar:Number(rule.afterMinutesRate||0),at:Number(rule.afterMinutesThreshold||0)
+      ar:Number(rule.afterMinutesRate||0),at:Number(rule.afterMinutesThreshold||0),bc:Number(rule.belibConnectedTimePerMinute||0)
     })));
   }
 
@@ -237,12 +287,13 @@
     const map=new Map();
     for(const config of configs){
       const provider=providerFromConfigLabel(config.label||config.configurationLabel)||text(config.offerProvider);
-      const key=[norm(provider),text(config.kind).toUpperCase(),Number(config.powerKw||0).toFixed(3),pricingSignature(config.pricing),text(config.e55cPricingProfileId)].join('|');
+      const key=[norm(provider),text(config.kind).toUpperCase(),Number(config.powerKw||0).toFixed(3),pricingSignature(config.pricing),text(config.e55cPricingProfileId),text(config.belibPricingProfileId)].join('|');
       const existing=map.get(key);
       if(!existing){map.set(key,config);continue;}
       existing.stalls=Math.max(Number(existing.stalls||0),Number(config.stalls||0));
       if(config.e55cEvseIds)existing.e55cEvseIds=[...new Set([...(existing.e55cEvseIds||[]),...config.e55cEvseIds])];
       if(config.e55cPaymentUrls)existing.e55cPaymentUrls=[...new Set([...(existing.e55cPaymentUrls||[]),...config.e55cPaymentUrls])];
+      if(config.belibEvseIds)existing.belibEvseIds=[...new Set([...(existing.belibEvseIds||[]),...config.belibEvseIds])];
     }
     return [...map.values()];
   }
@@ -315,6 +366,129 @@
     return output;
   }
 
+  function isBelibOperator(station){
+    const value=norm(station?.operator);
+    return value==='belib'||value.startsWith('belib ');
+  }
+  function belibProvider(profile){
+    if(profile?.customerPlan==='resident')return 'Belib’ direct — Abonné résident Paris';
+    if(profile?.customerPlan==='nonresident')return 'Belib’ direct — Abonné non-résident';
+    return 'Belib’ direct — Visiteur';
+  }
+  function pricingWithoutParking(pricing){
+    const copy=deepClone(pricing||{type:'rules',rules:[]});
+    copy.type='rules';
+    copy.rules=(copy.rules||[]).map(rule=>{
+      const clean={...rule};
+      delete clean.parkingPerMinute;
+      delete clean.parkingFee;
+      delete clean.parkingCost;
+      return clean;
+    });
+    return copy;
+  }
+  function directBelibConfigurations(record,data){
+    const output=[];
+    for(const [configIndex,config] of (record.configurations||[]).entries()){
+      for(const profileId of config.pricingProfileIds||[]){
+        const profile=data?.profiles?.[profileId];if(!profile)continue;
+        const provider=belibProvider(profile),kind=text(config.kind).toUpperCase(),power=Number(config.powerKw);
+        output.push({
+          id:`belib-direct-${record.stationId}-${configIndex}-${profileId}`,
+          label:`${provider} · ${kind} ${power} kW`,kind,powerKw:power,stalls:Number(config.stalls||0),
+          pricing:pricingWithoutParking({type:'rules',rules:profile.rules}),offerProvider:provider,offerType:'operator_direct',
+          subscriptionId:profile.subscriptionId||null,belibDirect:true,belibVerified:true,belibPricingProfileId:profileId,
+          belibCustomerPlan:profile.customerPlan,belibServiceClass:config.serviceClass,belibAnnualFeeEur:Number(profile.annualFeeEur||0),
+          belibParkingExcluded:true,belibEvseIds:[...(config.evseIds||[])],belibRoamingEvseIds:[...(config.roamingEvseIds||[])]
+        });
+      }
+    }
+    return output;
+  }
+  function inferBelibServiceClass(config){
+    const rules=config?.pricing?.rules||[];
+    const perMinute=Math.max(0,...rules.flatMap(rule=>[Number(rule.chargePerMinute||0),Number(rule.idlePerMinute||0)]));
+    const perKwh=Math.max(0,...rules.map(rule=>Number(rule.pricePerKwh||0)));
+    if(perMinute>=.3)return 'boostPlus';
+    if(perMinute>=.1&&perKwh===0)return 'boost';
+    if(perKwh>0)return 'flex';
+    const power=Number(config?.powerKw||0);
+    return power>45?'boostPlus':power>10?'boost':'flex';
+  }
+  function remapBelibConfig(config,record){
+    const kind=text(config?.kind).toUpperCase(),power=Number(config?.powerKw||0),serviceClass=inferBelibServiceClass(config);
+    const candidates=(record.configurations||[]).filter(item=>text(item.kind).toUpperCase()===kind&&item.serviceClass===serviceClass)
+      .map(item=>({...item,distance:Math.abs(Number(item.powerKw)-power)})).sort((a,b)=>a.distance-b.distance);
+    const nearest=candidates[0];
+    if(!nearest||nearest.distance>Math.max(1.1,Number(nearest.powerKw)*.20)+1e-9)return null;
+    const copy={...config,powerKw:Number(nearest.powerKw),pricing:pricingWithoutParking(config.pricing),belibParkingExcluded:true};
+    const provider=providerFromConfigLabel(copy.label)||text(copy.offerProvider);
+    if(provider)copy.label=`${provider} · ${kind} ${copy.powerKw} kW`;
+    return copy;
+  }
+  function belibStreetKey(value){
+    return norm(value).split(' ').filter(token=>!/^\d/.test(token)&&token!=='paris'&&token!=='france').join(' ');
+  }
+  function belibLiveStatus(record,live,target){
+    const ids=[...new Set((record.configurations||[]).flatMap(config=>config.evseIds||[]))];
+    const entries=ids.map(id=>live?.evses?.[id]).filter(Boolean);
+    if(!entries.length)return target;
+    const values=entries.map(entry=>text(entry.status)).filter(Boolean),normalized=values.map(norm);
+    const outValues=new Set(['hors service','en maintenance','maintenance','supprime','supprimee','planifie','planifiee']);
+    const available=normalized.some(value=>value==='disponible');
+    const outOfService=normalized.length>0&&normalized.every(value=>outValues.has(value));
+    target.operationalStatus=available?'available':outOfService?'out_of_service':'unknown';
+    target.operationalStatusRaw=[...new Set(values)];
+    target.operationalStatusCheckedAt=live.fetchedAt||'';
+    target.operationalStatusSource='Paris Open Data — Belib’ temps réel';
+    target.operationalStatusStale=false;
+    target.scheduledClosureOverride=false;
+    target.belibLiveStatusJoined=true;
+    target.belibLiveStatusCounts={
+      expectedEvse:ids.length,reportedEvse:entries.length,available:normalized.filter(value=>value==='disponible').length,
+      occupied:normalized.filter(value=>value==='occupe'||value==='occupee').length,outOfService:normalized.filter(value=>outValues.has(value)).length
+    };
+    return target;
+  }
+  function mergedBelibStation(record,data,matches=[],live={evses:{}}){
+    const direct=directBelibConfigurations(record,data);
+    const existing=matches.flatMap(station=>(station.chargingConfigurations||[]).map(config=>remapBelibConfig(config,record)).filter(Boolean));
+    const configurations=mergeConfigurations([...existing,...direct]);
+    const first=configurations.find(config=>config.belibDirect)||configurations[0]||{kind:'AC',powerKw:Number(record.maxPowerKw||11),pricing:{type:'rules',rules:[]}};
+    const merged={
+      id:`france-catalog:belib:${record.stationId}`,catalogStationId:`belib:${record.stationId}`,name:record.name||'Station Belib’',address:record.address||'',
+      latitude:Number(record.coordinates[0]),longitude:Number(record.coordinates[1]),operator:'Belib’ (TotalEnergies)',stalls:Number(record.chargePointCount||0),
+      kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configurations,
+      access:{limited:false,unknown:false,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Accès Belib’ '+(record.access?.hours||'24/7'),condition:record.access?.condition||''},
+      lastUpdated:record.lastUpdated||String(data.generatedAt||'').slice(0,10),source:'belibOfficialCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,
+      belibStrictOperator:true,belibStationId:record.stationId,belibRoamingStationId:record.roamingStationId,belibParkingExcluded:true,
+      belibSourceCatalogStationIds:matches.map(station=>station.catalogStationId).filter(Boolean),belibStatusFallbackJoined:matches.length>0,
+      belibOfficialEvseIds:[...new Set((record.configurations||[]).flatMap(config=>config.evseIds||[]))]
+    };
+    mergeStatus(merged,matches);
+    return belibLiveStatus(record,live,merged);
+  }
+  function mergeBelibCatalog(catalog,data,live={evses:{}},origin={lat:0,lon:0},radiusKm=0){
+    if(!Array.isArray(data?.stations)||!data.stations.length)return catalog;
+    const official=(data.stations||[]).filter(record=>stationInArea(record,origin,radiusKm));
+    const source=catalog.map((station,index)=>({station,index})).filter(item=>isBelibOperator(item.station));
+    const matches=new Map(official.map(record=>[record.stationId,[]])),assigned=new Set();
+    const assign=(item,maxDistanceKm,requireStreet)=>{
+      const sourceKey=belibStreetKey(item.station.address||item.station.name),candidate=official.map(record=>({record,distance:geoDistanceKm(item.station.latitude,item.station.longitude,record.coordinates[0],record.coordinates[1])}))
+        .filter(entry=>entry.distance<=maxDistanceKm+1e-9&&(!requireStreet||belibStreetKey(entry.record.address)===sourceKey)).sort((a,b)=>a.distance-b.distance)[0];
+      if(!candidate)return false;
+      matches.get(candidate.record.stationId).push(item.station);assigned.add(item.index);return true;
+    };
+    source.forEach(item=>assign(item,.012,false));
+    source.filter(item=>!assigned.has(item.index)).forEach(item=>assign(item,.06,true));
+    const merged=official.map(record=>mergedBelibStation(record,data,matches.get(record.stationId)||[],live));
+    const matched=merged.filter(station=>station.belibSourceCatalogStationIds.length).length;
+    const collapsed=merged.reduce((sum,station)=>sum+Math.max(0,station.belibSourceCatalogStationIds.length-1),0);
+    const output=[...catalog.filter(station=>!isBelibOperator(station)),...merged];
+    window.TCC_BELIB_MERGE_STATS={strictStations:data.stations.length,strictStationsInArea:official.length,sourceBelibStations:source.length,matched,added:official.length-matched,collapsedSourceDuplicates:collapsed,excludedSourceStations:source.length-assigned.size,outputStations:output.length};
+    return output;
+  }
+
   async function rowsNear(lat,lon,radiusKm){
     const manifest=await loadManifest();
     const version=manifest.runtimePatchedAt||manifest.allSha256||manifest.generatedAt||'';
@@ -332,10 +506,10 @@
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
-    const [rows,statuses,e55c]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog()]);
+    const [rows,statuses,e55c,belib,belibLive]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive()]);
     const dayIndex=dayIndexFromSimulation();
     const baseCatalog=rows.map(row=>applyOperationalStatus(stationFromRow(row,dayIndex),statuses));
-    const catalog=mergeE55cCatalog(baseCatalog,e55c,origin,Number(maxDistanceKm)||0);
+    const catalog=mergeBelibCatalog(mergeE55cCatalog(baseCatalog,e55c,origin,Number(maxDistanceKm)||0),belib,belibLive,origin,Number(maxDistanceKm)||0);
     const originalStations=stations;
     const ids=new Set(originalStations.map(station=>station.id));
     const extra=catalog.filter(station=>!ids.has(station.id));
@@ -346,12 +520,15 @@
         result.franceCatalogLoaded=extra.length;
         result.e55cCatalogLoaded=true;
         result.e55cMergeStats={...(window.TCC_E55C_MERGE_STATS||{})};
+        result.belibCatalogLoaded=Number(window.TCC_BELIB_MERGE_STATS?.strictStationsInArea||0);
+        result.belibMergeStats={...(window.TCC_BELIB_MERGE_STATS||{})};
+        result.belibLiveLoaded=Object.keys(belibLive?.evses||{}).length>0;
       }
       return result;
     }finally{stations=originalStations;}
   };
 
-  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;},get cachedFragments(){return rawCache.size;}};
-  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,geoDistanceKm};
-  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C.');
+  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;},get cachedFragments(){return rawCache.size;}};
+  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,geoDistanceKm};
+  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu).');
 })();

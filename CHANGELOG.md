@@ -1,3 +1,13 @@
+# V8 Preview RC4.8 — Belib’ direct
+
+- Inventaire officiel strict de 381 stations exploitées par Belib’/TotalEnergies et 1 735 points compatibles Tesla.
+- Neuf profils directs : visiteur, abonné non-résident et abonné résident Paris pour Flex, Boost et Boost+.
+- Disponibilité officielle jointe en temps réel par identifiant EVSE.
+- Remplacement des lignes Belib obsolètes ou dupliquées du catalogue tiers par l’inventaire officiel.
+- Abonnements annuels proposés en option et exclus du classement tant qu’ils ne sont pas sélectionnés.
+- Frais de parking et de réservation exclus ; frais de longue connexion conservés.
+- Couche chargée uniquement dans la V8 Preview, sans modification de la V7.3 stable.
+
 # V8 Preview RC4.8 — pipeline E55C
 
 - Base compacte des stations strictement exploitées par E55C.

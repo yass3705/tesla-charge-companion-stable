@@ -8,6 +8,14 @@ La dimension E55C `PARKING_TIME` est appliquée uniquement lorsque le véhicule 
 
 La base est reconstruite automatiquement chaque jour depuis le Data Lab. Les tarifs non résolus restent non classés et aucune tarification n’est déduite de la seule puissance.
 
+## Données V8 Preview — Belib’ direct
+
+La Preview V8 charge une base officielle séparée limitée aux stations qui satisfont simultanément `nom_operateur=TOTALENERGIES` et `nom_enseigne=Belib'`. Les stations accessibles uniquement en itinérance, les points moto et les connecteurs non compatibles Tesla sont exclus. L’inventaire initial validé contient 381 stations, 1 735 points et 9 profils tarifaires directs (visiteur, abonné non-résident et abonné résident Paris, pour Flex, Boost et Boost+).
+
+Les disponibilités sont jointes à l’exécution par identifiant EVSE depuis le flux temps réel Paris Open Data. Les abonnements annuels restent optionnels dans le classement et leur cotisation n’est pas imputée à une session. Les frais de réservation ne sont pas ajoutés automatiquement. Conformément au périmètre décidé pour TCC, aucun prix, crédit ou règle de parking Belib’ n’est intégré.
+
+Cette base est réservée à la V8 Preview : la V7.3 stable ne la charge pas.
+
 ## Nouveauté : plusieurs puissances sur un même site
 
 Une borne/site peut contenir plusieurs configurations de recharge.

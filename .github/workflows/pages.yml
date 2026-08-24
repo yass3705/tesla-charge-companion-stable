@@ -44,9 +44,11 @@ jobs:
           cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
           cp site/data/e55c_station_tariffs_v1.json.gz site/v8-preview/data/e55c_station_tariffs_v1.json.gz
+          cp site/data/belib_station_tariffs_v1.json.gz site/v8-preview/data/belib_station_tariffs_v1.json.gz
           rm -rf site/v8-preview/data/non_tesla_france
           cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france
           cp site/assets/france-catalog-v8.js site/v8-preview/assets/france-catalog.js
+          cp site/assets/v8-belib-pricing.js site/v8-preview/assets/v8-belib-pricing.js
 
           cat > site/v8-preview/assets/preview-storage.js <<'JS'
           (function(){
@@ -70,7 +72,7 @@ jobs:
               if(header&&!document.getElementById('tccPreviewBanner')){
                 const banner=document.createElement('div');
                 banner.id='tccPreviewBanner';
-                banner.textContent='V8 Preview · RC4.8 · rc48ax · statuts live · horaires séparés · auto-mise à jour désactivée';
+                banner.textContent='V8 Preview · RC4.8 · rc48bj · Belib’ direct · parking exclu · auto-mise à jour désactivée';
                 banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';
                 header.appendChild(banner);
               }
@@ -101,8 +103,11 @@ jobs:
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
-          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-e55c-idle-20260824', html)
+          html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-belib-idle-20260824', html)
           html=re.sub(r'<script src="assets/v8-e55c-pricing\.js\?v=[^"]+" defer></script>\n?','',html)
+          html=re.sub(r'<script src="assets/v8-belib-pricing\.js\?v=[^"]+" defer></script>\n?','',html)
+          france_tag='<script src="assets/france-catalog.js?v=rc48-belib-idle-20260824" defer></script>'
+          html=html.replace(france_tag,france_tag+'\n<script src="assets/v8-belib-pricing.js?v=rc48-belib-1" defer></script>',1)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48am-20260821', html)
           html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bi-20260823', html)
           html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bd-20260823', html)
@@ -125,9 +130,9 @@ jobs:
               '<script src="assets/v8-rc4-extensions.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-rc4-toggle-fix.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-combined-tariff-fix.js?v=rc48am-20260821" defer></script>\n'
-              '<script src="assets/v8-source-integrity.js?v=rc48am-20260821" defer></script>\n'
+              '<script src="assets/v8-source-integrity.js?v=rc48bj-20260824" defer></script>\n'
               '<script src="assets/v8-ambiguous-electra-warning.js?v=rc48am-20260821" defer></script>\n'
-              '<script src="assets/v8-subscription-selection.js?v=rc48bg-20260823" defer></script>\n'
+              '<script src="assets/v8-subscription-selection.js?v=rc48bj-20260824" defer></script>\n'
               '<script src="assets/v8-station-status.js?v=rc48ax-20260823" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
@@ -159,6 +164,7 @@ jobs:
 
           p=Path('site/v8-preview/assets/update.js')
           s=p.read_text(encoding='utf-8')
+          s=re.sub(r'assets/august-release\.js\?v=[^\']+', 'assets/august-release.js?v=rc48bj-20260824', s)
           sw="if('serviceWorker' in navigator){"
           if sw in s:s=s.replace(sw,"if(!window.TCC_PREVIEW&&'serviceWorker' in navigator){",1)
           needle='  let checking=false;'
@@ -168,6 +174,7 @@ jobs:
           PY
 
           node --check site/v8-preview/assets/france-catalog.js
+          node --check site/v8-preview/assets/v8-belib-pricing.js
           node --check site/v8-preview/assets/v8-operator-tariff-overlay.js
           node --check site/v8-preview/assets/v8-evadea-band-fallback.js
           node --check site/v8-preview/assets/v8-regional-tariff-overlay.js
@@ -186,9 +193,12 @@ jobs:
           python -m json.tool site/v8-preview/data/non_tesla_france/status_snapshot.json >/dev/null
           node site/scripts/test_e55c_v8_overlay.mjs site/v8-preview/data/e55c_station_tariffs_v1.json.gz
           (cd site && node scripts/test_e55c_v8_runtime.mjs)
-          grep -q 'V8 Preview · RC4.8 · rc48ax · statuts live' site/v8-preview/assets/preview-storage.js
-          grep -q 'france-catalog.js?v=rc48-e55c-idle-20260824' site/v8-preview/index.html
+          node site/scripts/test_belib_v8_overlay.mjs site/v8-preview/data/belib_station_tariffs_v1.json.gz
+          (cd site && node scripts/test_belib_v8_runtime.mjs v8-preview/data/belib_station_tariffs_v1.json.gz)
+          grep -q 'V8 Preview · RC4.8 · rc48bj · Belib’ direct · parking exclu' site/v8-preview/assets/preview-storage.js
+          grep -q 'france-catalog.js?v=rc48-belib-idle-20260824' site/v8-preview/index.html
           ! grep -q 'v8-e55c-pricing.js' site/v8-preview/index.html
+          grep -q 'v8-belib-pricing.js?v=rc48-belib-1' site/v8-preview/index.html
           grep -q 'v8-operator-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
@@ -197,8 +207,13 @@ jobs:
           grep -q "const REVISION='rc48av-fee-breakdown-fix'" site/v8-preview/assets/v8-direct-resolver-followup.js
           grep -q 'const physicalKey=x=>' site/v8-preview/assets/august-release.js
           grep -q 'v8-station-status.js?v=rc48ax-20260823' site/v8-preview/index.html
-          grep -q 'v8-subscription-selection.js?v=rc48bg-20260823' site/v8-preview/index.html
+          grep -q 'v8-subscription-selection.js?v=rc48bj-20260824' site/v8-preview/index.html
+          grep -q 'belib-nonresident' site/v8-preview/data/tariff_overlay_v1.json
+          grep -q 'belib-resident' site/v8-preview/data/tariff_overlay_v1.json
+          grep -q 'belibConnectedTimePerMinute' site/v8-preview/assets/v8-belib-pricing.js
+          ! grep -q 'belib_station_tariffs_v1' site/index.html
           python - <<'PY'
+          import json
           from pathlib import Path
           index=Path('site/v8-preview/index.html').read_text(encoding='utf-8')
           updater=Path('site/v8-preview/assets/update.js').read_text(encoding='utf-8')
@@ -206,14 +221,23 @@ jobs:
           subscriptions=Path('site/v8-preview/assets/v8-subscription-selection.js').read_text(encoding='utf-8')
           checks={
               'cache update.js rc48bi':'update.js?v=rc48bi-20260823' in index,
-              'chargeur august-release rc48bg':'august-release.js?v=rc48bg-20260823' in updater,
+              'chargeur august-release rc48bj':'august-release.js?v=rc48bj-20260824' in updater,
               'option coût/km':'<option value="costPerKm">Coût au km récupéré</option>' in august,
               'tri coût/km':"mode==='costPerKm'" in august,
               'kilomètres récupérés exposés':'data-recovered-km' in august,
               'reclassement abonnements':"mode!=='costPerKm'" in subscriptions,
+              'détail temps de branchement Belib':'connectedTimeCost' in august,
           }
           missing=[name for name,ok in checks.items() if not ok]
           if missing: raise SystemExit('Contrôles coût/km manquants: '+', '.join(missing))
+          overlay=json.loads(Path('site/v8-preview/data/tariff_overlay_v1.json').read_text(encoding='utf-8'))
+          plans={plan['id']:plan for plan in overlay.get('subscriptions',[])}
+          for plan_id in ('belib-nonresident','belib-resident'):
+              plan=plans.get(plan_id)
+              if not plan or plan.get('runtime')!='existing_belib_direct' or plan.get('monthlyFeeLabel')!='7 €/an' or 'pricePerKwh' in plan:
+                  raise SystemExit(f'Abonnement Belib invalide: {plan_id}')
+          if "row.dataset.subscriptionId='belib-nonresident'" not in subscriptions or "row.dataset.subscriptionId='belib-resident'" not in subscriptions:
+              raise SystemExit('Rattachement des lignes Belib aux abonnements absent')
           print('Contrôles coût/km validés.')
           PY
           grep -q "document.createElement('details')" site/v8-preview/assets/v8-subscription-selection.js
