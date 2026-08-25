@@ -34,8 +34,10 @@ jobs:
           node --check assets/v8-direct-resolver-ui.js
           node --check assets/v8-direct-resolver-followup.js
           node --check assets/v8-subscription-selection.js
+          node --check assets/v8-subscription-stability-fix.js
+          node --check assets/v8-labornebleue-operator-fallback.js
           node --check assets/v8-source-integrity.js
-          node --check service-worker.js
+          service-worker.js
 
       - name: Validate JSON files
         run: |
@@ -54,6 +56,9 @@ jobs:
       - name: Smoke-test subscription ranking semantics
         run: node scripts/test_v8_subscription_ranking.mjs
 
+      - name: Smoke-test La Borne Bleue explicit operator fallback
+        run: node scripts/test_labornebleue_explicit_operator_fallback.mjs
+
       - name: Verify August build references
         shell: bash
         run: |
@@ -70,6 +75,8 @@ jobs:
           grep -q "august-rc2-fixes.js" assets/update.js
           grep -q "v8-direct-resolver-ui.js" assets/v8-overlay-area-bridge.js
           grep -q "v8-direct-resolver-followup.js" assets/v8-overlay-area-bridge.js
+          grep -q "v8-subscription-stability-fix.js" assets/v8-overlay-area-bridge.js
+          grep -q "v8-labornebleue-operator-fallback.js" assets/v8-overlay-area-bridge.js
           grep -q "rc48av-fee-breakdown-fix" assets/v8-direct-resolver-followup.js
           grep -q "teslaCongestionFeePerMinute" data/tesla_stations.json
           echo "V8 build ${BUILD} references are consistent."
