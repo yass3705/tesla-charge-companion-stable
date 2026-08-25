@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.4.0",
-  "generatedAt": "2026-08-21T01:25:00+02:00",
+  "schemaVersion": "1.4.1",
+  "generatedAt": "2026-08-25T17:02:00+02:00",
   "country": "FR",
   "mode": "conservative",
   "notes": [
@@ -9,7 +9,8 @@
     "Subscription offers are always displayable but are excluded from cost ranking unless the user selects the plan.",
     "Monthly subscription fees are never allocated to an individual charging session.",
     "e-Vadea direct pricing is rankable only when the station/configuration resolves against the separately validated EVSE map; unmatched e-Vadea stations stay reference-only.",
-    "Validated operators whose exact consumer tariff still depends on station, network, concession or unresolved context remain intentionally outside the rankable overlay until those conditions can be represented safely."
+    "Validated operators whose exact consumer tariff still depends on station, network, concession or unresolved context remain intentionally outside the rankable overlay until those conditions can be represented safely.",
+    "Charge+ Zen is mirrored in this base overlay so cached V8 runtime scripts still receive the current TotalEnergies subscription plan from the no-store tariff fetch."
   ],
   "operatorOffers": [
     {"id":"fastned-standard","provider":"Fastned direct","offerType":"operator_direct","operatorAliases":["Fastned"],"kind":"DC","pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.61,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/fastned_official_france.json"},
@@ -35,6 +36,7 @@
     {"id":"belib-nonresident","provider":"Belib’ abonné non-résident","offerType":"subscription","runtime":"existing_belib_direct","monthlyFeeLabel":"7 €/an","defaultSelected":false,"source":"data-lab/belib_official_paris.json"},
     {"id":"belib-resident","provider":"Belib’ abonné résident Paris","offerType":"subscription","runtime":"existing_belib_direct","monthlyFeeLabel":"7 €/an","defaultSelected":false,"source":"data-lab/belib_official_paris.json"},
     {"id":"fastned-gold","provider":"Fastned Gold","offerType":"subscription","operatorAliases":["Fastned"],"kind":"DC","pricePerKwh":0.43,"currency":"EUR","monthlyFeeEur":5.99,"monthlyFeePromotionEnd":"2026-09-30","monthlyFeeLabel":"5,99 €/mois jusqu'au 30/09/2026","defaultSelected":false,"source":"data-lab/fastned_official_france.json"},
+    {"id":"totalenergies-charge-plus-zen","provider":"Charge+ Zen","offerType":"subscription","operatorAliases":["TotalEnergies","Total Energies"],"kind":"DC","minPowerKw":50,"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":3.9,"defaultSelected":false,"partnerEligible":false,"networkScope":"physical_operator_totalenergies_only","source":"data-lab/totalenergies_official_france.json","note":"Cache-safe mirror of Charge+ Zen: 3,90 €/mois and 0,49 €/kWh from 50 kW on physical TotalEnergies-operated stations only; no partner discount."},
     {"id":"atlante-go-atlante","selectionId":"atlante-go","control":true,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Atlante"],"pricePerKwh":0.29,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
     {"id":"atlante-go-powerdot","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Powerdot","Power Dot"],"pricePerKwh":0.42,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
     {"id":"atlante-go-charge-league","selectionId":"atlante-go","control":false,"provider":"Atlante Go","offerType":"subscription_emsp","operatorAliases":["Electra","Fastned","IONITY","Ionity"],"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":9.99,"defaultSelected":false,"source":"data-lab/atlante_official_france.json"},
