@@ -3,7 +3,7 @@
 // Aucun alias Alizé / Bouygues / SIPPEREC / réseau partenaire n'est accepté ici.
 (function(){
   'use strict';
-  const REVISION='rc48bj-lbb-explicit-operator-fallback';
+  const REVISION='rc48bk-lbb-explicit-operator-fallback';
   const SUBSCRIPTION_ID='labornebleue-annual';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -11,7 +11,7 @@
 
   function explicitPhysicalLbb(st){
     if(st?.labornebleueStrictCpo===true)return true;
-    const values=[st?.operator,st?._sourceOperator,st?.cpo,st?.network].map(norm).filter(Boolean);
+    const values=[st?.operator,st?._sourceOperator,st?.cpo,st?.network,st?.sourceNetworkLabel].map(norm).filter(Boolean);
     return values.some(v=>v==='la borne bleue'||v==='labornebleue');
   }
 
@@ -46,10 +46,29 @@
     }
     return out;
   }
-  function isExistingLbbDirect(c,kind,power){
-    if(text(c?.kind).toUpperCase()!==kind||Math.abs(Number(c?.powerKw||0)-power)>.25)return false;
+  function planForConfig(c){
+    const provider=norm(c?.offerProvider||c?.label||c?.configurationLabel);
+    if(text(c?.subscriptionId)===SUBSCRIPTION_ID||provider.includes('abonne'))return'subscriber';
+    return'public';
+  }
+  function isLbbDirectProvider(c){
     if(c?.labornebleueDirect===true)return true;
     return norm(c?.offerProvider||c?.label||c?.configurationLabel).startsWith('la borne bleue direct');
+  }
+  function isCalculableLbbDirect(c,kind,power,subscriber){
+    if(text(c?.kind).toUpperCase()!==kind||Math.abs(Number(c?.powerKw||0)-power)>.25)return false;
+    if(!isLbbDirectProvider(c))return false;
+    if(planForConfig(c)!==(subscriber?'subscriber':'public'))return false;
+    if(c?.labornebleueDirect!==true||c?.labornebleueVerified!==true)return false;
+    const pricing=c?.pricing;
+    return !!(pricing?.labornebleueExact||(pricing?.type==='rules'&&Array.isArray(pricing.rules)&&pricing.rules.length));
+  }
+  function keepBaseConfig(c){
+    // Une ancienne ligne « La Borne Bleue direct » informative ne doit jamais
+    // empêcher l'ajout de la vraie grille calculable. On ne conserve que les
+    // configurations LBB déjà validées et tarifables.
+    if(!isLbbDirectProvider(c))return true;
+    return c?.labornebleueDirect===true&&c?.labornebleueVerified===true&&!!c?.pricing?.labornebleueExact;
   }
   function powerLabel(power){return Number.isInteger(Number(power))?String(Number(power)):String(Number(power)).replace(/0+$/,'').replace(/\.$/,'')}
   function makeConfig(st,cfg,subscriber){
@@ -67,14 +86,15 @@
   }
   function addDirect(st){
     if(!st||st.source==='teslaSupercharger'||String(st.countryCode||'FR').toUpperCase()!=='FR'||!explicitPhysicalLbb(st))return st;
-    const base=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations.map(clone):[];
-    const added=[];
-    for(const cfg of physicalConfigurations(st)){
+    const raw=Array.isArray(st.chargingConfigurations)?st.chargingConfigurations.map(clone):[];
+    const physical=physicalConfigurations({...st,chargingConfigurations:raw});
+    const base=raw.filter(keepBaseConfig),added=[];
+    for(const cfg of physical){
       const pub=exactPublic(cfg.kind,cfg.powerKw),sub=exactSubscriber(cfg.kind,cfg.powerKw);if(!pub||!sub)continue;
-      if(base.some(c=>isExistingLbbDirect(c,cfg.kind,cfg.powerKw))||added.some(c=>isExistingLbbDirect(c,cfg.kind,cfg.powerKw)))continue;
-      added.push(makeConfig(st,cfg,false),makeConfig(st,cfg,true));
+      if(!base.some(c=>isCalculableLbbDirect(c,cfg.kind,cfg.powerKw,false))&&!added.some(c=>isCalculableLbbDirect(c,cfg.kind,cfg.powerKw,false)))added.push(makeConfig(st,cfg,false));
+      if(!base.some(c=>isCalculableLbbDirect(c,cfg.kind,cfg.powerKw,true))&&!added.some(c=>isCalculableLbbDirect(c,cfg.kind,cfg.powerKw,true)))added.push(makeConfig(st,cfg,true));
     }
-    if(!added.length)return st;
+    if(!added.length&&base.length===raw.length)return st;
     return{...st,operator:'La Borne Bleue',chargingConfigurations:[...base,...added],_labornebleueExplicitFallback:true,_labornebleueExplicitFallbackRevision:REVISION};
   }
 
@@ -90,5 +110,5 @@
   let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>1200)clearInterval(timer)},50);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,0),{once:true});else setTimeout(install,0);
   window.TCCV8LaBorneBleueExplicitFallback={revision:REVISION,explicitPhysicalLbb,exactPublic,exactSubscriber,runtimePricing,addDirect,install};
-  console.info('[TCC V8] Fallback La Borne Bleue opérateur explicite actif : grille directe publique + abonné, partenaires exclus.');
+  console.info('[TCC V8] Fallback La Borne Bleue opérateur explicite actif : grille directe publique + abonné, placeholders remplacés, partenaires exclus.');
 })();
