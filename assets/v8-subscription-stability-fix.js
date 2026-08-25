@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — stabilisation unique de l'UI abonnements + garde-fou de classement.
 (function(){
   'use strict';
-  const REVISION='rc48bm-subscription-host-stable';
+  const REVISION='rc48bn-subscription-visible-top-level';
   const KEY='tccSubscriptionsV1';
   const MIGRATION_KEY='tccSubscriptionStableMigrationV1';
   const $=id=>document.getElementById(id);
@@ -47,37 +47,54 @@
   }
   function eligible(st){const id=inferSubscriptionId(st);return !id||selectedSet().has(id)}
 
+  // Les variantes abonnées doivent rester visibles dans la carte de tarifs. Le tri
+  // les exclut déjà via TCCV8Subscriptions.isStationEligible / rankingSubscriptionEligible.
+  // On ne les retire donc plus à l'étape expandConfigurations.
   function installExpansionGuard(){
     const current=window.expandConfigurations;if(typeof current!=='function')return false;
-    if(current.__tccSubscriptionStabilityV1)return true;
-    const wrapped=function(baseStations){const out=current.call(this,baseStations)||[];return out.filter(eligible)};
+    if(current.__tccSubscriptionStabilityV2)return true;
+    const wrapped=function(baseStations){return current.call(this,baseStations)||[];};
     for(const key of ['__tccOverlayExpansionGuard','__tccDirectResolverPowerV1','__tccDirectSmokeFix','__tccLbbExplicitExpansionV2'])if(current[key])wrapped[key]=current[key];
-    wrapped.__tccSubscriptionStabilityV1=true;wrapped.__tccOriginal=current;
+    wrapped.__tccSubscriptionStabilityV2=true;wrapped.__tccOriginal=current;
     window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}return true;
   }
 
+  // En RC4.8 le panneau Filtres est replié par défaut. L'ancien hôte donnait donc
+  // l'impression que la liste d'abonnements avait disparu. On l'ancre maintenant au
+  // niveau principal de la carte Comparer, juste avant « Filtres & classement ».
   function subscriptionHost(){
+    const compareCard=$('v8CompareCard')||$('compare')?.querySelector('.card');if(compareCard)return compareCard;
     const direct=$('v8FilterBody')||$('augCompareFilters');if(direct)return direct;
     const power=$('v8PowerWindow');if(power?.parentElement)return power.parentElement;
     const kind=$('simKindFilter');if(kind?.parentElement?.parentElement)return kind.parentElement.parentElement;
-    const compare=$('compare');return compare?.querySelector('.card')||null;
+    return null;
   }
   function injectStyle(){if($('v8SubscriptionStableStyle'))return;const s=document.createElement('style');s.id='v8SubscriptionStableStyle';s.textContent=`
     #v8SubscriptionsBox{display:none!important}
-    .v8-sub-stable{margin-top:12px;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13}
+    .v8-sub-stable{margin-top:12px;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13;position:relative;z-index:1}
     .v8-sub-stable-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .v8-sub-stable-count{font-size:10px;color:#9a9aa2;font-weight:700}
+    .v8-sub-stable-count{font-size:10px;color:#9a9aa2;font-weight:700;white-space:nowrap}
     .v8-sub-stable select{width:100%;margin-top:9px;min-height:40px}
     .v8-sub-stable-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
     .v8-sub-stable-chip{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid #35363c;border-radius:10px;background:#151519;font-size:10px}
     .v8-sub-stable-chip span{color:#9a9aa2}.v8-sub-stable-remove{border:0;background:transparent;color:#e0a9a9;font-size:17px;line-height:1;padding:0 2px}
   `;document.head.appendChild(s)}
+  function placeBox(box,host){
+    const compareCard=$('v8CompareCard')||$('compare')?.querySelector('.card');
+    if(host===compareCard&&compareCard){
+      const filters=compareCard.querySelector('.v8-filter-details');
+      if(filters){if(box.parentElement!==compareCard||box.nextElementSibling!==filters)compareCard.insertBefore(box,filters);return true;}
+      const core=compareCard.querySelector('.v8-core-grid');if(core){if(box.previousElementSibling!==core)core.insertAdjacentElement('afterend',box);return true;}
+    }
+    if(box.parentElement!==host){const anchor=$('v8PowerWindow');if(anchor?.parentElement===host)anchor.insertAdjacentElement('afterend',box);else host.appendChild(box);}
+    return true;
+  }
 
   async function render(force=false){
     const host=subscriptionHost();if(!host)return false;injectStyle();await loadPlans();
     let box=$('v8SubscriptionsStableBox');
     if(!box){box=document.createElement('div');box.id='v8SubscriptionsStableBox';box.className='v8-sub-stable';}
-    if(box.parentElement!==host){const anchor=$('v8PowerWindow');if(anchor?.parentElement===host)anchor.insertAdjacentElement('afterend',box);else host.appendChild(box);force=true;}
+    placeBox(box,host);
     const selected=selectedSet(),available=plans.filter(p=>!selected.has(selectionId(p))),active=plans.filter(p=>selected.has(selectionId(p))),sig=`${plans.map(selectionId).join('|')}::${[...selected].sort().join('|')}`;
     if(!force&&box.dataset.sig===sig)return true;
     box.innerHTML=`<div class="v8-sub-stable-head"><div><b>Mes abonnements</b><div class="small" style="margin-top:4px">Seuls les abonnements ajoutés ici participent au classement.</div></div><div class="v8-sub-stable-count">${active.length?`${active.length} actif${active.length>1?'s':''}`:'Aucun actif'}</div></div><select id="v8SubscriptionStableSelect"><option value="">${available.length?'Ajouter un abonnement…':'Tous les abonnements sont déjà ajoutés'}</option>${available.map(p=>`<option value="${esc(selectionId(p))}">${esc(p.provider)} · ${esc(planLabel(p))}</option>`).join('')}</select><div class="v8-sub-stable-chips">${active.length?active.map(p=>`<div class="v8-sub-stable-chip"><div><b>${esc(p.provider)}</b><br><span>${esc(planLabel(p))}</span></div><button type="button" class="v8-sub-stable-remove" data-remove="${esc(selectionId(p))}" aria-label="Retirer ${esc(p.provider)}">×</button></div>`).join(''):'<span class="small">Aucun abonnement sélectionné.</span>'}</div>`;
@@ -103,13 +120,13 @@
   function installObserver(){if(observer)return true;const root=document.documentElement;if(!root)return false;let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{busy=true;stabilizeLegacyApis();Promise.resolve(render(false)).finally(()=>{installExpansionGuard();busy=false})},120)});observer.observe(root,{childList:true,subtree:true});return true}
   function markRevision(){
     const banner=$('tccPreviewBanner');if(!banner)return;
-    const label='V8 Preview · RC4.8 · rc48bm · abonnements visibles · La Borne Bleue direct calculable · données canoniques France · auto-mise à jour désactivée';
+    const label='V8 Preview · RC4.8 · rc48bn · abonnements visibles · métadonnées offres préservées · La Borne Bleue direct calculable · données canoniques France · auto-mise à jour désactivée';
     banner.textContent=label;banner.dataset.stableLabel=label;banner.setAttribute('aria-label',label);
   }
 
   migrateBrokenLbbSelection();
   let tries=0;const timer=setInterval(()=>{tries++;stabilizeLegacyApis();installExpansionGuard();render(false);installObserver();markRevision();if(tries>1200)clearInterval(timer)},100);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{stabilizeLegacyApis();installExpansionGuard();render(true);installObserver();markRevision()},{once:true});else{stabilizeLegacyApis();installExpansionGuard();render(true);installObserver();markRevision()}
-  window.TCCV8SubscriptionStability={revision:REVISION,render,eligible,inferSubscriptionId,selectedSet,installExpansionGuard,stabilizeLegacyApis,subscriptionHost};
-  console.info('[TCC V8] UI abonnements stabilisée sur hôte dynamique + exclusion fail-closed avant classement.');
+  window.TCCV8SubscriptionStability={revision:REVISION,render,eligible,inferSubscriptionId,selectedSet,installExpansionGuard,stabilizeLegacyApis,subscriptionHost,placeBox};
+  console.info('[TCC V8] UI abonnements visible hors panneau replié + variantes abonnées conservées hors classement tant que non sélectionnées.');
 })();
