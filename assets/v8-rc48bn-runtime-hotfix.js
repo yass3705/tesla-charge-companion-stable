@@ -2,10 +2,16 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48bs-runtime-compat';
+  const REVISION='rc48bt-runtime-compat-fr-cpo-gap';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
+
+  function loadFranceCpoGap(){
+    if(window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
+    const s=document.createElement('script');
+    s.src='assets/v8-france-cpo-gap-overlay.js?v=rc48bt-20260825';s.defer=true;s.dataset.tccFranceCpoGap='1';document.head.appendChild(s);return true;
+  }
 
   function mergeRawMetadata(rawList,normalized){
     if(!Array.isArray(normalized))return normalized;
@@ -13,7 +19,6 @@
     const byId=new Map(raw.map((cfg,index)=>[String(cfg?.id||`#${index}`),cfg||{}]));
     return normalized.map((cfg,index)=>({...((byId.get(String(cfg?.id||`#${index}`))||raw[index]||{})),...cfg}));
   }
-
   function installMetadataGuard(){
     let installed=false;
     const n=window.normalizeConfigurations;
@@ -71,12 +76,12 @@
     return true;
   }
   function renderSubscriptions(force=false){return window.TCCV8CompareSubscriptions?.render?.(force)??false}
-  function boot(){installMetadataGuard();installResultsObserver();refreshResults();renderSubscriptions(false)}
+  function boot(){loadFranceCpoGap();installMetadataGuard();installResultsObserver();refreshResults();renderSubscriptions(false)}
 
   document.addEventListener('tcc:compare-subscriptions-ready',()=>renderSubscriptions(false));
-  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton'))installMetadataGuard()},true);
+  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadFranceCpoGap();installMetadataGuard()}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
-  window.TCCV8RC48BNHotfix={revision:REVISION,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48bs : hotfix historique réduit aux garde-fous métadonnées/offres.');
+  window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
+  console.info('[TCC V8] rc48bt : compatibilité runtime + compléments CPO directs France chargés.');
 })();
