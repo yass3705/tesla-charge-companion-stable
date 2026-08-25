@@ -2,15 +2,15 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48bt-runtime-compat-fr-cpo-gap';
+  const REVISION='rc48bu-runtime-compat-fr-cpo-consolidated';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
 
   function loadFranceCpoGap(){
-    if(window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
+    if(window.TCCV8FranceCpoConsolidated||window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
     const s=document.createElement('script');
-    s.src='assets/v8-france-cpo-gap-overlay.js?v=rc48bt-20260825';s.defer=true;s.dataset.tccFranceCpoGap='1';document.head.appendChild(s);return true;
+    s.src='assets/v8-france-cpo-gap-overlay.js?v=rc48bu-20260826';s.defer=true;s.dataset.tccFranceCpoGap='1';document.head.appendChild(s);return true;
   }
 
   function mergeRawMetadata(rawList,normalized){
@@ -83,5 +83,5 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
   window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48bt : compatibilité runtime + compléments CPO directs France chargés.');
+  console.info('[TCC V8] rc48bu : compatibilité runtime + couche CPO France consolidée chargée.');
 })();
