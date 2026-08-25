@@ -70,7 +70,7 @@
     if(!document.querySelector('link[data-tcc-august]')){
       const css=document.createElement('link');css.rel='stylesheet';css.href=`assets/august-release.css?v=${CURRENT_BUILD}`;css.dataset.tccAugust='1';document.head.appendChild(css);
     }
-    const script=document.createElement('script');script.src=`assets/august-release.js?v=${CURRENT_BUILD}`;script.dataset.tccAugust='1';
+    const script=document.createElement('script');script.src='assets/august-release.js?v=rc48bl-20260824';script.dataset.tccAugust='1';
     script.onload=()=>{console.info('[TCC] August release layer loaded.');loadValidatedRegionalPatches();loadAugustUiFixes();loadLaBorneBleueDirect();};
     script.onerror=()=>{console.error('[TCC] August release layer could not be loaded.');loadValidatedRegionalPatches();loadLaBorneBleueDirect();};
     document.body.appendChild(script);
