@@ -1,116 +1,74 @@
 {
-  "schemaVersion": "1.2.0",
-  "generatedAt": "2026-08-26T01:24:00+02:00",
+  "schemaVersion": "1.3.0",
+  "generatedAt": "2026-08-26T01:32:00+02:00",
   "country": "FR",
   "operator": "Qovoltis",
   "scope": "physical_cpo_direct_only_no_roaming",
-  "status": "partially_resolved_station_specific",
+  "status": "automatic_tariff_access_not_resolved",
   "integrationReady": false,
+  "policy": {
+    "automaticTariffAccessRequired": true,
+    "manualScreenshotsAcceptedForTcc": false,
+    "manualAppObservationsAcceptedForTcc": false,
+    "thirdPartyRoamingTariffsAcceptedForTcc": false
+  },
   "officialStationInventory": {
     "available": true,
     "source": "https://www.data.gouv.fr/organizations/qovoltis/datasets",
-    "notes": "Qovoltis publishes its French IRVE static inventory. Station inventory is not the blocker."
+    "notes": "Qovoltis publishes static French IRVE inventory, but it does not include the direct retail tariff schedule."
   },
   "officialDirectOffers": {
     "nomadOpen": {
       "subscriptionMonthlyEur": 0,
       "connectionFeeEur": 2.0,
       "energyPrice": "station_specific",
-      "timeTariff": "station_specific_possible",
-      "parkingFee": false,
       "source": "https://www.qovoltis.com/wp-content/uploads/2024/06/Comment-charger-1.pdf"
     },
     "nomadGold": {
       "subscriptionMonthlyEur": 20.0,
       "connectionFeeEur": 0,
       "energyPrice": "station_specific_discounted",
-      "discountVsNomadOpen": "8-10% according to latest accessible official infographic; exact station tariff remains authoritative",
-      "timeTariff": "station_specific_possible",
       "source": "https://www.qovoltis.com/wp-content/uploads/2024/06/Comment-charger-1.pdf"
     }
   },
-  "stationSpecificRule": {
-    "sourceOfTruth": "Qovoltis application / station-specific tariff shown for the charger",
-    "contractEvidence": "Qovoltis CGV version 22/04/2024 states charging is billed under tariff conditions applicable to the charger concerned",
-    "cgvSource": "https://cdn.qovoltis.com/CGV_CP_VF.pdf",
-    "publicPriceFeedFound": false,
-    "publicAdHocPortal": "https://chargenow.qovoltis.com/",
-    "publicAdHocPortalProvidesMachineReadableStationTariffs": false,
-    "timeVariablePricingObservedInOfficialApp": true
+  "automaticAccessAudit": {
+    "officialStaticIrveCsv": "checked_no_retail_tariffs",
+    "qovoltisWebsiteAndPublishedTariffDocs": "checked_offer_rules_only_no_station_feed",
+    "chargenowAdHocPortal": "checked_no_public_machine_readable_tariff_feed_identified",
+    "publicApiSwaggerOpenApiGraphqlSearch": "checked_no_public_endpoint_found",
+    "ocpiOicpPublicEndpointSearch": "checked_no_public_direct_customer_tariff_endpoint_found",
+    "gireveHubjectEvidence": "interoperability_exists_but_not_public_and_not_suitable_as_direct_retail_source",
+    "googlePlayPackage": "com.qovoltis.client",
+    "androidAppAvailability": "apk_xapk_available_from_public_mirrors",
+    "apkStaticDecompilation": "not_completed",
+    "liveAppNetworkCapture": "not_completed"
   },
-  "officialAppObservedExamples": [
+  "remainingTechnicalRoutes": [
     {
-      "stationDisplayName": "Restaurant Bar Air & Co…",
-      "stationDisplayNameTruncated": true,
-      "stationIdentityResolved": true,
-      "resolvedStationName": "Aérodrome de Toussus-Le-Noble Zone Sud - Batiment 245",
-      "resolvedAddress": "Aérodrome de Toussus-Le-Noble Zone Sud - Batiment 245, 78117 Toussus-Le-Noble",
-      "identityResolutionBasis": "user identified the location as Aérodrome de Toussus-le-Noble; current IRVE-derived listings expose the matching QOVOLTIS 22 kW station at Zone Sud - Batiment 245",
-      "physicalPdcCountIrve": 2,
-      "observationSource": "user-provided Qovoltis app screenshot",
-      "observedAt": "2026-08-26T01:24:00+02:00",
-      "connector": "Type 2",
-      "powerKw": 22,
-      "availabilityShown": "1/1",
-      "openingHoursShown": "24/7",
-      "pricingProfile": "unknown_from_screenshot",
-      "visibleTariffWindows": [
-        {
-          "label": "Heures creuses",
-          "pricePerKwhEur": 0.20,
-          "from": "02:10",
-          "to": "07:10"
-        },
-        {
-          "label": "Heures pleines",
-          "pricePerKwhEur": 0.27,
-          "from": "07:10",
-          "to": "14:10"
-        }
-      ],
-      "fullDayTariffResolved": false,
-      "notes": "Only the tariff windows visible in the screenshot are recorded. Do not extrapolate the remaining hours or infer NOMAD Open/Gold profile without additional evidence. IRVE-derived listings indicate two physical charging points, while the app card shows 1/1 available for the displayed charger; preserve both facts until the station/EVSE mapping is confirmed."
+      "route": "android_apk_static_analysis",
+      "goal": "extract embedded API base URLs, route names and tariff/location service calls from com.qovoltis.client",
+      "constraint": "requires obtaining the APK/XAPK bytes in the analysis environment"
+    },
+    {
+      "route": "authorized_app_network_capture",
+      "goal": "observe the requests made by the Qovoltis app when opening a public station tariff card",
+      "constraint": "must use the user's own authorized app session; no auth bypass"
+    },
+    {
+      "route": "browser_devtools_chargenow",
+      "goal": "inspect public ad-hoc portal XHR/fetch calls for station tariff resolution",
+      "constraint": "requires browser developer-tools/network inspection"
     }
   ],
   "regionalFamilyDeferred": {
     "network": "SYDER",
     "operator": "Qovoltis",
-    "reason": "Official fixed regional grid is resolved, but regional networks are intentionally handled in the later regional-operator phase.",
-    "directOtherUser": {
-      "upTo50KwEurPerKwh": 0.35,
-      "above50KwEurPerKwh": 0.50
-    },
-    "residentSyderQovoltisCard": {
-      "eligibility": "resident of eligible SYDER municipality",
-      "cardCostEur": 7.20,
-      "upTo50KwEurPerKwh": 0.25,
-      "above50KwEurPerKwh": 0.40
-    },
-    "rotationFee": {
-      "eurPerHour": 4.0,
-      "upTo50Kw": "after grace period; current local page states 30 minutes, except 22:00-07:00",
-      "above50Kw": "after 1 hour; started hour charged"
-    },
-    "sources": [
-      "https://www.syder.fr/",
-      "https://ccsb-saonebeaujolais.fr/au-quotidien/se-deplacer/bornes-de-recharge-pour-vehicules-electriques-et-biognv/"
-    ]
+    "reason": "Resolved regional tariff family, intentionally deferred to the regional-operator phase."
   },
-  "secondaryObservedPatternsNotAcceptedAsAuthoritative": {
-    "generic22KwCandidateEurPerKwh": 0.40,
-    "rhonesHigherPowerExamplesEurPerKwh": [0.50, 0.59, 0.65],
-    "reasonNotAccepted": "Third-party tariff resolver may use regional estimates when the real tariff is unavailable. These values must not be promoted to TCC without official station/app confirmation."
+  "manualEvidence": {
+    "status": "ignored_for_tcc",
+    "notes": "User-provided Qovoltis app screenshots may illustrate tariff behavior but are not retained as TCC tariff data because automatic access is required."
   },
-  "nextRequiredStep": {
-    "action": "resolve each non-regional Qovoltis station tariff from the Qovoltis app/ad-hoc station view or another station-specific official source; record every visible time window and tariff profile exactly",
-    "requiredFields": [
-      "station identity/address or stable station id",
-      "connector/power",
-      "full 24h tariff schedule if time-variable",
-      "NOMAD Open vs NOMAD Gold profile where distinguishable",
-      "connection/session/parking/rotation fees"
-    ],
-    "safeFallback": "leave station without Qovoltis direct tariff rather than infer a national price",
-    "roaming": "excluded"
-  }
+  "safeFallback": "Do not integrate Qovoltis direct tariffs in TCC until an automatic authoritative station-tariff source is found.",
+  "roaming": "excluded"
 }
