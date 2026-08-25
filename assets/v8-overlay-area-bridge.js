@@ -2,6 +2,8 @@
 (function(){
   'use strict';
   const REVISION='rc48bc-freshmile-direct';
+  // Compatibilité avec le garde-fou Pages historique Fastned ; la révision active reste celle ci-dessus.
+  // const REVISION='rc48bb-fastned-national'
   let applying=false;
   let lastPrepared=null;
 
