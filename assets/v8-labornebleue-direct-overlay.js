@@ -5,13 +5,13 @@
 (function(){
   'use strict';
   const DATA_URL='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/labornebleue_direct_stations_idf.json.gz';
-  const REVISION='rc48-labornebleue-direct-20260825a';
+  const REVISION='rc48-labornebleue-direct-20260825b';
   const SUBSCRIPTION_ID='labornebleue-annual';
   const MAX_MATCH_METERS=120;
   const MAX_NEUTRAL_MATCH_METERS=35;
   const MAX_PREPARED_STATIONS=80;
-  const DATA_VERSION='20260825a';
-  let dataPromise=null,candidateInstalled=false,pricingInstalled=false,lastPrepared=null,subscriptionShimmed=false,uiObserver=null,uiBusy=false;
+  const DATA_VERSION='20260825b';
+  let dataPromise=null,candidateInstalled=false,pricingInstalled=false,lastPrepared=null,uiObserver=null,uiBusy=false;
 
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -97,6 +97,21 @@
     const values=[st?.operator,st?._sourceOperator,st?.cpo,st?.network,st?.name].map(norm).filter(Boolean);
     return values.some(v=>v.includes('la borne bleue')||v==='labornebleue'||v.includes('alize')||v.includes('bouygues energies')||v==='sipperec'||v.includes('sipperec'));
   }
+  function addressFingerprint(value){
+    const raw=norm(value),parts=raw.split(' ').filter(Boolean);
+    const number=(raw.match(/\b\d{1,4}\b/)||[])[0]||'';
+    const postcode=(raw.match(/\b(?:75|77|78|91|92|93|94|95)\d{3}\b/)||[])[0]||'';
+    const stop=new Set(['rue','avenue','av','boulevard','bd','place','allee','route','chemin','impasse','quai','square','france','ile','de','la','le','du','des','sur','seine','cedex']);
+    const tokens=parts.filter(x=>x!==number&&x!==postcode&&!/^\d+$/.test(x)&&x.length>=3&&!stop.has(x));
+    return{number,postcode,tokens:new Set(tokens)};
+  }
+  function sameStreetAddress(a,b){
+    const x=addressFingerprint(a),y=addressFingerprint(b);
+    if(!x.number||!y.number||x.number!==y.number)return false;
+    if(x.postcode&&y.postcode&&x.postcode!==y.postcode)return false;
+    const shared=[...x.tokens].filter(t=>y.tokens.has(t));
+    return shared.length>=2;
+  }
   function configProvider(c){const explicit=text(c?.offerProvider);if(explicit)return explicit;const label=text(c?.label||c?.configurationLabel),i=label.indexOf('·');return(i>=0?label.slice(0,i):label).trim();}
   function configKey(c){return [norm(configProvider(c)),text(c?.kind).toUpperCase(),Number(c?.powerKw||0).toFixed(3),text(c?.subscriptionId),JSON.stringify(c?.pricing?.labornebleueExact||c?.pricing||null)].join('|');}
   function mergeConfigurations(sources,direct=[]){
@@ -116,17 +131,20 @@
       const lat=Number(st?.latitude),lon=Number(st?.longitude);if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
       official.forEach((loc,locIndex)=>{
         const meters=haversineKm(lat,lon,loc.latitude,loc.longitude)*1000;
-        const allowed=meters<=MAX_NEUTRAL_MATCH_METERS+1e-6||(isLikelyLabornebleueStation(st)&&meters<=MAX_MATCH_METERS+1e-6);
-        if(allowed)pairs.push({index,locIndex,meters});
+        const likely=isLikelyLabornebleueStation(st),addressMatch=likely&&sameStreetAddress(st?.address||st?._sourceAddress||'',loc?.address||'');
+        let matchMode='',rank=9;
+        if(addressMatch&&meters<=1000){matchMode='address_operator';rank=0;}
+        else if(likely&&meters<=250+1e-6){matchMode='geo_operator';rank=1;}
+        else if(meters<=MAX_NEUTRAL_MATCH_METERS+1e-6){matchMode='geo_neutral';rank=2;}
+        if(matchMode)pairs.push({index,locIndex,meters,matchMode,rank});
       });
     });
-    pairs.sort((a,b)=>a.meters-b.meters||a.index-b.index||a.locIndex-b.locIndex);
-    const assignedBase=new Set(),byLocation=new Map();
+    pairs.sort((a,b)=>a.rank-b.rank||a.meters-b.meters||a.index-b.index||a.locIndex-b.locIndex);
+    const assignedBase=new Set(),assignedOfficial=new Set(),byLocation=new Map();
     for(const pair of pairs){
-      if(assignedBase.has(pair.index))continue;
-      assignedBase.add(pair.index);
-      if(!byLocation.has(pair.locIndex))byLocation.set(pair.locIndex,[]);
-      byLocation.get(pair.locIndex).push(pair);
+      if(assignedBase.has(pair.index)||assignedOfficial.has(pair.locIndex))continue;
+      assignedBase.add(pair.index);assignedOfficial.add(pair.locIndex);
+      byLocation.set(pair.locIndex,[pair]);
     }
     return{assignedBase,byLocation};
   }
@@ -134,7 +152,7 @@
   function directConfigs(loc){return (loc.configurations||[]).map(clone);}
   function canonicalFromMatches(loc,matches,base,origin){
     const ordered=matches.slice().sort((a,b)=>a.meters-b.meters),primary=base[ordered[0].index],sources=ordered.map(x=>base[x.index]),configurations=mergeConfigurations(sources,directConfigs(loc)),first=configurations.find(c=>c?.labornebleueDirect)||configurations[0];
-    return {...primary,name:loc.name||primary.name,address:loc.address||primary.address,latitude:Number(loc.latitude),longitude:Number(loc.longitude),operator:'La Borne Bleue',countryCode:'FR',kind:first?.kind||primary.kind,powerKw:Number(first?.powerKw||primary.powerKw||11),pricing:first?.pricing||primary.pricing,chargingConfigurations:configurations,stalls:Math.max(Number(loc.chargePointCount||0),Number(primary.stalls||0)),_airKm:locationAirKm(loc,origin),labornebleueStrictCpo:true,labornebleueStationId:loc.stationId,labornebleueSourceCatalogStationIds:sources.map(x=>x.catalogStationId).filter(Boolean),labornebleueStatusJoinedExternally:true,labornebleueDirectConfigurationCount:(loc.configurations||[]).length,labornebleueMatchDistanceMeters:Math.round(ordered[0].meters),_labornebleueOverlayRevision:REVISION};
+    return {...primary,name:loc.name||primary.name,address:loc.address||primary.address,latitude:Number(loc.latitude),longitude:Number(loc.longitude),operator:'La Borne Bleue',countryCode:'FR',kind:first?.kind||primary.kind,powerKw:Number(first?.powerKw||primary.powerKw||11),pricing:first?.pricing||primary.pricing,chargingConfigurations:configurations,stalls:Math.max(Number(loc.chargePointCount||0),Number(primary.stalls||0)),_airKm:locationAirKm(loc,origin),labornebleueStrictCpo:true,labornebleueStationId:loc.stationId,labornebleueSourceCatalogStationIds:sources.map(x=>x.catalogStationId).filter(Boolean),labornebleueStatusJoinedExternally:true,labornebleueDirectConfigurationCount:(loc.configurations||[]).length,labornebleueMatchDistanceMeters:Math.round(ordered[0].meters),labornebleueMatchMode:ordered[0].matchMode||'geo',_labornebleueOverlayRevision:REVISION};
   }
   function syntheticFromOfficial(loc,origin){
     const configs=directConfigs(loc),first=configs[0],id=`labornebleue-direct:${loc.stationId}`;
@@ -193,60 +211,44 @@
     wrapped.__tccLabornebleueExactV1=true;wrapped.__tccOriginal=current;window.priceWithRules=wrapped;try{priceWithRules=wrapped}catch(e){}pricingInstalled=true;window.__TCC_LABORNEBLEUE_PRICING_INSTALLED__=true;return true;
   }
 
-  function readSubscriptionState(){try{const s=JSON.parse(localStorage.getItem('tccSubscriptionsV1')||'{}');return new Set(Array.isArray(s.selected)?s.selected:[])}catch(e){return new Set()}}
-  function setSubscriptionSelected(enabled){
-    const selected=readSubscriptionState();if(enabled)selected.add(SUBSCRIPTION_ID);else selected.delete(SUBSCRIPTION_ID);
-    localStorage.setItem('tccSubscriptionsV1',JSON.stringify({selected:[...selected],updatedAt:new Date().toISOString()}));
-    window.TCCV8Subscriptions?.applyAll?.(true);
-    const run=window.compare;if(typeof run==='function'&&document.querySelector('#results .result-card'))setTimeout(()=>{try{Promise.resolve(run()).catch(()=>{})}catch(e){}},0);
-  }
+  const SUBSCRIPTION_PLAN={id:SUBSCRIPTION_ID,selectionId:SUBSCRIPTION_ID,provider:'La Borne Bleue — Abonnement',offerType:'subscription',runtime:'existing_labornebleue_direct',monthlyFeeLabel:'10 €/an',defaultSelected:false,operatorAliases:['La Borne Bleue'],directOperatorOnly:true,source:'data-lab/labornebleue_official_idf.json'};
   function registerPlan(){
-    const overlay=window.TCC_TARIFF_OVERLAY_V1;if(!overlay||!Array.isArray(overlay.subscriptions))return false;
-    if(!overlay.subscriptions.some(p=>text(p?.selectionId||p?.id)===SUBSCRIPTION_ID))overlay.subscriptions.push({id:SUBSCRIPTION_ID,provider:'La Borne Bleue — Abonnement',offerType:'subscription',runtime:'existing_labornebleue_direct',monthlyFeeLabel:'10 €/an',defaultSelected:false,operatorAliases:['La Borne Bleue'],directOperatorOnly:true,source:'data-lab/labornebleue_official_idf.json'});
-    return true;
-  }
-  function installSubscriptionApiShim(){
-    const api=window.TCCV8Subscriptions;if(!api||subscriptionShimmed)return false;
-    const previousProvider=typeof api.subscriptionIdForProvider==='function'?api.subscriptionIdForProvider.bind(api):()=>'';
-    const previousStation=typeof api.subscriptionIdForStation==='function'?api.subscriptionIdForStation.bind(api):()=>'';
-    const previousEligible=typeof api.isStationEligible==='function'?api.isStationEligible.bind(api):null;
-    api.subscriptionIdForProvider=value=>norm(value).includes('la borne bleue direct abonne')?SUBSCRIPTION_ID:previousProvider(value);
-    api.subscriptionIdForStation=st=>text(st?.subscriptionId||st?.subscriptionSelectionId)||api.subscriptionIdForProvider(st?.configurationLabel||st?.label||st?.offerProvider)||previousStation(st);
-    api.isStationEligible=(st,selected=readSubscriptionState())=>{const id=api.subscriptionIdForStation(st);if(id===SUBSCRIPTION_ID)return selected.has(SUBSCRIPTION_ID);return previousEligible?previousEligible(st,selected):true;};
-    subscriptionShimmed=true;return true;
+    const overlay=window.TCC_TARIFF_OVERLAY_V1;
+    if(overlay&&Array.isArray(overlay.subscriptions)){
+      const index=overlay.subscriptions.findIndex(p=>text(p?.selectionId||p?.id)===SUBSCRIPTION_ID);
+      if(index>=0)overlay.subscriptions[index]={...overlay.subscriptions[index],...SUBSCRIPTION_PLAN};else overlay.subscriptions.push(clone(SUBSCRIPTION_PLAN));
+    }
+    const api=window.TCCV8Subscriptions;
+    if(typeof api?.registerPlan==='function')api.registerPlan(SUBSCRIPTION_PLAN);
+    document.getElementById('tccLabornebleueSubscriptionControl')?.remove();
+    try{window.TCCV8DirectResolver?.renderSubscriptionDropdown?.(true)}catch(e){}
+    return typeof api?.registerPlan==='function';
   }
   function providerText(row){const el=row.querySelector('.v8-offer-provider');return norm(el?.textContent||row.dataset?.tccProvider||'');}
   function tagSubscriptionRows(){
-    document.querySelectorAll('#results .v8-offer-row').forEach(row=>{if(providerText(row).includes('la borne bleue direct abonne')){row.dataset.subscriptionId=SUBSCRIPTION_ID;row.dataset.tccProvider='La Borne Bleue direct — Abonné';}});
-  }
-  function injectSubscriptionControl(){
-    const box=document.getElementById('v8SubscriptionsBox');if(!box)return false;
-    let host=document.getElementById('tccLabornebleueSubscriptionControl');
-    const checked=readSubscriptionState().has(SUBSCRIPTION_ID);
-    if(!host){
-      host=document.createElement('label');host.id='tccLabornebleueSubscriptionControl';host.className='v8-subscription-choice';
-      host.style.cssText='display:flex;align-items:flex-start;gap:8px;padding:9px 10px;margin-top:8px;border:1px solid #33333a;border-radius:11px;font-size:11px';
-      host.innerHTML='<input type="checkbox" data-labornebleue-subscription style="width:auto!important;margin-top:2px"><span><b>La Borne Bleue — Abonnement</b><span style="display:block;color:#8f8f96;font-size:9px;margin-top:2px">10 €/an · tarif préférentiel sur le réseau propre</span></span>';
-      const grid=box.querySelector('.v8-subscriptions-grid');(grid||box).appendChild(host);
-      host.querySelector('input').addEventListener('change',e=>setSubscriptionSelected(!!e.target.checked));
-    }
-    const input=host.querySelector('input');if(input)input.checked=checked;return true;
+    document.querySelectorAll('#results .v8-offer-row').forEach(row=>{
+      const provider=providerText(row);
+      if(provider.includes('la borne bleue direct abonne')||provider==='abonne'){
+        const card=row.closest?.('.result-card');const op=norm(card?.querySelector?.('.operator-badge')?.textContent||'');
+        if(provider.includes('la borne bleue')||op.includes('la borne bleue')){row.dataset.subscriptionId=SUBSCRIPTION_ID;row.dataset.tccProvider='La Borne Bleue direct — Abonné';}
+      }
+    });
   }
   function installUiObserver(){
     const root=document.documentElement;if(!root||uiObserver)return false;
-    let timer=null;uiObserver=new MutationObserver(()=>{if(uiBusy)return;clearTimeout(timer);timer=setTimeout(()=>{uiBusy=true;try{registerPlan();installSubscriptionApiShim();tagSubscriptionRows();injectSubscriptionControl();window.TCCV8Subscriptions?.applyAll?.(true);}finally{uiBusy=false;}},120)});uiObserver.observe(root,{childList:true,subtree:true});return true;
+    let timer=null;uiObserver=new MutationObserver(()=>{if(uiBusy)return;clearTimeout(timer);timer=setTimeout(()=>{uiBusy=true;try{registerPlan();tagSubscriptionRows();window.TCCV8Subscriptions?.applyAll?.(true);}finally{uiBusy=false;}},120)});uiObserver.observe(root,{childList:true,subtree:true});return true;
   }
 
   function markRevision(){const banner=document.getElementById('tccPreviewBanner');if(banner&&/RC4\.8/.test(text(banner.textContent))&&!/Borne Bleue/i.test(text(banner.textContent)))banner.textContent=`${text(banner.textContent)} · La Borne Bleue direct`;}
 
   loadData();let attempts=0;
   const timer=setInterval(async()=>{
-    attempts++;installPricing();installCandidateWrapper();registerPlan();installSubscriptionApiShim();installUiObserver();injectSubscriptionControl();tagSubscriptionRows();
+    attempts++;installPricing();installCandidateWrapper();registerPlan();installUiObserver();tagSubscriptionRows();
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;if(prepared&&prepared!==lastPrepared){await applyToPrepared(prepared);lastPrepared=prepared;window.TCC_V8_AREA_CACHE.prepared=prepared;}
     markRevision();if(attempts>2400)clearInterval(timer);
   },50);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();installUiObserver();injectSubscriptionControl();tagSubscriptionRows();},0),{once:true});else setTimeout(()=>{markRevision();installUiObserver();injectSubscriptionControl();tagSubscriptionRows();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();registerPlan();installUiObserver();tagSubscriptionRows();},0),{once:true});else setTimeout(()=>{markRevision();registerPlan();installUiObserver();tagSubscriptionRows();},0);
 
-  window.TCCV8LaBorneBleueDirect={loadData,validateData,validateExact,mergePrepared,applyToPrepared,isLikelyLabornebleueStation,exactCost,installPricing,installCandidateWrapper,registerPlan,installSubscriptionApiShim,tagSubscriptionRows,subscriptionId:SUBSCRIPTION_ID,revision:REVISION};
+  window.TCCV8LaBorneBleueDirect={loadData,validateData,validateExact,mergePrepared,applyToPrepared,isLikelyLabornebleueStation,exactCost,installPricing,installCandidateWrapper,registerPlan,tagSubscriptionRows,sameStreetAddress,subscriptionId:SUBSCRIPTION_ID,revision:REVISION};
   console.info('[TCC V8] La Borne Bleue direct strict pret : inventaire + tarifs public/abonne exacts + abonnement opt-in.');
 })();

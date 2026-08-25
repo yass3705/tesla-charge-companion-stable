@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const source=fs.readFileSync(process.argv[2]||'assets/v8-subscription-selection.js','utf8');
+const store=new Map();
+const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+const sandbox={console,localStorage,setInterval:()=>0,clearInterval:()=>{},setTimeout:fn=>{fn();return 0},clearTimeout:()=>{},document:{readyState:'loading',addEventListener:()=>{},getElementById:()=>null,head:{appendChild:()=>{}}}};sandbox.window=sandbox;
+vm.createContext(sandbox);vm.runInContext(source,sandbox,{filename:'v8-subscription-selection.js'});
+const api=sandbox.TCCV8Subscriptions;assert.ok(api);
+assert.equal(api.subscriptionIdForProvider('La Borne Bleue direct — Abonné'),'labornebleue-annual');
+const st={configurationLabel:'La Borne Bleue direct — Abonné · AC 7.36 kW',subscriptionId:'labornebleue-annual'};
+assert.equal(api.isStationEligible(st),false,'LBB subscriber must be excluded while unselected');
+localStorage.setItem('tccSubscriptionsV1',JSON.stringify({selected:['labornebleue-annual']}));
+assert.equal(api.isStationEligible(st),true,'LBB subscriber must be eligible when selected');
+api.registerPlan({id:'labornebleue-annual',selectionId:'labornebleue-annual',provider:'La Borne Bleue — Abonnement',monthlyFeeLabel:'10 €/an'});
+assert.ok(api.plans.some(p=>(p.selectionId||p.id)==='labornebleue-annual'),'late LBB plan should enter native dropdown list');
+console.log(JSON.stringify({ok:true,subscription:'labornebleue-annual',nativePlan:true},null,2));

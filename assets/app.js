@@ -200,6 +200,10 @@ function expandConfigurations(baseStations){
    powerKw:cfg.powerKw,
    stalls:cfg.stalls,
    pricing:cfg.pricing||st.pricing,
+   offerProvider:cfg.offerProvider??st.offerProvider,
+   offerType:cfg.offerType??st.offerType,
+   subscriptionId:cfg.subscriptionId??st.subscriptionId??null,
+   subscriptionSelectionId:cfg.subscriptionSelectionId??st.subscriptionSelectionId??null,
    totalSiteStalls:st.stalls,
    configurationIndex:index
  })));

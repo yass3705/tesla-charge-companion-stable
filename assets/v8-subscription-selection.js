@@ -28,6 +28,7 @@
     const provider=norm(value);
     if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';
     if(provider.includes('belib direct abonne resident'))return'belib-resident';
+    if(provider.includes('la borne bleue direct abonne')||provider.includes('la borne bleue abonne'))return'labornebleue-annual';
     return'';
   }
   function subscriptionIdForStation(st){
@@ -48,8 +49,21 @@
 
   async function loadPlans(){
     const overlay=window.TCC_TARIFF_OVERLAY_V1||await window.TCCV8OperatorOverlay?.loadOverlay?.()||{};
-    plans=Array.isArray(overlay.subscriptions)?overlay.subscriptions:[];
+    plans=Array.isArray(overlay.subscriptions)?overlay.subscriptions.slice():[];
     return plans;
+  }
+  function upsertPlan(plan){
+    const id=selectionId(plan);if(!id)return false;
+    const index=plans.findIndex(p=>selectionId(p)===id);
+    if(index>=0)plans[index]={...plans[index],...plan};else plans.push({...plan});
+    return true;
+  }
+  function registerPlan(plan){
+    if(!upsertPlan(plan))return false;
+    try{injectControls()}catch(e){}
+    setTimeout(()=>{try{window.TCCV8DirectResolver?.renderSubscriptionDropdown?.(true)}catch(e){}},0);
+    try{applyAll(true)}catch(e){}
+    return true;
   }
   function controlPlans(){
     const byId=new Map();
@@ -213,6 +227,6 @@
     await loadPlans();forceLegacyElectraOff();let tries=0;const timer=setInterval(()=>{tries++;const a=injectControls(),b=installObserver();forceLegacyElectraOff();if((a&&b)||tries>160){clearInterval(timer);setTimeout(()=>applyAll(true),900)}},100);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,planApplies,generatedPlanTotal,get plans(){return plans.slice()}};
+  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,planApplies,generatedPlanTotal,registerPlan,get plans(){return plans.slice()}};
   console.info('[TCC V8] Sélection multi-abonnements active : panneau repliable, classement opt-in, forfaits multi-réseaux, contrôle réseau direct et frais de durée supportés.');
 })();
