@@ -5,7 +5,7 @@
 (function(){
   'use strict';
   const DATA_URL='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/freshmile_direct_tcc_v8.json.gz';
-  const REVISION='rc48-freshmile-direct-remote-20260825d';
+  const REVISION='rc48-freshmile-direct-remote-20260825c';
   const MAX_MATCH_METERS=120;
   const MAX_PREPARED_STATIONS=80;
   let dataPromise=null;
@@ -29,7 +29,7 @@
     if(exact.sessionFeeEur!=null&&!(Number(exact.sessionFeeEur)>=0))throw new Error('frais de session Freshmile invalides');
     if(energy&&(!(Number(energy.amount)>=0)||!['started_kwh','linear_kwh'].includes(energy.billing)))throw new Error('composante énergie Freshmile invalide');
     if(time){
-      if(!(Number(time.amount)>=0)||!['started_minute','linear_minute'].includes(time.billing)||!['charge','occupied'].includes(time.appliesTo))throw new Error('composante temps Freshmile invalide');
+      if(!(Number(time.amount)>=0)||time.billing!=='started_minute'||!['charge','occupied'].includes(time.appliesTo))throw new Error('composante temps Freshmile invalide');
       if(time.startAfterMinutes!=null&&!(Number(time.startAfterMinutes)>=0))throw new Error('seuil temps Freshmile invalide');
     }
     if(!energy&&!time&&!(Number(exact.sessionFeeEur)>0))throw new Error('formule Freshmile vide');
@@ -71,7 +71,7 @@
     return JSON.parse(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text());
   }
   async function loadData(){
-    if(!dataPromise)dataPromise=fetch(`${DATA_URL}?v=20260825d`,{cache:'no-store'}).then(async r=>{
+    if(!dataPromise)dataPromise=fetch(`${DATA_URL}?v=20260825c`,{cache:'no-store'}).then(async r=>{
       if(!r.ok)throw new Error(`base Freshmile stricte indisponible (${r.status})`);
       return gunzipJson(r);
     }).then(data=>{
@@ -147,7 +147,7 @@
     const occupied=occupiedMinutes(chargeMinutes,unplugTime,startTime),energy=exact.energy||null,time=exact.time||null,connection=Math.max(0,Number(exact.sessionFeeEur||0));
     let energyCost=0,timeCost=0;
     if(energy){const units=energy.billing==='started_kwh'?startedUnits(billedEnergy):Math.max(0,Number(billedEnergy||0));energyCost=units*Number(energy.amount||0);}
-    if(time){const minutes=time.appliesTo==='occupied'?occupied:Math.max(0,Number(chargeMinutes||0)),threshold=Math.max(0,Number(time.startAfterMinutes||0)),billable=Math.max(0,minutes-threshold),units=time.billing==='started_minute'?startedUnits(billable):billable;timeCost=units*Number(time.amount||0);}
+    if(time){const minutes=time.appliesTo==='occupied'?occupied:Math.max(0,Number(chargeMinutes||0)),threshold=Math.max(0,Number(time.startAfterMinutes||0)),billable=Math.max(0,minutes-threshold);timeCost=startedUnits(billable)*Number(time.amount||0);}
     return{total:connection+energyCost+timeCost,connection,energyCost,timeCost,occupiedMinutes:occupied,timeAppliesTo:time?.appliesTo||null};
   }
   function installPricing(){
