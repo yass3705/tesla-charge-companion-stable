@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48bc-freshmile-direct';
+  const REVISION='rc48bh-labornebleue-wired';
   // Compatibilité avec le garde-fou Pages historique Fastned ; la révision active reste celle ci-dessus.
   // const REVISION='rc48bb-fastned-national'
   let applying=false;
@@ -36,6 +36,15 @@
       const s=document.createElement('script');
       s.src='assets/v8-freshmile-direct-overlay.js?v=rc48-freshmile-20260825c';
       s.defer=true;s.dataset.tccFreshmileDirect='1';
+      document.head.appendChild(s);
+    }
+  }
+
+  function loadLaBorneBleueDirect(){
+    if(!window.TCCV8LaBorneBleueDirect&&!document.querySelector('script[data-tcc-labornebleue-direct]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-labornebleue-direct-overlay.js?v=rc48-labornebleue-20260825c';
+      s.defer=true;s.dataset.tccLabornebleueDirect='1';
       document.head.appendChild(s);
     }
   }
@@ -79,6 +88,7 @@
   loadReferenceOffers();
   loadFastnedStationOverlay();
   loadFreshmileDirect();
+  loadLaBorneBleueDirect();
   loadCanonicalStationOverlay();
   loadDirectResolverUi();
   loadDirectSmokeFix();
@@ -88,22 +98,23 @@
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     const fastnedApi=window.TCCV8FastnedStationOverlay;
     const freshmileApi=window.TCCV8FreshmileDirect;
+    const labornebleueApi=window.TCCV8LaBorneBleueDirect;
     const operatorApi=window.TCCV8OperatorOverlay;
     const canonicalApi=window.TCCV8CanonicalStationOverlay;
     if(!prepared||!operatorApi?.applyToPrepared||applying)return false;
     const fastnedReady=!!fastnedApi?.applyToPrepared;
     const freshmileReady=!!freshmileApi?.applyToPrepared;
+    const labornebleueReady=!!labornebleueApi?.applyToPrepared;
     const canonicalReady=!!canonicalApi?.applyToPrepared;
-    if(!force&&prepared===lastPrepared&&prepared.tariffOverlayApplied&&(!fastnedReady||prepared.fastnedStationOverlayApplied)&&(!canonicalReady||prepared.canonicalStationOverlayApplied)&&(!freshmileReady||prepared.freshmileDirectOverlayApplied))return true;
+    if(!force&&prepared===lastPrepared&&prepared.tariffOverlayApplied&&(!fastnedReady||prepared.fastnedStationOverlayApplied)&&(!canonicalReady||prepared.canonicalStationOverlayApplied)&&(!freshmileReady||prepared.freshmileDirectOverlayApplied)&&(!labornebleueReady||prepared.labornebleueDirectOverlayApplied))return true;
     applying=true;
     try{
-      // Les inventaires physiques/canoniques sont fusionnés avant les tarifs
-      // directs stricts. Freshmile est appliqué en dernier afin de rattacher
-      // ses configurations exactes aux stations runtime déjà consolidées.
+      // Inventaires physiques/canoniques d'abord, puis couches CPO directes strictes.
       if(fastnedReady)await fastnedApi.applyToPrepared(prepared);
       await operatorApi.applyToPrepared(prepared);
       if(canonicalReady)await canonicalApi.applyToPrepared(prepared);
       if(freshmileReady)await freshmileApi.applyToPrepared(prepared);
+      if(labornebleueReady)await labornebleueApi.applyToPrepared(prepared);
       lastPrepared=prepared;
       window.TCC_V8_AREA_CACHE.prepared=prepared;
       return true;
@@ -143,13 +154,14 @@
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(String(banner.textContent||''))){
-      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · Fastned national · tarif direct prioritaire · détail frais stabilisé · données canoniques France · auto-mise à jour désactivée`;
+      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · Fastned national · Freshmile direct strict · La Borne Bleue direct strict · tarifs directs & abonnements · données canoniques France · auto-mise à jour désactivée`;
     }
   }
 
   const timer=setInterval(()=>{
     loadFastnedStationOverlay();
     loadFreshmileDirect();
+    loadLaBorneBleueDirect();
     loadCanonicalStationOverlay();
     loadDirectResolverUi();
     loadDirectSmokeFix();
@@ -167,7 +179,7 @@
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    loadFastnedStationOverlay();loadFreshmileDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();
+    loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -178,9 +190,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadFastnedStationOverlay,loadFreshmileDirect,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + Fastned national + Freshmile direct strict + direct resolver rc48av.');
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadFastnedStationOverlay,loadFreshmileDirect,loadLaBorneBleueDirect,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache actif + Fastned national + Freshmile direct strict + La Borne Bleue direct strict + direct resolver rc48av.');
 })();
