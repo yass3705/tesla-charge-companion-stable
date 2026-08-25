@@ -3,16 +3,27 @@
   'use strict';
   const REVISION='rc48bi-subscription-stable-ui';
   const KEY='tccSubscriptionsV1';
+  const MIGRATION_KEY='tccSubscriptionStableMigrationV1';
   const $=id=>document.getElementById(id);
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const esc=v=>window.escapeHtml?window.escapeHtml(v):text(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const BUILTIN=[{id:'labornebleue-annual',selectionId:'labornebleue-annual',provider:'La Borne Bleue — Abonnement',monthlyFeeLabel:'10 €/an',control:true}];
-  let plans=[],loading=null,expansionWrapped=false,observer=null,busy=false;
+  let plans=[],loading=null,observer=null,busy=false;
 
   function readState(){try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');return{selected:Array.isArray(s.selected)?s.selected:[]}}catch(e){return{selected:[]}}}
   function selectedSet(){return new Set(readState().selected)}
   function save(ids){localStorage.setItem(KEY,JSON.stringify({selected:[...ids],updatedAt:new Date().toISOString()}));}
+  function migrateBrokenLbbSelection(){
+    try{
+      if(localStorage.getItem(MIGRATION_KEY)==='1')return;
+      const ids=selectedSet();
+      // LBB a été introduit pendant la période où deux UI se réécrivaient mutuellement.
+      // On repart donc une seule fois de l'état attendu: abonnement LBB non sélectionné.
+      ids.delete('labornebleue-annual');
+      save(ids);localStorage.setItem(MIGRATION_KEY,'1');
+    }catch(e){}
+  }
   function selectionId(p){return text(p?.selectionId||p?.id)}
   function planLabel(p){if(p?.monthlyFeeLabel)return p.monthlyFeeLabel;if(Number.isFinite(Number(p?.monthlyFeeEur)))return`${Number(p.monthlyFeeEur).toFixed(2).replace('.',',')} €/mois`;return'abonnement'}
   function mergePlans(source){const by=new Map();for(const p of [...(source||[]),...BUILTIN]){const id=selectionId(p);if(!id)continue;if(!by.has(id)||by.get(id).control===false)by.set(id,{...p});}plans=[...by.values()].filter(p=>p.control!==false);return plans;}
@@ -42,11 +53,11 @@
 
   function installExpansionGuard(){
     const current=window.expandConfigurations;if(typeof current!=='function')return false;
-    if(current.__tccSubscriptionStabilityV1){expansionWrapped=true;return true;}
+    if(current.__tccSubscriptionStabilityV1)return true;
     const wrapped=function(baseStations){const out=current.call(this,baseStations)||[];return out.filter(eligible)};
     for(const key of ['__tccOverlayExpansionGuard','__tccDirectResolverPowerV1','__tccDirectSmokeFix'])if(current[key])wrapped[key]=current[key];
     wrapped.__tccSubscriptionStabilityV1=true;wrapped.__tccOriginal=current;
-    window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}expansionWrapped=true;return true;
+    window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}return true;
   }
 
   function injectStyle(){if($('v8SubscriptionStableStyle'))return;const s=document.createElement('style');s.id='v8SubscriptionStableStyle';s.textContent=`
@@ -71,12 +82,35 @@
     box.dataset.sig=sig;return true;
   }
 
-  function afterChange(){render(true);window.TCCV8Subscriptions?.applyAll?.(true);const run=window.compare;if(typeof run==='function')setTimeout(()=>{try{Promise.resolve(run()).then(()=>window.TCCV8Subscriptions?.applyAll?.(true)).catch(()=>{})}catch(e){}},0)}
-  function installObserver(){if(observer)return true;const root=document.documentElement;if(!root)return false;let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{busy=true;Promise.resolve(render(false)).finally(()=>{installExpansionGuard();busy=false})},150)});observer.observe(root,{childList:true,subtree:true});return true}
-  function markRevision(){const banner=$('tccPreviewBanner');if(banner&&/RC4\.8/.test(text(banner.textContent))&&!/abonnements stabilises/i.test(norm(banner.textContent)))banner.textContent=`${text(banner.textContent)} · abonnements stabilisés`}
+  function stabilizeLegacyApis(){
+    const api=window.TCCV8Subscriptions;
+    if(api&&!api.__tccStableRegisterWrapped&&typeof api.registerPlan==='function'){
+      const original=api.registerPlan.bind(api);
+      api.registerPlan=function(plan){
+        const id=selectionId(plan),exists=id&&api.plans.some(p=>selectionId(p)===id);
+        if(exists){mergePlans(api.plans);render(true);return true;}
+        const ok=original(plan);mergePlans(api.plans);render(true);return ok;
+      };
+      api.__tccStableRegisterWrapped=true;
+    }
+    const resolver=window.TCCV8DirectResolver;
+    if(resolver&&!resolver.__tccStableDropdownWrapped&&typeof resolver.renderSubscriptionDropdown==='function'){
+      resolver.renderSubscriptionDropdown=function(force=false){render(force);return true;};
+      resolver.__tccStableDropdownWrapped=true;
+    }
+  }
 
-  let tries=0;const timer=setInterval(()=>{tries++;installExpansionGuard();render(false);installObserver();markRevision();if(tries>600)clearInterval(timer)},100);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{installExpansionGuard();render(true);installObserver();markRevision()},{once:true});else{installExpansionGuard();render(true);installObserver();markRevision()}
-  window.TCCV8SubscriptionStability={revision:REVISION,render,eligible,inferSubscriptionId,selectedSet,installExpansionGuard};
+  function afterChange(){render(true);window.TCCV8Subscriptions?.applyAll?.(true);const run=window.compare;if(typeof run==='function')setTimeout(()=>{try{Promise.resolve(run()).then(()=>window.TCCV8Subscriptions?.applyAll?.(true)).catch(()=>{})}catch(e){}},0)}
+  function installObserver(){if(observer)return true;const root=document.documentElement;if(!root)return false;let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{busy=true;stabilizeLegacyApis();Promise.resolve(render(false)).finally(()=>{installExpansionGuard();busy=false})},150)});observer.observe(root,{childList:true,subtree:true});return true}
+  function markRevision(){
+    const banner=$('tccPreviewBanner');if(!banner)return;
+    const label='V8 Preview · RC4.8 · rc48bi · abonnements stabilisés · La Borne Bleue direct strict · données canoniques France · auto-mise à jour désactivée';
+    banner.textContent=label;banner.dataset.stableLabel=label;banner.setAttribute('aria-label',label);
+  }
+
+  migrateBrokenLbbSelection();
+  let tries=0;const timer=setInterval(()=>{tries++;stabilizeLegacyApis();installExpansionGuard();render(false);installObserver();markRevision();if(tries>600)clearInterval(timer)},100);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{stabilizeLegacyApis();installExpansionGuard();render(true);installObserver();markRevision()},{once:true});else{stabilizeLegacyApis();installExpansionGuard();render(true);installObserver();markRevision()}
+  window.TCCV8SubscriptionStability={revision:REVISION,render,eligible,inferSubscriptionId,selectedSet,installExpansionGuard,stabilizeLegacyApis};
   console.info('[TCC V8] UI abonnements stabilisée : source unique + exclusion fail-closed avant classement.');
 })();
