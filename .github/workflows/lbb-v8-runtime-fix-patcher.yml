@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Repair patch test marker
+        run: python scripts/repair_lbb_patcher_marker.py
+
       - name: Apply patch
         run: python scripts/patch_lbb_v8_runtime_bugfix.py
 
@@ -51,6 +54,7 @@ jobs:
         run: |
           rm .github/workflows/lbb-v8-runtime-fix-patcher.yml
           rm scripts/patch_lbb_v8_runtime_bugfix.py
+          rm scripts/repair_lbb_patcher_marker.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
