@@ -7,16 +7,16 @@ on:
       - release/2026-08
     paths:
       - assets/v8-labornebleue-direct-overlay.js
+      - assets/update.js
       - scripts/test_labornebleue_v8_runtime.mjs
-      - index.html
       - .github/workflows/v8-labornebleue-direct.yml
   pull_request:
     branches:
       - release/2026-08
     paths:
       - assets/v8-labornebleue-direct-overlay.js
+      - assets/update.js
       - scripts/test_labornebleue_v8_runtime.mjs
-      - index.html
       - .github/workflows/v8-labornebleue-direct.yml
   workflow_dispatch:
 
@@ -48,5 +48,6 @@ jobs:
 
       - name: Check release wiring
         run: |
-          grep -q 'v8-labornebleue-direct-overlay.js' index.html
+          grep -q 'v8-labornebleue-direct-overlay.js' assets/update.js
+          grep -q 'data-tcc-labornebleue-direct' assets/update.js
           grep -q 'La Borne Bleue direct' assets/v8-labornebleue-direct-overlay.js
