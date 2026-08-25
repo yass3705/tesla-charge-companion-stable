@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48bi-subscription-stable';
+  const REVISION='rc48bj-lbb-explicit-fallback';
   // Compatibilité avec le garde-fou Pages historique Fastned ; la révision active reste celle ci-dessus.
   // const REVISION='rc48bb-fastned-national'
   let applying=false;
@@ -45,6 +45,15 @@
       const s=document.createElement('script');
       s.src='assets/v8-labornebleue-direct-overlay.js?v=rc48-labornebleue-20260825c';
       s.defer=true;s.dataset.tccLabornebleueDirect='1';
+      document.head.appendChild(s);
+    }
+  }
+
+  function loadLaBorneBleueExplicitFallback(){
+    if(!window.TCCV8LaBorneBleueExplicitFallback&&!document.querySelector('script[data-tcc-labornebleue-explicit-fallback]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-labornebleue-operator-fallback.js?v=rc48bj-20260825';
+      s.defer=true;s.dataset.tccLabornebleueExplicitFallback='1';
       document.head.appendChild(s);
     }
   }
@@ -98,6 +107,7 @@
   loadFastnedStationOverlay();
   loadFreshmileDirect();
   loadLaBorneBleueDirect();
+  loadLaBorneBleueExplicitFallback();
   loadCanonicalStationOverlay();
   loadDirectResolverUi();
   loadDirectSmokeFix();
@@ -136,7 +146,6 @@
 
   // Dernier garde-fou juste avant la simulation : expandConfigurations est la
   // frontière exacte entre une station physique et ses variantes tarifaires.
-  // On y réapplique les overlays de façon synchrone, une station à la fois.
   function installExpansionGuard(){
     const current=window.expandConfigurations;
     if(typeof current!=='function'||current.__tccOverlayExpansionGuard)return false;
@@ -164,7 +173,7 @@
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(String(banner.textContent||''))){
-      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · Fastned national · Freshmile direct strict · La Borne Bleue direct strict · abonnements stabilisés · données canoniques France · auto-mise à jour désactivée`;
+      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · Fastned national · Freshmile direct strict · La Borne Bleue direct strict + fallback opérateur · abonnements stabilisés · données canoniques France · auto-mise à jour désactivée`;
     }
   }
 
@@ -172,6 +181,7 @@
     loadFastnedStationOverlay();
     loadFreshmileDirect();
     loadLaBorneBleueDirect();
+    loadLaBorneBleueExplicitFallback();
     loadCanonicalStationOverlay();
     loadDirectResolverUi();
     loadDirectSmokeFix();
@@ -190,7 +200,7 @@
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();
+    loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -201,9 +211,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadFastnedStationOverlay,loadFreshmileDirect,loadLaBorneBleueDirect,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,loadSubscriptionStability,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + Fastned national + Freshmile direct strict + La Borne Bleue direct strict + abonnements stabilisés.');
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadFastnedStationOverlay,loadFreshmileDirect,loadLaBorneBleueDirect,loadLaBorneBleueExplicitFallback,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,loadSubscriptionStability,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache actif + Fastned + Freshmile + La Borne Bleue direct/fallback + abonnements stabilisés.');
 })();
