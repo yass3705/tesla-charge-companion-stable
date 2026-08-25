@@ -57,7 +57,7 @@ jobs:
             if(!location.pathname.includes('/v8-preview/'))return;
             window.TCC_PREVIEW=true;
             const uiGuardKey='tcc-preview-area-ui-repair-rc48bf';
-            const stableBannerText='V8 Preview · RC4.8 · rc48bk · Fastned national · Freshmile direct strict · La Borne Bleue direct calculable · tarifs directs & abonnements · données canoniques France · auto-mise à jour désactivée';
+            const stableBannerText='V8 Preview · RC4.8 · rc48bm · abonnements visibles · La Borne Bleue direct calculable · tarifs directs & abonnements · données canoniques France · auto-mise à jour désactivée';
             window.addEventListener('pageshow',function(event){if(event.persisted)setTimeout(function(){window.TCCV8AreaWorkflow?.repair?.();},0);});
             if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(reg){if(String(reg.scope||'').includes('/v8-preview/'))reg.unregister().catch(function(){});});}).catch(function(){});}
             if('caches' in window){caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return /^tcc-v8|^tcc-v800/.test(k);}).map(function(k){return caches.delete(k);}));}).catch(function(){});}
@@ -113,10 +113,10 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc48bk-banner-20260825"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48bm-banner-20260825"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
-          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
+          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-subscription-stability-fix','v8-station-status'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-atlante-20260824', html)
           html=re.sub(r'<script src="assets/v8-e55c-pricing\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -124,8 +124,8 @@ jobs:
           france_tag='<script src="assets/france-catalog.js?v=rc48-atlante-20260824" defer></script>'
           html=html.replace(france_tag,france_tag+'\n<script src="assets/v8-belib-pricing.js?v=rc48-belib-1" defer></script>',1)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48bl-20260824', html)
-          html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bk-20260825', html)
-          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bk-lbb-20260825', html)
+          html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bm-20260825', html)
+          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-evadea-band-fallback\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-regional-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -148,6 +148,7 @@ jobs:
               '<script src="assets/v8-source-integrity.js?v=rc48bl-20260824" defer></script>\n'
               '<script src="assets/v8-ambiguous-electra-warning.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-subscription-selection.js?v=rc48bl-20260824" defer></script>\n'
+              '<script src="assets/v8-subscription-stability-fix.js?v=rc48bm-20260825" defer></script>\n'
               '<script src="assets/v8-station-status.js?v=rc48ax-20260823" defer></script>\n'
           )
           html=html.replace('</body>',scripts+'</body>',1)
@@ -198,6 +199,8 @@ jobs:
           node --check site/v8-preview/assets/v8-direct-resolver-ui.js
           node --check site/v8-preview/assets/v8-direct-resolver-followup.js
           node --check site/v8-preview/assets/v8-reference-offers.js
+          node --check site/v8-preview/assets/v8-tariff-display-fix.js
+          node --check site/v8-preview/assets/v8-subscription-stability-fix.js
           node --check site/v8-preview/assets/august-release.js
           node --check site/v8-preview/assets/v8-offer-selection.js
           node --check site/v8-preview/assets/v8-redesign.js
@@ -217,7 +220,7 @@ jobs:
           (cd site && node scripts/test_atlante_v8_runtime.mjs)
           (cd site/v8-preview && node scripts/test_fastned_v8_release.mjs data/fastned_direct_stations_france.json.gz)
           (cd site/v8-preview && node scripts/test_labornebleue_explicit_operator_fallback.mjs)
-          grep -q 'stableBannerText=.*Fastned national.*Freshmile direct strict.*La Borne Bleue direct calculable' site/v8-preview/assets/preview-storage.js
+          grep -q 'stableBannerText=.*rc48bm.*abonnements visibles.*La Borne Bleue direct calculable' site/v8-preview/assets/preview-storage.js
           grep -q 'tccPreviewBannerStableStyle' site/v8-preview/assets/preview-storage.js
           grep -q 'france-catalog.js?v=rc48-atlante-20260824' site/v8-preview/index.html
           ! grep -q 'v8-e55c-pricing.js' site/v8-preview/index.html
@@ -227,12 +230,18 @@ jobs:
           grep -q 'v8-source-integrity.js?v=rc48bl-20260824' site/v8-preview/index.html
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
-          grep -q 'assets/update.js?v=rc48bk-20260825' site/v8-preview/index.html
-          grep -q 'v8-overlay-area-bridge.js?v=rc48bk-lbb-20260825' site/v8-preview/index.html
+          grep -q 'assets/update.js?v=rc48bm-20260825' site/v8-preview/index.html
+          grep -q 'v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825' site/v8-preview/index.html
+          grep -q 'v8-subscription-stability-fix.js?v=rc48bm-20260825' site/v8-preview/index.html
           grep -q 'v8-fastned-station-overlay.js?v=rc48-fastned-20260825' site/v8-preview/assets/v8-overlay-area-bridge.js
-          grep -q "const REVISION='rc48bk-lbb-calculable-fallback'" site/v8-preview/assets/v8-overlay-area-bridge.js
+          grep -q "const REVISION='rc48bm-lbb-runtime-stable'" site/v8-preview/assets/v8-overlay-area-bridge.js
+          grep -q 'lbbFallbackApi?.applyToPrepared' site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q 'lbbFallbackApi?.addDirect' site/v8-preview/assets/v8-overlay-area-bridge.js
-          grep -q 'v8-labornebleue-operator-fallback.js?v=rc48bk-20260825' site/v8-preview/assets/update.js
+          grep -q 'v8-labornebleue-operator-fallback.js?v=rc48bm-20260825' site/v8-preview/assets/update.js
+          grep -q 'v8-subscription-stability-fix.js?v=rc48bm-20260825' site/v8-preview/assets/update.js
+          grep -q "const REVISION='rc48bm-lbb-runtime-guard'" site/v8-preview/assets/v8-labornebleue-operator-fallback.js
+          grep -q "const REVISION='rc48bm-subscription-host-stable'" site/v8-preview/assets/v8-subscription-stability-fix.js
+          grep -q "const REVISION='rc48bm-offer-label-isolation'" site/v8-preview/assets/v8-tariff-display-fix.js
           grep -q "const REVISION='rc48am'" site/v8-preview/assets/v8-operator-tariff-overlay.js
           grep -q "const REVISION='rc48av-fee-breakdown-fix'" site/v8-preview/assets/v8-direct-resolver-followup.js
           grep -q 'function rankingSubscriptionEligible' site/v8-preview/assets/august-release.js
@@ -252,12 +261,20 @@ jobs:
           updater=Path('site/v8-preview/assets/update.js').read_text(encoding='utf-8')
           august=Path('site/v8-preview/assets/august-release.js').read_text(encoding='utf-8')
           subscriptions=Path('site/v8-preview/assets/v8-subscription-selection.js').read_text(encoding='utf-8')
+          stability=Path('site/v8-preview/assets/v8-subscription-stability-fix.js').read_text(encoding='utf-8')
+          lbb=Path('site/v8-preview/assets/v8-labornebleue-operator-fallback.js').read_text(encoding='utf-8')
           integrity=Path('site/v8-preview/assets/v8-source-integrity.js').read_text(encoding='utf-8')
+          tariff_display=Path('site/v8-preview/assets/v8-tariff-display-fix.js').read_text(encoding='utf-8')
           checks={
-              'cache update.js rc48bk':'update.js?v=rc48bk-20260825' in index,
-              'cache bridge LBB':'v8-overlay-area-bridge.js?v=rc48bk-lbb-20260825' in index,
+              'cache update.js rc48bm':'update.js?v=rc48bm-20260825' in index,
+              'cache bridge LBB rc48bm':'v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825' in index,
+              'UI abonnements chargée explicitement':'v8-subscription-stability-fix.js?v=rc48bm-20260825' in index,
               'chargeur august-release rc48bl':'august-release.js?v=rc48bl-20260824' in updater,
-              'chargeur fallback LBB rc48bk':'v8-labornebleue-operator-fallback.js?v=rc48bk-20260825' in updater,
+              'chargeur fallback LBB rc48bm':'v8-labornebleue-operator-fallback.js?v=rc48bm-20260825' in updater,
+              'chargeur UI abonnements rc48bm':'v8-subscription-stability-fix.js?v=rc48bm-20260825' in updater,
+              'candidate guard LBB':'function installCandidate' in lbb and 'applyToPrepared' in lbb,
+              'host abonnements dynamique':'function subscriptionHost' in stability and "$('augCompareFilters')" in stability,
+              'roaming protégé du rematching':"isRoamingProvider" in tariff_display and "p==='electroverse'" in tariff_display,
               'option coût/km':'<option value="costPerKm">Coût au km récupéré</option>' in august,
               'tri coût/km':"mode==='costPerKm'" in august,
               'kilomètres récupérés exposés':'data-recovered-km' in august,
@@ -322,10 +339,10 @@ jobs:
           grep -q 'stablePasses>=30' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'locationObserver.observe' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'row.contains(radius)' site/v8-preview/assets/v8-area-workflow.js
-          grep -q 'preview-storage.js?v=rc48bk-banner-20260825' site/v8-preview/index.html
+          grep -q 'preview-storage.js?v=rc48bm-banner-20260825' site/v8-preview/index.html
           grep -q 'TCCV8AreaWorkflow?.repair' site/v8-preview/assets/preview-storage.js
-          if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
-            echo 'Ancienne couche tarifaire encore chargée' >&2
+          if grep -q 'v8-source-first-offers.js' site/v8-preview/index.html; then
+            echo 'Ancienne couche source-first encore chargée' >&2
             exit 1
           fi
           grep -q 'IONITY_URL' site/v8-preview/assets/france-catalog.js
@@ -333,7 +350,7 @@ jobs:
           grep -q 'atlante-go-powerdot' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'atlante-go-charge-league' site/v8-preview/data/tariff_overlay_v1.json
           grep -q "r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct')" site/v8-preview/assets/v8-reference-offers.js
-          echo 'V8 RC4.8 rc48bk preview calculable La Borne Bleue + abonnements + autres CPO préparée avec succès'
+          echo 'V8 RC4.8 rc48bm preview La Borne Bleue calculable + abonnements visibles + offres roaming isolées préparée avec succès'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
