@@ -1,0 +1,36 @@
+name: Migrate Pages to rc48bt
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: contains(github.event.head_commit.message, 'install pages rc48bt migration')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Align Pages workflow with rc48bt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/pages.yml')
+          s=p.read_text(encoding='utf-8')
+          old=s
+          s=s.replace('rc48bs','rc48bt')
+          if s == old:
+              raise SystemExit('No rc48bs reference found in pages.yml')
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/pages.yml
+          git commit -m 'ci(pages): align compact subscriptions with rc48bt'
+          git push origin HEAD:main
