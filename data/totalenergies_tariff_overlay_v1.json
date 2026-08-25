@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-25T13:49:00+02:00",
+  "schemaVersion": "1.0.1",
+  "generatedAt": "2026-08-25T15:24:00+02:00",
   "operator": "TotalEnergies",
   "country": "FR",
   "source": "data-lab/totalenergies_official_france.json",
@@ -9,6 +9,7 @@
     "Tarifs applicables uniquement aux bornes exploitées directement par TotalEnergies en France.",
     "Charge+ Zen est opt-in, coûte 3,90 €/mois et ne participe au classement que si l'utilisateur le sélectionne.",
     "Charge+ Zen est limité aux configurations DC de 50 kW ou plus et ne s'applique pas aux réseaux partenaires.",
+    "La restriction réseau direct de Charge+ Zen repose sur le CPO physique TotalEnergies de la carte résultat; le contrôle redondant par présence d'une ligne TotalEnergies direct a été retiré car il empêchait l'offre abonnée d'être générée après fusion visuelle des tarifs.",
     "Le palier standard 50 kW est conservé dans la classe 40–50 kW; la classe suivante commence au-dessus de 50 kW pour éviter un double tarif à la frontière."
   ],
   "operatorOffers": [
@@ -18,7 +19,7 @@
     {"id":"totalenergies-dc-over-200","provider":"TotalEnergies direct","offerType":"operator_direct","operatorAliases":["TotalEnergies","Total Energies"],"directOperatorOnly":true,"kind":"DC","minPowerKw":200.01,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.65,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/totalenergies_official_france.json"}
   ],
   "subscriptions": [
-    {"id":"totalenergies-charge-plus-zen","provider":"Charge+ Zen","offerType":"subscription","operatorAliases":["TotalEnergies","Total Energies"],"kind":"DC","minPowerKw":50,"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":3.9,"defaultSelected":false,"directOperatorOnly":true,"requiredDirectProvider":"TotalEnergies direct","partnerEligible":false,"source":"data-lab/totalenergies_official_france.json","note":"Option Charge+ Zen: 3,90 €/mois, tarif 0,49 €/kWh dès 50 kW sur le réseau direct TotalEnergies uniquement; aucun rabais partenaire."}
+    {"id":"totalenergies-charge-plus-zen","provider":"Charge+ Zen","offerType":"subscription","operatorAliases":["TotalEnergies","Total Energies"],"kind":"DC","minPowerKw":50,"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":3.9,"defaultSelected":false,"partnerEligible":false,"networkScope":"physical_operator_totalenergies_only","source":"data-lab/totalenergies_official_france.json","note":"Option Charge+ Zen: 3,90 €/mois, tarif 0,49 €/kWh dès 50 kW sur le réseau direct TotalEnergies uniquement; aucun rabais partenaire."}
   ],
   "validationFixtures": [
     {"name":"TotalEnergies FR AC 22 kW direct","kind":"AC","powerKw":22,"direct":true,"expectedPricePerKwh":0.52,"zenEligible":false},
