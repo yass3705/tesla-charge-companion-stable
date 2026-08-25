@@ -47,7 +47,7 @@
   function loadLaBorneBleueResultGuard(){
     if(window.TCCV8LaBorneBleueResultGuard||document.querySelector('script[data-tcc-labornebleue-result-guard]'))return;
     const script=document.createElement('script');
-    script.src='assets/v8-labornebleue-result-guard.js?v=rc48bp-20260825';
+    script.src='assets/v8-labornebleue-result-guard.js?v=rc48bq-20260825';
     script.dataset.tccLabornebleueResultGuard='1';
     script.onload=()=>console.info('[TCC] La Borne Bleue rendered-card guard loaded.');
     script.onerror=()=>console.error('[TCC] La Borne Bleue rendered-card guard could not be loaded.');
