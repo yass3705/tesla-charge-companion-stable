@@ -3,7 +3,7 @@
 // les tarifs directs officiels de sa classe de puissance, même si le matching catalogue a échoué.
 (function(){
   'use strict';
-  const REVISION='rc48bp-lbb-result-guard';
+  const REVISION='rc48bq-lbb-cap-explained';
   const SUBSCRIPTION_ID='labornebleue-annual';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -55,6 +55,21 @@
     const a=hm(start),b=hm(unplug);if(!unplug||!Number.isFinite(a)||!Number.isFinite(b))return charge;
     let d=b-a;if(d<0)d+=1440;return Math.max(charge,d);
   }
+  function cappedWindowReached(exact,startMinute,charge,unplug,startText){
+    if(exact?.model!=='time_windows')return 0;
+    const billed=occupied(charge,unplug,startText);
+    for(const w of exact.windows||[]){
+      const cap=Number(w?.capEur||0);if(!(cap>0))continue;
+      let raw=0;
+      for(let i=0;i<Math.ceil(billed);i++){
+        const fraction=Math.min(1,billed-i);if(fraction<=0)continue;
+        const minute=(startMinute+i)%1440;
+        if(inWindow(minute,w.start,w.end))raw+=fraction*Number(w.ratePerMinute||0);
+      }
+      if(raw+1e-9>=cap)return cap;
+    }
+    return 0;
+  }
   function localCost(exact,startMinute,charge,energy,unplug,startText){
     if(exact.model==='kwh_plus_elapsed')return Math.max(0,energy)*Number(exact.pricePerKwh||0)+Math.max(0,charge-Number(exact.afterMinutes||0))*Number(exact.afterRatePerMinute||0);
     const billed=occupied(charge,unplug,startText);
@@ -70,46 +85,56 @@
   function calculate(card,subscriber){
     const kp=kindPower(card),exact=exactTariff(kp.kind,kp.power,subscriber),charge=chargeMinutes(card);if(!exact||!Number.isFinite(charge))return null;
     const base=hm(document.getElementById('simTime')?.value||''),start=Number.isFinite(base)?(base+travelMinutes(card))%1440:0,startText=hmText(start),unplug=document.getElementById('simUnplugTime')?.value||'',energy=billedEnergy(card);
+    const capReachedEur=cappedWindowReached(exact,start,charge,unplug,startText);
     const api=window.TCCV8LaBorneBleueDirect?.exactCost;
-    if(typeof api==='function')try{const r=api({labornebleueExact:exact},start,charge,energy,unplug,startText);if(Number.isFinite(Number(r?.total)))return{total:Number(r.total),exact};}catch(e){}
-    const total=localCost(exact,start,charge,energy,unplug,startText);return Number.isFinite(total)?{total,exact}:null;
+    if(typeof api==='function')try{const r=api({labornebleueExact:exact},start,charge,energy,unplug,startText);if(Number.isFinite(Number(r?.total)))return{total:Number(r.total),exact,capReachedEur};}catch(e){}
+    const total=localCost(exact,start,charge,energy,unplug,startText);return Number.isFinite(total)?{total,exact,capReachedEur}:null;
   }
-  function priceLabel(exact){
+  function priceLabel(exact,capReachedEur=0){
     if(exact.model==='kwh_plus_elapsed')return`${Number(exact.pricePerKwh).toFixed(2)} EUR/kWh + ${Number(exact.afterRatePerMinute).toFixed(2)} EUR/min après ${Number(exact.afterMinutes)} min`;
     if(exact.model==='per_minute')return`${Number(exact.ratePerMinute).toFixed(3)} EUR/min`;
-    return(exact.windows||[]).map(w=>`${w.start}–${w.end} ${Number(w.ratePerMinute).toFixed(3)} EUR/min${w.capEur?` · plafond ${euro(w.capEur)}`:''}`).join(' · ');
+    const windows=(exact.windows||[]).map(w=>`${w.start}–${w.end} ${Number(w.ratePerMinute).toFixed(3)} EUR/min${w.capEur?` · plafond ${euro(w.capEur)}`:''}`).join(' · ');
+    return capReachedEur>0?`${windows} · plafond nocturne ${euro(capReachedEur)} atteint`:windows;
   }
   function provider(row){return norm(row?.querySelector('.v8-offer-provider')?.textContent);}
   function rowFor(box,subscriber){
     return [...box.querySelectorAll('.v8-offer-row')].find(row=>{
       const p=provider(row);
-      if(subscriber)return text(row.dataset.subscriptionId)===SUBSCRIPTION_ID||(p.includes('la borne bleue')&&p.includes('abonne'));
+      if(subscriber)return text(row.dataset.subscriptionId)===SUBSCRIPTION_ID||(p.includes('la borne bleue')&&p.includes('abonne'))||p==='abonne';
       return p==='la borne bleue direct'||(p.startsWith('la borne bleue direct ')&&!p.includes('abonne'));
     });
   }
-  function numeric(row){const s=text(row?.querySelector('.v8-offer-total')?.textContent);return /\d/.test(s)&&(/€|eur/i.test(s));}
   function upsert(card,box,subscriber){
     const calc=calculate(card,subscriber);if(!calc)return false;
-    let row=rowFor(box,subscriber);
-    if(!row){row=document.createElement('div');row.className='v8-offer-row';const note=box.querySelector('.v8-offer-note');note?note.before(row):box.appendChild(row);}
+    let row=rowFor(box,subscriber),created=false;
+    if(!row){row=document.createElement('div');row.className='v8-offer-row';const note=box.querySelector('.v8-offer-note');note?note.before(row):box.appendChild(row);created=true;}
+    const displayProvider=subscriber?'La Borne Bleue direct — Abonné':'La Borne Bleue direct';
+    const desired=`<div class="v8-offer-provider">${displayProvider}</div><div class="v8-offer-price">${priceLabel(calc.exact,calc.capReachedEur)}</div><div class="v8-offer-total">${euro(calc.total)}</div>`;
+    const changed=created||row.innerHTML!==desired||row.dataset.labornebleueResultGuard!==REVISION;
     row.classList.remove('v8-direct-fallback-row','v8-reference-row','v8-offer-ambiguous');row.classList.add('v8-lbb-result-guard-row');
-    row.dataset.tccProvider=subscriber?'La Borne Bleue direct — Abonné':'La Borne Bleue direct';row.dataset.labornebleueDirect='1';row.dataset.labornebleueResultGuard=REVISION;
+    row.dataset.tccProvider=displayProvider;row.dataset.labornebleueDirect='1';row.dataset.labornebleueResultGuard=REVISION;
     if(subscriber)row.dataset.subscriptionId=SUBSCRIPTION_ID;else delete row.dataset.subscriptionId;
-    row.innerHTML=`<div class="v8-offer-provider">${subscriber?'La Borne Bleue direct — Abonné':'La Borne Bleue direct'}</div><div class="v8-offer-price">${priceLabel(calc.exact)}</div><div class="v8-offer-total">${euro(calc.total)}</div>`;
-    return true;
+    if(row.innerHTML!==desired)row.innerHTML=desired;
+    return changed;
   }
   function ensureCard(card){
     if(!isExactLbbCard(card))return false;const box=card.querySelector('.v8-offer-box');if(!box)return false;let changed=false;
-    const pub=rowFor(box,false);if(!pub||!numeric(pub))changed=upsert(card,box,false)||changed;
-    const sub=rowFor(box,true);if(!sub||!numeric(sub))changed=upsert(card,box,true)||changed;
-    if(rowFor(box,false)&&numeric(rowFor(box,false)))box.querySelectorAll('.v8-direct-fallback-row,.v8-reference-row').forEach(r=>{if(provider(r).startsWith('la borne bleue direct'))r.remove();});
+    changed=upsert(card,box,false)||changed;
+    changed=upsert(card,box,true)||changed;
+    if(rowFor(box,false))box.querySelectorAll('.v8-direct-fallback-row,.v8-reference-row').forEach(r=>{if(provider(r).startsWith('la borne bleue direct'))r.remove();});
     return changed;
   }
   function ensureAll(){
     let changed=0;document.querySelectorAll('#results .result-card[data-result-id]').forEach(card=>{if(ensureCard(card))changed++;});
     if(changed)try{window.TCCV8Subscriptions?.applyAll?.(true);}catch(e){}return changed;
   }
-  function mark(){const b=document.getElementById('tccPreviewBanner');if(!b)return;const s='V8 Preview · RC4.8 · rc48bp · tarifs La Borne Bleue garantis par opérateur · abonnements stables iOS · données canoniques France · auto-mise à jour désactivée';b.dataset.stableLabel=s;b.setAttribute('aria-label',s);}
+  function installBannerStyle(){
+    if(document.getElementById('tccPreviewBannerRc48bqStyle'))return;
+    const s=document.createElement('style');s.id='tccPreviewBannerRc48bqStyle';
+    s.textContent="#tccPreviewBanner::after{content:'V8 Preview · RC4.8 · rc48bq · plafond nocturne La Borne Bleue explicite · abonnements stables iOS · données canoniques France · auto-mise à jour désactivée'!important}";
+    document.head.appendChild(s);
+  }
+  function mark(){installBannerStyle();const b=document.getElementById('tccPreviewBanner');if(!b)return;const s='V8 Preview · RC4.8 · rc48bq · plafond nocturne La Borne Bleue explicite · abonnements stables iOS · données canoniques France · auto-mise à jour désactivée';b.dataset.stableLabel=s;b.setAttribute('aria-label',s);}
   function install(){
     const root=document.getElementById('results');if(!root)return false;
     if(!observer){let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{busy=true;try{ensureAll()}finally{busy=false}},180)});observer.observe(root,{childList:true,subtree:true});}
@@ -118,6 +143,6 @@
   let tries=0;const timer=setInterval(()=>{tries++;if(install()&&tries>20)clearInterval(timer);if(tries>120)clearInterval(timer)},250);
   document.addEventListener('click',e=>{if(e.target?.closest?.('.v8-simulate,#routeButton'))setTimeout(ensureAll,160);},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,0),{once:true});else setTimeout(install,0);
-  window.TCCV8LaBorneBleueResultGuard={revision:REVISION,ensureAll,ensureCard,isExactLbbCard,exactTariff};
-  console.info('[TCC V8] rc48bp : chaque carte au badge exact La Borne Bleue reçoit les offres directes calculables.');
+  window.TCCV8LaBorneBleueResultGuard={revision:REVISION,ensureAll,ensureCard,isExactLbbCard,exactTariff,cappedWindowReached};
+  console.info('[TCC V8] rc48bq : plafond nocturne La Borne Bleue explicitement signalé lorsqu’il est atteint.');
 })();
