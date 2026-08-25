@@ -57,6 +57,7 @@ jobs:
             if(!location.pathname.includes('/v8-preview/'))return;
             window.TCC_PREVIEW=true;
             const uiGuardKey='tcc-preview-area-ui-repair-rc48bf';
+            const stableBannerText='V8 Preview · RC4.8 · rc48bc · Fastned national · Freshmile direct strict · La Borne Bleue direct · tarifs directs & abonnements · données canoniques France · auto-mise à jour désactivée';
             window.addEventListener('pageshow',function(event){if(event.persisted)setTimeout(function(){window.TCCV8AreaWorkflow?.repair?.();},0);});
             if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(reg){if(String(reg.scope||'').includes('/v8-preview/'))reg.unregister().catch(function(){});});}).catch(function(){});}
             if('caches' in window){caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return /^tcc-v8|^tcc-v800/.test(k);}).map(function(k){return caches.delete(k);}));}).catch(function(){});}
@@ -74,9 +75,21 @@ jobs:
               if(header&&!document.getElementById('tccPreviewBanner')){
                 const banner=document.createElement('div');
                 banner.id='tccPreviewBanner';
-                banner.textContent='V8 Preview · RC4.8 · rc48bn · Fastned national · Belib’ abonnements opt-in · IONITY Direct · Atlante direct + Go · auto-mise à jour désactivée';
+                banner.textContent=stableBannerText;
                 banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';
                 header.appendChild(banner);
+              }
+              const banner=document.getElementById('tccPreviewBanner');
+              if(banner){
+                banner.dataset.stableLabel=stableBannerText;
+                banner.setAttribute('aria-label',stableBannerText);
+                banner.style.fontSize='0';
+                if(!document.getElementById('tccPreviewBannerStableStyle')){
+                  const style=document.createElement('style');
+                  style.id='tccPreviewBannerStableStyle';
+                  style.textContent='#tccPreviewBanner::after{content:attr(data-stable-label);font-size:10px;font-weight:800;line-height:1.45;white-space:normal}';
+                  document.head.appendChild(style);
+                }
               }
               setTimeout(function(){
                 const ready=function(){const row=document.getElementById('v8OriginRefreshRow');const radius=document.getElementById('simMaxDistance');const button=document.getElementById('routeButton');return !!row&&!!radius&&row.contains(radius)&&!!button&&/Mettre à jour/i.test(String(button.textContent||''));};
@@ -100,7 +113,7 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc48bn-fastned-20260825"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48bd-banner-stable-20260825"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
@@ -201,7 +214,8 @@ jobs:
           (cd site && node scripts/test_ionity_v8_runtime.mjs)
           (cd site && node scripts/test_atlante_v8_runtime.mjs)
           (cd site/v8-preview && node scripts/test_fastned_v8_release.mjs data/fastned_direct_stations_france.json.gz)
-          grep -q 'V8 Preview · RC4.8 · rc48bn · Fastned national · Belib’ abonnements opt-in · IONITY Direct · Atlante direct + Go' site/v8-preview/assets/preview-storage.js
+          grep -q 'stableBannerText=.*Fastned national.*Freshmile direct strict.*La Borne Bleue direct' site/v8-preview/assets/preview-storage.js
+          grep -q 'tccPreviewBannerStableStyle' site/v8-preview/assets/preview-storage.js
           grep -q 'france-catalog.js?v=rc48-atlante-20260824' site/v8-preview/index.html
           ! grep -q 'v8-e55c-pricing.js' site/v8-preview/index.html
           grep -q 'v8-belib-pricing.js?v=rc48-belib-1' site/v8-preview/index.html
@@ -301,7 +315,7 @@ jobs:
           grep -q 'stablePasses>=30' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'locationObserver.observe' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'row.contains(radius)' site/v8-preview/assets/v8-area-workflow.js
-          grep -q 'preview-storage.js?v=rc48bn-fastned-20260825' site/v8-preview/index.html
+          grep -q 'preview-storage.js?v=rc48bd-banner-stable-20260825' site/v8-preview/index.html
           grep -q 'TCCV8AreaWorkflow?.repair' site/v8-preview/assets/preview-storage.js
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
@@ -312,7 +326,7 @@ jobs:
           grep -q 'atlante-go-powerdot' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'atlante-go-charge-league' site/v8-preview/data/tariff_overlay_v1.json
           grep -q "r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct')" site/v8-preview/assets/v8-reference-offers.js
-          echo 'V8 RC4.8 rc48bn preview E55C + Belib opt-in + IONITY Direct + Atlante direct/Go + Fastned national prepared successfully'
+          echo 'V8 RC4.8 rc48bd preview banner stable + E55C + Belib opt-in + IONITY Direct + Atlante direct/Go + Fastned national prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
