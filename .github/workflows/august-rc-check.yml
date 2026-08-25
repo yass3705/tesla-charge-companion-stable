@@ -37,7 +37,7 @@ jobs:
           node --check assets/v8-subscription-stability-fix.js
           node --check assets/v8-labornebleue-operator-fallback.js
           node --check assets/v8-source-integrity.js
-          service-worker.js
+          node --check service-worker.js
 
       - name: Validate JSON files
         run: |
