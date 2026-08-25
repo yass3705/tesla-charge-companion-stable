@@ -1,0 +1,23 @@
+name: Diagnose DRIVECO samples
+
+on:
+  push:
+    branches: ["release/2026-08"]
+    paths:
+      - "scripts/diagnose_driveco_samples.py"
+      - ".github/workflows/diagnose-driveco-samples.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+      - name: Print matching DRIVECO source rows
+        run: python scripts/diagnose_driveco_samples.py
