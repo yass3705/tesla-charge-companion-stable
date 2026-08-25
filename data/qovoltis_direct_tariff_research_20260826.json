@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-26T01:10:00+02:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-08-26T01:24:00+02:00",
   "country": "FR",
   "operator": "Qovoltis",
   "scope": "physical_cpo_direct_only_no_roaming",
@@ -16,7 +16,7 @@
       "subscriptionMonthlyEur": 0,
       "connectionFeeEur": 2.0,
       "energyPrice": "station_specific",
-      "timeTariff": false,
+      "timeTariff": "station_specific_possible",
       "parkingFee": false,
       "source": "https://www.qovoltis.com/wp-content/uploads/2024/06/Comment-charger-1.pdf"
     },
@@ -25,6 +25,7 @@
       "connectionFeeEur": 0,
       "energyPrice": "station_specific_discounted",
       "discountVsNomadOpen": "8-10% according to latest accessible official infographic; exact station tariff remains authoritative",
+      "timeTariff": "station_specific_possible",
       "source": "https://www.qovoltis.com/wp-content/uploads/2024/06/Comment-charger-1.pdf"
     }
   },
@@ -34,8 +35,39 @@
     "cgvSource": "https://cdn.qovoltis.com/CGV_CP_VF.pdf",
     "publicPriceFeedFound": false,
     "publicAdHocPortal": "https://chargenow.qovoltis.com/",
-    "publicAdHocPortalProvidesMachineReadableStationTariffs": false
+    "publicAdHocPortalProvidesMachineReadableStationTariffs": false,
+    "timeVariablePricingObservedInOfficialApp": true
   },
+  "officialAppObservedExamples": [
+    {
+      "stationDisplayName": "Restaurant Bar Air & Co…",
+      "stationDisplayNameTruncated": true,
+      "stationIdentityResolved": false,
+      "observationSource": "user-provided Qovoltis app screenshot",
+      "observedAt": "2026-08-26T01:24:00+02:00",
+      "connector": "Type 2",
+      "powerKw": 22,
+      "availabilityShown": "1/1",
+      "openingHoursShown": "24/7",
+      "pricingProfile": "unknown_from_screenshot",
+      "visibleTariffWindows": [
+        {
+          "label": "Heures creuses",
+          "pricePerKwhEur": 0.20,
+          "from": "02:10",
+          "to": "07:10"
+        },
+        {
+          "label": "Heures pleines",
+          "pricePerKwhEur": 0.27,
+          "from": "07:10",
+          "to": "14:10"
+        }
+      ],
+      "fullDayTariffResolved": false,
+      "notes": "Only the tariff windows visible in the screenshot are recorded. Do not extrapolate the remaining hours or infer NOMAD Open/Gold profile without additional evidence."
+    }
+  ],
   "regionalFamilyDeferred": {
     "network": "SYDER",
     "operator": "Qovoltis",
@@ -66,7 +98,14 @@
     "reasonNotAccepted": "Third-party tariff resolver may use regional estimates when the real tariff is unavailable. These values must not be promoted to TCC without official station/app confirmation."
   },
   "nextRequiredStep": {
-    "action": "resolve each non-regional Qovoltis station tariff from the Qovoltis app/ad-hoc station view or another station-specific official source",
+    "action": "resolve each non-regional Qovoltis station tariff from the Qovoltis app/ad-hoc station view or another station-specific official source; record every visible time window and tariff profile exactly",
+    "requiredFields": [
+      "station identity/address or stable station id",
+      "connector/power",
+      "full 24h tariff schedule if time-variable",
+      "NOMAD Open vs NOMAD Gold profile where distinguishable",
+      "connection/session/parking/rotation fees"
+    ],
     "safeFallback": "leave station without Qovoltis direct tariff rather than infer a national price",
     "roaming": "excluded"
   }
