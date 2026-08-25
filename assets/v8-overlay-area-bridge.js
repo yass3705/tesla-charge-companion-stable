@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48ba-ui-stable';
+  const REVISION='rc48bb-fastned-national';
   let applying=false;
   let lastPrepared=null;
 
@@ -17,6 +17,15 @@
       x.src='assets/v8-idf-extra-reference-offers.js?v=20260821q1';
       x.defer=true;x.dataset.tccIdfExtraReferenceOffers='1';
       document.head.appendChild(x);
+    }
+  }
+
+  function loadFastnedStationOverlay(){
+    if(!window.TCCV8FastnedStationOverlay&&!document.querySelector('script[data-tcc-fastned-stations]')){
+      const s=document.createElement('script');
+      s.src='assets/v8-fastned-station-overlay.js?v=rc48-fastned-20260825';
+      s.defer=true;s.dataset.tccFastnedStations='1';
+      document.head.appendChild(s);
     }
   }
 
@@ -57,6 +66,7 @@
   }
 
   loadReferenceOffers();
+  loadFastnedStationOverlay();
   loadCanonicalStationOverlay();
   loadDirectResolverUi();
   loadDirectSmokeFix();
@@ -64,13 +74,18 @@
 
   async function apply(force=false){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
+    const fastnedApi=window.TCCV8FastnedStationOverlay;
     const operatorApi=window.TCCV8OperatorOverlay;
     const canonicalApi=window.TCCV8CanonicalStationOverlay;
     if(!prepared||!operatorApi?.applyToPrepared||applying)return false;
+    const fastnedReady=!!fastnedApi?.applyToPrepared;
     const canonicalReady=!!canonicalApi?.applyToPrepared;
-    if(!force&&prepared===lastPrepared&&prepared.tariffOverlayApplied&&(!canonicalReady||prepared.canonicalStationOverlayApplied))return true;
+    if(!force&&prepared===lastPrepared&&prepared.tariffOverlayApplied&&(!fastnedReady||prepared.fastnedStationOverlayApplied)&&(!canonicalReady||prepared.canonicalStationOverlayApplied))return true;
     applying=true;
     try{
+      // L'inventaire physique doit être fusionné avant les tarifs afin que les
+      // sites Fastned ajoutés par la base officielle reçoivent eux aussi les offres directes.
+      if(fastnedReady)await fastnedApi.applyToPrepared(prepared);
       await operatorApi.applyToPrepared(prepared);
       if(canonicalReady)await canonicalApi.applyToPrepared(prepared);
       lastPrepared=prepared;
@@ -112,11 +127,12 @@
   function markRevision(){
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(String(banner.textContent||''))){
-      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · tarif direct prioritaire · détail frais stabilisé · données canoniques France · auto-mise à jour désactivée`;
+      banner.textContent=`V8 Preview · RC4.8 · ${REVISION} · Fastned national · tarif direct prioritaire · détail frais stabilisé · données canoniques France · auto-mise à jour désactivée`;
     }
   }
 
   const timer=setInterval(()=>{
+    loadFastnedStationOverlay();
     loadCanonicalStationOverlay();
     loadDirectResolverUi();
     loadDirectSmokeFix();
@@ -134,7 +150,7 @@
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
     if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();
+    loadFastnedStationOverlay();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();
     const ok=await apply(true);
     if(!ok)return;
     installExpansionGuard();loadReferenceOffers();
@@ -145,9 +161,9 @@
     }finally{delete button.dataset.tccOverlayReplay;}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0),{once:true});
-  else setTimeout(()=>{markRevision();loadReferenceOffers();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0),{once:true});
+  else setTimeout(()=>{markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();},0);
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache actif + direct resolver rc48av.');
+  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,loadReferenceOffers,loadFastnedStationOverlay,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache actif + Fastned national + direct resolver rc48av.');
 })();
