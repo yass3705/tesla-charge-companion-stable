@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 RC4.8 — stabilisation unique de l'UI abonnements + garde-fou de classement.
 (function(){
   'use strict';
-  const REVISION='rc48bn-subscription-visible-top-level';
+  const REVISION='rc48bm-subscription-host-stable';
   const KEY='tccSubscriptionsV1';
   const MIGRATION_KEY='tccSubscriptionStableMigrationV1';
   const $=id=>document.getElementById(id);
@@ -28,7 +28,7 @@
     loading=(async()=>{
       let source=window.TCCV8Subscriptions?.plans||window.TCC_TARIFF_OVERLAY_V1?.subscriptions||null;
       if(!source&&typeof fetch==='function'){
-        try{const r=await fetch(`data/tariff_overlay_v1.json?v=${REVISION}`,{cache:'no-store'});if(r.ok)source=(await r.json())?.subscriptions||null;}catch(e){}
+        try{const r=await fetch(`data/tariff_overlay_v1.json?v=rc48bn-subscriptions`,{cache:'no-store'});if(r.ok)source=(await r.json())?.subscriptions||null;}catch(e){}
       }
       return mergePlans(source||[]);
     })().finally(()=>{loading=null;});
@@ -47,9 +47,8 @@
   }
   function eligible(st){const id=inferSubscriptionId(st);return !id||selectedSet().has(id)}
 
-  // Les variantes abonnées doivent rester visibles dans la carte de tarifs. Le tri
-  // les exclut déjà via TCCV8Subscriptions.isStationEligible / rankingSubscriptionEligible.
-  // On ne les retire donc plus à l'étape expandConfigurations.
+  // Les variantes abonnées doivent rester disponibles pour l'affichage et le recalcul.
+  // Le classement lui-même filtre déjà celles qui ne sont pas sélectionnées.
   function installExpansionGuard(){
     const current=window.expandConfigurations;if(typeof current!=='function')return false;
     if(current.__tccSubscriptionStabilityV2)return true;
@@ -59,9 +58,8 @@
     window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}return true;
   }
 
-  // En RC4.8 le panneau Filtres est replié par défaut. L'ancien hôte donnait donc
-  // l'impression que la liste d'abonnements avait disparu. On l'ancre maintenant au
-  // niveau principal de la carte Comparer, juste avant « Filtres & classement ».
+  // Le panneau « Filtres & classement » est replié par défaut. La liste abonnements
+  // doit donc vivre au niveau principal de la carte Comparer, juste avant ce panneau.
   function subscriptionHost(){
     const compareCard=$('v8CompareCard')||$('compare')?.querySelector('.card');if(compareCard)return compareCard;
     const direct=$('v8FilterBody')||$('augCompareFilters');if(direct)return direct;
