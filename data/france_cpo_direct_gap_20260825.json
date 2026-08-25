@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-25T23:59:00+02:00",
+  "country": "FR",
+  "scope": "physical_cpo_direct_only_no_roaming",
+  "integrated": [
+    {
+      "operator": "Charge E-Lec",
+      "scope": "all explicitly branded standard AC 22 kW points",
+      "pricePerKwh": 0.19,
+      "currency": "EUR",
+      "effectiveFrom": "2026-07-09",
+      "subscriptionRequired": false,
+      "source": "https://www.e.leclerc/e/charge-e-lec"
+    },
+    {
+      "operator": "YAWAY",
+      "station": "Breteuil",
+      "pricePerKwh": 0.30,
+      "currency": "EUR",
+      "subscriptionRequired": false,
+      "source": "https://yaway.fr/"
+    },
+    {
+      "operator": "Ouest Charge",
+      "departments": ["49", "44", "35", "29", "22"],
+      "profile": "direct non-subscriber",
+      "connectionFeeEur": 1.0,
+      "stationClassMethod": "maximum physical station power; normal <=22.5 kW, rapid 40-60 kW, ultra >=100 kW; ambiguous gaps excluded",
+      "source": "https://ouestcharge.fr/tarifs-borne-ouest-charge/"
+    }
+  ],
+  "excludedPartnerDepartments": [
+    {"network": "Ouest Charge", "department": "85", "reason": "partner network SYDEV; not direct Ouest Charge tariff grid"},
+    {"network": "Ouest Charge", "department": "53", "reason": "partner network Territoire d'énergie; not direct Ouest Charge tariff grid"},
+    {"network": "Ouest Charge", "department": "72", "reason": "partner network Alizé Charge; not direct Ouest Charge tariff grid"},
+    {"network": "Ouest Charge", "department": "56", "reason": "partner network Morbihan Energies; not direct Ouest Charge tariff grid"}
+  ],
+  "blockedOrDeferred": [
+    {"operator": "Powerdot", "reason": "direct consumer tariff is station/connector specific; exact price via QR/app"},
+    {"operator": "Qovoltis", "reason": "direct consumer tariff is station specific"},
+    {"operator": "Bump", "reason": "price and possible duration/parking fees are site specific"},
+    {"operator": "e-Totem", "reason": "direct tariff depends on the local network/site"},
+    {"operator": "DRIVECO", "reason": "published national values are references; exact charger tariff remains station specific"},
+    {"operator": "Allego", "reason": "France published prices are defaults; exact charger price may vary"},
+    {"operator": "ENGIE Vianeo", "reason": "energy prices are published but station-specific minute fees can still apply"},
+    {"operator": "IZIVIA Express", "reason": "official public tariff is a 0.40-0.55 EUR/kWh range; exact price must be read from each station"},
+    {"operator": "Révéo", "reason": "current tariff varies by station type, location and use; exact grid is selected in the app/site and special territories differ"},
+    {"operator": "YAWAY Connect", "reason": "exact station price is displayed per site; only Breteuil had an exact public direct price verified"},
+    {"operator": "Charge E-Lec rapid/ultra-rapid", "reason": "the July 2026 official national 0.19 EUR/kWh announcement explicitly covers standard 22 kW points only"},
+    {"operator": "BP Pulse France", "reason": "no current reliable France direct station-tariff source identified in this pass"},
+    {"operator": "Stations-e", "reason": "only older tariff evidence found; not accepted as current August 2026 pricing"},
+    {"operator": "AVIA Volt / Picoty", "reason": "current evidence found concerned roaming/payment services rather than a direct CPO station tariff"},
+    {"operator": "R3", "reason": "operator identity/source could not be resolved unambiguously in this pass"}
+  ],
+  "alreadyCoveredNotRetreated": [
+    "Tesla",
+    "Electra",
+    "Electroverse",
+    "Belib'",
+    "Electric 55 Charging",
+    "IONITY Direct",
+    "Atlante",
+    "Freshmile",
+    "TotalEnergies",
+    "La Borne Bleue",
+    "Fastned",
+    "Lidl",
+    "IECharge",
+    "Mobilize Fast Charge / Plug Inn",
+    "Zunder",
+    "Shell Recharge",
+    "e-Vadea",
+    "Plenitude On The Road",
+    "SIGEIF",
+    "Ecocharge77",
+    "SEY Ma Borne",
+    "SMOYS",
+    "VOLTi / SIE-ELY",
+    "Pass Pass Électrique",
+    "Chargezy / TE63",
+    "Métropolis"
+  ]
+}
