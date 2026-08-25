@@ -1,0 +1,74 @@
+name: Build DRIVECO EVSE tariff map
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["release/2026-08"]
+    paths:
+      - "scripts/build_driveco_evse_tariffs.py"
+      - ".github/workflows/build-driveco-tariff-map.yml"
+  schedule:
+    - cron: "17 9 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-driveco-tariff-map
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+
+      - name: Build conservative DRIVECO map
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/build_driveco_evse_tariffs.py
+          python scripts/build_driveco_evse_tariffs.py
+
+      - name: Validate output
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('data/driveco_evse_tariffs_v1.json').read_text(encoding='utf-8'))
+          assert p['operator']=='DRIVECO'
+          assert p['country']=='FR'
+          assert p['sourcePolicy']['operatorDirectOnly'] is True
+          assert p['sourcePolicy']['roamingExcluded'] is True
+          assert p['sourcePolicy']['headlineReferencePricesNeverUsedAsFallback'] is True
+          assert p['sourcePolicy']['matrixOSFStoredRawAndNotInterpreted'] is True
+          assert p['validatedInventory']['exactEnergyPriceEvseCount']==1601
+          assert p['validatedInventory']['qualichargeNumericCandidateRowsHeldBack']==184
+          assert len(p['evses'])==1601
+          assert all(v['energyPriceExact'] is True for v in p['evses'].values())
+          assert all(v['rankable'] == v['fullSessionCostSafe'] for v in p['evses'].values())
+          assert all(v['rankingBlockReason']=='driveco_matrix_osf_semantics_unvalidated' for v in p['evses'].values() if not v['rankable'])
+          print('DRIVECO conservative EVSE map validated')
+          PY
+
+      - name: Publish map on release branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/driveco_evse_tariffs_v1.json
+          if git diff --cached --quiet; then echo "No DRIVECO map changes"; exit 0; fi
+          git commit -m "data(v8): publish conservative DRIVECO EVSE tariff map [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin release/2026-08
+            if git push origin HEAD:release/2026-08; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1
