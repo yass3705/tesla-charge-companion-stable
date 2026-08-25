@@ -196,7 +196,7 @@
       cleanProvider(row);
     });
     box.querySelectorAll('.v8-offer-row').forEach(row=>{
-      const provider=cleanProvider(row),id=subscriptionIdForProvider(provider);
+      const provider=cleanProvider(row),id=subscriptionIdForProvider(cleanProvider(row));
       if(id)row.dataset.subscriptionId=id;
       else if(norm(physicalOperator(card)).includes('la borne bleue')&&isGenericSubscriberLabel(provider))row.dataset.subscriptionId='labornebleue-annual';
     });
