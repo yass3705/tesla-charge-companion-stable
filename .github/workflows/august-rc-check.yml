@@ -78,7 +78,7 @@ jobs:
           ! grep -q "assets/v8-e55c-pricing.js" index.html
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
-          grep -q "v8-compare-subscriptions.js?v=rc48bs-20260825" assets/update.js
+          grep -q "v8-compare-subscriptions.js?v=rc48bt-20260825" assets/update.js
           grep -q "v8-direct-resolver-ui.js" assets/v8-overlay-area-bridge.js
           grep -q "v8-direct-resolver-followup.js" assets/v8-overlay-area-bridge.js
           grep -q "v8-subscription-stability-fix.js" assets/v8-overlay-area-bridge.js

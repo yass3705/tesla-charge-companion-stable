@@ -12,11 +12,14 @@ assert(compact.includes("v8SubscriptionsCompactBox"),'compact subscription box m
 assert(compact.includes("document.createElement('details')"),'subscriptions are not rendered as a collapsible details element');
 assert(compact.includes("#v8SubscriptionsBox,#v8SubscriptionsStableBox,#v8SubscriptionsHotfixBox"),'legacy subscription UIs are not hidden');
 assert(compact.includes("data-subscription-compact"),'compact checkbox controls missing');
+assert(compact.includes("await window.TCCV8Subscriptions.loadPlans()"),'compact UI must explicitly await the complete upstream subscription catalogue');
+assert(compact.includes("hasExternalPlan"),'compact UI must distinguish builtin-only bootstrap state from a complete catalogue');
+assert(compact.includes("rc48bt-subscriptions-20260825"),'compact UI must have a no-store full-catalogue fallback');
 assert(!compact.includes('setInterval('),'compact UI must not use a permanent interval');
 assert(!stability.includes('MutationObserver('),'legacy stability bridge must not observe the whole DOM anymore');
 assert(!stability.includes('setInterval('),'legacy stability bridge must not poll');
 assert(!hotfix.includes('v8SubscriptionsHotfixBox'),'runtime hotfix still owns a duplicate subscription UI');
 assert(!hotfix.includes('setInterval('),'runtime hotfix must not poll');
-assert(update.includes('v8-compare-subscriptions.js?v=rc48bs-20260825'),'update loader does not load the compact subscription UI');
+assert(update.includes('v8-compare-subscriptions.js?v=rc48bt-20260825'),'update loader does not load the corrected compact subscription UI');
 
-console.log('Compare subscription refactor OK: one compact collapsible UI, no duplicate polling layers.');
+console.log('Compare subscription refactor OK: one compact collapsible UI, complete catalogue loading, no duplicate polling layers.');

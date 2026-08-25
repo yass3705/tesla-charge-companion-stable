@@ -1,14 +1,15 @@
 // Tesla Charge Companion V8 RC4.8 — UI abonnements compacte et unique pour la page Comparer.
-// Objectif : une seule UI, repliée par défaut, stable iOS, sans boucle de polling permanente.
+// Une seule UI, repliable, stable iOS et alimentée par le catalogue complet des abonnements.
 (function(){
   'use strict';
 
-  const REVISION='rc48bs-compare-subscriptions';
+  const REVISION='rc48bt-compare-subscriptions';
   const KEY='tccSubscriptionsV1';
   const OPEN_KEY='tccSubscriptionsPanelOpenV1';
   const BUILTIN=[
     {id:'labornebleue-annual',selectionId:'labornebleue-annual',provider:'La Borne Bleue — Abonnement',monthlyFeeLabel:'10 €/an',control:true}
   ];
+  const BUILTIN_IDS=new Set(BUILTIN.map(p=>String(p.selectionId||p.id)));
   const $=id=>document.getElementById(id);
   const text=v=>String(v==null?'':v).trim();
   const esc=v=>window.escapeHtml?window.escapeHtml(v):text(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -31,6 +32,7 @@
   function writeSelected(ids){localStorage.setItem(KEY,JSON.stringify({selected:[...ids],updatedAt:new Date().toISOString()}));}
   function readOpen(){try{return localStorage.getItem(OPEN_KEY)==='1'}catch(e){return false}}
   function writeOpen(open){try{localStorage.setItem(OPEN_KEY,open?'1':'0')}catch(e){}}
+  function hasExternalPlan(source){return Array.isArray(source)&&source.some(plan=>{const id=selectionId(plan);return id&&!BUILTIN_IDS.has(id)})}
 
   function mergePlans(source){
     const byId=new Map();
@@ -44,18 +46,37 @@
   }
 
   async function loadPlans(force=false){
-    if(plans.length&&!force)return plans;
+    if(hasExternalPlan(plans)&&!force)return plans;
     if(loading)return loading;
     loading=(async()=>{
-      let source=window.TCCV8Subscriptions?.plans||window.TCC_TARIFF_OVERLAY_V1?.subscriptions||null;
-      if((!source||!source.length)&&typeof window.TCCV8Subscriptions?.loadPlans==='function'){
-        try{source=await window.TCCV8Subscriptions.loadPlans()}catch(e){}
-      }
-      if((!source||!source.length)&&typeof fetch==='function'){
+      let source=null;
+
+      // TCCV8Subscriptions peut être exposé avant que son propre boot asynchrone ait
+      // remplacé le seul plan builtin La Borne Bleue par le catalogue JSON complet.
+      // On appelle donc explicitement loadPlans(), même si api.plans n'est pas vide.
+      if(typeof window.TCCV8Subscriptions?.loadPlans==='function'){
         try{
-          const response=await fetch('data/tariff_overlay_v1.json?v=rc48bs-subscriptions-20260825',{cache:'no-store'});
-          if(response.ok)source=(await response.json())?.subscriptions||[];
+          const upstream=await window.TCCV8Subscriptions.loadPlans();
+          if(Array.isArray(upstream)&&upstream.length)source=upstream;
         }catch(e){}
+      }
+
+      const globalPlans=window.TCC_TARIFF_OVERLAY_V1?.subscriptions;
+      if(!hasExternalPlan(source)&&Array.isArray(globalPlans)&&globalPlans.length)source=globalPlans;
+
+      if(!hasExternalPlan(source)&&typeof fetch==='function'){
+        try{
+          const response=await fetch('data/tariff_overlay_v1.json?v=rc48bt-subscriptions-20260825',{cache:'no-store'});
+          if(response.ok){
+            const remote=(await response.json())?.subscriptions;
+            if(Array.isArray(remote)&&remote.length)source=remote;
+          }
+        }catch(e){}
+      }
+
+      if(!source){
+        const exposed=window.TCCV8Subscriptions?.plans;
+        if(Array.isArray(exposed)&&exposed.length)source=exposed;
       }
       return mergePlans(source||[]);
     })().finally(()=>{loading=null});
@@ -102,11 +123,7 @@
     if(names.length<=2)return names.join(' · ');
     return `${names.slice(0,2).join(' · ')} · +${names.length-2}`;
   }
-
-  function signature(){
-    const selected=[...readSelected()].sort();
-    return `${plans.map(selectionId).join('|')}::${selected.join('|')}`;
-  }
+  function signature(){return `${plans.map(selectionId).join('|')}::${[...readSelected()].sort().join('|')}`}
 
   function updateSummary(box){
     const selected=readSelected();
@@ -128,7 +145,7 @@
   async function render(force=false){
     installStyle();
     const root=host();if(!root)return false;
-    await loadPlans();
+    await loadPlans(force&&!hasExternalPlan(plans));
     if(!plans.length)return false;
 
     let box=$('v8SubscriptionsCompactBox');
@@ -166,16 +183,17 @@
 
   function boot(){
     bootAttempts++;
-    Promise.resolve(render(false)).finally(()=>{
+    const needsCatalogue=!hasExternalPlan(plans);
+    Promise.resolve(render(needsCatalogue)).finally(()=>{
       observeCompare();
-      if((!$('v8SubscriptionsCompactBox')||!window.TCCV8Subscriptions)&&bootAttempts<30)setTimeout(boot,200);
+      if((!$('v8SubscriptionsCompactBox')||!window.TCCV8Subscriptions||!hasExternalPlan(plans))&&bootAttempts<30)setTimeout(boot,200);
     });
   }
 
-  document.addEventListener('tcc:subscription-plan-registered',()=>{loadPlans(true).then(()=>render(true))});
+  document.addEventListener('tcc:subscription-plan-registered',()=>loadPlans(true).then(()=>render(true)));
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 
-  window.TCCV8CompareSubscriptions={revision:REVISION,render,loadPlans,selectedSet:readSelected,writeSelected,host};
+  window.TCCV8CompareSubscriptions={revision:REVISION,render,loadPlans,selectedSet:readSelected,writeSelected,host,get plans(){return plans.slice()}};
   document.dispatchEvent(new CustomEvent('tcc:compare-subscriptions-ready'));
-  console.info('[TCC V8] rc48bs : UI abonnements compacte, repliable et unique.');
+  console.info('[TCC V8] rc48bt : UI abonnements compacte alimentée par le catalogue complet.');
 })();
