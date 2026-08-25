@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-26T01:10:00+02:00",
+  "country": "FR",
+  "operator": "Qovoltis",
+  "scope": "physical_cpo_direct_only_no_roaming",
+  "status": "partially_resolved_station_specific",
+  "integrationReady": false,
+  "officialStationInventory": {
+    "available": true,
+    "source": "https://www.data.gouv.fr/organizations/qovoltis/datasets",
+    "notes": "Qovoltis publishes its French IRVE static inventory. Station inventory is not the blocker."
+  },
+  "officialDirectOffers": {
+    "nomadOpen": {
+      "subscriptionMonthlyEur": 0,
+      "connectionFeeEur": 2.0,
+      "energyPrice": "station_specific",
+      "timeTariff": false,
+      "parkingFee": false,
+      "source": "https://www.qovoltis.com/wp-content/uploads/2024/06/Comment-charger-1.pdf"
+    },
+    "nomadGold": {
+      "subscriptionMonthlyEur": 20.0,
+      "connectionFeeEur": 0,
+      "energyPrice": "station_specific_discounted",
+      "discountVsNomadOpen": "8-10% according to latest accessible official infographic; exact station tariff remains authoritative",
+      "source": "https://www.qovoltis.com/wp-content/uploads/2024/06/Comment-charger-1.pdf"
+    }
+  },
+  "stationSpecificRule": {
+    "sourceOfTruth": "Qovoltis application / station-specific tariff shown for the charger",
+    "contractEvidence": "Qovoltis CGV version 22/04/2024 states charging is billed under tariff conditions applicable to the charger concerned",
+    "cgvSource": "https://cdn.qovoltis.com/CGV_CP_VF.pdf",
+    "publicPriceFeedFound": false,
+    "publicAdHocPortal": "https://chargenow.qovoltis.com/",
+    "publicAdHocPortalProvidesMachineReadableStationTariffs": false
+  },
+  "regionalFamilyDeferred": {
+    "network": "SYDER",
+    "operator": "Qovoltis",
+    "reason": "Official fixed regional grid is resolved, but regional networks are intentionally handled in the later regional-operator phase.",
+    "directOtherUser": {
+      "upTo50KwEurPerKwh": 0.35,
+      "above50KwEurPerKwh": 0.50
+    },
+    "residentSyderQovoltisCard": {
+      "eligibility": "resident of eligible SYDER municipality",
+      "cardCostEur": 7.20,
+      "upTo50KwEurPerKwh": 0.25,
+      "above50KwEurPerKwh": 0.40
+    },
+    "rotationFee": {
+      "eurPerHour": 4.0,
+      "upTo50Kw": "after grace period; current local page states 30 minutes, except 22:00-07:00",
+      "above50Kw": "after 1 hour; started hour charged"
+    },
+    "sources": [
+      "https://www.syder.fr/",
+      "https://ccsb-saonebeaujolais.fr/au-quotidien/se-deplacer/bornes-de-recharge-pour-vehicules-electriques-et-biognv/"
+    ]
+  },
+  "secondaryObservedPatternsNotAcceptedAsAuthoritative": {
+    "generic22KwCandidateEurPerKwh": 0.40,
+    "rhonesHigherPowerExamplesEurPerKwh": [0.50, 0.59, 0.65],
+    "reasonNotAccepted": "Third-party tariff resolver may use regional estimates when the real tariff is unavailable. These values must not be promoted to TCC without official station/app confirmation."
+  },
+  "nextRequiredStep": {
+    "action": "resolve each non-regional Qovoltis station tariff from the Qovoltis app/ad-hoc station view or another station-specific official source",
+    "safeFallback": "leave station without Qovoltis direct tariff rather than infer a national price",
+    "roaming": "excluded"
+  }
+}
