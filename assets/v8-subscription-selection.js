@@ -3,7 +3,7 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-6';
+  const VERSION='rc48-multi-subs-4';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
@@ -24,25 +24,6 @@
   }
   function selectedSet(){return new Set(state().selected)}
   function saveSelected(ids){localStorage.setItem(KEY,JSON.stringify({selected:[...ids],updatedAt:new Date().toISOString()}));}
-  function subscriptionIdForProvider(value){
-    const provider=norm(value);
-    if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';
-    if(provider.includes('belib direct abonne resident'))return'belib-resident';
-    return'';
-  }
-  function subscriptionIdForStation(st){
-    const explicit=text(st?.subscriptionId||st?.subscriptionSelectionId);if(explicit)return explicit;
-    return subscriptionIdForProvider(st?.configurationLabel||st?.label||st?.offerProvider);
-  }
-  function isStationEligible(st,selected=selectedSet()){
-    const id=subscriptionIdForStation(st);return !id||selected.has(id);
-  }
-  function selectionChanged(){
-    applyAll(true);
-    const root=$('results'),run=window.compare;
-    if(typeof run!=='function'||!root?.querySelector('.result-card'))return;
-    setTimeout(()=>{try{Promise.resolve(run()).then(()=>setTimeout(()=>applyAll(true),80)).catch(err=>console.warn('[TCC V8] Reclassement abonnements impossible :',err?.message||err))}catch(err){console.warn('[TCC V8] Reclassement abonnements impossible :',err?.message||err)}},0);
-  }
   function forceLegacyElectraOff(){const old=readJson(OLD_ELECTRA_KEY,{})||{};if(old.includeRanking){old.includeRanking=false;localStorage.setItem(OLD_ELECTRA_KEY,JSON.stringify(old));}const box=$('v8ElectraBox');if(box)box.style.display='none';}
   function selectionId(p){return text(p?.selectionId||p?.id)}
 
@@ -66,11 +47,7 @@
   function injectStyle(){
     if($('v8SubscriptionStyle'))return;
     const s=document.createElement('style');s.id='v8SubscriptionStyle';s.textContent=`
-      .v8-subscriptions-box{margin-top:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13;overflow:hidden}
-      .v8-subscriptions-box>summary{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;cursor:pointer;font-size:12px;font-weight:900;list-style:none}
-      .v8-subscriptions-box>summary::-webkit-details-marker{display:none}.v8-subscriptions-box>summary:after{content:'▾';color:#a9a9b0;font-size:14px}.v8-subscriptions-box[open]>summary:after{content:'▴'}
-      .v8-subscriptions-count{color:#9a9aa2;font-size:10px;font-weight:700;margin-left:auto}
-      .v8-subscriptions-body{padding:0 12px 12px;border-top:1px solid #292930}
+      .v8-subscriptions-box{margin-top:12px;padding:12px;border:1px solid #303038;border-radius:14px;background:#0f0f13}
       .v8-subscriptions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:9px}
       .v8-subscription-choice{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid #33333a;border-radius:11px;font-size:11px}
       .v8-subscription-choice input{width:auto!important;margin-top:2px}.v8-subscription-choice b{display:block}.v8-subscription-choice span{display:block;color:#8f8f96;font-size:9px;margin-top:2px}
@@ -84,13 +61,12 @@
     const host=$('v8FilterBody'),controls=controlPlans();if(!host||!controls.length)return false;
     forceLegacyElectraOff();injectStyle();
     let box=$('v8SubscriptionsBox');
-    if(!box){box=document.createElement('details');box.id='v8SubscriptionsBox';box.className='v8-subscriptions-box';host.appendChild(box);}
-    const selected=selectedSet(),countLabel=selected.size?`${selected.size} sélectionné${selected.size>1?'s':''}`:'Aucun sélectionné';
-    box.innerHTML=`<summary><span>Mes abonnements</span><span class="v8-subscriptions-count">${countLabel}</span></summary><div class="v8-subscriptions-body"><div style="font-size:12px;font-weight:800;margin-top:10px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût de l'abonnement n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${controls.map(p=>{const id=selectionId(p);return `<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${id}" ${selected.has(id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`}).join('')}</div></div>`;
+    if(!box){box=document.createElement('div');box.id='v8SubscriptionsBox';box.className='v8-subscriptions-box';host.appendChild(box);}
+    const selected=selectedSet();
+    box.innerHTML=`<div class="v8-eyebrow">Mes abonnements</div><div style="font-size:12px;font-weight:800;margin-top:3px">Inclure dans le classement</div><div class="small" style="margin-top:5px">Les tarifs abonnés restent toujours affichés. Ils ne peuvent devenir le tarif retenu que si le forfait est coché. Le coût mensuel n'est jamais imputé à une recharge.</div><div class="v8-subscriptions-grid">${controls.map(p=>{const id=selectionId(p);return `<label class="v8-subscription-choice"><input type="checkbox" data-subscription-choice="${id}" ${selected.has(id)?'checked':''}><span><b>${p.provider}</b><span>${planLabel(p)}</span></span></label>`}).join('')}</div>`;
     box.querySelectorAll('[data-subscription-choice]').forEach(input=>input.addEventListener('change',()=>{
       const ids=new Set([...box.querySelectorAll('[data-subscription-choice]:checked')].map(x=>x.dataset.subscriptionChoice));
-      const label=box.querySelector('.v8-subscriptions-count');if(label)label.textContent=ids.size?`${ids.size} sélectionné${ids.size>1?'s':''}`:'Aucun sélectionné';
-      saveSelected(ids);selectionChanged();
+      saveSelected(ids);applyAll(true);
     }));
     return true;
   }
@@ -107,7 +83,13 @@
   function physicalOperator(card){return text(card.querySelector('.operator-badge')?.textContent)}
   function operatorMatches(card,p){const op=norm(physicalOperator(card));return (p.operatorAliases||[]).some(a=>op===norm(a))}
   function kindPower(card){const h=text(card.querySelector('h3')?.textContent);const m=h.match(/\b(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);return{kind:m?.[1]?.toUpperCase()||'',power:m?Number(m[2].replace(',','.')):0}}
-  function planApplies(card,p){const kp=kindPower(card);if(p.kind&&kp.kind!==text(p.kind).toUpperCase())return false;if(Number.isFinite(Number(p.minPowerKw))&&kp.power<Number(p.minPowerKw))return false;if(Number.isFinite(Number(p.maxPowerKw))&&kp.power>Number(p.maxPowerKw))return false;return operatorMatches(card,p)}
+  function requiredDirectOfferPresent(card,p){
+    if(!p?.directOperatorOnly&&!p?.requiredDirectProvider)return true;
+    const required=norm(p?.requiredDirectProvider);
+    if(!required)return false;
+    return [...card.querySelectorAll('.v8-offer-row:not([data-subscription-offer-id])')].some(row=>norm(cleanProvider(row))===required);
+  }
+  function planApplies(card,p){const kp=kindPower(card);if(p.kind&&kp.kind!==text(p.kind).toUpperCase())return false;if(Number.isFinite(Number(p.minPowerKw))&&kp.power<Number(p.minPowerKw))return false;if(Number.isFinite(Number(p.maxPowerKw))&&kp.power>Number(p.maxPowerKw))return false;if(!operatorMatches(card,p))return false;return requiredDirectOfferPresent(card,p)}
   function hmToMinutes(v){const m=text(v).match(/^(\d{1,2}):(\d{2})$/);return m?Number(m[1])*60+Number(m[2]):NaN}
   function chargeMinutes(card){
     const t=text(card.textContent).replace(/\s+/g,' ');
@@ -157,9 +139,6 @@
       const plan=text(row.dataset.plan).toLowerCase();row.dataset.subscriptionId=plan==='smart'?'electra-smart':'electra-essential';
       cleanProvider(row);
     });
-    box.querySelectorAll('.v8-offer-row').forEach(row=>{
-      const id=subscriptionIdForProvider(cleanProvider(row));if(id)row.dataset.subscriptionId=id;
-    });
   }
   function clearBest(rows){rows.forEach(row=>{row.classList.remove('best');row.querySelectorAll('.v8-offer-best').forEach(x=>x.remove())})}
   function setStatus(row,active){
@@ -189,10 +168,9 @@
     card.dataset.tccSubsSig=sig;
   }
   function sortCost(){
-    const mode=$('simRanking')?.value;if(mode!=='cost'&&mode!=='costPerKm')return;
+    if($('simRanking')?.value!=='cost')return;
     const root=$('results');if(!root)return;const cards=[...root.querySelectorAll('.result-card[data-result-id]')];
-    const score=card=>{const cost=Number(card.dataset.tccEffectiveCost||Infinity);if(mode==='cost')return cost;const km=Number(card.dataset.recoveredKm||0);return Number.isFinite(cost)&&km>0?cost/km*100:Infinity;};
-    cards.sort((a,b)=>score(a)-score(b)).forEach(c=>root.appendChild(c));
+    cards.sort((a,b)=>Number(a.dataset.tccEffectiveCost||Infinity)-Number(b.dataset.tccEffectiveCost||Infinity)).forEach(c=>root.appendChild(c));
     cards.forEach((c,i)=>{const h=c.querySelector('h3');if(h)h.textContent=text(h.textContent).replace(/^\d+\.\s*/,`${i+1}. `)});
   }
   function applyAll(force=false){if(busy)return;busy=true;try{document.querySelectorAll('#results .result-card[data-result-id]').forEach(c=>applyCard(c,force));sortCost();}finally{busy=false}}
@@ -206,6 +184,6 @@
     await loadPlans();forceLegacyElectraOff();let tries=0;const timer=setInterval(()=>{tries++;const a=injectControls(),b=installObserver();forceLegacyElectraOff();if((a&&b)||tries>160){clearInterval(timer);setTimeout(()=>applyAll(true),900)}},100);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,get plans(){return plans.slice()}};
-  console.info('[TCC V8] Sélection multi-abonnements active : panneau repliable, classement opt-in, forfaits multi-réseaux et frais de durée supportés.');
+  window.TCCV8Subscriptions={state,applyAll,get plans(){return plans.slice()}};
+  console.info('[TCC V8] Sélection multi-abonnements active : affichage permanent, classement opt-in, forfaits multi-réseaux, contrôle réseau direct et frais de durée supportés.');
 })();

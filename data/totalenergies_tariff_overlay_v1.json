@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-25T13:49:00+02:00",
+  "operator": "TotalEnergies",
+  "country": "FR",
+  "source": "data-lab/totalenergies_official_france.json",
+  "resolvedDeferredOperators": ["TotalEnergies"],
+  "notes": [
+    "Tarifs applicables uniquement aux bornes exploitées directement par TotalEnergies en France.",
+    "Charge+ Zen est opt-in, coûte 3,90 €/mois et ne participe au classement que si l'utilisateur le sélectionne.",
+    "Charge+ Zen est limité aux configurations DC de 50 kW ou plus et ne s'applique pas aux réseaux partenaires.",
+    "Le palier standard 50 kW est conservé dans la classe 40–50 kW; la classe suivante commence au-dessus de 50 kW pour éviter un double tarif à la frontière."
+  ],
+  "operatorOffers": [
+    {"id":"totalenergies-ac-7-22","provider":"TotalEnergies direct","offerType":"operator_direct","operatorAliases":["TotalEnergies","Total Energies"],"directOperatorOnly":true,"kind":"AC","minPowerKw":7,"maxPowerKw":22,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.52,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/totalenergies_official_france.json"},
+    {"id":"totalenergies-dc-40-50","provider":"TotalEnergies direct","offerType":"operator_direct","operatorAliases":["TotalEnergies","Total Energies"],"directOperatorOnly":true,"kind":"DC","minPowerKw":40,"maxPowerKw":50,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.55,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/totalenergies_official_france.json"},
+    {"id":"totalenergies-dc-over-50-200","provider":"TotalEnergies direct","offerType":"operator_direct","operatorAliases":["TotalEnergies","Total Energies"],"directOperatorOnly":true,"kind":"DC","minPowerKw":50.01,"maxPowerKw":200,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.59,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/totalenergies_official_france.json"},
+    {"id":"totalenergies-dc-over-200","provider":"TotalEnergies direct","offerType":"operator_direct","operatorAliases":["TotalEnergies","Total Energies"],"directOperatorOnly":true,"kind":"DC","minPowerKw":200.01,"pricing":{"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.65,"chargePerMinute":0,"connectionFee":0,"idlePerMinute":0,"afterMinutesRate":0,"afterMinutesThreshold":0,"afterMinutesCap":0,"afterMinutesCapStart":"00:00","afterMinutesCapEnd":"24:00"}]},"source":"data-lab/totalenergies_official_france.json"}
+  ],
+  "subscriptions": [
+    {"id":"totalenergies-charge-plus-zen","provider":"Charge+ Zen","offerType":"subscription","operatorAliases":["TotalEnergies","Total Energies"],"kind":"DC","minPowerKw":50,"pricePerKwh":0.49,"currency":"EUR","monthlyFeeEur":3.9,"defaultSelected":false,"directOperatorOnly":true,"requiredDirectProvider":"TotalEnergies direct","partnerEligible":false,"source":"data-lab/totalenergies_official_france.json","note":"Option Charge+ Zen: 3,90 €/mois, tarif 0,49 €/kWh dès 50 kW sur le réseau direct TotalEnergies uniquement; aucun rabais partenaire."}
+  ],
+  "validationFixtures": [
+    {"name":"TotalEnergies FR AC 22 kW direct","kind":"AC","powerKw":22,"direct":true,"expectedPricePerKwh":0.52,"zenEligible":false},
+    {"name":"TotalEnergies FR DC 50 kW direct","kind":"DC","powerKw":50,"direct":true,"expectedPricePerKwh":0.55,"expectedZenPricePerKwh":0.49,"zenEligible":true},
+    {"name":"TotalEnergies FR DC 150 kW direct","kind":"DC","powerKw":150,"direct":true,"expectedPricePerKwh":0.59,"expectedZenPricePerKwh":0.49,"zenEligible":true},
+    {"name":"TotalEnergies FR DC 250 kW direct","kind":"DC","powerKw":250,"direct":true,"expectedPricePerKwh":0.65,"expectedZenPricePerKwh":0.49,"zenEligible":true},
+    {"name":"Partenaire 150 kW via TotalEnergies","kind":"DC","powerKw":150,"direct":false,"zenEligible":false}
+  ]
+}
