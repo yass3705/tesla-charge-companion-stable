@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "generatedAt": "2026-08-26T01:24:00+02:00",
   "country": "FR",
   "operator": "Qovoltis",
@@ -42,7 +42,11 @@
     {
       "stationDisplayName": "Restaurant Bar Air & Co…",
       "stationDisplayNameTruncated": true,
-      "stationIdentityResolved": false,
+      "stationIdentityResolved": true,
+      "resolvedStationName": "Aérodrome de Toussus-Le-Noble Zone Sud - Batiment 245",
+      "resolvedAddress": "Aérodrome de Toussus-Le-Noble Zone Sud - Batiment 245, 78117 Toussus-Le-Noble",
+      "identityResolutionBasis": "user identified the location as Aérodrome de Toussus-le-Noble; current IRVE-derived listings expose the matching QOVOLTIS 22 kW station at Zone Sud - Batiment 245",
+      "physicalPdcCountIrve": 2,
       "observationSource": "user-provided Qovoltis app screenshot",
       "observedAt": "2026-08-26T01:24:00+02:00",
       "connector": "Type 2",
@@ -65,7 +69,7 @@
         }
       ],
       "fullDayTariffResolved": false,
-      "notes": "Only the tariff windows visible in the screenshot are recorded. Do not extrapolate the remaining hours or infer NOMAD Open/Gold profile without additional evidence."
+      "notes": "Only the tariff windows visible in the screenshot are recorded. Do not extrapolate the remaining hours or infer NOMAD Open/Gold profile without additional evidence. IRVE-derived listings indicate two physical charging points, while the app card shows 1/1 available for the displayed charger; preserve both facts until the station/EVSE mapping is confirmed."
     }
   ],
   "regionalFamilyDeferred": {
