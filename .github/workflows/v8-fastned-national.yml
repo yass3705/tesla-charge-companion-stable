@@ -1,0 +1,124 @@
+name: V8 Fastned national inventory
+
+on:
+  pull_request:
+    branches: ["release/2026-08"]
+    paths:
+      - "assets/v8-fastned-station-overlay.js"
+      - "assets/v8-overlay-area-bridge.js"
+      - "data/fastned_direct_stations_france.json.gz"
+      - "scripts/test_fastned_v8_release.mjs"
+      - ".github/workflows/v8-fastned-national.yml"
+  push:
+    branches: ["feat/fastned-national-v8", "release/2026-08"]
+    paths:
+      - "assets/v8-fastned-station-overlay.js"
+      - "assets/v8-overlay-area-bridge.js"
+      - "scripts/test_fastned_v8_release.mjs"
+      - ".github/workflows/v8-fastned-national.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v8-fastned-national-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FASTNED_SOURCE: https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/fastned_direct_stations_france.json.gz
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch validated data-lab inventory
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 3 --retry-all-errors "$FASTNED_SOURCE" -o /tmp/fastned_direct_stations_france.json.gz
+          mkdir -p data
+          cp /tmp/fastned_direct_stations_france.json.gz data/fastned_direct_stations_france.json.gz
+
+      - name: JavaScript syntax
+        run: |
+          node --check assets/v8-fastned-station-overlay.js
+          node --check assets/v8-overlay-area-bridge.js
+          node --check scripts/test_fastned_v8_release.mjs
+
+      - name: Validate national inventory and V8 merge
+        run: node scripts/test_fastned_v8_release.mjs data/fastned_direct_stations_france.json.gz
+
+      - name: Validate source safeguards
+        run: |
+          python - <<'PY'
+          import gzip,json
+          p='data/fastned_direct_stations_france.json.gz'
+          with gzip.open(p,'rt',encoding='utf-8') as f:d=json.load(f)
+          assert d['dataset']=='fastned-direct-operated-stations-france'
+          assert d['operator']=='Fastned' and d['country']=='FR'
+          s=d['scope']
+          assert s['officialFastnedLocationPagesOnly'] is True
+          assert s['onlyFastnedCpoLocations'] is True
+          assert s['partnerOperatorLocationsIncluded'] is False
+          assert s['liveStatusIncluded'] is False
+          assert s['fastnedDiscountsApplyAtPartnerOperators'] is False
+          assert s['roamingTariffsIncluded'] is False
+          assert d['counts']['candidateLocationPageCount']==444
+          assert d['counts']['franceLocationCount']==63
+          assert d['counts']['franceChargingPointCount']==471
+          assert len(d['locations'])==63
+          assert len({x['stationId'] for x in d['locations']})==63
+          assert all(x['country']=='FR' and x['chargingPoints']>0 for x in d['locations'])
+          print(d['counts'])
+          PY
+
+      - name: Verify bridge order and V8 subscription semantics
+        run: |
+          grep -q 'v8-fastned-station-overlay.js?v=rc48-fastned-20260825' assets/v8-overlay-area-bridge.js
+          python - <<'PY'
+          from pathlib import Path
+          bridge=Path('assets/v8-overlay-area-bridge.js').read_text()
+          a=bridge.index('fastnedApi.applyToPrepared(prepared)')
+          b=bridge.index('operatorApi.applyToPrepared(prepared)',a)
+          assert a < b, 'Fastned physical inventory must be applied before direct tariff overlay'
+          sub=Path('assets/v8-subscription-selection.js').read_text()
+          assert 'Les tarifs abonnés restent toujours affichés' in sub
+          assert 'selected.has(id)' in sub
+          print('Fastned physical -> direct tariff -> opt-in subscription order OK')
+          PY
+
+  publish-data:
+    if: github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh validated Fastned inventory
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          curl --fail --silent --show-error --location --retry 3 --retry-all-errors "$FASTNED_SOURCE" -o data/fastned_direct_stations_france.json.gz
+          node scripts/test_fastned_v8_release.mjs data/fastned_direct_stations_france.json.gz
+
+      - name: Commit inventory snapshot to current V8 branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/fastned_direct_stations_france.json.gz
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "data(v8): publish Fastned France national inventory [run ${GITHUB_RUN_ID}]"
+          branch="${GITHUB_REF_NAME}"
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin "$branch"
+            if git push origin HEAD:"$branch"; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1
