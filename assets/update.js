@@ -43,7 +43,7 @@
   function loadCompareSubscriptions(){
     if(window.TCCV8CompareSubscriptions||document.querySelector('script[data-tcc-compare-subscriptions]'))return;
     const script=document.createElement('script');
-    script.src='assets/v8-compare-subscriptions.js?v=rc48bs-20260825';
+    script.src='assets/v8-compare-subscriptions.js?v=rc48bt-20260825';
     script.dataset.tccCompareSubscriptions='1';
     script.onload=()=>console.info('[TCC] Compact subscription UI loaded.');
     script.onerror=()=>console.error('[TCC] Compact subscription UI could not be loaded.');
