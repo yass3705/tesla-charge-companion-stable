@@ -1,4 +1,4 @@
-// Tesla Charge Companion V8 RC3 — refonte mobile/desktop + profil véhicule.
+// Tesla Charge Companion V8 RC4.8 — refonte mobile/desktop + profil véhicule.
 (function(){
   'use strict';
   const BUILD='8004';
@@ -169,9 +169,9 @@
     $('simOrigin')?.addEventListener('change',refresh);$('simMaxDistance')?.addEventListener('change',refresh);
   }
   function updateChrome(){
-    document.title='Tesla Charge Companion V8 RC3';document.querySelector('meta[name="tcc-build"]')?.setAttribute('content',BUILD);
-    const p=document.querySelector('header>p');if(p)p.textContent='V8 RC3 · profils véhicule & multi-tarifs';
-    const about=$('fx')?.querySelector('.card .small');if(about)about.innerHTML=about.innerHTML.replace(/V8 RC\d+/,'V8 RC3');
+    document.title='Tesla Charge Companion V8 RC4.8';document.querySelector('meta[name="tcc-build"]')?.setAttribute('content',BUILD);
+    const p=document.querySelector('header>p');if(p)p.textContent='V8 RC4.8 · profils véhicule & multi-tarifs';
+    const about=$('fx')?.querySelector('.card .small');if(about)about.innerHTML=about.innerHTML.replace(/V8 RC\d+(?:\.\d+)?/,'V8 RC4.8');
   }
   function install(){
     if(!installCompareLayout())return false;installVehicleSettings();installPowerLimits();bindConsumptionOverride();enhanceEditButtons();bindDynamicAreaRefresh();applyProfileToEngine();updateChrome();return true;
