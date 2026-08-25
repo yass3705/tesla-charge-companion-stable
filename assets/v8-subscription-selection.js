@@ -3,7 +3,7 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-7';
+  const VERSION='rc48-multi-subs-8-totalenergies';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
@@ -108,8 +108,9 @@
   function operatorMatches(card,p){const op=norm(physicalOperator(card));return (p.operatorAliases||[]).some(a=>op===norm(a))}
   function kindPower(card){const h=text(card.querySelector('h3')?.textContent);const m=h.match(/\b(AC|DC)\s+([0-9]+(?:[.,][0-9]+)?)\s*kW/i);return{kind:m?.[1]?.toUpperCase()||'',power:m?Number(m[2].replace(',','.')):0}}
   function requiredDirectOfferPresent(card,p){
-    if(!p?.directOperatorOnly&&!p?.requiredDirectProvider)return true;
-    const required=norm(p?.requiredDirectProvider);
+    if(p?.directOperatorOnly)return operatorMatches(card,p);
+    if(!p?.requiredDirectProvider)return true;
+    const required=norm(p.requiredDirectProvider);
     if(!required)return false;
     return [...card.querySelectorAll('.v8-offer-row:not([data-subscription-offer-id])')].some(row=>norm(cleanProvider(row))===required);
   }
@@ -212,6 +213,6 @@
     await loadPlans();forceLegacyElectraOff();let tries=0;const timer=setInterval(()=>{tries++;const a=injectControls(),b=installObserver();forceLegacyElectraOff();if((a&&b)||tries>160){clearInterval(timer);setTimeout(()=>applyAll(true),900)}},100);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,get plans(){return plans.slice()}};
+  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,planApplies,generatedPlanTotal,get plans(){return plans.slice()}};
   console.info('[TCC V8] Sélection multi-abonnements active : panneau repliable, classement opt-in, forfaits multi-réseaux, contrôle réseau direct et frais de durée supportés.');
 })();
