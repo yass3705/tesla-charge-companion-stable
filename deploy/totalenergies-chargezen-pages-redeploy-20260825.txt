@@ -1,3 +1,3 @@
 Force a fresh GitHub Pages build after mirroring Charge+ Zen in release/2026-08 base tariff_overlay_v1.json.
-Release commit: 780568dbb75335b959da2d1db29b3a9eda927c68
-Reason: previous Pages rerun reused the same workflow run and produced duplicate github-pages artifacts; a fresh run is required.
+Release commit: 028cee81a55652925a536f16202793d06d3473f1
+Reason: align the visible V8 subtitle from RC3 to RC4.8 and publish it through a fresh Pages run; rerunning the same workflow run creates duplicate github-pages artifacts.
