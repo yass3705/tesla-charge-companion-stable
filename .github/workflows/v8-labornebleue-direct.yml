@@ -1,0 +1,52 @@
+name: V8 La Borne Bleue direct
+
+on:
+  push:
+    branches:
+      - feat/labornebleue-direct-v8-20260825
+      - release/2026-08
+    paths:
+      - assets/v8-labornebleue-direct-overlay.js
+      - scripts/test_labornebleue_v8_runtime.mjs
+      - index.html
+      - .github/workflows/v8-labornebleue-direct.yml
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - assets/v8-labornebleue-direct-overlay.js
+      - scripts/test_labornebleue_v8_runtime.mjs
+      - index.html
+      - .github/workflows/v8-labornebleue-direct.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download strict La Borne Bleue dataset
+        run: |
+          curl --fail --location --retry 3 \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/labornebleue_direct_stations_idf.json.gz' \
+            -o /tmp/labornebleue_direct_stations_idf.json.gz
+          test -s /tmp/labornebleue_direct_stations_idf.json.gz
+
+      - name: Runtime overlay tests
+        run: node scripts/test_labornebleue_v8_runtime.mjs assets/v8-labornebleue-direct-overlay.js /tmp/labornebleue_direct_stations_idf.json.gz
+
+      - name: Check release wiring
+        run: |
+          grep -q 'v8-labornebleue-direct-overlay.js' index.html
+          grep -q 'La Borne Bleue direct' assets/v8-labornebleue-direct-overlay.js
