@@ -2,19 +2,57 @@
 (function(){
   'use strict';
   const OVERLAY_URL='data/tariff_overlay_v1.json';
+  const TOTALENERGIES_URL='data/totalenergies_tariff_overlay_v1.json';
   const EVADEA_MAP_URL='data/evadea_evse_tariffs_v1.json';
-  const REVISION='rc48aj';
-  let overlayPromise=null,evadeaPromise=null,evadeaAddressIndexCache=null;
+  const REVISION='rc48ak';
+  let overlayPromise=null,totalEnergiesPromise=null,evadeaPromise=null,evadeaAddressIndexCache=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
 
-  async function loadOverlay(){
-    if(!overlayPromise)overlayPromise=fetch(`${OVERLAY_URL}?v=20260821b`,{cache:'no-store'}).then(r=>{
-      if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
+  async function loadTotalEnergiesOverlay(){
+    if(!totalEnergiesPromise)totalEnergiesPromise=fetch(`${TOTALENERGIES_URL}?v=20260825a`,{cache:'no-store'}).then(r=>{
+      if(!r.ok)throw new Error(`extension TotalEnergies indisponible (${r.status})`);
       return r.json();
     }).then(data=>{
-      window.TCC_TARIFF_OVERLAY_V1=data;
+      if(!data||data.operator!=='TotalEnergies'||String(data.country||'FR').toUpperCase()!=='FR')throw new Error('extension TotalEnergies invalide');
+      window.TCC_TOTALENERGIES_TARIFF_OVERLAY_V1=data;
       return data;
+    }).catch(err=>{
+      console.warn('[TCC V8] Extension TotalEnergies non chargée:',err);
+      return null;
+    });
+    return totalEnergiesPromise;
+  }
+
+  function mergeOperatorExtension(base,extension){
+    if(!extension)return base||{};
+    const merged={...(base||{})};
+    const baseOffers=Array.isArray(merged.operatorOffers)?merged.operatorOffers:[];
+    const baseSubs=Array.isArray(merged.subscriptions)?merged.subscriptions:[];
+    const extOffers=Array.isArray(extension.operatorOffers)?extension.operatorOffers:[];
+    const extSubs=Array.isArray(extension.subscriptions)?extension.subscriptions:[];
+    const extOfferIds=new Set(extOffers.map(x=>text(x?.id)).filter(Boolean));
+    const extSubIds=new Set(extSubs.map(x=>text(x?.id)).filter(Boolean));
+    merged.operatorOffers=[...baseOffers.filter(x=>!extOfferIds.has(text(x?.id))),...extOffers];
+    merged.subscriptions=[...baseSubs.filter(x=>!extSubIds.has(text(x?.id))),...extSubs];
+    const resolved=new Set((extension.resolvedDeferredOperators||[]).map(norm).filter(Boolean));
+    if(resolved.size&&Array.isArray(merged.deferredValidated)){
+      merged.deferredValidated=merged.deferredValidated.filter(x=>!resolved.has(norm(x?.operator)));
+    }
+    return merged;
+  }
+
+  async function loadOverlay(){
+    if(!overlayPromise)overlayPromise=Promise.all([
+      fetch(`${OVERLAY_URL}?v=20260825a`,{cache:'no-store'}).then(r=>{
+        if(!r.ok)throw new Error(`overlay tarifs indisponible (${r.status})`);
+        return r.json();
+      }),
+      loadTotalEnergiesOverlay()
+    ]).then(([data,totalEnergies])=>{
+      const merged=mergeOperatorExtension(data,totalEnergies);
+      window.TCC_TARIFF_OVERLAY_V1=merged;
+      return merged;
     }).catch(err=>{
       console.warn('[TCC V8] Overlay tarifs opérateur non chargé:',err);
       return {operatorOffers:[],subscriptions:[],mappedOperatorOffers:[]};
@@ -41,6 +79,9 @@
   function operatorCandidates(st){
     return [st?.operator,st?._sourceOperator,st?.cpo,st?.network,st?.name].map(norm).filter(Boolean);
   }
+  function directOperatorCandidates(st){
+    return [st?.operator,st?._sourceOperator,st?.cpo].map(norm).filter(Boolean);
+  }
   function isSigeifOperator(st){
     return operatorCandidates(st).some(v=>v==='sigeif'||v.includes('sigeif')||v.includes('syndicat intercommunal pour le gaz et l electricite en idf'));
   }
@@ -51,7 +92,7 @@
     return operatorCandidates(st).some(v=>v==='e vadea'||v==='evadea'||v.includes('e vadea'));
   }
   function operatorMatches(st,offer){
-    const values=operatorCandidates(st),id=String(offer?.id||'');
+    const values=offer?.directOperatorOnly?directOperatorCandidates(st):operatorCandidates(st),id=String(offer?.id||'');
     if(id.startsWith('sigeif-')&&isSigeifOperator(st))return true;
     if(id.startsWith('plenitude-')&&isPlenitudeOperator(st))return true;
     return (offer?.operatorAliases||[]).some(alias=>values.includes(norm(alias)));
@@ -359,7 +400,7 @@
     wrapped.__tccOperatorOverlay=true;wrapped.__tccOriginal=current;
     window.candidateStations=wrapped;
     try{candidateStations=wrapped}catch(e){}
-    console.info('[TCC V8] Overlay opérateur direct V1 + e-Vadea EVSE/geo actif.');
+    console.info('[TCC V8] Overlay opérateur direct V1 + TotalEnergies + e-Vadea EVSE/geo actif.');
     return true;
   }
 
@@ -371,5 +412,5 @@
   loadOverlay();loadEvadeaMap();
   let tries=0;const timer=setInterval(()=>{tries++;const a=install(),b=installPostChargePricing(),c=installEvadeaReferenceGuard();if((a&&b&&c)||tries>160)clearInterval(timer);},100);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(markRevision,0),{once:true});else setTimeout(markRevision,0);
-  window.TCCV8OperatorOverlay={loadOverlay,loadEvadeaMap,addOperatorOffers,applyToPrepared,isSigeifOperator,isPlenitudeOperator,isEvadeaOperator,resolveEvadea,installPostChargePricing,pruneEvadeaReferenceRows,revision:REVISION};
+  window.TCCV8OperatorOverlay={loadOverlay,loadTotalEnergiesOverlay,loadEvadeaMap,mergeOperatorExtension,addOperatorOffers,applyToPrepared,isSigeifOperator,isPlenitudeOperator,isEvadeaOperator,resolveEvadea,installPostChargePricing,pruneEvadeaReferenceRows,revision:REVISION};
 })();
