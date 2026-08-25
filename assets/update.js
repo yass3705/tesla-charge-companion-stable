@@ -4,6 +4,32 @@
   const meta=document.querySelector('meta[name="tcc-build"]');
   if(meta)meta.content=CURRENT_BUILD;
 
+  // V8 Preview: never persist the full national catalogue in localStorage.
+  // Keep only local/manual overrides; the published catalogue is reloaded from files on each startup.
+  if(window.TCC_PREVIEW){
+    const proto=Storage.prototype;
+    const previousSetItem=proto.setItem;
+    const previousRemoveItem=proto.removeItem;
+    try{previousRemoveItem.call(window.localStorage,'tccStationsV701');}catch(e){}
+    proto.setItem=function(key,value){
+      if(this===window.localStorage&&String(key)==='tccStationsV701'){
+        try{
+          const parsed=JSON.parse(String(value||'[]'));
+          const compact=Array.isArray(parsed)?parsed.filter(st=>st&&(st.source==='custom'||st._syncUpdatedAt||st.syncUpdatedAt||st.temporarilyUnavailable===true)):[];
+          return previousSetItem.call(this,key,JSON.stringify(compact));
+        }catch(err){
+          if(err?.name==='QuotaExceededError'||/quota/i.test(String(err?.message||err))){
+            try{previousRemoveItem.call(this,key);}catch(e){}
+            console.info('[TCC V8] Catalogue complet non mis en cache : quota localStorage atteint.');
+            return;
+          }
+          throw err;
+        }
+      }
+      return previousSetItem.call(this,key,value);
+    };
+  }
+
   function loadAugustRc2Fixes(){
     if(document.querySelector('script[data-tcc-august-rc2]'))return;
     const fixes=document.createElement('script');
