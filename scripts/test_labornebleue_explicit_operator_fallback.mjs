@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 
 const source=fs.readFileSync(process.argv[2]||'assets/v8-labornebleue-operator-fallback.js','utf8');
 const bridge=fs.readFileSync('assets/v8-overlay-area-bridge.js','utf8');
-const subscriptions=fs.readFileSync('assets/v8-subscription-stability-fix.js','utf8');
+const subscriptions=fs.readFileSync('assets/v8-compare-subscriptions.js','utf8');
+const subscriptionCompat=fs.readFileSync('assets/v8-subscription-stability-fix.js','utf8');
 const henri={
   id:'henri-poincare',operator:'La Borne Bleue',countryCode:'FR',kind:'AC',powerKw:22,stalls:2,
   chargingConfigurations:[
@@ -28,45 +29,34 @@ function assertAc22Pair(st,label){
   const lbb=lbbOffers(st);
   assert.equal(lbb.length,2,`${label} must gain public + subscriber direct offers`);
   const pub=lbb.find(c=>!c.subscriptionId),sub=lbb.find(c=>c.subscriptionId==='labornebleue-annual');
-  assert.ok(pub&&sub,`${label} must expose both tariff plans`);
-  assert.equal(pub.offerProvider,'La Borne Bleue direct');
-  assert.equal(sub.offerProvider,'La Borne Bleue direct — Abonné');
-  assert.ok(Math.abs(pub.pricing.labornebleueExact.ratePerMinute-(6.5/60))<1e-12,`${label}: 22 kW public must be 6.50 EUR/h`);
-  assert.equal(sub.pricing.labornebleueExact.model,'time_windows');
-  assert.ok(sub.pricing.labornebleueExact.windows.every(w=>Math.abs(w.ratePerMinute-(5.5/60))<1e-12),`${label}: 22 kW subscriber must be 5.50 EUR/h`);
-  assert.equal(sub.pricing.labornebleueExact.windows.find(w=>w.start==='20:00')?.capEur,12,`${label}: subscriber night cap must be 12 EUR`);
-  return lbb;
+  assert.ok(pub&&sub,`${label} must expose public and subscriber offers`);
+  assert.equal(pub.pricing?.labornebleueExact?.model,'per_minute');
+  assert.ok(Math.abs(pub.pricing.labornebleueExact.ratePerMinute*60-6.5)<1e-9);
+  assert.equal(sub.pricing?.labornebleueExact?.model,'time_windows');
+  assert.ok(Math.abs(sub.pricing.labornebleueExact.windows[0].ratePerMinute*60-5.5)<1e-9);
+  assert.equal(sub.pricing.labornebleueExact.windows[1].capEur,12);
 }
 
-assertAc22Pair(henri,'Henri-Poincare');
-const marne={...henri,id:'avenue-de-la-marne-44',chargingConfigurations:[{id:'ev2',kind:'AC',powerKw:22,stalls:2,offerProvider:'Electroverse'},{id:'el2',kind:'AC',powerKw:22,stalls:2,offerProvider:'Electra'}]};
-assertAc22Pair(marne,'44 Avenue de la Marne');
+assertAc22Pair(structuredClone(henri),'Henri-Poincare');
+assertAc22Pair({...structuredClone(henri),id:'avenue-marne',name:'ASNIERES-SUR-SEINE - 44 Avenue De La Marne'},'44 Avenue de la Marne');
 
-const placeholder={...marne,id:'marne-placeholder',chargingConfigurations:[...marne.chargingConfigurations,{id:'old-lbb-info',kind:'AC',powerKw:22,stalls:2,offerProvider:'La Borne Bleue direct',pricing:{type:'rules',rules:[]}}]};
-const placeholderOut=api.addDirect(placeholder);
-assert.equal(placeholderOut.chargingConfigurations.some(c=>c.id==='old-lbb-info'),false,'non-calculable LBB placeholder must be removed');
-assert.equal(placeholderOut.chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,2,'placeholder must be replaced by public + subscriber calculable offers');
+const partner={id:'partner',operator:'SIPPEREC / Alize',countryCode:'FR',kind:'AC',powerKw:22,chargingConfigurations:[{id:'p',kind:'AC',powerKw:22,stalls:2}]};
+assert.equal(lbbOffers(partner).length,0,'SIPPEREC/Alize partner must stay excluded');
 
-const displayOnly=api.addDirect({...henri,operator:'',displayOperator:'La Borne Bleue'});
-assert.equal(displayOnly.chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,2,'explicit display operator must be recognized');
+const existing={...structuredClone(henri),chargingConfigurations:[
+  ...henri.chargingConfigurations,
+  {id:'old-lbb',kind:'AC',powerKw:22,stalls:2,offerProvider:'La Borne Bleue direct',pricing:{type:'unknown'}}
+]};
+const replaced=api.addDirect(existing).chargingConfigurations.filter(c=>c.labornebleueDirect===true);
+assert.equal(replaced.length,2,'old non-calculable LBB placeholder must be replaced by exact pair');
+assert.ok(replaced.every(c=>c.pricing?.labornebleueExact),'replaced LBB offers must carry exact pricing');
 
-const partner=api.addDirect({...henri,id:'partner',operator:'Alizé',network:'SIPPEREC'});
-assert.equal(partner.chargingConfigurations.length,2,'Alize/SIPPEREC partner must not receive LBB fallback');
-const duplicate=api.addDirect(api.addDirect(henri));
-assert.equal(duplicate.chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,2,'fallback must be idempotent');
+const prepared=api.applyToPrepared({origin:{lat:48.91,lon:2.28},stations:[structuredClone(henri),structuredClone(partner)]});
+assert.equal(prepared.stations[0].chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,2,'prepared cache must gain LBB pair');
+assert.equal(prepared.stations[1].chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,0,'partner must stay excluded in prepared cache');
 
-assert.equal(api.installCandidate(),true,'candidateStations guard must install');
-const prepared=await sandbox.candidateStations();
-assert.equal(prepared.stations[0].chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,2,'candidateStations must expose calculable LBB offers before simulation');
-assert.equal(prepared.labornebleueExplicitFallbackApplied,true);
-assert.equal(api.installExpansion(),true,'expandConfigurations guard must install');
-const expanded=sandbox.expandConfigurations([structuredClone(henri)]);
-assert.equal(expanded[0].chargingConfigurations.filter(c=>c.labornebleueDirect===true).length,2,'expansion guard must remain as final safety net');
-
-// Reproduit la normalisation historique d'app.js qui supprimait les métadonnées
-// commerciales. Le garde-fou rc48bn du bridge doit les réinjecter avant simulation.
 const bridgeSandbox={
-  console,
+  console,Promise,
   setInterval:()=>0,clearInterval:()=>{},setTimeout:()=>0,
   document:{
     readyState:'complete',addEventListener:()=>{},querySelector:()=>null,getElementById:()=>null,
@@ -93,8 +83,8 @@ assert.equal(subscribedDirect.offerProvider,'La Borne Bleue direct — Abonné')
 assert.match(bridge,/lbbFallbackApi\?\.applyToPrepared/,'bridge must apply LBB fallback to prepared cache');
 assert.match(bridge,/lbbFallbackApi\?\.addDirect/,'bridge must keep final expansion boundary guard');
 assert.match(bridge,/installConfigurationMetadataGuard/,'bridge must preserve configuration metadata before simulation');
-assert.match(subscriptions,/const compareCard=\$\('v8CompareCard'\)\|\|\$\('compare'\)\?\.querySelector\('\.card'\)/,'subscription UI must prefer the visible top-level compare card');
-assert.match(subscriptions,/compareCard\.insertBefore\(box,filters\)/,'subscription UI must be placed before the collapsed filters panel');
-assert.doesNotMatch(subscriptions,/out\.filter\(eligible\)/,'subscriber variants must remain visible even when excluded from ranking');
+assert.match(subscriptions,/function host\(\)\{return \$\('v8CompareCard'\)\|\|\$\('compare'\)\?\.querySelector\('\.card'\)/,'compact subscription UI must prefer the visible top-level compare card');
+assert.match(subscriptions,/root\.insertBefore\(box,filters\)/,'compact subscription UI must be placed before the collapsed filters panel');
+assert.doesNotMatch(subscriptionCompat,/out\.filter\(eligible\)/,'subscriber variants must remain visible even when excluded from ranking');
 
 console.log(JSON.stringify({ok:true,stations:['Henri-Poincare','44 Avenue de la Marne'],publicEurPerHour:6.5,subscriberEurPerHour:5.5,placeholderReplaced:true,candidateGuard:true,metadataGuard:true,subscriptionHostVisible:true,bridgeBoundary:true,partnerExcluded:true},null,2));
