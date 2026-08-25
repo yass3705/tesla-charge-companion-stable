@@ -8,8 +8,11 @@ if s.count(old)!=1:
     raise SystemExit(f'old runtime marker definition count={s.count(old)}')
 s=s.replace(old,new,1)
 old_fn='''def replace_once(text: str, old: str, new: str, label: str) -> str:\n    count = text.count(old)\n    if count != 1:\n        raise SystemExit(f"{label}: expected 1 match, found {count}")\n    return text.replace(old, new, 1)\n'''
-new_fn='''def replace_once(text: str, old: str, new: str, label: str) -> str:\n    count = text.count(old)\n    expected = 2 if label in {"workflow path marker", "workflow test path marker"} else 1\n    if count != expected:\n        raise SystemExit(f"{label}: expected {expected} match(es), found {count}")\n    return text.replace(old, new, expected)\n'''
+new_fn='''def replace_once(text: str, old: str, new: str, label: str) -> str:\n    count = text.count(old)\n    if count != 1:\n        raise SystemExit(f"{label}: expected 1 match, found {count}")\n    return text.replace(old, new, 1)\n'''
 if s.count(old_fn)!=1:
     raise SystemExit(f'replace_once definition count={s.count(old_fn)}')
 s=s.replace(old_fn,new_fn,1)
+start=s.index('# 6) Expand long-term LBB CI coverage.')
+end=s.index('print("LBB V8 runtime patch applied")',start)
+s=s[:start]+'# CI workflow stays unchanged; the existing LBB overlay/test paths already trigger it.\n\n'+s[end:]
 p.write_text(s,encoding='utf-8')
