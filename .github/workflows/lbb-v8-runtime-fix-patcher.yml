@@ -50,9 +50,8 @@ jobs:
           ! grep -q 'tccLabornebleueSubscriptionControl' assets/v8-labornebleue-direct-overlay.js
           grep -q 'address_operator' assets/v8-labornebleue-direct-overlay.js
 
-      - name: Commit tested patch
+      - name: Commit tested application patch
         run: |
-          rm .github/workflows/lbb-v8-runtime-fix-patcher.yml
           rm scripts/patch_lbb_v8_runtime_bugfix.py
           rm scripts/repair_lbb_patcher_marker.py
           git config user.name 'github-actions[bot]'
@@ -61,4 +60,4 @@ jobs:
           git commit -m 'fix(v8): repair La Borne Bleue subscriptions and station matching'
           git push origin HEAD:fix/labornebleue-v8-runtime-20260825
 
-# retry: 2
+# retry: 3
