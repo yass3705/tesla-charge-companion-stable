@@ -44,6 +44,15 @@
     if(window.TCCV8SubscriptionStability||document.querySelector('script[data-tcc-subscription-stability]'))return;
     const script=document.createElement('script');script.src='assets/v8-subscription-stability-fix.js?v=rc48bm-20260825';script.dataset.tccSubscriptionStability='1';script.onload=()=>console.info('[TCC] Subscription selector runtime loaded.');script.onerror=()=>console.error('[TCC] Subscription selector runtime could not be loaded.');document.body.appendChild(script);
   }
+  function loadLaBorneBleueResultGuard(){
+    if(window.TCCV8LaBorneBleueResultGuard||document.querySelector('script[data-tcc-labornebleue-result-guard]'))return;
+    const script=document.createElement('script');
+    script.src='assets/v8-labornebleue-result-guard.js?v=rc48bp-20260825';
+    script.dataset.tccLabornebleueResultGuard='1';
+    script.onload=()=>console.info('[TCC] La Borne Bleue rendered-card guard loaded.');
+    script.onerror=()=>console.error('[TCC] La Borne Bleue rendered-card guard could not be loaded.');
+    document.body.appendChild(script);
+  }
   function loadLaBorneBleueExplicitFallback(){
     if(window.TCCV8LaBorneBleueExplicitFallback||document.querySelector('script[data-tcc-labornebleue-explicit-fallback]'))return;
     const script=document.createElement('script');
@@ -54,26 +63,26 @@
     document.body.appendChild(script);
   }
   function loadLaBorneBleueDirect(){
-    loadLaBorneBleueExplicitFallback();
+    loadLaBorneBleueExplicitFallback();loadLaBorneBleueResultGuard();
     if(window.TCCV8LaBorneBleueDirect||document.querySelector('script[data-tcc-labornebleue-direct]'))return;
     const script=document.createElement('script');
     script.src='assets/v8-labornebleue-direct-overlay.js?v=rc48-labornebleue-20260825d';
     script.dataset.tccLabornebleueDirect='1';
-    script.onload=()=>{console.info('[TCC] La Borne Bleue direct strict loaded.');loadLaBorneBleueExplicitFallback();};
-    script.onerror=()=>{console.error('[TCC] La Borne Bleue direct strict could not be loaded.');loadLaBorneBleueExplicitFallback();};
+    script.onload=()=>{console.info('[TCC] La Borne Bleue direct strict loaded.');loadLaBorneBleueExplicitFallback();loadLaBorneBleueResultGuard();};
+    script.onerror=()=>{console.error('[TCC] La Borne Bleue direct strict could not be loaded.');loadLaBorneBleueExplicitFallback();loadLaBorneBleueResultGuard();};
     document.body.appendChild(script);
   }
   function loadAugustRelease(){
-    loadLaBorneBleueExplicitFallback();loadSubscriptionStability();
+    loadLaBorneBleueExplicitFallback();loadLaBorneBleueResultGuard();loadSubscriptionStability();
     if(document.querySelector('script[data-tcc-august]')){loadLaBorneBleueDirect();return;}
     if(!document.querySelector('link[data-tcc-august]')){const css=document.createElement('link');css.rel='stylesheet';css.href=`assets/august-release.css?v=${CURRENT_BUILD}`;css.dataset.tccAugust='1';document.head.appendChild(css);}
     const script=document.createElement('script');script.src='assets/august-release.js?v=rc48bl-20260824';script.dataset.tccAugust='1';
-    script.onload=()=>{console.info('[TCC] August release layer loaded.');loadValidatedRegionalPatches();loadAugustUiFixes();loadLaBorneBleueDirect();loadSubscriptionStability();};
-    script.onerror=()=>{console.error('[TCC] August release layer could not be loaded.');loadValidatedRegionalPatches();loadLaBorneBleueDirect();loadSubscriptionStability();};
+    script.onload=()=>{console.info('[TCC] August release layer loaded.');loadValidatedRegionalPatches();loadAugustUiFixes();loadLaBorneBleueDirect();loadSubscriptionStability();loadLaBorneBleueResultGuard();};
+    script.onerror=()=>{console.error('[TCC] August release layer could not be loaded.');loadValidatedRegionalPatches();loadLaBorneBleueDirect();loadSubscriptionStability();loadLaBorneBleueResultGuard();};
     document.body.appendChild(script);
   }
 
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(loadAugustRelease,0),{once:true});
+  document.addEventListener('DOMContentLoaded',()=>{loadLaBorneBleueResultGuard();setTimeout(loadAugustRelease,0);},{once:true});
 
   if('serviceWorker' in navigator){
     window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(reg=>reg.update().catch(()=>{})).catch(err=>console.info('[TCC] Service worker unavailable:',err?.message||err));},{once:true});
