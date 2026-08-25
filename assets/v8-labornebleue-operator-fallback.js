@@ -51,13 +51,14 @@
     if(c?.labornebleueDirect===true)return true;
     return norm(c?.offerProvider||c?.label||c?.configurationLabel).startsWith('la borne bleue direct');
   }
+  function powerLabel(power){return Number.isInteger(Number(power))?String(Number(power)):String(Number(power)).replace(/0+$/,'').replace(/\.$/,'')}
   function makeConfig(st,cfg,subscriber){
     const exact=(subscriber?exactSubscriber:exactPublic)(cfg.kind,cfg.powerKw);if(!exact)return null;
     const provider=subscriber?'La Borne Bleue direct — Abonné':'La Borne Bleue direct';
     const suffix=subscriber?'subscriber':'public';
     return{
       id:`lbb-explicit:${text(st?.baseStationId||st?.catalogStationId||st?.id||'station')}:${cfg.kind}:${String(cfg.powerKw).replace('.','_')}:${suffix}`,
-      label:`${provider} · ${cfg.kind} ${cfg.powerKw:g} kW`.replace(':g',''),
+      label:`${provider} · ${cfg.kind} ${powerLabel(cfg.powerKw)} kW`,
       kind:cfg.kind,powerKw:cfg.powerKw,stalls:Math.max(1,cfg.stalls||1),pricing:runtimePricing(exact),offerProvider:provider,offerType:'operator_direct',
       subscriptionId:subscriber?SUBSCRIPTION_ID:null,
       labornebleueDirect:true,labornebleueVerified:true,labornebleueOwnNetworkOnly:true,
