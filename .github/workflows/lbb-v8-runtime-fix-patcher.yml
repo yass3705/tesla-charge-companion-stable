@@ -60,3 +60,5 @@ jobs:
           git add -A
           git commit -m 'fix(v8): repair La Borne Bleue subscriptions and station matching'
           git push origin HEAD:fix/labornebleue-v8-runtime-20260825
+
+# retry: 2
