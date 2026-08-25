@@ -3,14 +3,17 @@
 // que si l'utilisateur a explicitement sélectionné le forfait correspondant.
 (function(){
   'use strict';
-  const VERSION='rc48-multi-subs-8-totalenergies';
+  const VERSION='rc48-multi-subs-9-lbb-selector';
   const KEY='tccSubscriptionsV1';
   const OLD_ELECTRA_KEY='tccElectraPlusV1';
   const $=id=>document.getElementById(id);
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const euro=v=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0));
-  let plans=[];let busy=false;let observer=null;
+  const BUILTIN_PLANS=[
+    {id:'labornebleue-annual',selectionId:'labornebleue-annual',provider:'La Borne Bleue — Abonnement',offerType:'subscription',runtime:'existing_labornebleue_direct',monthlyFeeLabel:'10 €/an',defaultSelected:false,operatorAliases:['La Borne Bleue'],directOperatorOnly:true,source:'data-lab/labornebleue_official_idf.json'}
+  ];
+  let plans=BUILTIN_PLANS.map(p=>({...p}));let busy=false;let observer=null;
 
   function readJson(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
   function state(){
@@ -31,9 +34,17 @@
     if(provider.includes('la borne bleue direct abonne')||provider.includes('la borne bleue abonne'))return'labornebleue-annual';
     return'';
   }
+  function isLabornebleueStation(st){
+    return [st?.operator,st?._sourceOperator,st?.cpo,st?.network,st?.name].map(norm).filter(Boolean).some(v=>v.includes('la borne bleue')||v==='labornebleue');
+  }
+  function isGenericSubscriberLabel(value){
+    const p=norm(value);return p==='abonne'||p.startsWith('abonne ')||p.endsWith(' abonne');
+  }
   function subscriptionIdForStation(st){
     const explicit=text(st?.subscriptionId||st?.subscriptionSelectionId);if(explicit)return explicit;
-    return subscriptionIdForProvider(st?.configurationLabel||st?.label||st?.offerProvider);
+    const provider=text(st?.configurationLabel||st?.label||st?.offerProvider),mapped=subscriptionIdForProvider(provider);if(mapped)return mapped;
+    if(isLabornebleueStation(st)&&isGenericSubscriberLabel(provider))return'labornebleue-annual';
+    return'';
   }
   function isStationEligible(st,selected=selectedSet()){
     const id=subscriptionIdForStation(st);return !id||selected.has(id);
@@ -46,17 +57,23 @@
   }
   function forceLegacyElectraOff(){const old=readJson(OLD_ELECTRA_KEY,{})||{};if(old.includeRanking){old.includeRanking=false;localStorage.setItem(OLD_ELECTRA_KEY,JSON.stringify(old));}const box=$('v8ElectraBox');if(box)box.style.display='none';}
   function selectionId(p){return text(p?.selectionId||p?.id)}
-
-  async function loadPlans(){
-    const overlay=window.TCC_TARIFF_OVERLAY_V1||await window.TCCV8OperatorOverlay?.loadOverlay?.()||{};
-    plans=Array.isArray(overlay.subscriptions)?overlay.subscriptions.slice():[];
-    return plans;
-  }
   function upsertPlan(plan){
     const id=selectionId(plan);if(!id)return false;
     const index=plans.findIndex(p=>selectionId(p)===id);
     if(index>=0)plans[index]={...plans[index],...plan};else plans.push({...plan});
     return true;
+  }
+  function seedBuiltinPlans(){for(const p of BUILTIN_PLANS)upsertPlan(p);}
+
+  async function loadPlans(){
+    let overlay=window.TCC_TARIFF_OVERLAY_V1||null;
+    if(!overlay){try{overlay=await window.TCCV8OperatorOverlay?.loadOverlay?.()||null}catch(e){}}
+    if(!overlay&&typeof fetch==='function'){
+      try{const r=await fetch(`data/tariff_overlay_v1.json?v=${VERSION}`,{cache:'no-store'});if(r.ok)overlay=await r.json()}catch(e){}
+    }
+    plans=Array.isArray(overlay?.subscriptions)?overlay.subscriptions.slice():[];
+    seedBuiltinPlans();
+    return plans;
   }
   function registerPlan(plan){
     if(!upsertPlan(plan))return false;
@@ -164,7 +181,7 @@
     const kwh=wallKwh(card);if(!Number.isFinite(kwh))return;
     const note=box.querySelector('.v8-offer-note');
     for(const p of plans){
-      if(p.runtime==='existing_electra_plus'||!Number.isFinite(Number(p.pricePerKwh))||!planApplies(card,p))continue;
+      if(p.runtime==='existing_electra_plus'||p.runtime==='existing_labornebleue_direct'||!Number.isFinite(Number(p.pricePerKwh))||!planApplies(card,p))continue;
       const offerId=text(p.id),sid=selectionId(p);if(!offerId||!sid)continue;
       if(box.querySelector(`[data-subscription-offer-id="${offerId}"]`))continue;
       const total=generatedPlanTotal(card,p,kwh),row=document.createElement('div');
@@ -173,13 +190,15 @@
       note?.before(row);
     }
   }
-  function mapExistingSubscriptions(box){
+  function mapExistingSubscriptions(card,box){
     box.querySelectorAll('.v8-electra-plus-row').forEach(row=>{
       const plan=text(row.dataset.plan).toLowerCase();row.dataset.subscriptionId=plan==='smart'?'electra-smart':'electra-essential';
       cleanProvider(row);
     });
     box.querySelectorAll('.v8-offer-row').forEach(row=>{
-      const id=subscriptionIdForProvider(cleanProvider(row));if(id)row.dataset.subscriptionId=id;
+      const provider=cleanProvider(row),id=subscriptionIdForProvider(provider);
+      if(id)row.dataset.subscriptionId=id;
+      else if(norm(physicalOperator(card)).includes('la borne bleue')&&isGenericSubscriberLabel(provider))row.dataset.subscriptionId='labornebleue-annual';
     });
   }
   function clearBest(rows){rows.forEach(row=>{row.classList.remove('best');row.querySelectorAll('.v8-offer-best').forEach(x=>x.remove())})}
@@ -192,7 +211,7 @@
 
   function applyCard(card,force=false){
     const box=card.querySelector('.v8-offer-box');if(!box)return;
-    ensureGeneratedRows(card,box);mapExistingSubscriptions(box);
+    ensureGeneratedRows(card,box);mapExistingSubscriptions(card,box);
     const selected=selectedSet(),rows=[...box.querySelectorAll('.v8-offer-row')];
     const sig=`${[...selected].sort().join(',')}|${rows.map(r=>`${r.dataset.subscriptionId||'-'}:${cleanProvider(r)}:${rowTotal(r)}`).join('|')}`;
     if(!force&&card.dataset.tccSubsSig===sig)return;
@@ -227,6 +246,6 @@
     await loadPlans();forceLegacyElectraOff();let tries=0;const timer=setInterval(()=>{tries++;const a=injectControls(),b=installObserver();forceLegacyElectraOff();if((a&&b)||tries>160){clearInterval(timer);setTimeout(()=>applyAll(true),900)}},100);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,planApplies,generatedPlanTotal,registerPlan,get plans(){return plans.slice()}};
-  console.info('[TCC V8] Sélection multi-abonnements active : panneau repliable, classement opt-in, forfaits multi-réseaux, contrôle réseau direct et frais de durée supportés.');
+  window.TCCV8Subscriptions={state,applyAll,selectionChanged,selectedSet,subscriptionIdForProvider,subscriptionIdForStation,isStationEligible,planApplies,generatedPlanTotal,registerPlan,loadPlans,get plans(){return plans.slice()}};
+  console.info('[TCC V8] Sélection multi-abonnements active : liste native rechargée, classement opt-in strict et La Borne Bleue robuste.');
 })();
