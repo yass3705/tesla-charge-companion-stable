@@ -74,7 +74,7 @@ jobs:
               if(header&&!document.getElementById('tccPreviewBanner')){
                 const banner=document.createElement('div');
                 banner.id='tccPreviewBanner';
-                banner.textContent='V8 Preview · RC4.8 · rc48bm · Belib’ abonnements opt-in · IONITY Direct · Atlante direct + Go · auto-mise à jour désactivée';
+                banner.textContent='V8 Preview · RC4.8 · rc48bn · Fastned national · Belib’ abonnements opt-in · IONITY Direct · Atlante direct + Go · auto-mise à jour désactivée';
                 banner.style.cssText='margin-top:7px;padding:6px 9px;border-radius:10px;background:#312710;color:#ffc76a;font-size:10px;font-weight:800;text-align:center';
                 header.appendChild(banner);
               }
@@ -100,7 +100,7 @@ jobs:
           p=Path('site/v8-preview/index.html')
           html=p.read_text(encoding='utf-8')
           html=re.sub(r'<script src="assets/preview-storage\.js\?v=[^"]+"></script>\n?','',html)
-          tag='<script src="assets/preview-storage.js?v=rc48bm"></script>\n'
+          tag='<script src="assets/preview-storage.js?v=rc48bn-fastned-20260825"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
           for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-station-status'):
@@ -112,7 +112,7 @@ jobs:
           html=html.replace(france_tag,france_tag+'\n<script src="assets/v8-belib-pricing.js?v=rc48-belib-1" defer></script>',1)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48bl-20260824', html)
           html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bi-20260823', html)
-          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bd-20260823', html)
+          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bb-fastned-20260825', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-evadea-band-fallback\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-regional-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -180,6 +180,7 @@ jobs:
           node --check site/v8-preview/assets/v8-evadea-band-fallback.js
           node --check site/v8-preview/assets/v8-regional-tariff-overlay.js
           node --check site/v8-preview/assets/v8-overlay-area-bridge.js
+          node --check site/v8-preview/assets/v8-fastned-station-overlay.js
           node --check site/v8-preview/assets/v8-direct-resolver-ui.js
           node --check site/v8-preview/assets/v8-direct-resolver-followup.js
           node --check site/v8-preview/assets/v8-reference-offers.js
@@ -191,6 +192,7 @@ jobs:
           node --check site/v8-preview/assets/v8-subscription-selection.js
           node --check site/v8-preview/assets/v8-station-status.js
           node --check site/v8-preview/assets/update.js
+          node --check site/v8-preview/scripts/test_fastned_v8_release.mjs
           python -m json.tool site/v8-preview/data/non_tesla_france/status_snapshot.json >/dev/null
           node site/scripts/test_e55c_v8_overlay.mjs site/v8-preview/data/e55c_station_tariffs_v1.json.gz
           (cd site && node scripts/test_e55c_v8_runtime.mjs)
@@ -198,7 +200,8 @@ jobs:
           (cd site && node scripts/test_belib_v8_runtime.mjs v8-preview/data/belib_station_tariffs_v1.json.gz)
           (cd site && node scripts/test_ionity_v8_runtime.mjs)
           (cd site && node scripts/test_atlante_v8_runtime.mjs)
-          grep -q 'V8 Preview · RC4.8 · rc48bm · Belib’ abonnements opt-in · IONITY Direct · Atlante direct + Go' site/v8-preview/assets/preview-storage.js
+          (cd site/v8-preview && node scripts/test_fastned_v8_release.mjs data/fastned_direct_stations_france.json.gz)
+          grep -q 'V8 Preview · RC4.8 · rc48bn · Fastned national · Belib’ abonnements opt-in · IONITY Direct · Atlante direct + Go' site/v8-preview/assets/preview-storage.js
           grep -q 'france-catalog.js?v=rc48-atlante-20260824' site/v8-preview/index.html
           ! grep -q 'v8-e55c-pricing.js' site/v8-preview/index.html
           grep -q 'v8-belib-pricing.js?v=rc48-belib-1' site/v8-preview/index.html
@@ -207,7 +210,9 @@ jobs:
           grep -q 'v8-source-integrity.js?v=rc48bl-20260824' site/v8-preview/index.html
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
-          grep -q 'v8-overlay-area-bridge.js?v=rc48bd-20260823' site/v8-preview/index.html
+          grep -q 'v8-overlay-area-bridge.js?v=rc48bb-fastned-20260825' site/v8-preview/index.html
+          grep -q 'v8-fastned-station-overlay.js?v=rc48-fastned-20260825' site/v8-preview/assets/v8-overlay-area-bridge.js
+          grep -q "const REVISION='rc48bb-fastned-national'" site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q "const REVISION='rc48am'" site/v8-preview/assets/v8-operator-tariff-overlay.js
           grep -q "const REVISION='rc48av-fee-breakdown-fix'" site/v8-preview/assets/v8-direct-resolver-followup.js
           grep -q 'function rankingSubscriptionEligible' site/v8-preview/assets/august-release.js
@@ -216,9 +221,11 @@ jobs:
           grep -q 'v8-subscription-selection.js?v=rc48bl-20260824' site/v8-preview/index.html
           grep -q 'belib-nonresident' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'belib-resident' site/v8-preview/data/tariff_overlay_v1.json
+          grep -q 'fastned-gold' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'belibConnectedTimePerMinute' site/v8-preview/assets/v8-belib-pricing.js
           ! grep -q 'belib_station_tariffs_v1' site/index.html
           python - <<'PY'
+          import gzip
           import json
           from pathlib import Path
           index=Path('site/v8-preview/index.html').read_text(encoding='utf-8')
@@ -228,6 +235,7 @@ jobs:
           integrity=Path('site/v8-preview/assets/v8-source-integrity.js').read_text(encoding='utf-8')
           checks={
               'cache update.js rc48bi':'update.js?v=rc48bi-20260823' in index,
+              'cache bridge Fastned':'v8-overlay-area-bridge.js?v=rc48bb-fastned-20260825' in index,
               'chargeur august-release rc48bl':'august-release.js?v=rc48bl-20260824' in updater,
               'option coût/km':'<option value="costPerKm">Coût au km récupéré</option>' in august,
               'tri coût/km':"mode==='costPerKm'" in august,
@@ -239,7 +247,7 @@ jobs:
               'détail temps de branchement Belib':'connectedTimeCost' in august,
           }
           missing=[name for name,ok in checks.items() if not ok]
-          if missing: raise SystemExit('Contrôles coût/km manquants: '+', '.join(missing))
+          if missing: raise SystemExit('Contrôles coût/km/Fastned manquants: '+', '.join(missing))
           overlay=json.loads(Path('site/v8-preview/data/tariff_overlay_v1.json').read_text(encoding='utf-8'))
           plans={plan['id']:plan for plan in overlay.get('subscriptions',[])}
           for plan_id in ('belib-nonresident','belib-resident'):
@@ -260,7 +268,21 @@ jobs:
               price,aliases=expected.get(plan.get('id'),(None,set()))
               if price is None or plan.get('pricePerKwh')!=price or plan.get('monthlyFeeEur')!=9.99 or plan.get('defaultSelected') is not False or set(plan.get('operatorAliases',[]))!=aliases:
                   raise SystemExit(f"Palier Atlante Go invalide: {plan.get('id')}")
-          print('Contrôles coût/km validés.')
+          fastned=plans.get('fastned-gold')
+          if not fastned or fastned.get('pricePerKwh')!=0.43 or fastned.get('monthlyFeeEur')!=5.99 or fastned.get('defaultSelected') is not False:
+              raise SystemExit('Abonnement Fastned Gold invalide')
+          with gzip.open('site/v8-preview/data/fastned_direct_stations_france.json.gz','rt',encoding='utf-8') as handle:
+              fastned_data=json.load(handle)
+          if fastned_data.get('dataset')!='fastned-direct-operated-stations-france' or fastned_data.get('operator')!='Fastned' or fastned_data.get('country')!='FR':
+              raise SystemExit('Dataset Fastned national invalide')
+          locations=fastned_data.get('locations',[])
+          counts=fastned_data.get('counts',{})
+          if len(locations)<50 or counts.get('franceLocationCount')!=len(locations) or counts.get('franceChargingPointCount',0)<=0:
+              raise SystemExit('Inventaire Fastned national incomplet')
+          scope=fastned_data.get('scope',{})
+          if scope.get('onlyFastnedCpoLocations') is not True or scope.get('partnerOperatorLocationsIncluded') is not False or scope.get('liveStatusIncluded') is not False:
+              raise SystemExit('Garde-fous Fastned CPO/live invalides')
+          print(f"Contrôles coût/km validés. Fastned: {len(locations)} stations / {counts.get('franceChargingPointCount')} points.")
           PY
           grep -q "document.createElement('details')" site/v8-preview/assets/v8-subscription-selection.js
           grep -q 'scheduledClosureOverride' site/v8-preview/data/non_tesla_france/status_snapshot.json
@@ -279,7 +301,7 @@ jobs:
           grep -q 'stablePasses>=30' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'locationObserver.observe' site/v8-preview/assets/v8-area-workflow.js
           grep -q 'row.contains(radius)' site/v8-preview/assets/v8-area-workflow.js
-          grep -q 'preview-storage.js?v=rc48bm' site/v8-preview/index.html
+          grep -q 'preview-storage.js?v=rc48bn-fastned-20260825' site/v8-preview/index.html
           grep -q 'TCCV8AreaWorkflow?.repair' site/v8-preview/assets/preview-storage.js
           if grep -q 'v8-tariff-display-fix.js\|v8-source-first-offers.js' site/v8-preview/index.html; then
             echo 'Ancienne couche tarifaire encore chargée' >&2
@@ -290,7 +312,7 @@ jobs:
           grep -q 'atlante-go-powerdot' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'atlante-go-charge-league' site/v8-preview/data/tariff_overlay_v1.json
           grep -q "r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct')" site/v8-preview/assets/v8-reference-offers.js
-          echo 'V8 RC4.8 rc48bm preview E55C + Belib opt-in + IONITY Direct + Atlante direct/Go prepared successfully'
+          echo 'V8 RC4.8 rc48bn preview E55C + Belib opt-in + IONITY Direct + Atlante direct/Go + Fastned national prepared successfully'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
