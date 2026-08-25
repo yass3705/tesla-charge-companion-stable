@@ -36,8 +36,18 @@
     document.body.appendChild(script);
   }
 
+  function loadLaBorneBleueDirect(){
+    if(window.TCCV8LaBorneBleueDirect||document.querySelector('script[data-tcc-labornebleue-direct]'))return;
+    const script=document.createElement('script');
+    script.src='assets/v8-labornebleue-direct-overlay.js?v=rc48-labornebleue-20260825a';
+    script.dataset.tccLabornebleueDirect='1';
+    script.onload=()=>console.info('[TCC] La Borne Bleue direct strict loaded.');
+    script.onerror=()=>console.error('[TCC] La Borne Bleue direct strict could not be loaded.');
+    document.body.appendChild(script);
+  }
+
   function loadAugustRelease(){
-    if(document.querySelector('script[data-tcc-august]'))return;
+    if(document.querySelector('script[data-tcc-august]')){loadLaBorneBleueDirect();return;}
     if(!document.querySelector('link[data-tcc-august]')){
       const css=document.createElement('link');
       css.rel='stylesheet';
@@ -52,10 +62,12 @@
       console.info('[TCC] August release layer loaded.');
       loadValidatedRegionalPatches();
       loadAugustUiFixes();
+      loadLaBorneBleueDirect();
     };
     script.onerror=()=>{
       console.error('[TCC] August release layer could not be loaded.');
       loadValidatedRegionalPatches();
+      loadLaBorneBleueDirect();
     };
     document.body.appendChild(script);
   }
