@@ -128,17 +128,10 @@
     let changed=0;document.querySelectorAll('#results .result-card[data-result-id]').forEach(card=>{if(ensureCard(card))changed++;});
     if(changed)try{window.TCCV8Subscriptions?.applyAll?.(true);}catch(e){}return changed;
   }
-  function installBannerStyle(){
-    if(document.getElementById('tccPreviewBannerRc48bqStyle'))return;
-    const s=document.createElement('style');s.id='tccPreviewBannerRc48bqStyle';
-    s.textContent="#tccPreviewBanner::after{content:'V8 Preview · RC4.8 · rc48bq · plafond nocturne La Borne Bleue explicite · abonnements stables iOS · données canoniques France · auto-mise à jour désactivée'!important}";
-    document.head.appendChild(s);
-  }
-  function mark(){installBannerStyle();const b=document.getElementById('tccPreviewBanner');if(!b)return;const s='V8 Preview · RC4.8 · rc48bq · plafond nocturne La Borne Bleue explicite · abonnements stables iOS · données canoniques France · auto-mise à jour désactivée';b.dataset.stableLabel=s;b.setAttribute('aria-label',s);}
   function install(){
     const root=document.getElementById('results');if(!root)return false;
     if(!observer){let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{busy=true;try{ensureAll()}finally{busy=false}},180)});observer.observe(root,{childList:true,subtree:true});}
-    ensureAll();mark();return true;
+    ensureAll();return true;
   }
   let tries=0;const timer=setInterval(()=>{tries++;if(install()&&tries>20)clearInterval(timer);if(tries>120)clearInterval(timer)},250);
   document.addEventListener('click',e=>{if(e.target?.closest?.('.v8-simulate,#routeButton'))setTimeout(ensureAll,160);},true);
