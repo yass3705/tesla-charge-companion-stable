@@ -6,9 +6,15 @@ const pipeline=fs.readFileSync('assets/v8-direct-offer-pipeline.js','utf8');
 const hotfix=fs.readFileSync('assets/v8-rc48bn-runtime-hotfix.js','utf8');
 
 assert.equal(registry.policy?.directOffersResolvedBeforeRanking,true,'direct offers must be resolved before ranking');
+assert.equal(registry.policy?.subscriptionsAreOptIn,true,'subscriptions must stay opt-in');
+assert.equal(registry.policy?.operatorOverlaysAreNonDestructive,true,'operator overlays must never truncate or drop unrelated stations');
+assert.equal(registry.policy?.previewDataMustRemainPreviewLocal,true,'preview runtime must not escape to root data');
 const publishEntries=registry.publish?.copyFromMain||[];
 const isPublishedFromMain=path=>publishEntries.some(entry=>path===entry.target||(entry.kind==='directory'&&path.startsWith(`${entry.target}/`)));
 const byId=new Map((registry.sources||[]).map(s=>[s.id,s]));
+assert.equal(registry.sources?.[0]?.id,'runtime-integrity-guard','runtime integrity guard must load before operator/catalog modules');
+assert.equal(byId.get('runtime-integrity-guard')?.status,'active');
+assert.deepEqual(byId.get('runtime-integrity-guard')?.runtimeModules,['assets/v8-runtime-integrity-guard.js']);
 assert.equal(byId.get('direct-offer-pipeline')?.status,'active');
 assert.equal(byId.get('driveco-direct')?.status,'active','DRIVECO validated EVSE map must be active');
 for(const id of ['powerdot-direct','freshmile-direct','bump-direct','driveco-direct']){
@@ -36,4 +42,4 @@ for(const source of registry.sources||[]){
   for(const module of source.runtimeModules||[])if(!isPublishedFromMain(module))assert.ok(fs.existsSync(module),`active runtime module missing: ${source.id} -> ${module}`);
   for(const artifact of source.artifactPaths||[])if(!isPublishedFromMain(artifact))assert.ok(fs.existsSync(artifact),`active artifact missing: ${source.id} -> ${artifact}`);
 }
-console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, compare untouched.');
+console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, non-destructive overlays, preview-local data, compare untouched.');
