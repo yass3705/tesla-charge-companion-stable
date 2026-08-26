@@ -37,6 +37,7 @@ jobs:
       - name: Appliquer et tester l’intégration e-Totem
         run: |
           python site/scripts/ensure_etotem_v8_runtime.py --main-root site --rc-root rc
+          python site/scripts/fix_etotem_sections.py site/assets/france-catalog-v8.js
           node --check site/assets/france-catalog-v8.js
           node --check rc/assets/app.js
           grep -q "ETOTEM_URL" site/assets/france-catalog-v8.js
@@ -75,7 +76,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Catalogue V8 déjà raccordé."
           else
-            git commit -m "feat(etotem): integrate strict direct station tariffs in V8"
+            git commit -m "fix(etotem): parse AC DC tariff sections safely"
             for attempt in 1 2 3 4; do
               git pull --rebase origin main
               if git push origin HEAD:main; then break; fi
