@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-26T10:45:00+02:00",
+  "country": "FR",
+  "operator": "E.Leclerc",
+  "operatorId": "FR*LE2",
+  "service": "Charge E-Lec",
+  "scope": "physical_cpo_direct_only_no_roaming_dc_rapid_ultra",
+  "status": "station_specific_tariffs_partial_research",
+  "integrationReady": false,
+  "policy": {
+    "directCpoOnly": true,
+    "roamingExcluded": true,
+    "nationalDcTariff": false,
+    "stationTariffMustBeObservedBeforeCharge": true,
+    "minimumSessionEur": 0.5,
+    "doNotApplyNationalAc019ToDc": true,
+    "doNotPropagateUltraPriceToRapidEvseAtSameSite": true,
+    "doNotPropagateOldPriceAcrossTopologyReplacement": true
+  },
+  "officialRules": {
+    "pricing": "Each E.Leclerc centre freely defines its Charge E-Lec tariff; the price is visible before charging.",
+    "payment": "Direct Charge E-Lec service/account; Freshmile is the technical platform provider, not a roaming tariff source.",
+    "possibleExtraFees": "Individual centres may apply an additional parking/occupation component; only retain when verified for the station.",
+    "sources": [
+      "https://www.charge-elec.leclerc/cgau",
+      "https://www.charge-elec.leclerc/",
+      "https://www.charge-elec.leclerc/mentions-legales"
+    ]
+  },
+  "tariffEvidence": {
+    "primaryChannel": "Charge E-Lec application",
+    "publicMachineReadableTariffFeedFound": false,
+    "nationalIrveStaticContainsRetailTariff": false,
+    "nationalIrveDynamicContainsRetailTariff": false,
+    "communityAppSnapshot": {
+      "observedAt": "2026-07-21",
+      "source": "https://www.blogtesla.fr/forum/viewtopic.php?p=546011",
+      "notes": "Community member manually inspected the Charge E-Lec app. Use as dated evidence only, not as a current live tariff feed. A 2026-08-20 update reports 22 ultra-fast stations plus one upcoming and says most remain around 0.28 EUR/kWh."
+    }
+  },
+  "pricedUltraStationsTopologyStillCompatible": [
+    {"station":"Le Gua","department":"17","currentUltraPowerKw":[160],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-station-service-le-gua","confidence":"medium"},
+    {"station":"Surgères","department":"17","currentUltraPowerKw":[300],"energyEurPerKwhObserved":0.27,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-surgeres","confidence":"medium"},
+    {"station":"Saint-Loup","department":"69","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-saint-loup","confidence":"medium"},
+    {"station":"Blain / Blaindis","department":"44","currentUltraPowerKw":[120],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-blaindis","confidence":"medium"},
+    {"station":"Amilly","department":"45","currentUltraPowerKw":[120],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-amilly","confidence":"medium"},
+    {"station":"Vannes","department":"56","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-vannes","confidence":"medium"},
+    {"station":"Clamecy","department":"58","currentUltraPowerKw":[200],"energyEurPerKwhObserved":0.19,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-clamecy","confidence":"medium"},
+    {"station":"Caudry","department":"59","currentUltraPowerKw":[120],"energyEurPerKwhObserved":0.19,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-caudry","confidence":"medium"},
+    {"station":"Valenciennes","department":"59","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.35,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-valenciennes","confidence":"medium"},
+    {"station":"Oloron","department":"64","currentUltraPowerKw":[100],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-oloron","confidence":"medium"},
+    {"station":"Orthez","department":"64","currentUltraPowerKw":[280],"energyEurPerKwhObserved":0.21,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-orthez","confidence":"medium"},
+    {"station":"Geispolsheim","department":"67","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-geispolsheim","confidence":"medium"},
+    {"station":"Ribeauvillé","department":"68","currentUltraPowerKw":[200],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-ribeauville","confidence":"medium"},
+    {"station":"Lure","department":"70","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-lure","confidence":"medium"},
+    {"station":"Alençon Arçonnay","department":"72","currentUltraPowerKw":[100],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-alencon-arconnay","confidence":"medium"},
+    {"station":"Cran-Gevrier","department":"74","currentUltraPowerKw":[120],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-cran-gevrier","confidence":"medium"},
+    {"station":"Bessines","department":"79","currentUltraPowerKw":[150],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/e-leclerc-bessines","confidence":"medium"}
+  ],
+  "quarantinedOldObservations": [
+    {"station":"Le Neubourg","oldPowerKw":180,"oldEnergyEurPerKwhObserved":0.28,"reason":"Current official Charge E-Lec page no longer exposes the old 180 kW ultra-fast topology; only 50 kW rapid points are currently explicit. Do not reuse old tariff."},
+    {"station":"Lesparre-Médoc","oldPowerKw":180,"oldEnergyEurPerKwhObserved":0.38,"currentPowerKw":150,"reason":"Ultra-fast hardware/topology changed from the observed July configuration. New app tariff required."},
+    {"station":"Bourgoin-Jallieu","oldPowerKw":240,"oldEnergyEurPerKwhObserved":0.28,"currentPowerKw":480,"reason":"Ultra-fast hardware/topology materially changed. New app tariff required."},
+    {"station":"Auch","oldPowerKw":160,"oldEnergyEurPerKwhObserved":0.0,"reason":"The apparent free tariff was observed while the station was not open; community immediately flagged it as non-valid. Never model as free without a live app confirmation."}
+  ],
+  "newOrCurrentUltraSitesWithoutVerifiedDirectTariff": [
+    {"station":"Nice Saint-Isidore","currentUltraPowerKw":[150],"status":"price_pending_charge_e_lec_app"},
+    {"station":"Tourlaville","currentUltraPowerKw":[120,180],"status":"price_pending_charge_e_lec_app"}
+  ],
+  "rapid24To99Kw": {
+    "status":"inventory_available_but_tariff_feed_missing",
+    "notes":"Many direct FR*LE2 Charge E-Lec sites expose 24-99 kW DC points. Do not infer their price from 22 kW AC or from ultra-fast points at the same site.",
+    "verifiedExamples": [
+      {"station":"Surgères","powersKw":[30,43,50,60]},
+      {"station":"Orthez","powersKw":[80]},
+      {"station":"Bessines","powersKw":[50]},
+      {"station":"Nice Saint-Isidore","powersKw":[50]},
+      {"station":"Rivéry","powersKw":[50]},
+      {"station":"Niort Station A Hyper","powersKw":[50]},
+      {"station":"Niort Station B Location","powersKw":[50]},
+      {"station":"Marsannay-la-Côte","powersKw":[80]},
+      {"station":"Mios","powersKw":[50]},
+      {"station":"Blois","powersKw":[60]},
+      {"station":"Sables d'Olonne","powersKw":[60]},
+      {"station":"Cognac","powersKw":[50]},
+      {"station":"Tonneins","powersKw":[50]},
+      {"station":"Raon-l'Etape","powersKw":[25,80]},
+      {"station":"Gonesse","powersKw":[50]},
+      {"station":"Sarlat","powersKw":[50]},
+      {"station":"Bastia","powersKw":[50]},
+      {"station":"Coutras","powersKw":[90]}
+    ]
+  },
+  "nextStep": {
+    "preferred": "Resolve the public/authorized Charge E-Lec app station tariff endpoint, then regenerate all FR*LE2 DC tariffs automatically.",
+    "fallback": "Fresh direct-app observation per station/EVSE, with observation timestamp and no propagation across replacement hardware."
+  },
+  "safeFallback": "Do not publish Charge E-Lec DC prices into TCC as current tariffs until a fresh direct Charge E-Lec tariff observation or an authoritative machine-readable station tariff source is available.",
+  "roaming": "excluded"
+}
