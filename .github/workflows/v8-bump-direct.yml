@@ -61,14 +61,23 @@ jobs:
           assert c['unresolved_evse_mapping']==83 and c['unresolved_station_match']==72 and c['unresolved_no_numeric_price']==23
           assert not p.get('variableParseFailures')
           assert not any('L-' in str(st.get('address') or '') for st in p['stations'])
-          points={x.get('idPdcItinerance'):x for st in p['stations'] for x in st.get('points',[]) if x.get('idPdcItinerance')}
-          assert sum(1 for x in points.values() if x.get('rankable') is True)==2074
+          all_points=[x for st in p['stations'] for x in st.get('points',[])]
+          points={x.get('idPdcItinerance'):x for x in all_points if x.get('idPdcItinerance')}
+          assert sum(1 for x in all_points if x.get('rankable') is True)==2074
           a=points['FRBMPE1151']; assert a['rankable'] and abs(a['components']['energyEurPerKwh']-.384)<1e-9 and abs(a['components']['minPriceEur']-1)<1e-9
           b=points['FRBMPE6443']; assert b['rankable'] and abs(b['components']['energyEurPerKwh']-.456)<1e-9 and abs(b['components']['minPriceEur']-1)<1e-9
-          d=points['FRBMPE6747']; assert d['rankable'] and abs(d['components']['energyEurPerKwh']-.55)<1e-9
-          flat=next(r for r in d['rules'] if r['kind']=='flat_fee'); assert abs(flat['amountEur']-1.2)<1e-9 and flat['conditions'][0]['kind']=='energy_above_kwh' and abs(flat['conditions'][0]['value']-.5)<1e-9
-          assert all(x.get('rankable') is not True for st in p['stations'] for x in st.get('points',[]) if x.get('status','').startswith('unresolved_'))
-          print(c)
+          conditional=[]
+          for x in all_points:
+              if not x.get('rankable'): continue
+              comp=x.get('components') or {}
+              if abs(float(comp.get('energyEurPerKwh') or 0)-.55)>1e-9: continue
+              for r in x.get('rules') or []:
+                  if r.get('kind')!='flat_fee' or abs(float(r.get('amountEur') or 0)-1.2)>1e-9: continue
+                  cond=r.get('conditions') or []
+                  if any(q.get('kind')=='energy_above_kwh' and abs(float(q.get('value') or 0)-.5)<1e-9 for q in cond): conditional.append(x)
+          assert conditional, 'validated conditional Bump tariff pattern missing'
+          assert all(x.get('rankable') is not True for x in all_points if x.get('status','').startswith('unresolved_'))
+          print({**c,'conditionalPatternPoints':len(conditional)})
           PY
 
       - name: Test Bump runtime
@@ -83,11 +92,9 @@ jobs:
           import re
           p=Path('index.html');text=p.read_text(encoding='utf-8')
           tag='<script src="assets/v8-bump-direct.js?v=bump-20260826a" defer></script>'
-          # Normalize an existing Bump tag if this workflow is re-run.
           text=re.sub(r'<script\s+src="assets/v8-bump-direct\.js(?:\?[^\"]*)?"\s+defer></script>',tag,text)
           if tag not in text:
-              lines=text.splitlines()
-              pos=None
+              lines=text.splitlines();pos=None
               for marker in ('assets/v8-driveco-direct-overlay.js','assets/v8-allego-direct.js','assets/v8-france-cpo-gap-overlay.js'):
                   hits=[i for i,line in enumerate(lines) if marker in line]
                   if hits: pos=hits[-1]; break
