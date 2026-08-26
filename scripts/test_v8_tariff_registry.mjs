@@ -9,6 +9,17 @@ assert.equal(registry.policy?.subscriptionsAreOptIn,true);
 assert.equal(registry.policy?.subscriptionFixedFeesExcludedFromSessions,true);
 assert.equal(registry.policy?.failOnMissingRequiredArtifact,true);
 
+for(const entry of registry.publish?.copyFromMain||[]){
+  assert.ok(entry.path&&entry.target, 'publish entry requires path and target');
+  assert.ok(['file','directory'].includes(entry.kind), `invalid publish kind for ${entry.path}`);
+}
+const publishEntries=registry.publish?.copyFromMain||[];
+const publishTargets=publishEntries.map(x=>x.target);
+assert.equal(new Set(publishTargets).size,publishTargets.length,'duplicate publish targets are not allowed');
+assert.ok(publishTargets.includes('data/powerdot_direct_france.json.gz'),'Powerdot direct must be part of the declarative publish contract');
+assert.ok(publishTargets.includes('data/etotem_direct_tariffs_france.json.gz'),'e-Totem direct must be part of the declarative publish contract');
+const isPublishedFromMain=path=>publishEntries.some(entry=>path===entry.target||(entry.kind==='directory'&&path.startsWith(`${entry.target}/`)));
+
 const ids=new Set();
 for(const source of registry.sources||[]){
   assert.ok(source.id, 'every source must have an id');
@@ -18,19 +29,14 @@ for(const source of registry.sources||[]){
   assert.ok(Array.isArray(source.artifactPaths), `artifactPaths missing for ${source.id}`);
   assert.ok(Array.isArray(source.runtimeModules), `runtimeModules missing for ${source.id}`);
   if(source.status==='active'){
-    for(const path of source.artifactPaths)assert.ok(fs.existsSync(path), `active source ${source.id} missing artifact ${path}`);
-    for(const path of source.runtimeModules)assert.ok(fs.existsSync(path), `active source ${source.id} missing runtime module ${path}`);
+    for(const path of source.artifactPaths){
+      if(!isPublishedFromMain(path))assert.ok(fs.existsSync(path), `active source ${source.id} missing artifact ${path}`);
+    }
+    for(const path of source.runtimeModules){
+      if(!isPublishedFromMain(path))assert.ok(fs.existsSync(path), `active source ${source.id} missing runtime module ${path}`);
+    }
   }
 }
-
-for(const entry of registry.publish?.copyFromMain||[]){
-  assert.ok(entry.path&&entry.target, 'publish entry requires path and target');
-  assert.ok(['file','directory'].includes(entry.kind), `invalid publish kind for ${entry.path}`);
-}
-const publishTargets=(registry.publish?.copyFromMain||[]).map(x=>x.target);
-assert.equal(new Set(publishTargets).size,publishTargets.length,'duplicate publish targets are not allowed');
-assert.ok(publishTargets.includes('data/powerdot_direct_france.json.gz'),'Powerdot direct must be part of the declarative publish contract');
-assert.ok(publishTargets.includes('data/etotem_direct_tariffs_france.json.gz'),'e-Totem direct must be part of the declarative publish contract');
 
 const overlay=JSON.parse(fs.readFileSync('data/tariff_overlay_v1.json','utf8'));
 const total=JSON.parse(fs.readFileSync('data/totalenergies_tariff_overlay_v1.json','utf8'));
