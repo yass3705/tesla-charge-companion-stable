@@ -380,7 +380,20 @@ jobs:
           grep -q 'atlante-go-powerdot' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'atlante-go-charge-league' site/v8-preview/data/tariff_overlay_v1.json
           grep -q "r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct')" site/v8-preview/assets/v8-reference-offers.js
-          echo 'V8 RC4.8 rc48bt preview : registre tarifaire unifié + page Comparer consolidée + abonnements compacts catalogue complet + La Borne Bleue calculable préparée avec succès'
+
+          # Contrat cache final : il doit être appliqué après toutes les réécritures
+          # du preview, sinon un script peut retrouver une URL de déploiement précédente.
+          python site/scripts/sync_v8_publish_contract.py \
+            --registry rc/data/v8_tariff_sources.json \
+            --source-root site \
+            --target-root site/v8-preview
+          grep -q '_v8deploy=gh-' site/v8-preview/index.html
+          grep -q 'window.fetch=function(input,init)' site/v8-preview/assets/v8-preview-cache-guard.js
+          grep -q "attempt>=3?new URL('refresh.html'" site/v8-preview/assets/v8-preview-cache-guard.js
+          grep -q '_v8deploy=gh-' site/v8-preview/assets/v8-rc48bn-runtime-hotfix.js
+          grep -q '_v8deploy=gh-' site/v8-preview/assets/v8-overlay-area-bridge.js
+
+          echo 'V8 RC4.8 rc48bt preview : registre tarifaire unifié + cache cohérent par déploiement + page Comparer consolidée + abonnements compacts catalogue complet + La Borne Bleue calculable préparée avec succès'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
