@@ -38,8 +38,11 @@
   function gPower(st){const p=Number(st?.powerKw);return Number.isFinite(p)?p:0;}
   function cloneWinner(row,variants){
     const known=variants.filter(finiteCost).sort((a,b)=>a.r.total-b.r.total||providerFromStation(a.st).localeCompare(providerFromStation(b.st),'fr'));
+    const eligibleVariants=variants.filter(v=>stationEligible(v.st));
     const eligibleKnown=known.filter(v=>stationEligible(v.st));
-    let winner=eligibleKnown[0]||known[0]||variants.slice().sort((a,b)=>(a.distanceKm??Infinity)-(b.distanceKm??Infinity))[0];
+    // Fail closed : une offre avec abonnement non sélectionné ne doit jamais redevenir
+    // gagnante via un fallback lorsque toutes les offres tarifées éligibles ont disparu.
+    let winner=eligibleKnown[0]||eligibleVariants.slice().sort((a,b)=>(a.distanceKm??Infinity)-(b.distanceKm??Infinity))[0];
     if(!winner)return null;
     const st={...winner.st};
     const offers=(known.length?known:variants).map(v=>({provider:providerFromStation(v.st),total:Number.isFinite(v?.r?.total)?v.r.total:null,configurationId:v?.st?.configurationId||null,configurationLabel:v?.st?.configurationLabel||'',subscriptionId:subscriptionIdForProvider(providerFromStation(v.st))||null})).sort((a,b)=>(a.total??Infinity)-(b.total??Infinity)||a.provider.localeCompare(b.provider,'fr'));
@@ -146,10 +149,14 @@
 
     for(const entries of groups.values()){
       entries.forEach(e=>e.provider=providerName(e.info,e.card));
+      const eligibleEntries=entries.filter(e=>providerEligible(e.provider));
+      // Si le groupe ne contient que des variantes d'abonnement non sélectionnées,
+      // aucune carte ne doit subsister comme résultat classable.
+      if(!eligibleEntries.length){entries.forEach(e=>e.card.remove());continue;}
       const known=entries.filter(e=>Number.isFinite(e.cost));
       const eligibleKnown=known.filter(e=>providerEligible(e.provider));
       const minCost=eligibleKnown.length?Math.min(...eligibleKnown.map(e=>e.cost)):null;
-      let winner=eligibleKnown.length?eligibleKnown.slice().sort((a,b)=>a.cost-b.cost||a.index-b.index)[0]:(known[0]||entries[0]);
+      const winner=eligibleKnown.length?eligibleKnown.slice().sort((a,b)=>a.cost-b.cost||a.index-b.index)[0]:eligibleEntries.slice().sort((a,b)=>a.index-b.index)[0];
       const anchor=entries.slice().sort((a,b)=>a.index-b.index)[0];
       if(winner.card!==anchor.card)anchor.card.parentNode.insertBefore(winner.card,anchor.card);
 
