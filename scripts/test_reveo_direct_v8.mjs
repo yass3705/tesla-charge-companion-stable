@@ -18,88 +18,98 @@ vm.runInThisContext(code,{filename:'v8-reveo-direct.js'});
 const api=globalThis.TCCReveoDirectV8;
 assert.ok(api,'Révéo API missing');
 assert.equal(api.validateMatrix(matrix),matrix);
+assert.deepEqual(matrix.scope.rankableTerritories,['S34']);
+assert.equal(matrix.scope.roamingTariffsPromotedToDirect,false);
 
-function base({department='34',operator='Révéo',name='Révéo Test',address='',configs=[]}={}){
-  return {id:`test-${department}-${name}`,name,operator,department,address,countryCode:'FR',source:'franceNationalCatalog',chargingConfigurations:configs};
+const unsafe=structuredClone(matrix);
+unsafe.territories.S12.public=[{key:'unsafe',kind:'AC',pricePerKwh:.4}];
+assert.throws(()=>api.validateMatrix(unsafe),/non vérifié rendu calculable/);
+
+function base({department='34',operator='Révéo',name='Révéo Test',address='',city='',partyId='',configs=[]}={}){
+  return {id:`test-${department}-${name}`,name,operator,department,address,city,partyId,countryCode:'FR',source:'franceNationalCatalog',chargingConfigurations:configs};
 }
-const ac22={id:'electroverse-ac',label:'Electroverse · AC 22 kW',kind:'AC',powerKw:22,stalls:2,offerProvider:'Electroverse',offerType:'roaming',pricing:{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:.55}]}};
-const dc24={id:'roam-dc24',label:'Roaming · DC 24 kW',kind:'DC',powerKw:24,stalls:1,offerProvider:'Electroverse',offerType:'roaming'};
-const dc50={id:'roam-dc50',label:'Roaming · DC 50 kW',kind:'DC',powerKw:50,stalls:1,offerProvider:'Electroverse',offerType:'roaming'};
-const dc100={id:'roam-dc100',label:'Roaming · DC 100 kW',kind:'DC',powerKw:100,stalls:2,offerProvider:'Electroverse',offerType:'roaming'};
+function config(kind,powerKw,stalls=1,provider='Electroverse'){
+  return {id:`${provider}-${kind}-${powerKw}`,label:`${provider} · ${kind} ${powerKw} kW`,kind,powerKw,stalls,offerProvider:provider,offerType:'roaming',pricing:{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:.77}]}};
+}
+const ac22=config('AC',22,2),ac43=config('AC',43.6),dc24=config('DC',24),dc50=config('DC',50),dc100=config('DC',100,2);
+const feeRule=c=>c.pricing.rules.find(r=>Number(r.afterMinutesRate)>0);
 
-// Hérault: public + subscriber exact by connector, roaming preserved.
-let st=api.mergeStation(base({department:'34',configs:[ac22,dc24,dc50,dc100]}),matrix);
+// Hérault hors métropole : public + abonné exacts, roaming conservé.
+let st=api.mergeStation(base({department:'34',city:'Béziers',configs:[ac22,ac43,dc24,dc50,dc100]}),matrix);
 assert.equal(st.reveoTerritory,'S34');
 assert.equal(st.reveoPricingStatus,'verified');
-assert.ok(st.chargingConfigurations.some(c=>c.offerProvider==='Electroverse'),'roaming must be preserved');
+assert.ok(st.chargingConfigurations.some(c=>c.offerProvider==='Electroverse'),'roaming must be preserved separately');
 const pub=st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Direct');
 const sub=st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Abonné');
-assert.equal(pub.length,4);assert.equal(sub.length,4);
-assert.equal(pub.find(c=>c.powerKw===22).pricing.rules[1].pricePerKwh,.40);
-assert.equal(pub.find(c=>c.powerKw===22).pricing.rules[1].afterMinutesThreshold,180);
-assert.equal(pub.find(c=>c.powerKw===22).pricing.rules[1].afterMinutesRate,.10);
-assert.equal(sub.find(c=>c.powerKw===22).pricing.rules[1].pricePerKwh,.32);
-assert.equal(sub.find(c=>c.powerKw===24).pricing.rules[1].pricePerKwh,.36);
-assert.equal(pub.find(c=>c.powerKw===50).pricing.rules[1].pricePerKwh,.50);
-assert.equal(pub.find(c=>c.powerKw===100).pricing.rules[0].pricePerKwh,.59);
-assert.equal(sub.find(c=>c.powerKw===100).pricing.rules[0].pricePerKwh,.50);
-assert.ok(sub.every(c=>c.subscriptionId==='reveo-subscription'));
+assert.equal(pub.length,5);assert.equal(sub.length,5);
+for(const p of [22,43.6]){
+  assert.equal(pub.find(c=>c.kind==='AC'&&c.powerKw===p).pricing.rules[0].pricePerKwh,.40);
+  assert.equal(sub.find(c=>c.kind==='AC'&&c.powerKw===p).pricing.rules[0].pricePerKwh,.32);
+  assert.equal(feeRule(pub.find(c=>c.kind==='AC'&&c.powerKw===p)).afterMinutesThreshold,180);
+  assert.equal(feeRule(pub.find(c=>c.kind==='AC'&&c.powerKw===p)).afterMinutesRate,.10);
+  assert.equal(feeRule(sub.find(c=>c.kind==='AC'&&c.powerKw===p)).afterMinutesRate,.075);
+}
+assert.equal(pub.find(c=>c.kind==='DC'&&c.powerKw===24).pricing.rules[0].pricePerKwh,.46);
+assert.equal(sub.find(c=>c.kind==='DC'&&c.powerKw===24).pricing.rules[0].pricePerKwh,.36);
+assert.equal(pub.find(c=>c.kind==='DC'&&c.powerKw===50).pricing.rules[0].pricePerKwh,.50);
+assert.equal(sub.find(c=>c.kind==='DC'&&c.powerKw===50).pricing.rules[0].pricePerKwh,.40);
+assert.equal(pub.find(c=>c.kind==='DC'&&c.powerKw===100).pricing.rules[0].pricePerKwh,.59);
+assert.equal(sub.find(c=>c.kind==='DC'&&c.powerKw===100).pricing.rules[0].pricePerKwh,.50);
+assert.equal(pub.find(c=>c.kind==='DC'&&c.powerKw===100).pricing.rules[0].afterMinutesThreshold,30);
+assert.equal(pub.find(c=>c.kind==='DC'&&c.powerKw===100).pricing.rules[0].afterMinutesRate,.12);
+assert.ok(sub.every(c=>c.subscriptionId==='reveo-subscription'&&c.subscriptionSelectionId==='reveo-subscription'));
 
-// Explicit long-duration tag changes AC threshold from 3 h to 10 h.
-st=api.mergeStation(base({department:'34',name:'Révéo longue durée',configs:[ac22]}),matrix);
+// La catégorie longue utilisation n'est utilisée que si le site est explicitement marqué.
+st=api.mergeStation(base({department:'34',city:'Béziers',name:'Révéo borne longue utilisation',configs:[ac22]}),matrix);
 let direct=st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct');
+assert.equal(direct.reveoTariffKey,'ac-long');
 assert.equal(direct.pricing.rules[0].afterMinutesThreshold,600);
 assert.equal(direct.pricing.rules[0].afterMinutesRate,.10);
 
-// Aveyron: 1 July 2026 public grid only; no guessed subscriber offer.
-st=api.mergeStation(base({department:'12',configs:[ac22,dc24,dc50,dc100]}),matrix);
-assert.equal(st.reveoTerritory,'S12');
-assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Direct').length,4);
-assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Abonné').length,0);
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.powerKw===24).pricing.rules[0].pricePerKwh,.46);
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.powerKw===50).pricing.rules[0].pricePerKwh,.50);
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.powerKw===100).pricing.rules[0].pricePerKwh,.59);
-
-// Lozère: current public tariff only.
-st=api.mergeStation(base({department:'48',configs:[ac22,dc50,dc100]}),matrix);
-assert.equal(st.reveoTerritory,'S48');
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.powerKw===22).pricing.rules[1].pricePerKwh,.40);
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.powerKw===50).pricing.rules[0].pricePerKwh,.55);
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.powerKw===100).pricing.rules[0].pricePerKwh,.70);
-assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Abonné').length,0);
-
-// Toulouse Métropole: never infer M31 from department alone.
-st=api.mergeStation(base({department:'31',name:'Révéo Toulouse',configs:[ac22]}),matrix);
-assert.equal(st.reveoPricingStatus,'unresolved');
-assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Direct').length,0);
-st=api.mergeStation(base({department:'31',name:'Révéo Toulouse Métropole',configs:[ac22,dc50]}),matrix);
-assert.equal(st.reveoTerritory,'M31');
-let ac=st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.kind==='AC');
-assert.deepEqual(ac.pricing.rules.map(r=>[r.start,r.end,r.pricePerKwh,r.afterMinutesRate,r.afterMinutesThreshold]),[
-  ['06:00','23:00',.40,.04,120],['23:00','06:00',.30,.04,120]
-]);
-assert.equal(st.chargingConfigurations.find(c=>c.offerProvider==='Révéo Direct'&&c.kind==='DC').pricing.rules[0].pricePerKwh,.40);
-
-// Montpellier/Toulibéo must not inherit Hérault S34 by department.
-st=api.mergeStation(base({department:'34',name:'Révéo Montpellier Métropole',configs:[ac22]}),matrix);
-assert.notEqual(st.reveoPricingStatus,'verified');
-
-// Révéo 2025 remains fail-closed until current territory rules are revalidated.
-for(const dep of ['09','11','46','65','66']){
-  st=api.mergeStation(base({department:dep,configs:[ac22,dc100]}),matrix);
-  assert.equal(st.reveoPricingStatus,'unresolved',dep);
-  assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Direct').length,0,dep);
+// Montpellier Méditerranée Métropole : exclusion géographique, même avec FR*S34 explicite.
+for(const sample of [
+  base({department:'34',city:'Montpellier',partyId:'FR*S34',configs:[ac22]}),
+  base({department:'34',city:'Lattes',partyId:'FR*S34',configs:[dc100]}),
+  base({department:'34',address:'1 avenue de Test, 34970 Lattes',configs:[ac22]})
+]){
+  st=api.mergeStation(sample,matrix);
+  assert.equal(st.reveoTerritory,'M34');
+  assert.equal(st.reveoPricingStatus,'unresolved');
+  assert.equal(st.chargingConfigurations.filter(c=>c.reveoDirect).length,0);
 }
 
-// A partner CPO with a Révéo roaming row is not treated as Révéo-operated.
-st=api.mergeStation(base({department:'34',operator:'Powerdot',name:'Powerdot',configs:[{...ac22,offerProvider:'Révéo'}]}),matrix);
+// Tous les autres territoires connus restent fail-closed : aucune donnée roaming/OCPI n'est promue.
+const cases=[
+  ['12','S12','Rodez','FR*S12'],['31','M31','Toulouse','FR*M31'],['48','S48','Mende','FR*S48'],
+  ['09','D09','Foix',''],['11','D11','Carcassonne',''],['46','D46','Cahors',''],['65','D65','Tarbes',''],['66','D66','Perpignan','']
+];
+for(const [department,territory,city,partyId] of cases){
+  st=api.mergeStation(base({department,city,partyId,configs:[ac22,dc100]}),matrix);
+  assert.equal(st.reveoTerritory,territory,department);
+  assert.equal(st.reveoPricingStatus,'unresolved',department);
+  assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Direct'||c.offerProvider==='Révéo Abonné').length,0,department);
+}
+
+// Un CPO partenaire proposant Révéo en itinérance ne devient jamais une station Révéo opérée.
+st=api.mergeStation(base({department:'34',operator:'Powerdot',city:'Béziers',configs:[config('AC',22,1,'Révéo')]}),matrix);
 assert.equal(st.operator,'Powerdot');
 assert.equal(st.reveoPricingStatus,undefined);
+
+// Statistiques overlay : vérifié uniquement sur Hérault hors métropole.
+const prepared={stations:[
+  base({department:'34',city:'Béziers',configs:[ac22]}),
+  base({department:'34',city:'Montpellier',configs:[ac22]}),
+  base({department:'12',city:'Rodez',configs:[ac22]})
+]};
+api.overlayPrepared(prepared,matrix);
+assert.equal(prepared.reveoMergeStats.verifiedStations,1);
+assert.equal(prepared.reveoMergeStats.unresolvedStations,2);
 
 assert.ok(registered.some(p=>p.selectionId==='reveo-subscription'),'Révéo plan not registered');
 const plan=registered.find(p=>p.selectionId==='reveo-subscription');
 assert.equal(plan.defaultSelected,false);
 assert.equal(plan.monthlyFeeEur,1.5);
 assert.match(plan.monthlyFeeLabel,/12 €/);
+assert.equal(plan.directOperatorOnly,true);
 
-console.log('Révéo Direct V8 tests OK');
+console.log(JSON.stringify({ok:true,rankableTerritories:matrix.scope.rankableTerritories,subscription:'reveo-subscription',unresolved:['09','11','12','31','46','48','65','66','Montpellier Métropole']},null,2));
