@@ -1,7 +1,7 @@
 // Tesla Charge Companion V8 — ALDI France CPO-direct, strict physical operator only.
 (function(){
   'use strict';
-  const REVISION='aldi-direct-v1-20260826';
+  const REVISION='aldi-direct-v1b-20260826';
   const SOURCE='https://www.aldi.fr/services/borne-recharge.html';
   const CPO_SOURCE='https://afirev.fr/en/list-of-assigned-identifiers/';
   const text=v=>String(v==null?'':v).trim();
@@ -39,7 +39,7 @@
   }
   function tariffFor(g){
     if(g.kind==='AC'&&g.powerKw>0&&g.powerKw<=22.5)return{id:'aldi-fr-ac-direct',price:.29};
-    if(g.kind==='DC'&&g.powerKw>=40&&g.powerKw<=60)return{id:'aldi-fr-dc50-direct',price:.35};
+    if(g.kind==='DC'&&g.powerKw>=45&&g.powerKw<=55)return{id:'aldi-fr-dc50-direct',price:.35};
     return null;
   }
   function pricing(price){return{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:price,chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0,afterMinutesCap:0,afterMinutesCapStart:'00:00',afterMinutesCapEnd:'24:00'}],aldiExactDirect:true}}
@@ -88,5 +88,5 @@
   function boot(){if(!installCandidateOverlay()){let tries=0;const timer=setInterval(()=>{tries++;if(installCandidateOverlay()||tries>=30)clearInterval(timer)},200)}}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
   window.TCCAldiDirectV8={revision:REVISION,isAldiPhysical,hasFrAln,isExplicitAldiOperator,physicalGroups,tariffFor,directConfigurations,mergeStation,overlayPrepared,installCandidateOverlay};
-  console.info('[TCC V8] ALDI Direct France : FRALN/ALDI physique uniquement, AC <=22 kW et DC 50 kW; autres puissances fail-closed.');
+  console.info('[TCC V8] ALDI Direct France : FRALN/ALDI physique uniquement, AC <=22 kW et DC 50 kW; DC 60/100 kW fail-closed.');
 })();
