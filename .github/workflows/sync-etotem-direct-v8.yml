@@ -33,6 +33,10 @@ jobs:
           ref: main
           path: data-lab
 
+      - name: Normaliser les coordonnées IRVE e-Totem
+        working-directory: data-lab
+        run: python scripts/etotem_normalize_inventory_coordinates.py data/national/etotem_direct_stations_france.json.gz
+
       - name: Installer le navigateur du harvest e-Totem
         working-directory: data-lab
         run: npm install --no-save playwright-core@1.55.0
@@ -60,7 +64,7 @@ jobs:
             assert str(a.get('bOcpi',0)) == '0'
             assert str(a.get('bGireve',0)) == '0'
             assert str(a.get('bItinerance',0)) == '0'
-          print(json.dumps({'counts':c,'harvest':d.get('harvest',{}),'topProfiles':[{'count':x['count'],'text':x['text'][:500]} for x in d.get('tariffProfiles',[])[:15]]},ensure_ascii=False,indent=2))
+          print(json.dumps({'counts':c,'coverageByFamily':d.get('coverageByFamily',{}),'harvest':d.get('harvest',{}),'topProfiles':[{'count':x['count'],'text':x['text'][:500]} for x in d.get('tariffProfiles',[])[:15]]},ensure_ascii=False,indent=2))
           PY
 
       - name: Installer la base directe dans TCC V8
