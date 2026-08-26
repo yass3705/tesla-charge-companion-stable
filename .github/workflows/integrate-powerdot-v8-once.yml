@@ -25,7 +25,20 @@ jobs:
         run: curl --fail --location --retry 4 --retry-delay 5 --output data/powerdot_direct_france.json.gz https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/powerdot_direct_france.json.gz
       - name: Diagnose connector delta
         run: |
-          python -c 'import gzip,json; d=json.load(gzip.open("data/powerdot_direct_france.json.gz","rt")); bad=[{"charger":e.get("chargerName"),"location":(e.get("location") or {}).get("name"),"connector":c.get("connectorNumber"),"physicalReference":c.get("physicalReference"),"type":c.get("type"),"maxPowerKw":c.get("maxPowerKw"),"voltage":c.get("voltage"),"amperage":c.get("amperage"),"tariff":c.get("tariff")} for e in d.get("chargers",[]) for c in (e.get("charger") or {}).get("connectors",[]) if not (float(c.get("maxPowerKw") or 0)>0)]; print(json.dumps({"missingPowerCount":len(bad),"items":bad},ensure_ascii=False,indent=2))'
+          python - <<'PY'
+          import gzip,json
+          d=json.load(gzip.open('data/powerdot_direct_france.json.gz','rt'))
+          out=[]
+          for e in d.get('chargers',[]):
+            for c in (e.get('charger') or {}).get('connectors',[]):
+              t=c.get('tariff') or {}
+              comps=[pc for el in t.get('elements',[]) for pc in el.get('priceComponents',[])]
+              power=float(c.get('maxPowerKw') or 0)
+              recognized=[pc for pc in comps if pc.get('type') in ('ENERGY','FLAT','PARKING_TIME','TIME') and float(pc.get('pricePerUnit') or 0)>0]
+              if not (power>0 and recognized):
+                out.append({'charger':e.get('chargerName'),'location':(e.get('location') or {}).get('name'),'connector':c.get('connectorNumber'),'physicalReference':c.get('physicalReference'),'type':c.get('type'),'maxPowerKw':c.get('maxPowerKw'),'voltage':c.get('voltage'),'amperage':c.get('amperage'),'components':comps,'reason':('missing_power' if power<=0 else 'no_positive_recognized_component')})
+          print(json.dumps({'unmappedCount':len(out),'items':out},ensure_ascii=False,indent=2))
+          PY
       - name: Patch V8
         run: python scripts/integrate_powerdot_v8_once.py
       - name: Align source metadata guards
