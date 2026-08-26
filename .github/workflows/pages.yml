@@ -41,6 +41,8 @@ jobs:
           mkdir -p site/v8-preview
           rsync -a --delete --exclude='.git/' --exclude='.github/' rc/ site/v8-preview/
 
+          # Compatibilité transitoire : les copies historiques restent présentes,
+          # puis le registre central complète/valide automatiquement toutes les sources.
           cp site/data/custom_stations.json site/v8-preview/data/custom_stations.json
           cp site/data/exchange_rates.json site/v8-preview/data/exchange_rates.json
           cp site/data/e55c_station_tariffs_v1.json.gz site/v8-preview/data/e55c_station_tariffs_v1.json.gz
@@ -51,6 +53,11 @@ jobs:
           cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france
           cp site/assets/france-catalog-v8.js site/v8-preview/assets/france-catalog.js
           cp site/assets/v8-belib-pricing.js site/v8-preview/assets/v8-belib-pricing.js
+
+          python site/scripts/sync_v8_publish_contract.py \
+            --registry rc/data/v8_tariff_sources.json \
+            --source-root site \
+            --target-root site/v8-preview
 
           cat > site/v8-preview/assets/preview-storage.js <<'JS'
           (function(){
@@ -116,7 +123,7 @@ jobs:
           tag='<script src="assets/preview-storage.js?v=rc48bt-banner-20260825"></script>\n'
           marker='<script>window.escapeHtml'
           html=html.replace(marker,tag+marker,1) if marker in html else html.replace('</head>',tag+'</head>',1)
-          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-subscription-stability-fix','v8-compare-subscriptions','v8-station-status'):
+          for name in ('v8-vehicle-profiles','v8-redesign','v8-dynamic-filter','v8-area-workflow','v8-sync-guard','v8-rc4-extensions','v8-rc4-toggle-fix','v8-combined-tariff-fix','v8-source-first-offers','v8-source-integrity','v8-ambiguous-electra-warning','v8-tariff-display-fix','v8-subscription-selection','v8-subscription-stability-fix','v8-compare-subscriptions','v8-station-status','v8-tariff-engine'):
               html=re.sub(rf'<script src="assets/{name}\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'assets/france-catalog\.js\?v=[^"]+', 'assets/france-catalog.js?v=rc48-atlante-20260824', html)
           html=re.sub(r'<script src="assets/v8-e55c-pricing\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -137,6 +144,7 @@ jobs:
           )
           html=html.replace(offer_tag,injected+offer_tag,1)
           scripts=(
+              '<script src="assets/v8-tariff-engine.js?v=v8-tariff-engine-1" defer></script>\n'
               '<script src="assets/v8-vehicle-profiles.js?v=rc48am-20260821" defer></script>\n'
               '<script src="assets/v8-redesign.js?v=rc48be-20260823" defer></script>\n'
               '<script src="assets/v8-dynamic-filter.js?v=rc48am-20260821" defer></script>\n'
@@ -191,6 +199,7 @@ jobs:
 
           node --check site/v8-preview/assets/france-catalog.js
           node --check site/v8-preview/assets/v8-belib-pricing.js
+          node --check site/v8-preview/assets/v8-tariff-engine.js
           node --check site/v8-preview/assets/v8-operator-tariff-overlay.js
           node --check site/v8-preview/assets/v8-evadea-band-fallback.js
           node --check site/v8-preview/assets/v8-regional-tariff-overlay.js
@@ -212,10 +221,12 @@ jobs:
           node --check site/v8-preview/assets/v8-subscription-selection.js
           node --check site/v8-preview/assets/v8-station-status.js
           node --check site/v8-preview/assets/update.js
+          node --check site/v8-preview/scripts/test_v8_tariff_registry.mjs
           node --check site/v8-preview/scripts/test_fastned_v8_release.mjs
           node --check site/v8-preview/scripts/test_labornebleue_explicit_operator_fallback.mjs
           node --check site/v8-preview/scripts/test_compare_subscriptions_refactor.mjs
           python -m json.tool site/v8-preview/data/non_tesla_france/status_snapshot.json >/dev/null
+          (cd site/v8-preview && node scripts/test_v8_tariff_registry.mjs)
           node site/scripts/test_e55c_v8_overlay.mjs site/v8-preview/data/e55c_station_tariffs_v1.json.gz
           (cd site && node scripts/test_e55c_v8_runtime.mjs)
           node site/scripts/test_belib_v8_overlay.mjs site/v8-preview/data/belib_station_tariffs_v1.json.gz
@@ -228,6 +239,8 @@ jobs:
           grep -q 'stableBannerText=.*rc48bt.*abonnements compacts.*La Borne Bleue direct calculable' site/v8-preview/assets/preview-storage.js
           grep -q 'tccPreviewBannerStableStyle' site/v8-preview/assets/preview-storage.js
           grep -q 'france-catalog.js?v=rc48-atlante-20260824' site/v8-preview/index.html
+          grep -q 'v8-tariff-engine.js?v=v8-tariff-engine-1' site/v8-preview/index.html
+          grep -q '"contractVersion": "v8-tariff-engine-1"' site/v8-preview/data/v8_tariff_sources.json
           ! grep -q 'v8-e55c-pricing.js' site/v8-preview/index.html
           grep -q 'v8-belib-pricing.js?v=rc48-belib-1' site/v8-preview/index.html
           grep -q 'v8-operator-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
@@ -278,6 +291,7 @@ jobs:
           checks={
               'cache update.js rc48bt':'update.js?v=rc48bt-20260825' in index,
               'cache bridge LBB rc48bm':'v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825' in index,
+              'moteur tarifaire unifié chargé':'v8-tariff-engine.js?v=v8-tariff-engine-1' in index,
               'UI abonnements compacte chargée':'v8-compare-subscriptions.js?v=rc48bt-20260825' in index,
               'pont abonnements chargé':'v8-subscription-stability-fix.js?v=rc48bs-20260825' in index,
               'chargeur august-release rc48bl':'august-release.js?v=rc48bl-20260824' in updater,
@@ -366,7 +380,7 @@ jobs:
           grep -q 'atlante-go-powerdot' site/v8-preview/data/tariff_overlay_v1.json
           grep -q 'atlante-go-charge-league' site/v8-preview/data/tariff_overlay_v1.json
           grep -q "r.id==='ionity-direct'&&hasRankableProvider(box,'IONITY Direct')" site/v8-preview/assets/v8-reference-offers.js
-          echo 'V8 RC4.8 rc48bt preview : page Comparer consolidée + abonnements compacts catalogue complet + La Borne Bleue calculable préparée avec succès'
+          echo 'V8 RC4.8 rc48bt preview : registre tarifaire unifié + page Comparer consolidée + abonnements compacts catalogue complet + La Borne Bleue calculable préparée avec succès'
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
