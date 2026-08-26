@@ -51,6 +51,9 @@ assert.ok(directPipelineSource.includes('repairSubscriptionMetadata'),'subscript
 assert.ok(directPipelineSource.includes("full.endsWith(' '+p)"),'shortened provider labels must map back to subscription plans');
 assert.ok(directPipelineSource.includes('window.TCCV8Subscriptions?.applyAll?.(true)'),'subscription eligibility must be reapplied after metadata repair');
 assert.ok(directPipelineSource.includes('window.TCCV8ReferenceOffers?.apply?.()'),'operator references must be restored when no exact direct tariff is available');
+assert.ok(directPipelineSource.includes('api.mergedPowerdotStation(best.location,data,[st])'),'Powerdot must enrich only an already prepared station');
+assert.ok(directPipelineSource.includes("if(!api.isPowerdotOperator(st)"),'Powerdot enrichment must be restricted to physical Powerdot stations');
+assert.ok(!directPipelineSource.includes('api.mergePowerdotCatalog(prepared.stations'),'Powerdot pipeline must never re-expand the national catalog into a prepared area');
 assert.ok(runtimeHotfixSource.includes('loadDirectOfferPipeline()'),'runtime hotfix must bootstrap the unified direct pipeline');
 assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js'),'runtime hotfix must load the direct pipeline asset');
 
