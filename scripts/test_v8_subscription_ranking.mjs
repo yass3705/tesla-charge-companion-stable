@@ -78,9 +78,20 @@ assert.equal(collapsed.length, 1);
 assert.equal(collapsed[0].r.total, 10, 'Sans abonnement, le tarif Visiteur doit déterminer le classement.');
 assert.equal(collapsed[0].st._offerComparison.offers.length, 3, 'Les offres abonnées restent affichables.');
 
+const subscriberOnly = [
+  variant('Belib’ direct — Abonné résident Paris', 5),
+  variant('Belib’ direct — Abonné non-résident', 6),
+];
+storage.set('tccSubscriptionsV1', JSON.stringify({ selected: [] }));
+collapsed = offers.collapseOfferVariants(subscriberOnly);
+assert.equal(collapsed.length, 0, 'Un groupe uniquement composé d’abonnements non sélectionnés doit être non classable.');
+
 storage.set('tccSubscriptionsV1', JSON.stringify({ selected: ['belib-resident'] }));
 collapsed = offers.collapseOfferVariants(variants);
 assert.equal(collapsed[0].r.total, 5, 'Le tarif résident doit être classable après sélection.');
+collapsed = offers.collapseOfferVariants(subscriberOnly);
+assert.equal(collapsed.length, 1);
+assert.equal(collapsed[0].r.total, 5, 'Dans un groupe uniquement abonné, seul le forfait explicitement sélectionné peut gagner.');
 
 storage.set('tccSubscriptionsV1', JSON.stringify({ selected: ['belib-nonresident'] }));
 collapsed = offers.collapseOfferVariants(variants);
@@ -89,6 +100,11 @@ assert.equal(collapsed[0].r.total, 6, 'Le tarif non-résident doit être classab
 storage.set('tccSubscriptionsV1', JSON.stringify({ selected: ['electra-smart'] }));
 collapsed = offers.collapseOfferVariants(variants);
 assert.equal(collapsed[0].r.total, 10, 'Un autre abonnement ne doit pas activer Belib’.');
+collapsed = offers.collapseOfferVariants(subscriberOnly);
+assert.equal(collapsed.length, 0, 'Un abonnement tiers ne doit jamais réactiver un fallback Belib abonné.');
+
+const offerSelectionSource = fs.readFileSync('assets/v8-offer-selection.js', 'utf8');
+assert.doesNotMatch(offerSelectionSource, /eligibleKnown\[0\]\|\|known\[0\]/, 'Le fallback historique vers une offre tarifée inéligible ne doit pas revenir.');
 
 const august = fs.readFileSync('assets/august-release.js', 'utf8');
 assert.match(august, /available\.filter\(x=>rankingSubscriptionEligible\(x\.st\)\)/);
@@ -102,4 +118,4 @@ const integrity = fs.readFileSync('assets/v8-source-integrity.js', 'utf8');
 assert.match(integrity, /\(!m\.subscriptionId\|\|selected\.has\(m\.subscriptionId\)\)/);
 assert.match(integrity, /subscriptionIdForProvider\(provider\)/);
 
-console.log('Belib subscription ranking tests passed: resident and non-resident are opt-in before Top 20.');
+console.log('Belib subscription ranking tests passed: subscriptions are strictly opt-in, including subscriber-only groups.');
