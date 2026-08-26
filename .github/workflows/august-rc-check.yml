@@ -142,7 +142,7 @@ jobs:
           grep -q "assets/v8-rc48bn-runtime-hotfix.js" index.html
           test "$(grep -c 'assets/v8-waat-direct.js' index.html)" -eq 1
           test -s data/waat_direct_tariffs_tcc_france.json
-          grep -q "assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4" assets/v8-rc48bn-runtime-hotfix.js
+          grep -q "assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-5" assets/v8-rc48bn-runtime-hotfix.js
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
           grep -q "v8-compare-subscriptions.js?v=rc48bt-20260825" assets/update.js
