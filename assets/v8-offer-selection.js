@@ -22,8 +22,8 @@
   function subscriptionIdForProvider(value){
     const api=window.TCCV8Subscriptions;if(api?.subscriptionIdForProvider)return api.subscriptionIdForProvider(value);
     const provider=text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
-    if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';
-    if(provider.includes('belib direct abonne resident'))return'belib-resident';
+    if(provider.includes('belib direct abonne non resident')||provider==='abonne non resident')return'belib-nonresident';
+    if(provider.includes('belib direct abonne resident')||provider==='abonne resident paris')return'belib-resident';
     return'';
   }
   function selectedSubscriptions(){

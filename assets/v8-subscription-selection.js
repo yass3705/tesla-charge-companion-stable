@@ -29,8 +29,8 @@
   function saveSelected(ids){localStorage.setItem(KEY,JSON.stringify({selected:[...ids],updatedAt:new Date().toISOString()}));}
   function subscriptionIdForProvider(value){
     const provider=norm(value);
-    if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';
-    if(provider.includes('belib direct abonne resident'))return'belib-resident';
+    if(provider.includes('belib direct abonne non resident')||provider==='abonne non resident')return'belib-nonresident';
+    if(provider.includes('belib direct abonne resident')||provider==='abonne resident paris')return'belib-resident';
     if(provider.includes('la borne bleue direct abonne')||provider.includes('la borne bleue abonne'))return'labornebleue-annual';
     return'';
   }
