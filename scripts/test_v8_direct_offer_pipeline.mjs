@@ -6,6 +6,8 @@ const pipeline=fs.readFileSync('assets/v8-direct-offer-pipeline.js','utf8');
 const hotfix=fs.readFileSync('assets/v8-rc48bn-runtime-hotfix.js','utf8');
 
 assert.equal(registry.policy?.directOffersResolvedBeforeRanking,true,'direct offers must be resolved before ranking');
+const publishEntries=registry.publish?.copyFromMain||[];
+const isPublishedFromMain=path=>publishEntries.some(entry=>path===entry.target||(entry.kind==='directory'&&path.startsWith(`${entry.target}/`)));
 const byId=new Map((registry.sources||[]).map(s=>[s.id,s]));
 assert.equal(byId.get('direct-offer-pipeline')?.status,'active');
 assert.equal(byId.get('driveco-direct')?.status,'active','DRIVECO validated EVSE map must be active');
@@ -31,7 +33,7 @@ assert.ok(hotfix.includes('loadDirectOfferPipeline()'),'runtime bootstrap must l
 assert.ok(hotfix.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4'),'runtime bootstrap must use the current pipeline revision');
 for(const source of registry.sources||[]){
   if(source.status!=='active')continue;
-  for(const module of source.runtimeModules||[])assert.ok(fs.existsSync(module),`active runtime module missing: ${source.id} -> ${module}`);
-  for(const artifact of source.artifactPaths||[])assert.ok(fs.existsSync(artifact),`active artifact missing: ${source.id} -> ${artifact}`);
+  for(const module of source.runtimeModules||[])if(!isPublishedFromMain(module))assert.ok(fs.existsSync(module),`active runtime module missing: ${source.id} -> ${module}`);
+  for(const artifact of source.artifactPaths||[])if(!isPublishedFromMain(artifact))assert.ok(fs.existsSync(artifact),`active artifact missing: ${source.id} -> ${artifact}`);
 }
 console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, compare untouched.');
