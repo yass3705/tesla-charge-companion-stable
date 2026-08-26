@@ -103,6 +103,20 @@ jobs:
       - name: Smoke-test Bump direct matching and fee rules
         run: node scripts/test_bump_direct_v8.mjs
 
+      - name: Fetch pinned France catalog for Bump matching audit
+        run: |
+          set -euo pipefail
+          mkdir -p data/non_tesla_france
+          curl -fsSL --retry 3 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-stable/7652472eae0ea60db1bad2767d1f6fd0dbbee73f/data/non_tesla_france/all.json.gz \
+            -o data/non_tesla_france/all.json.gz
+          python - <<'PY'
+          from pathlib import Path
+          blob=Path('data/non_tesla_france/all.json.gz').read_bytes()
+          assert blob[:2]==b'\x1f\x8b' and len(blob)>1000
+          print({'franceCatalogBytes':len(blob)})
+          PY
+
       - name: Audit Bump known Paris matching fixtures
         run: node scripts/audit_bump_runtime_matching.mjs
 
