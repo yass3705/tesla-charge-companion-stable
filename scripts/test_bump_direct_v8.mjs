@@ -15,6 +15,28 @@ assert.equal(B.validateCatalog(fakeCatalog),fakeCatalog);
 assert.equal(B.isBumpOperator({operator:'Bump'}),true);
 assert.equal(B.isBumpOperator({operator:'Electroverse'}),false);
 
+// Les flux physiques peuvent publier 7.4 kW là où le snapshot Bump exprime 7 kW.
+// Cette différence de puissance nominale doit matcher, contrairement à un vrai saut de classe.
+assert.equal(B.compatible({powerKw:7},{powerKw:7.4}),true);
+assert.equal(B.compatible({powerKw:7},{powerKw:11}),false);
+const meyerTariff={energyEurPerKwh:.42,minPriceEur:.5};
+const meyerRules=[{kind:'energy',eurPerKwh:.42}];
+const meyerCatalog={stations:[
+ {stationId:'FRBMPS664624',name:'Bump - SAGS - Paris - Meyerbeer',address:"3 Rue de la Chau. d'Antin, 75009 Paris",points:[{idPdcItinerance:'FRBMPENM0550',powerKw:7,status:'rankable_static',rankable:true,components:meyerTariff,rules:meyerRules}]},
+ {stationId:'FRBMPS664625',name:'Bump - SAGS - Paris - Meyerbeer',address:"3 Rue de la Chau. d'Antin, 75009 Paris",points:[{idPdcItinerance:'FRBMPENM0572',powerKw:7,status:'rankable_static',rankable:true,components:meyerTariff,rules:meyerRules}]}
+]};
+const meyerRuntime={countryCode:'FR',operator:'Bump',name:'Bump - SAGS - Paris - Meyerbeer',address:"3 Rue de la Chau. d'Antin,, 75009, Paris",chargingConfigurations:[{id:'electra-meyer-ac-7_4',label:'Electra · AC 7.4 kW',kind:'AC',powerKw:7.4,stalls:1,pricing:{type:'rules',rules:[]}}]};
+const meyerResolved=B.resolve(meyerRuntime,{kind:'AC',powerKw:7.4,stalls:1},meyerCatalog);
+assert.ok(meyerResolved,'Meyerbeer-style exact-name 7.4 -> 7 kW match must resolve');
+assert.equal(meyerResolved.bumpMatchMode,'exact_name_multi_station_power');
+assert.equal(meyerResolved.bumpMatchedEvseIds.length,2);
+const meyerEnriched=B.addOffers(meyerRuntime,meyerCatalog);
+const meyerOffer=meyerEnriched.chargingConfigurations.find(c=>c.bumpDirectOffer);
+assert.ok(meyerOffer,'Meyerbeer-style runtime station must receive a Bump Direct offer');
+assert.equal(meyerOffer.powerKw,7.4,'displayed physical power remains the runtime power');
+assert.equal(meyerOffer.bumpTariffPowerKw,7,'tariff provenance keeps the Bump nominal power');
+assert.equal(B.resolve(meyerRuntime,{kind:'AC',powerKw:11,stalls:1},meyerCatalog),null,'real power-class mismatch must stay fail-closed');
+
 const flatPolicy={components:{energyEurPerKwh:.55,minPriceEur:.5},rules:[
  {kind:'minimum_total',amountEur:.5},
  {kind:'flat_fee',amountEur:1.2,conditions:[{kind:'energy_above_kwh',value:.5}]},
@@ -59,4 +81,4 @@ const nightOccupancy={components:{energyEurPerKwh:.45,minPriceEur:.5},rules:[
 ]};
 assert.equal(B.bumpExtras(nightOccupancy,22*60+50,20,10,'00:10','22:50').idle,0);
 
-console.log('Bump V8 direct runtime tests: OK');
+console.log('Bump V8 direct runtime tests: OK, including nominal 7.4/7 kW matching.');
