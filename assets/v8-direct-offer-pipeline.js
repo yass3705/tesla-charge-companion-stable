@@ -5,7 +5,7 @@
 (function(){
   'use strict';
 
-  const REVISION='v8-direct-offer-pipeline-4';
+  const REVISION='v8-direct-offer-pipeline-5';
   const REGISTRY_URL='data/v8_tariff_sources.json';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -18,6 +18,7 @@
   let subscriptionPlansReady=false;
   let renderObserver=null;
   let renderTimer=null;
+  let compatibilityTimer=null;
 
   function record(level,message,detail){
     const row={at:new Date().toISOString(),level,message,detail:detail||null};
@@ -302,19 +303,51 @@
     return true;
   }
 
-  async function boot(){
-    await ensureActiveRuntimeModules();await ensureSubscriptionPlans();installSubscriptionEligibilityBridge();
-    installRenderObserver();installCandidateGuard();
-    const prepared=currentPrepared();if(prepared)await preparePrepared(prepared,{reason:'boot-cache'});
-    scheduleFinalize();
-    let tries=0;const timer=setInterval(()=>{
-      tries++;installRenderObserver();installCandidateGuard();installSubscriptionEligibilityBridge();
-      if(tries>1200)clearInterval(timer);
+  function installRuntimeHooks(){
+    const render=installRenderObserver();
+    const candidate=installCandidateGuard();
+    const subscriptions=installSubscriptionEligibilityBridge();
+    return {render,candidate,subscriptions,ready:render&&candidate&&subscriptions};
+  }
+  async function prepareCurrent(reason='runtime-hook'){
+    const prepared=currentPrepared();
+    if(prepared)await preparePrepared(prepared,{reason});
+    return prepared;
+  }
+  function stopCompatibilityRetry(){
+    if(compatibilityTimer){clearInterval(compatibilityTimer);compatibilityTimer=null;}
+  }
+  function scheduleCompatibilityRetry(){
+    if(compatibilityTimer)return;
+    let tries=0;
+    compatibilityTimer=setInterval(()=>{
+      tries++;
+      const hooks=installRuntimeHooks();
+      if(hooks.ready||tries>=40)stopCompatibilityRetry();
     },100);
   }
+  async function rearm(reason){
+    const hooks=installRuntimeHooks();
+    if(!hooks.ready)scheduleCompatibilityRetry();
+    try{await prepareCurrent(reason)}catch(err){record('warn','Réarmement pipeline direct incomplet',err?.message||String(err))}
+    scheduleFinalize();
+    return hooks.ready;
+  }
 
-  window.TCCV8DirectPipeline={revision:REVISION,loadRegistry,ensureActiveRuntimeModules,registerPreparedEnricher,preparePrepared,canonicalizePreparedOfferMetadata,repairPreparedSubscriptionMetadata,declaredSubscriptionIdForProvider,installSubscriptionEligibilityBridge,repairSubscriptionMetadata,finalizeRendered,installCandidateGuard,get enrichers(){return[...enrichers.keys()]},get diagnostics(){return diagnostics.slice()}};
+  async function boot(){
+    await ensureActiveRuntimeModules();
+    await ensureSubscriptionPlans();
+    const hooks=installRuntimeHooks();
+    await prepareCurrent('boot-cache');
+    scheduleFinalize();
+    if(!hooks.ready)scheduleCompatibilityRetry();
+  }
+
+  window.TCCV8DirectPipeline={revision:REVISION,loadRegistry,ensureActiveRuntimeModules,registerPreparedEnricher,preparePrepared,canonicalizePreparedOfferMetadata,repairPreparedSubscriptionMetadata,declaredSubscriptionIdForProvider,installSubscriptionEligibilityBridge,repairSubscriptionMetadata,finalizeRendered,installCandidateGuard,installRuntimeHooks,rearm,get enrichers(){return[...enrichers.keys()]},get diagnostics(){return diagnostics.slice()}};
   document.dispatchEvent(new CustomEvent('tcc:direct-offer-pipeline-ready'));
+  document.addEventListener('tcc:bump-map-ready',()=>rearm('bump-ready'));
+  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton'))rearm('user-action')},true);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')rearm('visible')});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>boot(),{once:true});else boot();
   console.info('[TCC V8] Pipeline unifié offres directes actif avant expansion:',REVISION);
 })();
