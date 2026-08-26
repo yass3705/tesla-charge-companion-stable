@@ -1,0 +1,119 @@
+name: WAAT Direct final integration smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/waat-direct-finalize.yml'
+      - 'assets/v8-waat-direct.js'
+      - 'data/waat_direct_tariffs_tcc_france.json'
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+
+      - name: Validate published WAAT compact map
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('data/waat_direct_tariffs_tcc_france.json',encoding='utf-8'))
+          assert p['schemaVersion']=='1.0.0'
+          assert p['dataset']=='waat-direct-tariffs-tcc-france'
+          assert p['operator']=='WAAT' and p['country']=='FR'
+          assert p['scope']=={'directCpoOnly':True,'roamingIncluded':False,'stationSpecificPricing':True,'unresolvedCasesNeverRankable':True}
+          assert p['counts']=={'franceStations':571,'rankableStations':452,'rankableConfigs':507,'unresolvedStations':119}
+          assert len(p['stations'])==571
+          assert len({s['stationId'] for s in p['stations']})==571
+          configs=[c for s in p['stations'] for c in s['configs']]
+          assert len(configs)==507
+          assert all(c['kind'] in ('AC','DC') and c['powerKw']>0 and c['directEurPerKwh']>0 and c['groupIds'] for c in configs)
+          assert all(811653 not in c['groupIds'] for c in configs)
+          print(p['counts'])
+          PY
+
+      - name: Syntax check WAAT runtime
+        run: node --check assets/v8-waat-direct.js
+
+      - name: Runtime smoke — exact station, AC/DC power and fail-closed
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const data=JSON.parse(fs.readFileSync('data/waat_direct_tariffs_tcc_france.json','utf8'));
+          global.window={};
+          global.document={dispatchEvent(){}};
+          global.CustomEvent=function(type,init){this.type=type;this.detail=init?.detail};
+          global.fetch=async()=>({ok:true,json:async()=>data});
+          global.setInterval=()=>1;
+          global.clearInterval=()=>{};
+          vm.runInThisContext(fs.readFileSync('assets/v8-waat-direct.js','utf8'),{filename:'v8-waat-direct.js'});
+          const api=window.TCCWaatDirectV8;
+          if(!api)throw new Error('WAAT runtime API missing');
+          api.validateCatalog(data);
+          const byGroup=new Map();
+          for(const s of data.stations)for(const c of s.configs)for(const gid of c.groupIds)byGroup.set(Number(gid),{s,c});
+          function physical(kind,power){return {kind,powerKw:power,stalls:1,pricing:{type:'rules',rules:[]}}}
+          function checkGroup(gid,kind,power,price){
+            const hit=byGroup.get(gid);if(!hit)throw new Error(`witness group ${gid} missing`);
+            const st={countryCode:'FR',catalogStationId:hit.s.stationId,operator:'WAAT',name:hit.s.name,address:hit.s.address,coordinates:hit.s.coordinates,chargingConfigurations:[physical(kind,power)]};
+            const out=api.addOffers(st,data);
+            const offers=out.chargingConfigurations.filter(x=>x.waatDirectOffer===true);
+            if(offers.length!==1)throw new Error(`group ${gid}: expected one WAAT offer, got ${offers.length}`);
+            const o=offers[0];
+            if(o.kind!==kind||Math.abs(o.powerKw-power)>.01||Math.abs(o.waatDirectEurPerKwh-price)>1e-9)throw new Error(`group ${gid}: wrong offer ${JSON.stringify(o)}`);
+            const rule=o.pricing?.rules?.[0];
+            if(!rule||rule.billing!=='kwh'||rule.currency!=='EUR'||Math.abs(rule.pricePerKwh-price)>1e-9)throw new Error(`group ${gid}: wrong pricing rule`);
+          }
+          checkGroup(631961,'DC',47,.42);
+          checkGroup(494949,'AC',22,.28);
+          checkGroup(714420,'DC',50,.62);
+          if(byGroup.has(811653))throw new Error('ambiguous Carcassonne group leaked into compact map');
+          const unresolved=data.stations.find(s=>!s.configs.length);
+          if(!unresolved)throw new Error('no unresolved witness station');
+          const blocked={countryCode:'FR',catalogStationId:unresolved.stationId,operator:'WAAT',name:unresolved.name,address:unresolved.address,coordinates:unresolved.coordinates,chargingConfigurations:[physical('AC',22)]};
+          const blockedOut=api.addOffers(blocked,data);
+          if(blockedOut.chargingConfigurations.some(x=>x.waatDirectOffer===true))throw new Error('unresolved station received a WAAT offer');
+          const exact=byGroup.get(494949);
+          const wrongOperator={countryCode:'FR',operator:'Other CPO',name:exact.s.name,address:'Different address',chargingConfigurations:[physical('AC',22)]};
+          const wrongOut=api.addOffers(wrongOperator,data);
+          if(wrongOut.chargingConfigurations.some(x=>x.waatDirectOffer===true))throw new Error('non-WAAT fallback matched by name');
+          console.log(JSON.stringify({ok:true,witnesses:{strasbourgDC:.42,strasbourgAC:.28,beziersDC:.62},ambiguousCarcassonne:'blocked',unresolved:'blocked'}));
+          NODE
+
+      - name: Ensure WAAT module is loaded and bump cache revision
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="assets/v8-waat-direct.js?v=waat-20260826b" defer></script>'
+          if 'assets/v8-waat-direct.js' not in s:
+              s=s.replace('</body></html>',tag+'\n</body></html>')
+          else:
+              import re
+              s=re.sub(r'<script src="assets/v8-waat-direct\.js\?v=[^"]+" defer></script>',tag,s)
+          p.write_text(s,encoding='utf-8')
+          assert tag in s
+          PY
+
+      - name: Commit final cache-busted integration
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'feat(v8): activate validated WAAT Direct runtime'
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin release/2026-08
+            if git push origin HEAD:release/2026-08; then exit 0; fi
+            sleep $((attempt*2))
+          done
+          exit 1
