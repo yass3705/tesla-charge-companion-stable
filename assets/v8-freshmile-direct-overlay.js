@@ -5,12 +5,12 @@
 (function(){
   'use strict';
   const DATA_URL='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/freshmile_direct_tcc_v8.json.gz';
-  const REVISION='rc48-freshmile-direct-remote-20260825c';
+  const REVISION='rc48-freshmile-direct-hardening-20260826';
   const MAX_MATCH_METERS=120;
-  const MAX_PREPARED_STATIONS=80;
   let dataPromise=null;
   let candidateInstalled=false;
   let lastPrepared=null;
+  let bootstrapTimer=null;
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const clone=v=>JSON.parse(JSON.stringify(v));
@@ -120,10 +120,11 @@
     const base=prepared.stations.slice(),origin=prepared.origin||{},official=inArea(data,prepared),{assignedBase,byLocation}=buildAssignments(base,official),kept=base.filter((_,index)=>!assignedBase.has(index)),merged=[];
     let matched=0,added=0;
     official.forEach((loc,locIndex)=>{const matches=byLocation.get(locIndex)||[];if(matches.length){merged.push(canonicalFromMatches(loc,matches,base,origin));matched++;}else{merged.push(syntheticFromOfficial(loc,origin));added++;}});
-    let stations=[...kept,...merged];
+    const stations=[...kept,...merged];
     stations.forEach(st=>{if(!Number.isFinite(Number(st._airKm)))st._airKm=stationAirKm(st,origin);});
     stations.sort((a,b)=>stationAirKm(a,origin)-stationAirKm(b,origin));
-    if(stations.length>MAX_PREPARED_STATIONS)stations=stations.slice(0,MAX_PREPARED_STATIONS);
+    // Un overlay tarifaire ne doit jamais tronquer la liste physique préparée :
+    // le Top 20 appartient au moteur de classement, pas à une source opérateur.
     prepared.stations=stations;prepared.freshmileDirectOverlayApplied=true;prepared.freshmileDirectOverlayRevision=REVISION;
     prepared.freshmileDirectOverlayStats={strictNationalStations:data.stations.length,strictInPreparedArea:official.length,matchedRuntimeSites:matched,addedStrictSites:added,preparedStationCount:stations.length};
     return prepared;
@@ -166,16 +167,26 @@
     const banner=document.getElementById('tccPreviewBanner');
     if(banner&&/RC4\.8/.test(text(banner.textContent))&&!/Freshmile direct/i.test(text(banner.textContent)))banner.textContent=`${text(banner.textContent)} · Freshmile direct strict`;
   }
-  loadData();let attempts=0;
-  const timer=setInterval(async()=>{
-    attempts++;installPricing();installCandidateWrapper();
+  async function applyCurrentPrepared(){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
-    if(prepared&&prepared!==lastPrepared){await applyToPrepared(prepared);lastPrepared=prepared;window.TCC_V8_AREA_CACHE.prepared=prepared;}
-    markRevision();
-    if(attempts>2400)clearInterval(timer);
-  },50);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(markRevision,0),{once:true});else setTimeout(markRevision,0);
+    if(!prepared||prepared===lastPrepared)return false;
+    await applyToPrepared(prepared);lastPrepared=prepared;if(window.TCC_V8_AREA_CACHE)window.TCC_V8_AREA_CACHE.prepared=prepared;return true;
+  }
+  async function boot(){
+    loadData();installPricing();installCandidateWrapper();markRevision();
+    try{await applyCurrentPrepared()}catch(err){console.warn('[TCC V8] Freshmile cache initial ignoré:',err?.message||err);}
+    if(installPricing()&&installCandidateWrapper())return;
+    let attempts=0;
+    clearInterval(bootstrapTimer);
+    bootstrapTimer=setInterval(()=>{
+      attempts++;const ready=installPricing()&&installCandidateWrapper();
+      if(ready||attempts>=100){clearInterval(bootstrapTimer);bootstrapTimer=null;}
+    },100);
+  }
+  document.addEventListener('tcc:direct-offer-pipeline-ready',()=>{installPricing();installCandidateWrapper();applyCurrentPrepared().catch(()=>{});});
+  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){installPricing();installCandidateWrapper();}},true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>boot(),{once:true});else queueMicrotask(boot);
 
-  window.TCCV8FreshmileDirect={loadData,validateData,mergePrepared,applyToPrepared,isFreshmileStation,exactCost,installPricing,installCandidateWrapper,revision:REVISION};
-  console.info('[TCC V8] Freshmile direct strict prêt : inventaire + tarification exacte fail-closed.');
+  window.TCCV8FreshmileDirect={loadData,validateData,mergePrepared,applyToPrepared,isFreshmileStation,exactCost,installPricing,installCandidateWrapper,applyCurrentPrepared,revision:REVISION};
+  console.info('[TCC V8] Freshmile direct strict prêt : inventaire + tarification exacte fail-closed, sans troncature globale.');
 })();
