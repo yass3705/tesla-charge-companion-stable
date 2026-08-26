@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-26T11:45:00+02:00",
+  "country": "FR",
+  "operator": "E.Leclerc",
+  "operatorId": "FR*LE2",
+  "service": "Charge E-Lec",
+  "scope": "physical_cpo_direct_only_no_roaming_dc_rapid_ultra",
+  "status": "partial_safe_integration_active",
+  "integration": {
+    "branch": "release/2026-08",
+    "overlay": "assets/v8-france-cpo-gap-overlay.js",
+    "overlayRevision": "rc48bv-fr-cpo-charge-elec-dc-20260826",
+    "integrationCommit": "9d7393c722d37708bebef253ffc4566750a741ff",
+    "runtimeLoader": "assets/v8-rc48bn-runtime-hotfix.js",
+    "runtimeRevision": "rc48by-runtime-charge-elec-dc",
+    "runtimeCacheBustCommit": "6d94b6b4e6c809e56d60e488ef0d5bbc8a3b10e1",
+    "tariffObservedAt": "2026-07-21",
+    "validUntil": "2026-09-05T00:00:00+02:00",
+    "failClosedAfterExpiry": true
+  },
+  "policy": {
+    "directCpoOnly": true,
+    "roamingExcluded": true,
+    "nationalDcTariff": false,
+    "matchRequiresStationAndCurrentPower": true,
+    "doNotPropagateAcrossPower": true,
+    "doNotPropagateAcrossHardwareReplacement": true,
+    "doNotUseGenericFreshmileTariffWithoutSiplecRetailProof": true,
+    "nationalAc019Remains22KwOnly": true
+  },
+  "activeExactStationPowerTariffs": [
+    {"station":"Le Gua","department":"17","powerKw":160,"eurPerKwh":0.28},
+    {"station":"Surgères","department":"17","powerKw":300,"eurPerKwh":0.27},
+    {"station":"Blain / Blaindis","department":"44","powerKw":120,"eurPerKwh":0.28},
+    {"station":"Amilly","department":"45","powerKw":120,"eurPerKwh":0.28},
+    {"station":"Vannes","department":"56","powerKw":180,"eurPerKwh":0.28},
+    {"station":"Clamecy","department":"58","powerKw":200,"eurPerKwh":0.19},
+    {"station":"Caudry","department":"59","powerKw":120,"eurPerKwh":0.19},
+    {"station":"Valenciennes / Anzin","department":"59","powerKw":180,"eurPerKwh":0.35},
+    {"station":"Oloron","department":"64","powerKw":100,"eurPerKwh":0.28},
+    {"station":"Orthez","department":"64","powerKw":280,"eurPerKwh":0.21},
+    {"station":"Geispolsheim","department":"67","powerKw":180,"eurPerKwh":0.28},
+    {"station":"Ribeauvillé","department":"68","powerKw":200,"eurPerKwh":0.28},
+    {"station":"Lure","department":"70","powerKw":180,"eurPerKwh":0.28},
+    {"station":"Alençon-Arçonnay","department":"72","powerKw":100,"eurPerKwh":0.28},
+    {"station":"Cran-Gevrier","department":"74","powerKw":120,"eurPerKwh":0.28},
+    {"station":"Bessines","department":"79","powerKw":150,"eurPerKwh":0.28}
+  ],
+  "quarantined": [
+    {"station":"Saint-Loup","reason":"July identity reported department 23; current 180 kW Charge E-Lec Saint-Loup is department 69; identity not proven."},
+    {"station":"Le Neubourg","reason":"Current topology no longer matches observed 180 kW hardware."},
+    {"station":"Lesparre-Médoc","reason":"Current 150 kW topology differs from observed 180 kW hardware."},
+    {"station":"Bourgoin-Jallieu","reason":"Current 480 kW topology differs materially from observed 240 kW hardware."},
+    {"station":"Auch","reason":"Observed zero price was while station was not open; invalid as retail tariff."}
+  ],
+  "pendingCurrentUltra": [
+    {"station":"Saint-Loup (Vindry-sur-Turdine)","powerKw":[180]},
+    {"station":"Nice Saint-Isidore","powerKw":[150]},
+    {"station":"Tourlaville","powerKw":[120,180]}
+  ],
+  "rapid24To99Kw": {
+    "status": "not_integrated_tariff_unresolved",
+    "rule": "Never inherit AC 22 kW or ultra-fast price from the same site."
+  },
+  "sources": {
+    "officialRules": [
+      "https://www.charge-elec.leclerc/cgau",
+      "https://www.charge-elec.leclerc/mentions-legales",
+      "https://www.charge-elec.leclerc/"
+    ],
+    "datedDirectAppObservation": "https://www.blogtesla.fr/forum/viewtopic.php?t=11639",
+    "researchFile": "data/charge_e_lec_rapid_direct_research_20260826.json"
+  },
+  "next": "Replace dated observations with authoritative live Charge E-Lec/SIPLEC station tariffs if a direct retail endpoint becomes available; otherwise refresh station-by-station before expiry."
+}
