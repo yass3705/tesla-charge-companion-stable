@@ -10,7 +10,7 @@
   const BELIB_LIVE_TTL_MS=5*60*1000;
   const IONITY_URL='data/ionity_direct_stations_france.json.gz';
   const ATLANTE_URL='data/atlante_direct_stations_france.json.gz';
-  const POWERDOT_URL='data/powerdot_direct_france.json.gz';
+  const POWERDOT_URL='../data/powerdot_direct_france.json.gz';
   const rawCache=new Map();
   let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0,ionityPromise=null,atlantePromise=null,powerdotPromise=null;
   const STATUS_MAX_AGE_MS=48*60*60*1000;
