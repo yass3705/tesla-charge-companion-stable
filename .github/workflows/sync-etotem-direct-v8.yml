@@ -51,20 +51,26 @@ jobs:
           import gzip,json
           p='data-lab/data/national/etotem_direct_tariffs_france.json.gz'
           with gzip.open(p,'rt',encoding='utf-8') as f:d=json.load(f)
-          c=d['counts']; s=d['scope']
+          c=d['counts']; s=d['scope']; cov=d['coverageByFamily']
           assert s['physicalCpoDirectOnly'] is True
           assert s['roamingIncluded'] is False
           assert s['noGuessedFallback'] is True
           assert c['inventoryStations'] >= 600, c
-          assert c['resolvedStations'] >= 500, c
-          assert c['resolvedWithTariffText'] > 0, c
+          assert cov['FRETI']['resolved']/cov['FRETI']['inventory'] >= .99, cov['FRETI']
+          assert cov['FRESE']['resolved']/cov['FRESE']['inventory'] >= .98, cov['FRESE']
+          assert c['resolvedStations'] >= 465, c
+          assert c['resolvedWithTariffText'] >= 465, c
+          assert c['coordinateFallbackMatches'] <= 10, c
           for x in d['stations']:
-            if not x.get('resolved'): continue
-            a=x['api']
-            assert str(a.get('bOcpi',0)) == '0'
-            assert str(a.get('bGireve',0)) == '0'
-            assert str(a.get('bItinerance',0)) == '0'
-          print(json.dumps({'counts':c,'coverageByFamily':d.get('coverageByFamily',{}),'harvest':d.get('harvest',{}),'topProfiles':[{'count':x['count'],'text':x['text'][:500]} for x in d.get('tariffProfiles',[])[:15]]},ensure_ascii=False,indent=2))
+            if x.get('resolved'):
+              a=x['api']
+              assert str(a.get('bOcpi',0)) == '0'
+              assert str(a.get('bGireve',0)) == '0'
+              assert str(a.get('bItinerance',0)) == '0'
+            else:
+              assert not x.get('tariffText'), x.get('stationId')
+              assert x.get('reason'), x.get('stationId')
+          print(json.dumps({'counts':c,'coverageByFamily':cov,'coordinateMatches':[{'stationId':x['stationId'],'name':x['name'],'apiId':x['api']['sIdPool'],'apiName':x['api']['sLibelle'],'distanceM':x['matchDistanceM']} for x in d['stations'] if x.get('matchMethod')=='coordinates'],'harvest':d.get('harvest',{})},ensure_ascii=False,indent=2))
           PY
 
       - name: Installer la base directe dans TCC V8
