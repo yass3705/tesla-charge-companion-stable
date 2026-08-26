@@ -43,6 +43,7 @@ jobs:
           node --check assets/v8-waat-direct.js
           node --check scripts/test_v8_tariff_registry.mjs
           node --check scripts/test_v8_direct_offer_pipeline.mjs
+          node --check scripts/diagnose_v8_real_stations.mjs
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -77,6 +78,9 @@ jobs:
 
       - name: Smoke-test WAAT direct station/configuration tariffs
         run: node scripts/test_waat_direct_v8.mjs
+
+      - name: Diagnose reported real stations
+        run: node scripts/diagnose_v8_real_stations.mjs
 
       - name: Verify August build references
         shell: bash
