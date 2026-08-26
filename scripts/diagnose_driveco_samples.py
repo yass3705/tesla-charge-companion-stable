@@ -17,18 +17,25 @@ def simple_sig(osf):
         return float(e.get('price')) if isinstance(e.get('price'),(int,float)) else None
     return None
 
+def sig(osf):
+    return json.dumps(osf,sort_keys=True,separators=(',',':'))
+
 req=urllib.request.Request(SOURCE,headers={'User-Agent':UA,'Accept':'application/json'})
 with urllib.request.urlopen(req,timeout=60) as r:
     src=json.loads(r.read().decode('utf-8'))
 
 print('SOURCE_KEYS', sorted(src.keys()))
-counts=Counter()
+counts=Counter(); multi=Counter()
 for row in src.get('resolved',[]):
-    rate=simple_sig((row.get('tariff') or {}).get('matrixOSF'))
+    osf=(row.get('tariff') or {}).get('matrixOSF')
+    rate=simple_sig(osf)
     if rate is not None: counts[rate]+=1
+    if isinstance(osf,list) and len(osf)>1: multi[sig(osf)]+=1
 print('SIMPLE_OSF_15MIN_COUNTS', json.dumps(dict(sorted(counts.items())),sort_keys=True))
+print('MULTI_OSF_SIGNATURES', len(multi))
+for signature,count in multi.most_common(20): print('MULTI_OSF_COUNT',count,signature)
 
-needles=('velizy villacoublay','villacoublay','vernouillet')
+needles=('velizy villacoublay','villacoublay','vernouillet','saint remy les chevreuse')
 for bucket_name,bucket in src.items():
     if not isinstance(bucket,list): continue
     for row in bucket:
