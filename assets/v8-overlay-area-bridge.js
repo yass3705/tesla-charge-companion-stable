@@ -1,8 +1,8 @@
 // Tesla Charge Companion V8 RC4.8 — pont déterministe overlays tarifs -> cache de zone.
 (function(){
   'use strict';
-  const REVISION='rc48bm-lbb-runtime-stable';
-  let applying=false,lastPrepared=null;
+  const REVISION='rc48bo-bounded-runtime-hooks';
+  let applying=false,lastPrepared=null,compatibilityTimer=null;
 
   // app.js normalise les configurations avant chaque simulation. Historiquement cette
   // normalisation ne gardait que id/label/kind/power/stalls/pricing et supprimait donc
@@ -58,9 +58,12 @@
   function loadDirectSmokeFix(){if(!window.TCCV8DirectSmokeFix&&!document.querySelector('script[data-tcc-direct-smoke-fix]')){const s=document.createElement('script');s.src='assets/v8-direct-resolver-followup.js?v=rc48av-20260822';s.defer=true;s.dataset.tccDirectSmokeFix='1';document.head.appendChild(s)}}
   function loadTariffDisplay(){if(!window.TCCV8TariffDisplay&&!document.querySelector('script[data-tcc-tariff-display]')){const s=document.createElement('script');s.src='assets/v8-tariff-display-fix.js?v=rc48bn-20260825';s.defer=true;s.dataset.tccTariffDisplay='1';document.head.appendChild(s)}}
   function loadSubscriptionStability(){if(!window.TCCV8SubscriptionStability&&!document.querySelector('script[data-tcc-subscription-stability]')){const s=document.createElement('script');s.src='assets/v8-subscription-stability-fix.js?v=rc48bn-20260825';s.defer=true;s.dataset.tccSubscriptionStability='1';document.head.appendChild(s)}}
+  function loadAllRuntimeModules(){
+    loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();
+  }
 
   installConfigurationMetadataGuard();
-  loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();
+  loadAllRuntimeModules();
 
   async function apply(force=false){
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;
@@ -95,23 +98,45 @@
     wrapped.__tccOverlayExpansionGuard=true;wrapped.__tccOriginal=current;window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}return true;
   }
 
-  function markRevision(){const banner=document.getElementById('tccPreviewBanner');if(banner&&/RC4\.8/.test(String(banner.textContent||''))){const label=`V8 Preview · RC4.8 · rc48bn · métadonnées offres préservées · abonnements visibles · La Borne Bleue direct calculable · données canoniques France · auto-mise à jour désactivée`;banner.textContent=label;banner.dataset.stableLabel=label;banner.setAttribute('aria-label',label)}}
+  function markRevision(){const banner=document.getElementById('tccPreviewBanner');if(banner&&/RC4\.8/.test(String(banner.textContent||''))){const label=`V8 Preview · RC4.8 · rc48bo · métadonnées offres préservées · abonnements visibles · overlays déterministes · données canoniques France · auto-mise à jour désactivée`;banner.textContent=label;banner.dataset.stableLabel=label;banner.setAttribute('aria-label',label)}}
 
-  const timer=setInterval(()=>{installConfigurationMetadataGuard();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();apply(false);installExpansionGuard();markRevision();loadReferenceOffers()},120);
-  setTimeout(()=>clearInterval(timer),120000);
+  function stopCompatibilityRetry(){if(compatibilityTimer){clearInterval(compatibilityTimer);compatibilityTimer=null;}}
+  function primeRuntime(){
+    const metadata=installConfigurationMetadataGuard();loadAllRuntimeModules();const expansion=installExpansionGuard();markRevision();
+    return metadata&&expansion;
+  }
+  function scheduleCompatibilityRetry(){
+    if(compatibilityTimer)return;
+    let tries=0;
+    compatibilityTimer=setInterval(()=>{
+      tries++;const ready=primeRuntime();apply(false);
+      if(ready||tries>=40)stopCompatibilityRetry();
+    },120);
+  }
+  function refreshRuntime(force=false){
+    const ready=primeRuntime();
+    const applied=apply(force);
+    if(!ready)scheduleCompatibilityRetry();
+    return applied;
+  }
 
   document.addEventListener('click',async event=>{
     const button=event.target?.closest?.('.v8-simulate');if(!button||button.dataset.tccOverlayReplay==='1')return;
     const prepared=window.TCC_V8_AREA_CACHE?.prepared;if(!prepared)return;
     event.preventDefault();event.stopImmediatePropagation();
-    installConfigurationMetadataGuard();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability();
-    const ok=await apply(true);if(!ok)return;installExpansionGuard();loadReferenceOffers();button.dataset.tccOverlayReplay='1';
+    primeRuntime();
+    const ok=await apply(true);if(!ok){scheduleCompatibilityRetry();return;}installExpansionGuard();loadReferenceOffers();button.dataset.tccOverlayReplay='1';
     try{if(typeof window.compare==='function')await window.compare();else if(typeof compare==='function')await compare()}finally{delete button.dataset.tccOverlayReplay}
   },true);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{installConfigurationMetadataGuard();markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability()},0),{once:true});
-  else setTimeout(()=>{installConfigurationMetadataGuard();markRevision();loadReferenceOffers();loadFastnedStationOverlay();loadFreshmileDirect();loadLaBorneBleueDirect();loadLaBorneBleueExplicitFallback();loadCanonicalStationOverlay();loadDirectResolverUi();loadDirectSmokeFix();loadTariffDisplay();loadSubscriptionStability()},0);
+  document.addEventListener('tcc:direct-offer-pipeline-ready',()=>refreshRuntime(false));
+  document.addEventListener('tcc:bump-map-ready',()=>refreshRuntime(false));
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshRuntime(false)});
+  window.addEventListener?.('online',()=>refreshRuntime(false));
 
-  window.TCCV8OverlayAreaBridge={apply,installExpansionGuard,installConfigurationMetadataGuard,loadReferenceOffers,loadFastnedStationOverlay,loadFreshmileDirect,loadLaBorneBleueDirect,loadLaBorneBleueExplicitFallback,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,loadSubscriptionStability,revision:REVISION};
-  console.info('[TCC V8] Pont overlay/cache rc48bn actif + métadonnées de configuration préservées avant simulation.');
+  function boot(){const ready=primeRuntime();apply(false);if(!ready)scheduleCompatibilityRetry();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0),{once:true});else setTimeout(boot,0);
+
+  window.TCCV8OverlayAreaBridge={apply,refreshRuntime,installExpansionGuard,installConfigurationMetadataGuard,loadAllRuntimeModules,loadReferenceOffers,loadFastnedStationOverlay,loadFreshmileDirect,loadLaBorneBleueDirect,loadLaBorneBleueExplicitFallback,loadCanonicalStationOverlay,loadDirectResolverUi,loadDirectSmokeFix,loadTariffDisplay,loadSubscriptionStability,revision:REVISION};
+  console.info('[TCC V8] Pont overlay/cache rc48bo actif + hooks événementiels, polling long supprimé.');
 })();
