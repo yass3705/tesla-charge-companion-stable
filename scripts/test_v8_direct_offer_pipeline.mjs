@@ -4,6 +4,7 @@ import fs from 'node:fs';
 const registry=JSON.parse(fs.readFileSync('data/v8_tariff_sources.json','utf8'));
 const pipeline=fs.readFileSync('assets/v8-direct-offer-pipeline.js','utf8');
 const hotfix=fs.readFileSync('assets/v8-rc48bn-runtime-hotfix.js','utf8');
+const overlayBridge=fs.readFileSync('assets/v8-overlay-area-bridge.js','utf8');
 
 assert.equal(registry.policy?.directOffersResolvedBeforeRanking,true,'direct offers must be resolved before ranking');
 assert.equal(registry.policy?.subscriptionsAreOptIn,true,'subscriptions must stay opt-in');
@@ -36,9 +37,13 @@ assert.ok(pipeline.includes('installCandidateGuard'),'candidateStations must be 
 assert.ok(!pipeline.includes('installCompareGuard'),'compare() ownership is forbidden for the direct pipeline');
 assert.ok(!pipeline.includes('window.compare=wrapped'),'direct pipeline must not replace compare()');
 assert.ok(pipeline.includes('declaredSubscriptionIdForProvider'),'subscription labels must resolve against declared plans');
-assert.ok(!pipeline.includes('tries>1200'),'two-minute bootstrap polling must not return');
-assert.ok(pipeline.includes('tries>=40'),'compatibility retries must be bounded to a short startup window');
+assert.ok(!pipeline.includes('tries>1200'),'two-minute direct-pipeline bootstrap polling must not return');
+assert.ok(pipeline.includes('tries>=40'),'direct-pipeline compatibility retries must be bounded to a short startup window');
 assert.ok(pipeline.includes("rearm('user-action')"),'user actions must re-arm runtime hooks deterministically');
+assert.ok(!overlayBridge.includes('120000'),'two-minute overlay bridge polling must not return');
+assert.ok(!overlayBridge.includes('setTimeout(()=>clearInterval'),'overlay bridge must not rely on a delayed global polling shutdown');
+assert.ok(overlayBridge.includes('tries>=40'),'overlay compatibility retries must be bounded');
+assert.ok(overlayBridge.includes("document.addEventListener('tcc:direct-offer-pipeline-ready'"),'overlay bridge must re-arm from runtime readiness events');
 assert.ok(hotfix.includes('loadDirectOfferPipeline()'),'runtime bootstrap must load the direct offer pipeline');
 assert.ok(hotfix.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-5'),'runtime bootstrap must use the current pipeline revision');
 for(const source of registry.sources||[]){
@@ -46,4 +51,4 @@ for(const source of registry.sources||[]){
   for(const module of source.runtimeModules||[])if(!isPublishedFromMain(module))assert.ok(fs.existsSync(module),`active runtime module missing: ${source.id} -> ${module}`);
   for(const artifact of source.artifactPaths||[])if(!isPublishedFromMain(artifact))assert.ok(fs.existsSync(artifact),`active artifact missing: ${source.id} -> ${artifact}`);
 }
-console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, non-destructive overlays, preview-local data, bounded bootstrap, compare untouched.');
+console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, non-destructive overlays, preview-local data, bounded runtime hooks, compare untouched.');
