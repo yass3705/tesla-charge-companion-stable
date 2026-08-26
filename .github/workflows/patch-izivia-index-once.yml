@@ -1,0 +1,33 @@
+name: Wire IZIVIA Express overlay once
+on:
+  push:
+    branches:
+      - "feat/izivia-express-direct-v8"
+    paths:
+      - ".github/workflows/patch-izivia-index-once.yml"
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert IZIVIA runtime loader
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text()
+          needle='<script src="assets/v8-freshmile-direct-overlay.js?v=rc48-freshmile-20260825c" defer></script>'
+          insert=needle+'\n<script src="assets/v8-izivia-express-direct-overlay.js?v=rc48-izivia-express-20260826a" defer></script>'
+          if 'assets/v8-izivia-express-direct-overlay.js' in s:
+              print('IZIVIA loader already present')
+          else:
+              if needle not in s: raise SystemExit('Freshmile anchor not found')
+              p.write_text(s.replace(needle,insert,1))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then echo 'No index change'; else git commit -m 'Load IZIVIA Express exact direct overlay'; git push; fi
