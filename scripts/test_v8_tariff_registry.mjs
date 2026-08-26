@@ -8,6 +8,7 @@ assert.equal(registry.contractVersion,'v8-tariff-engine-1');
 assert.equal(registry.policy?.subscriptionsAreOptIn,true);
 assert.equal(registry.policy?.subscriptionFixedFeesExcludedFromSessions,true);
 assert.equal(registry.policy?.failOnMissingRequiredArtifact,true);
+assert.equal(registry.policy?.directOffersResolvedBeforeRanking,true,'direct offers must be resolved before ranking');
 
 for(const entry of registry.publish?.copyFromMain||[]){
   assert.ok(entry.path&&entry.target, 'publish entry requires path and target');
@@ -20,11 +21,11 @@ assert.ok(publishTargets.includes('data/powerdot_direct_france.json.gz'),'Powerd
 assert.ok(publishTargets.includes('data/etotem_direct_tariffs_france.json.gz'),'e-Totem direct must be part of the declarative publish contract');
 const isPublishedFromMain=path=>publishEntries.some(entry=>path===entry.target||(entry.kind==='directory'&&path.startsWith(`${entry.target}/`)));
 
-const ids=new Set();
+const ids=new Set(),sourcesById=new Map();
 for(const source of registry.sources||[]){
   assert.ok(source.id, 'every source must have an id');
   assert.ok(!ids.has(source.id), `duplicate source id: ${source.id}`);
-  ids.add(source.id);
+  ids.add(source.id);sourcesById.set(source.id,source);
   assert.ok(['active','staged','disabled'].includes(source.status), `invalid status for ${source.id}`);
   assert.ok(Array.isArray(source.artifactPaths), `artifactPaths missing for ${source.id}`);
   assert.ok(Array.isArray(source.runtimeModules), `runtimeModules missing for ${source.id}`);
@@ -37,6 +38,21 @@ for(const source of registry.sources||[]){
     }
   }
 }
+for(const sourceId of ['direct-offer-pipeline','powerdot-direct','freshmile-direct','bump-direct','driveco-direct'])assert.equal(sourcesById.get(sourceId)?.status,'active',`${sourceId} must be active`);
+
+const directPipelineSource=fs.readFileSync('assets/v8-direct-offer-pipeline.js','utf8');
+const runtimeHotfixSource=fs.readFileSync('assets/v8-rc48bn-runtime-hotfix.js','utf8');
+new vm.Script(directPipelineSource,{filename:'assets/v8-direct-offer-pipeline.js'});
+new vm.Script(runtimeHotfixSource,{filename:'assets/v8-rc48bn-runtime-hotfix.js'});
+for(const id of ['powerdot-direct','freshmile-direct','bump-direct','driveco-direct'])assert.ok(directPipelineSource.includes(`registerPreparedEnricher('${id}'`),`${id} must register a prepared enricher`);
+assert.ok(directPipelineSource.includes("await preparePrepared(prepared,{reason:'compare'})"),'prepared direct sources must resolve before compare');
+assert.ok(directPipelineSource.indexOf("await preparePrepared(prepared,{reason:'compare'})")<directPipelineSource.indexOf('const result=await current.apply(this,args)'),'direct source preparation must happen before compare execution');
+assert.ok(directPipelineSource.includes('repairSubscriptionMetadata'),'subscription metadata repair must be part of finalization');
+assert.ok(directPipelineSource.includes("full.endsWith(' '+p)"),'shortened provider labels must map back to subscription plans');
+assert.ok(directPipelineSource.includes('window.TCCV8Subscriptions?.applyAll?.(true)'),'subscription eligibility must be reapplied after metadata repair');
+assert.ok(directPipelineSource.includes('window.TCCV8ReferenceOffers?.apply?.()'),'operator references must be restored when no exact direct tariff is available');
+assert.ok(runtimeHotfixSource.includes('loadDirectOfferPipeline()'),'runtime hotfix must bootstrap the unified direct pipeline');
+assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js'),'runtime hotfix must load the direct pipeline asset');
 
 const overlay=JSON.parse(fs.readFileSync('data/tariff_overlay_v1.json','utf8'));
 const total=JSON.parse(fs.readFileSync('data/totalenergies_tariff_overlay_v1.json','utf8'));
@@ -90,4 +106,4 @@ const unrelatedOffers=engine.declaredOffersForStation(unrelated,electraSelected)
 assert.ok(!unrelatedOffers.some(x=>x.id==='electra-smart'),'runtime-bound Electra subscription must not leak into generic station matching');
 assert.ok(unrelatedOffers.some(x=>x.id==='fastned-standard'),'Fastned direct offer must match Fastned station');
 
-console.log(`V8 tariff registry OK: ${ids.size} sources, ${engine.offers.length} declarative offers, ${engine.subscriptions.length} subscriptions.`);
+console.log(`V8 tariff registry OK: ${ids.size} sources, ${engine.offers.length} declarative offers, ${engine.subscriptions.length} subscriptions + direct pipeline contract.`);
