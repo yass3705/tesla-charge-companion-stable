@@ -1,0 +1,63 @@
+name: Test IZIVIA Express V8 integration
+on:
+  push:
+    branches:
+      - "feat/izivia-express-direct-v8"
+    paths:
+      - "assets/v8-izivia-express-direct-overlay.js"
+      - "scripts/test_izivia_express_v8_runtime.mjs"
+      - "index.html"
+      - ".github/workflows/test-izivia-express-v8.yml"
+  pull_request:
+    branches:
+      - "release/2026-08"
+    paths:
+      - "assets/v8-izivia-express-direct-overlay.js"
+      - "scripts/test_izivia_express_v8_runtime.mjs"
+      - "index.html"
+      - ".github/workflows/test-izivia-express-v8.yml"
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: JavaScript syntax
+        run: node --check assets/v8-izivia-express-direct-overlay.js
+      - name: Exact tariff runtime tests
+        run: node scripts/test_izivia_express_v8_runtime.mjs
+      - name: Validate live public dataset
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL 'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/izivia_express_direct_tcc_v8.json' -o /tmp/izivia.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/izivia.json'))
+          c=p['counts'];s=p['scope']
+          assert p['dataset']=='izivia-express-direct-tcc-v8-france'
+          assert s['onlyDirectCpo'] is True and s['roamingIncluded'] is False and s['subscriptionDiscountsIncluded'] is False and s['failClosed'] is True
+          assert c['officialStationRows']==155 and c['tccLocations']==153
+          assert c['directPricePublishedRows']==146 and c['directPriceNotPublishedRows']==9
+          assert c['pricedTccLocations']==144 and c['exactConfigurations']==313 and c['excludedAmbiguousConfigurations']==0
+          bad=[]
+          for st in p['stations']:
+            for cfg in st['configurations']:
+              if cfg['powerKw']<=3 and cfg['kind']!='AC':bad.append((st['stationId'],cfg['kind'],cfg['powerKw']))
+          assert not bad,bad
+          print(c)
+          PY
+      - name: Verify runtime loader
+        run: grep -F 'assets/v8-izivia-express-direct-overlay.js' index.html
+      - name: Regression smoke tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f scripts/test_freshmile_v8_runtime.mjs ] && [ -f data/freshmile_direct_tcc_v8.json.gz ]; then
+            node scripts/test_freshmile_v8_runtime.mjs
+          else
+            echo 'Freshmile smoke skipped: local fixture not present in checkout.'
+          fi
+          if [ -f scripts/test_e55c_pricing.mjs ]; then node scripts/test_e55c_pricing.mjs; fi
