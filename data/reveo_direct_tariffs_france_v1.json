@@ -3,13 +3,15 @@
   "dataset": "reveo-direct-tariffs-france",
   "operator": "Révéo",
   "country": "FR",
-  "generatedAt": "2026-08-26T11:35:00+02:00",
+  "generatedAt": "2026-08-26T12:20:00+02:00",
   "scope": {
     "operatorDirectOnly": true,
     "roamingIncluded": false,
+    "roamingTariffsPromotedToDirect": false,
     "unverifiedTerritoriesAreRankable": false,
     "subscriberOffersRequireSelection": true,
-    "longDurationRequiresExplicitStationTag": true
+    "longDurationRequiresExplicitStationTag": true,
+    "rankableTerritories": ["S34"]
   },
   "subscription": {
     "selectionId": "reveo-subscription",
@@ -20,19 +22,18 @@
   },
   "sources": {
     "officialTariffPage": "https://reveocharge.com/tarifs/",
-    "officialOcpiIndex": "https://reveocharge.com/tarif-roaming/",
-    "officialOcpiTariffs": "https://roaming.road.io/files/2ac5b1b4-2d18-4578-98fe-53db518e1a63/tariffs.json",
-    "heraultOfficialPdf": "https://www.herault-energies.fr/sites/default/files/2025-04/tarifs_reveo_au_1_avril_2025_2.pdf",
-    "loadStationsInventory": "https://www.data.gouv.fr/datasets/bornes-de-recharge-pour-vehicules-electriques-reveo"
+    "heraultOfficialPdf": "https://www.herault-energies.fr/sites/default/files/2025-04/tarifs_reveo_au_1_avril_2025_4.pdf",
+    "reveo2025SupportFolder": "https://support.reveocharge.com/portal/fr/kb/reveo/reveo-2025-d%C3%A9partements-09-11-46-65-66",
+    "reveoChargeSupportFolder": "https://support.reveocharge.com/portal/fr/kb/reveo/r%C3%A9seau-reveocharge-d%C3%A9partements-12-31-et-48"
   },
   "territories": {
     "S34": {
       "partyId": "FR*S34",
       "department": "34",
-      "label": "Hérault hors Montpellier Métropole",
+      "label": "Hérault hors Montpellier Méditerranée Métropole",
       "status": "rankable_public_and_subscriber",
       "effectiveFrom": "2025-04-01",
-      "evidence": ["officialTariffPage", "heraultOfficialPdf", "officialOcpiTariffs"],
+      "evidence": ["officialTariffPage", "heraultOfficialPdf"],
       "public": [
         {"key":"ac-long","kind":"AC","maxPowerKw":22,"longDurationOnly":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":600}},
         {"key":"ac-normal","kind":"AC","excludeLongDuration":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":180,"activeWindow":{"start":"07:00","end":"22:00"}}},
@@ -48,63 +49,20 @@
         {"key":"dc-ultra","kind":"DC","minPowerKwExclusive":50,"pricePerKwh":0.50,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":30}}
       ]
     },
-    "S12": {
-      "partyId": "FR*S12",
-      "department": "12",
-      "label": "Aveyron",
-      "status": "rankable_public_only",
-      "effectiveFrom": "2026-07-01",
-      "evidence": ["officialOcpiIndex", "officialOcpiTariffs"],
-      "public": [
-        {"key":"ac-long","kind":"AC","maxPowerKw":22,"longDurationOnly":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":600}},
-        {"key":"ac-normal","kind":"AC","maxPowerKw":22,"excludeLongDuration":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":120,"activeWindow":{"start":"07:00","end":"22:00"}}},
-        {"key":"dc-24","kind":"DC","maxPowerKw":24,"pricePerKwh":0.46,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":90}},
-        {"key":"dc-50","kind":"DC","minPowerKwExclusive":24,"maxPowerKw":50,"pricePerKwh":0.50,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":60}},
-        {"key":"dc-ultra","kind":"DC","minPowerKwExclusive":50,"pricePerKwh":0.59,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":30}}
-      ],
-      "subscriber": null,
-      "unresolved": ["current_subscriber_grid"]
-    },
-    "S48": {
-      "partyId": "FR*S48",
-      "department": "48",
-      "label": "Lozère",
-      "status": "rankable_public_only",
-      "effectiveFrom": null,
-      "evidence": ["officialOcpiIndex", "officialOcpiTariffs"],
-      "public": [
-        {"key":"ac-normal","kind":"AC","maxPowerKw":22,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":120,"activeWindow":{"start":"07:00","end":"23:00"}}},
-        {"key":"dc-50","kind":"DC","maxPowerKw":50,"pricePerKwh":0.55,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":60}},
-        {"key":"dc-ultra","kind":"DC","minPowerKwExclusive":50,"pricePerKwh":0.70,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":30}}
-      ],
-      "subscriber": null,
-      "unresolved": ["current_subscriber_grid_not_revalidated"]
-    },
-    "M31": {
-      "partyId": "FR*M31",
-      "department": "31",
-      "label": "Toulouse Métropole",
-      "status": "rankable_public_only_explicit_party_match",
-      "effectiveFrom": null,
-      "evidence": ["officialOcpiIndex", "officialOcpiTariffs"],
-      "public": [
-        {"key":"ac-long","kind":"AC","maxPowerKw":22,"longDurationOnly":true,"pricePerKwh":0.23,"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":600}},
-        {"key":"ac-normal","kind":"AC","maxPowerKw":22,"excludeLongDuration":true,"energyTimeBands":[{"start":"06:00","end":"23:00","pricePerKwh":0.40},{"start":"23:00","end":"06:00","pricePerKwh":0.30}],"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":120}},
-        {"key":"dc","kind":"DC","pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":60}}
-      ],
-      "subscriber": null,
-      "unresolved": ["current_subscriber_grid"]
-    },
-    "D09": {"department":"09","label":"Ariège — Révéo 2025 / Load Stations","status":"unresolved","public":null,"subscriber":null},
-    "D11": {"department":"11","label":"Aude — Révéo 2025 / Load Stations","status":"unresolved","public":null,"subscriber":null},
-    "D46": {"department":"46","label":"Lot — Révéo 2025 / Load Stations","status":"unresolved","public":null,"subscriber":null},
-    "D65": {"department":"65","label":"Hautes-Pyrénées — Révéo 2025 / Load Stations","status":"unresolved_pending_current_source_revalidation","public":null,"subscriber":null},
-    "D66": {"department":"66","label":"Pyrénées-Orientales — Révéo 2025 / Load Stations","status":"unresolved","public":null,"subscriber":null}
+    "M34": {"department":"34","label":"Montpellier Méditerranée Métropole","status":"unresolved_excluded_from_herault_grid","public":null,"subscriber":null},
+    "S12": {"partyId":"FR*S12","department":"12","label":"Aveyron","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "M31": {"partyId":"FR*M31","department":"31","label":"Toulouse Métropole / Haute-Garonne","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "S48": {"partyId":"FR*S48","department":"48","label":"Lozère","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "D09": {"department":"09","label":"Ariège — Révéo 2025","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "D11": {"department":"11","label":"Aude — Révéo 2025","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "D46": {"department":"46","label":"Lot — Révéo 2025","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "D65": {"department":"65","label":"Hautes-Pyrénées — Révéo 2025","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null},
+    "D66": {"department":"66","label":"Pyrénées-Orientales — Révéo 2025","status":"unresolved_current_direct_grid_not_verified","public":null,"subscriber":null}
   },
   "exclusions": [
-    "Montpellier Méditerranée Métropole is not priced as FR*S34 unless FR*S34 is explicitly present",
+    "Montpellier Méditerranée Métropole is always excluded from the Hérault S34 grid",
     "Toulibéo/Alizé is not merged into Révéo",
-    "Révéo roaming offers on partner CPOs are excluded",
-    "Departments 09/11/46/65/66 remain non-rankable until current direct tariff rules are officially revalidated"
+    "Révéo roaming/OCPI tariffs are never promoted to direct CPO tariffs",
+    "Departments 09/11/12/31/46/48/65/66 remain non-rankable until a current direct operator grid is verified"
   ]
 }
