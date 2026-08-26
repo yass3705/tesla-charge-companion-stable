@@ -2,7 +2,7 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48bx-runtime-reveo-direct';
+  const REVISION='rc48by-runtime-charge-elec-dc';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
@@ -10,7 +10,7 @@
   function loadFranceCpoGap(){
     if(window.TCCV8FranceCpoConsolidated||window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
     const s=document.createElement('script');
-    s.src='assets/v8-france-cpo-gap-overlay.js?v=rc48bu-20260826';s.defer=true;s.dataset.tccFranceCpoGap='1';document.head.appendChild(s);return true;
+    s.src='assets/v8-france-cpo-gap-overlay.js?v=rc48bv-20260826';s.defer=true;s.dataset.tccFranceCpoGap='1';document.head.appendChild(s);return true;
   }
   function loadDrivecoDirect(){
     if(window.TCCV8DrivecoDirect||document.querySelector('script[data-tcc-driveco-direct]'))return true;
@@ -98,5 +98,5 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
   window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48bx : runtime + couches CPO France, DRIVECO, Allego Direct et Révéo Direct chargées.');
+  console.info('[TCC V8] rc48by : runtime + couche CPO France Charge E-Lec DC, DRIVECO, Allego Direct et Révéo Direct chargées.');
 })();
