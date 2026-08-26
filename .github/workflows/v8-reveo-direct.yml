@@ -2,7 +2,19 @@ name: V8 Révéo Direct
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - "assets/v8-reveo-direct.js"
+      - "assets/v8-rc48bn-runtime-hotfix.js"
+      - "data/reveo_direct_tariffs_france_v1.json"
+      - "scripts/test_reveo_direct_v8.mjs"
+      - ".github/workflows/v8-reveo-direct.yml"
   push:
+    branches:
+      - feat/reveo-direct-v8-20260826
+      - release/2026-08
     paths:
       - "assets/v8-reveo-direct.js"
       - "assets/v8-rc48bn-runtime-hotfix.js"
@@ -21,12 +33,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Syntax checks
+      - name: Syntax and matrix checks
         run: |
           node --check assets/v8-reveo-direct.js
           node --check assets/v8-rc48bn-runtime-hotfix.js
-          node -e "JSON.parse(require('fs').readFileSync('data/reveo_direct_tariffs_france_v1.json','utf8'))"
+          node -e "const d=JSON.parse(require('fs').readFileSync('data/reveo_direct_tariffs_france_v1.json','utf8')); if(JSON.stringify(d.scope.rankableTerritories)!=='[\"S34\"]') process.exit(1); if(d.scope.roamingTariffsPromotedToDirect!==false) process.exit(1)"
       - name: Révéo direct regression tests
         run: node scripts/test_reveo_direct_v8.mjs
       - name: Existing subscription ranking regression
         run: node scripts/test_v8_subscription_ranking.mjs
+      - name: Release wiring
+        run: |
+          grep -q "v8-reveo-direct.js?v=reveo-direct-v1-20260826" assets/v8-rc48bn-runtime-hotfix.js
+          grep -q "loadReveoDirect" assets/v8-rc48bn-runtime-hotfix.js
+          grep -q "Hérault hors Montpellier Métropole calculable" assets/v8-reveo-direct.js
