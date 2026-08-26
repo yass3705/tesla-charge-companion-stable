@@ -1,4 +1,4 @@
-// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib' + IONITY + Atlante.
+// Tesla Charge Companion V8 — catalogue national France enrichi E55C + Belib' + IONITY + Atlante + Powerdot.
 // Le socle Electroverse/Electra reste l'autorité des statuts. Les inventaires CPO
 // stricts ajoutent les stations manquantes et leurs tarifs directs vérifiés.
 (function(){
@@ -10,8 +10,9 @@
   const BELIB_LIVE_TTL_MS=5*60*1000;
   const IONITY_URL='data/ionity_direct_stations_france.json.gz';
   const ATLANTE_URL='data/atlante_direct_stations_france.json.gz';
+  const POWERDOT_URL='data/powerdot_direct_france.json.gz';
   const rawCache=new Map();
-  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0,ionityPromise=null,atlantePromise=null;
+  let manifestPromise=null,statusPromise=null,e55cPromise=null,belibPromise=null,belibLivePromise=null,belibLiveLoadedAt=0,ionityPromise=null,atlantePromise=null,powerdotPromise=null;
   const STATUS_MAX_AGE_MS=48*60*60*1000;
   const text=value=>String(value==null?'':value).trim();
   const norm=value=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -164,6 +165,22 @@
       return {locations:[],counts:{}};
     });
     return atlantePromise;
+  }
+
+  async function loadPowerdotCatalog(){
+    if(!powerdotPromise)powerdotPromise=readStandaloneGzip(POWERDOT_URL,'Powerdot').then(data=>{
+      if(data?.source?.sourceType!=='direct_cpo_public_adhoc_api'||data?.source?.roaming!==false||text(data?.source?.emspCode)!==''||text(data?.source?.operator)!=='Power Dot France')throw new Error('Contexte tarifaire Powerdot invalide');
+      if(!Array.isArray(data?.chargers)||Number(data?.counts?.apiSuccessChargers)!==data.chargers.length||data.chargers.length<2200)throw new Error('Inventaire Powerdot incomplet');
+      if(Number(data?.counts?.pricedConnectors)<7000||Number(data?.counts?.coveredIrveStations)<1000)throw new Error('Couverture Powerdot insuffisante');
+      if(data.chargers.some(entry=>entry?.location?.countryCode!=='FR'))throw new Error('Station Powerdot hors France');
+      if(data.chargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
+      window.TCC_POWERDOT_DIRECT_CATALOG_V1=data;
+      return data;
+    }).catch(error=>{
+      console.warn('[TCC V8] Base Powerdot directe ignorée :',error?.message||error);
+      return {chargers:[],counts:{}};
+    });
+    return powerdotPromise;
   }
 
   async function readGzipJson(file,version=''){
@@ -347,6 +364,9 @@
       if(config.belibEvseIds)existing.belibEvseIds=[...new Set([...(existing.belibEvseIds||[]),...config.belibEvseIds])];
       if(config.atlanteEvseIds)existing.atlanteEvseIds=[...new Set([...(existing.atlanteEvseIds||[]),...config.atlanteEvseIds])];
       if(config.atlanteConnectorIds)existing.atlanteConnectorIds=[...new Set([...(existing.atlanteConnectorIds||[]),...config.atlanteConnectorIds])];
+      if(config.powerdotIrvePdcIds)existing.powerdotIrvePdcIds=[...new Set([...(existing.powerdotIrvePdcIds||[]),...config.powerdotIrvePdcIds])];
+      if(config.powerdotChargerNames)existing.powerdotChargerNames=[...new Set([...(existing.powerdotChargerNames||[]),...config.powerdotChargerNames])];
+      if(config.powerdotTariffIds)existing.powerdotTariffIds=[...new Set([...(existing.powerdotTariffIds||[]),...config.powerdotTariffIds])];
     }
     return [...map.values()];
   }
@@ -689,6 +709,103 @@
     return output;
   }
 
+  function isPowerdotOperator(station){
+    const value=norm(station?.operator);
+    return value==='powerdot'||value==='power dot'||value.startsWith('powerdot ')||value.startsWith('power dot ');
+  }
+  function powerdotPricing(tariff){
+    const rule={scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:(text(tariff?.currencyCode)||'EUR').toUpperCase(),pricePerKwh:0,chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0,afterMinutesCap:0,afterMinutesCapStart:'00:00',afterMinutesCapEnd:'24:00'};
+    let hasPrice=false;
+    for(const element of tariff?.elements||[]){
+      const restrictions=element?.restrictions||{};
+      for(const component of element?.priceComponents||[]){
+        const type=text(component?.type).toUpperCase(),price=Number(component?.pricePerUnit);
+        if(!Number.isFinite(price)||price<0)continue;
+        if(type==='ENERGY'&&price>0){rule.pricePerKwh=price;hasPrice=true;}
+        else if(type==='FLAT'&&price>0){rule.connectionFee=price;hasPrice=true;}
+        else if(type==='PARKING_TIME'&&price>0){rule.idlePerMinute=price;hasPrice=true;}
+        else if(type==='TIME'&&price>0){
+          const thresholdSec=Number(restrictions?.minDurationSec||0);
+          if(thresholdSec>0){rule.afterMinutesRate=price;rule.afterMinutesThreshold=thresholdSec/60;}
+          else rule.chargePerMinute=price;
+          hasPrice=true;
+        }
+      }
+    }
+    return hasPrice?{type:'rules',rules:[rule]}:{type:'rules',rules:[]};
+  }
+  function powerdotLocations(data){
+    const map=new Map();
+    for(const entry of data?.chargers||[]){
+      const location=entry?.location||{},latitude=Number(location.latitude),longitude=Number(location.longitude);
+      if(location.countryCode!=='FR'||!Number.isFinite(latitude)||!Number.isFinite(longitude))continue;
+      const key=text(location.id)||text(location.uid)||`${latitude.toFixed(6)}|${longitude.toFixed(6)}|${norm(location.name)}`;
+      if(!map.has(key))map.set(key,{id:key,uid:text(location.uid),name:text(location.name),address:text(location.address),zipcode:text(location.zipcode),city:text(location.city),latitude,longitude,countryCode:'FR',chargers:[],irvePdcIds:[]});
+      const target=map.get(key);
+      target.chargers.push(entry);
+      target.irvePdcIds=[...new Set([...target.irvePdcIds,...(entry.irvePdcIds||[])])];
+    }
+    return [...map.values()];
+  }
+  function powerdotConnectorKind(connector){
+    const type=Number(connector?.type||0);
+    if(type===2)return 'AC';
+    if(type===1)return 'DC';
+    return Number(connector?.maxPowerKw||0)<=22.5?'AC':'DC';
+  }
+  function powerdotDirectConfigurations(location){
+    const groups=new Map(),powerVariants=new Map();
+    for(const entry of location.chargers||[]){
+      const chargerName=text(entry?.chargerName)||text(entry?.charger?.chargerName);
+      for(const connector of entry?.charger?.connectors||[]){
+        const power=Number(connector?.maxPowerKw),kind=powerdotConnectorKind(connector),pricing=powerdotPricing(connector?.tariff);
+        if(!(power>0)||!pricing.rules.length||!pricing.rules.some(rule=>Number(rule.pricePerKwh)>0||Number(rule.chargePerMinute)>0||Number(rule.connectionFee)>0||Number(rule.idlePerMinute)>0||Number(rule.afterMinutesRate)>0))continue;
+        const powerKey=`${kind}|${power.toFixed(3)}`,signature=pricingSignature(pricing),key=`${powerKey}|${signature}`;
+        if(!groups.has(key))groups.set(key,{kind,power,pricing,connectors:[],chargerNames:new Set(),irvePdcIds:new Set(),tariffIds:new Set()});
+        const group=groups.get(key);group.connectors.push(connector);if(chargerName)group.chargerNames.add(chargerName);
+        for(const id of entry.irvePdcIds||[])group.irvePdcIds.add(id);
+        if(connector?.tariff?.id)group.tariffIds.add(connector.tariff.id);
+        if(!powerVariants.has(powerKey))powerVariants.set(powerKey,new Set());powerVariants.get(powerKey).add(signature);
+      }
+    }
+    return [...groups.values()].map((group,index)=>{
+      const refs=[...new Set(group.connectors.map(connector=>text(connector.physicalReference)||String(connector.connectorNumber||'')).filter(Boolean))];
+      const powerKey=`${group.kind}|${group.power.toFixed(3)}`;
+      const provider=powerVariants.get(powerKey)?.size>1&&refs.length?`Powerdot direct (bornes ${refs.join(', ')})`:'Powerdot direct';
+      return {id:`powerdot-direct-${location.id}-${index}`,label:`${provider} · ${group.kind} ${group.power} kW`,kind:group.kind,powerKw:group.power,stalls:group.connectors.length,pricing:group.pricing,offerProvider:provider,offerType:'operator_direct',powerdotDirect:true,powerdotVerified:true,powerdotLocationId:location.id,powerdotLocationUid:location.uid,powerdotChargerNames:[...group.chargerNames],powerdotIrvePdcIds:[...group.irvePdcIds],powerdotTariffIds:[...group.tariffIds],powerdotPhysicalReferences:refs};
+    });
+  }
+  function mergedPowerdotStation(location,data,matches=[]){
+    const direct=powerdotDirectConfigurations(location);
+    const existing=matches.flatMap(station=>station.chargingConfigurations||[]);
+    const configurations=mergeConfigurations([...direct,...existing]);
+    const first=direct[0]||configurations[0]||{kind:'DC',powerKw:50,pricing:{type:'rules',rules:[]}};
+    const base=matches.length?{...primaryStation(matches)}:{id:`france-catalog:powerdot:${location.id}`,catalogStationId:`powerdot:${location.id}`,source:'franceNationalCatalog',countryCode:'FR',temporarilyUnavailable:false,readOnlyCatalog:true,access:{limited:false,unknown:true,days:{},afterCloseMode:'exit_allowed',afterCloseNote:'Horaires non fournis par la base tarifaire Powerdot — accès à vérifier.'}};
+    const directConnectorCount=direct.reduce((sum,config)=>sum+Number(config.stalls||0),0);
+    const merged={...base,name:location.name||base.name,address:[location.address,location.zipcode,location.city].filter(Boolean).join(', ')||base.address,latitude:Number(location.latitude),longitude:Number(location.longitude),operator:'Powerdot',stalls:directConnectorCount,kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configurations,lastUpdated:String(data.generatedAt||'').slice(0,10),powerdotStrictCpo:true,powerdotDirectPricingContext:'adhoc_emsp_empty',powerdotLocationId:location.id,powerdotLocationUid:location.uid,powerdotIrvePdcIds:[...location.irvePdcIds],powerdotSourceCatalogStationIds:matches.map(station=>station.catalogStationId).filter(Boolean),powerdotStatusJoinedExternally:matches.length>0,powerdotDirectConnectorCount:directConnectorCount};
+    return mergeStatus(merged,matches);
+  }
+  function mergePowerdotCatalog(catalog,data,origin={lat:0,lon:0},radiusKm=0){
+    if(!Array.isArray(data?.chargers)||!data.chargers.length)return catalog;
+    const allLocations=powerdotLocations(data).filter(location=>powerdotDirectConfigurations(location).length>0);
+    const locations=allLocations.filter(location=>!(radiusKm>0)||geoDistanceKm(origin.lat,origin.lon,location.latitude,location.longitude)<=radiusKm+.10);
+    const assignments=new Map(),consumed=new Set();
+    for(let index=0;index<catalog.length;index++){
+      const station=catalog[index];
+      if(!isPowerdotOperator(station)||!Number.isFinite(Number(station.latitude))||!Number.isFinite(Number(station.longitude)))continue;
+      let best=null;
+      for(const location of locations){const distance=geoDistanceKm(station.latitude,station.longitude,location.latitude,location.longitude);if(distance<=.08+1e-9&&(!best||distance<best.distance))best={location,distance};}
+      if(!best)continue;
+      if(!assignments.has(best.location.id))assignments.set(best.location.id,[]);
+      assignments.get(best.location.id).push({index,station});consumed.add(index);
+    }
+    let matched=0,added=0,collapsed=0,directConnectors=0;
+    const merged=locations.map(location=>{const matches=assignments.get(location.id)||[];if(matches.length){matched++;collapsed+=Math.max(0,matches.length-1);}else added++;const station=mergedPowerdotStation(location,data,matches.map(match=>match.station));directConnectors+=Number(station.powerdotDirectConnectorCount||0);return station;});
+    const output=[...catalog.filter((_,index)=>!consumed.has(index)),...merged];
+    window.TCC_POWERDOT_MERGE_STATS={sourceChargers:data.chargers.length,directLocations:allLocations.length,inAreaLocations:locations.length,matched,added,collapsedSourceDuplicates:collapsed,directConnectors,unresolvedIrveStations:Number(data?.counts?.uniqueIrveStations||0)-Number(data?.counts?.coveredIrveStations||0),outputStations:output.length};
+    return output;
+  }
+
   async function rowsNear(lat,lon,radiusKm){
     const manifest=await loadManifest();
     const version=manifest.runtimePatchedAt||manifest.allSha256||manifest.generatedAt||'';
@@ -706,13 +823,14 @@
     if(filterMode!=='all')return originalCandidateStations(filterMode,maxDistanceKm);
     const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';
     const origin=await resolveOrigin(originText);
-    const [rows,statuses,e55c,belib,belibLive,ionity,atlante]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive(),loadIonityCatalog(),loadAtlanteCatalog()]);
+    const [rows,statuses,e55c,belib,belibLive,ionity,atlante,powerdot]=await Promise.all([rowsNear(origin.lat,origin.lon,Number(maxDistanceKm)||0),loadStatusSnapshot(),loadE55cCatalog(),loadBelibCatalog(),loadBelibLive(),loadIonityCatalog(),loadAtlanteCatalog(),loadPowerdotCatalog()]);
     const dayIndex=dayIndexFromSimulation();
     const baseCatalog=rows.map(row=>applyOperationalStatus(stationFromRow(row,dayIndex),statuses));
     const e55cCatalog=mergeE55cCatalog(baseCatalog,e55c,origin,Number(maxDistanceKm)||0);
     const belibCatalog=mergeBelibCatalog(e55cCatalog,belib,belibLive,origin,Number(maxDistanceKm)||0);
     const ionityCatalog=mergeIonityCatalog(belibCatalog,ionity,origin,Number(maxDistanceKm)||0);
-    const catalog=mergeAtlanteCatalog(ionityCatalog,atlante,origin,Number(maxDistanceKm)||0);
+    const atlanteCatalog=mergeAtlanteCatalog(ionityCatalog,atlante,origin,Number(maxDistanceKm)||0);
+    const catalog=mergePowerdotCatalog(atlanteCatalog,powerdot,origin,Number(maxDistanceKm)||0);
     const originalStations=stations;
     const ids=new Set(originalStations.map(station=>station.id));
     const extra=catalog.filter(station=>!ids.has(station.id));
@@ -730,12 +848,14 @@
         result.ionityMergeStats={...(window.TCC_IONITY_MERGE_STATS||{})};
         result.atlanteDirectCatalogLoaded=true;
         result.atlanteMergeStats={...(window.TCC_ATLANTE_MERGE_STATS||{})};
+        result.powerdotDirectCatalogLoaded=true;
+        result.powerdotMergeStats={...(window.TCC_POWERDOT_MERGE_STATS||{})};
       }
       return result;
     }finally{stations=originalStations;}
   };
 
-  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,loadIonityCatalog,loadAtlanteCatalog,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;ionityPromise=null;atlantePromise=null;},get cachedFragments(){return rawCache.size;}};
-  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,mergeIonityCatalog,mergedIonityStation,ionityDirectConfigurations,isIonityOperator,mergeAtlanteCatalog,mergedAtlanteStation,atlanteDirectConfigurations,isAtlanteOperator,geoDistanceKm};
-  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu) + IONITY + Atlante.');
+  window.TCCFranceCatalog={loadManifest,loadStatusSnapshot,loadE55cCatalog,loadBelibCatalog,loadBelibLive,loadIonityCatalog,loadAtlanteCatalog,loadPowerdotCatalog,clearCache(){rawCache.clear();manifestPromise=null;statusPromise=null;e55cPromise=null;belibPromise=null;belibLivePromise=null;belibLiveLoadedAt=0;ionityPromise=null;atlantePromise=null;powerdotPromise=null;},get cachedFragments(){return rawCache.size;}};
+  window.TCCFranceCatalogV8={stationFromRow,mergeE55cCatalog,mergedE55cStation,directConfigurations,isE55cOperator,mergeBelibCatalog,mergedBelibStation,directBelibConfigurations,isBelibOperator,belibLiveStatus,mergeIonityCatalog,mergedIonityStation,ionityDirectConfigurations,isIonityOperator,mergeAtlanteCatalog,mergedAtlanteStation,atlanteDirectConfigurations,isAtlanteOperator,mergePowerdotCatalog,mergedPowerdotStation,powerdotDirectConfigurations,powerdotLocations,powerdotPricing,isPowerdotOperator,geoDistanceKm};
+  console.info('[TCC V8] Catalogue national France enrichi des stations et tarifs directs E55C + Belib’ (parking exclu) + IONITY + Atlante + Powerdot.');
 })();
