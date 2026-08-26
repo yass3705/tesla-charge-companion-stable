@@ -39,6 +39,7 @@ jobs:
           node --check assets/v8-rc48bn-runtime-hotfix.js
           node --check assets/v8-labornebleue-operator-fallback.js
           node --check assets/v8-source-integrity.js
+          node --check assets/v8-waat-direct.js
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -64,6 +65,9 @@ jobs:
       - name: Smoke-test La Borne Bleue explicit operator fallback
         run: node scripts/test_labornebleue_explicit_operator_fallback.mjs
 
+      - name: Smoke-test WAAT direct station/configuration tariffs
+        run: node scripts/test_waat_direct_v8.mjs
+
       - name: Verify August build references
         shell: bash
         run: |
@@ -76,6 +80,9 @@ jobs:
           grep -q "assets/update.js?v=${BUILD}" index.html
           grep -q "assets/v8-offer-selection.js?v=${BUILD}" index.html
           ! grep -q "assets/v8-e55c-pricing.js" index.html
+          grep -q "assets/v8-waat-direct.js?v=waat-20260826a" index.html
+          test "$(grep -c 'assets/v8-waat-direct.js' index.html)" -eq 1
+          test -s data/waat_monta_direct_tariffs_france.json.gz
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
           grep -q "v8-compare-subscriptions.js?v=rc48bt-20260825" assets/update.js
