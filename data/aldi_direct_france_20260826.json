@@ -41,8 +41,9 @@
     {
       "id": "aldi-fr-dc50-direct",
       "kind": "DC",
-      "minPowerKw": 40,
-      "maxPowerKw": 60,
+      "minPowerKw": 45,
+      "maxPowerKw": 55,
+      "nominalPowerKw": 50,
       "pricePerKwh": 0.35,
       "currency": "EUR",
       "connectionFee": 0,
@@ -55,8 +56,8 @@
   "deferred": [
     {
       "kind": "DC",
-      "condition": "powerKw > 60",
-      "reason": "Des sites ALDI directs sont référencés au-delà de 50 kW, mais la grille ALDI France vérifiée ici documente explicitement la famille DC 50 kW. Aucun tarif n'est extrapolé aux puissances supérieures."
+      "condition": "powerKw outside the 50 kW class (45-55 kW tolerance)",
+      "reason": "Des sites ALDI directs sont référencés à 60 ou 100 kW, mais la grille ALDI France vérifiée ici documente explicitement la famille DC 50 kW. Aucun tarif n'est extrapolé aux puissances supérieures."
     },
     {
       "kind": "ANY",
