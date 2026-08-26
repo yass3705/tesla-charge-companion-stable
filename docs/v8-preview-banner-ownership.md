@@ -6,3 +6,4 @@ Operator-specific runtime modules must not read, rewrite, style or version `#tcc
 Their internal revision identifiers remain local diagnostics only.
 
 The release branch contains `scripts/test_v8_banner_ownership.mjs` to enforce this invariant during V8 maintenance.
+The published preview must preserve the build-owned banner text after all operator modules have loaded.
