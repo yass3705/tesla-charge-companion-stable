@@ -5,6 +5,7 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/integrate-etotem-v8.yml"
+      - "scripts/fix_etotem_loader_guard.py"
       - ".deploy/etotem-runtime-revision.txt"
   workflow_dispatch:
 
@@ -38,11 +39,13 @@ jobs:
         run: |
           python site/scripts/ensure_etotem_v8_runtime.py --main-root site --rc-root rc
           python site/scripts/fix_etotem_sections.py site/assets/france-catalog-v8.js
+          python site/scripts/fix_etotem_loader_guard.py site/assets/france-catalog-v8.js
           node --check site/assets/france-catalog-v8.js
           node --check rc/assets/app.js
           grep -q "ETOTEM_URL" site/assets/france-catalog-v8.js
           grep -q "mergeEtotemCatalog" site/assets/france-catalog-v8.js
           grep -q "idleGraceMinutes" rc/assets/app.js
+          grep -q "Couverture tarifaire e-Totem publique insuffisante" site/assets/france-catalog-v8.js
           node site/scripts/test_etotem_v8_runtime.mjs site/assets/france-catalog-v8.js
 
       - name: Publier la correction du moteur V8
@@ -76,7 +79,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Catalogue V8 déjà raccordé."
           else
-            git commit -m "fix(etotem): parse AC DC tariff sections safely"
+            git commit -m "fix(etotem): enforce public family coverage guard"
             for attempt in 1 2 3 4; do
               git pull --rebase origin main
               if git push origin HEAD:main; then break; fi
