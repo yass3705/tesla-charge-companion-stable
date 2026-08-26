@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import zlib from 'node:zlib';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
 
@@ -14,14 +13,14 @@ vm.runInThisContext(source,{filename:'v8-waat-direct.js'});
 const W=globalThis.TCCWaatDirectV8;
 assert.ok(W,'WAAT runtime export missing');
 
-const dataPath=new URL('../data/waat_monta_direct_tariffs_france.json.gz',import.meta.url);
-const catalog=JSON.parse(zlib.gunzipSync(fs.readFileSync(dataPath)));
+const dataPath=new URL('../data/waat_direct_tariffs_tcc_france.json',import.meta.url);
+const catalog=JSON.parse(fs.readFileSync(dataPath,'utf8'));
 W.validateCatalog(catalog);
-assert.equal(catalog.counts.inventoryStations,571);
-assert.equal(catalog.counts.mapHttp200,571);
-assert.equal(catalog.counts.mapErrors,0);
+assert.equal(catalog.counts.franceStations,571);
 assert.equal(catalog.counts.rankableStations,452);
-assert.equal(catalog.counts.rankablePhysicalConfigs,507);
+assert.equal(catalog.counts.rankableConfigs,507);
+assert.equal(catalog.counts.unresolvedStations,119);
+assert.equal(catalog.stations.length,571);
 
 assert.equal(W.isWaatOperator({operator:'WAAT SAS | FR*WA2'}),true);
 assert.equal(W.isWaatOperator({operator:'Electroverse'}),false);
@@ -47,25 +46,14 @@ out=W.addOffers(st,catalog);offers=directOffers(out);assert.equal(offers.length,
 st={countryCode:'FR',operator:'WAAT',catalogStationId:'FRWA2PUNKNOWN',name:'Station inconnue',address:'Adresse inconnue',chargingConfigurations:[{kind:'AC',powerKw:22,stalls:2}]};
 out=W.addOffers(st,catalog);assert.equal(directOffers(out).length,0);
 
-// Carcassonne mixed/range group 811653 must never become a WAAT Direct offer.
-const carc=catalog.stations.find(s=>(s.montaGroups||[]).some(g=>g.montaGroupId===811653));
-assert.ok(carc,'Carcassonne range witness missing');
-const range=carc.montaGroups.find(g=>g.montaGroupId===811653);
-assert.equal(range.rankable,false);assert.equal(range.blockingReason,'price_range');assert.equal(range.directEurPerKwh,null);
-const fakePhysical=(carc.physicalConfigs||[]).map(c=>({kind:c.kind,powerKw:c.powerKw,stalls:1}));
-st={countryCode:'FR',operator:'WAAT',catalogStationId:carc.stationIdNormalized,name:carc.stationName,address:carc.address,chargingConfigurations:fakePhysical};
-out=W.addOffers(st,catalog);offers=directOffers(out);
-assert.ok(offers.every(c=>!(c.waatMontaGroupIds||[]).includes(811653)),'range group leaked into rankable offer');
-for(const c of offers)assert.ok(c.waatDirectEurPerKwh>0);
-
-// Every published WAAT Direct configuration must map to exactly one positive price.
-for(const station of catalog.stations){
-  for(const c of station.integrationConfigs||[]){
-    if(!c.rankable)continue;
-    assert.ok(['AC','DC'].includes(c.kind));
-    assert.ok(Number(c.powerKw)>0);assert.ok(Number(c.directEurPerKwh)>0);
-    assert.ok(Array.isArray(c.groupIds)&&c.groupIds.length>0);
-  }
+// The ambiguous Monta group 811653 must never exist in the consolidated rankable file.
+const allConfigs=catalog.stations.flatMap(s=>s.configs||[]);
+assert.equal(allConfigs.length,507);
+assert.ok(allConfigs.every(c=>!(c.groupIds||[]).map(Number).includes(811653)),'ambiguous WAAT group leaked into consolidated rankable dataset');
+for(const c of allConfigs){
+  assert.ok(['AC','DC'].includes(c.kind));
+  assert.ok(Number(c.powerKw)>0);assert.ok(Number(c.directEurPerKwh)>0);
+  assert.ok(Array.isArray(c.groupIds)&&c.groupIds.length>0);
 }
 
 console.log('WAAT V8 direct runtime tests: OK');
