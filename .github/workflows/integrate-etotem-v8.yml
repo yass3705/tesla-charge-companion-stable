@@ -1,0 +1,84 @@
+name: Intégrer e-Totem direct dans TCC V8
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/integrate-etotem-v8.yml"
+      - ".deploy/etotem-runtime-revision.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: integrate-etotem-v8
+  cancel-in-progress: true
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Récupérer la base stable
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          path: site
+
+      - name: Récupérer le code V8
+        uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+          path: rc
+
+      - name: Appliquer l’intégration e-Totem
+        run: |
+          python site/scripts/patch_etotem_v8_runtime.py --main-root site --rc-root rc
+          node --check site/assets/france-catalog-v8.js
+          node --check rc/assets/app.js
+          grep -q "ETOTEM_URL" site/assets/france-catalog-v8.js
+          grep -q "mergeEtotemCatalog" site/assets/france-catalog-v8.js
+          grep -q "idleGraceMinutes" rc/assets/app.js
+
+      - name: Publier la correction du moteur V8
+        working-directory: rc
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/app.js
+          if git diff --cached --quiet; then
+            echo "Moteur V8 déjà corrigé."
+          else
+            git commit -m "feat(etotem): support post-charge grace in V8 pricing"
+            for attempt in 1 2 3 4; do
+              git pull --rebase origin release/2026-08
+              if git push origin HEAD:release/2026-08; then break; fi
+              sleep $((attempt * 2))
+              [ "$attempt" -lt 4 ] || exit 1
+            done
+          fi
+
+      - name: Publier le raccordement du catalogue e-Totem
+        working-directory: site
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/france-catalog-v8.js
+          if git diff --cached --quiet; then
+            echo "Catalogue V8 déjà raccordé."
+          else
+            git commit -m "feat(etotem): integrate strict direct station tariffs in V8"
+            for attempt in 1 2 3 4; do
+              git pull --rebase origin main
+              if git push origin HEAD:main; then break; fi
+              sleep $((attempt * 2))
+              [ "$attempt" -lt 4 ] || exit 1
+            done
+          fi
