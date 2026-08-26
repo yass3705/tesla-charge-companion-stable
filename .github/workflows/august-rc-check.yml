@@ -49,6 +49,7 @@ jobs:
           node --check scripts/test_freshmile_v8_runtime.mjs
           node --check scripts/test_bump_direct_v8.mjs
           node --check scripts/test_v8_runtime_integrity_guard.mjs
+          node --check scripts/audit_bump_runtime_matching.mjs
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -101,6 +102,9 @@ jobs:
 
       - name: Smoke-test Bump direct matching and fee rules
         run: node scripts/test_bump_direct_v8.mjs
+
+      - name: Audit Bump known Paris matching fixtures
+        run: node scripts/audit_bump_runtime_matching.mjs
 
       - name: Validate preview-local data isolation
         run: node scripts/test_v8_runtime_integrity_guard.mjs
