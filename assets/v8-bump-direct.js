@@ -2,7 +2,7 @@
 // Source: validated Bump public driver-facing tariff snapshot. No roaming and no network-wide fallback.
 (function(){
   'use strict';
-  const REVISION='bump-direct-v1-20260826b';
+  const REVISION='bump-direct-v1-20260827a';
   const DATA_URL='data/bump_direct_tariffs_tcc_france.json.gz';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -52,7 +52,15 @@
     return out;
   }
   function hasDirect(configs,cfg){return(configs||[]).some(c=>providerOf(c)==='bump direct'&&text(c?.kind).toUpperCase()===cfg.kind&&Math.abs(Number(c?.powerKw||0)-cfg.powerKw)<.35)}
-  function compatible(point,cfg){return Math.abs(Number(point?.powerKw||0)-Number(cfg?.powerKw||0))<.35}
+  function powerTolerance(point,cfg){
+    const a=Number(point?.powerKw||0),b=Number(cfg?.powerKw||0);
+    if(!(a>0)||!(b>0))return 0;
+    // Les sources IRVE et opérateur n'expriment pas toujours la même puissance nominale
+    // (ex. 7.0 kW côté Bump et 7.4 kW côté Electra). On accepte uniquement un petit
+    // arrondi technique, jamais un changement de classe de puissance.
+    return Math.max(.75,Math.min(a,b)*.05);
+  }
+  function compatible(point,cfg){return Math.abs(Number(point?.powerKw||0)-Number(cfg?.powerKw||0))<=powerTolerance(point,cfg)+1e-9}
   function signature(point){return JSON.stringify({components:point?.components||null,rules:point?.rules||null});}
 
   function indexes(data){
@@ -90,7 +98,8 @@
   function rankable(point){return point?.rankable===true&&(point?.status==='rankable_static'||point?.status==='rankable_rule_based')}
   function safePointGroup(points,cfg,mode){
     const all=(points||[]).filter(p=>compatible(p,cfg));if(!all.length)return null;
-    // A station/name/address fallback is allowed only when every PDC at that power is rankable.
+    // Un fallback station/nom/adresse reste fail-closed : tous les PDC compatibles
+    // doivent être classables et porter exactement la même règle tarifaire.
     if(all.some(p=>!rankable(p)))return null;
     const sig=new Set(all.map(signature));if(sig.size!==1)return null;
     return {...all[0],bumpMatchMode:mode,bumpMatchedEvseIds:all.map(p=>compact(p.idPdcItinerance)).filter(Boolean)};
@@ -182,7 +191,7 @@
       added.push({
         id:`bump-direct:${cfg.kind}:${String(cfg.powerKw).replace('.','_')}`,label:`Bump Direct · ${cfg.kind} ${cfg.powerKw} kW`,kind:cfg.kind,powerKw:cfg.powerKw,stalls:Math.max(1,(point.bumpMatchedEvseIds||[]).length||cfg.stalls),
         pricing:basePricing(point),offerProvider:'Bump Direct',offerType:'operator_direct',bumpDirectOffer:true,bumpVerified:true,bumpMapVersion:data.schemaVersion,
-        bumpMatchMode:point.bumpMatchMode,bumpMatchedEvseIds:point.bumpMatchedEvseIds||[],bumpStationId:point.stationId||'',bumpTariffGroupId:point.tariffGroupId||'',bumpTariffId:point.tariffId||'',bumpRankableStatus:point.status
+        bumpMatchMode:point.bumpMatchMode,bumpMatchedEvseIds:point.bumpMatchedEvseIds||[],bumpStationId:point.stationId||'',bumpTariffGroupId:point.tariffGroupId||'',bumpTariffId:point.tariffId||'',bumpRankableStatus:point.status,bumpTariffPowerKw:Number(point.powerKw||0)
       });
     }
     return added.length?{...st,chargingConfigurations:[...base,...added],_bumpDirectOffers:[...(st._bumpDirectOffers||[]),...added.map(x=>x.id)]}:st;
@@ -199,5 +208,5 @@
     document.addEventListener('tcc:bump-map-ready',()=>{installExpansion();installPricingExtension();});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
-  window.TCCBumpDirectV8={revision:REVISION,loadCatalog,validateCatalog,addOffers,resolve,basePricing,bumpExtras,conditionsMet,isBumpOperator,installPricingExtension,installExpansion,get catalog(){return window.TCC_BUMP_DIRECT_CATALOG_V1||null}};
+  window.TCCBumpDirectV8={revision:REVISION,loadCatalog,validateCatalog,addOffers,resolve,basePricing,bumpExtras,conditionsMet,isBumpOperator,powerTolerance,compatible,installPricingExtension,installExpansion,get catalog(){return window.TCC_BUMP_DIRECT_CATALOG_V1||null}};
 })();
