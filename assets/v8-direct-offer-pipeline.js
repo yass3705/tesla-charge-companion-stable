@@ -5,7 +5,7 @@
 (function(){
   'use strict';
 
-  const REVISION='v8-direct-offer-pipeline-1';
+  const REVISION='v8-direct-offer-pipeline-2';
   const REGISTRY_URL='data/v8_tariff_sources.json';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -79,11 +79,28 @@
 
   async function enrichPowerdot(prepared){
     const catalog=await waitFor(()=>window.TCCFranceCatalog,5000),api=await waitFor(()=>window.TCCFranceCatalogV8,5000);
-    if(!catalog?.loadPowerdotCatalog||!api?.mergePowerdotCatalog)return prepared;
+    if(!catalog?.loadPowerdotCatalog||!api?.powerdotLocations||!api?.mergedPowerdotStation||!api?.geoDistanceKm||!api?.isPowerdotOperator)return prepared;
     const data=await catalog.loadPowerdotCatalog();
     if(!Array.isArray(data?.chargers)||!data.chargers.length)return prepared;
-    prepared.stations=api.mergePowerdotCatalog(prepared.stations||[],data,prepared.origin||{},Number(prepared.maxDistanceKm||0));
-    prepared.powerdotDirectPipelineApplied=true;return prepared;
+    // Le cache de zone ne mémorise pas nécessairement l'origine/rayon. Ne jamais
+    // rappeler ici la fusion nationale : on enrichit uniquement les stations Powerdot
+    // déjà présentes dans la zone préparée, par proximité stricte (80 m max).
+    const locations=api.powerdotLocations(data).filter(location=>api.powerdotDirectConfigurations?.(location)?.length>0);
+    let matched=0;
+    prepared.stations=(prepared.stations||[]).map(st=>{
+      if(!api.isPowerdotOperator(st)||!Number.isFinite(Number(st?.latitude))||!Number.isFinite(Number(st?.longitude)))return st;
+      let best=null;
+      for(const location of locations){
+        const distance=api.geoDistanceKm(st.latitude,st.longitude,location.latitude,location.longitude);
+        if(distance<=.08+1e-9&&(!best||distance<best.distance))best={location,distance};
+      }
+      if(!best)return st;
+      matched++;
+      return api.mergedPowerdotStation(best.location,data,[st]);
+    });
+    prepared.powerdotDirectPipelineApplied=true;
+    prepared.powerdotDirectPipelineMatched=matched;
+    return prepared;
   }
   async function enrichFreshmile(prepared){
     const api=await waitFor(()=>window.TCCV8FreshmileDirect,7000);
