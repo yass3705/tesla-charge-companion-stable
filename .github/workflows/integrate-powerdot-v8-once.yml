@@ -1,4 +1,4 @@
-name: Integrer Powerdot Direct V8
+name: Finaliser Powerdot Direct V8
 
 on:
   push:
@@ -12,62 +12,36 @@ permissions:
   contents: write
 
 jobs:
-  integrate:
+  finalize:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
-      - name: Download Powerdot dataset
-        run: curl --fail --location --retry 4 --retry-delay 5 --output data/powerdot_direct_france.json.gz https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/powerdot_direct_france.json.gz
-      - name: Patch V8
-        run: python scripts/integrate_powerdot_v8_once.py
-      - name: Align source guards and mappable coverage
+      - name: Use published root dataset
         run: |
           python - <<'PY'
           from pathlib import Path
           p=Path('assets/france-catalog-v8.js')
-          s=p.read_text()
-          s=s.replace("      if(data?.dataset!=='powerdot-direct-cpo-france')throw new Error('Dataset Powerdot inattendu');\n      if(data?.source?.pricingContext!=='direct CPO / adhoc / emspCode empty')throw new Error('Contexte tarifaire Powerdot invalide');", "      if(data?.source?.sourceType!=='direct_cpo_public_adhoc_api'||data?.source?.roaming!==false||text(data?.source?.emspCode)!==''||text(data?.source?.operator)!=='Power Dot France')throw new Error('Contexte tarifaire Powerdot invalide');")
-          p.write_text(s)
-
-          p=Path('scripts/test_powerdot_v8_runtime.mjs')
-          s=p.read_text()
-          s=s.replace("assert(powerdot.dataset==='powerdot-direct-cpo-france','Dataset Powerdot inattendu');\nassert(powerdot.source?.pricingContext==='direct CPO / adhoc / emspCode empty','Contexte CPO Powerdot invalide');", "assert(powerdot.source?.sourceType==='direct_cpo_public_adhoc_api','Source Powerdot inattendue');\nassert(powerdot.source?.roaming===false&&String(powerdot.source?.emspCode??'')===''&&powerdot.source?.operator==='Power Dot France','Contexte CPO Powerdot invalide');")
-          marker="const locations=api.powerdotLocations(powerdot).filter(location=>api.powerdotDirectConfigurations(location).length>0);"
-          insert="""const recognizedTypes=new Set(['ENERGY','FLAT','PARKING_TIME','TIME']);
-          const expectedMappableConnectors=(powerdot.chargers||[]).reduce((sum,entry)=>{
-            const location=entry.location||{},validLocation=location.countryCode==='FR'&&Number.isFinite(Number(location.latitude))&&Number.isFinite(Number(location.longitude));
-            if(!validLocation)return sum;
-            return sum+(entry.charger?.connectors||[]).filter(connector=>Number(connector.maxPowerKw)>0&&(connector.tariff?.elements||[]).some(element=>(element.priceComponents||[]).some(component=>recognizedTypes.has(component.type)&&Number(component.pricePerUnit)>0))).length;
-          },0);
-          const excludedUnmappableConnectors=Number(powerdot.counts.pricedConnectors||0)-expectedMappableConnectors;
-          assert(expectedMappableConnectors>=7050,`Couverture Powerdot mappable insuffisante : ${expectedMappableConnectors}`);
-          assert(excludedUnmappableConnectors>=0&&excludedUnmappableConnectors<=5,`Trop de connecteurs Powerdot non mappables : ${excludedUnmappableConnectors}`);
-          const locations=api.powerdotLocations(powerdot).filter(location=>api.powerdotDirectConfigurations(location).length>0);"""
-          if 'expectedMappableConnectors=' not in s:
-            assert marker in s
-            s=s.replace(marker,insert,1)
-          s=s.replace("assert(directConnectors===powerdot.counts.pricedConnectors,`Connecteurs directs : ${directConnectors}/${powerdot.counts.pricedConnectors}`);", "assert(directConnectors===expectedMappableConnectors,`Connecteurs directs mappables : ${directConnectors}/${expectedMappableConnectors}`);")
-          s=s.replace("assert(stats.directConnectors===powerdot.counts.pricedConnectors,'Stats connecteurs Powerdot incohérentes');", "assert(stats.directConnectors===expectedMappableConnectors,'Stats connecteurs Powerdot incohérentes');")
-          s=s.replace("console.log(JSON.stringify({strictLocations:strict.length,matched:stats.matched,added:stats.added,directConnectors,unresolvedIrveStations:stats.unresolvedIrveStations},null,2));", "console.log(JSON.stringify({strictLocations:strict.length,matched:stats.matched,added:stats.added,directConnectors,sourcePricedConnectors:powerdot.counts.pricedConnectors,excludedUnmappableConnectors,unresolvedIrveStations:stats.unresolvedIrveStations},null,2));")
-          p.write_text(s)
+          s=p.read_text(encoding='utf-8')
+          old="const POWERDOT_URL='data/powerdot_direct_france.json.gz';"
+          new="const POWERDOT_URL='../data/powerdot_direct_france.json.gz';"
+          if old not in s and new not in s: raise SystemExit('POWERDOT_URL introuvable')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
           PY
-      - name: Validate Powerdot and regressions
+      - name: Validate
         run: |
           node --check assets/france-catalog-v8.js
           node scripts/test_powerdot_v8_runtime.mjs
-          node scripts/test_ionity_v8_runtime.mjs
-          node scripts/test_atlante_v8_runtime.mjs
-          grep -q "POWERDOT_URL='data/powerdot_direct_france.json.gz'" assets/france-catalog-v8.js
-      - name: Publish Powerdot assets
+          grep -q "POWERDOT_URL='../data/powerdot_direct_france.json.gz'" assets/france-catalog-v8.js
+      - name: Publish runtime path
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/france-catalog-v8.js data/powerdot_direct_france.json.gz scripts/test_powerdot_v8_runtime.mjs
-          git rm scripts/integrate_powerdot_v8_once.py
-          git commit -m "feat(v8): integrate Powerdot direct CPO tariffs"
+          git add assets/france-catalog-v8.js
+          git commit -m "fix(v8): load Powerdot dataset from site root"
           git push origin HEAD:main
