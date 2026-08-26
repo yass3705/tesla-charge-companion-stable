@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-26T11:20:00+02:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-08-26T12:10:00+02:00",
   "country": "FR",
   "operator": "E.Leclerc / SIPLEC",
   "operatorId": "FR*LE2",
@@ -12,23 +12,56 @@
     "nationalStandardPromotion": "0.19 EUR/kWh applies to standard charging only; rapid and ultra-rapid charging are excluded.",
     "technicalOperator": "Freshmile manages/supervises the Charge E-Lec application and charging infrastructure for SIPLEC.",
     "directRetailOperator": "SIPLEC / E.Leclerc (FR*LE2)",
-    "publicWebApp": "https://app.charge-elec.leclerc/ currently returns an error to unauthenticated crawler access.",
-    "publicMachineReadableDirectTariffFeed": false
+    "publicWebApp": "https://app.charge-elec.leclerc/ is a SIPLEC/Freshmile application surface; crawler access does not expose station tariff objects.",
+    "publicMachineReadableDirectTariffFeed": false,
+    "genericFreshmilePriceMustNotBeAssumedDirect": true
+  },
+  "publicGuestQrLead": {
+    "status": "high_priority_unresolved",
+    "pattern": "https://xfm.fr/<five-character-point-code>",
+    "officialFreshmileEvidence": "Freshmile still documents XFM links as a no-account guest route that opens the charging-point page and allows charging. Freshmile also states the applicable tariff and minimum payment requirement are shown before charging.",
+    "chargeElecCompatibilityEvidence": "Official Charge E-Lec station pages expose five-character point codes such as AFGQ2 and SCWV2, matching the historical/current Freshmile XFM code shape.",
+    "directRetailEquivalenceProven": false,
+    "blockingPoint": "The analysis web environment cannot currently resolve/follow xfm.fr/<Charge E-Lec point code> to its final public page, so the returned tariff and tenant identity cannot yet be verified.",
+    "tccPolicy": "Do not ingest until a resolved guest page proves the displayed price belongs to Charge E-Lec/SIPLEC for FR*LE2 rather than a generic Freshmile mobility tariff."
+  },
+  "leclercShortDomainLead": {
+    "status": "high_priority_unresolved",
+    "domain": "https://chg.leclerc",
+    "evidence": [
+      "Historical website telemetry for app.charge-elec.leclerc reports chg.leclerc as a redirecting source.",
+      "The .leclerc registry report shows chg.leclerc is an active Cloudflare-backed domain in August 2026.",
+      "chg.leclerc first appeared in public new-domain reporting in April 2025, during Charge E-Lec development."
+    ],
+    "hypothesis": "chg.leclerc may be the SIPLEC-owned short/deep-link domain used by Charge E-Lec, potentially preferable to xfm.fr for proving direct-retail tenant context.",
+    "pointCodeRouteTested": false,
+    "blockingPoint": "No indexed public path pattern or resolvable point-code deep link has yet been found."
   },
   "freshmileBackendLead": {
     "historicalEndpoint": "https://move.freshmile.com/api/enduser/map/search",
     "evidence": "Historical Freshmile mobile traffic capture shows map/search requests returning charging-station information through this endpoint.",
     "authenticationObserved": true,
     "whiteLabelDirectPriceEquivalenceProven": false,
+    "currentFreshmileWebMapStatus": "The former charge.freshmile.com/map web surface now redirects to an app-migration landing page, while Freshmile support documentation still describes XFM/QR guest charging and tariff display.",
     "tccPolicy": "Do not import prices from the generic Freshmile endpoint until it is proven that the returned tariff for FR*LE2 is the SIPLEC Charge E-Lec direct retail tariff, not a Freshmile EMP/roaming tariff."
+  },
+  "historicalPilotLead": {
+    "domain": "https://pilote.charge-elec.leclerc",
+    "status": "historical_only",
+    "evidence": "Public reporting in October 2025 states that the beta site exposed the station map and prices, varying from 0.25 to 0.45 EUR/kWh depending on charging power.",
+    "currentUse": "Architecture/route discovery only; historical prices must never be applied to current DC stations.",
+    "archiveBundleRecovered": false
   },
   "application": {
     "androidPackage": "leclerc.siplec.charge_e_lec",
     "latestObservedVersion": "1.3.0",
     "latestObservedDate": "2026-05-09",
     "apkSha256Observed": "faec6bd54ba64a6e2f4547c069fdc7f28d4ff918bde09a12bd92a97455f71d03",
+    "publicMirror": "APKPure",
+    "publicMirrorFileSize": "123.3 MB",
     "staticDecompilationCompleted": false,
-    "reason": "APK bytes could not be retrieved in the available analysis environment."
+    "reason": "APK metadata is public, but the APK/XAPK bytes could not be retrieved in the available analysis environment.",
+    "safeStaticAnalysisGoal": "If public APK bytes become available, extract only embedded public API base URLs, tenant identifiers, deep-link domains and route names; do not bypass authentication or security controls."
   },
   "inventory": {
     "authoritativePhysicalSources": [
@@ -37,20 +70,47 @@
     ],
     "nationalIrveRetailTariffAvailable": false,
     "chargeElecOfficialPagesExposePowerAndEvse": true,
-    "chargeElecOfficialPagesExposeRetailPrice": false
+    "chargeElecOfficialPagesExposeRetailPrice": false,
+    "examplePointCodes": ["AFGQ2", "AFGQ1", "SCWV2", "SCWV1"]
+  },
+  "secondaryEvidencePolicy": {
+    "communityAppObservations": "May be retained with timestamp for research/cross-checking only.",
+    "aggregatorTariffs": "May be used only as cross-checks, never as authoritative Charge E-Lec direct prices.",
+    "historicalBetaTariffs": "Architecture evidence only; never current production tariffs."
   },
   "safeRoutesRemaining": [
     {
+      "priority": 1,
+      "route": "resolve_xfm_guest_point_links",
+      "goal": "Resolve xfm.fr/<FR*LE2 point code> to the public guest page and verify whether the tariff is Charge E-Lec/SIPLEC direct retail.",
+      "constraint": "Public guest flow only; no authentication bypass."
+    },
+    {
+      "priority": 2,
+      "route": "resolve_chg_leclerc_deep_links",
+      "goal": "Determine whether chg.leclerc supports station/point deep links and whether those pages expose the direct Charge E-Lec tariff.",
+      "constraint": "Public paths only."
+    },
+    {
+      "priority": 3,
+      "route": "apk_static_analysis",
+      "goal": "Extract public API/deep-link configuration embedded in the Charge E-Lec Android package.",
+      "constraint": "Requires obtaining APK/XAPK bytes from a lawful public source; no bypass of authentication or security controls."
+    },
+    {
+      "priority": 4,
       "route": "authorized_charge_e_lec_app_network_capture",
       "goal": "Observe the tariff request made when opening an FR*LE2 station in the user's own authorized Charge E-Lec session and identify the white-label direct retail endpoint.",
       "constraint": "No authentication bypass; use only an authorized user session."
     },
     {
-      "route": "apk_static_analysis",
-      "goal": "Extract API base URLs and tariff/location service routes embedded in the Charge E-Lec Android package.",
-      "constraint": "Requires obtaining the APK/XAPK bytes."
+      "priority": 5,
+      "route": "archive_pilot_assets",
+      "goal": "Recover public archived JavaScript/configuration from pilote.charge-elec.leclerc to identify route and tenant structures.",
+      "constraint": "Architecture discovery only; never reuse historical prices."
     },
     {
+      "priority": 6,
       "route": "fresh_direct_app_observation",
       "goal": "Record current price per station/EVSE with timestamp where automatic access remains unavailable.",
       "constraint": "Research evidence only unless freshness policy for TCC is explicitly accepted."
@@ -59,9 +119,14 @@
   "sources": [
     "https://www.charge-elec.leclerc/cgau",
     "https://www.charge-elec.leclerc/mentions-legales",
+    "https://www.charge-elec.leclerc/station/eleclerc-surgeres",
+    "https://www.freshmile.com/articles/recharger-son-vehicule-electrique-freshmile/",
+    "https://www.freshmile.com/aide-contact/",
+    "https://charge.freshmile.com/map",
     "https://play.google.com/store/apps/details?id=leclerc.siplec.charge_e_lec",
-    "https://www.kuketz-blog.de/klimaschutz-mit-datenschutz-der-grosse-elektroauto-ladeapp-test/",
-    "https://apkpure.net/charge-e-lec/leclerc.siplec.charge_e_lec"
+    "https://apkpure.net/charge-e-lec/leclerc.siplec.charge_e_lec",
+    "https://pilote.charge-elec.leclerc",
+    "https://chg.leclerc"
   ],
   "safeFallback": "Keep Charge E-Lec rapid/ultra tariffs out of production TCC until a current direct SIPLEC tariff is resolved per station/EVSE.",
   "roaming": "excluded"
