@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-26T11:15:00+02:00",
+  "country": "FR",
+  "operator": "Picoty",
+  "operatorId": "FR*PY2",
+  "service": "AVIA VOLT - PICOTY",
+  "scope": "physical_cpo_direct_only_no_roaming",
+  "status": "station_specific_tariffs_partial_inventory",
+  "integrationReady": false,
+  "inventory": {
+    "stationIdsIdentified": 26,
+    "tariff065ObservedStations": 14,
+    "unpricedStations": 11,
+    "quarantinedStations": 1,
+    "exhaustive": false,
+    "note": "Current national PAN IRVE static resource is larger than the available tabular-query limit in this research environment. Inventory is therefore expanded from current IRVE-derived indexed sources and must be reconciled against the full PAN export before final publication."
+  },
+  "policy": {
+    "directCpoOnly": true,
+    "roamingExcluded": true,
+    "operatorIdMustMatch": "FR*PY2",
+    "doNotTreatAviaBrandAsCpo": true,
+    "excludeAviaVoltOperatedByEasycharge": true,
+    "excludeAviaVoltOperatedByBump": true,
+    "excludeIonityTeslaAndOtherColocatedCpos": true,
+    "stationTariffMustBeObserved": true,
+    "doNotPropagate065ToUnpricedStations": true,
+    "subscriptionDiscountMustBeKnownBeforeUse": true
+  },
+  "officialRules": {
+    "network": "Picoty operates and supervises AVIA VOLT charging infrastructure in AVIA Picoty service stations; partner charging networks may also be present at AVIA locations and must not be classified as Picoty unless the physical CPO is FR*PY2.",
+    "payment": "Direct public charging can be paid at the session; recent stations support bank-card/contactless payment. AVIA VOLT is also interoperable, but roaming tariffs are excluded from this dataset.",
+    "subscription": {
+      "name": "AVIA Carte - option recharge électrique",
+      "annualFeeEur": 48.0,
+      "monthlyFeeEur": 8.0,
+      "directAviaVoltDiscount": "confirmed_but_amount_not_publicly_resolved",
+      "integrationReady": false
+    },
+    "sources": [
+      "https://www.picoty.fr/stations-service/mes-produits/bornes-electriques/",
+      "https://www.picoty.fr/stations-service/mes-cartes/aviacarte/",
+      "https://www.picoty.fr/professionnels/ma-mobilite/services/mobilite-electrique/",
+      "https://transport.data.gouv.fr/resources/84013"
+    ]
+  },
+  "tariffEvidence": {
+    "primaryChannel": "AVIA VOLT Recharge & Vous application",
+    "publicMachineReadableDirectTariffFeedFound": false,
+    "universalNationalTariffOfficiallyConfirmed": false,
+    "repeatedObservedDirectPriceEurPerKwh": 0.65,
+    "confidence": "medium",
+    "reason": "Many current FR*PY2 station listings across different regions and powers converge on 0.65 EUR/kWh, but no Picoty official public source has yet confirmed that 0.65 EUR/kWh is universal. Keep station-level evidence only.",
+    "roamingCounterExample": "Saint-Palais-sur-Mer has been observed with a lower eMSP price than the repeated FR*PY2 direct listing. Such third-party/eMSP pricing must not replace the Picoty direct price."
+  },
+  "tariff065ObservedStations": [
+    {"stationId":"FR*PY2*P14800*0077","city":"Tourgéville","postalCode":"14800","address":"33P Avenue de la République","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P17220*0016","city":"Salles-sur-Mer","postalCode":"17220","address":"Rue des Petits Bonneveaux","maxPowerKw":240,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P17420*0113","city":"Saint-Palais-sur-Mer","postalCode":"17420","address":"Place du Rha","maxPowerKw":240,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P17690*0057","city":"Angoulins","postalCode":"17690","address":"Route de La Rochelle D137","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P22120*0033","city":"Hillion","postalCode":"22120","address":"La Ville Cario","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P31210*0023","city":"Ponlat-Taillebourg","postalCode":"31210","address":"A64, Aire du Comminges, Clarac","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P31210*0024","city":"Ponlat-Taillebourg","postalCode":"31210","address":"A64, Aire du Comminges, Clarac","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P33310*0073","city":"Lormont","postalCode":"33310","address":"3 Avenue de la Résistance","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P44300*0100","city":"Nantes","postalCode":"44300","address":"162 Route de Rennes","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P56450*0069","city":"Surzur","postalCode":"56450","address":"La Croix Bonnevaud","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P72000*0070","city":"Le Mans","postalCode":"72000","address":"Avenue Rhin et Danube","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P72500*0120","city":"Dissay-sous-Courcillon","postalCode":"72500","address":"A28, Aire de Sarthe Touraine","maxPowerKw":200,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P78550*0029","city":"Maulette","postalCode":"78550","address":"N12, Aire de la Prairie","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P78550*0031","city":"Maulette","postalCode":"78550","address":"N12, Aire du Val Raymond","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"}
+  ],
+  "unpricedInventory": [
+    {"stationId":"FR*PY2*P17000*0000","city":"La Rochelle","postalCode":"17000","address":"Rue de Béthencourt","maxPowerKw":22,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P17000*0086","city":"La Rochelle","postalCode":"17000","address":"Rue de Béthencourt","maxPowerKw":24,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P17540*0067","city":"Saint-Sauveur-d'Aunis","postalCode":"17540","address":"Rue des Beaux Vallons","maxPowerKw":11,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P17600*0022","city":"Corme-Royal","postalCode":"17600","address":"D117E1, Champs de Devant","maxPowerKw":22,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P17810*0075","city":"Saint-Georges-des-Coteaux","postalCode":"17810","address":"1 Impasse Sophie Germain","maxPowerKw":50,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P17810*0087","city":"Saint-Georges-des-Coteaux","postalCode":"17810","address":"1 Impasse Sophie Germain","maxPowerKw":22,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P23000*0000","city":"Guéret","postalCode":"23000","address":"76 Rue de Vernet","maxPowerKw":11,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P33440*0000","city":"Ambarès-et-Lagrave","postalCode":"33440","address":"1 Avenue des Industries","maxPowerKw":22,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P85100*0109","city":"Les Sables-d'Olonne","postalCode":"85100","address":"36 Rue Clément Ader","maxPowerKw":47,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P87000*0032","city":"Limoges","postalCode":"87000","address":"4 Avenue Baudin","maxPowerKw":11,"status":"direct_price_pending"},
+    {"stationId":"FR*PY2*P87000*0047","city":"Limoges","postalCode":"87000","address":"198 Rue de Toulouse","maxPowerKw":11,"status":"direct_price_pending"}
+  ],
+  "quarantinedStations": [
+    {"stationId":"FR*PY2*P59160*0053","reportedPowerKw":360,"observedEnergyEurPerKwh":0.65,"reason":"Current indexed sources place this station in the Royan/Saint-Palais-sur-Mer area while the station identifier embeds postal code 59160. Location/identity mismatch must be resolved from the full PAN row or AVIA VOLT app before use."}
+  ],
+  "knownStationTopologyNotes": [
+    {"stationId":"FR*PY2*P31210*0023","evsePowerKw":[22,60,180],"notes":"Mixed CCS/CHAdeMO/Type 2 site; do not assume all connectors share a tariff unless direct app confirms it."},
+    {"stationId":"FR*PY2*P31210*0024","evsePowerKw":[22,60,180],"notes":"Mixed CCS/CHAdeMO/Type 2 site; do not assume all connectors share a tariff unless direct app confirms it."},
+    {"stationId":"FR*PY2*P22120*0033","evsePowerKw":[22,125,180],"notes":"Mixed-power site."},
+    {"stationId":"FR*PY2*P72000*0070","evsePowerKw":[22,360],"notes":"Six 360 kW CCS outlets plus 22 kW Type 2 in indexed topology."},
+    {"stationId":"FR*PY2*P17000*0086","evsePowerKw":[22,24],"notes":"Type 2 + 24 kW CCS/CHAdeMO."},
+    {"stationId":"FR*PY2*P17810*0075","evsePowerKw":[22,50],"notes":"Type 2 + 50 kW CCS/CHAdeMO."}
+  ],
+  "nextStep": {
+    "preferred": "Reconcile this inventory against the full national PAN IRVE static export, then resolve the AVIA VOLT Recharge & Vous station tariff endpoint or capture fresh direct-app prices for every FR*PY2 station/EVSE.",
+    "fallback": "Keep only station-level 0.65 EUR/kWh observations with timestamps/confidence; leave all other FR*PY2 configurations without a TCC direct tariff until observed."
+  },
+  "safeFallback": "Do not publish 0.65 EUR/kWh as a universal Picoty tariff. Publish only explicitly observed FR*PY2 station/EVSE tariffs after final reconciliation.",
+  "roaming": "excluded"
+}
