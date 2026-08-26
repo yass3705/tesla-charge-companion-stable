@@ -63,13 +63,11 @@ jobs:
           node scripts/test_ionity_v8_runtime.mjs
           node scripts/test_atlante_v8_runtime.mjs
           grep -q "POWERDOT_URL='data/powerdot_direct_france.json.gz'" assets/france-catalog-v8.js
-          grep -q 'powerdot_direct_france.json.gz' .github/workflows/pages.yml
-          grep -q 'france-catalog.js?v=rc48-powerdot-20260826' .github/workflows/pages.yml
-      - name: Publish integration
+      - name: Publish Powerdot assets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          rm -f .github/workflows/integrate-powerdot-v8-once.yml scripts/integrate_powerdot_v8_once.py
-          git add -A
+          git add assets/france-catalog-v8.js data/powerdot_direct_france.json.gz scripts/test_powerdot_v8_runtime.mjs
+          git rm scripts/integrate_powerdot_v8_once.py
           git commit -m "feat(v8): integrate Powerdot direct CPO tariffs"
           git push origin HEAD:main
