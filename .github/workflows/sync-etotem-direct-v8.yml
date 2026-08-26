@@ -1,0 +1,88 @@
+name: Synchroniser e-Totem direct dans TCC V8
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/sync-etotem-direct-v8.yml"
+      - ".deploy/etotem-v8-revision.txt"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-etotem-direct-v8
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Récupérer TCC V8
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Récupérer le data-lab e-Totem
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          ref: main
+          path: data-lab
+
+      - name: Installer le navigateur du harvest e-Totem
+        working-directory: data-lab
+        run: npm install --no-save playwright-core@1.55.0
+
+      - name: Construire les tarifs directs e-Totem France
+        working-directory: data-lab
+        run: node scripts/etotem_direct_tariff_harvest.mjs
+
+      - name: Valider le périmètre CPO strict
+        run: |
+          python - <<'PY'
+          import gzip,json
+          p='data-lab/data/national/etotem_direct_tariffs_france.json.gz'
+          with gzip.open(p,'rt',encoding='utf-8') as f:d=json.load(f)
+          c=d['counts']; s=d['scope']
+          assert s['physicalCpoDirectOnly'] is True
+          assert s['roamingIncluded'] is False
+          assert s['noGuessedFallback'] is True
+          assert c['inventoryStations'] >= 600, c
+          assert c['resolvedStations'] >= 500, c
+          assert c['resolvedWithTariffText'] > 0, c
+          for x in d['stations']:
+            if not x.get('resolved'): continue
+            a=x['api']
+            assert str(a.get('bOcpi',0)) == '0'
+            assert str(a.get('bGireve',0)) == '0'
+            assert str(a.get('bItinerance',0)) == '0'
+          print(json.dumps({'counts':c,'harvest':d.get('harvest',{}),'topProfiles':[{'count':x['count'],'text':x['text'][:500]} for x in d.get('tariffProfiles',[])[:15]]},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Installer la base directe dans TCC V8
+        run: |
+          mkdir -p data
+          cp data-lab/data/national/etotem_direct_tariffs_france.json.gz data/etotem_direct_tariffs_france.json.gz
+
+      - name: Publier la base e-Totem uniquement en cas de changement
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/etotem_direct_tariffs_france.json.gz
+          if git diff --cached --quiet; then
+            echo "Aucun changement e-Totem direct à publier."
+            exit 0
+          fi
+          git commit -m "data(etotem): publish strict direct France tariffs for V8"
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1
