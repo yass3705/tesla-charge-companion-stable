@@ -63,7 +63,7 @@ assert.ok(directPipelineSource.includes('api.mergedPowerdotStation(best.location
 assert.ok(directPipelineSource.includes("if(!api.isPowerdotOperator(st)"),'Powerdot enrichment must be restricted to physical Powerdot stations');
 assert.ok(!directPipelineSource.includes('api.mergePowerdotCatalog(prepared.stations'),'Powerdot pipeline must never re-expand the national catalog into a prepared area');
 assert.ok(runtimeHotfixSource.includes('loadDirectOfferPipeline()'),'runtime hotfix must bootstrap the unified direct pipeline');
-assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4'),'runtime hotfix must cache-bust the pre-expansion pipeline');
+assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-5'),'runtime hotfix must cache-bust the pre-expansion pipeline');
 
 const bumpSource=fs.readFileSync('assets/v8-bump-direct.js','utf8');
 new vm.Script(bumpSource,{filename:'assets/v8-bump-direct.js'});
