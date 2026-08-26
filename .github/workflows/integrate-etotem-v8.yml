@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
           path: rc
 
-      - name: Appliquer l’intégration e-Totem
+      - name: Appliquer et tester l’intégration e-Totem
         run: |
           python site/scripts/patch_etotem_v8_runtime.py --main-root site --rc-root rc
           node --check site/assets/france-catalog-v8.js
@@ -42,6 +42,7 @@ jobs:
           grep -q "ETOTEM_URL" site/assets/france-catalog-v8.js
           grep -q "mergeEtotemCatalog" site/assets/france-catalog-v8.js
           grep -q "idleGraceMinutes" rc/assets/app.js
+          node site/scripts/test_etotem_v8_runtime.mjs site/assets/france-catalog-v8.js
 
       - name: Publier la correction du moteur V8
         working-directory: rc
