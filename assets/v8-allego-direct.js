@@ -118,10 +118,9 @@
       const id=recordId(record);if(used.has(id))continue;
       const coords=record.coordinates||[],distance=geoDistanceKm(station.latitude,station.longitude,coords[0],coords[1]);
       if(distance>.15+1e-9)continue;
-      const sameName=stationNameKey(station.name)&&stationNameKey(record.name)&&(
-        stationNameKey(station.name).includes(stationNameKey(record.name))||stationNameKey(record.name).includes(stationNameKey(station.name))
-      );
-      const score=distance-(sameName?.03:0);
+      const sourceName=stationNameKey(station.name),targetName=stationNameKey(record.name);
+      const sameName=!!(sourceName&&targetName&&(sourceName.includes(targetName)||targetName.includes(sourceName)));
+      const score=distance-(sameName ? .03 : 0);
       if(!best||score<best.score)best={record,distance,score};
     }
     return best;
@@ -141,7 +140,7 @@
     return {
       ...base,name:record.name||base.name||'Station Allego',address:record.irveAddress||record.address||base.address||'',latitude:Number(coords[0]),longitude:Number(coords[1]),
       operator:'Allego',stalls:direct.reduce((sum,config)=>sum+Number(config.stalls||0),0),kind:first.kind,powerKw:first.powerKw,pricing:first.pricing,chargingConfigurations:configurations,
-      lastUpdated:String(record.generatedAt||window.TCC_ALLEGO_DIRECT_CATALOG_V1?.generatedAt||'').slice(0,10),allegoStrictCpo:true,allegoDirectPricingContext:'official_dxp',
+      lastUpdated:String(window.TCC_ALLEGO_DIRECT_CATALOG_V1?.generatedAt||'').slice(0,10),allegoStrictCpo:true,allegoDirectPricingContext:'official_dxp',
       allegoIrveStationIds:[...(record.irveStationIds||[])],allegoOfficialEvseIds:[...(record.evses||[]).map(evse=>evse.evseId).filter(Boolean)],
       allegoDirectEvseCount:direct.reduce((sum,config)=>sum+Number(config.stalls||0),0),allegoPricingStatus:record.pricingStatus||'',allegoStationPageUrl:record.stationPageUrl||'',
       allegoSourceCatalogStationId:baseStation?.catalogStationId||'',allegoStatusJoinedExternally:!!baseStation
