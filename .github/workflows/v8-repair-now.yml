@@ -1,0 +1,79 @@
+name: V8 tariff repair now
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["data/v8-repair-now.trigger"]
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Repair Powerdot on main
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('assets/france-catalog-v8.js');s=p.read_text()
+          s=s.replace("const POWERDOT_URL='../data/powerdot_direct_france.json.gz';","const POWERDOT_URL='data/powerdot_direct_france.json.gz';")
+          s=s.replace("const ETOTEM_URL='../data/etotem_direct_tariffs_france.json.gz';","const ETOTEM_URL='data/etotem_direct_tariffs_france.json.gz';")
+          s=s.replace("if(type===2)return 'AC';\n    if(type===1)return 'DC';","if(type===1)return 'AC';\n    if(type===2)return 'DC';",1)
+          if "if(type===1)return 'AC';\n    if(type===2)return 'DC';" not in s: raise SystemExit('Powerdot kind mapping not repaired')
+          p.write_text(s)
+          p=Path('scripts/test_powerdot_v8_runtime.mjs');t=p.read_text()
+          mark="const firstGrill=strict.find(station=>/first grill 45/i.test(station.name));"
+          add="""const orgeval=strict.find(station=>/marche frais - orgeval/i.test(station.name));assert(orgeval,'Marché Frais Orgeval absent');
+const od=(orgeval.chargingConfigurations||[]).filter(c=>c.powerdotDirect);
+assert(od.some(c=>c.kind==='AC'&&Number(c.powerKw)===22&&Number(c.pricing?.rules?.[0]?.pricePerKwh)===.44),'Orgeval AC22 Powerdot incorrect');
+assert(od.some(c=>c.kind==='DC'&&Number(c.powerKw)===200&&Number(c.pricing?.rules?.[0]?.pricePerKwh)===.59),'Orgeval DC200 Powerdot incorrect');
+"""
+          if add not in t:
+            if mark not in t: raise SystemExit('Powerdot test marker missing')
+            t=t.replace(mark,add+mark,1)
+          p.write_text(t)
+          PY
+          node --check assets/france-catalog-v8.js
+          node scripts/test_powerdot_v8_runtime.mjs
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add assets/france-catalog-v8.js scripts/test_powerdot_v8_runtime.mjs
+          git commit -m 'fix(v8): correct Powerdot kind mapping and local paths'
+          git push origin HEAD:main
+      - name: Repair Belib on release
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin release/2026-08
+          git worktree add ../rc -B release/2026-08 origin/release/2026-08
+          python - <<'PY'
+          from pathlib import Path
+          r=Path('../rc')
+          for f in ['assets/v8-offer-selection.js','assets/v8-subscription-selection.js']:
+            p=r/f;s=p.read_text()
+            s=s.replace("if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';","if(provider.includes('belib direct abonne non resident')||provider==='abonne non resident')return'belib-nonresident';")
+            s=s.replace("if(provider.includes('belib direct abonne resident'))return'belib-resident';","if(provider.includes('belib direct abonne resident')||provider==='abonne resident paris')return'belib-resident';")
+            if "provider==='abonne resident paris'" not in s: raise SystemExit(f'Belib mapping missing in {f}')
+            p.write_text(s)
+          p=r/'scripts/test_v8_subscription_ranking.mjs';s=p.read_text()
+          m="assert.equal(subscriptions.subscriptionIdForProvider('Belib’ direct — Visiteur'), '');"
+          a="\nassert.equal(subscriptions.subscriptionIdForProvider('Abonné résident Paris'), 'belib-resident');\nassert.equal(subscriptions.subscriptionIdForProvider('Abonné non-résident'), 'belib-nonresident');"
+          if a.strip() not in s:
+            if m not in s: raise SystemExit('Belib test marker missing')
+            s=s.replace(m,m+a,1)
+          p.write_text(s)
+          PY
+          cd ../rc
+          node --check assets/v8-offer-selection.js
+          node --check assets/v8-subscription-selection.js
+          node scripts/test_v8_subscription_ranking.mjs
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add assets/v8-offer-selection.js assets/v8-subscription-selection.js scripts/test_v8_subscription_ranking.mjs
+          git commit -m 'fix(v8): enforce Belib short-label subscriptions as opt-in'
+          git push origin HEAD:release/2026-08
