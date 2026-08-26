@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Temporary diagnostics for the 2026-08-26 first-party DRIVECO screenshots.
 import json, urllib.request, unicodedata
 SOURCE='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/operator_direct/driveco_evse_tariffs.json'
 UA='TeslaChargeCompanion/8 DRIVECO sample diagnostics'
