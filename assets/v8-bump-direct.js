@@ -2,7 +2,7 @@
 // Source: validated Bump public driver-facing tariff snapshot. No roaming and no network-wide fallback.
 (function(){
   'use strict';
-  const REVISION='bump-direct-v1-20260826a';
+  const REVISION='bump-direct-v1-20260826b';
   const DATA_URL='data/bump_direct_tariffs_tcc_france.json.gz';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -102,10 +102,12 @@
     for(const sid of ids.station){for(const rec of idx.byStation.get(sid)||[]){const hit=safePointGroup(rec.points,cfg,'station_id');if(hit)return hit}}
     if(!isBumpOperator(st))return null;
     for(const n of [norm(st?.name),norm(st?._sourceName)].filter(x=>x.length>=6)){
-      const recs=idx.byName.get(n)||[];if(recs.length!==1)continue;const hit=safePointGroup(recs[0].points,cfg,'exact_name_power');if(hit)return hit;
+      const recs=idx.byName.get(n)||[];if(!recs.length)continue;
+      const hit=safePointGroup(recs.flatMap(rec=>rec.points||[]),cfg,recs.length===1?'exact_name_power':'exact_name_multi_station_power');if(hit)return hit;
     }
     for(const a of [norm(st?.address),norm(st?._sourceAddress)].filter(x=>x.length>=8)){
-      const recs=idx.byAddress.get(a)||[];if(recs.length!==1)continue;const hit=safePointGroup(recs[0].points,cfg,'exact_address_power');if(hit)return hit;
+      const recs=idx.byAddress.get(a)||[];if(!recs.length)continue;
+      const hit=safePointGroup(recs.flatMap(rec=>rec.points||[]),cfg,recs.length===1?'exact_address_power':'exact_address_multi_station_power');if(hit)return hit;
     }
     return null;
   }
