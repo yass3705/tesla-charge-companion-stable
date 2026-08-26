@@ -832,8 +832,7 @@
   function etotemNumber(value){const n=Number(String(value||'').replace(',','.'));return Number.isFinite(n)?n:null;}
   function etotemSections(value){
     const source=etotemNormTariff(value),marks=[];
-    for(const match of source.matchAll(/(?:^|[\n;])\s*(AC|DC)\s*(?=[:\-–—]|\d|\s)/gi))marks.push({kind:match[1].toUpperCase(),index:match.index+(match[0].length-match[0].trimStart().length)});
-    if(!marks.length){for(const match of source.matchAll(/\b(AC|DC)\b\s*[:\-–—]/gi))marks.push({kind:match[1].toUpperCase(),index:match.index});}
+    for(const match of source.matchAll(/\b(AC|DC)\b\s*[:\-–—]/gi))marks.push({kind:match[1].toUpperCase(),index:match.index});
     marks.sort((a,b)=>a.index-b.index);const out={};
     for(let i=0;i<marks.length;i++){const mark=marks[i],end=marks[i+1]?.index??source.length;if(!out[mark.kind])out[mark.kind]=source.slice(mark.index,end).trim();}
     return {source,...out};
