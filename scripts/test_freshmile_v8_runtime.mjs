@@ -91,7 +91,7 @@ const manyBase=Array.from({length:125},(_,i)=>({
   id:`other-${i}`,
   catalogStationId:`other-${i}`,
   name:`Other ${i}`,
-  operator:'Other',
+  operator:i===3?'Powerdot':i===7?'Bump':'Other',
   latitude:44+i*0.001,
   longitude:2,
   kind:'AC',
@@ -99,10 +99,14 @@ const manyBase=Array.from({length:125},(_,i)=>({
   chargingConfigurations:[],
   _airKm:i+10,
 }));
+const powerdotBase=manyBase.find(st=>st.operator==='Powerdot');
+const bumpBase=manyBase.find(st=>st.operator==='Bump');
 const preparedLarge={origin:{lat:official.latitude,lon:official.longitude},maxDistanceKm:20000,stations:manyBase};
 api.mergePrepared(preparedLarge,data);
 assert.ok(preparedLarge.stations.length>=125,'Freshmile must never cap the global prepared station list.');
 for(const st of manyBase)assert.ok(preparedLarge.stations.some(x=>x.id===st.id),`Base station ${st.id} was lost by Freshmile overlay.`);
+assert.ok(preparedLarge.stations.some(st=>st.id===powerdotBase.id&&st.operator==='Powerdot'),'Powerdot station was lost by Freshmile overlay.');
+assert.ok(preparedLarge.stations.some(st=>st.id===bumpBase.id&&st.operator==='Bump'),'Bump station was lost by Freshmile overlay.');
 assert.equal(preparedLarge.freshmileDirectOverlayStats.preparedStationCount,preparedLarge.stations.length);
 
 for(const st of data.stations)for(const cfg of st.configurations){
@@ -111,4 +115,4 @@ for(const st of data.stations)for(const cfg of st.configurations){
   assert.ok(['AC','DC'].includes(cfg.kind));
 }
 
-console.log(JSON.stringify({ok:true,stations:data.counts.strictPublishedStations,evse:data.counts.strictPublishedEvse,configurations:data.counts.strictPublishedConfigurations,revision:api.revision,preservedGlobalStations:manyBase.length},null,2));
+console.log(JSON.stringify({ok:true,stations:data.counts.strictPublishedStations,evse:data.counts.strictPublishedEvse,configurations:data.counts.strictPublishedConfigurations,revision:api.revision,preservedGlobalStations:manyBase.length,powerdotPreserved:true,bumpPreserved:true},null,2));
