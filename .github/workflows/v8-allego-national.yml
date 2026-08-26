@@ -1,0 +1,126 @@
+name: V8 Allego national direct inventory
+
+on:
+  pull_request:
+    branches: ["release/2026-08"]
+    paths:
+      - "assets/v8-allego-direct.js"
+      - "assets/v8-rc48bn-runtime-hotfix.js"
+      - "data/allego_direct_stations_france.json.gz"
+      - "scripts/test_allego_direct_v8.mjs"
+      - ".github/workflows/v8-allego-national.yml"
+  push:
+    branches: ["feat/allego-direct-v8-20260826", "release/2026-08"]
+    paths:
+      - "assets/v8-allego-direct.js"
+      - "assets/v8-rc48bn-runtime-hotfix.js"
+      - "data/allego_direct_stations_france.json.gz"
+      - "scripts/test_allego_direct_v8.mjs"
+      - ".github/workflows/v8-allego-national.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v8-allego-national-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ALLEGO_SOURCE: https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/allego_direct_stations_france.json.gz
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch validated data-lab Allego inventory
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 3 --retry-all-errors "$ALLEGO_SOURCE" -o /tmp/allego_direct_stations_france.json.gz
+          mkdir -p data
+          cp /tmp/allego_direct_stations_france.json.gz data/allego_direct_stations_france.json.gz
+
+      - name: JavaScript regression tests
+        run: |
+          node --check assets/v8-allego-direct.js
+          node --check assets/v8-rc48bn-runtime-hotfix.js
+          node scripts/test_allego_direct_v8.mjs
+          node scripts/test_v8_subscription_ranking.mjs
+
+      - name: Validate national direct-only inventory
+        run: |
+          python - <<'PY'
+          import gzip,json
+          p='data/allego_direct_stations_france.json.gz'
+          with gzip.open(p,'rt',encoding='utf-8') as f:d=json.load(f)
+          c=d['counts']; s=d['scope']
+          assert d['schemaVersion']=='3.1.0'
+          assert d['dataset']=='allego-direct-operated-evse-france'
+          assert d['operator']=='Allego' and d['country']=='FR'
+          assert s['operatorDirectOnly'] is True
+          assert s['roamingIncluded'] is False
+          assert s['countryDefaultsAreRankable'] is False
+          assert s['exactDirectPricesFromDxp'] is True
+          assert s['structuredTimeFeesAreRankable'] is True
+          assert s['conditionalOffersRequireSelection'] is True
+          assert c['franceStationCount']==154, c
+          assert c['stationsWithCoordinates']==154, c
+          assert c['franceEvseCount']==1127, c
+          assert c['rankableEvseCount']==1121, c
+          assert c['blockedEvseCount']==6, c
+          assert c['coveragePct']>=99.0, c
+          assert c['kingdomEligibleEvseCount']==208, c
+          assert c['structuredFeeEvseCount']==848, c
+          assert all(e.get('directEurPerKwh') is None for e in d['evses'] if not e.get('rankableDirect'))
+          assert all(e.get('blockingReason')=='not_allego_own_network' for e in d['evses'] if not e.get('rankableDirect'))
+          bron=[e for e in d['evses'] if 'BRON' in str(e.get('stationName') or '').upper() and 'BURGER KING' in str(e.get('stationName') or '').upper()]
+          assert len(bron)==4
+          assert all(e.get('kind')=='DC' and abs(float(e.get('powerKw'))-150)<.01 for e in bron)
+          assert all(abs(float(e.get('directEurPerKwh'))-.45)<1e-9 for e in bron)
+          assert all((e.get('conditionalOffers') or [{}])[0].get('selectionId')=='burger-king-kingdom' for e in bron)
+          lanester=next(x for x in d['stations'] if x.get('stationId')=='FRSITE00000325')
+          assert lanester['coordinates']==[47.779187,-3.342502]
+          print(c)
+          PY
+
+  publish-data:
+    if: github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh validated Allego inventory
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          curl --fail --silent --show-error --location --retry 3 --retry-all-errors "$ALLEGO_SOURCE" -o data/allego_direct_stations_france.json.gz
+          python - <<'PY'
+          import gzip,json
+          with gzip.open('data/allego_direct_stations_france.json.gz','rt',encoding='utf-8') as f:d=json.load(f)
+          assert d['schemaVersion']=='3.1.0'
+          assert d['scope']['operatorDirectOnly'] is True and d['scope']['roamingIncluded'] is False
+          assert d['counts']['rankableEvseCount']>=1100 and d['counts']['coveragePct']>=99.0
+          PY
+
+      - name: Commit inventory snapshot to current V8 branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/allego_direct_stations_france.json.gz
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "data(v8): publish Allego France direct inventory [run ${GITHUB_RUN_ID}]"
+          branch="${GITHUB_REF_NAME}"
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin "$branch"
+            if git push origin HEAD:"$branch"; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1
