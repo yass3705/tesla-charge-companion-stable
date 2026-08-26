@@ -5,7 +5,7 @@
 (function(){
   'use strict';
 
-  const REVISION='v8-direct-offer-pipeline-2';
+  const REVISION='v8-direct-offer-pipeline-3';
   const REGISTRY_URL='data/v8_tariff_sources.json';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
@@ -120,6 +120,31 @@
     prepared.stations=(prepared.stations||[]).map(st=>api.addOffers(st,map));prepared.drivecoDirectPipelineApplied=true;return prepared;
   }
 
+  function canonicalOfferProvider(st,cfg){
+    const explicit=text(cfg?.offerProvider);if(explicit)return explicit;
+    if(text(cfg?.offerType).toLowerCase()==='operator_direct'){
+      const operator=text(st?.operator||st?._sourceOperator||st?.cpo||st?.network);
+      return operator?`${operator} Direct`:'Opérateur direct';
+    }
+    return'';
+  }
+  function canonicalizePreparedOfferMetadata(prepared){
+    let changed=0;
+    for(const st of prepared?.stations||[]){
+      if(!Array.isArray(st?.chargingConfigurations))continue;
+      st.chargingConfigurations=st.chargingConfigurations.map(cfg=>{
+        if(!cfg||typeof cfg!=='object')return cfg;
+        const provider=canonicalOfferProvider(st,cfg);if(!provider)return cfg;
+        const kind=text(cfg.kind||st.kind).toUpperCase(),power=Number(cfg.powerKw??st.powerKw??0);
+        const label=kind&&Number.isFinite(power)&&power>0?`${provider} · ${kind} ${power} kW`:provider;
+        if(text(cfg.offerProvider)===provider&&text(cfg.label)===label)return cfg;
+        changed++;return{...cfg,offerProvider:provider,label};
+      });
+    }
+    if(changed)prepared.offerMetadataCanonicalized=changed;
+    return changed;
+  }
+
   registerPreparedEnricher('powerdot-direct',enrichPowerdot,20);
   registerPreparedEnricher('freshmile-direct',enrichFreshmile,30);
   registerPreparedEnricher('bump-direct',enrichBump,40);
@@ -134,6 +159,7 @@
       for(const enricher of ordered){
         try{await enricher.fn(prepared,context);}catch(err){record('warn',`Enrichisseur ${enricher.id} ignoré`,err?.message||String(err));}
       }
+      canonicalizePreparedOfferMetadata(prepared);
       if(window.TCC_V8_AREA_CACHE)window.TCC_V8_AREA_CACHE.prepared=prepared;
       prepared.directOfferPipelineRevision=REVISION;
       return prepared;
@@ -192,9 +218,17 @@
       }
     }
   }
+  function ensureOfferGrouping(){
+    const cards=[...document.querySelectorAll('#results .result-card[data-result-id]')];
+    if(!cards.length||cards.every(card=>card.querySelector('.v8-offer-box')))return false;
+    const collapse=window.TCCV8OfferSelection?.decorateAndCollapseAugustResults;
+    if(typeof collapse!=='function'){record('warn','Regroupement multi-tarifs indisponible');return false;}
+    collapse();return true;
+  }
   function finalizeRendered(){
+    const grouped=ensureOfferGrouping();
     const changed=repairSubscriptionMetadata();
-    if(changed)try{window.TCCV8Subscriptions?.applyAll?.(true);}catch(e){}
+    if(grouped||changed)try{window.TCCV8Subscriptions?.applyAll?.(true);}catch(e){}
     try{window.TCCV8ReferenceOffers?.apply?.();}catch(e){}
     collectRenderedDiagnostics();
   }
@@ -222,13 +256,14 @@
 
   async function boot(){
     await ensureActiveRuntimeModules();
+    await waitFor(()=>window.TCCV8OfferSelection,5000);
     installRenderObserver();installCompareGuard();
     const prepared=currentPrepared();if(prepared)await preparePrepared(prepared,{reason:'boot'});
     scheduleFinalize();
     let tries=0;const timer=setInterval(()=>{tries++;installRenderObserver();installCompareGuard();if(tries>1200)clearInterval(timer);},100);
   }
 
-  window.TCCV8DirectPipeline={revision:REVISION,loadRegistry,ensureActiveRuntimeModules,registerPreparedEnricher,preparePrepared,repairSubscriptionMetadata,finalizeRendered,installCompareGuard,get enrichers(){return[...enrichers.keys()]},get diagnostics(){return diagnostics.slice()}};
+  window.TCCV8DirectPipeline={revision:REVISION,loadRegistry,ensureActiveRuntimeModules,registerPreparedEnricher,preparePrepared,canonicalizePreparedOfferMetadata,repairSubscriptionMetadata,ensureOfferGrouping,finalizeRendered,installCompareGuard,get enrichers(){return[...enrichers.keys()]},get diagnostics(){return diagnostics.slice()}};
   document.dispatchEvent(new CustomEvent('tcc:direct-offer-pipeline-ready'));
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>boot(),{once:true});else boot();
   console.info('[TCC V8] Pipeline unifié offres directes actif:',REVISION);
