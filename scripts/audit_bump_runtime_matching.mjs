@@ -1,41 +1,49 @@
+import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import vm from 'node:vm';
 import zlib from 'node:zlib';
 
 function readGzipJson(path){return JSON.parse(zlib.gunzipSync(fs.readFileSync(path)).toString('utf8'));}
 const bump=readGzipJson('data/bump_direct_tariffs_tcc_france.json.gz');
 const france=readGzipJson('data/non_tesla_france/all.json.gz');
-const terms=['meyerbeer','malesherbes'];
-const norm=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-const signature=p=>JSON.stringify({components:p?.components||null,rules:p?.rules||null});
-function distanceKm(aLat,aLon,bLat,bLon){
-  const R=6371,toRad=x=>Number(x)*Math.PI/180;
-  const p1=toRad(aLat),p2=toRad(bLat),dp=toRad(Number(bLat)-Number(aLat)),dl=toRad(Number(bLon)-Number(aLon));
-  const h=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
-  return 2*R*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));
-}
-function physicalGroups(records){
-  const groups=new Map();
-  for(const st of records)for(const p of st.points||[]){
-    const key=String(Number(p.powerKw||0));
-    if(!groups.has(key))groups.set(key,{powerKw:Number(p.powerKw||0),points:0,rankable:0,signatures:new Set(),ids:[]});
-    const g=groups.get(key);g.points++;if(p.rankable===true)g.rankable++;if(p.rankable===true)g.signatures.add(signature(p));if(p.idPdcItinerance)g.ids.push(p.idPdcItinerance);
-  }
-  return [...groups.values()].map(g=>({...g,signatures:g.signatures.size,ids:g.ids.slice(0,8)})).sort((a,b)=>a.powerKw-b.powerKw);
-}
 
-for(const term of terms){
-  const bumpHits=(bump.stations||[]).filter(st=>norm(`${st.name} ${st.address}`).includes(term));
-  if(!bumpHits.length){console.log(JSON.stringify({term,error:'no Bump hit'}));continue;}
-  const site=bumpHits[0],lat=Number(site.latitude??site.coordinates?.[0]),lon=Number(site.longitude??site.coordinates?.[1]);
-  const nearby=(france||[]).map(row=>({row,distanceKm:distanceKm(lat,lon,row?.[3],row?.[4])})).filter(x=>Number.isFinite(x.distanceKm)&&x.distanceKm<=.20).sort((a,b)=>a.distanceKm-b.distanceKm).slice(0,12).map(({row,distanceKm})=>({
-    distanceM:Math.round(distanceKm*1000),catalogStationId:row?.[0],name:row?.[1],address:row?.[2],operator:row?.[5],
-    configurations:(row?.[8]||[]).map(c=>({id:c?.[0],label:c?.[1],kind:c?.[2],powerKw:Number(c?.[3]),stalls:Number(c?.[4])}))
-  }));
-  console.log(JSON.stringify({
-    term,
-    bumpSite:{name:site.name,address:site.address,latitude:lat,longitude:lon,records:bumpHits.length,groups:physicalGroups(bumpHits)},
-    exactNameCatalog:(france||[]).filter(row=>norm(row?.[1])===norm(site.name)).length,
-    exactAddressCatalog:(france||[]).filter(row=>norm(row?.[2])===norm(site.address)).length,
-    nearbyCatalog:nearby
-  },null,2));
+globalThis.window=globalThis;
+globalThis.document={readyState:'loading',addEventListener(){},dispatchEvent(){}};
+globalThis.CustomEvent=class CustomEvent{constructor(type,init={}){this.type=type;this.detail=init.detail}};
+vm.runInThisContext(fs.readFileSync('assets/v8-bump-direct.js','utf8'),{filename:'v8-bump-direct.js'});
+const B=globalThis.TCCBumpDirectV8;
+assert.ok(B,'Bump runtime export missing');
+B.validateCatalog(bump);
+
+function stationFromRow(row){
+  return {
+    id:`fixture:${row[0]}`,catalogStationId:row[0],countryCode:'FR',name:row[1],address:row[2],latitude:Number(row[3]),longitude:Number(row[4]),operator:row[5],
+    chargingConfigurations:(row[8]||[]).map(c=>({id:c[0],label:c[1],kind:c[2],powerKw:Number(c[3]),stalls:Number(c[4]),pricing:{type:'rules',rules:[]}}))
+  };
 }
+function exactCatalogStation(name){
+  const hits=france.filter(row=>String(row?.[1]||'')===name);
+  assert.equal(hits.length,1,`expected one national catalog row for ${name}`);
+  return stationFromRow(hits[0]);
+}
+function directOffers(st){return (st.chargingConfigurations||[]).filter(c=>c.bumpDirectOffer);}
+
+const meyer=exactCatalogStation('Bump - SAGS - Paris - Meyerbeer');
+assert.equal(meyer.operator,'Bump');
+assert.ok(meyer.chargingConfigurations.some(c=>c.kind==='AC'&&Math.abs(c.powerKw-7.4)<1e-9),'Meyerbeer 7.4 kW runtime configuration missing');
+const enrichedMeyer=B.addOffers(meyer,bump),meyerDirect=directOffers(enrichedMeyer);
+assert.ok(meyerDirect.length>=1,'Meyerbeer must receive Bump Direct after nominal 7.4/7 kW reconciliation');
+assert.ok(meyerDirect.some(c=>Math.abs(c.powerKw-7.4)<1e-9&&Math.abs(c.bumpTariffPowerKw-7)<1e-9),'Meyerbeer must keep 7.4 kW physical power with 7 kW Bump tariff provenance');
+assert.ok(meyerDirect.every(c=>String(c.bumpMatchMode).startsWith('exact_name')),'Meyerbeer must be matched by exact Bump identity, not a broad fallback');
+
+const malesherbes=exactCatalogStation('Bump - SAGS - Paris - Malesherbes');
+assert.equal(malesherbes.operator,'Bump');
+const enrichedMalesherbes=B.addOffers(malesherbes,bump),malesherbesDirect=directOffers(enrichedMalesherbes);
+assert.ok(malesherbesDirect.some(c=>Math.abs(c.powerKw-22)<1e-9&&Math.abs(c.bumpTariffPowerKw-22)<1e-9),'Malesherbes known 22 kW direct offer must remain available');
+
+const nearbyNonBump=stationFromRow(france.find(row=>String(row?.[0])==='electroverse:438057'));
+assert.ok(nearbyNonBump,'nearby Belib fixture missing');
+assert.notEqual(nearbyNonBump.operator,'Bump');
+assert.equal(directOffers(B.addOffers(nearbyNonBump,bump)).length,0,'nearby non-Bump station must never inherit a Bump tariff');
+
+console.log(JSON.stringify({ok:true,meyerbeer:{physicalKw:7.4,tariffKw:7,offers:meyerDirect.length},malesherbes:{physicalKw:22,offers:malesherbesDirect.length},nearbyNonBumpExcluded:true},null,2));
