@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "v8-tariff-engine-1",
+  "updatedAt": "2026-08-26",
+  "policy": {
+    "failOnMissingRequiredArtifact": true,
+    "failOnMissingRuntimeModule": true,
+    "subscriptionsAreOptIn": true,
+    "subscriptionFixedFeesExcludedFromSessions": true,
+    "unknownOrAmbiguousTariffsAreNotRankable": true
+  },
+  "publish": {
+    "copyFromMain": [
+      {"path":"data/custom_stations.json","target":"data/custom_stations.json","kind":"file","required":true},
+      {"path":"data/exchange_rates.json","target":"data/exchange_rates.json","kind":"file","required":true},
+      {"path":"data/e55c_station_tariffs_v1.json.gz","target":"data/e55c_station_tariffs_v1.json.gz","kind":"file","required":true},
+      {"path":"data/belib_station_tariffs_v1.json.gz","target":"data/belib_station_tariffs_v1.json.gz","kind":"file","required":true},
+      {"path":"data/ionity_direct_stations_france.json.gz","target":"data/ionity_direct_stations_france.json.gz","kind":"file","required":true},
+      {"path":"data/atlante_direct_stations_france.json.gz","target":"data/atlante_direct_stations_france.json.gz","kind":"file","required":true},
+      {"path":"data/powerdot_direct_france.json.gz","target":"data/powerdot_direct_france.json.gz","kind":"file","required":true},
+      {"path":"data/etotem_direct_tariffs_france.json.gz","target":"data/etotem_direct_tariffs_france.json.gz","kind":"file","required":true},
+      {"path":"data/non_tesla_france","target":"data/non_tesla_france","kind":"directory","required":true},
+      {"path":"assets/france-catalog-v8.js","target":"assets/france-catalog.js","kind":"file","required":true},
+      {"path":"assets/v8-belib-pricing.js","target":"assets/v8-belib-pricing.js","kind":"file","required":true}
+    ]
+  },
+  "sources": [
+    {"id":"france-national-catalog","label":"Electroverse + Electra national","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_france/manifest.json","data/non_tesla_france/all.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"e55c-direct","label":"E55C direct","status":"active","integration":"catalog-direct","artifactPaths":["data/e55c_station_tariffs_v1.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"belib-direct","label":"Belib direct","status":"active","integration":"catalog-direct","artifactPaths":["data/belib_station_tariffs_v1.json.gz"],"runtimeModules":["assets/france-catalog.js","assets/v8-belib-pricing.js"]},
+    {"id":"ionity-direct","label":"IONITY Direct","status":"active","integration":"catalog-direct","artifactPaths":["data/ionity_direct_stations_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"atlante-direct","label":"Atlante direct","status":"active","integration":"catalog-direct","artifactPaths":["data/atlante_direct_stations_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"powerdot-direct","label":"Powerdot direct","status":"active","integration":"catalog-direct","artifactPaths":["data/powerdot_direct_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"etotem-direct","label":"e-Totem direct","status":"active","integration":"catalog-direct","artifactPaths":["data/etotem_direct_tariffs_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"operator-overlay","label":"Tarifs opérateurs et abonnements déclaratifs","status":"active","integration":"offer-overlay","artifactPaths":["data/tariff_overlay_v1.json","data/totalenergies_tariff_overlay_v1.json"],"runtimeModules":["assets/v8-operator-tariff-overlay.js","assets/v8-subscription-selection.js","assets/v8-compare-subscriptions.js"]},
+    {"id":"evadea-direct","label":"e-Vadea direct","status":"active","integration":"mapped-offer","artifactPaths":["data/evadea_evse_tariffs_v1.json"],"runtimeModules":["assets/v8-operator-tariff-overlay.js","assets/v8-evadea-band-fallback.js"]},
+    {"id":"regional-overlay","label":"Tarifs régionaux validés","status":"active","integration":"offer-overlay","artifactPaths":["data/regional_tariff_overlay_v1.json"],"runtimeModules":["assets/v8-regional-tariff-overlay.js"]},
+    {"id":"canonical-stations","label":"Normalisation stations canoniques","status":"active","integration":"station-overlay","artifactPaths":["data/v8_canonical_station_overlay_v1.json"],"runtimeModules":["assets/v8-canonical-station-overlay.js"]},
+    {"id":"fastned-direct","label":"Fastned direct","status":"active","integration":"station-overlay","artifactPaths":["data/fastned_direct_stations_france.json.gz"],"runtimeModules":["assets/v8-fastned-station-overlay.js"]},
+    {"id":"freshmile-direct","label":"Freshmile direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-freshmile-direct-overlay.js"]},
+    {"id":"izivia-express-direct","label":"IZIVIA Express direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-izivia-express-direct-overlay.js"]},
+    {"id":"labornebleue-direct","label":"La Borne Bleue direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-labornebleue-direct-overlay.js","assets/v8-labornebleue-operator-fallback.js"]},
+    {"id":"bump-direct","label":"Bump direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/bump_direct_tariffs_tcc_france.json.gz"],"runtimeModules":["assets/v8-bump-direct.js"]},
+    {"id":"waat-direct","label":"WAAT direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/waat_direct_tariffs_tcc_france.json"],"runtimeModules":["assets/v8-waat-direct.js"]},
+    {"id":"aldi-direct","label":"ALDI direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/aldi_direct_france_20260826.json"],"runtimeModules":["assets/v8-aldi-direct.js"]},
+    {"id":"allego-direct","label":"Allego direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/allego_direct_stations_france.json.gz"],"runtimeModules":["assets/v8-allego-direct.js"]},
+    {"id":"reveo-direct","label":"Révéo direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/reveo_direct_tariffs_france_v1.json"],"runtimeModules":["assets/v8-reveo-direct.js"]},
+    {"id":"yaway-connect-direct","label":"Yaway Connect direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/yaway_connect_direct_tariffs_v1.json"],"runtimeModules":["assets/v8-yaway-connect-direct.js"]},
+    {"id":"driveco-direct","label":"Driveco direct","status":"staged","integration":"mapped-offer","artifactPaths":["data/driveco_evse_tariffs_v1.json"],"runtimeModules":["assets/v8-driveco-direct-overlay.js"]}
+  ]
+}
