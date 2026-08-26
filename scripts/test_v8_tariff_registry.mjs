@@ -34,19 +34,24 @@ assert.ok(publishTargets.includes('data/etotem_direct_tariffs_france.json.gz'),'
 
 const overlay=JSON.parse(fs.readFileSync('data/tariff_overlay_v1.json','utf8'));
 const total=JSON.parse(fs.readFileSync('data/totalenergies_tariff_overlay_v1.json','utf8'));
-const allOffers=[...(overlay.operatorOffers||[]),...(total.operatorOffers||[])];
-const allSubs=[...(overlay.subscriptions||[]),...(total.subscriptions||[])];
+const mergeById=(left,right)=>{
+  const map=new Map();
+  for(const row of [...(left||[]),...(right||[])])if(row?.id)map.set(row.id,row);
+  return [...map.values()];
+};
+const allOffers=mergeById(overlay.operatorOffers,total.operatorOffers);
+const allSubs=mergeById(overlay.subscriptions,total.subscriptions);
 const offerIds=new Set();
 for(const offer of allOffers){
   assert.ok(offer.id&&offer.provider, 'operator offer requires id and provider');
-  assert.ok(!offerIds.has(offer.id), `duplicate operator offer id: ${offer.id}`);
+  assert.ok(!offerIds.has(offer.id), `duplicate operator offer id after merge: ${offer.id}`);
   offerIds.add(offer.id);
   assert.ok(offer.pricing||offer.mappingFile, `operator offer ${offer.id} has neither pricing nor mapping`);
 }
 const subIds=new Set();
 for(const plan of allSubs){
   assert.ok(plan.id&&plan.provider, 'subscription requires id and provider');
-  assert.ok(!subIds.has(plan.id), `duplicate subscription id: ${plan.id}`);
+  assert.ok(!subIds.has(plan.id), `duplicate subscription id after merge: ${plan.id}`);
   subIds.add(plan.id);
   assert.equal(plan.defaultSelected,false, `subscription ${plan.id} must remain opt-in`);
   if(plan.monthlyFeeEur!=null)assert.ok(Number(plan.monthlyFeeEur)>=0, `invalid monthly fee for ${plan.id}`);
@@ -64,8 +69,8 @@ const engine=context.window.TCCV8TariffEngine;
 assert.ok(engine,'unified tariff engine must be exposed');
 assert.equal(engine.validateRegistry(registry).ok,true);
 await engine.loadCatalogue(true);
-assert.ok(engine.offers.length>0,'engine must ingest declarative operator offers');
-assert.ok(engine.subscriptions.length>0,'engine must ingest subscriptions');
+assert.equal(engine.offers.length,allOffers.length,'engine must ingest the merged declarative operator catalogue');
+assert.equal(engine.subscriptions.length,allSubs.length,'engine must ingest the merged subscription catalogue');
 const fastnedGold=engine.subscriptions.find(x=>x.id==='fastned-gold');
 assert.ok(fastnedGold,'Fastned Gold must be ingested');
 assert.equal(engine.isOfferEligible(fastnedGold,new Set()),false,'subscription must be excluded when not selected');
