@@ -28,6 +28,11 @@ jobs:
       - name: Patch V8
         run: python scripts/integrate_powerdot_v8_once.py
 
+      - name: Align source metadata guards
+        run: |
+          python -c 'from pathlib import Path; p=Path("assets/france-catalog-v8.js"); s=p.read_text(); s=s.replace("      if(data?.dataset!==\u0027powerdot-direct-cpo-france\u0027)throw new Error(\u0027Dataset Powerdot inattendu\u0027);\n      if(data?.source?.pricingContext!==\u0027direct CPO / adhoc / emspCode empty\u0027)throw new Error(\u0027Contexte tarifaire Powerdot invalide\u0027);", "      if(data?.source?.sourceType!==\u0027direct_cpo_public_adhoc_api\u0027||data?.source?.roaming!==false||text(data?.source?.emspCode)!==\u0027\u0027||text(data?.source?.operator)!==\u0027Power Dot France\u0027)throw new Error(\u0027Contexte tarifaire Powerdot invalide\u0027);"); p.write_text(s)'
+          python -c 'from pathlib import Path; p=Path("scripts/test_powerdot_v8_runtime.mjs"); s=p.read_text(); s=s.replace("assert(powerdot.dataset===\u0027powerdot-direct-cpo-france\u0027,\u0027Dataset Powerdot inattendu\u0027);\nassert(powerdot.source?.pricingContext===\u0027direct CPO / adhoc / emspCode empty\u0027,\u0027Contexte CPO Powerdot invalide\u0027);", "assert(powerdot.source?.sourceType===\u0027direct_cpo_public_adhoc_api\u0027,\u0027Source Powerdot inattendue\u0027);\nassert(powerdot.source?.roaming===false&&String(powerdot.source?.emspCode??\u0027\u0027)===\u0027\u0027&&powerdot.source?.operator===\u0027Power Dot France\u0027,\u0027Contexte CPO Powerdot invalide\u0027);"); p.write_text(s)'
+
       - name: Validate Powerdot and regressions
         run: |
           node --check assets/france-catalog-v8.js
