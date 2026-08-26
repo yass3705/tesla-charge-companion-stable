@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import zlib from 'node:zlib';
 
 const registry=JSON.parse(fs.readFileSync('data/v8_tariff_sources.json','utf8'));
 assert.equal(registry.schemaVersion,1);
@@ -51,11 +52,48 @@ assert.ok(directPipelineSource.includes('repairSubscriptionMetadata'),'subscript
 assert.ok(directPipelineSource.includes("full.endsWith(' '+p)"),'shortened provider labels must map back to subscription plans');
 assert.ok(directPipelineSource.includes('window.TCCV8Subscriptions?.applyAll?.(true)'),'subscription eligibility must be reapplied after metadata repair');
 assert.ok(directPipelineSource.includes('window.TCCV8ReferenceOffers?.apply?.()'),'operator references must be restored when no exact direct tariff is available');
+assert.ok(directPipelineSource.includes('canonicalizePreparedOfferMetadata(prepared)'),'structured provider metadata must be canonicalized before expansion');
+assert.ok(directPipelineSource.indexOf('canonicalizePreparedOfferMetadata(prepared)')<directPipelineSource.indexOf('if(window.TCC_V8_AREA_CACHE)'),'provider metadata must be canonicalized before prepared cache is returned');
+assert.ok(directPipelineSource.includes('window.TCCV8OfferSelection?.decorateAndCollapseAugustResults'),'unified pipeline must restore physical station + power grouping after render');
+assert.ok(directPipelineSource.indexOf('const grouped=ensureOfferGrouping()')<directPipelineSource.indexOf('const changed=repairSubscriptionMetadata()'),'offer grouping must happen before subscription eligibility is applied');
 assert.ok(directPipelineSource.includes('api.mergedPowerdotStation(best.location,data,[st])'),'Powerdot must enrich only an already prepared station');
 assert.ok(directPipelineSource.includes("if(!api.isPowerdotOperator(st)"),'Powerdot enrichment must be restricted to physical Powerdot stations');
 assert.ok(!directPipelineSource.includes('api.mergePowerdotCatalog(prepared.stations'),'Powerdot pipeline must never re-expand the national catalog into a prepared area');
 assert.ok(runtimeHotfixSource.includes('loadDirectOfferPipeline()'),'runtime hotfix must bootstrap the unified direct pipeline');
 assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js'),'runtime hotfix must load the direct pipeline asset');
+
+const bumpSource=fs.readFileSync('assets/v8-bump-direct.js','utf8');
+new vm.Script(bumpSource,{filename:'assets/v8-bump-direct.js'});
+assert.ok(bumpSource.includes('exact_name_multi_station_power'),'Bump resolver must support identical multi-station site records');
+assert.ok(bumpSource.includes('recs.flatMap(rec=>rec.points||[])'),'Bump duplicate station ids must be validated as one safe tariff group');
+assert.ok(!bumpSource.includes('if(recs.length!==1)continue'),'Bump exact name/address duplicates must not be rejected solely because ids are duplicated');
+
+// Regression fixture from the published Paris Malesherbes site: multiple Bump station ids,
+// but the AC 11 kW PDCs share the same exact rankable tariff.
+const bumpData=JSON.parse(zlib.gunzipSync(fs.readFileSync('data/bump_direct_tariffs_tcc_france.json.gz')).toString('utf8'));
+const bumpDocument={readyState:'loading',addEventListener(){},dispatchEvent(){}};
+class BumpCustomEvent{constructor(type,init){this.type=type;this.detail=init?.detail;}}
+const bumpContext=vm.createContext({window:{},document:bumpDocument,CustomEvent:BumpCustomEvent,console,Number,Math,JSON,Date,Set,Map,String,Array,Object,RegExp,Promise,setInterval(){return 0},clearInterval(){},setTimeout(){return 0},queueMicrotask(){},fetch:async()=>{throw new Error('fetch disabled in Bump registry test')}});
+bumpContext.window=bumpContext;
+vm.runInContext(bumpSource,bumpContext,{filename:'assets/v8-bump-direct.js'});
+const bumpApi=bumpContext.TCCBumpDirectV8;bumpApi.validateCatalog(bumpData);bumpContext.TCC_BUMP_DIRECT_CATALOG_V1=bumpData;
+const malesherbes={id:'electroverse:malesherbes',catalogStationId:'electroverse:malesherbes',operator:'Bump',countryCode:'FR',name:'Bump - SAGS - Paris - Malesherbes',address:'37 Boulevard Malesherbes, 75008 Paris',chargingConfigurations:[{id:'roaming-ac11',label:'Electroverse · AC 11 kW',kind:'AC',powerKw:11,stalls:49,pricing:{type:'kwh',pricePerKwh:.6}}]};
+const malesherbesOut=bumpApi.addOffers(malesherbes,bumpData),malesherbesDirect=malesherbesOut.chargingConfigurations.find(c=>c.offerProvider==='Bump Direct'&&c.kind==='AC'&&Math.abs(c.powerKw-11)<.01);
+assert.ok(malesherbesDirect,'Bump Malesherbes AC 11 kW direct tariff must resolve');
+assert.equal(malesherbesDirect.bumpMatchMode,'exact_name_multi_station_power');
+assert.ok(Math.abs(malesherbesDirect.pricing.rules[0].pricePerKwh-.5499996)<1e-5);
+assert.equal(malesherbesDirect.pricing.bumpFeePolicy.components.flatFeeEur,1.2);
+
+// Structured metadata wins over a stale roaming display label.
+const pipelineDocument={readyState:'loading',addEventListener(){},dispatchEvent(){},querySelectorAll(){return[]},getElementById(){return null},scripts:[]};
+class PipelineCustomEvent{constructor(type){this.type=type;}}
+const pipelineContext=vm.createContext({window:{},document:pipelineDocument,CustomEvent:PipelineCustomEvent,console,Date,JSON,Set,Map,Promise,String,Number,Math,setTimeout(){return 0},clearTimeout(){},setInterval(){return 0},clearInterval(){},fetch:async()=>({ok:true,json:async()=>({sources:[]})})});
+pipelineContext.window=pipelineContext;vm.runInContext(directPipelineSource,pipelineContext,{filename:'assets/v8-direct-offer-pipeline.js'});
+const preparedMetadata={stations:[{operator:'Freshmile',kind:'AC',powerKw:7,chargingConfigurations:[{id:'fm',offerType:'operator_direct',label:'Electra · AC 7 kW',kind:'AC',powerKw:7,pricing:{type:'rules'}}]},{operator:'Bump',kind:'AC',powerKw:11,chargingConfigurations:[{id:'b',offerType:'operator_direct',offerProvider:'Bump Direct',label:'Electra · AC 11 kW',kind:'AC',powerKw:11,pricing:{type:'rules'}}]}]};
+assert.equal(pipelineContext.TCCV8DirectPipeline.canonicalizePreparedOfferMetadata(preparedMetadata),2);
+assert.equal(preparedMetadata.stations[0].chargingConfigurations[0].offerProvider,'Freshmile Direct');
+assert.equal(preparedMetadata.stations[0].chargingConfigurations[0].label,'Freshmile Direct · AC 7 kW');
+assert.equal(preparedMetadata.stations[1].chargingConfigurations[0].label,'Bump Direct · AC 11 kW');
 
 const overlay=JSON.parse(fs.readFileSync('data/tariff_overlay_v1.json','utf8'));
 const total=JSON.parse(fs.readFileSync('data/totalenergies_tariff_overlay_v1.json','utf8'));
