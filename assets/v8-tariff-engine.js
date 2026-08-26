@@ -62,7 +62,13 @@
     if(!text(offer.offerType).startsWith('subscription'))return true;
     return selected.has(selectionId(offer));
   }
+  function genericStationMatchAllowed(offer){
+    if(text(offer?.runtime).startsWith('existing_'))return false;
+    if(text(offer?.offerType).startsWith('subscription')&&!(offer?.operatorAliases||[]).length)return false;
+    return true;
+  }
   function operatorMatches(station,offer){
+    if(!genericStationMatchAllowed(offer))return false;
     const aliases=(offer?.operatorAliases||[]).map(norm).filter(Boolean);if(!aliases.length)return true;
     const candidates=[station?.operator,station?._sourceOperator,station?.cpo,station?.network,station?.name].map(norm).filter(Boolean);
     return aliases.some(alias=>candidates.includes(alias));
