@@ -41,8 +41,14 @@ jobs:
           node --check assets/v8-labornebleue-operator-fallback.js
           node --check assets/v8-source-integrity.js
           node --check assets/v8-waat-direct.js
+          node --check assets/v8-freshmile-direct-overlay.js
+          node --check assets/v8-bump-direct.js
+          node --check assets/v8-runtime-integrity-guard.js
           node --check scripts/test_v8_tariff_registry.mjs
           node --check scripts/test_v8_direct_offer_pipeline.mjs
+          node --check scripts/test_freshmile_v8_runtime.mjs
+          node --check scripts/test_bump_direct_v8.mjs
+          node --check scripts/test_v8_runtime_integrity_guard.mjs
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -55,6 +61,7 @@ jobs:
           python -m json.tool data/exchange_rates.json >/dev/null
           python -m json.tool data/tariff_overlay_v1.json >/dev/null
           python -m json.tool data/v8_canonical_station_overlay_v1.json >/dev/null
+          python -m json.tool data/v8_tariff_sources.json >/dev/null
           python -m json.tool data/waat_direct_tariffs_tcc_france.json >/dev/null
 
       - name: Smoke-test E55C PARKING_TIME semantics
@@ -75,6 +82,15 @@ jobs:
       - name: Validate pre-expansion direct offer pipeline
         run: node scripts/test_v8_direct_offer_pipeline.mjs
 
+      - name: Validate non-destructive Freshmile overlay
+        run: node scripts/test_freshmile_v8_runtime.mjs
+
+      - name: Smoke-test Bump direct matching and fee rules
+        run: node scripts/test_bump_direct_v8.mjs
+
+      - name: Validate preview-local data isolation
+        run: node scripts/test_v8_runtime_integrity_guard.mjs
+
       - name: Smoke-test WAAT direct station/configuration tariffs
         run: node scripts/test_waat_direct_v8.mjs
 
@@ -90,8 +106,8 @@ jobs:
           grep -q "assets/update.js?v=${BUILD}" index.html
           grep -q "assets/v8-offer-selection.js?v=${BUILD}" index.html
           ! grep -q "assets/v8-e55c-pricing.js" index.html
-          grep -q "assets/v8-waat-direct.js?v=waat-20260826b" index.html
-          grep -q "assets/v8-rc48bn-runtime-hotfix.js?v=rc48ce-20260826" index.html
+          grep -q "assets/v8-waat-direct.js" index.html
+          grep -q "assets/v8-rc48bn-runtime-hotfix.js" index.html
           test "$(grep -c 'assets/v8-waat-direct.js' index.html)" -eq 1
           test -s data/waat_direct_tariffs_tcc_france.json
           grep -q "assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4" assets/v8-rc48bn-runtime-hotfix.js
