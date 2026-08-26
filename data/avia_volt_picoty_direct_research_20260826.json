@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-26T11:15:00+02:00",
+  "schemaVersion": "1.0.1",
+  "generatedAt": "2026-08-26T11:30:00+02:00",
   "country": "FR",
   "operator": "Picoty",
   "operatorId": "FR*PY2",
@@ -9,8 +9,8 @@
   "status": "station_specific_tariffs_partial_inventory",
   "integrationReady": false,
   "inventory": {
-    "stationIdsIdentified": 26,
-    "tariff065ObservedStations": 14,
+    "stationIdsIdentified": 27,
+    "tariff065ObservedStations": 15,
     "unpricedStations": 11,
     "quarantinedStations": 1,
     "exhaustive": false,
@@ -62,6 +62,7 @@
     {"stationId":"FR*PY2*P22120*0033","city":"Hillion","postalCode":"22120","address":"La Ville Cario","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
     {"stationId":"FR*PY2*P31210*0023","city":"Ponlat-Taillebourg","postalCode":"31210","address":"A64, Aire du Comminges, Clarac","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
     {"stationId":"FR*PY2*P31210*0024","city":"Ponlat-Taillebourg","postalCode":"31210","address":"A64, Aire du Comminges, Clarac","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
+    {"stationId":"FR*PY2*P33170*0034","city":"Gradignan","postalCode":"33170","address":"77 Rue de la Croix de Monjous","maxPowerKw":180,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
     {"stationId":"FR*PY2*P33310*0073","city":"Lormont","postalCode":"33310","address":"3 Avenue de la Résistance","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
     {"stationId":"FR*PY2*P44300*0100","city":"Nantes","postalCode":"44300","address":"162 Route de Rennes","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
     {"stationId":"FR*PY2*P56450*0069","city":"Surzur","postalCode":"56450","address":"La Croix Bonnevaud","maxPowerKw":360,"energyEurPerKwhObserved":0.65,"confidence":"medium"},
@@ -89,6 +90,7 @@
   "knownStationTopologyNotes": [
     {"stationId":"FR*PY2*P31210*0023","evsePowerKw":[22,60,180],"notes":"Mixed CCS/CHAdeMO/Type 2 site; do not assume all connectors share a tariff unless direct app confirms it."},
     {"stationId":"FR*PY2*P31210*0024","evsePowerKw":[22,60,180],"notes":"Mixed CCS/CHAdeMO/Type 2 site; do not assume all connectors share a tariff unless direct app confirms it."},
+    {"stationId":"FR*PY2*P33170*0034","evsePowerKw":[3.7,11,125,180],"notes":"Mixed domestic/Type 2/CCS/CHAdeMO site; pay-as-you-go and bank-card access observed."},
     {"stationId":"FR*PY2*P22120*0033","evsePowerKw":[22,125,180],"notes":"Mixed-power site."},
     {"stationId":"FR*PY2*P72000*0070","evsePowerKw":[22,360],"notes":"Six 360 kW CCS outlets plus 22 kW Type 2 in indexed topology."},
     {"stationId":"FR*PY2*P17000*0086","evsePowerKw":[22,24],"notes":"Type 2 + 24 kW CCS/CHAdeMO."},
