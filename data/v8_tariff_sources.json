@@ -1,14 +1,16 @@
 {
   "schemaVersion": 1,
   "contractVersion": "v8-tariff-engine-1",
-  "updatedAt": "2026-08-26",
+  "updatedAt": "2026-08-27",
   "policy": {
     "failOnMissingRequiredArtifact": true,
     "failOnMissingRuntimeModule": true,
     "subscriptionsAreOptIn": true,
     "subscriptionFixedFeesExcludedFromSessions": true,
     "unknownOrAmbiguousTariffsAreNotRankable": true,
-    "directOffersResolvedBeforeRanking": true
+    "directOffersResolvedBeforeRanking": true,
+    "operatorOverlaysAreNonDestructive": true,
+    "previewDataMustRemainPreviewLocal": true
   },
   "publish": {
     "copyFromMain": [
@@ -26,6 +28,7 @@
     ]
   },
   "sources": [
+    {"id":"runtime-integrity-guard","label":"Isolation runtime preview","status":"active","integration":"runtime-guard","artifactPaths":[],"runtimeModules":["assets/v8-runtime-integrity-guard.js"]},
     {"id":"france-national-catalog","label":"Electroverse + Electra national","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_france/manifest.json","data/non_tesla_france/all.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
     {"id":"e55c-direct","label":"E55C direct","status":"active","integration":"catalog-direct","artifactPaths":["data/e55c_station_tariffs_v1.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
     {"id":"belib-direct","label":"Belib direct","status":"active","integration":"catalog-direct","artifactPaths":["data/belib_station_tariffs_v1.json.gz"],"runtimeModules":["assets/france-catalog.js","assets/v8-belib-pricing.js"]},
