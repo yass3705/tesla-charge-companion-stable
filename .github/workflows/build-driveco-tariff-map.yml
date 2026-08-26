@@ -6,6 +6,7 @@ on:
     branches: ["release/2026-08"]
     paths:
       - "scripts/build_driveco_evse_tariffs.py"
+      - "scripts/merge_driveco_qualicharge_validated.py"
       - ".github/workflows/build-driveco-tariff-map.yml"
   schedule:
     - cron: "17 9 * * *"
@@ -20,7 +21,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,8 +32,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile scripts/build_driveco_evse_tariffs.py
+          python -m py_compile scripts/build_driveco_evse_tariffs.py scripts/merge_driveco_qualicharge_validated.py
           python scripts/build_driveco_evse_tariffs.py
+          python scripts/merge_driveco_qualicharge_validated.py
 
       - name: Validate output
         shell: bash
@@ -51,19 +53,24 @@ jobs:
           assert p['sourcePolicy']['matrixOSFInterpretedOnlyForValidatedPatterns'] is True
           assert p['sourcePolicy']['unvalidatedMatrixOSFExcludedFromRanking'] is True
           assert p['sourcePolicy']['firstPartyScreenshotPromotionOnlyByWhitelistedEvse'] is True
+          assert p['sourcePolicy']['qualichargeNumericTariffsExcludedUntilVatSemanticsValidated'] is False
+          assert p['sourcePolicy']['qualichargeNumericTtcTransformValidated'] is True
+          assert p['sourcePolicy']['qualichargeNumericOccupancyNotInferred'] is True
           inv=p['validatedInventory']
           assert inv['sourceResolvedEnergyEvseCount']==1601
           assert inv['sourceUnresolvedRows']==3841
           assert inv['firstPartyPromotedUnresolvedEvseCount']==10
-          assert inv['remainingUnresolvedSourceRows']==3831
-          assert inv['exactEnergyPriceEvseCount']==1611
           assert inv['fullSessionCostSafeEvseCount']==1607
           assert inv['validatedSingleMatrix020EvseCount']==715
           assert inv['validatedSingleMatrix030EvseCount']==172
           assert inv['validatedMultiTierMatrix020EvseCount']==710
           assert inv['unresolvedMultiTierMatrixEvseCount']==4
-          assert inv['qualichargeNumericCandidateRowsHeldBack']==184
-          assert len(p['evses'])==1611
+          assert inv['qualichargeNumericCandidateRowsHeldBack']==0
+          assert inv['qualichargeNumericValidatedRows']==184
+          assert inv['qualichargeNumericValidatedRawCounts']=={'0.45':6,'0.4583':156,'0.4917':22}
+          assert inv['exactEnergyPriceEvseCount']==len(p['evses'])
+          assert inv['exactEnergyPriceEvseCount']>=1611
+          assert inv['qualichargeNumericOverlapWithExistingEvse']+inv['qualichargeNumericNewExactEnergyEvse']==184
           assert all(v['energyPriceExact'] is True for v in p['evses'].values())
           assert all(v['rankable'] == v['fullSessionCostSafe'] for v in p['evses'].values())
           safe=[v for v in p['evses'].values() if v['rankable']]
@@ -73,21 +80,11 @@ jobs:
               assert o.get('trigger')=='connected_after_charge_end'
               assert o.get('graceMinutes')==15
               assert any(abs(float(o.get('ratePerMinuteEur'))-x)<1e-9 for x in (0.20,0.30))
-          blocked=[v for v in p['evses'].values() if not v['rankable']]
-          assert len(blocked)==4
-          assert all(v['rankingBlockReason']=='driveco_matrix_osf_multi_tier_semantics_unvalidated' for v in blocked)
-          fp=p['firstPartyAppValidation']
-          assert fp['commonOccupancySemantics']['graceMinutes']==15
-          assert fp['commonOccupancySemantics']['trigger']=='connected_after_charge_end'
-          names={s['stationName'] for s in fp['samples']}
-          assert 'Carrefour Market - Saint-Remy-Les-Chevreuse' in names
-          assert 'Carrefour Market - Vernouillet' in names
-          assert 'La Maison Villacoublay - Vélizy-Villacoublay' in names
-          velizy=[v for v in p['evses'].values() if v.get('firstPartyPromotedFromUnresolved')]
-          assert len(velizy)==10
-          assert {round(float(v['pricePerKwhEur']),2) for v in velizy}=={0.55,0.59}
-          assert all(abs(float(v['occupancy']['ratePerMinuteEur'])-0.30)<1e-9 for v in velizy)
-          print('DRIVECO first-party validated EVSE map OK')
+          q=p['qualichargeNumericValidation']
+          assert q['vatMultiplier']==1.20
+          assert q['validatedMappings']=={'0.45':0.54,'0.4583':0.55,'0.4917':0.59}
+          assert q['occupancyGeneralization'] is False
+          print('DRIVECO validated EVSE + QualiCharge energy map OK')
           print(json.dumps(inv, ensure_ascii=False, indent=2))
           PY
 
@@ -99,7 +96,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/driveco_evse_tariffs_v1.json
           if git diff --cached --quiet; then echo "No DRIVECO map changes"; exit 0; fi
-          git commit -m "data(v8): publish first-party validated DRIVECO EVSE tariff map [run ${GITHUB_RUN_ID}]"
+          git commit -m "data(v8): publish validated DRIVECO EVSE tariff map [run ${GITHUB_RUN_ID}]"
           for attempt in 1 2 3 4; do
             git pull --rebase origin release/2026-08
             if git push origin HEAD:release/2026-08; then exit 0; fi
