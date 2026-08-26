@@ -160,5 +160,5 @@
   function install(){const a=installCandidateWrapper(),b=installPricing();return a&&b;}
   window.TCCV8IziviaExpressDirect={loadData,validateData,validateExact,exactCost,mergePrepared,applyToPrepared,install,revision:REVISION};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
-  let tries=0;const timer=setInterval(()=>{tries++;if(install()||tries>160)clearInterval(timer);},100);
+  let tries=0,timer=null;timer=setInterval(()=>{tries++;if(install()||tries>160){if(timer!=null)clearInterval(timer);}},100);
 })();
