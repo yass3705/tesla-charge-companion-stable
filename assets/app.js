@@ -801,11 +801,18 @@ function priceWithRules(pp,startMin,chargeMinutes,billedEnergy,unplugTime,startT
      chargeCost+=fxToEur(raw,currency);
    }
    let occupied=unplugDurationMinutes(startTime,chargeMinutes,unplugTime);
-   for(let i=Math.ceil(chargeMinutes);i<Math.ceil(occupied);i++){
+   const idleByRule=new Map();
+   for(let i=Math.floor(chargeMinutes);i<Math.ceil(occupied);i++){
      let rule=ruleForMinute(rules,minuteOfSession(startMin,i));if(!rule)continue;
      let currency=(rule.currency||'EUR').toUpperCase();currencies.add(currency);
-     idleCost+=fxToEur(rule.idlePerMinute||0,currency);
+     let rate=Math.max(0,Number(rule.idlePerMinute||0)),grace=Math.max(0,Number(rule.idleGraceMinutes||0));if(!(rate>0))continue;
+     let eligibleStart=chargeMinutes+grace,from=Math.max(i,eligibleStart),to=Math.min(i+1,occupied),fraction=Math.max(0,to-from);if(!(fraction>0))continue;
+     let entry=idleByRule.get(rule)||{regular:0,capped:0};
+     let cap=Math.max(0,Number(rule.idleCap||0)),capStart=rule.idleCapStart||'00:00',capEnd=rule.idleCapEnd||'24:00';
+     let inCapWindow=cap>0&&minutesInWindow(minuteOfSession(startMin,from),Math.max(.001,fraction),capStart,capEnd)>0;
+     let amount=fxToEur(rate*fraction,currency);if(inCapWindow)entry.capped+=amount;else entry.regular+=amount;idleByRule.set(rule,entry);
    }
+   for(const [rule,entry] of idleByRule.entries()){let capped=entry.capped,cap=Math.max(0,Number(rule.idleCap||0));if(cap>0)capped=Math.min(capped,fxToEur(cap,rule.currency||'EUR'));idleCost+=entry.regular+capped;}
 
    // Frais liés à la durée totale de connexion, même si la voiture charge encore.
    // Exemple : 0,05 unité monétaire/min après 180 min.
