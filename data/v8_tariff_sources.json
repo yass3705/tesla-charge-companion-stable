@@ -7,7 +7,8 @@
     "failOnMissingRuntimeModule": true,
     "subscriptionsAreOptIn": true,
     "subscriptionFixedFeesExcludedFromSessions": true,
-    "unknownOrAmbiguousTariffsAreNotRankable": true
+    "unknownOrAmbiguousTariffsAreNotRankable": true,
+    "directOffersResolvedBeforeRanking": true
   },
   "publish": {
     "copyFromMain": [
@@ -32,6 +33,7 @@
     {"id":"atlante-direct","label":"Atlante direct","status":"active","integration":"catalog-direct","artifactPaths":["data/atlante_direct_stations_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
     {"id":"powerdot-direct","label":"Powerdot direct","status":"active","integration":"catalog-direct","artifactPaths":["data/powerdot_direct_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
     {"id":"etotem-direct","label":"e-Totem direct","status":"active","integration":"catalog-direct","artifactPaths":["data/etotem_direct_tariffs_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
+    {"id":"direct-offer-pipeline","label":"Orchestration unifiée des offres directes","status":"active","integration":"orchestrator","artifactPaths":[],"runtimeModules":["assets/v8-direct-offer-pipeline.js","assets/v8-rc48bn-runtime-hotfix.js"]},
     {"id":"operator-overlay","label":"Tarifs opérateurs et abonnements déclaratifs","status":"active","integration":"offer-overlay","artifactPaths":["data/tariff_overlay_v1.json","data/totalenergies_tariff_overlay_v1.json"],"runtimeModules":["assets/v8-operator-tariff-overlay.js","assets/v8-subscription-selection.js","assets/v8-compare-subscriptions.js"]},
     {"id":"evadea-direct","label":"e-Vadea direct","status":"active","integration":"mapped-offer","artifactPaths":["data/evadea_evse_tariffs_v1.json"],"runtimeModules":["assets/v8-operator-tariff-overlay.js","assets/v8-evadea-band-fallback.js"]},
     {"id":"regional-overlay","label":"Tarifs régionaux validés","status":"active","integration":"offer-overlay","artifactPaths":["data/regional_tariff_overlay_v1.json"],"runtimeModules":["assets/v8-regional-tariff-overlay.js"]},
@@ -42,10 +44,10 @@
     {"id":"labornebleue-direct","label":"La Borne Bleue direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-labornebleue-direct-overlay.js","assets/v8-labornebleue-operator-fallback.js"]},
     {"id":"bump-direct","label":"Bump direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/bump_direct_tariffs_tcc_france.json.gz"],"runtimeModules":["assets/v8-bump-direct.js"]},
     {"id":"waat-direct","label":"WAAT direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/waat_direct_tariffs_tcc_france.json"],"runtimeModules":["assets/v8-waat-direct.js"]},
+    {"id":"driveco-direct","label":"Driveco direct","status":"active","integration":"mapped-offer","artifactPaths":["data/driveco_evse_tariffs_v1.json"],"runtimeModules":["assets/v8-driveco-direct-overlay.js"]},
     {"id":"aldi-direct","label":"ALDI direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/aldi_direct_france_20260826.json"],"runtimeModules":["assets/v8-aldi-direct.js"]},
     {"id":"allego-direct","label":"Allego direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/allego_direct_stations_france.json.gz"],"runtimeModules":["assets/v8-allego-direct.js"]},
     {"id":"reveo-direct","label":"Révéo direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/reveo_direct_tariffs_france_v1.json"],"runtimeModules":["assets/v8-reveo-direct.js"]},
-    {"id":"yaway-connect-direct","label":"Yaway Connect direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/yaway_connect_direct_tariffs_v1.json"],"runtimeModules":["assets/v8-yaway-connect-direct.js"]},
-    {"id":"driveco-direct","label":"Driveco direct","status":"staged","integration":"mapped-offer","artifactPaths":["data/driveco_evse_tariffs_v1.json"],"runtimeModules":["assets/v8-driveco-direct-overlay.js"]}
+    {"id":"yaway-connect-direct","label":"Yaway Connect direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/yaway_connect_direct_tariffs_v1.json"],"runtimeModules":["assets/v8-yaway-connect-direct.js"]}
   ]
 }

@@ -2,11 +2,16 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48cb-runtime-aldi-direct';
+  const REVISION='rc48cc-unified-direct-pipeline';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
 
+  function loadDirectOfferPipeline(){
+    if(window.TCCV8DirectPipeline||document.querySelector('script[data-tcc-direct-offer-pipeline]'))return true;
+    const s=document.createElement('script');
+    s.src='assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-1';s.defer=true;s.dataset.tccDirectOfferPipeline='1';document.head.appendChild(s);return true;
+  }
   function loadFranceCpoGap(){
     if(window.TCCV8FranceCpoConsolidated||window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
     const s=document.createElement('script');
@@ -90,7 +95,9 @@
   }
   function refreshResults(){
     prepareLbbSubscriptionRows();cleanDirectFallbacks();
+    try{window.TCCV8DirectPipeline?.repairSubscriptionMetadata?.()}catch(e){}
     try{window.TCCV8Subscriptions?.applyAll?.(true)}catch(e){}
+    try{window.TCCV8ReferenceOffers?.apply?.()}catch(e){}
   }
   function installResultsObserver(){
     if(resultsObserver)return true;
@@ -101,12 +108,13 @@
     return true;
   }
   function renderSubscriptions(force=false){return window.TCCV8CompareSubscriptions?.render?.(force)??false}
-  function boot(){loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();loadReveoDirect();loadYawayConnectDirect();loadAldiDirect();installMetadataGuard();installResultsObserver();refreshResults();renderSubscriptions(false)}
+  function boot(){loadDirectOfferPipeline();loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();loadReveoDirect();loadYawayConnectDirect();loadAldiDirect();installMetadataGuard();installResultsObserver();refreshResults();renderSubscriptions(false)}
 
   document.addEventListener('tcc:compare-subscriptions-ready',()=>renderSubscriptions(false));
-  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();loadReveoDirect();loadYawayConnectDirect();loadAldiDirect();installMetadataGuard()}},true);
+  document.addEventListener('tcc:direct-offer-pipeline-ready',()=>refreshResults());
+  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadDirectOfferPipeline();loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();loadReveoDirect();loadYawayConnectDirect();loadAldiDirect();installMetadataGuard()}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
-  window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48cb : runtime + couche CPO France, DRIVECO, Allego Direct, Révéo Direct, YAWAY Connect Direct et ALDI Direct chargées.');
+  window.TCCV8RC48BNHotfix={revision:REVISION,loadDirectOfferPipeline,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
+  console.info('[TCC V8] rc48cc : pipeline unifié des offres directes et couche CPO France chargés.');
 })();
