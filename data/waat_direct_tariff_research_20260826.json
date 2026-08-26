@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "1.3.0",
+  "generatedAt": "2026-08-26T12:08:00+02:00",
+  "country": "FR",
+  "operator": "WAAT",
+  "operatorCode": "FR*WA2",
+  "scope": "physical_cpo_direct_only_no_roaming",
+  "status": "automatic_station_tariff_access_not_resolved",
+  "integrationReady": false,
+  "policy": {
+    "operatorDirectOnly": true,
+    "roamingIncluded": false,
+    "automaticTariffAccessRequired": true,
+    "manualScreenshotsAcceptedForTcc": false,
+    "manualAppObservationsAcceptedForTcc": false,
+    "thirdPartyRoamingTariffsAcceptedForTcc": false,
+    "residentialTariffsAcceptedForPublicCpo": false
+  },
+  "operatorIdentity": {
+    "name": "WAAT SAS",
+    "emi3Code": "FR*WA2",
+    "evidence": [
+      "Current French IRVE records identify WAAT SAS / FR*WA2 on public-access charging stations.",
+      "Examples include FRWA2P501370 / FRWA2E5806034 at 50 Rue Jean Zay, Saint-Priest and FRWA2P531814 at Dardilly."
+    ]
+  },
+  "officialStationInventory": {
+    "available": true,
+    "primarySource": "French national IRVE / data.gouv.fr",
+    "waatDataset": "https://www.data.gouv.fr/organizations/waat/datasets",
+    "montaExtractionDataset": "https://www.data.gouv.fr/datasets/extraction-monta/",
+    "filter": "nom_operateur contains WAAT or operator/EVSE identifier starts FRWA2 / FR*WA2",
+    "notes": "WAAT publishes an IRVE dataset and a historical Monta extraction. The national IRVE inventory is preferred for current station identity; tariff fields are generally absent."
+  },
+  "publicDirectTariffModel": {
+    "nationalFixedTariff": false,
+    "stationSpecific": true,
+    "profileSpecificPossible": true,
+    "timeSpecificPossible": true,
+    "parkingOrTimeFeesPossible": true,
+    "notes": "WAAT/Monta allows the site/operator to configure access and pricing per site/profile. No authoritative national public WAAT retail tariff was identified."
+  },
+  "excludedEvidence": {
+    "residentialMyWaatOffers": {
+      "excluded": true,
+      "reason": "Residential/home subscription and peak/off-peak energy rates are contract tariffs, not public CPO tariffs."
+    },
+    "myWaatRoamingNetwork": {
+      "excluded": true,
+      "reason": "MyWAAT provides access to a much wider roaming network; those EMSP prices are outside direct-CPO scope."
+    },
+    "thirdPartyRoamingTariffTables": {
+      "excluded": true,
+      "reason": "Roaming tariffs for FR-WA2 do not establish the WAAT direct retail price."
+    }
+  },
+  "montaBackend": {
+    "confirmedWhiteLabel": true,
+    "privacyPolicy": "https://waat.monta.app/privacy-policy",
+    "appPackage": "com.waat.thirdparty.monta.waatev",
+    "paymentProcessorEvidence": "WAAT terms state that charging-consumption payments may be collected by MONTA on WAAT's behalf.",
+    "officialMontaApi": "https://developer.monta.com/",
+    "priceEndpointModel": "GET /prices/forecast by chargePointId",
+    "requiredScopes": [
+      "charge-points:read",
+      "prices-forecast:read"
+    ],
+    "publicUnauthenticatedTariffAccess": false,
+    "notes": "Monta partner CPO API exposes charge-point price forecasts but API credentials require an enabled commercial/operator account. No anonymous WAAT station-price endpoint was identified."
+  },
+  "automaticAccessAudit": {
+    "officialStaticIrve": "checked_station_inventory_available_tariffs_blank_or_non_structured",
+    "waatMontaExtraction": "identified_historical_dataset_2024_not_current_tariff_feed",
+    "waatWebsiteAndHelp": "checked_contract_and_site_specific_pricing_rules_no_station_tariff_feed",
+    "montaPartnerApiDocs": "checked_price_forecast_exists_but_requires_authenticated_operator_scopes",
+    "publicWebSearchForWaatStationTariffs": "checked_no_authoritative_machine_readable_direct_price_feed_found",
+    "publicQrOrAdHocPortal": "not_resolved",
+    "liveAuthorizedMyWaatNetworkCapture": "not_completed"
+  },
+  "knownDirectExamples": [
+    {
+      "stationId": "FRWA2P501370",
+      "evseExample": "FRWA2E5806034",
+      "name": "PROUDREED_VEELLAGE_SAINT-PRIEST",
+      "address": "50 Rue Jean Zay, 69800 Saint-Priest",
+      "powerKw": 22,
+      "access": "public",
+      "directCpo": true,
+      "directTariff": null,
+      "blockingReason": "retail_tariff_not_published_in_irve"
+    },
+    {
+      "stationId": "FRWA2P531814",
+      "name": "PROUDREED_DARDILLY_PAISY",
+      "address": "5 Route du Paisy, 69570 Dardilly",
+      "powerKw": 22,
+      "access": "public",
+      "directCpo": true,
+      "directTariff": null,
+      "blockingReason": "retail_tariff_not_published_in_irve"
+    }
+  ],
+  "remainingTechnicalRoutes": [
+    {
+      "route": "authorized_monta_cpo_api",
+      "goal": "Use WAAT/Monta operator credentials to enumerate FR*WA2 chargePointIds and retrieve price forecasts/tariffs.",
+      "constraint": "Requires legitimate operator API access and appropriate Monta scopes; do not bypass authentication."
+    },
+    {
+      "route": "authorized_mywaat_network_capture",
+      "goal": "Observe the requests made by the user's own authorized MyWAAT session while opening direct WAAT station price cards.",
+      "constraint": "Use only an authorized account/session; do not bypass authentication or access controls."
+    },
+    {
+      "route": "public_qr_ad_hoc_discovery",
+      "goal": "Identify any public WAAT/Monta ad-hoc or QR charging page that exposes the retail price without authentication.",
+      "constraint": "Only public endpoints are acceptable."
+    },
+    {
+      "route": "android_apk_static_analysis",
+      "goal": "Confirm MyWAAT API hosts/routes and distinguish public endpoints from authenticated Monta APIs.",
+      "constraint": "Static inspection only; no credential extraction or authentication bypass."
+    }
+  ],
+  "safeFallback": "Build and keep the FR*WA2 direct station inventory, but do not rank WAAT stations using a fabricated or roaming price. Keep direct tariff null until an automatic authoritative per-station price source is available.",
+  "roaming": "excluded"
+}
