@@ -1,0 +1,61 @@
+name: WAAT Direct data import
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/waat-direct-data-import.yml'
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+      - name: Fetch validated compact WAAT map
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          curl --fail --silent --show-error --location \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/publish/waat_direct_tariffs_tcc_france.json' \
+            -o data/waat_direct_tariffs_tcc_france.json
+      - name: Validate imported WAAT map
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('data/waat_direct_tariffs_tcc_france.json',encoding='utf-8'))
+          assert p['schemaVersion']=='1.0.0'
+          assert p['dataset']=='waat-direct-tariffs-tcc-france'
+          assert p['operator']=='WAAT' and p['country']=='FR'
+          assert p['scope']=={'directCpoOnly':True,'roamingIncluded':False,'stationSpecificPricing':True,'unresolvedCasesNeverRankable':True}
+          assert p['counts']=={'franceStations':571,'rankableStations':452,'rankableConfigs':507,'unresolvedStations':119}
+          assert len(p['stations'])==571
+          assert len({s['stationId'] for s in p['stations']})==571
+          cfgs=[c for s in p['stations'] for c in s['configs']]
+          assert len(cfgs)==507
+          assert all(c['kind'] in ('AC','DC') and c['powerKw']>0 and c['directEurPerKwh']>0 and c['groupIds'] for c in cfgs)
+          # Known range/ambiguous Carcassonne group must not be published as rankable.
+          assert all(811653 not in c['groupIds'] for c in cfgs)
+          # Witness prices from the validated national audit.
+          by_group={gid:c for s in p['stations'] for c in s['configs'] for gid in c['groupIds']}
+          assert by_group[631961]['kind']=='DC' and abs(by_group[631961]['powerKw']-47)<.01 and abs(by_group[631961]['directEurPerKwh']-.42)<1e-9
+          assert by_group[494949]['kind']=='AC' and abs(by_group[494949]['powerKw']-22)<.01 and abs(by_group[494949]['directEurPerKwh']-.28)<1e-9
+          assert by_group[714420]['kind']=='DC' and abs(by_group[714420]['directEurPerKwh']-.62)<1e-9
+          print(p['counts'])
+          PY
+      - name: Commit WAAT map to release branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/waat_direct_tariffs_tcc_france.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'data(v8): publish validated WAAT direct tariff map'
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin release/2026-08
+            if git push origin HEAD:release/2026-08; then exit 0; fi
+            sleep $((attempt*2))
+          done
+          exit 1
