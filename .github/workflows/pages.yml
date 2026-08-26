@@ -132,7 +132,7 @@ jobs:
           html=html.replace(france_tag,france_tag+'\n<script src="assets/v8-belib-pricing.js?v=rc48-belib-1" defer></script>',1)
           html=re.sub(r'assets/v8-offer-selection\.js\?v=[^"]+', 'assets/v8-offer-selection.js?v=rc48bl-20260824', html)
           html=re.sub(r'assets/update\.js\?v=[^"]+', 'assets/update.js?v=rc48bt-20260825', html)
-          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825', html)
+          html=re.sub(r'assets/v8-overlay-area-bridge\.js\?v=[^"]+', 'assets/v8-overlay-area-bridge.js?v=rc48bo-bounded-hooks-20260827', html)
           html=re.sub(r'<script src="assets/v8-operator-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-evadea-band-fallback\.js\?v=[^"]+" defer></script>\n?','',html)
           html=re.sub(r'<script src="assets/v8-regional-tariff-overlay\.js\?v=[^"]+" defer></script>\n?','',html)
@@ -249,11 +249,11 @@ jobs:
           grep -q 'v8-evadea-band-fallback.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'v8-regional-tariff-overlay.js?v=rc48am-20260821' site/v8-preview/index.html
           grep -q 'assets/update.js?v=rc48bt-20260825' site/v8-preview/index.html
-          grep -q 'v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825' site/v8-preview/index.html
+          grep -q 'v8-overlay-area-bridge.js?v=rc48bo-bounded-hooks-20260827' site/v8-preview/index.html
           grep -q 'v8-compare-subscriptions.js?v=rc48bt-20260825' site/v8-preview/index.html
           grep -q 'v8-subscription-stability-fix.js?v=rc48bs-20260825' site/v8-preview/index.html
           grep -q 'v8-fastned-station-overlay.js?v=rc48-fastned-20260825' site/v8-preview/assets/v8-overlay-area-bridge.js
-          grep -q "const REVISION='rc48bm-lbb-runtime-stable'" site/v8-preview/assets/v8-overlay-area-bridge.js
+          grep -q "const REVISION='rc48bo-bounded-runtime-hooks'" site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q 'lbbFallbackApi?.applyToPrepared' site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q 'lbbFallbackApi?.addDirect' site/v8-preview/assets/v8-overlay-area-bridge.js
           grep -q 'v8-labornebleue-operator-fallback.js?v=rc48bm-20260825' site/v8-preview/assets/update.js
@@ -290,7 +290,7 @@ jobs:
           tariff_display=Path('site/v8-preview/assets/v8-tariff-display-fix.js').read_text(encoding='utf-8')
           checks={
               'cache update.js rc48bt':'update.js?v=rc48bt-20260825' in index,
-              'cache bridge LBB rc48bm':'v8-overlay-area-bridge.js?v=rc48bm-lbb-20260825' in index,
+              'cache bridge bounded hooks':'v8-overlay-area-bridge.js?v=rc48bo-bounded-hooks-20260827' in index,
               'moteur tarifaire unifié chargé':'v8-tariff-engine.js?v=v8-tariff-engine-1' in index,
               'UI abonnements compacte chargée':'v8-compare-subscriptions.js?v=rc48bt-20260825' in index,
               'pont abonnements chargé':'v8-subscription-stability-fix.js?v=rc48bs-20260825' in index,
