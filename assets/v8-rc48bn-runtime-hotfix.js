@@ -2,7 +2,7 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48ca-runtime-aldi-direct';
+  const REVISION='rc48cb-runtime-aldi-direct';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
@@ -35,7 +35,7 @@
   function loadAldiDirect(){
     if(window.TCCAldiDirectV8||document.querySelector('script[data-tcc-aldi-direct]'))return true;
     const s=document.createElement('script');
-    s.src='assets/v8-aldi-direct.js?v=aldi-direct-v1-20260826';s.defer=true;s.dataset.tccAldiDirect='1';document.head.appendChild(s);return true;
+    s.src='assets/v8-aldi-direct.js?v=aldi-direct-v1b-20260826';s.defer=true;s.dataset.tccAldiDirect='1';document.head.appendChild(s);return true;
   }
 
   function mergeRawMetadata(rawList,normalized){
@@ -108,5 +108,5 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
   window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48ca : runtime + couche CPO France, DRIVECO, Allego Direct, Révéo Direct, YAWAY Connect Direct et ALDI Direct chargées.');
+  console.info('[TCC V8] rc48cb : runtime + couche CPO France, DRIVECO, Allego Direct, Révéo Direct, YAWAY Connect Direct et ALDI Direct chargées.');
 })();
