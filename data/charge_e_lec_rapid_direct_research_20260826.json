@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-08-26T10:45:00+02:00",
+  "schemaVersion": "1.0.1",
+  "generatedAt": "2026-08-26T10:50:00+02:00",
   "country": "FR",
   "operator": "E.Leclerc",
   "operatorId": "FR*LE2",
@@ -42,7 +42,6 @@
   "pricedUltraStationsTopologyStillCompatible": [
     {"station":"Le Gua","department":"17","currentUltraPowerKw":[160],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-station-service-le-gua","confidence":"medium"},
     {"station":"Surgères","department":"17","currentUltraPowerKw":[300],"energyEurPerKwhObserved":0.27,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-surgeres","confidence":"medium"},
-    {"station":"Saint-Loup","department":"69","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-saint-loup","confidence":"medium"},
     {"station":"Blain / Blaindis","department":"44","currentUltraPowerKw":[120],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-blaindis","confidence":"medium"},
     {"station":"Amilly","department":"45","currentUltraPowerKw":[120],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-amilly","confidence":"medium"},
     {"station":"Vannes","department":"56","currentUltraPowerKw":[180],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/eleclerc-vannes","confidence":"medium"},
@@ -59,12 +58,14 @@
     {"station":"Bessines","department":"79","currentUltraPowerKw":[150],"energyEurPerKwhObserved":0.28,"tariffObservedAt":"2026-07-21","officialStationUrl":"https://www.charge-elec.leclerc/station/e-leclerc-bessines","confidence":"medium"}
   ],
   "quarantinedOldObservations": [
+    {"station":"Saint-Loup","oldDepartmentReported":"23","oldPowerKw":180,"oldEnergyEurPerKwhObserved":0.28,"reason":"Community observation reports department 23, while the current official Charge E-Lec Saint-Loup with 180 kW is at Vindry-sur-Turdine in department 69. Identity match is not proven; new app tariff required."},
     {"station":"Le Neubourg","oldPowerKw":180,"oldEnergyEurPerKwhObserved":0.28,"reason":"Current official Charge E-Lec page no longer exposes the old 180 kW ultra-fast topology; only 50 kW rapid points are currently explicit. Do not reuse old tariff."},
     {"station":"Lesparre-Médoc","oldPowerKw":180,"oldEnergyEurPerKwhObserved":0.38,"currentPowerKw":150,"reason":"Ultra-fast hardware/topology changed from the observed July configuration. New app tariff required."},
     {"station":"Bourgoin-Jallieu","oldPowerKw":240,"oldEnergyEurPerKwhObserved":0.28,"currentPowerKw":480,"reason":"Ultra-fast hardware/topology materially changed. New app tariff required."},
     {"station":"Auch","oldPowerKw":160,"oldEnergyEurPerKwhObserved":0.0,"reason":"The apparent free tariff was observed while the station was not open; community immediately flagged it as non-valid. Never model as free without a live app confirmation."}
   ],
   "newOrCurrentUltraSitesWithoutVerifiedDirectTariff": [
+    {"station":"Saint-Loup (Vindry-sur-Turdine)","department":"69","currentUltraPowerKw":[180],"status":"price_pending_charge_e_lec_app"},
     {"station":"Nice Saint-Isidore","currentUltraPowerKw":[150],"status":"price_pending_charge_e_lec_app"},
     {"station":"Tourlaville","currentUltraPowerKw":[120,180],"status":"price_pending_charge_e_lec_app"}
   ],
