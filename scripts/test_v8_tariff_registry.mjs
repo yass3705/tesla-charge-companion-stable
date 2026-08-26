@@ -46,21 +46,24 @@ const runtimeHotfixSource=fs.readFileSync('assets/v8-rc48bn-runtime-hotfix.js','
 new vm.Script(directPipelineSource,{filename:'assets/v8-direct-offer-pipeline.js'});
 new vm.Script(runtimeHotfixSource,{filename:'assets/v8-rc48bn-runtime-hotfix.js'});
 for(const id of ['powerdot-direct','freshmile-direct','bump-direct','driveco-direct'])assert.ok(directPipelineSource.includes(`registerPreparedEnricher('${id}'`),`${id} must register a prepared enricher`);
-assert.ok(directPipelineSource.includes("await preparePrepared(prepared,{reason:'compare'})"),'prepared direct sources must resolve before compare');
-assert.ok(directPipelineSource.indexOf("await preparePrepared(prepared,{reason:'compare'})")<directPipelineSource.indexOf('const result=await current.apply(this,args)'),'direct source preparation must happen before compare execution');
-assert.ok(directPipelineSource.includes('repairSubscriptionMetadata'),'subscription metadata repair must be part of finalization');
-assert.ok(directPipelineSource.includes("full.endsWith(' '+p)"),'shortened provider labels must map back to subscription plans');
-assert.ok(directPipelineSource.includes('window.TCCV8Subscriptions?.applyAll?.(true)'),'subscription eligibility must be reapplied after metadata repair');
-assert.ok(directPipelineSource.includes('window.TCCV8ReferenceOffers?.apply?.()'),'operator references must be restored when no exact direct tariff is available');
+assert.ok(directPipelineSource.includes("await preparePrepared(prepared,{reason:'candidateStations'})"),'prepared direct sources must resolve from candidateStations');
+assert.ok(directPipelineSource.includes('const prepared=await current.apply(this,args)'),'candidateStations must run before direct enrichment');
+assert.ok(directPipelineSource.indexOf('const prepared=await current.apply(this,args)')<directPipelineSource.indexOf("await preparePrepared(prepared,{reason:'candidateStations'})"),'direct enrichment must happen on the prepared physical station set before expansion');
+assert.ok(directPipelineSource.includes('installCandidateGuard'),'candidateStations must be the direct-offer integration boundary');
+assert.ok(!directPipelineSource.includes('installCompareGuard'),'the direct pipeline must never own compare()');
+assert.ok(!directPipelineSource.includes('window.compare=wrapped'),'the direct pipeline must not replace compare() and break offer grouping');
 assert.ok(directPipelineSource.includes('canonicalizePreparedOfferMetadata(prepared)'),'structured provider metadata must be canonicalized before expansion');
-assert.ok(directPipelineSource.indexOf('canonicalizePreparedOfferMetadata(prepared)')<directPipelineSource.indexOf('if(window.TCC_V8_AREA_CACHE)'),'provider metadata must be canonicalized before prepared cache is returned');
-assert.ok(directPipelineSource.includes('window.TCCV8OfferSelection?.decorateAndCollapseAugustResults'),'unified pipeline must restore physical station + power grouping after render');
-assert.ok(directPipelineSource.indexOf('const grouped=ensureOfferGrouping()')<directPipelineSource.indexOf('const changed=repairSubscriptionMetadata()'),'offer grouping must happen before subscription eligibility is applied');
+assert.ok(directPipelineSource.includes('repairPreparedSubscriptionMetadata(prepared)'),'subscription metadata must be attached before ranking');
+assert.ok(directPipelineSource.includes('installSubscriptionEligibilityBridge'),'declared subscription eligibility must be centralized');
+assert.ok(directPipelineSource.includes('declaredSubscriptionIdForProvider'),'shortened provider labels must resolve through declared plans');
+assert.ok(directPipelineSource.includes('repairSubscriptionMetadata'),'subscription metadata repair must remain available for rendered rows');
+assert.ok(directPipelineSource.includes('window.TCCV8Subscriptions?.applyAll?.(true)'),'subscription eligibility must be reapplied after rendered metadata repair');
+assert.ok(directPipelineSource.includes('window.TCCV8ReferenceOffers?.apply?.()'),'operator references must be restored when no exact direct tariff is available');
 assert.ok(directPipelineSource.includes('api.mergedPowerdotStation(best.location,data,[st])'),'Powerdot must enrich only an already prepared station');
 assert.ok(directPipelineSource.includes("if(!api.isPowerdotOperator(st)"),'Powerdot enrichment must be restricted to physical Powerdot stations');
 assert.ok(!directPipelineSource.includes('api.mergePowerdotCatalog(prepared.stations'),'Powerdot pipeline must never re-expand the national catalog into a prepared area');
 assert.ok(runtimeHotfixSource.includes('loadDirectOfferPipeline()'),'runtime hotfix must bootstrap the unified direct pipeline');
-assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js'),'runtime hotfix must load the direct pipeline asset');
+assert.ok(runtimeHotfixSource.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4'),'runtime hotfix must cache-bust the pre-expansion pipeline');
 
 const bumpSource=fs.readFileSync('assets/v8-bump-direct.js','utf8');
 new vm.Script(bumpSource,{filename:'assets/v8-bump-direct.js'});
@@ -84,16 +87,36 @@ assert.equal(malesherbesDirect.bumpMatchMode,'exact_name_multi_station_power');
 assert.ok(Math.abs(malesherbesDirect.pricing.rules[0].pricePerKwh-.5499996)<1e-5);
 assert.equal(malesherbesDirect.pricing.bumpFeePolicy.components.flatFeeEur,1.2);
 
-// Structured metadata wins over a stale roaming display label.
+// Structured metadata wins over a stale roaming display label, and shortened Belib labels
+// resolve against the declarative subscription catalogue before ranking.
 const pipelineDocument={readyState:'loading',addEventListener(){},dispatchEvent(){},querySelectorAll(){return[]},getElementById(){return null},scripts:[]};
 class PipelineCustomEvent{constructor(type){this.type=type;}}
-const pipelineContext=vm.createContext({window:{},document:pipelineDocument,CustomEvent:PipelineCustomEvent,console,Date,JSON,Set,Map,Promise,String,Number,Math,setTimeout(){return 0},clearTimeout(){},setInterval(){return 0},clearInterval(){},fetch:async()=>({ok:true,json:async()=>({sources:[]})})});
+const pipelineContext=vm.createContext({window:{},document:pipelineDocument,CustomEvent:PipelineCustomEvent,console,Date,JSON,Set,Map,WeakMap,Promise,String,Number,Math,setTimeout(){return 0},clearTimeout(){},setInterval(){return 0},clearInterval(){},fetch:async()=>({ok:true,json:async()=>({sources:[]})})});
 pipelineContext.window=pipelineContext;vm.runInContext(directPipelineSource,pipelineContext,{filename:'assets/v8-direct-offer-pipeline.js'});
 const preparedMetadata={stations:[{operator:'Freshmile',kind:'AC',powerKw:7,chargingConfigurations:[{id:'fm',offerType:'operator_direct',label:'Electra · AC 7 kW',kind:'AC',powerKw:7,pricing:{type:'rules'}}]},{operator:'Bump',kind:'AC',powerKw:11,chargingConfigurations:[{id:'b',offerType:'operator_direct',offerProvider:'Bump Direct',label:'Electra · AC 11 kW',kind:'AC',powerKw:11,pricing:{type:'rules'}}]}]};
 assert.equal(pipelineContext.TCCV8DirectPipeline.canonicalizePreparedOfferMetadata(preparedMetadata),2);
 assert.equal(preparedMetadata.stations[0].chargingConfigurations[0].offerProvider,'Freshmile Direct');
 assert.equal(preparedMetadata.stations[0].chargingConfigurations[0].label,'Freshmile Direct · AC 7 kW');
 assert.equal(preparedMetadata.stations[1].chargingConfigurations[0].label,'Bump Direct · AC 11 kW');
+
+const selectedBelib=new Set(['belib-nonresident']);
+pipelineContext.TCCV8Subscriptions={
+  plans:[
+    {id:'belib-resident',provider:'Belib’ abonné résident Paris'},
+    {id:'belib-nonresident',provider:'Belib’ abonné non-résident'}
+  ],
+  subscriptionIdForProvider(){return''},subscriptionIdForStation(){return''},
+  selectedSet(){return selectedBelib},isStationEligible(){return true}
+};
+assert.equal(pipelineContext.TCCV8DirectPipeline.installSubscriptionEligibilityBridge(),true);
+assert.equal(pipelineContext.TCCV8Subscriptions.subscriptionIdForProvider('Abonné résident Paris'),'belib-resident');
+assert.equal(pipelineContext.TCCV8Subscriptions.subscriptionIdForProvider('Abonné non-résident'),'belib-nonresident');
+assert.equal(pipelineContext.TCCV8Subscriptions.isStationEligible({configurationLabel:'Abonné résident Paris'}),false,'unchecked Belib resident must stay outside ranking');
+assert.equal(pipelineContext.TCCV8Subscriptions.isStationEligible({configurationLabel:'Abonné non-résident'}),true,'selected Belib non-resident must be rankable');
+const belibPrepared={stations:[{chargingConfigurations:[{label:'Abonné résident Paris · AC 7 kW'},{label:'Abonné non-résident · AC 7 kW'}]}]};
+assert.equal(pipelineContext.TCCV8DirectPipeline.repairPreparedSubscriptionMetadata(belibPrepared),2);
+assert.equal(belibPrepared.stations[0].chargingConfigurations[0].subscriptionId,'belib-resident');
+assert.equal(belibPrepared.stations[0].chargingConfigurations[1].subscriptionId,'belib-nonresident');
 
 const overlay=JSON.parse(fs.readFileSync('data/tariff_overlay_v1.json','utf8'));
 const total=JSON.parse(fs.readFileSync('data/totalenergies_tariff_overlay_v1.json','utf8'));
@@ -147,4 +170,4 @@ const unrelatedOffers=engine.declaredOffersForStation(unrelated,electraSelected)
 assert.ok(!unrelatedOffers.some(x=>x.id==='electra-smart'),'runtime-bound Electra subscription must not leak into generic station matching');
 assert.ok(unrelatedOffers.some(x=>x.id==='fastned-standard'),'Fastned direct offer must match Fastned station');
 
-console.log(`V8 tariff registry OK: ${ids.size} sources, ${engine.offers.length} declarative offers, ${engine.subscriptions.length} subscriptions + direct pipeline contract.`);
+console.log(`V8 tariff registry OK: ${ids.size} sources, ${engine.offers.length} declarative offers, ${engine.subscriptions.length} subscriptions + pre-expansion direct pipeline contract.`);
