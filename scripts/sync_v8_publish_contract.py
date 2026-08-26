@@ -17,6 +17,7 @@ import re
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 
 def fail(message: str) -> None:
@@ -113,13 +114,81 @@ def preview_deploy_id(registry_path: Path, target_root: Path) -> str:
     return f"local-{digest.hexdigest()[:16]}"
 
 
-def install_preview_cache_guard(registry_path: Path, target_root: Path) -> str:
-    """Install a deployment-aware guard against Safari/iOS bfcache staleness.
+_LOCAL_ASSET_RE = re.compile(
+    r"(?<![A-Za-z0-9:/])(?P<path>(?:\.\.?/)?assets/[A-Za-z0-9._/-]+\.(?:js|css))"
+    r"(?P<query>\?[^'\"`\s<>)]*)?"
+)
 
-    The preview keeps its service worker disabled, but a document restored from
-    Safari's back/forward cache can still be an old full-page snapshot. The guard
-    compares its embedded deployment id with a no-store manifest and navigates to
-    a cache-busted URL when a newer Pages artifact is available.
+
+def stamp_preview_asset_urls(target_root: Path, deploy_id: str) -> int:
+    """Give every local JS/CSS URL a deployment-unique cache key.
+
+    Safari can keep an old HTTP-cache entry even after the document itself was
+    refreshed. V8 historically used hand-maintained ?v= labels, which allowed a
+    new Pages artifact to reuse an old module when a label was not bumped. The
+    deploy id is appended to every literal local asset URL in the document and
+    runtime loaders, so two Pages artifacts can never share a JS/CSS URL.
+    """
+    stamp = quote(deploy_id, safe="")
+    assets_dir = target_root / "assets"
+    candidates = [target_root / "index.html"]
+    if assets_dir.is_dir():
+        candidates.extend(sorted(p for p in assets_dir.iterdir() if p.suffix in {".js", ".css"}))
+
+    total_refs = 0
+    changed_files = 0
+    for path in candidates:
+        if not path.is_file():
+            continue
+        original = path.read_text(encoding="utf-8")
+        file_refs = 0
+
+        def repl(match: re.Match[str]) -> str:
+            nonlocal file_refs
+            resource = match.group("path")
+            query_string = match.group("query") or ""
+            if "_v8deploy=" in query_string:
+                return match.group(0)
+            separator = "&" if query_string else "?"
+            file_refs += 1
+            return f"{resource}{query_string}{separator}_v8deploy={stamp}"
+
+        updated = _LOCAL_ASSET_RE.sub(repl, original)
+        if updated != original:
+            path.write_text(updated, encoding="utf-8")
+            changed_files += 1
+            total_refs += file_refs
+
+    unstamped: list[str] = []
+    for path in candidates:
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for match in _LOCAL_ASSET_RE.finditer(text):
+            if "_v8deploy=" not in (match.group("query") or ""):
+                unstamped.append(f"{path.relative_to(target_root)}:{match.group(0)}")
+                if len(unstamped) >= 8:
+                    break
+        if len(unstamped) >= 8:
+            break
+    if unstamped:
+        fail("unstamped local asset URLs: " + "; ".join(unstamped))
+    if total_refs < 20:
+        fail(f"asset cache stamp coverage unexpectedly low: {total_refs}")
+    print(
+        f"V8 publish contract: deploy cache stamp applied to {total_refs} asset refs "
+        f"across {changed_files} files ({deploy_id})"
+    )
+    return total_refs
+
+
+def install_preview_cache_guard(registry_path: Path, target_root: Path) -> str:
+    """Install deployment-aware protection against Safari/iOS cache staleness.
+
+    The preview service worker is disabled, but Safari can restore a stale full
+    document from bfcache and can retain old HTTP-cache entries for subresources.
+    The guard detects a newer Pages artifact, retries cache-busted navigation when
+    needed, and stamps same-origin fetches with the current deployment id.
     """
     index = target_root / "index.html"
     if not index.is_file():
@@ -143,32 +212,60 @@ def install_preview_cache_guard(registry_path: Path, target_root: Path) -> str:
   'use strict';
   if(!location.pathname.includes('/v8-preview/'))return;
   const DEPLOY_ID=__DEPLOY_ID__;
-  const RELOAD_KEY='tcc:v8-preview:reload-target';
+  const RELOAD_KEY='tcc:v8-preview:reload-state';
+  const marker='/v8-preview/';
+  const markerIndex=location.pathname.indexOf(marker);
+  const REPO_ROOT=markerIndex>=0?location.pathname.slice(0,markerIndex+1):'/';
+  const nativeFetch=window.fetch.bind(window);
   let checking=false;
+
+  window.TCC_V8_DEPLOY_ID=DEPLOY_ID;
+  window.fetch=function(input,init){
+    try{
+      const isRequest=typeof Request!=='undefined'&&input instanceof Request;
+      const method=String((init&&init.method)||(isRequest&&input.method)||'GET').toUpperCase();
+      if(method==='GET'){
+        const url=new URL(isRequest?input.url:input,location.href);
+        if(url.origin===location.origin&&url.pathname.startsWith(REPO_ROOT)){
+          url.searchParams.set('_v8deploy',DEPLOY_ID);
+          input=isRequest?new Request(url.href,input):url.href;
+        }
+      }
+    }catch(e){}
+    return nativeFetch(input,init);
+  };
+
+  function readReloadState(){
+    try{return JSON.parse(sessionStorage.getItem(RELOAD_KEY)||'{}')||{}}catch(e){return{}}
+  }
+  function writeReloadState(target,attempts){
+    try{sessionStorage.setItem(RELOAD_KEY,JSON.stringify({target,attempts,at:Date.now()}))}catch(e){}
+  }
+  function clearReloadState(){try{sessionStorage.removeItem(RELOAD_KEY)}catch(e){}}
+  function navigateToDeploy(remote,attempt){
+    const next=attempt>=3?new URL('refresh.html',location.href):new URL(location.href);
+    next.searchParams.set('_v8deploy',remote);
+    next.searchParams.set('_refresh',String(Date.now()));
+    next.searchParams.set('_cacheAttempt',String(attempt));
+    location.replace(next.href);
+  }
   async function check(reason){
     if(checking)return false;
     checking=true;
     try{
       const manifestUrl=new URL('preview-version.json',location.href);
       manifestUrl.searchParams.set('_',String(Date.now()));
-      const response=await fetch(manifestUrl.href,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+      const response=await nativeFetch(manifestUrl.href,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
       if(!response.ok)return false;
       const payload=await response.json();
       const remote=String(payload&&payload.deployId||'').trim();
       if(!remote)return false;
-      if(remote===DEPLOY_ID){
-        try{sessionStorage.removeItem(RELOAD_KEY);}catch(e){}
-        return false;
-      }
-      try{
-        const previous=sessionStorage.getItem(RELOAD_KEY);
-        if(previous===remote)return false;
-        sessionStorage.setItem(RELOAD_KEY,remote);
-      }catch(e){}
-      const next=new URL(location.href);
-      next.searchParams.set('_v8deploy',remote);
-      next.searchParams.set('_refresh',String(Date.now()));
-      location.replace(next.href);
+      if(remote===DEPLOY_ID){clearReloadState();return false;}
+      const state=readReloadState();
+      const attempts=state.target===remote?Math.max(0,Number(state.attempts)||0):0;
+      const nextAttempt=Math.min(attempts+1,3);
+      writeReloadState(remote,nextAttempt);
+      navigateToDeploy(remote,nextAttempt);
       return true;
     }catch(error){
       console.info('[TCC V8] Preview version check unavailable:',error&&error.message||error,reason||'');
@@ -177,13 +274,24 @@ def install_preview_cache_guard(registry_path: Path, target_root: Path) -> str:
       checking=false;
     }
   }
-  window.TCCV8PreviewVersion={deployId:DEPLOY_ID,check};
+  window.TCCV8PreviewVersion={deployId:DEPLOY_ID,check,repoRoot:REPO_ROOT};
   window.addEventListener('pageshow',()=>setTimeout(()=>check('pageshow'),0));
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')setTimeout(()=>check('visible'),0);});
   window.addEventListener('online',()=>check('online'));
-  setTimeout(()=>check('boot'),750);
+  setTimeout(()=>check('boot'),500);
 })();
 '''.replace("__DEPLOY_ID__", json.dumps(deploy_id))
+
+    required_guard_tokens = (
+        "window.TCC_V8_DEPLOY_ID=DEPLOY_ID",
+        "window.fetch=function(input,init)",
+        "url.searchParams.set('_v8deploy',DEPLOY_ID)",
+        "nativeFetch(manifestUrl.href",
+        "attempt>=3?new URL('refresh.html'",
+    )
+    missing_guard = [token for token in required_guard_tokens if token not in guard_source]
+    if missing_guard:
+        fail("preview cache guard contract incomplete: " + ", ".join(missing_guard))
 
     assets = target_root / "assets"
     assets.mkdir(parents=True, exist_ok=True)
@@ -234,10 +342,11 @@ def main() -> None:
 
     validate_active_sources(registry, target_root)
     deploy_id = install_preview_cache_guard(registry_path, target_root)
+    stamped_refs = stamp_preview_asset_urls(target_root, deploy_id)
     print(
         f"V8 publish contract OK: {len(entries)} main resources, "
         f"{sum(1 for s in registry.get('sources', []) if s.get('status') == 'active')} active sources, "
-        f"preview deploy {deploy_id}"
+        f"{stamped_refs} deploy-stamped asset refs, preview deploy {deploy_id}"
     )
 
 
