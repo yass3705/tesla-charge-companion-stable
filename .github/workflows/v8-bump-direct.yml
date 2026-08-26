@@ -69,13 +69,16 @@ jobs:
           conditional=[]
           for x in all_points:
               if not x.get('rankable'): continue
-              comp=x.get('components') or {}
-              if abs(float(comp.get('energyEurPerKwh') or 0)-.55)>1e-9: continue
-              for r in x.get('rules') or []:
+              rules=x.get('rules') or []
+              has_energy=any(r.get('kind')=='energy' and abs(float(r.get('eurPerKwh') or 0)-.55)<1e-9 for r in rules)
+              has_flat=False
+              for r in rules:
                   if r.get('kind')!='flat_fee' or abs(float(r.get('amountEur') or 0)-1.2)>1e-9: continue
                   cond=r.get('conditions') or []
-                  if any(q.get('kind')=='energy_above_kwh' and abs(float(q.get('value') or 0)-.5)<1e-9 for q in cond): conditional.append(x)
-          assert conditional, 'validated conditional Bump tariff pattern missing'
+                  if any(q.get('kind')=='energy_above_kwh' and abs(float(q.get('value') or 0)-.5)<1e-9 for q in cond):
+                      has_flat=True
+              if has_energy and has_flat: conditional.append(x)
+          assert conditional, 'validated conditional Bump tariff rule pattern missing'
           assert all(x.get('rankable') is not True for x in all_points if x.get('status','').startswith('unresolved_'))
           print({**c,'conditionalPatternPoints':len(conditional)})
           PY
