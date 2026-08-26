@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "yaway-connect-direct-tariffs-france",
+  "generatedAt": "2026-08-26T13:43:00+02:00",
+  "country": "FR",
+  "operator": "YAWAY",
+  "network": "YAWAY Connect",
+  "scope": {
+    "operatorDirectOnly": true,
+    "roamingIncluded": false,
+    "roamingTariffsPromotedToDirect": false,
+    "stationSpecific": true,
+    "unverifiedStationsAreRankable": false,
+    "allPhysicalPowerGroupsAtVerifiedSiteUseSiteTariff": true
+  },
+  "billing": {
+    "currency": "EUR",
+    "type": "kwh",
+    "connectionFee": 0,
+    "chargePerMinute": 0,
+    "idlePerMinute": 0
+  },
+  "stations": [
+    {
+      "key": "douains",
+      "city": "Douains",
+      "addressHint": "Rue de l'Escadron des Cracks",
+      "pricePerKwh": 0.51,
+      "verifiedAt": "2026-08-26T13:41:00+02:00",
+      "source": "YAWAY Charge app — user screenshots",
+      "observedEvsePrefixes": ["FRYAWE1234702011*AC5", "FRYAWE1234702010*DC3"],
+      "observedPowerKw": [22, 360],
+      "observedConnectors": ["Type 2", "CCS"],
+      "stationOutletCountObserved": 5,
+      "feeEvidence": "App detail shows only Energy 0.51 EUR/kWh; station cards state pay only energy consumed."
+    },
+    {
+      "key": "pont-l-eveque",
+      "city": "Pont-l'Évêque",
+      "addressHint": "Parking Intermarché, Rue Marie Curie",
+      "pricePerKwh": 0.51,
+      "verifiedAt": "2026-08-26T13:42:00+02:00",
+      "source": "YAWAY Charge app — user screenshots",
+      "observedEvsePrefixes": ["FRYAWE1234702003*DC1", "FRYAWE1234702004*AC4"],
+      "observedPowerKw": [22, 300],
+      "observedConnectors": ["Type 2", "CCS"],
+      "stationOutletCountObserved": 7,
+      "feeEvidence": "App detail shows only Energy 0.51 EUR/kWh; station cards state pay only energy consumed."
+    },
+    {
+      "key": "bretteville-sur-odon",
+      "city": "Bretteville-sur-Odon",
+      "addressHint": "60 Rue Philippe Livry-Level",
+      "pricePerKwh": 0.51,
+      "verifiedAt": "2026-08-26T13:43:00+02:00",
+      "source": "YAWAY Charge app — user screenshots",
+      "observedEvsePrefixes": ["FRYAWE1234702008*DC4", "FRYAWE1234702007*AC6"],
+      "observedPowerKw": [22, 300],
+      "observedConnectors": ["Type 2", "CCS"],
+      "stationOutletCountObserved": 7,
+      "feeEvidence": "App detail shows only Energy 0.51 EUR/kWh; station cards state pay only energy consumed."
+    },
+    {
+      "key": "rambouillet",
+      "city": "Rambouillet",
+      "addressHint": "Parking Concessionnaire Volkswagen, 122 Rue de Clairefontaine",
+      "pricePerKwh": 0.51,
+      "verifiedAt": "2026-08-26T13:43:00+02:00",
+      "source": "YAWAY Charge app — user screenshots",
+      "observedEvsePrefixes": ["FRYAWE1234706943*AC4", "FRYAWE1234706943*DC3"],
+      "observedPowerKw": [22, 300],
+      "observedConnectors": ["CCS"],
+      "stationOutletCountObserved": 7,
+      "dataQualityNote": "The app labels the 22 kW EVSE as CCS although its identifier is AC4; tariff is verified but connector type should come from the station catalogue, not this app label.",
+      "feeEvidence": "Station cards state pay only energy consumed at 0.51 EUR/kWh."
+    },
+    {
+      "key": "etrelles",
+      "city": "Étrelles",
+      "pricePerKwh": 0.522,
+      "verifiedAt": "2026-02-04",
+      "source": "Official/dated YAWAY-Kallista publication previously verified in TCC research",
+      "observedEvsePrefixes": [],
+      "observedPowerKw": [],
+      "stationOutletCountObserved": null,
+      "feeEvidence": "Published direct VL tariff: 0.435 EUR HT / 0.522 EUR TTC per kWh."
+    }
+  ],
+  "excluded": {
+    "breteuil": "Separate YAWAY direct site already modelled at 0.30 EUR/kWh; not part of this YAWAY Connect matrix.",
+    "otherYawayOrRoamingStations": "Fail closed until exact physical CPO identity and direct retail tariff are verified."
+  }
+}
