@@ -30,16 +30,20 @@ for(const needle of [
   'repairSubscriptionMetadata',
   'window.TCCV8ReferenceOffers?.apply?.()'
 ])assert.ok(pipeline.includes(needle),`missing pipeline invariant: ${needle}`);
+assert.ok(pipeline.includes("const REVISION='v8-direct-offer-pipeline-5'"),'current direct-pipeline revision missing');
 assert.ok(pipeline.indexOf('const prepared=await current.apply(this,args)')<pipeline.indexOf("await preparePrepared(prepared,{reason:'candidateStations'})"),'candidate result must be enriched before expandConfigurations consumes it');
 assert.ok(pipeline.includes('installCandidateGuard'),'candidateStations must be the direct-offer integration boundary');
 assert.ok(!pipeline.includes('installCompareGuard'),'compare() ownership is forbidden for the direct pipeline');
 assert.ok(!pipeline.includes('window.compare=wrapped'),'direct pipeline must not replace compare()');
 assert.ok(pipeline.includes('declaredSubscriptionIdForProvider'),'subscription labels must resolve against declared plans');
+assert.ok(!pipeline.includes('tries>1200'),'two-minute bootstrap polling must not return');
+assert.ok(pipeline.includes('tries>=40'),'compatibility retries must be bounded to a short startup window');
+assert.ok(pipeline.includes("rearm('user-action')"),'user actions must re-arm runtime hooks deterministically');
 assert.ok(hotfix.includes('loadDirectOfferPipeline()'),'runtime bootstrap must load the direct offer pipeline');
-assert.ok(hotfix.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4'),'runtime bootstrap must use the current pipeline revision');
+assert.ok(hotfix.includes('assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-5'),'runtime bootstrap must use the current pipeline revision');
 for(const source of registry.sources||[]){
   if(source.status!=='active')continue;
   for(const module of source.runtimeModules||[])if(!isPublishedFromMain(module))assert.ok(fs.existsSync(module),`active runtime module missing: ${source.id} -> ${module}`);
   for(const artifact of source.artifactPaths||[])if(!isPublishedFromMain(artifact))assert.ok(fs.existsSync(artifact),`active artifact missing: ${source.id} -> ${artifact}`);
 }
-console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, non-destructive overlays, preview-local data, compare untouched.');
+console.log('V8 unified direct offer pipeline contract OK: pre-expansion enrichment, non-destructive overlays, preview-local data, bounded bootstrap, compare untouched.');
