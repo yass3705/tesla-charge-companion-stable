@@ -1,0 +1,130 @@
+name: V8 WAAT Direct
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["release/2026-08"]
+    paths:
+      - "assets/v8-waat-direct.js"
+      - "scripts/test_waat_direct_v8.mjs"
+      - ".github/workflows/v8-waat-direct.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v8-waat-direct-release-2026-08
+  cancel-in-progress: true
+
+jobs:
+  validate-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch pinned validated WAAT France snapshot
+        run: |
+          python - <<'PY'
+          import urllib.request
+          from pathlib import Path
+          url='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/5c793cb09d50c33781ea5f9d160a20eb9fb3f11c/data/national/waat_monta_direct_tariffs_france.json.gz'
+          req=urllib.request.Request(url,headers={'User-Agent':'TeslaChargeCompanionV8-WAATPublisher/1.0'})
+          with urllib.request.urlopen(req,timeout=60) as r:
+              blob=r.read()
+          assert blob[:2]==b'\x1f\x8b'
+          p=Path('data/waat_monta_direct_tariffs_france.json.gz');p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(blob)
+          print({'bytes':len(blob)})
+          PY
+
+      - name: Validate WAAT direct perimeter and witness tariffs
+        run: |
+          python - <<'PY'
+          import gzip,json,re
+          from pathlib import Path
+          p=json.loads(gzip.decompress(Path('data/waat_monta_direct_tariffs_france.json.gz').read_bytes()))
+          c=p['counts'];s=p['scope']
+          assert p['schemaVersion']=='2.0.0' and p['dataset']=='waat-monta-direct-tariffs-france' and p['operator']=='WAAT' and p['country']=='FR'
+          assert s['directCpoOnly'] is True and s['roamingIncluded'] is False and s['stationSpecificPricing'] is True and s['unresolvedCasesNeverRankable'] is True
+          assert s['zeroPriceAutoRanked'] is False and s['dynamicPricingAutoRanked'] is False and s['rangePricingAutoRanked'] is False
+          assert c['inventoryStations']==571 and c['queriedStations']==571 and c['mapHttp200']==571 and c['mapErrors']==0
+          assert c['rankableStations']==452 and c['rankablePhysicalConfigs']==507 and c['unresolvedPhysicalConfigs']==164
+          ids=[x['stationIdNormalized'] for x in p['stations']]
+          assert len(ids)==len(set(ids))==571
+          groups={g['montaGroupId']:g for st in p['stations'] for g in st.get('montaGroups',[])}
+          for st in p['stations']:
+              for g in st.get('montaGroups',[]):
+                  assert re.search(r'WAAT|FR\s*\*?\s*WA2',str(g.get('operatorName') or ''),re.I)
+              byid={g['montaGroupId']:g for g in st.get('montaGroups',[])}
+              for cfg in st.get('integrationConfigs',[]):
+                  if not cfg.get('rankable'): continue
+                  assert cfg['kind'] in ('AC','DC') and float(cfg['powerKw'])>0 and float(cfg['directEurPerKwh'])>0
+                  gids=cfg.get('groupIds') or []; assert gids
+                  hits=[byid[x] for x in gids if x in byid]; assert len(hits)==len(gids)
+                  prices={round(float(g['directEurPerKwh']),6) for g in hits}
+                  assert prices=={round(float(cfg['directEurPerKwh']),6)}
+                  assert all(g.get('rankable') is True and g.get('kind')==cfg['kind'] for g in hits)
+          assert groups[631961]['rankable'] is True and groups[631961]['kind']=='DC' and abs(groups[631961]['directEurPerKwh']-.42)<1e-9
+          assert groups[494949]['rankable'] is True and groups[494949]['kind']=='AC' and abs(groups[494949]['directEurPerKwh']-.28)<1e-9
+          assert groups[714420]['rankable'] is True and groups[714420]['kind']=='DC' and abs(groups[714420]['directEurPerKwh']-.62)<1e-9
+          assert groups[811653]['rankable'] is False and groups[811653]['blockingReason']=='price_range' and groups[811653]['directEurPerKwh'] is None
+          assert all(811653 not in (cfg.get('groupIds') or []) for st in p['stations'] for cfg in st.get('integrationConfigs',[]) if cfg.get('rankable'))
+          print(c)
+          PY
+
+      - name: Test WAAT runtime
+        run: |
+          node --check assets/v8-waat-direct.js
+          node scripts/test_waat_direct_v8.mjs
+
+      - name: Load WAAT runtime in V8
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html');text=p.read_text(encoding='utf-8')
+          tag='<script src="assets/v8-waat-direct.js?v=waat-20260826a" defer></script>'
+          text=re.sub(r'<script\s+src="assets/v8-waat-direct\.js(?:\?[^\"]*)?"\s+defer></script>',tag,text)
+          if tag not in text:
+              lines=text.splitlines();pos=None
+              for marker in ('assets/v8-bump-direct.js','assets/v8-yaway-connect-direct.js','assets/v8-izivia-express-direct-overlay.js','assets/v8-france-cpo-gap-overlay.js'):
+                  hits=[i for i,line in enumerate(lines) if marker in line]
+                  if hits: pos=hits[-1]; break
+              if pos is None:
+                  hits=[i for i,line in enumerate(lines) if '</body>' in line.lower()]
+                  if not hits: raise SystemExit('No safe insertion point in index.html')
+                  pos=hits[0]-1
+              lines.insert(pos+1,tag);text='\n'.join(lines)+'\n'
+          p.write_text(text,encoding='utf-8')
+          assert text.count('assets/v8-waat-direct.js')==1
+          print('WAAT runtime loader present')
+          PY
+
+      - name: Validate loader and source pin
+        run: |
+          grep -F 'assets/v8-waat-direct.js?v=waat-20260826a' index.html
+          grep -F '5c793cb09d50c33781ea5f9d160a20eb9fb3f11c' .github/workflows/v8-waat-direct.yml
+
+      - name: Publish WAAT V8 data and loader
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/waat_monta_direct_tariffs_france.json.gz index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "data(waat): publish validated France direct tariffs in V8 [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3 4; do
+            if git pull --rebase origin release/2026-08 && git push origin HEAD:release/2026-08; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 2))
+          done
+          exit 1
