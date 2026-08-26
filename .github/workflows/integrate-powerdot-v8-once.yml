@@ -23,28 +23,39 @@ jobs:
           fetch-depth: 0
       - name: Download Powerdot dataset
         run: curl --fail --location --retry 4 --retry-delay 5 --output data/powerdot_direct_france.json.gz https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/powerdot_direct_france.json.gz
-      - name: Diagnose connector delta
-        run: |
-          python - <<'PY'
-          import gzip,json
-          d=json.load(gzip.open('data/powerdot_direct_france.json.gz','rt'))
-          out=[]
-          for e in d.get('chargers',[]):
-            for c in (e.get('charger') or {}).get('connectors',[]):
-              t=c.get('tariff') or {}
-              comps=[pc for el in t.get('elements',[]) for pc in el.get('priceComponents',[])]
-              power=float(c.get('maxPowerKw') or 0)
-              recognized=[pc for pc in comps if pc.get('type') in ('ENERGY','FLAT','PARKING_TIME','TIME') and float(pc.get('pricePerUnit') or 0)>0]
-              if not (power>0 and recognized):
-                out.append({'charger':e.get('chargerName'),'location':(e.get('location') or {}).get('name'),'connector':c.get('connectorNumber'),'physicalReference':c.get('physicalReference'),'type':c.get('type'),'maxPowerKw':c.get('maxPowerKw'),'voltage':c.get('voltage'),'amperage':c.get('amperage'),'components':comps,'reason':('missing_power' if power<=0 else 'no_positive_recognized_component')})
-          print(json.dumps({'unmappedCount':len(out),'items':out},ensure_ascii=False,indent=2))
-          PY
       - name: Patch V8
         run: python scripts/integrate_powerdot_v8_once.py
-      - name: Align source metadata guards
+      - name: Align source guards and mappable coverage
         run: |
-          python -c 'from pathlib import Path; p=Path("assets/france-catalog-v8.js"); s=p.read_text(); s=s.replace("      if(data?.dataset!==\u0027powerdot-direct-cpo-france\u0027)throw new Error(\u0027Dataset Powerdot inattendu\u0027);\n      if(data?.source?.pricingContext!==\u0027direct CPO / adhoc / emspCode empty\u0027)throw new Error(\u0027Contexte tarifaire Powerdot invalide\u0027);", "      if(data?.source?.sourceType!==\u0027direct_cpo_public_adhoc_api\u0027||data?.source?.roaming!==false||text(data?.source?.emspCode)!==\u0027\u0027||text(data?.source?.operator)!==\u0027Power Dot France\u0027)throw new Error(\u0027Contexte tarifaire Powerdot invalide\u0027);"); p.write_text(s)'
-          python -c 'from pathlib import Path; p=Path("scripts/test_powerdot_v8_runtime.mjs"); s=p.read_text(); s=s.replace("assert(powerdot.dataset===\u0027powerdot-direct-cpo-france\u0027,\u0027Dataset Powerdot inattendu\u0027);\nassert(powerdot.source?.pricingContext===\u0027direct CPO / adhoc / emspCode empty\u0027,\u0027Contexte CPO Powerdot invalide\u0027);", "assert(powerdot.source?.sourceType===\u0027direct_cpo_public_adhoc_api\u0027,\u0027Source Powerdot inattendue\u0027);\nassert(powerdot.source?.roaming===false&&String(powerdot.source?.emspCode??\u0027\u0027)===\u0027\u0027&&powerdot.source?.operator===\u0027Power Dot France\u0027,\u0027Contexte CPO Powerdot invalide\u0027);"); p.write_text(s)'
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('assets/france-catalog-v8.js')
+          s=p.read_text()
+          s=s.replace("      if(data?.dataset!=='powerdot-direct-cpo-france')throw new Error('Dataset Powerdot inattendu');\n      if(data?.source?.pricingContext!=='direct CPO / adhoc / emspCode empty')throw new Error('Contexte tarifaire Powerdot invalide');", "      if(data?.source?.sourceType!=='direct_cpo_public_adhoc_api'||data?.source?.roaming!==false||text(data?.source?.emspCode)!==''||text(data?.source?.operator)!=='Power Dot France')throw new Error('Contexte tarifaire Powerdot invalide');")
+          p.write_text(s)
+
+          p=Path('scripts/test_powerdot_v8_runtime.mjs')
+          s=p.read_text()
+          s=s.replace("assert(powerdot.dataset==='powerdot-direct-cpo-france','Dataset Powerdot inattendu');\nassert(powerdot.source?.pricingContext==='direct CPO / adhoc / emspCode empty','Contexte CPO Powerdot invalide');", "assert(powerdot.source?.sourceType==='direct_cpo_public_adhoc_api','Source Powerdot inattendue');\nassert(powerdot.source?.roaming===false&&String(powerdot.source?.emspCode??'')===''&&powerdot.source?.operator==='Power Dot France','Contexte CPO Powerdot invalide');")
+          marker="const locations=api.powerdotLocations(powerdot).filter(location=>api.powerdotDirectConfigurations(location).length>0);"
+          insert="""const recognizedTypes=new Set(['ENERGY','FLAT','PARKING_TIME','TIME']);
+          const expectedMappableConnectors=(powerdot.chargers||[]).reduce((sum,entry)=>{
+            const location=entry.location||{},validLocation=location.countryCode==='FR'&&Number.isFinite(Number(location.latitude))&&Number.isFinite(Number(location.longitude));
+            if(!validLocation)return sum;
+            return sum+(entry.charger?.connectors||[]).filter(connector=>Number(connector.maxPowerKw)>0&&(connector.tariff?.elements||[]).some(element=>(element.priceComponents||[]).some(component=>recognizedTypes.has(component.type)&&Number(component.pricePerUnit)>0))).length;
+          },0);
+          const excludedUnmappableConnectors=Number(powerdot.counts.pricedConnectors||0)-expectedMappableConnectors;
+          assert(expectedMappableConnectors>=7050,`Couverture Powerdot mappable insuffisante : ${expectedMappableConnectors}`);
+          assert(excludedUnmappableConnectors>=0&&excludedUnmappableConnectors<=5,`Trop de connecteurs Powerdot non mappables : ${excludedUnmappableConnectors}`);
+          const locations=api.powerdotLocations(powerdot).filter(location=>api.powerdotDirectConfigurations(location).length>0);"""
+          if 'expectedMappableConnectors=' not in s:
+            assert marker in s
+            s=s.replace(marker,insert,1)
+          s=s.replace("assert(directConnectors===powerdot.counts.pricedConnectors,`Connecteurs directs : ${directConnectors}/${powerdot.counts.pricedConnectors}`);", "assert(directConnectors===expectedMappableConnectors,`Connecteurs directs mappables : ${directConnectors}/${expectedMappableConnectors}`);")
+          s=s.replace("assert(stats.directConnectors===powerdot.counts.pricedConnectors,'Stats connecteurs Powerdot incohérentes');", "assert(stats.directConnectors===expectedMappableConnectors,'Stats connecteurs Powerdot incohérentes');")
+          s=s.replace("console.log(JSON.stringify({strictLocations:strict.length,matched:stats.matched,added:stats.added,directConnectors,unresolvedIrveStations:stats.unresolvedIrveStations},null,2));", "console.log(JSON.stringify({strictLocations:strict.length,matched:stats.matched,added:stats.added,directConnectors,sourcePricedConnectors:powerdot.counts.pricedConnectors,excludedUnmappableConnectors,unresolvedIrveStations:stats.unresolvedIrveStations},null,2));")
+          p.write_text(s)
+          PY
       - name: Validate Powerdot and regressions
         run: |
           node --check assets/france-catalog-v8.js
