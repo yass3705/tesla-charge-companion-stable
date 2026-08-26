@@ -37,9 +37,12 @@ jobs:
           node --check assets/v8-subscription-stability-fix.js
           node --check assets/v8-compare-subscriptions.js
           node --check assets/v8-rc48bn-runtime-hotfix.js
+          node --check assets/v8-direct-offer-pipeline.js
           node --check assets/v8-labornebleue-operator-fallback.js
           node --check assets/v8-source-integrity.js
           node --check assets/v8-waat-direct.js
+          node --check scripts/test_v8_tariff_registry.mjs
+          node --check scripts/test_v8_direct_offer_pipeline.mjs
           node --check service-worker.js
 
       - name: Validate JSON files
@@ -52,6 +55,7 @@ jobs:
           python -m json.tool data/exchange_rates.json >/dev/null
           python -m json.tool data/tariff_overlay_v1.json >/dev/null
           python -m json.tool data/v8_canonical_station_overlay_v1.json >/dev/null
+          python -m json.tool data/waat_direct_tariffs_tcc_france.json >/dev/null
 
       - name: Smoke-test E55C PARKING_TIME semantics
         run: node scripts/test_e55c_pricing.mjs
@@ -64,6 +68,12 @@ jobs:
 
       - name: Smoke-test La Borne Bleue explicit operator fallback
         run: node scripts/test_labornebleue_explicit_operator_fallback.mjs
+
+      - name: Validate unified tariff registry and fixtures
+        run: node scripts/test_v8_tariff_registry.mjs
+
+      - name: Validate pre-expansion direct offer pipeline
+        run: node scripts/test_v8_direct_offer_pipeline.mjs
 
       - name: Smoke-test WAAT direct station/configuration tariffs
         run: node scripts/test_waat_direct_v8.mjs
@@ -80,9 +90,11 @@ jobs:
           grep -q "assets/update.js?v=${BUILD}" index.html
           grep -q "assets/v8-offer-selection.js?v=${BUILD}" index.html
           ! grep -q "assets/v8-e55c-pricing.js" index.html
-          grep -q "assets/v8-waat-direct.js?v=waat-20260826a" index.html
+          grep -q "assets/v8-waat-direct.js?v=waat-20260826b" index.html
+          grep -q "assets/v8-rc48bn-runtime-hotfix.js?v=rc48ce-20260826" index.html
           test "$(grep -c 'assets/v8-waat-direct.js' index.html)" -eq 1
-          test -s data/waat_monta_direct_tariffs_france.json.gz
+          test -s data/waat_direct_tariffs_tcc_france.json
+          grep -q "assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4" assets/v8-rc48bn-runtime-hotfix.js
           grep -q "august-ui-fixes.js" assets/update.js
           grep -q "august-rc2-fixes.js" assets/update.js
           grep -q "v8-compare-subscriptions.js?v=rc48bt-20260825" assets/update.js

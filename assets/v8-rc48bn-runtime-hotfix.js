@@ -2,7 +2,7 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48cc-unified-direct-pipeline';
+  const REVISION='rc48ce-pre-expansion-direct';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
@@ -10,7 +10,7 @@
   function loadDirectOfferPipeline(){
     if(window.TCCV8DirectPipeline||document.querySelector('script[data-tcc-direct-offer-pipeline]'))return true;
     const s=document.createElement('script');
-    s.src='assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-1';s.defer=true;s.dataset.tccDirectOfferPipeline='1';document.head.appendChild(s);return true;
+    s.src='assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4';s.defer=true;s.dataset.tccDirectOfferPipeline='1';document.head.appendChild(s);return true;
   }
   function loadFranceCpoGap(){
     if(window.TCCV8FranceCpoConsolidated||window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
@@ -116,5 +116,5 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
   window.TCCV8RC48BNHotfix={revision:REVISION,loadDirectOfferPipeline,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48cc : pipeline unifié des offres directes et couche CPO France chargés.');
+  console.info('[TCC V8] rc48ce : pipeline direct pré-expansion et couche CPO France chargés.');
 })();
