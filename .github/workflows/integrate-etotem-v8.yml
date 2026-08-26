@@ -36,7 +36,7 @@ jobs:
 
       - name: Appliquer et tester l’intégration e-Totem
         run: |
-          python site/scripts/patch_etotem_v8_runtime.py --main-root site --rc-root rc
+          python site/scripts/ensure_etotem_v8_runtime.py --main-root site --rc-root rc
           node --check site/assets/france-catalog-v8.js
           node --check rc/assets/app.js
           grep -q "ETOTEM_URL" site/assets/france-catalog-v8.js
