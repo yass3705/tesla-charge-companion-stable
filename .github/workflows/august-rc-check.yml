@@ -37,11 +37,13 @@ jobs:
           node --check assets/v8-subscription-stability-fix.js
           node --check assets/v8-compare-subscriptions.js
           node --check assets/v8-rc48bn-runtime-hotfix.js
+          node --check assets/v8-tariff-integrity.js
           node --check assets/v8-direct-offer-pipeline.js
           node --check assets/v8-labornebleue-operator-fallback.js
           node --check assets/v8-source-integrity.js
           node --check assets/v8-waat-direct.js
           node --check scripts/test_v8_tariff_registry.mjs
+          node --check scripts/test_v8_tariff_integrity.mjs
           node --check scripts/test_v8_direct_offer_pipeline.mjs
           node --check scripts/diagnose_v8_real_stations.mjs
           node --check service-worker.js
@@ -72,6 +74,9 @@ jobs:
 
       - name: Validate unified tariff registry and fixtures
         run: node scripts/test_v8_tariff_registry.mjs
+
+      - name: Validate central tariff integrity
+        run: node scripts/test_v8_tariff_integrity.mjs
 
       - name: Validate pre-expansion direct offer pipeline
         run: node scripts/test_v8_direct_offer_pipeline.mjs
