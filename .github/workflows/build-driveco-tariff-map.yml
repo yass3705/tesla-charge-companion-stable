@@ -44,35 +44,51 @@ jobs:
           p=json.loads(Path('data/driveco_evse_tariffs_v1.json').read_text(encoding='utf-8'))
           assert p['operator']=='DRIVECO'
           assert p['country']=='FR'
-          assert p['schemaVersion']=='1.1.0'
+          assert p['schemaVersion']=='1.2.0'
           assert p['sourcePolicy']['operatorDirectOnly'] is True
           assert p['sourcePolicy']['roamingExcluded'] is True
           assert p['sourcePolicy']['headlineReferencePricesNeverUsedAsFallback'] is True
           assert p['sourcePolicy']['matrixOSFInterpretedOnlyForValidatedPatterns'] is True
-          assert p['sourcePolicy']['unvalidatedMultiTierMatrixOSFExcludedFromRanking'] is True
-          assert p['validatedInventory']['exactEnergyPriceEvseCount']==1601
-          assert p['validatedInventory']['qualichargeNumericCandidateRowsHeldBack']==184
-          assert len(p['evses'])==1601
+          assert p['sourcePolicy']['unvalidatedMatrixOSFExcludedFromRanking'] is True
+          assert p['sourcePolicy']['firstPartyScreenshotPromotionOnlyByWhitelistedEvse'] is True
+          inv=p['validatedInventory']
+          assert inv['sourceResolvedEnergyEvseCount']==1601
+          assert inv['sourceUnresolvedRows']==3841
+          assert inv['firstPartyPromotedUnresolvedEvseCount']==10
+          assert inv['remainingUnresolvedSourceRows']==3831
+          assert inv['exactEnergyPriceEvseCount']==1611
+          assert inv['fullSessionCostSafeEvseCount']==1607
+          assert inv['validatedSingleMatrix020EvseCount']==715
+          assert inv['validatedSingleMatrix030EvseCount']==172
+          assert inv['validatedMultiTierMatrix020EvseCount']==710
+          assert inv['unresolvedMultiTierMatrixEvseCount']==4
+          assert inv['qualichargeNumericCandidateRowsHeldBack']==184
+          assert len(p['evses'])==1611
           assert all(v['energyPriceExact'] is True for v in p['evses'].values())
           assert all(v['rankable'] == v['fullSessionCostSafe'] for v in p['evses'].values())
           safe=[v for v in p['evses'].values() if v['rankable']]
-          assert len(safe)==p['validatedInventory']['fullSessionCostSafeEvseCount']
-          assert p['validatedInventory']['validatedSingleMatrixEvseCount'] > 0
+          assert len(safe)==1607
           for v in safe:
-              if v.get('matrixOSFRaw'):
-                  o=v.get('occupancy') or {}
-                  assert o.get('trigger')=='connected_after_charge_end'
-                  assert o.get('graceMinutes')==15
-                  assert abs(float(o.get('ratePerMinuteEur'))-0.20)<1e-9
-          for v in p['evses'].values():
-              if not v['rankable']:
-                  assert v['rankingBlockReason'] in ('driveco_matrix_osf_semantics_unvalidated','driveco_matrix_osf_multi_tier_semantics_unvalidated')
+              o=v.get('occupancy') or {}
+              assert o.get('trigger')=='connected_after_charge_end'
+              assert o.get('graceMinutes')==15
+              assert any(abs(float(o.get('ratePerMinuteEur'))-x)<1e-9 for x in (0.20,0.30))
+          blocked=[v for v in p['evses'].values() if not v['rankable']]
+          assert len(blocked)==4
+          assert all(v['rankingBlockReason']=='driveco_matrix_osf_multi_tier_semantics_unvalidated' for v in blocked)
           fp=p['firstPartyAppValidation']
-          assert fp['rules']['graceMinutes']==15
-          assert abs(fp['rules']['ratePerMinuteEur']-0.20)<1e-9
-          assert fp['rules']['trigger']=='connected_after_charge_end'
+          assert fp['commonOccupancySemantics']['graceMinutes']==15
+          assert fp['commonOccupancySemantics']['trigger']=='connected_after_charge_end'
+          names={s['stationName'] for s in fp['samples']}
+          assert 'Carrefour Market - Saint-Remy-Les-Chevreuse' in names
+          assert 'Carrefour Market - Vernouillet' in names
+          assert 'La Maison Villacoublay - Vélizy-Villacoublay' in names
+          velizy=[v for v in p['evses'].values() if v.get('firstPartyPromotedFromUnresolved')]
+          assert len(velizy)==10
+          assert {round(float(v['pricePerKwhEur']),2) for v in velizy}=={0.55,0.59}
+          assert all(abs(float(v['occupancy']['ratePerMinuteEur'])-0.30)<1e-9 for v in velizy)
           print('DRIVECO first-party validated EVSE map OK')
-          print(json.dumps(p['validatedInventory'], ensure_ascii=False, indent=2))
+          print(json.dumps(inv, ensure_ascii=False, indent=2))
           PY
 
       - name: Publish map on release branch
