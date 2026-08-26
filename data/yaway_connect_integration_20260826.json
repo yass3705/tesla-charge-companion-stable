@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-26T13:50:00+02:00",
+  "country": "FR",
+  "operator": "YAWAY",
+  "network": "YAWAY Connect",
+  "scope": "physical_cpo_direct_only_no_roaming_station_specific",
+  "status": "integrated_5_of_5_verified_sites",
+  "integration": {
+    "branch": "release/2026-08",
+    "dataFile": "data/yaway_connect_direct_tariffs_v1.json",
+    "overlay": "assets/v8-yaway-connect-direct.js",
+    "overlayRevision": "yaway-connect-direct-v1-20260826",
+    "runtimeLoader": "assets/v8-rc48bn-runtime-hotfix.js",
+    "runtimeRevision": "rc48bz-runtime-yaway-connect",
+    "dataCommit": "f3ca5631140995922dc09af592fc39c4513350dd",
+    "overlayCommit": "c06dc11cb2814997e5c87b481b38b2117cec3135",
+    "runtimeCommit": "444c7bf195f6fbbbc5006aaf22b48ae860e1408b"
+  },
+  "verifiedTariffs": [
+    {"station":"Douains","eurPerKwh":0.51,"powerKwObserved":[22,360],"verifiedAt":"2026-08-26","source":"YAWAY Charge app screenshots"},
+    {"station":"Pont-l'Évêque","eurPerKwh":0.51,"powerKwObserved":[22,300],"verifiedAt":"2026-08-26","source":"YAWAY Charge app screenshots"},
+    {"station":"Bretteville-sur-Odon","eurPerKwh":0.51,"powerKwObserved":[22,300],"verifiedAt":"2026-08-26","source":"YAWAY Charge app screenshots"},
+    {"station":"Rambouillet","eurPerKwh":0.51,"powerKwObserved":[22,300],"verifiedAt":"2026-08-26","source":"YAWAY Charge app screenshots"},
+    {"station":"Étrelles","eurPerKwh":0.522,"powerKwObserved":[],"verifiedAt":"2026-02-04","source":"Official/dated YAWAY-Kallista publication previously verified"}
+  ],
+  "feePolicy": {
+    "douainsPontBrettevilleRambouillet": "Energy-only direct tariff. No connection, time or idle fee displayed in YAWAY Charge at verification time.",
+    "etrelles": "Published direct per-kWh tariff retained exactly at 0.522 EUR/kWh."
+  },
+  "qualityNotes": [
+    "Rambouillet app labels the 22 kW AC4 EVSE as CCS; connector type is not trusted from that label. TCC keeps topology from its station catalogue.",
+    "Breteuil is a separate YAWAY direct site already modelled at 0.30 EUR/kWh and is intentionally excluded from the YAWAY Connect matrix.",
+    "Any other YAWAY/FRYAW station remains fail-closed until the exact direct tariff is verified."
+  ]
+}
