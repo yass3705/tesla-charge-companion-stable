@@ -1,0 +1,30 @@
+name: V8 Allego Direct
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "assets/v8-allego-direct.js"
+      - "assets/v8-rc48bn-runtime-hotfix.js"
+      - "scripts/test_allego_direct_v8.mjs"
+      - ".github/workflows/v8-allego-direct.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax checks
+        run: |
+          node --check assets/v8-allego-direct.js
+          node --check assets/v8-rc48bn-runtime-hotfix.js
+      - name: Allego direct regression tests
+        run: node scripts/test_allego_direct_v8.mjs
+      - name: Existing subscription ranking regression
+        run: node scripts/test_v8_subscription_ranking.mjs

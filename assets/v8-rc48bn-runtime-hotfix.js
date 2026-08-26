@@ -2,7 +2,7 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48bv-runtime-driveco-direct';
+  const REVISION='rc48bw-runtime-allego-direct';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
@@ -16,6 +16,11 @@
     if(window.TCCV8DrivecoDirect||document.querySelector('script[data-tcc-driveco-direct]'))return true;
     const s=document.createElement('script');
     s.src='assets/v8-driveco-direct-overlay.js?v=rc48-driveco-20260826a';s.defer=true;s.dataset.tccDrivecoDirect='1';document.head.appendChild(s);return true;
+  }
+  function loadAllegoDirect(){
+    if(window.TCCAllegoDirectV8||document.querySelector('script[data-tcc-allego-direct]'))return true;
+    const s=document.createElement('script');
+    s.src='assets/v8-allego-direct.js?v=allego-direct-v2-20260826';s.defer=true;s.dataset.tccAllegoDirect='1';document.head.appendChild(s);return true;
   }
 
   function mergeRawMetadata(rawList,normalized){
@@ -81,12 +86,12 @@
     return true;
   }
   function renderSubscriptions(force=false){return window.TCCV8CompareSubscriptions?.render?.(force)??false}
-  function boot(){loadFranceCpoGap();loadDrivecoDirect();installMetadataGuard();installResultsObserver();refreshResults();renderSubscriptions(false)}
+  function boot(){loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();installMetadataGuard();installResultsObserver();refreshResults();renderSubscriptions(false)}
 
   document.addEventListener('tcc:compare-subscriptions-ready',()=>renderSubscriptions(false));
-  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadFranceCpoGap();loadDrivecoDirect();installMetadataGuard()}},true);
+  document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();installMetadataGuard()}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
-  window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,loadDrivecoDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48bv : compatibilité runtime + couches CPO France et DRIVECO direct chargées.');
+  window.TCCV8RC48BNHotfix={revision:REVISION,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
+  console.info('[TCC V8] rc48bw : runtime + couches CPO France, DRIVECO et Allego Direct chargées.');
 })();
