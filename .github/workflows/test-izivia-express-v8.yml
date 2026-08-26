@@ -15,6 +15,7 @@ on:
       - "assets/v8-izivia-express-direct-overlay.js"
       - "scripts/test_izivia_express_v8_runtime.mjs"
       - "index.html"
+      - ".github/workflows/test-izivia-express-v8.yml"
 permissions:
   contents: read
 jobs:
@@ -53,5 +54,10 @@ jobs:
       - name: Regression smoke tests
         shell: bash
         run: |
-          if [ -f scripts/test_freshmile_v8_runtime.mjs ]; then node scripts/test_freshmile_v8_runtime.mjs; fi
+          set -euo pipefail
+          if [ -f scripts/test_freshmile_v8_runtime.mjs ] && [ -f data/freshmile_direct_tcc_v8.json.gz ]; then
+            node scripts/test_freshmile_v8_runtime.mjs
+          else
+            echo 'Freshmile smoke skipped: local fixture not present in checkout.'
+          fi
           if [ -f scripts/test_e55c_pricing.mjs ]; then node scripts/test_e55c_pricing.mjs; fi
