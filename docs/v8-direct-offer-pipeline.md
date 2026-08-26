@@ -12,4 +12,4 @@ The pipeline is designed for progressive operator onboarding:
 
 The first centrally orchestrated direct sources are Powerdot, Freshmile, Bump and DRIVECO. The same mechanism is intended for future operators rather than adding operator-specific logic to the comparator.
 
-Deployment note — 2026-08-26: publish release `3c9e5317d39cdd2368b464b8f15c3b342788af9a`, containing the unified direct-offer pipeline, subscription eligibility repair, strict prepared-area Powerdot enrichment and registry contract tests.
+Deployment note — 2026-08-26: publish release `8a7490ca95864535cc8c4139e5a11d0e7447a0bf`, containing deterministic physical station + power offer grouping, structured direct-provider metadata before expansion, subscription eligibility after grouping, strict prepared-area Powerdot enrichment, and the safe Bump duplicate-site resolver validated against Paris Malesherbes AC 11 kW.
