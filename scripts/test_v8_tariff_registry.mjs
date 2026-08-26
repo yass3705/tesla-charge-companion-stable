@@ -84,5 +84,10 @@ assert.equal(engine.isOfferEligible(fastnedGold,new Set(['fastned-gold'])),true,
 const direct=engine.offers.find(x=>x.id==='fastned-standard');
 assert.ok(direct,'Fastned standard must be ingested');
 assert.equal(engine.isOfferEligible(direct,new Set()),true,'direct offer must remain eligible without subscription');
+const unrelated={operator:'Fastned',kind:'DC',powerKw:300};
+const electraSelected=new Set(['electra-smart']);
+const unrelatedOffers=engine.declaredOffersForStation(unrelated,electraSelected);
+assert.ok(!unrelatedOffers.some(x=>x.id==='electra-smart'),'runtime-bound Electra subscription must not leak into generic station matching');
+assert.ok(unrelatedOffers.some(x=>x.id==='fastned-standard'),'Fastned direct offer must match Fastned station');
 
 console.log(`V8 tariff registry OK: ${ids.size} sources, ${engine.offers.length} declarative offers, ${engine.subscriptions.length} subscriptions.`);
