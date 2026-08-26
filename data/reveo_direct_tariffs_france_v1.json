@@ -3,7 +3,7 @@
   "dataset": "reveo-direct-tariffs-france",
   "operator": "Révéo",
   "country": "FR",
-  "generatedAt": "2026-08-26T10:30:00+02:00",
+  "generatedAt": "2026-08-26T11:35:00+02:00",
   "scope": {
     "operatorDirectOnly": true,
     "roamingIncluded": false,
@@ -35,14 +35,14 @@
       "evidence": ["officialTariffPage", "heraultOfficialPdf", "officialOcpiTariffs"],
       "public": [
         {"key":"ac-long","kind":"AC","maxPowerKw":22,"longDurationOnly":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":600}},
-        {"key":"ac-normal","kind":"AC","maxPowerKw":22,"excludeLongDuration":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":180,"activeWindow":{"start":"07:00","end":"22:00"}}},
+        {"key":"ac-normal","kind":"AC","excludeLongDuration":true,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":180,"activeWindow":{"start":"07:00","end":"22:00"}}},
         {"key":"dc-24","kind":"DC","maxPowerKw":24,"pricePerKwh":0.46,"durationFee":{"ratePerMinute":0.10,"thresholdMinutes":90,"activeWindow":{"start":"07:00","end":"22:00"}}},
         {"key":"dc-50","kind":"DC","minPowerKwExclusive":24,"maxPowerKw":50,"pricePerKwh":0.50,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":60,"activeWindow":{"start":"07:00","end":"22:00"}}},
         {"key":"dc-ultra","kind":"DC","minPowerKwExclusive":50,"pricePerKwh":0.59,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":30}}
       ],
       "subscriber": [
         {"key":"ac-long","kind":"AC","maxPowerKw":22,"longDurationOnly":true,"pricePerKwh":0.32,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":600}},
-        {"key":"ac-normal","kind":"AC","maxPowerKw":22,"excludeLongDuration":true,"pricePerKwh":0.32,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":180,"activeWindow":{"start":"07:00","end":"22:00"}}},
+        {"key":"ac-normal","kind":"AC","excludeLongDuration":true,"pricePerKwh":0.32,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":180,"activeWindow":{"start":"07:00","end":"22:00"}}},
         {"key":"dc-24","kind":"DC","maxPowerKw":24,"pricePerKwh":0.36,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":90,"activeWindow":{"start":"07:00","end":"22:00"}}},
         {"key":"dc-50","kind":"DC","minPowerKwExclusive":24,"maxPowerKw":50,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":60,"activeWindow":{"start":"07:00","end":"22:00"}}},
         {"key":"dc-ultra","kind":"DC","minPowerKwExclusive":50,"pricePerKwh":0.50,"durationFee":{"ratePerMinute":0.075,"thresholdMinutes":30}}
