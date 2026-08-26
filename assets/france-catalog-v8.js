@@ -189,7 +189,8 @@
     if(!etotemPromise)etotemPromise=readStandaloneGzip(ETOTEM_URL,'e-Totem').then(data=>{
       if(data?.scope?.physicalCpoDirectOnly!==true||data?.scope?.roamingIncluded!==false||data?.scope?.noGuessedFallback!==true)throw new Error('Périmètre e-Totem direct invalide');
       if(!Array.isArray(data?.stations)||Number(data?.counts?.inventoryStations)!==data.stations.length||data.stations.length<600)throw new Error('Inventaire e-Totem incomplet');
-      if(Number(data?.counts?.resolvedStations)<500||Number(data?.counts?.resolvedWithTariffText)<450)throw new Error('Couverture tarifaire e-Totem insuffisante');
+      const etCov=data?.coverageByFamily||{},etEti=etCov.FRETI||{},etEse=etCov.FRESE||{};
+      if(Number(data?.counts?.resolvedStations)<465||Number(data?.counts?.resolvedWithTariffText)<465||Number(data?.counts?.coordinateFallbackMatches)>10||Number(etEti.resolved)/Math.max(1,Number(etEti.inventory))<.99||Number(etEse.resolved)/Math.max(1,Number(etEse.inventory))<.98)throw new Error('Couverture tarifaire e-Totem publique insuffisante');
       if(data.stations.some(record=>record?.resolved&&(String(record?.api?.bOcpi??0)!=='0'||String(record?.api?.bGireve??0)!=='0'||String(record?.api?.bItinerance??0)!=='0')))throw new Error('Station e-Totem itinérante présente dans la base directe');
       window.TCC_ETOTEM_DIRECT_CATALOG_V1=data;
       return data;
