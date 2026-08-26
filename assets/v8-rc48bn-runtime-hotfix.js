@@ -10,7 +10,7 @@
   function loadDirectOfferPipeline(){
     if(window.TCCV8DirectPipeline||document.querySelector('script[data-tcc-direct-offer-pipeline]'))return true;
     const s=document.createElement('script');
-    s.src='assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-4';s.defer=true;s.dataset.tccDirectOfferPipeline='1';document.head.appendChild(s);return true;
+    s.src='assets/v8-direct-offer-pipeline.js?v=v8-direct-offer-pipeline-5';s.defer=true;s.dataset.tccDirectOfferPipeline='1';document.head.appendChild(s);return true;
   }
   function loadFranceCpoGap(){
     if(window.TCCV8FranceCpoConsolidated||window.TCCV8FranceCpoGap||document.querySelector('script[data-tcc-france-cpo-gap]'))return true;
