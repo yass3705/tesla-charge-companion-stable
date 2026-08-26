@@ -82,6 +82,20 @@ jobs:
       - name: Validate pre-expansion direct offer pipeline
         run: node scripts/test_v8_direct_offer_pipeline.mjs
 
+      - name: Fetch pinned Freshmile strict snapshot
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          curl -fsSL --retry 3 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/d64a60862b75c0839b5f771410a2afa07ddee3b3/data/national/freshmile_direct_tcc_v8.json.gz \
+            -o data/freshmile_direct_tcc_v8.json.gz
+          python - <<'PY'
+          from pathlib import Path
+          blob=Path('data/freshmile_direct_tcc_v8.json.gz').read_bytes()
+          assert blob[:2]==b'\x1f\x8b' and len(blob)>1000
+          print({'freshmileSnapshotBytes':len(blob)})
+          PY
+
       - name: Validate non-destructive Freshmile overlay
         run: node scripts/test_freshmile_v8_runtime.mjs
 
