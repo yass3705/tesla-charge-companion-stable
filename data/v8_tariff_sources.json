@@ -48,6 +48,8 @@
     {"id":"bump-direct","label":"Bump direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/bump_direct_tariffs_tcc_france.json.gz"],"runtimeModules":["assets/v8-bump-direct.js"]},
     {"id":"waat-direct","label":"WAAT direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/waat_direct_tariffs_tcc_france.json"],"runtimeModules":["assets/v8-waat-direct.js"]},
     {"id":"driveco-direct","label":"Driveco direct","status":"active","integration":"mapped-offer","artifactPaths":["data/driveco_evse_tariffs_v1.json"],"runtimeModules":["assets/v8-driveco-direct-overlay.js"]},
+    {"id":"qovoltis-direct","label":"Qovoltis direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/qovoltis_direct_tariffs_v1.json"],"runtimeModules":["assets/v8-qovoltis-direct.js"]},
+    {"id":"avia-picoty-reference","label":"AVIA VOLT / Picoty direct (référence)","status":"active","integration":"reference-adapter","artifactPaths":["data/avia_picoty_station_index_v1.json"],"runtimeModules":["assets/v8-avia-picoty-reference.js"]},
     {"id":"aldi-direct","label":"ALDI direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/aldi_direct_france_20260826.json"],"runtimeModules":["assets/v8-aldi-direct.js"]},
     {"id":"allego-direct","label":"Allego direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/allego_direct_stations_france.json.gz"],"runtimeModules":["assets/v8-allego-direct.js"]},
     {"id":"reveo-direct","label":"Révéo direct","status":"staged","integration":"dataset-runtime","artifactPaths":["data/reveo_direct_tariffs_france_v1.json"],"runtimeModules":["assets/v8-reveo-direct.js"]},
