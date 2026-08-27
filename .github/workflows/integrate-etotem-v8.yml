@@ -5,6 +5,7 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/integrate-etotem-v8.yml"
+      - "scripts/ensure_etotem_v8_runtime.py"
       - "scripts/fix_etotem_loader_guard.py"
       - "scripts/fix_etotem_match_profile.py"
       - "scripts/test_etotem_v8_runtime.mjs"
