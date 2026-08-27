@@ -19,6 +19,7 @@ assert.ok(api?.mergeEtotemCatalog,'e-Totem catalogue merger not exported');
 
 function pdc(id,power,connectors){return {id,powerKw:power,connectors};}
 function ruleByKind(configs,kind){const c=configs.find(x=>x.kind===kind&&x.etotemVerified);assert.ok(c,`missing verified ${kind}`);return c.pricing.rules[0];}
+function ruleByPower(configs,kind,power){const c=configs.find(x=>x.kind===kind&&Number(x.powerKw)===Number(power)&&x.etotemVerified);assert.ok(c,`missing verified ${kind} ${power} kW`);return c.pricing.rules[0];}
 function catalogStation(id,name,kind,power){return {id,catalogStationId:`electroverse:${id}`,name,operator:'e-Totem',latitude:43.49,longitude:-1.47,kind,powerKw:power,stalls:2,pricing:{type:'rules',rules:[]},chargingConfigurations:[{id:`${id}-cfg`,label:`${kind} ${power} kW`,kind,powerKw:power,stalls:2,pricing:{type:'rules',rules:[]}}]};}
 
 const mane={
@@ -47,23 +48,26 @@ const ambiguous={stationId:'FRETIPAMB',tariffText:'Tarifs : 0,39 €/kWh ou 0,49
 const amb=api.etotemDirectConfigurations(ambiguous)[0];
 assert.equal(amb.etotemVerified,false);assert.equal(amb.pricing.rules.length,0);
 
-// Non-régression : deux stations e-Totem co-localisées (e-Smart AC / e-Fast DC)
-// avec le même nom de site doivent être rapprochées par profil technique, pas par ordre du catalogue.
+// Non-régression : la Polyclinique Côte Basque expose plusieurs puissances DC e-Fast
+// au même emplacement, en plus d'une e-Smart AC. Un même pool direct e-Fast doit
+// absorber toutes les lignes de puissance correspondantes sans avaler l'e-Smart.
 const coteBasqueCatalog=[
   catalogStation('pcb-smart','e-Totem - Polyclinique Cote Basque e-Smart','AC',22),
-  catalogStation('pcb-fast','e-Totem - Polyclinique Cote Basque e-Fast','DC',100),
+  catalogStation('pcb-fast-100','e-Totem - Polyclinique Cote Basque e-Fast','DC',100),
+  catalogStation('pcb-fast-150','e-Totem - Polyclinique Cote Basque e-Fast','DC',150),
 ];
 const coteBasqueData={generatedAt:'2026-08-27T00:00:00Z',stations:[
-  {stationId:'PCB-FAST',name:'Polyclinique Cote Basque',resolved:true,tariffText:'Tarif de recharge : 0,49 €/kWh.',latitude:43.49,longitude:-1.47,pdcCount:2,pdcs:[pdc('fast-1',100,['CCS']),pdc('fast-2',100,['CCS'])],api:{sIdPool:'FR*ETI*P*PCBFAST'}},
+  {stationId:'PCB-FAST',name:'Polyclinique Cote Basque',resolved:true,tariffText:'Tarif de recharge : 0,49 €/kWh.',latitude:43.49,longitude:-1.47,pdcCount:4,pdcs:[pdc('fast-100-a',100,['CCS']),pdc('fast-100-b',100,['CCS']),pdc('fast-150-a',150,['CCS']),pdc('fast-150-b',150,['CCS'])],api:{sIdPool:'FR*ETI*P*PCBFAST'}},
   {stationId:'PCB-SMART',name:'Polyclinique Cote Basque',resolved:true,tariffText:'Tarif de recharge : 0,39 €/kWh.',latitude:43.49,longitude:-1.47,pdcCount:2,pdcs:[pdc('smart-1',22,['T2']),pdc('smart-2',22,['T2'])],api:{sIdPool:'FR*ETI*P*PCBSMART'}},
 ]};
 const coteBasqueMerged=api.mergeEtotemCatalog(coteBasqueCatalog,coteBasqueData,{lat:43.49,lon:-1.47},2);
 const coteFast=coteBasqueMerged.find(station=>station.etotemStationId==='PCB-FAST');
 const coteSmart=coteBasqueMerged.find(station=>station.etotemStationId==='PCB-SMART');
 assert.ok(coteFast&&coteSmart,'Polyclinique Cote Basque records must both be merged');
-assert.deepEqual(coteFast.etotemSourceCatalogStationIds,['electroverse:pcb-fast'],'e-Fast must keep the DC 100 kW source station');
+assert.deepEqual(coteFast.etotemSourceCatalogStationIds.sort(),['electroverse:pcb-fast-100','electroverse:pcb-fast-150'],'e-Fast must keep both DC power source stations');
 assert.deepEqual(coteSmart.etotemSourceCatalogStationIds,['electroverse:pcb-smart'],'e-Smart must keep the AC 22 kW source station');
-assert.equal(ruleByKind(coteFast.chargingConfigurations,'DC').pricePerKwh,.49);
+assert.equal(ruleByPower(coteFast.chargingConfigurations,'DC',100).pricePerKwh,.49);
+assert.equal(ruleByPower(coteFast.chargingConfigurations,'DC',150).pricePerKwh,.49);
 assert.equal(ruleByKind(coteSmart.chargingConfigurations,'AC').pricePerKwh,.39);
 
 console.log(JSON.stringify({ok:true,mane:{dc,ac},semob:sr,eco:er.pricePerKwh,ambiguousVerified:amb.etotemVerified,coteBasque:{fastSource:coteFast.etotemSourceCatalogStationIds,smartSource:coteSmart.etotemSourceCatalogStationIds}},null,2));
