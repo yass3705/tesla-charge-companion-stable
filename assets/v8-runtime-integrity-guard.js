@@ -3,7 +3,7 @@
 // module still emits a ../data/... URL. Cross-origin operator APIs are untouched.
 (function(){
   'use strict';
-  const REVISION='v8-runtime-integrity-1';
+  const REVISION='v8-runtime-integrity-2-powerdot-fr';
   if(window.TCCV8RuntimeIntegrity?.revision===REVISION)return;
 
   const marker='/v8-preview/';
@@ -44,18 +44,76 @@
     return 'GET';
   }
 
+  function isPowerdotDataUrl(value){
+    try{
+      const url=new URL(String(value),String(window.location?.href||'http://localhost/'));
+      return /\/data\/powerdot_direct_france\.json\.gz$/i.test(url.pathname);
+    }catch(e){return false;}
+  }
+
+  function responseFromBytes(bytes,response,contentType='application/gzip'){
+    const headers=new Headers(response?.headers||{});
+    headers.delete('content-length');
+    headers.delete('content-encoding');
+    if(contentType)headers.set('content-type',contentType);
+    return new Response(bytes,{
+      status:response?.status||200,
+      statusText:response?.statusText||'OK',
+      headers
+    });
+  }
+
+  async function sanitizePowerdotResponse(response,url){
+    if(!response?.ok||!isPowerdotDataUrl(url))return response;
+    let bytes=null;
+    try{
+      bytes=new Uint8Array(await response.arrayBuffer());
+      if(bytes[0]!==0x1f||bytes[1]!==0x8b)return responseFromBytes(bytes,response,response.headers?.get?.('content-type')||'application/octet-stream');
+      if(typeof DecompressionStream!=='function'||typeof CompressionStream!=='function')return responseFromBytes(bytes,response);
+      const body=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+      const data=JSON.parse(body);
+      const source=Array.isArray(data?.chargers)?data.chargers:[];
+      if(!source.length)return responseFromBytes(bytes,response);
+      const french=source.filter(entry=>String(entry?.location?.countryCode||'').toUpperCase()==='FR');
+      if(french.length===source.length)return responseFromBytes(bytes,response);
+      const filtered={
+        ...data,
+        chargers:french,
+        counts:{
+          ...(data.counts||{}),
+          sourceApiSuccessChargers:Number(data?.counts?.sourceApiSuccessChargers||source.length),
+          apiSuccessChargers:french.length,
+          excludedForeignChargers:source.length-french.length
+        }
+      };
+      const encoded=new TextEncoder().encode(JSON.stringify(filtered));
+      const compressed=new Blob([encoded]).stream().pipeThrough(new CompressionStream('gzip'));
+      record(url,`${url}#powerdot-fr-only:${french.length}/${source.length}`);
+      return responseFromBytes(compressed,response);
+    }catch(error){
+      console.warn('[TCC V8] Filtrage Powerdot France ignoré :',error?.message||error);
+      return bytes?responseFromBytes(bytes,response):response;
+    }
+  }
+
   if(nativeFetch){
     const wrapped=function(input,init){
+      let finalUrl=inputUrl(input);
+      const method=requestMethod(input,init);
       try{
-        if(requestMethod(input,init)==='GET'){
-          const next=rewriteUrl(inputUrl(input));
+        if(method==='GET'){
+          const next=rewriteUrl(finalUrl);
+          finalUrl=next.href;
           const isRequest=typeof Request!=='undefined'&&input instanceof Request;
           input=isRequest?new Request(next.href,input):next.href;
         }
       }catch(error){
         console.warn('[TCC V8] Garde d’isolation des données ignoré :',error?.message||error);
       }
-      return nativeFetch(input,init);
+      const result=nativeFetch(input,init);
+      return method==='GET'&&isPowerdotDataUrl(finalUrl)
+        ?Promise.resolve(result).then(response=>sanitizePowerdotResponse(response,finalUrl))
+        :result;
     };
     wrapped.__tccRuntimeIntegrityGuard=true;
     wrapped.__tccOriginal=nativeFetch;
@@ -68,8 +126,9 @@
     repoRoot,
     previewRoot,
     rewriteUrl,
+    sanitizePowerdotResponse,
     get diagnostics(){return diagnostics.slice();}
   };
   try{document.dispatchEvent(new CustomEvent('tcc:runtime-integrity-ready',{detail:{revision:REVISION,previewActive:!!previewRoot}}));}catch(e){}
-  console.info('[TCC V8] Garde d’intégrité runtime actif : données preview isolées du root.',REVISION);
+  console.info('[TCC V8] Garde d’intégrité runtime actif : données preview isolées du root + Powerdot France assaini.',REVISION);
 })();
