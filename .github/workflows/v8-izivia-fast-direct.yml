@@ -1,0 +1,40 @@
+name: V8 IZIVIA FAST direct
+
+on:
+  push:
+    branches:
+      - release/2026-08
+      - fix/v8-izivia-fast-direct-20260827
+    paths:
+      - 'assets/v8-izivia-fast-direct.js'
+      - 'data/izivia_fast_direct_tariff_v1.json'
+      - 'data/v8_tariff_sources.json'
+      - 'scripts/test_v8_izivia_fast_direct.mjs'
+      - 'scripts/test_v8_avia_qovoltis.mjs'
+      - '.github/workflows/v8-izivia-fast-direct.yml'
+  pull_request:
+    paths:
+      - 'assets/v8-izivia-fast-direct.js'
+      - 'data/izivia_fast_direct_tariff_v1.json'
+      - 'data/v8_tariff_sources.json'
+      - 'scripts/test_v8_izivia_fast_direct.mjs'
+      - 'scripts/test_v8_avia_qovoltis.mjs'
+      - '.github/workflows/v8-izivia-fast-direct.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate JSON
+        run: python -m json.tool data/izivia_fast_direct_tariff_v1.json >/dev/null
+      - name: Validate JavaScript
+        run: node --check assets/v8-izivia-fast-direct.js
+      - name: Test IZIVIA FAST direct
+        run: node scripts/test_v8_izivia_fast_direct.mjs
+      - name: Re-test AVIA Picoty + Qovoltis
+        run: node scripts/test_v8_avia_qovoltis.mjs
