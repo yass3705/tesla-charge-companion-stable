@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Repair and validate Powerdot on main
+      - name: Repair and validate Powerdot France loader
         shell: bash
         run: |
           set -euo pipefail
@@ -24,47 +24,60 @@ jobs:
           from pathlib import Path
           p=Path('assets/france-catalog-v8.js')
           s=p.read_text(encoding='utf-8')
-          s=s.replace("const POWERDOT_URL='../data/powerdot_direct_france.json.gz';","const POWERDOT_URL='data/powerdot_direct_france.json.gz';")
-          s=s.replace("const ETOTEM_URL='../data/etotem_direct_tariffs_france.json.gz';","const ETOTEM_URL='data/etotem_direct_tariffs_france.json.gz';")
-          s=s.replace("if(type===2)return 'AC';\n    if(type===1)return 'DC';","if(type===1)return 'AC';\n    if(type===2)return 'DC';",1)
-          assert "const POWERDOT_URL='data/powerdot_direct_france.json.gz';" in s
-          assert "if(type===1)return 'AC';\n    if(type===2)return 'DC';" in s
+          old="""      if(data.chargers.some(entry=>entry?.location?.countryCode!=='FR'))throw new Error('Station Powerdot hors France');
+      if(data.chargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
+      window.TCC_POWERDOT_DIRECT_CATALOG_V1=data;
+      return data;"""
+          new="""      const sourceChargers=data.chargers;
+      const frenchChargers=sourceChargers.filter(entry=>entry?.location?.countryCode==='FR');
+      if(frenchChargers.length<2200)throw new Error(`Inventaire Powerdot France incomplet (${frenchChargers.length})`);
+      if(frenchChargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
+      const filtered={...data,chargers:frenchChargers,counts:{...(data.counts||{}),sourceApiSuccessChargers:sourceChargers.length,excludedForeignChargers:sourceChargers.length-frenchChargers.length}};
+      window.TCC_POWERDOT_DIRECT_CATALOG_V1=filtered;
+      return filtered;"""
+          if old in s:
+              s=s.replace(old,new,1)
+          assert "const frenchChargers=sourceChargers.filter(entry=>entry?.location?.countryCode==='FR');" in s
           p.write_text(s,encoding='utf-8')
-          PY
-          node --check assets/france-catalog-v8.js
-          node scripts/test_powerdot_v8_runtime.mjs
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/france-catalog-v8.js
-          git commit -m 'fix(v8): correct Powerdot kind mapping and local paths'
-          git push origin HEAD:main
 
-      - name: Repair and validate Belib on release
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch origin release/2026-08
-          git worktree add ../rc -B release/2026-08 origin/release/2026-08
-          python - <<'PY'
-          from pathlib import Path
-          root=Path('../rc')
-          for rel in ('assets/v8-offer-selection.js','assets/v8-subscription-selection.js'):
-              p=root/rel
-              s=p.read_text(encoding='utf-8')
-              s=s.replace("if(provider.includes('belib direct abonne non resident'))return'belib-nonresident';","if(provider.includes('belib direct abonne non resident')||provider==='abonne non resident')return'belib-nonresident';")
-              s=s.replace("if(provider.includes('belib direct abonne resident'))return'belib-resident';","if(provider.includes('belib direct abonne resident')||provider==='abonne resident paris')return'belib-resident';")
-              assert "provider==='abonne resident paris'" in s
-              assert "provider==='abonne non resident'" in s
-              p.write_text(s,encoding='utf-8')
+          t=Path('scripts/test_powerdot_v8_loader.mjs')
+          t.write_text(r'''import fs from 'node:fs';
+import vm from 'node:vm';
+import zlib from 'node:zlib';
+function assert(condition,message){if(!condition)throw new Error(message);}
+const code=fs.readFileSync('assets/france-catalog-v8.js','utf8');
+const gzip=fs.readFileSync('data/powerdot_direct_france.json.gz');
+const raw=JSON.parse(zlib.gunzipSync(gzip).toString('utf8'));
+const rawFrench=(raw.chargers||[]).filter(entry=>entry?.location?.countryCode==='FR');
+const sandbox={console,setTimeout:()=>0,clearTimeout:()=>{},setInterval:()=>0,clearInterval:()=>{},Response,Blob,DecompressionStream,Uint8Array,Date,fetch:async input=>{if(String(input).includes('powerdot_direct_france.json.gz'))return new Response(gzip,{status:200});throw new Error(`fetch inattendu: ${input}`);},document:{getElementById:()=>null},localStorage:{getItem:()=>null},candidateStations:async()=>({stations:[]}),resolveOrigin:async()=>({lat:48.81,lon:2.07,label:'test'}),stations:[],window:null};
+sandbox.window=sandbox;vm.createContext(sandbox);vm.runInContext(code,sandbox);
+const loaded=await sandbox.TCCFranceCatalog.loadPowerdotCatalog();
+assert(loaded.chargers.length===rawFrench.length,`Filtrage France Powerdot incorrect: ${loaded.chargers.length}/${rawFrench.length}`);
+assert(loaded.chargers.every(entry=>entry?.location?.countryCode==='FR'),'Une station Powerdot hors France reste dans le runtime');
+assert(Number(loaded.counts?.excludedForeignChargers)===raw.chargers.length-rawFrench.length,'Comptage Powerdot hors France incohérent');
+const api=sandbox.TCCFranceCatalogV8;
+const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const orgeval=api.powerdotLocations(loaded).find(location=>norm(location.name).includes('marche frais')&&norm(location.name).includes('orgeval'));
+assert(orgeval,'Marché Frais Orgeval absent du catalogue Powerdot filtré');
+const direct=api.powerdotDirectConfigurations(orgeval);
+const has=(kind,power,price)=>direct.some(c=>c.kind===kind&&Math.abs(Number(c.powerKw)-power)<.01&&Math.abs(Number(c.pricing?.rules?.[0]?.pricePerKwh)-price)<1e-9);
+assert(has('AC',22,.44),'Orgeval AC 22 kW Powerdot != 0,44 €/kWh');
+assert(has('DC',50,.54),'Orgeval DC 50 kW Powerdot != 0,54 €/kWh');
+assert(has('DC',200,.59),'Orgeval DC 200 kW Powerdot != 0,59 €/kWh');
+console.log(JSON.stringify({rawChargers:raw.chargers.length,frenchChargers:loaded.chargers.length,excludedForeignChargers:loaded.counts.excludedForeignChargers,orgevalDirect:direct.map(c=>({kind:c.kind,powerKw:c.powerKw,pricePerKwh:c.pricing?.rules?.[0]?.pricePerKwh}))},null,2));
+''',encoding='utf-8')
           PY
-          cd ../rc
-          node --check assets/v8-offer-selection.js
-          node --check assets/v8-subscription-selection.js
-          node scripts/test_v8_subscription_ranking.mjs
-          grep -q "provider==='abonne resident paris'" assets/v8-offer-selection.js
-          grep -q "provider==='abonne resident paris'" assets/v8-subscription-selection.js
+
+          node --check assets/france-catalog-v8.js
+          node scripts/test_powerdot_v8_loader.mjs
+          node scripts/test_powerdot_v8_runtime.mjs
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/v8-offer-selection.js assets/v8-subscription-selection.js
-          git commit -m 'fix(v8): enforce Belib short-label subscriptions as opt-in'
-          git push origin HEAD:release/2026-08
+          git add assets/france-catalog-v8.js scripts/test_powerdot_v8_loader.mjs
+          if git diff --cached --quiet; then
+            echo 'Powerdot France guard already applied.'
+          else
+            git commit -m 'fix(v8): keep French Powerdot data when foreign rows leak in'
+            git push origin HEAD:main
+          fi
