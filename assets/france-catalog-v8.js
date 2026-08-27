@@ -949,7 +949,15 @@
         candidates.push({index,station,distance,operatorLike,nameScore,variantMatch,technicalTier:technical.tier,powerDelta:technical.powerDelta});
       }
       candidates.sort((a,b)=>(b.variantMatch-a.variantMatch)||(b.technicalTier-a.technicalTier)||(Number(b.operatorLike)-Number(a.operatorLike))||(b.nameScore-a.nameScore)||(a.powerDelta-b.powerDelta)||(a.distance-b.distance));
-      if(candidates.length){const best=candidates[0];if(best.variantMatch>=0&&best.technicalTier>=0&&(best.operatorLike||best.nameScore>=2||best.distance<=.012)){assignments.set(record.stationId,[best.station]);consumed.add(best.index);}}
+      if(candidates.length){
+        const best=candidates[0];
+        if(best.variantMatch>=0&&best.technicalTier>=0&&(best.operatorLike||best.nameScore>=2||best.distance<=.012)){
+          const compatible=candidates.filter(candidate=>candidate.variantMatch>=0&&candidate.technicalTier>=2&&(candidate.operatorLike||candidate.nameScore>=2||candidate.distance<=.012)&&candidate.distance<=Math.max(.02,best.distance+.005));
+          const selected=compatible.length?compatible:[best];
+          assignments.set(record.stationId,selected.map(candidate=>candidate.station));
+          for(const candidate of selected)consumed.add(candidate.index);
+        }
+      }
     }
     let matched=0,added=0,directCalculatedPoints=0,directUnparsedPoints=0;
     const merged=records.map(record=>{const matches=assignments.get(record.stationId)||[];if(matches.length)matched++;else added++;const station=mergedEtotemStation(record,data,matches);directCalculatedPoints+=Number(station.etotemDirectCalculatedPoints||0);directUnparsedPoints+=Number(station.etotemDirectUnparsedPoints||0);return station;});
