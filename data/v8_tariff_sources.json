@@ -44,6 +44,7 @@
     {"id":"fastned-direct","label":"Fastned direct","status":"active","integration":"station-overlay","artifactPaths":["data/fastned_direct_stations_france.json.gz"],"runtimeModules":["assets/v8-fastned-station-overlay.js"]},
     {"id":"freshmile-direct","label":"Freshmile direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-freshmile-direct-overlay.js"]},
     {"id":"izivia-express-direct","label":"IZIVIA Express direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-izivia-express-direct-overlay.js"]},
+    {"id":"izivia-fast-direct","label":"IZIVIA FAST direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/izivia_fast_direct_tariff_v1.json"],"runtimeModules":["assets/v8-izivia-fast-direct.js"]},
     {"id":"labornebleue-direct","label":"La Borne Bleue direct","status":"active","integration":"runtime-overlay","artifactPaths":[],"runtimeModules":["assets/v8-labornebleue-direct-overlay.js","assets/v8-labornebleue-operator-fallback.js"]},
     {"id":"bump-direct","label":"Bump direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/bump_direct_tariffs_tcc_france.json.gz"],"runtimeModules":["assets/v8-bump-direct.js"]},
     {"id":"waat-direct","label":"WAAT direct","status":"active","integration":"dataset-runtime","artifactPaths":["data/waat_direct_tariffs_tcc_france.json"],"runtimeModules":["assets/v8-waat-direct.js"]},
