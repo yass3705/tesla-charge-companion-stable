@@ -2,8 +2,8 @@
 // Source is a preview-local artifact generated from the public ChargeNow site-details endpoint.
 (function(){
   'use strict';
-  const VERSION='v8-qovoltis-direct-20260827a';
-  const DATA_URL='data/qovoltis_direct_tariffs_v1.json?v=20260827a';
+  const VERSION='v8-qovoltis-direct-20260827b';
+  const DATA_URL='data/qovoltis_direct_tariffs_v1.json?v=20260827b';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   const compact=v=>text(v).toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -54,7 +54,7 @@
       if(v==null||depth>4)return;
       if(typeof v==='string'||typeof v==='number'){
         const raw=String(v).toUpperCase();
-        for(const m of raw.match(/FRQO[VI][A-Z0-9]+/g)||[])ids.add(compact(m));
+        for(const m of raw.match(/FR(?:QOV|QVI)[A-Z0-9]+/g)||[])ids.add(compact(m));
         return;
       }
       if(typeof v!=='object'||seen.has(v))return;seen.add(v);
