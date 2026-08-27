@@ -44,11 +44,26 @@ OLD_MATCH = r'''        const operatorLike=isEtotemOperator(station),nameScore=e
       if(candidates.length){const best=candidates[0];if(best.operatorLike||best.nameScore>=2||best.distance<=.012){assignments.set(record.stationId,[best.station]);consumed.add(best.index);}}
 '''
 
-NEW_MATCH = r'''        const operatorLike=isEtotemOperator(station),nameScore=etotemNameScore(record,station),variantMatch=etotemVariantMatch(record,station),technical=etotemTechnicalMatch(record,station);if(!operatorLike&&distance>.02&&nameScore<2)continue;
+SINGLE_PROFILE_MATCH = r'''        const operatorLike=isEtotemOperator(station),nameScore=etotemNameScore(record,station),variantMatch=etotemVariantMatch(record,station),technical=etotemTechnicalMatch(record,station);if(!operatorLike&&distance>.02&&nameScore<2)continue;
         candidates.push({index,station,distance,operatorLike,nameScore,variantMatch,technicalTier:technical.tier,powerDelta:technical.powerDelta});
       }
       candidates.sort((a,b)=>(b.variantMatch-a.variantMatch)||(b.technicalTier-a.technicalTier)||(Number(b.operatorLike)-Number(a.operatorLike))||(b.nameScore-a.nameScore)||(a.powerDelta-b.powerDelta)||(a.distance-b.distance));
       if(candidates.length){const best=candidates[0];if(best.variantMatch>=0&&best.technicalTier>=0&&(best.operatorLike||best.nameScore>=2||best.distance<=.012)){assignments.set(record.stationId,[best.station]);consumed.add(best.index);}}
+'''
+
+MULTI_PROFILE_MATCH = r'''        const operatorLike=isEtotemOperator(station),nameScore=etotemNameScore(record,station),variantMatch=etotemVariantMatch(record,station),technical=etotemTechnicalMatch(record,station);if(!operatorLike&&distance>.02&&nameScore<2)continue;
+        candidates.push({index,station,distance,operatorLike,nameScore,variantMatch,technicalTier:technical.tier,powerDelta:technical.powerDelta});
+      }
+      candidates.sort((a,b)=>(b.variantMatch-a.variantMatch)||(b.technicalTier-a.technicalTier)||(Number(b.operatorLike)-Number(a.operatorLike))||(b.nameScore-a.nameScore)||(a.powerDelta-b.powerDelta)||(a.distance-b.distance));
+      if(candidates.length){
+        const best=candidates[0];
+        if(best.variantMatch>=0&&best.technicalTier>=0&&(best.operatorLike||best.nameScore>=2||best.distance<=.012)){
+          const compatible=candidates.filter(candidate=>candidate.variantMatch>=0&&candidate.technicalTier>=2&&(candidate.operatorLike||candidate.nameScore>=2||candidate.distance<=.012)&&candidate.distance<=Math.max(.02,best.distance+.005));
+          const selected=compatible.length?compatible:[best];
+          assignments.set(record.stationId,selected.map(candidate=>candidate.station));
+          for(const candidate of selected)consumed.add(candidate.index);
+        }
+      }
 '''
 
 
@@ -66,10 +81,15 @@ def main():
     if 'technicalTier:technical.tier' not in text:
         if OLD_MATCH not in text:
             raise SystemExit('missing e-Totem matching anchor')
-        text=text.replace(OLD_MATCH,NEW_MATCH,1)
+        text=text.replace(OLD_MATCH,SINGLE_PROFILE_MATCH,1)
+
+    if 'const compatible=candidates.filter(' not in text:
+        if SINGLE_PROFILE_MATCH not in text:
+            raise SystemExit('missing e-Totem single-profile matching anchor')
+        text=text.replace(SINGLE_PROFILE_MATCH,MULTI_PROFILE_MATCH,1)
 
     path.write_text(text,encoding='utf-8')
-    print('e-Totem technical/variant matching guard applied')
+    print('e-Totem technical/variant multi-profile matching guard applied')
 
 
 if __name__=='__main__':
