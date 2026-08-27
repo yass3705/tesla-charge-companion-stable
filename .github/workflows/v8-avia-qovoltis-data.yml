@@ -1,0 +1,168 @@
+name: V8 AVIA + Qovoltis pinned datasets
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/v8-avia-qovoltis-20260827]
+    paths:
+      - '.github/workflows/v8-avia-qovoltis-data.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/v8-avia-qovoltis-20260827
+
+      - name: Build immutable local datasets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          QOV_SHA='4db6e5e69907be3c25294e99c15df038e97519e5'
+          AVIA_SHA='6ae0a82e63900095c7eb2bc08d4073e492b550c2'
+          curl -fL --retry 3 "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/${QOV_SHA}/data/qovoltis/qovoltis_tariffs.csv" -o /tmp/qovoltis_tariffs.csv
+          curl -fL --retry 3 "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/${AVIA_SHA}/data/national/avia_volt_picoty_station_index.json" -o /tmp/avia_picoty_station_index.json
+          python - <<'PY'
+          import csv, json
+          from collections import defaultdict
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          qov_sha='4db6e5e69907be3c25294e99c15df038e97519e5'
+          avia_sha='6ae0a82e63900095c7eb2bc08d4073e492b550c2'
+
+          def fnum(v):
+              try: return float(str(v).replace(',','.'))
+              except Exception: return None
+
+          groups=defaultdict(lambda: {'rows':[], 'name':'', 'address':'', 'prefix':''})
+          with open('/tmp/qovoltis_tariffs.csv',encoding='utf-8-sig',newline='') as f:
+              for row in csv.DictReader(f):
+                  sid=(row.get('id_station_itinerance') or '').strip().upper()
+                  ref=(row.get('ref_site') or '').strip()
+                  power=fnum(row.get('power_max'))
+                  connector=(row.get('reference') or '').strip()
+                  if not sid or not ref or not connector or not power or power <= 0:
+                      continue
+                  key=(sid, round(power/1000.0,3))
+                  g=groups[key]
+                  g['name']=(row.get('nom_station') or g['name']).strip()
+                  g['address']=(row.get('adresse_station') or g['address']).strip()
+                  g['prefix']=(row.get('emi3_prefix') or g['prefix']).strip().upper()
+                  g['refSite']=ref
+                  g['rows'].append(row)
+
+          stations=defaultdict(lambda: {'powers':[]})
+          safe_count=0
+          for (sid,power_kw),g in sorted(groups.items()):
+              prices=[]; refs=[]; unsafe=[]
+              for r in g['rows']:
+                  refs.append((r.get('reference') or '').strip())
+                  price=fnum(r.get('pricing_syder'))
+                  currency=(r.get('pricing_syder_currency') or '').strip()
+                  unit=(r.get('pricing_syder_unit') or '').strip().lower()
+                  duration=(r.get('pricing_duration_syder') or '').strip()
+                  if price is None or price <= 0: unsafe.append('missing_price'); continue
+                  if currency not in ('€','EUR','eur'): unsafe.append('currency'); continue
+                  if unit not in ('kwh','kw/h'): unsafe.append('unit'); continue
+                  if duration: unsafe.append('duration_component'); continue
+                  prices.append(round(price,6))
+              unique=sorted(set(prices))
+              safe=(not unsafe and len(prices)==len(g['rows']) and len(unique)==1)
+              if safe: safe_count+=1
+              st=stations[sid]
+              st.update({'stationId':sid,'refSite':g['refSite'],'prefix':g['prefix'],'name':g['name'],'address':g['address']})
+              st['powers'].append({
+                  'powerKw':power_kw,
+                  'rankable':safe,
+                  'pricePerKwhEur':unique[0] if safe else None,
+                  'observedPricesEurPerKwh':unique,
+                  'connectorReferences':sorted(set(x for x in refs if x)),
+                  'blockedReasons':sorted(set(unsafe + ([] if len(unique)==1 else ['mixed_prices'])))
+              })
+
+          qov={
+              'schemaVersion':'1.0.0',
+              'dataset':'qovoltis-direct-safe-station-power-v1',
+              'generatedAt':datetime.now(timezone.utc).isoformat(),
+              'source':{
+                  'dataLabCommit':qov_sha,
+                  'artifact':'data/qovoltis/qovoltis_tariffs.csv',
+                  'semantics':'public ChargeNow site-details connector pricing_syder; EUR/kWh only'
+              },
+              'policy':{
+                  'failClosed':True,
+                  'statusSeparatedFromTariff':True,
+                  'stationPowerRequiresUniformConnectorPrice':True,
+                  'durationComponentRejected':True,
+                  'siteLevelPeakOffPeakFieldsIgnored':True
+              },
+              'counts':{'stationCount':len(stations),'stationPowerCount':len(groups),'rankableStationPowerCount':safe_count},
+              'stations':list(stations.values())
+          }
+          Path('data/qovoltis_direct_tariffs_v1.json').write_text(json.dumps(qov,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+
+          raw=json.load(open('/tmp/avia_picoty_station_index.json',encoding='utf-8'))
+          out=[]
+          for st in raw.get('stations') or []:
+              sid=(st.get('stationId') or '').strip().upper()
+              if not sid.startswith('FRPY2'): continue
+              out.append({
+                  'stationId':sid,
+                  'stationName':st.get('stationName') or '',
+                  'address':st.get('address') or '',
+                  'coordinatesRaw':st.get('coordinatesRaw') or '',
+                  'powerKw':st.get('powerKw') or [],
+                  'pdcIds':st.get('pdcIds') or []
+              })
+          avia={
+              'schemaVersion':'1.0.0',
+              'dataset':'avia-volt-picoty-reference-stations-v1',
+              'generatedAt':datetime.now(timezone.utc).isoformat(),
+              'source':{'dataLabCommit':avia_sha,'artifact':'data/national/avia_volt_picoty_station_index.json'},
+              'policy':{'failClosed':True,'rankableTariffAvailable':False,'operatorScope':'Picoty / FR*PY2 only'},
+              'counts':{'stationCount':len(out)},
+              'stations':out
+          }
+          if len(out) != 41:
+              raise SystemExit(f'Unexpected AVIA Picoty station count: {len(out)}')
+          Path('data/avia_picoty_station_index_v1.json').write_text(json.dumps(avia,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+          print('Qovoltis',qov['counts'])
+          print('AVIA Picoty',avia['counts'])
+          PY
+
+      - name: Validate generated datasets
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          q=json.load(open('data/qovoltis_direct_tariffs_v1.json'))
+          a=json.load(open('data/avia_picoty_station_index_v1.json'))
+          assert q['policy']['failClosed'] is True
+          assert q['counts']['stationCount'] >= 300
+          assert q['counts']['rankableStationPowerCount'] > 0
+          assert a['counts']['stationCount'] == 41
+          assert a['policy']['rankableTariffAvailable'] is False
+          assert all(x['stationId'].startswith('FRPY2') for x in a['stations'])
+          print('datasets OK')
+          PY
+
+      - name: Commit generated local datasets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -z "$(git status --porcelain -- data/qovoltis_direct_tariffs_v1.json data/avia_picoty_station_index_v1.json)"; then
+            echo 'No dataset change'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/qovoltis_direct_tariffs_v1.json data/avia_picoty_station_index_v1.json
+          git commit -m 'data(v8): pin AVIA Picoty and Qovoltis datasets'
+          git push origin HEAD:feat/v8-avia-qovoltis-20260827

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "izivia-fast-direct-france-v1",
+  "generatedAt": "2026-08-27",
+  "source": {
+    "networkPage": "https://izivia.com/installation-bornes-de-recharge/izivia-bornes-recharge-ultra-rapide-mcdonalds-france",
+    "tariffArticle": "https://izivia.com/blog/le-pass-izivia-vous-donne-acces-a-400-000-points-de-charge-en-france-et-en-europe"
+  },
+  "scope": {
+    "countryCode": "FR",
+    "network": "IZIVIA FAST",
+    "host": "McDonald's France",
+    "operator": "IZIVIA",
+    "onlyDirectCpo": true,
+    "roamingIncluded": false,
+    "subscriptionDiscountsIncluded": false,
+    "failClosed": true
+  },
+  "matching": {
+    "operatorAliases": ["izivia", "sodetrel"],
+    "stationHintsAny": ["izivia fast", "mcdonald"],
+    "dcOnly": true
+  },
+  "tariff": {
+    "currency": "EUR",
+    "billing": "kwh",
+    "windows": [
+      {"start": "00:00", "end": "11:30", "pricePerKwh": 0.30, "label": "Happy Hour"},
+      {"start": "11:30", "end": "15:00", "pricePerKwh": 0.35, "label": "Standard"},
+      {"start": "15:00", "end": "18:00", "pricePerKwh": 0.30, "label": "Happy Hour"},
+      {"start": "18:00", "end": "24:00", "pricePerKwh": 0.35, "label": "Standard"}
+    ]
+  },
+  "notes": [
+    "Applies only when the physical CPO is identified as IZIVIA/Sodetrel and the station is explicitly identified as IZIVIA FAST or McDonald's.",
+    "No generic IZIVIA, IZIVIA Express, SIGEIF/IZIVIA or roaming station inherits this tariff.",
+    "Session ranking uses only the direct energy tariff; no roaming or subscription price is introduced by this adapter."
+  ]
+}
