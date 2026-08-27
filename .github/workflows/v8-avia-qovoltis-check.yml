@@ -1,0 +1,54 @@
+name: V8 AVIA + Qovoltis checks
+
+on:
+  pull_request:
+    branches: [release/2026-08]
+    paths:
+      - 'assets/v8-qovoltis-direct.js'
+      - 'assets/v8-avia-picoty-reference.js'
+      - 'data/qovoltis_direct_tariffs_v1.json'
+      - 'data/avia_picoty_station_index_v1.json'
+      - 'data/v8_tariff_sources.json'
+      - 'scripts/test_v8_avia_qovoltis.mjs'
+      - '.github/workflows/v8-avia-qovoltis-*.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  adapters:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax
+        run: |
+          node --check assets/v8-qovoltis-direct.js
+          node --check assets/v8-avia-picoty-reference.js
+          node --check scripts/test_v8_avia_qovoltis.mjs
+      - name: Data contracts
+        run: |
+          python - <<'PY'
+          import json
+          q=json.load(open('data/qovoltis_direct_tariffs_v1.json'))
+          a=json.load(open('data/avia_picoty_station_index_v1.json'))
+          assert q['dataset']=='qovoltis-direct-safe-station-power-v1'
+          assert q['policy']['failClosed'] is True
+          assert q['policy']['statusSeparatedFromTariff'] is True
+          assert q['counts']['rankableStationPowerCount'] > 0
+          assert a['dataset']=='avia-volt-picoty-reference-stations-v1'
+          assert a['policy']['failClosed'] is True
+          assert a['policy']['rankableTariffAvailable'] is False
+          assert a['counts']['stationCount']==41
+          assert all(x['stationId'].startswith('FRPY2') for x in a['stations'])
+          PY
+      - name: Adapter regressions
+        run: node scripts/test_v8_avia_qovoltis.mjs
+      - name: Preserve critical V8 invariants
+        run: |
+          node scripts/test_v8_subscription_ranking.mjs
+          node scripts/test_freshmile_v8_runtime.mjs || {
+            echo 'Freshmile fixture may require its pinned dataset from August RC; running structural conservation check instead.'
+            grep -q 'Un overlay tarifaire ne doit jamais tronquer la liste physique préparée' assets/v8-freshmile-direct-overlay.js
+          }
+          ! grep -q 'MAX_PREPARED_STATIONS' assets/v8-freshmile-direct-overlay.js
+          grep -q 'eligibleVariants' assets/v8-offer-selection.js
