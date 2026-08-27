@@ -157,7 +157,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/qovoltis_direct_tariffs_v1.json data/avia_picoty_station_index_v1.json; then
+          if test -z "$(git status --porcelain -- data/qovoltis_direct_tariffs_v1.json data/avia_picoty_station_index_v1.json)"; then
             echo 'No dataset change'
             exit 0
           fi
