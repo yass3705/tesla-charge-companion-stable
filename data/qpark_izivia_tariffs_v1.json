@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.1.1",
   "dataset": "qpark-izivia-tariffs-france",
   "networkId": "qpark",
   "country": "FR",
@@ -13,6 +13,8 @@
     "physicalInventoryFromIrveOnly": true,
     "qparkIsCommercialHost": true,
     "chargingProvider": "IZIVIA",
+    "requirePhysicalOperatorId": "izivia",
+    "excludeOtherTechnicalCpos": true,
     "parkingExcludedFromChargingTariff": true,
     "otherMspTariffsRemainSeparate": true,
     "payNowTariffUnresolved": true
@@ -26,6 +28,7 @@
       "feePeriod": "one_time",
       "monthlyFeeEur": 0,
       "defaultSelected": false,
+      "quotaBased": false,
       "rankableWhenSelected": true,
       "note": "Pass IZIVIA Access: 15 EUR TTC one-time card price, no subscription. The acquisition fee must not be added to each charging session."
     }
@@ -33,10 +36,12 @@
   "offers": [
     {
       "id": "qpark-izivia-pass-access",
-      "channel": "msp",
+      "channel": "subscription",
       "provider": "IZIVIA Pass · Q-Park",
       "subscriptionId": "izivia-pass-access",
-      "selectors": {},
+      "selectors": {
+        "physicalOperatorIds": ["izivia"]
+      },
       "pricingRules": [
         {
           "scope": "allDay",
@@ -52,13 +57,15 @@
         }
       ],
       "rankable": true,
-      "note": "Q-Park publishes this unique tariff specifically for holders of the Pass IZIVIA. Q-Park parking cost remains separate."
+      "note": "Q-Park publishes this tariff specifically for holders of the Pass IZIVIA. Q-Park parking cost remains separate."
     },
     {
       "id": "qpark-izivia-paynow-unresolved",
-      "channel": "adhoc",
+      "channel": "reference",
       "provider": "IZIVIA PayNow · Q-Park",
-      "selectors": {},
+      "selectors": {
+        "physicalOperatorIds": ["izivia"]
+      },
       "pricingRules": [],
       "rankable": false,
       "blockedReasons": ["adhoc_paynow_tariff_not_published_on_qpark_source"],
@@ -68,6 +75,7 @@
   "notes": [
     "Do not expose the Pass IZIVIA tariff to users who have not selected/declared the Pass Access product.",
     "Chargemap Pass, NewMotion, Total Fleet and Digital Charging Solutions remain independent roaming offers.",
-    "Do not treat Q-Park as the charging CPO solely because it is the parking operator/host."
+    "Do not treat Q-Park as the charging CPO solely because it is the parking operator/host.",
+    "The Q-Park-branded IRVE station resolved to Electra must not inherit this Q-Park/IZIVIA tariff."
   ]
 }
