@@ -23,8 +23,7 @@ def test_indigo():
     data = load("indigo_recharge_direct_tariffs_v1.json")
     assert data["networkId"] == "indigo"
     offers = by_id(data["offers"])
-    public = offers["indigo-public-standard"]
-    rule = public["pricingRules"][0]
+    rule = offers["indigo-public-standard"]["pricingRules"][0]
     assert_close(rule["pricePerKwh"], 0.55)
     assert_close(rule["connectionFee"], 0.99)
     assert_close(rule["durationPerMinute"], 0.10)
@@ -35,8 +34,10 @@ def test_indigo():
     assert_close(card["durationPerMinute"], 0.05)
     legacy = offers["indigo-a-la-carte-legacy-city"]
     assert "Saint-Germain-en-Laye" in legacy["selectors"]["cities"]
-    assert_close(legacy["pricingRules"][0]["pricePerKwh"], 0.30)
-    assert_close(legacy["pricingRules"][0]["chargePerMinute"], 0.03)
+    legacy_rule = legacy["pricingRules"][0]
+    assert_close(legacy_rule["pricePerKwh"], 0.30)
+    assert_close(legacy_rule["durationPerMinute"], 0.03)
+    assert_close(legacy_rule["chargePerMinute"], 0)
     assert offers["indigo-public-legacy-city-unresolved"]["rankable"] is False
     subs = by_id(data["subscriptions"])
     assert subs["indigo-recharge-a-la-carte"]["defaultSelected"] is False
@@ -64,6 +65,8 @@ def test_eborn():
         assert_close(rule["pricePerKwh"], energy)
         assert_close(rule["occupancyPerMinute"], idle)
         assert rule["occupancyThresholdMinutes"] == 30
+    assert offers["eborn-public-accelerated"]["selectors"]["maxSitePowerKwExclusive"] == 25
+    assert offers["eborn-public-rapid"]["selectors"]["minSitePowerKw"] == 25
     assert offers["eborn-public-accelerated"]["pricingRules"][0]["occupancyWindow"] == "08:00-20:00"
     assert offers["eborn-card-accelerated"]["pricingRules"][0]["occupancyWindow"] == "08:00-20:00"
     subs = by_id(data["subscriptions"])
