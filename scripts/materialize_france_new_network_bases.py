@@ -55,7 +55,7 @@ def base_row(data, offer, normalized_at):
         "maxPowerKw": (offer.get("selectors") or {}).get("maxPowerKw"),
         "pricingRules": normalize_pricing_rules(offer.get("pricingRules") or []),
         "subscriptionId": offer.get("subscriptionId"),
-        "validFrom": offer.get("validFrom"),
+        "validFrom": offer.get("validFrom") or data.get("validFrom"),
         "validTo": offer.get("validTo"),
         "rankable": rankable,
         "blockedReasons": blocked,
@@ -140,6 +140,7 @@ def main():
     parser.add_argument("--mobive", default="data/mobive_direct_tariffs_v1.json")
     parser.add_argument("--saemes", default="data/saemes_direct_tariffs_v1.json")
     parser.add_argument("--qpark", default="data/qpark_izivia_tariffs_v1.json")
+    parser.add_argument("--passpass", default="data/passpass_electrique_direct_tariffs_v1.json")
     parser.add_argument("--out-dir", default="build/france_irve_offers")
     args = parser.parse_args()
 
@@ -154,6 +155,7 @@ def main():
         (args.mobive, materialize_mobive),
         (args.saemes, materialize_simple),
         (args.qpark, materialize_simple),
+        (args.passpass, materialize_simple),
     ]:
         data = load(path)
         rows = handler(data, normalized_at)
@@ -181,7 +183,7 @@ def main():
     dump(out_dir / "new_network_subscriptions_v1_1.json", subscriptions)
     dump(out_dir / "new_network_partner_rules_v1_1.json", partner_rules)
     report = {
-        "schemaVersion": "1.1.2",
+        "schemaVersion": "1.1.3",
         "productionReady": False,
         "templateCount": len(templates),
         "rankableCount": sum(1 for row in templates if row.get("rankable")),
