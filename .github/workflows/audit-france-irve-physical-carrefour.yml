@@ -14,6 +14,7 @@ on:
       - 'data/france_runtime_extracted_tariff_rules_v1.json'
       - 'data/france_status_precedence_v1.json'
       - 'data/qpark_izivia_tariffs_v1.json'
+      - 'data/passpass_electrique_direct_tariffs_v1.json'
       - 'data/carrefour_energies_22kw_offer_v1.json'
       - 'data/carrefour_energies_benefits_v1.json'
       - 'scripts/build_france_irve_canonical.py'
@@ -27,6 +28,7 @@ on:
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_new_network_bases.py'
       - 'scripts/test_france_new_network_bases.py'
+      - 'scripts/test_passpass_electrique_base.py'
       - 'scripts/build_carrefour_eligible_22kw_offers.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - 'scripts/resolve_france_operational_status.py'
@@ -55,10 +57,12 @@ jobs:
             scripts/run_normalize_france_operator_offers.py \
             scripts/finalize_france_normalized_offers.py \
             scripts/materialize_france_new_network_bases.py \
+            scripts/test_passpass_electrique_base.py \
             scripts/build_carrefour_eligible_22kw_offers.py \
             scripts/build_irve_tariff_fallback_candidates.py \
             scripts/resolve_france_operational_status.py
           python scripts/test_france_new_network_bases.py
+          python scripts/test_passpass_electrique_base.py
 
       - name: Build effective tariff-network registry
         run: |
@@ -111,10 +115,11 @@ jobs:
             --identity-dir build/france_irve_physical \
             --offers-dir build/france_irve_offers
 
-      - name: Materialize official network tariff bases including Q-Park
+      - name: Materialize official network tariff bases including Q-Park and Pass Pass
         run: |
           python scripts/materialize_france_new_network_bases.py \
             --qpark data/qpark_izivia_tariffs_v1.json \
+            --passpass data/passpass_electrique_direct_tariffs_v1.json \
             --out-dir build/france_irve_offers
 
       - name: Download Carrefour official eligible-site list
@@ -174,6 +179,7 @@ jobs:
             'build/france_irve_offers/carrefour_22kw_match_report.json',
             'build/france_irve_offers/carrefour_loyalty_benefits.json',
             'build/france_irve_offers/new_network_materialization_report.json',
+            'build/france_irve_offers/new_network_subscriptions_v1_1.json',
             'build/france_irve_status/status_resolution_report.json',
           ]
           for path in js:
@@ -188,6 +194,7 @@ jobs:
           dedup=json.load(open('build/france_irve_physical/dedup_report.json',encoding='utf-8'))
           carrefour=json.load(open('build/france_irve_offers/carrefour_22kw_match_report.json',encoding='utf-8'))
           matches=json.load(open('build/france_irve_offers/match_report.json',encoding='utf-8'))
+          newbases=json.load(open('build/france_irve_offers/new_network_materialization_report.json',encoding='utf-8'))
           status=json.load(open('build/france_irve_status/status_resolution_report.json',encoding='utf-8'))
           print('Physical dedupe:')
           for key in ['inputStationCount','outputPhysicalStationCount','removedAliasStationCount','inputPdcCount','outputPhysicalPdcCount','removedAliasPdcCount','duplicateClusterCount','dynamicStatusConflictCount','clustersByPhysicalOperator']:
@@ -195,6 +202,8 @@ jobs:
           print('\nCarrefour 22 kW:')
           for key in ['participantSiteCount','participantsByPhysicalOperator','matchedSiteCount','matchedSiteRate','matchedSiteWith22KwPdcCount','matchedSiteWith22KwPdcRate','offerPdcCount','statusCounts']:
             print(key, carrefour.get(key))
+          print('\nOfficial network bases:')
+          print(json.dumps(newbases,ensure_ascii=False,indent=2))
           print('\nLegacy station normalization after alias collapse:')
           for source in matches.get('sources',[]):
             print(json.dumps(source,ensure_ascii=False))
