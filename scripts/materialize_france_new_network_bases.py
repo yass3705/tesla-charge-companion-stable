@@ -138,6 +138,7 @@ def main():
     parser.add_argument("--indigo", default="data/indigo_recharge_direct_tariffs_v1.json")
     parser.add_argument("--eborn", default="data/eborn_direct_tariffs_v1.json")
     parser.add_argument("--mobive", default="data/mobive_direct_tariffs_v1.json")
+    parser.add_argument("--saemes", default="data/saemes_direct_tariffs_v1.json")
     parser.add_argument("--out-dir", default="build/france_irve_offers")
     args = parser.parse_args()
 
@@ -150,6 +151,7 @@ def main():
         (args.indigo, materialize_simple),
         (args.eborn, materialize_simple),
         (args.mobive, materialize_mobive),
+        (args.saemes, materialize_simple),
     ]:
         data = load(path)
         rows = handler(data, normalized_at)
