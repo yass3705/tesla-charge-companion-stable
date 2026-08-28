@@ -213,7 +213,9 @@ def main():
         })
     unresolved_rows.sort(key=lambda row: (-row["pdcCount"], -row["stationCount"], row["networkRaw"]))
 
-    missing_statuses = {"missing_base", "scope_to_resolve", "extract_runtime", "normalize", "staged", "reference_only"}
+    # `partial_ready` stays visible: the network has usable structured data, but
+    # still needs explicit exception/coverage follow-up before production rollout.
+    missing_statuses = {"missing_base", "partial_ready", "scope_to_resolve", "extract_runtime", "normalize", "staged", "reference_only"}
     work_queue = [row for row in network_rows if row["coverageStatus"] in missing_statuses]
     work_queue.sort(key=lambda row: (row["priority"], -row["pdcCount"], row["label"] or ""))
 
