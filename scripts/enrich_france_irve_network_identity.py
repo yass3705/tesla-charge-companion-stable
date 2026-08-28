@@ -42,7 +42,7 @@ def dump_json(path, value, pretty=False):
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.suffix == ".gz":
         with gzip.open(path, "wt", encoding="utf-8", compresslevel=9) as handle:
-            json.dump(value, handle, ensure_ascii=False, separators=(",", ","))
+            json.dump(value, handle, ensure_ascii=False, separators=(",", ":"))
     else:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2 if pretty else None) + "\n", encoding="utf-8")
 
