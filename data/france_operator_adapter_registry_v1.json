@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-08-28",
+  "sources": [
+    {
+      "id": "qovoltis-direct-v1",
+      "operatorId": "qovoltis",
+      "mode": "station_power",
+      "path": "data/qovoltis_direct_tariffs_v1.json",
+      "stationArray": "stations",
+      "stationIdFields": ["refSite", "stationId"],
+      "nameField": "name",
+      "addressField": "address",
+      "configArray": "powers",
+      "powerField": "powerKw",
+      "pricePerKwhField": "pricePerKwhEur",
+      "rankableField": "rankable",
+      "blockedReasonsField": "blockedReasons"
+    },
+    {
+      "id": "waat-direct-v1",
+      "operatorId": "waat",
+      "mode": "station_power",
+      "path": "data/waat_direct_tariffs_tcc_france.json",
+      "stationArray": "stations",
+      "stationIdFields": ["stationId"],
+      "nameField": "name",
+      "addressField": "address",
+      "coordinatesField": "coordinates",
+      "configArray": "configs",
+      "powerField": "powerKw",
+      "kindField": "kind",
+      "pricePerKwhField": "directEurPerKwh"
+    },
+    {
+      "id": "totalenergies-overlay-v1",
+      "operatorId": "totalenergies",
+      "mode": "operator_rule",
+      "path": "data/totalenergies_tariff_overlay_v1.json",
+      "offerArray": "operatorOffers",
+      "subscriptionArray": "subscriptions"
+    },
+    {
+      "id": "base-operator-overlay-v1",
+      "mode": "operator_rule_multi",
+      "path": "data/tariff_overlay_v1.json",
+      "offerArray": "operatorOffers",
+      "subscriptionArray": "subscriptions"
+    }
+  ]
+}
