@@ -17,6 +17,7 @@ on:
       - 'data/indigo_recharge_direct_tariffs_v1.json'
       - 'data/eborn_direct_tariffs_v1.json'
       - 'data/mobive_direct_tariffs_v1.json'
+      - 'data/saemes_direct_tariffs_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/build_effective_france_tariff_network_registry.py'
@@ -45,6 +46,7 @@ on:
       - 'data/indigo_recharge_direct_tariffs_v1.json'
       - 'data/eborn_direct_tariffs_v1.json'
       - 'data/mobive_direct_tariffs_v1.json'
+      - 'data/saemes_direct_tariffs_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/build_effective_france_tariff_network_registry.py'
@@ -87,7 +89,7 @@ jobs:
             scripts/resolve_france_operational_status.py \
             scripts/build_irve_tariff_fallback_candidates.py
 
-      - name: Test Indigo eborn and Mobive source semantics
+      - name: Test new official network tariff semantics
         run: python scripts/test_france_new_network_bases.py
 
       - name: Build effective tariff-network registry
@@ -151,6 +153,7 @@ jobs:
             --indigo data/indigo_recharge_direct_tariffs_v1.json \
             --eborn data/eborn_direct_tariffs_v1.json \
             --mobive data/mobive_direct_tariffs_v1.json \
+            --saemes data/saemes_direct_tariffs_v1.json \
             --out-dir build/france_irve_offers
 
       - name: Build strict IRVE tariff fallback candidates
