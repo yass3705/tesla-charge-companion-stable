@@ -21,6 +21,12 @@
       "notes": "Department-specific direct and Pass Mobive grids are structured, including duration windows and total transaction caps."
     },
     {
+      "networkId": "saemes",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/saemes_direct_tariffs_v1.json"],
+      "notes": "Official SAEMES QR/CB tariff is structured as 0.50 EUR service + 0.50 EUR/kWh with the documented 10 EUR/hour surcharge after 15 hours connected. Roaming-card tariffs and Electra rapid stations remain separate; keep partial until station-level exception checks are completed."
+    },
+    {
       "networkId": "r3",
       "coverageStatus": "ready_migrated",
       "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
