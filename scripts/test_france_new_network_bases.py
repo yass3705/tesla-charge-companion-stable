@@ -101,11 +101,26 @@ def test_mobive():
     assert sub["defaultSelected"] is False
 
 
+def test_saemes():
+    data = load("saemes_direct_tariffs_v1.json")
+    assert data["networkId"] == "saemes"
+    offers = by_id(data["offers"])
+    rule = offers["saemes-public-qr-standard"]["pricingRules"][0]
+    assert_close(rule["pricePerKwh"], 0.50)
+    assert_close(rule["connectionFee"], 0.50)
+    assert_close(rule["durationPerMinute"], 10 / 60)
+    assert rule["durationThresholdMinutes"] == 900
+    assert_close(rule["parkingPerMinute"], 0)
+    assert data["scope"]["roamingMspTariffsRemainSeparate"] is True
+    assert data["scope"]["electraRapidStationsRemainSeparateNetwork"] is True
+
+
 def test_network_only_invariants():
     for name in (
         "indigo_recharge_direct_tariffs_v1.json",
         "eborn_direct_tariffs_v1.json",
         "mobive_direct_tariffs_v1.json",
+        "saemes_direct_tariffs_v1.json",
     ):
         raw = json.dumps(load(name), ensure_ascii=False).lower()
         assert '"latitude"' not in raw
@@ -118,8 +133,9 @@ def main():
     test_indigo()
     test_eborn()
     test_mobive()
+    test_saemes()
     test_network_only_invariants()
-    print("OK: Indigo, eborn and Mobive tariff bases validated")
+    print("OK: Indigo, eborn, Mobive and SAEMES tariff bases validated")
 
 
 if __name__ == "__main__":
