@@ -10,8 +10,12 @@ on:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
       - 'data/france_operator_adapter_registry_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
       - 'data/france_runtime_extracted_tariff_rules_v1.json'
       - 'data/france_status_precedence_v1.json'
+      - 'data/indigo_recharge_direct_tariffs_v1.json'
+      - 'data/eborn_direct_tariffs_v1.json'
+      - 'data/mobive_direct_tariffs_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/enrich_france_irve_network_identity.py'
@@ -20,6 +24,7 @@ on:
       - 'scripts/run_normalize_france_operator_offers.py'
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
+      - 'scripts/materialize_france_new_network_bases.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
@@ -30,8 +35,12 @@ on:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
       - 'data/france_operator_adapter_registry_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
       - 'data/france_runtime_extracted_tariff_rules_v1.json'
       - 'data/france_status_precedence_v1.json'
+      - 'data/indigo_recharge_direct_tariffs_v1.json'
+      - 'data/eborn_direct_tariffs_v1.json'
+      - 'data/mobive_direct_tariffs_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/enrich_france_irve_network_identity.py'
@@ -40,6 +49,7 @@ on:
       - 'scripts/run_normalize_france_operator_offers.py'
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
+      - 'scripts/materialize_france_new_network_bases.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
@@ -65,6 +75,7 @@ jobs:
             scripts/run_normalize_france_operator_offers.py \
             scripts/finalize_france_normalized_offers.py \
             scripts/materialize_france_runtime_rules.py \
+            scripts/materialize_france_new_network_bases.py \
             scripts/resolve_france_operational_status.py \
             scripts/build_irve_tariff_fallback_candidates.py
 
@@ -116,6 +127,14 @@ jobs:
             --input data/france_runtime_extracted_tariff_rules_v1.json \
             --out-dir build/france_irve_offers
 
+      - name: Materialize new official network tariff bases
+        run: |
+          python scripts/materialize_france_new_network_bases.py \
+            --indigo data/indigo_recharge_direct_tariffs_v1.json \
+            --eborn data/eborn_direct_tariffs_v1.json \
+            --mobive data/mobive_direct_tariffs_v1.json \
+            --out-dir build/france_irve_offers
+
       - name: Build strict IRVE tariff fallback candidates
         run: |
           python scripts/build_irve_tariff_fallback_candidates.py \
@@ -151,6 +170,8 @@ jobs:
               'build/france_irve_offers/offer_identity_finalization_report.json',
               'build/france_irve_offers/runtime_rule_templates.json',
               'build/france_irve_offers/runtime_rule_materialization_report.json',
+              'build/france_irve_offers/new_network_rule_templates_v1_1.json',
+              'build/france_irve_offers/new_network_materialization_report.json',
               'build/france_irve_offers/irve_tariff_fallback_report.json',
               'build/france_irve_status/status_resolution_report.json',
           ]:
@@ -167,6 +188,7 @@ jobs:
           offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
           identities=json.load(open('build/france_irve_offers/offer_identity_finalization_report.json', encoding='utf-8'))
           runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json', encoding='utf-8'))
+          newbases=json.load(open('build/france_irve_offers/new_network_materialization_report.json', encoding='utf-8'))
           fallback=json.load(open('build/france_irve_offers/irve_tariff_fallback_report.json', encoding='utf-8'))
           status=json.load(open('build/france_irve_status/status_resolution_report.json', encoding='utf-8'))
           print('PAN canonical summary:')
@@ -187,6 +209,8 @@ jobs:
           print(json.dumps(identities, ensure_ascii=False, indent=2))
           print('\nRuntime-rule materialization summary:')
           print(json.dumps(runtime, ensure_ascii=False, indent=2))
+          print('\nNew official-network bases summary:')
+          print(json.dumps(newbases, ensure_ascii=False, indent=2))
           print('\nIRVE fallback summary:')
           print(json.dumps(fallback, ensure_ascii=False, indent=2))
           print('\nOperational-status precedence summary:')
