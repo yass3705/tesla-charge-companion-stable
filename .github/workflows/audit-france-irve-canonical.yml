@@ -18,6 +18,7 @@ on:
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - 'scripts/normalize_france_operator_offers.py'
       - 'scripts/run_normalize_france_operator_offers.py'
+      - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
@@ -37,6 +38,7 @@ on:
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - 'scripts/normalize_france_operator_offers.py'
       - 'scripts/run_normalize_france_operator_offers.py'
+      - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
@@ -61,6 +63,7 @@ jobs:
             scripts/run_enrich_france_irve_network_identity.py \
             scripts/normalize_france_operator_offers.py \
             scripts/run_normalize_france_operator_offers.py \
+            scripts/finalize_france_normalized_offers.py \
             scripts/materialize_france_runtime_rules.py \
             scripts/resolve_france_operational_status.py \
             scripts/build_irve_tariff_fallback_candidates.py
@@ -101,6 +104,12 @@ jobs:
             --adapter-registry data/france_operator_adapter_registry_v1.json \
             --out-dir build/france_irve_offers
 
+      - name: Finalize legacy tariff identities to contract v1.1
+        run: |
+          python scripts/finalize_france_normalized_offers.py \
+            --identity-dir build/france_irve_identity \
+            --offers-dir build/france_irve_offers
+
       - name: Materialize extracted runtime tariff rules
         run: |
           python scripts/materialize_france_runtime_rules.py \
@@ -129,6 +138,7 @@ jobs:
               'build/france_irve_identity/stations.json.gz',
               'build/france_irve_identity/charge_points.json.gz',
               'build/france_irve_offers/station_offers.json.gz',
+              'build/france_irve_offers/station_offers_v1_1.json.gz',
               'build/france_irve_offers/irve_tariff_fallback_candidates.json.gz',
               'build/france_irve_status/charge_point_status.json.gz',
           ]:
@@ -137,6 +147,8 @@ jobs:
               print('valid', path)
           for path in [
               'build/france_irve_offers/operator_rule_templates.json',
+              'build/france_irve_offers/network_rule_templates_v1_1.json',
+              'build/france_irve_offers/offer_identity_finalization_report.json',
               'build/france_irve_offers/runtime_rule_templates.json',
               'build/france_irve_offers/runtime_rule_materialization_report.json',
               'build/france_irve_offers/irve_tariff_fallback_report.json',
@@ -153,6 +165,7 @@ jobs:
           pan=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
           network=json.load(open('build/france_irve_identity/network_gap_report.json', encoding='utf-8'))
           offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
+          identities=json.load(open('build/france_irve_offers/offer_identity_finalization_report.json', encoding='utf-8'))
           runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json', encoding='utf-8'))
           fallback=json.load(open('build/france_irve_offers/irve_tariff_fallback_report.json', encoding='utf-8'))
           status=json.load(open('build/france_irve_status/status_resolution_report.json', encoding='utf-8'))
@@ -170,6 +183,8 @@ jobs:
           print(json.dumps({k:v for k,v in offers.items() if k != 'sources'}, ensure_ascii=False, indent=2))
           for source in offers.get('sources', []):
               print(json.dumps(source, ensure_ascii=False))
+          print('\nOffer identity finalization summary:')
+          print(json.dumps(identities, ensure_ascii=False, indent=2))
           print('\nRuntime-rule materialization summary:')
           print(json.dumps(runtime, ensure_ascii=False, indent=2))
           print('\nIRVE fallback summary:')
