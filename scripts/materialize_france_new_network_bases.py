@@ -141,6 +141,7 @@ def main():
     parser.add_argument("--saemes", default="data/saemes_direct_tariffs_v1.json")
     parser.add_argument("--qpark", default="data/qpark_izivia_tariffs_v1.json")
     parser.add_argument("--passpass", default="data/passpass_electrique_direct_tariffs_v1.json")
+    parser.add_argument("--effia", default="data/effia_direct_tariffs_v1.json")
     parser.add_argument("--out-dir", default="build/france_irve_offers")
     args = parser.parse_args()
 
@@ -156,6 +157,7 @@ def main():
         (args.saemes, materialize_simple),
         (args.qpark, materialize_simple),
         (args.passpass, materialize_simple),
+        (args.effia, materialize_simple),
     ]:
         data = load(path)
         rows = handler(data, normalized_at)
@@ -183,7 +185,7 @@ def main():
     dump(out_dir / "new_network_subscriptions_v1_1.json", subscriptions)
     dump(out_dir / "new_network_partner_rules_v1_1.json", partner_rules)
     report = {
-        "schemaVersion": "1.1.3",
+        "schemaVersion": "1.1.4",
         "productionReady": False,
         "templateCount": len(templates),
         "rankableCount": sum(1 for row in templates if row.get("rankable")),
