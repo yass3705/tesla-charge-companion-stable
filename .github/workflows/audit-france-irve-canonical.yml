@@ -1,0 +1,66 @@
+name: Audit France IRVE canonical
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'scripts/build_france_irve_canonical.py'
+      - '.github/workflows/audit-france-irve-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate builder syntax
+        run: python -m py_compile scripts/build_france_irve_canonical.py
+
+      - name: Download PAN IRVE static and dynamic snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Build canonical non-production audit
+        run: |
+          python scripts/build_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+
+      - name: Print coverage summary
+        run: |
+          python - <<'PY'
+          import json
+          report=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
+          print(json.dumps(report['summary'], ensure_ascii=False, indent=2))
+          print('\nOperators requiring their own/normalized base:')
+          for row in report['operators']:
+              if row['needsOwnBase'] and row['irvePdcCount']:
+                  print(f"- {row['label']}: {row['irvePdcCount']} PDC / {row['irveStationCount']} stations [{row['coverageStatus']}]")
+          print('\nTop unregistered IRVE operators:')
+          for row in report['unregisteredOperators'][:50]:
+              print(f"- {row['rawOperator']}: {row['pdcCount']} PDC / {row['stationCount']} stations")
+          PY
+
+      - name: Upload audit snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-irve-canonical-audit
+          path: build/france_irve/
+          retention-days: 14
