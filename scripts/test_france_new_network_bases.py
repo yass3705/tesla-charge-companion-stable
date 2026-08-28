@@ -120,19 +120,23 @@ def test_qpark():
     assert data["networkId"] == "qpark"
     offers = by_id(data["offers"])
     izivia = offers["qpark-izivia-pass-access"]
-    assert izivia["channel"] == "msp"
+    assert izivia["channel"] == "subscription"
     assert izivia["subscriptionId"] == "izivia-pass-access"
+    assert izivia["selectors"]["physicalOperatorIds"] == ["izivia"]
     rule = izivia["pricingRules"][0]
     assert_close(rule["pricePerKwh"], 0.55)
     assert_close(rule["connectionFee"], 1.20)
     assert_close(rule["parkingPerMinute"], 0)
-    assert offers["qpark-izivia-paynow-unresolved"]["rankable"] is False
+    adhoc = offers["qpark-izivia-paynow-unresolved"]
+    assert adhoc["rankable"] is False
+    assert adhoc["selectors"]["physicalOperatorIds"] == ["izivia"]
     sub = by_id(data["subscriptions"])["izivia-pass-access"]
     assert sub["feeEur"] == 15
     assert sub["feePeriod"] == "one_time"
     assert sub["monthlyFeeEur"] == 0
     assert sub["defaultSelected"] is False
     assert data["scope"]["qparkIsCommercialHost"] is True
+    assert data["scope"]["requirePhysicalOperatorId"] == "izivia"
 
 
 def test_network_only_invariants():
