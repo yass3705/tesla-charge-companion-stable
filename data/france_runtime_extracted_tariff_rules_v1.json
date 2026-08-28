@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-28",
+  "country": "FR",
+  "productionReady": false,
+  "purpose": "Lossless data extraction of tariff rules already present in TCC V8 runtime JS before canonical IRVE migration.",
+  "networks": [
+    {
+      "networkId": "r3",
+      "source": "assets/v8-france-cpo-gap-overlay.js",
+      "upstream": "https://www.dbt.fr/carte-des-stations/",
+      "verifiedAt": "2026-08-26",
+      "offers": [
+        {"id":"r3-direct-ac","channel":"direct","selectors":{"kind":"AC","maxPowerKw":22.5},"pricing":{"currency":"EUR","pricePerKwh":0.35}},
+        {"id":"r3-direct-dc","channel":"direct","selectors":{"kind":"DC"},"pricing":{"currency":"EUR","pricePerKwh":0.55}}
+      ]
+    },
+    {
+      "networkId": "stations-e",
+      "source": "assets/v8-france-cpo-gap-overlay.js",
+      "upstream": "https://stations-e.com/fr/tarification",
+      "verifiedAt": "2026-08-26",
+      "supportedConfigurations": [
+        {"id":"22ac","kind":"AC","targetPowerKw":22,"toleranceKw":1.1},
+        {"id":"24dc","kind":"DC","targetPowerKw":24,"toleranceKw":1.1},
+        {"id":"50dc","kind":"DC","targetPowerKw":50,"toleranceKw":2.0}
+      ],
+      "subscriptions": [
+        {"id":"stations-e-badge","label":"Stations-e — Badge gratuit","monthlyFeeEur":0},
+        {"id":"stations-e-express","label":"Stations-e — Express-e","monthlyFeeEur":2.90},
+        {"id":"stations-e-access","label":"Stations-e — Access-e","monthlyFeeEur":4.90}
+      ],
+      "offers": [
+        {"id":"stations-e-direct","channel":"direct","pricingByConfiguration":{"22ac":0.54,"24dc":0.54,"50dc":0.54}},
+        {"id":"stations-e-badge","channel":"subscription","subscriptionId":"stations-e-badge","pricingByConfiguration":{"22ac":0.39,"24dc":0.39,"50dc":0.39}},
+        {"id":"stations-e-express","channel":"subscription","subscriptionId":"stations-e-express","pricingByConfiguration":{"22ac":0.32,"24dc":0.32,"50dc":0.35}},
+        {"id":"stations-e-access","channel":"subscription","subscriptionId":"stations-e-access","pricingByConfiguration":{"22ac":0.29,"24dc":0.29,"50dc":0.35}}
+      ],
+      "occupancyRules": [
+        {"configurationId":"22ac","window":"07:00-23:00","postChargeGraceMinutes":15,"postChargeEurPerMinute":0.10,"startedKwhCharged":true},
+        {"configurationId":"22ac","window":"23:00-07:00","postChargeGraceMinutes":15,"postChargeEurPerMinute":0,"startedKwhCharged":true},
+        {"configurationId":"24dc","window":"00:00-24:00","postChargeGraceMinutes":15,"postChargeEurPerMinute":0.10,"startedKwhCharged":true},
+        {"configurationId":"50dc","window":"00:00-24:00","postChargeGraceMinutes":15,"postChargeEurPerMinute":0.10,"startedKwhCharged":true}
+      ]
+    },
+    {
+      "networkId": "engie-vianeo",
+      "source": "assets/v8-france-cpo-gap-overlay.js",
+      "upstream": "https://www.engie-vianeo.com/france/engie-vianeo-max-abonnement-recharge-tarif-unique/",
+      "verifiedAt": "2026-08-26",
+      "subscriptions": [
+        {"id":"vianeo-max","label":"ENGIE Vianeo Max","monthlyFeeEur":9.99}
+      ],
+      "offers": [
+        {"id":"vianeo-max","channel":"subscription","subscriptionId":"vianeo-max","selectors":{"directVianeoOnly":true},"pricing":{"currency":"EUR","pricePerKwh":0.33},"preserveDirectLocalFees":true}
+      ],
+      "notes": "This extracts the Max overlay only. The direct tariff basis still needs to be materialized from the existing direct Vianeo source/runtime before canonical ranking."
+    },
+    {
+      "networkId": "ouest-charge",
+      "source": "assets/v8-france-cpo-gap-overlay.js",
+      "upstream": "https://ouestcharge.fr/tarifs-borne-ouest-charge/",
+      "verifiedAt": "2026-08-26",
+      "classification": {
+        "normal": {"maxSitePowerKw":22.5},
+        "rapid": {"minSitePowerKw":40,"maxSitePowerKw":60},
+        "ultra": {"minSitePowerKw":100}
+      },
+      "common": {"currency":"EUR","connectionFeeEur":1,"durationSurchargeEurPerMinute":0.20},
+      "departments": {
+        "49": {
+          "normal":{"pricePerKwh":0.35,"durationThresholdMinutes":300,"durationWindow":"07:00-21:00"},
+          "rapid":{"pricePerKwh":0.45,"durationThresholdMinutes":60,"durationWindow":"07:00-21:00"},
+          "ultra":{"pricePerKwh":0.55,"durationThresholdMinutes":45,"durationWindow":"07:00-21:00"}
+        },
+        "44": {
+          "normal":{"pricePerKwh":0.35,"durationThresholdMinutes":240,"durationWindow":"07:00-21:00"},
+          "rapid":{"pricePerKwh":0.50,"durationThresholdMinutes":60,"durationWindow":"07:00-21:00"}
+        },
+        "35": {
+          "normal":{"pricePerKwh":0.40,"durationThresholdMinutes":300,"durationWindow":"07:00-21:00","durationCapEur":50},
+          "rapid":{"pricePerKwh":0.55,"durationThresholdMinutes":60,"durationCapEur":50},
+          "ultra":{"pricePerKwh":0.55,"durationThresholdMinutes":60,"durationCapEur":50}
+        },
+        "29": {
+          "normal":{"pricePerKwh":0.40},
+          "rapid":{"pricePerKwh":0.55,"durationThresholdMinutes":60,"durationCapEur":50},
+          "ultra":{"pricePerKwh":0.55,"durationThresholdMinutes":60,"durationCapEur":50}
+        },
+        "22": {
+          "normal":{"pricePerKwh":0.40,"durationThresholdMinutes":300,"durationWindow":"07:00-21:00","durationCapEur":50},
+          "rapid":{"pricePerKwh":0.55,"durationThresholdMinutes":60,"durationCapEur":50},
+          "ultra":{"pricePerKwh":0.55,"durationThresholdMinutes":60}
+        }
+      }
+    },
+    {
+      "networkId": "ecocharge77",
+      "source": "assets/v8-ecocharge77-overlay.js",
+      "upstream": "data-lab/ecocharge77_official_idf.json",
+      "verifiedAt": "2026-08-21",
+      "classification": {
+        "normal": [{"kind":"AC","maxPowerKw":24.5},{"kind":"DC","minPowerKw":20,"maxPowerKw":30}],
+        "rapid": [{"kind":"DC","minPowerKw":50,"maxPowerKw":130}]
+      },
+      "offers": [
+        {"id":"ecocharge77-normal","channel":"direct","class":"normal","pricing":{"currency":"EUR","pricePerKwh":0.36},"durationRule":{"afterMinutes":180,"window":"08:00-21:00","eurPerMinute":0.036}},
+        {"id":"ecocharge77-rapid","channel":"direct","class":"rapid","pricing":{"currency":"EUR","pricePerKwh":0.46},"durationRule":{"afterMinutes":60,"window":"00:00-24:00","eurPerMinute":0.20}}
+      ]
+    }
+  ]
+}
