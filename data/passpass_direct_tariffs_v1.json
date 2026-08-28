@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.1.1",
+  "dataset": "passpass-direct-tariffs-france",
+  "networkId": "passpass",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "validFrom": "2025-04-01",
+  "source": "https://passpasselectrique.fr/fr/tarifs/",
+  "tariffImageSource": "https://passpasselectrique.fr/wp-content/uploads/sites/9/2025/03/tarif-ppe-tableau3.png",
+  "powerClassSource": "https://passpasselectrique.fr/fr/recharger-son-vehicule/",
+  "mapSource": "https://alize-map.azurewebsites.net/passpass",
+  "productionReady": false,
+  "scope": {
+    "physicalInventoryFromIrveOnly": true,
+    "directNetworkOnly": true,
+    "subscriberDefinition": "free Pass Pass electrique customer account",
+    "normalPowerClassOfficial": "3 to 22 kW",
+    "rapidPowerClassOfficial": "43/50 kW",
+    "intermediateAndNewHighPowerRequireOperatorTariffClass": true,
+    "billingContinuesWhileVehicleRemainsConnected": true
+  },
+  "subscriptions": [
+    {
+      "id": "passpass-account",
+      "label": "Pass Pass électrique — compte abonné",
+      "feeEur": 0,
+      "feePeriod": "none",
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true,
+      "note": "Pass Pass states that a user is considered subscribed as soon as an account is created."
+    }
+  ],
+  "offers": [
+    {
+      "id": "passpass-public-normal",
+      "channel": "direct",
+      "provider": "Pass Pass électrique non abonné",
+      "selectors": {"tariffClass":"normal","minPowerKw":3,"maxPowerKw":22.5},
+      "pricingRules": [
+        {"scope":"timeWindow","start":"07:00","end":"21:00","currency":"EUR","pricePerKwh":0.38,"durationPerMinute":0.08,"durationThresholdMinutes":180,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"},
+        {"scope":"timeWindow","start":"21:00","end":"07:00","currency":"EUR","pricePerKwh":0.38,"durationPerMinute":0.02,"durationThresholdMinutes":180,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-account-normal",
+      "channel": "subscription",
+      "subscriptionId": "passpass-account",
+      "provider": "Pass Pass électrique abonné",
+      "selectors": {"tariffClass":"normal","minPowerKw":3,"maxPowerKw":22.5},
+      "pricingRules": [
+        {"scope":"timeWindow","start":"07:00","end":"21:00","currency":"EUR","pricePerKwh":0.32,"durationPerMinute":0.04,"durationThresholdMinutes":180,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"},
+        {"scope":"timeWindow","start":"21:00","end":"07:00","currency":"EUR","pricePerKwh":0.32,"durationPerMinute":0.01,"durationThresholdMinutes":180,"durationCap":1.20,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-public-rapid",
+      "channel": "direct",
+      "provider": "Pass Pass électrique non abonné",
+      "selectors": {"tariffClass":"rapid","minPowerKw":40,"maxPowerKw":55,"officialTypicalPowerKw":[43,50]},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.51,"durationPerMinute":0.40,"durationThresholdMinutes":90,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-account-rapid",
+      "channel": "subscription",
+      "subscriptionId": "passpass-account",
+      "provider": "Pass Pass électrique abonné",
+      "selectors": {"tariffClass":"rapid","minPowerKw":40,"maxPowerKw":55,"officialTypicalPowerKw":[43,50]},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.44,"durationPerMinute":0.20,"durationThresholdMinutes":90,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-public-ultra-reference",
+      "channel": "reference",
+      "provider": "Pass Pass électrique non abonné — ultra rapide",
+      "selectors": {"tariffClass":"ultra_rapid","requiresOperatorClassMapping":true},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.51,"durationPerMinute":0.40,"durationThresholdMinutes":45,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": false,
+      "blockedReasons": ["ultra_rapid_power_mapping_not_published_in_static_tariff_page"]
+    },
+    {
+      "id": "passpass-account-ultra-reference",
+      "channel": "reference",
+      "subscriptionId": "passpass-account",
+      "provider": "Pass Pass électrique abonné — ultra rapide",
+      "selectors": {"tariffClass":"ultra_rapid","requiresOperatorClassMapping":true},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.44,"durationPerMinute":0.20,"durationThresholdMinutes":45,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": false,
+      "blockedReasons": ["ultra_rapid_power_mapping_not_published_in_static_tariff_page"]
+    },
+    {
+      "id": "passpass-public-long-stay-reference",
+      "channel": "reference",
+      "provider": "Pass Pass électrique non abonné — stationnement longue durée",
+      "selectors": {"tariffClass":"long_stay","requiresOperatorClassMapping":true},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.38,"durationPerMinute":0.0033333333333333335,"durationThresholdMinutes":840,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": false,
+      "blockedReasons": ["long_stay_station_scope_requires_operator_mapping"]
+    },
+    {
+      "id": "passpass-account-long-stay-reference",
+      "channel": "reference",
+      "subscriptionId": "passpass-account",
+      "provider": "Pass Pass électrique abonné — stationnement longue durée",
+      "selectors": {"tariffClass":"long_stay","requiresOperatorClassMapping":true},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.32,"durationPerMinute":0.0016666666666666668,"durationThresholdMinutes":840,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0,"rounding":"started_kwh_and_started_minute"}
+      ],
+      "rankable": false,
+      "blockedReasons": ["long_stay_station_scope_requires_operator_mapping"]
+    }
+  ],
+  "notes": [
+    "Normal tariff: first 3 hours have no connection-duration surcharge; day/night duration rates then apply while still connected.",
+    "Rapid tariff: first 90 minutes have no duration surcharge.",
+    "Ultra-rapid tariff: first 45 minutes have no duration surcharge, but the official static page does not publish a reliable power threshold for assigning current IRVE PDCs to this class.",
+    "Long-stay P+R/carpool tariff: first 14 hours have no duration surcharge; station classification must come from Pass Pass data, not from a generic name guess.",
+    "Pass Pass says tariffs shown on each charge point remain authoritative; map-level tariff-class extraction is the next step for the unresolved PDCs."
+  ]
+}
