@@ -21,6 +21,18 @@
       "notes": "Department-specific direct and Pass Mobive grids are structured, including duration windows and total transaction caps."
     },
     {
+      "networkId": "carrefour-energies",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/carrefour_energies_22kw_offer_v1.json", "data/carrefour_energies_eligible_sites_v1.json", "data/carrefour_energies_benefits_v1.json"],
+      "notes": "Official 0.23 EUR/kWh offer from 1 August 2026 is materialized only on explicitly listed participating hypermarket 22 kW PDCs. Carrefour loyalty cashback stays separate from billed price. Other powers and non-listed Carrefour stores remain unresolved."
+    },
+    {
+      "networkId": "passpass",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/passpass_electrique_direct_tariffs_v1.json"],
+      "notes": "Official subscribed/non-subscribed normal, rapid, ultra and long-stay tariffs are structured. Normal power classification is safe; newer rapid/ultra sites and long-stay P+R sites still require station-class mapping before production ranking."
+    },
+    {
       "networkId": "saemes",
       "coverageStatus": "partial_ready",
       "artifacts": ["data/saemes_direct_tariffs_v1.json"],
