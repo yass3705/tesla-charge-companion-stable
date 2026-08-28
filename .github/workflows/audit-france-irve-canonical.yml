@@ -25,6 +25,7 @@ on:
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/materialize_france_new_network_bases.py'
+      - 'scripts/test_france_new_network_bases.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
@@ -50,6 +51,7 @@ on:
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/materialize_france_new_network_bases.py'
+      - 'scripts/test_france_new_network_bases.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
@@ -76,8 +78,12 @@ jobs:
             scripts/finalize_france_normalized_offers.py \
             scripts/materialize_france_runtime_rules.py \
             scripts/materialize_france_new_network_bases.py \
+            scripts/test_france_new_network_bases.py \
             scripts/resolve_france_operational_status.py \
             scripts/build_irve_tariff_fallback_candidates.py
+
+      - name: Test Indigo eborn and Mobive source semantics
+        run: python scripts/test_france_new_network_bases.py
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -171,6 +177,8 @@ jobs:
               'build/france_irve_offers/runtime_rule_templates.json',
               'build/france_irve_offers/runtime_rule_materialization_report.json',
               'build/france_irve_offers/new_network_rule_templates_v1_1.json',
+              'build/france_irve_offers/new_network_subscriptions_v1_1.json',
+              'build/france_irve_offers/new_network_partner_rules_v1_1.json',
               'build/france_irve_offers/new_network_materialization_report.json',
               'build/france_irve_offers/irve_tariff_fallback_report.json',
               'build/france_irve_status/status_resolution_report.json',
