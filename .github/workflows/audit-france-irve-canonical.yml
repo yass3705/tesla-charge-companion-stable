@@ -20,6 +20,7 @@ on:
       - 'scripts/run_normalize_france_operator_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/resolve_france_operational_status.py'
+      - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
@@ -38,6 +39,7 @@ on:
       - 'scripts/run_normalize_france_operator_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/resolve_france_operational_status.py'
+      - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
 
 permissions:
@@ -60,7 +62,8 @@ jobs:
             scripts/normalize_france_operator_offers.py \
             scripts/run_normalize_france_operator_offers.py \
             scripts/materialize_france_runtime_rules.py \
-            scripts/resolve_france_operational_status.py
+            scripts/resolve_france_operational_status.py \
+            scripts/build_irve_tariff_fallback_candidates.py
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -104,6 +107,13 @@ jobs:
             --input data/france_runtime_extracted_tariff_rules_v1.json \
             --out-dir build/france_irve_offers
 
+      - name: Build strict IRVE tariff fallback candidates
+        run: |
+          python scripts/build_irve_tariff_fallback_candidates.py \
+            --static-csv .tmp/irve/static.csv \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
       - name: Resolve operational status precedence
         run: |
           python scripts/resolve_france_operational_status.py \
@@ -119,6 +129,7 @@ jobs:
               'build/france_irve_identity/stations.json.gz',
               'build/france_irve_identity/charge_points.json.gz',
               'build/france_irve_offers/station_offers.json.gz',
+              'build/france_irve_offers/irve_tariff_fallback_candidates.json.gz',
               'build/france_irve_status/charge_point_status.json.gz',
           ]:
               with gzip.open(path, 'rt', encoding='utf-8') as handle:
@@ -128,6 +139,7 @@ jobs:
               'build/france_irve_offers/operator_rule_templates.json',
               'build/france_irve_offers/runtime_rule_templates.json',
               'build/france_irve_offers/runtime_rule_materialization_report.json',
+              'build/france_irve_offers/irve_tariff_fallback_report.json',
               'build/france_irve_status/status_resolution_report.json',
           ]:
               json.load(open(path, encoding='utf-8'))
@@ -142,6 +154,7 @@ jobs:
           network=json.load(open('build/france_irve_identity/network_gap_report.json', encoding='utf-8'))
           offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
           runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json', encoding='utf-8'))
+          fallback=json.load(open('build/france_irve_offers/irve_tariff_fallback_report.json', encoding='utf-8'))
           status=json.load(open('build/france_irve_status/status_resolution_report.json', encoding='utf-8'))
           print('PAN canonical summary:')
           print(json.dumps(pan['summary'], ensure_ascii=False, indent=2))
@@ -159,6 +172,8 @@ jobs:
               print(json.dumps(source, ensure_ascii=False))
           print('\nRuntime-rule materialization summary:')
           print(json.dumps(runtime, ensure_ascii=False, indent=2))
+          print('\nIRVE fallback summary:')
+          print(json.dumps(fallback, ensure_ascii=False, indent=2))
           print('\nOperational-status precedence summary:')
           print(json.dumps(status['summary'], ensure_ascii=False, indent=2))
           PY
