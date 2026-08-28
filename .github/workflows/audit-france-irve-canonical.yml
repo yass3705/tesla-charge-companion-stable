@@ -9,9 +9,14 @@ on:
     paths:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_operator_adapter_registry_v1.json'
+      - 'data/france_runtime_extracted_tariff_rules_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - 'scripts/normalize_france_operator_offers.py'
+      - 'scripts/run_normalize_france_operator_offers.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
@@ -19,9 +24,14 @@ on:
     paths:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_operator_adapter_registry_v1.json'
+      - 'data/france_runtime_extracted_tariff_rules_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - 'scripts/normalize_france_operator_offers.py'
+      - 'scripts/run_normalize_france_operator_offers.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
 
 permissions:
@@ -40,7 +50,9 @@ jobs:
             scripts/build_france_irve_canonical.py \
             scripts/run_france_irve_canonical.py \
             scripts/enrich_france_irve_network_identity.py \
-            scripts/normalize_france_operator_offers.py
+            scripts/run_enrich_france_irve_network_identity.py \
+            scripts/normalize_france_operator_offers.py \
+            scripts/run_normalize_france_operator_offers.py
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -64,7 +76,7 @@ jobs:
 
       - name: Resolve technical CPO and tariff network separately
         run: |
-          python scripts/enrich_france_irve_network_identity.py \
+          python scripts/run_enrich_france_irve_network_identity.py \
             --canonical-dir build/france_irve \
             --operator-registry data/france_irve_operator_registry_v1.json \
             --network-registry data/france_irve_tariff_network_registry_v1.json \
@@ -72,11 +84,25 @@ jobs:
 
       - name: Normalize first legacy tariff sources
         run: |
-          python scripts/normalize_france_operator_offers.py \
+          python scripts/run_normalize_france_operator_offers.py \
             --canonical-dir build/france_irve_identity \
-            --operator-registry data/france_irve_operator_registry_v1.json \
+            --operator-registry data/france_irve_tariff_network_registry_v1.json \
             --adapter-registry data/france_operator_adapter_registry_v1.json \
             --out-dir build/france_irve_offers
+
+      - name: Validate generated JSON payloads
+        run: |
+          python - <<'PY'
+          import gzip, json
+          for path in [
+              'build/france_irve_identity/stations.json.gz',
+              'build/france_irve_identity/charge_points.json.gz',
+              'build/france_irve_offers/station_offers.json.gz',
+          ]:
+              with gzip.open(path, 'rt', encoding='utf-8') as handle:
+                  json.load(handle)
+              print('valid', path)
+          PY
 
       - name: Print coverage summary
         run: |
