@@ -1,0 +1,80 @@
+name: Netherlands catalog smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/ocpi-duration-tariffs-nl
+    paths:
+      - assets/netherlands-catalog.js
+      - assets/ocpi-duration-pricing.js
+      - assets/update.js
+      - tests/ocpi-duration-pricing.test.cjs
+      - data/non_tesla_netherlands/**
+      - .github/workflows/netherlands-catalog-smoke-test.yml
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate JavaScript syntax and duration engine
+        run: |
+          set -euo pipefail
+          node --check assets/update.js
+          node --check assets/netherlands-catalog.js
+          node --check assets/ocpi-duration-pricing.js
+          node tests/ocpi-duration-pricing.test.cjs
+
+      - name: Validate committed Netherlands runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import gzip,json,os,sys
+          root='data/non_tesla_netherlands'
+          manifest=json.load(open(f'{root}/manifest.json',encoding='utf-8'))
+          report=json.load(open(f'{root}/runtime_report.json',encoding='utf-8'))
+          with gzip.open(f'{root}/all.json.gz','rt',encoding='utf-8') as f:
+              rows=json.load(f)
+
+          duration_examples=[]
+          status_counts={}
+          for row in rows:
+              status=str(row[10] if len(row)>10 else 'UNKNOWN')
+              status_counts[status]=status_counts.get(status,0)+1
+              for config in row[8] or []:
+                  for rule in config[5] or []:
+                      bands=rule[12] if len(rule)>12 and isinstance(rule[12],list) else []
+                      if bands and len(duration_examples)<5:
+                          duration_examples.append({'station':row[0],'operator':row[5],'config':config[1],'bands':bands})
+
+          checks={
+              'schemaV2':manifest.get('schemaVersion')==2,
+              'stationCount':len(rows)==manifest.get('stationCount')==report.get('stationCount') and len(rows)>70000,
+              'tileCount':manifest.get('tileCount',0)>30,
+              'durationScope':manifest.get('scope',{}).get('ocpiDurationBands') is True,
+              'durationExamples':len(duration_examples)>0,
+              'durationConfigCount':manifest.get('durationBandConfigurationCount',0)>5000,
+              'exactCoverage':report.get('coveragePct',{}).get('exactTariffConnectors',0)>55,
+              'teslaExcluded':all(not str(row[0]).startswith('NL:TSL:') for row in rows),
+              'statusPresent':sum(status_counts.values())==len(rows) and len(status_counts)>0,
+          }
+          print(json.dumps({'checks':checks,'stations':len(rows),'tiles':manifest.get('tileCount'),'coverage':report.get('coveragePct'),'statuses':status_counts,'durationExamples':duration_examples},ensure_ascii=False,indent=2))
+          failed=[k for k,v in checks.items() if not v]
+          if failed:
+              print('FAILED: '+', '.join(failed),file=sys.stderr)
+              sys.exit(1)
+          PY
+
+      - name: Validate test-branch bootstrap wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'netherlands-catalog.js' assets/update.js
+          grep -q 'ocpiDurationBands' assets/netherlands-catalog.js
+          grep -q 'TCCOcpiDurationPricing' assets/netherlands-catalog.js
