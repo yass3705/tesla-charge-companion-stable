@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.1.0",
+  "dataset": "mobive-direct-tariffs-france",
+  "networkId": "mobive",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "source": "https://mobive.fr/nos-offres-et-tarifs/",
+  "productionReady": false,
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "subscriptionAnnualFeeEur": 18,
+    "transactionCapsAreTotalChargeTransactionCaps": true
+  },
+  "subscriptions": [
+    {
+      "id": "mobive-pass",
+      "label": "Pass Mobive",
+      "feeEur": 18,
+      "feePeriod": "year",
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true
+    }
+  ],
+  "grids": [
+    {
+      "id": "mobive-main-2025",
+      "effectiveFrom": "2025-05-05",
+      "departments": ["16", "17", "19", "23", "24", "33", "40", "47", "87"],
+      "dayWindow": "07:00-22:00",
+      "offers": [
+        {"id":"mobive-public-ac-le8","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"AC","maxPowerKva":8},"pricePerKwh":0.40,"durationPerMinute":0.10,"durationThresholdMinutes":600,"durationWindow":"07:00-22:00","transactionCapEur":90},
+        {"id":"mobive-public-ac-gt8","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"AC","minPowerKvaExclusive":8},"pricePerKwh":0.40,"durationPerMinute":0.10,"durationThresholdMinutes":150,"durationWindow":"07:00-22:00","transactionCapEur":90},
+        {"id":"mobive-public-dc-22-39","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"DC","minPowerKva":22,"maxPowerKva":39},"pricePerKwh":0.50,"durationPerMinute":0.12,"durationThresholdMinutes":90,"durationWindow":"00:00-24:00","transactionCapEur":90},
+        {"id":"mobive-public-dc-40-60","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"DC","minPowerKva":40,"maxPowerKva":60},"pricePerKwh":0.55,"durationPerMinute":0.12,"durationThresholdMinutes":60,"durationWindow":"00:00-24:00","transactionCapEur":90},
+        {"id":"mobive-public-dc-gt60","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"DC","minPowerKvaExclusive":60},"pricePerKwh":0.68,"durationPerMinute":0.12,"durationThresholdMinutes":30,"durationWindow":"00:00-24:00","transactionCapEur":90},
+        {"id":"mobive-pass-ac-le8","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"AC","maxPowerKva":8},"pricePerKwh":0.35,"durationPerMinute":0.08,"durationThresholdMinutes":600,"durationWindow":"07:00-22:00","transactionCapEur":50},
+        {"id":"mobive-pass-ac-gt8","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"AC","minPowerKvaExclusive":8},"pricePerKwh":0.35,"durationPerMinute":0.08,"durationThresholdMinutes":150,"durationWindow":"07:00-22:00","transactionCapEur":50},
+        {"id":"mobive-pass-dc-22-39","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"DC","minPowerKva":22,"maxPowerKva":39},"pricePerKwh":0.40,"durationPerMinute":0.10,"durationThresholdMinutes":90,"durationWindow":"00:00-24:00","transactionCapEur":50},
+        {"id":"mobive-pass-dc-40-60","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"DC","minPowerKva":40,"maxPowerKva":60},"pricePerKwh":0.45,"durationPerMinute":0.10,"durationThresholdMinutes":60,"durationWindow":"00:00-24:00","transactionCapEur":50},
+        {"id":"mobive-pass-dc-gt60","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"DC","minPowerKvaExclusive":60},"pricePerKwh":0.57,"durationPerMinute":0.10,"durationThresholdMinutes":30,"durationWindow":"00:00-24:00","transactionCapEur":50}
+      ]
+    },
+    {
+      "id": "mobive-pyrenees-atlantiques-2023",
+      "effectiveFrom": "2023-07-03",
+      "departments": ["64"],
+      "dayWindow": "07:00-23:00",
+      "offers": [
+        {"id":"mobive64-public-ac-le7","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"AC","maxPowerKva":7},"pricePerKwh":0.44,"durationPerMinute":0.09,"durationThresholdMinutes":600,"durationWindow":"07:00-23:00","transactionCapEur":50},
+        {"id":"mobive64-public-ac-gt7","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"AC","minPowerKvaExclusive":7},"pricePerKwh":0.55,"durationPerMinute":0.09,"durationThresholdMinutes":180,"durationWindow":"07:00-23:00","transactionCapEur":50},
+        {"id":"mobive64-public-dc-22-39","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"DC","minPowerKva":22,"maxPowerKva":39},"pricePerKwh":0.59,"durationPerMinute":0.09,"durationThresholdMinutes":60,"durationWindow":"00:00-24:00","transactionCapEur":50},
+        {"id":"mobive64-public-dc-40-60","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"DC","minPowerKva":40,"maxPowerKva":60},"pricePerKwh":0.64,"durationPerMinute":0.09,"durationThresholdMinutes":60,"durationWindow":"00:00-24:00","transactionCapEur":50},
+        {"id":"mobive64-public-dc-gt60","channel":"direct","provider":"Mobive non-abonné","selectors":{"kind":"DC","minPowerKvaExclusive":60},"pricePerKwh":0.68,"durationPerMinute":0.09,"durationThresholdMinutes":30,"durationWindow":"00:00-24:00","transactionCapEur":50},
+        {"id":"mobive64-pass-ac-le7","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"AC","maxPowerKva":7},"pricePerKwh":0.35,"durationPerMinute":0.07,"durationThresholdMinutes":600,"durationWindow":"07:00-23:00","transactionCapEur":30},
+        {"id":"mobive64-pass-ac-gt7","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"AC","minPowerKvaExclusive":7},"pricePerKwh":0.44,"durationPerMinute":0.07,"durationThresholdMinutes":180,"durationWindow":"07:00-23:00","transactionCapEur":30},
+        {"id":"mobive64-pass-dc-22-39","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"DC","minPowerKva":22,"maxPowerKva":39},"pricePerKwh":0.48,"durationPerMinute":0.07,"durationThresholdMinutes":60,"durationWindow":"00:00-24:00","transactionCapEur":30},
+        {"id":"mobive64-pass-dc-40-60","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"DC","minPowerKva":40,"maxPowerKva":60},"pricePerKwh":0.53,"durationPerMinute":0.07,"durationThresholdMinutes":60,"durationWindow":"00:00-24:00","transactionCapEur":30},
+        {"id":"mobive64-pass-dc-gt60","channel":"subscription","subscriptionId":"mobive-pass","provider":"Mobive abonné","selectors":{"kind":"DC","minPowerKvaExclusive":60},"pricePerKwh":0.57,"durationPerMinute":0.07,"durationThresholdMinutes":30,"durationWindow":"00:00-24:00","transactionCapEur":30}
+      ]
+    }
+  ],
+  "notes": [
+    "The official source states that only successful sessions are billed and every started kWh and minute is billed.",
+    "For AC tariffs, the duration surcharge is not applied during the official night window.",
+    "For DC tariffs, the duration surcharge uses the unique all-day tariff.",
+    "Transaction caps are kept as explicit tariff semantics and must be supported by the final TCC pricing engine before production ranking."
+  ]
+}
