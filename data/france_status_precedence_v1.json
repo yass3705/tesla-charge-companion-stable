@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "country": "FR",
+  "updatedAt": "2026-08-28",
+  "states": ["en_service", "hors_service", "inconnu"],
+  "occupationIgnored": true,
+  "precedence": [
+    "direct_cpo",
+    "irve_dynamic",
+    "unknown"
+  ],
+  "rules": {
+    "directCpoMayOverrideIrveDynamic": true,
+    "unknownDirectStateDoesNotOverrideKnownIrveState": true,
+    "electroverseStatusAllowed": false,
+    "electraStatusAllowed": false,
+    "staticInventoryPresenceNeverImpliesEnService": true,
+    "latestTimestampWinsWithinSameSourceClass": true,
+    "pdcGranularityPreferred": true,
+    "stationStatusDerivedAfterUserConnectorPowerFilters": true
+  },
+  "directStatusContract": {
+    "required": ["state", "source"],
+    "recommended": ["canonicalPdcId", "idPdcItinerance", "sourcePdcId", "timestamp"],
+    "acceptedStates": ["en_service", "hors_service", "inconnu"]
+  }
+}
