@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-08-28",
+  "overrides": [
+    {
+      "networkId": "indigo",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/indigo_recharge_direct_tariffs_v1.json"],
+      "notes": "Public and A-la-Carte standard tariffs are structured. Four legacy-price cities have an official A-la-Carte rule; their public ad-hoc price remains non-rankable. Monthly quota plans remain non-rankable until remaining quota is tracked."
+    },
+    {
+      "networkId": "eborn",
+      "coverageStatus": "ready",
+      "artifacts": ["data/eborn_direct_tariffs_v1.json"],
+      "notes": "Public and annual A-la-carte power-band tariffs are structured, including post-charge penalties. Monthly 250 kWh quota plan is retained but non-rankable without quota state. Partner roaming +15% is retained as a dependent partner rule."
+    },
+    {
+      "networkId": "mobive",
+      "coverageStatus": "ready",
+      "artifacts": ["data/mobive_direct_tariffs_v1.json"],
+      "notes": "Department-specific direct and Pass Mobive grids are structured, including duration windows and total transaction caps."
+    },
+    {
+      "networkId": "r3",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing verified runtime AC/DC rules are materialized into contract v1.1 templates."
+    },
+    {
+      "networkId": "stations-e",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing direct, Badge, Express-e and Access-e runtime rules are materialized into contract v1.1 templates."
+    },
+    {
+      "networkId": "ouest-charge",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing 22/29/35/44/49 departmental runtime grids are materialized into contract v1.1 templates."
+    },
+    {
+      "networkId": "ecocharge77",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing normal/rapid runtime rules are materialized into contract v1.1 templates."
+    }
+  ]
+}
