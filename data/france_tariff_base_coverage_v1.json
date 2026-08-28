@@ -33,6 +33,12 @@
       "notes": "Official subscribed/non-subscribed normal, rapid, ultra and long-stay tariffs are structured. Normal power classification is safe; newer rapid/ultra sites and long-stay P+R sites still require station-class mapping before production ranking."
     },
     {
+      "networkId": "effia",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/effia_direct_tariffs_v1.json"],
+      "notes": "EFFIA publishes 0.40 EUR/kWh + 1.50 EUR/session only for a selected parking list, so the standard offer remains non-rankable until that official list is matched. Paris Gare du Nord Park & Charge is preserved separately as a quota-based local subscription."
+    },
+    {
       "networkId": "saemes",
       "coverageStatus": "partial_ready",
       "artifacts": ["data/saemes_direct_tariffs_v1.json"],
