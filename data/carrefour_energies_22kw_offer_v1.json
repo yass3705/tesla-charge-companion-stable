@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.1.1",
+  "dataset": "carrefour-energies-eligible-22kw-offer-france",
+  "tariffNetworkId": "carrefour-energies",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "validFrom": "2026-08-01",
+  "source": "https://www.carrefour.fr/services/energies",
+  "networkSource": "https://energies.carrefour.fr/bornes-de-recharge",
+  "eligibleSitesSource": "https://static.carrefour.fr/static/cfr/C4FR/2026/07-juillet/modalites/bornes-electriques-liste-magasins-hm-baisse-des-prix.pdf",
+  "productionReady": false,
+  "policy": {
+    "physicalInventoryFromIrveOnly": true,
+    "stationSpecificEligibilityRequired": true,
+    "eligibleSiteMustMatchUniqueIrveStation": true,
+    "eligibleTechnicalOperators": {
+      "Allego": "allego",
+      "Powerdot": "powerdot"
+    },
+    "only22KwChargePoints": true,
+    "targetPowerKw": 22,
+    "powerToleranceKw": 1.5,
+    "channel": "direct",
+    "activationSurface": "Carrefour Energies WebApp",
+    "cashbackBenefitsExcludedFromChargingPrice": true
+  },
+  "offer": {
+    "idPrefix": "carrefour-energies-22kw-20260801",
+    "provider": "Carrefour Energies WebApp",
+    "pricePerKwh": 0.23,
+    "currency": "EUR",
+    "connectionFee": 0,
+    "chargePerMinute": 0,
+    "durationPerMinute": 0,
+    "occupancyPerMinute": 0,
+    "parkingPerMinute": 0
+  },
+  "notes": [
+    "The 0.23 EUR/kWh price applies from 1 August 2026 to participating Carrefour hypermarket 22 kW chargers listed by Carrefour.",
+    "The official participant list carries the expected technical operator (Allego or Powerdot); matching must respect it.",
+    "Do not apply the price to Carrefour Market/Contact sites or to non-participating Carrefour stations merely because their brand contains Carrefour.",
+    "Club/PASS cashback is a loyalty benefit and remains separate from the billed charging price."
+  ]
+}
