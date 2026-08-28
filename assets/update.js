@@ -86,8 +86,26 @@
     }
   }
 
-  // Register as early as possible so the next navigation is controlled by the worker.
-  registerWorker();
+  // Test-branch bootstrap for the DOT-NL national catalogue. It runs only after
+  // the regular deferred scripts (app + France catalogue) have initialized, so
+  // the Netherlands loader can safely chain candidateStations without changing
+  // the production main branch boot order.
+  window.addEventListener('DOMContentLoaded',()=>{
+    if(document.querySelector('script[data-tcc-netherlands-catalog]'))return;
+    const script=document.createElement('script');
+    script.src='assets/netherlands-catalog.js?v=2';
+    script.dataset.tccNetherlandsCatalog='1';
+    script.onload=()=>{
+      if(document.querySelector('script[data-tcc-netherlands-refresh]'))return;
+      const refresh=document.createElement('script');
+      refresh.src='assets/netherlands-refresh.js?v=1';
+      refresh.dataset.tccNetherlandsRefresh='1';
+      refresh.onerror=()=>console.warn('[TCC] Contrôle de rechargement Pays-Bas non chargé.');
+      document.head.appendChild(refresh);
+    };
+    script.onerror=()=>console.warn('[TCC] Catalogue Pays-Bas non chargé.');
+    document.head.appendChild(script);
+  },{once:true});
 
   // Opening/resuming the Home Screen app is the key iOS path.
   window.addEventListener('pageshow',()=>setTimeout(checkForUpdate,150));

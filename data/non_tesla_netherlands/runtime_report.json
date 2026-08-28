@@ -1,0 +1,43 @@
+{
+  "allCompressedBytes": 3986928,
+  "allUncompressedBytes": 25721343,
+  "cache": {
+    "compiledTariffs": 13127,
+    "tariffSelections": 13128
+  },
+  "coveragePct": {
+    "exactTariffConnectors": 56.505,
+    "pricedConfigs": 55.623
+  },
+  "dataset": "dotnl-netherlands-runtime-report",
+  "effectiveTariffDate": "2026-08-28",
+  "generatedAt": "2026-08-28T23:15:02.270001+00:00",
+  "metrics": {
+    "ambiguousTariffConnectors": 0,
+    "configs": 81939,
+    "connectors": 189581,
+    "durationBandConfigs": 6201,
+    "exactPricedConnectors": 107123,
+    "outOfBoundsByParty": {
+      "AGO": 1,
+      "ALL": 1,
+      "EFL": 6,
+      "ENE": 3,
+      "EVT": 1,
+      "LMS": 2,
+      "NUO": 2
+    },
+    "outOfBoundsStations": 16,
+    "pricedConfigs": 45577,
+    "unpricedConnectors": 82457,
+    "unsupportedReasons": {
+      "no_current_element": 3,
+      "restricted_flat": 4856,
+      "step_size": 4507,
+      "unsupported_restriction:max_power": 4
+    }
+  },
+  "publishedToTcc": false,
+  "stationCount": 78576,
+  "tileCount": 43
+}
