@@ -3,6 +3,13 @@ name: Audit France IRVE canonical
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'scripts/build_france_irve_canonical.py'
+      - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
       - release/2026-08
