@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.1.0",
+  "dataset": "saemes-direct-tariffs-france",
+  "networkId": "saemes",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "source": "https://www.saemes.fr/fr/bornes-de-recharge-vehicules-electriques",
+  "secondarySources": [
+    "https://www.recharge.saemes.fr/",
+    "https://www.saemes.fr/sites/default/files/2026-04/A5-Carnet-de-route-2026-public_optimis%C3%A9.pdf"
+  ],
+  "productionReady": false,
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "parkingExcludedFromChargingTariff": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "electraRapidStationsRemainSeparateNetwork": true
+  },
+  "subscriptions": [],
+  "offers": [
+    {
+      "id": "saemes-public-qr-standard",
+      "channel": "direct",
+      "provider": "SAEMES direct QR/CB",
+      "selectors": {},
+      "pricingRules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "currency": "EUR",
+          "pricePerKwh": 0.50,
+          "chargePerMinute": 0,
+          "connectionFee": 0.50,
+          "durationPerMinute": 0.1666666667,
+          "durationThresholdMinutes": 900,
+          "occupancyPerMinute": 0,
+          "parkingPerMinute": 0
+        }
+      ],
+      "rankable": true,
+      "note": "SAEMES documents a 0.50 EUR service fee plus 0.50 EUR/kWh for direct QR/CB charging. Its 2026 parking guide states 10 EUR/hour after 15 consecutive hours connected; this is modeled as a connection-duration surcharge, not as car-park parking cost."
+    }
+  ],
+  "notes": [
+    "Tariffs through mobility-provider badges can differ and must remain separate roaming offers.",
+    "Parking charges for the car park are not part of this charging offer.",
+    "Rapid Electra stations hosted inside some SAEMES car parks are not covered by this SAEMES direct rule when the resolved tariff network is Electra."
+  ]
+}
