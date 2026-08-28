@@ -18,6 +18,10 @@ on:
       - 'data/eborn_direct_tariffs_v1.json'
       - 'data/mobive_direct_tariffs_v1.json'
       - 'data/saemes_direct_tariffs_v1.json'
+      - 'data/qpark_izivia_tariffs_v1.json'
+      - 'data/carrefour_energies_22kw_offer_v1.json'
+      - 'data/carrefour_energies_benefits_v1.json'
+      - 'data/carrefour_energies_eligible_sites_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/build_effective_france_tariff_network_registry.py'
@@ -28,7 +32,9 @@ on:
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/materialize_france_new_network_bases.py'
+      - 'scripts/materialize_carrefour_energies_22kw.py'
       - 'scripts/test_france_new_network_bases.py'
+      - 'scripts/test_carrefour_energies_offer.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
@@ -47,6 +53,10 @@ on:
       - 'data/eborn_direct_tariffs_v1.json'
       - 'data/mobive_direct_tariffs_v1.json'
       - 'data/saemes_direct_tariffs_v1.json'
+      - 'data/qpark_izivia_tariffs_v1.json'
+      - 'data/carrefour_energies_22kw_offer_v1.json'
+      - 'data/carrefour_energies_benefits_v1.json'
+      - 'data/carrefour_energies_eligible_sites_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/build_effective_france_tariff_network_registry.py'
@@ -57,7 +67,9 @@ on:
       - 'scripts/finalize_france_normalized_offers.py'
       - 'scripts/materialize_france_runtime_rules.py'
       - 'scripts/materialize_france_new_network_bases.py'
+      - 'scripts/materialize_carrefour_energies_22kw.py'
       - 'scripts/test_france_new_network_bases.py'
+      - 'scripts/test_carrefour_energies_offer.py'
       - 'scripts/resolve_france_operational_status.py'
       - 'scripts/build_irve_tariff_fallback_candidates.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
@@ -86,11 +98,17 @@ jobs:
             scripts/materialize_france_runtime_rules.py \
             scripts/materialize_france_new_network_bases.py \
             scripts/test_france_new_network_bases.py \
+            scripts/test_carrefour_energies_offer.py \
             scripts/resolve_france_operational_status.py \
             scripts/build_irve_tariff_fallback_candidates.py
+          if [ -f scripts/materialize_carrefour_energies_22kw.py ]; then
+            python -m py_compile scripts/materialize_carrefour_energies_22kw.py
+          fi
 
       - name: Test new official network tariff semantics
-        run: python scripts/test_france_new_network_bases.py
+        run: |
+          python scripts/test_france_new_network_bases.py
+          python scripts/test_carrefour_energies_offer.py
 
       - name: Build effective tariff-network registry
         run: |
@@ -154,7 +172,20 @@ jobs:
             --eborn data/eborn_direct_tariffs_v1.json \
             --mobive data/mobive_direct_tariffs_v1.json \
             --saemes data/saemes_direct_tariffs_v1.json \
+            --qpark data/qpark_izivia_tariffs_v1.json \
             --out-dir build/france_irve_offers
+
+      - name: Materialize Carrefour Energies eligible 22 kW offer
+        run: |
+          if [ -f scripts/materialize_carrefour_energies_22kw.py ] && [ -f data/carrefour_energies_eligible_sites_v1.json ]; then
+            python scripts/materialize_carrefour_energies_22kw.py \
+              --canonical-dir build/france_irve_identity \
+              --offer data/carrefour_energies_22kw_offer_v1.json \
+              --eligible-sites data/carrefour_energies_eligible_sites_v1.json \
+              --out-dir build/france_irve_offers
+          else
+            echo 'Carrefour station matcher not materialized yet; semantic inputs validated only.'
+          fi
 
       - name: Build strict IRVE tariff fallback candidates
         run: |
@@ -173,7 +204,7 @@ jobs:
       - name: Validate generated JSON payloads
         run: |
           python - <<'PY'
-          import gzip, json
+          import gzip, json, os
           for path in [
               'build/france_irve_identity/stations.json.gz',
               'build/france_irve_identity/charge_points.json.gz',
@@ -201,12 +232,19 @@ jobs:
           ]:
               json.load(open(path, encoding='utf-8'))
               print('valid', path)
+          for path in [
+              'build/france_irve_offers/carrefour_22kw_station_offers.json',
+              'build/france_irve_offers/carrefour_22kw_match_report.json',
+          ]:
+              if os.path.exists(path):
+                  json.load(open(path, encoding='utf-8'))
+                  print('valid', path)
           PY
 
       - name: Print coverage summary
         run: |
           python - <<'PY'
-          import json
+          import json, os
           pan=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
           network=json.load(open('build/france_irve_identity/network_gap_report.json', encoding='utf-8'))
           offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
@@ -235,6 +273,9 @@ jobs:
           print(json.dumps(runtime, ensure_ascii=False, indent=2))
           print('\nNew official-network bases summary:')
           print(json.dumps(newbases, ensure_ascii=False, indent=2))
+          if os.path.exists('build/france_irve_offers/carrefour_22kw_match_report.json'):
+              print('\nCarrefour 22 kW station matching summary:')
+              print(json.dumps(json.load(open('build/france_irve_offers/carrefour_22kw_match_report.json', encoding='utf-8')), ensure_ascii=False, indent=2))
           print('\nIRVE fallback summary:')
           print(json.dumps(fallback, ensure_ascii=False, indent=2))
           print('\nOperational-status precedence summary:')
