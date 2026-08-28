@@ -115,12 +115,33 @@ def test_saemes():
     assert data["scope"]["electraRapidStationsRemainSeparateNetwork"] is True
 
 
+def test_qpark():
+    data = load("qpark_izivia_tariffs_v1.json")
+    assert data["networkId"] == "qpark"
+    offers = by_id(data["offers"])
+    izivia = offers["qpark-izivia-pass-access"]
+    assert izivia["channel"] == "msp"
+    assert izivia["subscriptionId"] == "izivia-pass-access"
+    rule = izivia["pricingRules"][0]
+    assert_close(rule["pricePerKwh"], 0.55)
+    assert_close(rule["connectionFee"], 1.20)
+    assert_close(rule["parkingPerMinute"], 0)
+    assert offers["qpark-izivia-paynow-unresolved"]["rankable"] is False
+    sub = by_id(data["subscriptions"])["izivia-pass-access"]
+    assert sub["feeEur"] == 15
+    assert sub["feePeriod"] == "one_time"
+    assert sub["monthlyFeeEur"] == 0
+    assert sub["defaultSelected"] is False
+    assert data["scope"]["qparkIsCommercialHost"] is True
+
+
 def test_network_only_invariants():
     for name in (
         "indigo_recharge_direct_tariffs_v1.json",
         "eborn_direct_tariffs_v1.json",
         "mobive_direct_tariffs_v1.json",
         "saemes_direct_tariffs_v1.json",
+        "qpark_izivia_tariffs_v1.json",
     ):
         raw = json.dumps(load(name), ensure_ascii=False).lower()
         assert '"latitude"' not in raw
@@ -134,8 +155,9 @@ def main():
     test_eborn()
     test_mobive()
     test_saemes()
+    test_qpark()
     test_network_only_invariants()
-    print("OK: Indigo, eborn, Mobive and SAEMES tariff bases validated")
+    print("OK: Indigo, eborn, Mobive, SAEMES and Q-Park tariff bases validated")
 
 
 if __name__ == "__main__":
