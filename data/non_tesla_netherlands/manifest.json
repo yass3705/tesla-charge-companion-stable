@@ -4,18 +4,18 @@
     "stationsWithExceptionalPeriods": 7,
     "stationsWithMultiIntervalRegular": 7,
     "stationsWithParkingRestrictions": 11880,
-    "stationsWithParkingType": 26848,
-    "twentyFourSevenStations": 69839,
+    "stationsWithParkingType": 26849,
+    "twentyFourSevenStations": 69840,
     "unknownStations": 8565
   },
-  "allBytes": 4015169,
+  "allBytes": 4015242,
   "allFile": "all.json.gz",
-  "configurationCount": 81939,
+  "configurationCount": 81940,
   "dataset": "netherlands-non-tesla-runtime-test",
   "durationBandConfigurationCount": 6201,
   "effectiveTariffDate": "2026-08-28",
-  "generatedAt": "2026-08-28T23:15:02.270001+00:00",
-  "pricedConfigurationCount": 45577,
+  "generatedAt": "2026-08-28T23:26:58.811981+00:00",
+  "pricedConfigurationCount": 45578,
   "schemaVersion": 3,
   "scope": {
     "countryCode": "NL",
@@ -32,7 +32,7 @@
     "strictTariffCompiler": true,
     "teslaExcluded": true
   },
-  "stationCount": 78576,
+  "stationCount": 78577,
   "tileCount": 43,
   "tileSizeDegrees": 0.5,
   "tiles": [
@@ -56,7 +56,7 @@
       "maxLon": 6.0,
       "minLat": 50.5,
       "minLon": 5.5,
-      "sha256": "0071eaf34975cb0f0cfbf6e95554bafdb1c207594a3c7c8086cc4c298e0f8811"
+      "sha256": "e2fa54b22994c133a790b68e78a50a2910c7e9b7cc694ad3f6db215e4d7d5a55"
     },
     {
       "bytes": 21732,
@@ -114,7 +114,7 @@
       "sha256": "a52b54a899f88431482957f2b4bcf70692cf842801f995dea8c4508ba36e1ed9"
     },
     {
-      "bytes": 100200,
+      "bytes": 100202,
       "count": 2018,
       "file": "t_102_10.json.gz",
       "id": "t_102_10",
@@ -122,10 +122,10 @@
       "maxLon": 5.5,
       "minLat": 51.0,
       "minLon": 5.0,
-      "sha256": "e47c76bbfaa8b1eb4b90f1d1a65d5d66bfbba3bde0bc2f2f647eeb4cfecfc392"
+      "sha256": "9905c1b080836164db7d4ede7310b9a356c7f77dae3f55d104541412f2e3e942"
     },
     {
-      "bytes": 107253,
+      "bytes": 107252,
       "count": 2030,
       "file": "t_102_11.json.gz",
       "id": "t_102_11",
@@ -133,7 +133,7 @@
       "maxLon": 6.0,
       "minLat": 51.0,
       "minLon": 5.5,
-      "sha256": "3c9a70b77f10fc9477e343d570e887ca3fc23b32d85049abcf0f0d8e7becd593"
+      "sha256": "eb107a96c5bb8dc5a1bdc1e0193a62619f4ea89ef4b63f4f0feb8bacd6ae2257"
     },
     {
       "bytes": 43734,
@@ -180,7 +180,7 @@
       "sha256": "704b31bc5c017f529939b24d1cabeb3ed0958af233c8005d17ba9ee5315102f5"
     },
     {
-      "bytes": 23639,
+      "bytes": 23643,
       "count": 428,
       "file": "t_102_8.json.gz",
       "id": "t_102_8",
@@ -188,10 +188,10 @@
       "maxLon": 4.5,
       "minLat": 51.0,
       "minLon": 4.0,
-      "sha256": "2f0056b6809411360421499fd766590b31d2bbd0ff88b5884ab994030f911da4"
+      "sha256": "bc86a90c674781f029261cbb9c6406de6b5c4f2b2cd89cc2d375820611eb51f2"
     },
     {
-      "bytes": 6792,
+      "bytes": 6787,
       "count": 112,
       "file": "t_102_9.json.gz",
       "id": "t_102_9",
@@ -199,10 +199,10 @@
       "maxLon": 5.0,
       "minLat": 51.0,
       "minLon": 4.5,
-      "sha256": "88ec7d700006cdf12dfd33ac60cf76448846bb9f24ec035ab5d1c0d8b65b8235"
+      "sha256": "9d5ca31bcb8d4036f13f6e9837b9ee6442c630cfb32ebd3f0854378727710fc4"
     },
     {
-      "bytes": 290130,
+      "bytes": 290138,
       "count": 5545,
       "file": "t_103_10.json.gz",
       "id": "t_103_10",
@@ -210,10 +210,10 @@
       "maxLon": 5.5,
       "minLat": 51.5,
       "minLon": 5.0,
-      "sha256": "ba6dea48a64423937fd618a4f657baa653b703de6307d608c6b3229e791e8f40"
+      "sha256": "28773676166a9d7616da45de9560c5a56f5179b1222b3e5253a618f3cedb8190"
     },
     {
-      "bytes": 241830,
+      "bytes": 241834,
       "count": 4694,
       "file": "t_103_11.json.gz",
       "id": "t_103_11",
@@ -221,7 +221,7 @@
       "maxLon": 6.0,
       "minLat": 51.5,
       "minLon": 5.5,
-      "sha256": "ac3acccf882315a0da3abf7b935410b839b3109c25899338b51a8c93144778e0"
+      "sha256": "6de346eb71f74244468d9aa83fec277e96cf3a8bb4e5c1a7f2b3badd215bcaa4"
     },
     {
       "bytes": 46543,
@@ -268,18 +268,18 @@
       "sha256": "164924b9115c0563c17d2dcc5783f294d76eed98c7da7363f7e0c29910380218"
     },
     {
-      "bytes": 254422,
-      "count": 6829,
+      "bytes": 254456,
+      "count": 6830,
       "file": "t_103_8.json.gz",
       "id": "t_103_8",
       "maxLat": 52.0,
       "maxLon": 4.5,
       "minLat": 51.5,
       "minLon": 4.0,
-      "sha256": "00999c6aa86a55cde7f6b2e278c7e8db6f97dc5d548c865971fbaa78ab863a50"
+      "sha256": "5ede924611f347a598e9a1a1f1c81b52b2a55e1d43f787fb25a7c15252bff29a"
     },
     {
-      "bytes": 379065,
+      "bytes": 379071,
       "count": 8722,
       "file": "t_103_9.json.gz",
       "id": "t_103_9",
@@ -287,10 +287,10 @@
       "maxLon": 5.0,
       "minLat": 51.5,
       "minLon": 4.5,
-      "sha256": "ee87371760df36d32f0988c165d18fe6d9b31ba51feb0c789063e2e32dd9fadd"
+      "sha256": "f013a3861a41f5a6aa6e90e47f31d722ed8e7cb5f5a893b4685be55def4d38db"
     },
     {
-      "bytes": 409067,
+      "bytes": 409086,
       "count": 7709,
       "file": "t_104_10.json.gz",
       "id": "t_104_10",
@@ -298,10 +298,10 @@
       "maxLon": 5.5,
       "minLat": 52.0,
       "minLon": 5.0,
-      "sha256": "44ca14e96541d0b0fcd8bf0a46f433f4a401bca690dc389c9c89c6385a753af0"
+      "sha256": "dfb4e80ad1a883b45b6815211ef724236fde207d619c3281cc92e82c453ae31e"
     },
     {
-      "bytes": 157871,
+      "bytes": 157870,
       "count": 3165,
       "file": "t_104_11.json.gz",
       "id": "t_104_11",
@@ -309,10 +309,10 @@
       "maxLon": 6.0,
       "minLat": 52.0,
       "minLon": 5.5,
-      "sha256": "d8e52975275460e4219d9d70278af8b195b7c0d39bb58302d64b8bfc618da404"
+      "sha256": "8931eb4f4fc61b4b3b7327168201cdf0fe54d766c53c45efb4e0e460eb069f89"
     },
     {
-      "bytes": 110392,
+      "bytes": 110390,
       "count": 2169,
       "file": "t_104_12.json.gz",
       "id": "t_104_12",
@@ -320,10 +320,10 @@
       "maxLon": 6.5,
       "minLat": 52.0,
       "minLon": 6.0,
-      "sha256": "fd0c3e7ac43679ff2c1bd0031d17967bc17ee8f2fc816af3d31ed3e735952096"
+      "sha256": "9c04469628e43aae68330fe7fdb25a0a41e1d49c97e4f455bb1fd82676f64986"
     },
     {
-      "bytes": 101855,
+      "bytes": 101861,
       "count": 1978,
       "file": "t_104_13.json.gz",
       "id": "t_104_13",
@@ -331,7 +331,7 @@
       "maxLon": 7.0,
       "minLat": 52.0,
       "minLon": 6.5,
-      "sha256": "105e6ca1c258ceb127a732a00e4a3cbc94efb9d5340a670da494cad1c8eac1d5"
+      "sha256": "aced9c2db68c3e0072d1bb990bd49f52c4e158a8bf53aa4c77181e5595bef8e7"
     },
     {
       "bytes": 4434,
@@ -345,7 +345,7 @@
       "sha256": "62fa3048b3b7f7875070f165cddae33a2bba069d447c3b68f852b77da79991a7"
     },
     {
-      "bytes": 315641,
+      "bytes": 315649,
       "count": 7196,
       "file": "t_104_8.json.gz",
       "id": "t_104_8",
@@ -353,10 +353,10 @@
       "maxLon": 4.5,
       "minLat": 52.0,
       "minLon": 4.0,
-      "sha256": "76d7d2b8f08e801b6c4bc484dc34fc148c49e313c5b71ffaddaeca2fe000e487"
+      "sha256": "55abd393b6168826c0e0da55e11fabf283b84a7b3874e68e5285f6cc63e0ebfb"
     },
     {
-      "bytes": 498375,
+      "bytes": 498383,
       "count": 9965,
       "file": "t_104_9.json.gz",
       "id": "t_104_9",
@@ -364,10 +364,10 @@
       "maxLon": 5.0,
       "minLat": 52.0,
       "minLon": 4.5,
-      "sha256": "030240c767099846da4fb9168c3648542f47f11a165326b632bb449be6322c8f"
+      "sha256": "c34a5eab57c73e0ba0f2e82cf8be4c3cf356629aabfa2859b244bbf0c222a4e4"
     },
     {
-      "bytes": 55074,
+      "bytes": 55071,
       "count": 1092,
       "file": "t_105_10.json.gz",
       "id": "t_105_10",
@@ -375,7 +375,7 @@
       "maxLon": 5.5,
       "minLat": 52.5,
       "minLon": 5.0,
-      "sha256": "68b4840118c00c5290aed4794a09dd6639c7e6516bc1b4611b465d75d06cdd9e"
+      "sha256": "8f7656db41c52b8851466a14c3fa7ec0d7d5b4ddc2639fff9dee41754b5f7957"
     },
     {
       "bytes": 52712,
@@ -433,7 +433,7 @@
       "sha256": "78f77a7e18bb60406c541319588949cde7cb74ae768accd8ff063aadf50045f1"
     },
     {
-      "bytes": 139185,
+      "bytes": 139191,
       "count": 2590,
       "file": "t_105_9.json.gz",
       "id": "t_105_9",
@@ -441,7 +441,7 @@
       "maxLon": 5.0,
       "minLat": 52.5,
       "minLon": 4.5,
-      "sha256": "5a17833f0ab2c2bd45297c60b0c39068bde67ab396b6f876606962df7300cd90"
+      "sha256": "358e4249aaf7655e7b21d92517bcb181096fb8bf80c338170506aa7c4089da95"
     },
     {
       "bytes": 6624,
@@ -485,7 +485,7 @@
       "maxLon": 7.0,
       "minLat": 53.0,
       "minLon": 6.5,
-      "sha256": "1a6d986dc5d3993099902f515446383d197eaeefd325a2a40bf0d49abb187797"
+      "sha256": "6f49e49016d7a9559d708d41555a4d8dfe29eb150aa716b5eb203726868e788a"
     },
     {
       "bytes": 4996,
