@@ -1,0 +1,213 @@
+name: Audit France IRVE physical + Carrefour
+# Non-production validation of conservative physical dedupe and Carrefour 22 kW mapping.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'data/france_operator_adapter_registry_v1.json'
+      - 'data/france_runtime_extracted_tariff_rules_v1.json'
+      - 'data/france_status_precedence_v1.json'
+      - 'data/qpark_izivia_tariffs_v1.json'
+      - 'data/carrefour_energies_22kw_offer_v1.json'
+      - 'data/carrefour_energies_benefits_v1.json'
+      - 'scripts/build_france_irve_canonical.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - 'scripts/build_france_safe_physical_dedupe.py'
+      - 'scripts/normalize_france_operator_offers.py'
+      - 'scripts/run_normalize_france_operator_offers.py'
+      - 'scripts/finalize_france_normalized_offers.py'
+      - 'scripts/materialize_france_new_network_bases.py'
+      - 'scripts/test_france_new_network_bases.py'
+      - 'scripts/build_carrefour_eligible_22kw_offers.py'
+      - 'scripts/build_irve_tariff_fallback_candidates.py'
+      - 'scripts/resolve_france_operational_status.py'
+      - '.github/workflows/audit-france-irve-physical-carrefour.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Python syntax and tariff semantics
+        run: |
+          python -m py_compile \
+            scripts/build_france_irve_canonical.py \
+            scripts/run_france_irve_canonical.py \
+            scripts/build_effective_france_tariff_network_registry.py \
+            scripts/enrich_france_irve_network_identity.py \
+            scripts/run_enrich_france_irve_network_identity.py \
+            scripts/build_france_safe_physical_dedupe.py \
+            scripts/normalize_france_operator_offers.py \
+            scripts/run_normalize_france_operator_offers.py \
+            scripts/finalize_france_normalized_offers.py \
+            scripts/materialize_france_new_network_bases.py \
+            scripts/build_carrefour_eligible_22kw_offers.py \
+            scripts/build_irve_tariff_fallback_candidates.py \
+            scripts/resolve_france_operational_status.py
+          python scripts/test_france_new_network_bases.py
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Build canonical IRVE identity layer
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Collapse only high-confidence physical duplicate identities
+        run: |
+          python scripts/build_france_safe_physical_dedupe.py \
+            --identity-dir build/france_irve_identity \
+            --out-dir build/france_irve_physical \
+            --max-distance-m 250
+
+      - name: Re-normalize legacy station tariffs on deduped physical inventory
+        run: |
+          python scripts/run_normalize_france_operator_offers.py \
+            --canonical-dir build/france_irve_physical \
+            --operator-registry build/france_irve/effective_tariff_network_registry.json \
+            --adapter-registry data/france_operator_adapter_registry_v1.json \
+            --out-dir build/france_irve_offers
+          python scripts/finalize_france_normalized_offers.py \
+            --identity-dir build/france_irve_physical \
+            --offers-dir build/france_irve_offers
+
+      - name: Materialize official network tariff bases including Q-Park
+        run: |
+          python scripts/materialize_france_new_network_bases.py \
+            --qpark data/qpark_izivia_tariffs_v1.json \
+            --out-dir build/france_irve_offers
+
+      - name: Download Carrefour official eligible-site list
+        run: |
+          mkdir -p .tmp/carrefour
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://static.carrefour.fr/static/cfr/C4FR/2026/07-juillet/modalites/bornes-electriques-liste-magasins-hm-baisse-des-prix.pdf' \
+            --output .tmp/carrefour/eligible-sites.pdf
+          if ! command -v pdftotext >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq poppler-utils
+          fi
+          pdftotext -layout .tmp/carrefour/eligible-sites.pdf .tmp/carrefour/eligible-sites.txt
+          test -s .tmp/carrefour/eligible-sites.txt
+
+      - name: Build Carrefour eligible 22 kW PDC offers
+        run: |
+          python scripts/build_carrefour_eligible_22kw_offers.py \
+            --participants-text .tmp/carrefour/eligible-sites.txt \
+            --canonical-dir build/france_irve_physical \
+            --config data/carrefour_energies_22kw_offer_v1.json \
+            --benefits data/carrefour_energies_benefits_v1.json \
+            --out-dir build/france_irve_offers \
+            --min-match-rate 0.70
+
+      - name: Build IRVE fallback and operational status on physical inventory
+        run: |
+          python scripts/build_irve_tariff_fallback_candidates.py \
+            --static-csv .tmp/irve/static.csv \
+            --canonical-dir build/france_irve_physical \
+            --out-dir build/france_irve_offers
+          python scripts/resolve_france_operational_status.py \
+            --canonical-dir build/france_irve_physical \
+            --policy data/france_status_precedence_v1.json \
+            --out-dir build/france_irve_status
+
+      - name: Validate physical and Carrefour outputs
+        run: |
+          python - <<'PY'
+          import gzip, json
+          gz = [
+            'build/france_irve_physical/stations.json.gz',
+            'build/france_irve_physical/charge_points.json.gz',
+            'build/france_irve_offers/station_offers_v1_1.json.gz',
+            'build/france_irve_offers/carrefour_22kw_station_offers.json.gz',
+            'build/france_irve_offers/irve_tariff_fallback_candidates.json.gz',
+            'build/france_irve_status/charge_point_status.json.gz',
+          ]
+          for path in gz:
+            with gzip.open(path, 'rt', encoding='utf-8') as handle:
+              json.load(handle)
+            print('valid', path)
+          js = [
+            'build/france_irve_physical/station_alias_map.json',
+            'build/france_irve_physical/pdc_alias_map.json',
+            'build/france_irve_physical/dedup_report.json',
+            'build/france_irve_offers/carrefour_22kw_match_report.json',
+            'build/france_irve_offers/carrefour_loyalty_benefits.json',
+            'build/france_irve_offers/new_network_materialization_report.json',
+            'build/france_irve_status/status_resolution_report.json',
+          ]
+          for path in js:
+            json.load(open(path, encoding='utf-8'))
+            print('valid', path)
+          PY
+
+      - name: Print physical and Carrefour audit summary
+        run: |
+          python - <<'PY'
+          import json
+          dedup=json.load(open('build/france_irve_physical/dedup_report.json',encoding='utf-8'))
+          carrefour=json.load(open('build/france_irve_offers/carrefour_22kw_match_report.json',encoding='utf-8'))
+          matches=json.load(open('build/france_irve_offers/match_report.json',encoding='utf-8'))
+          status=json.load(open('build/france_irve_status/status_resolution_report.json',encoding='utf-8'))
+          print('Physical dedupe:')
+          for key in ['inputStationCount','outputPhysicalStationCount','removedAliasStationCount','inputPdcCount','outputPhysicalPdcCount','removedAliasPdcCount','duplicateClusterCount','dynamicStatusConflictCount','clustersByPhysicalOperator']:
+            print(key, dedup.get(key))
+          print('\nCarrefour 22 kW:')
+          for key in ['participantSiteCount','participantsByPhysicalOperator','matchedSiteCount','matchedSiteRate','matchedSiteWith22KwPdcCount','matchedSiteWith22KwPdcRate','offerPdcCount','statusCounts']:
+            print(key, carrefour.get(key))
+          print('\nLegacy station normalization after alias collapse:')
+          for source in matches.get('sources',[]):
+            print(json.dumps(source,ensure_ascii=False))
+          print('\nStatus after physical dedupe:')
+          print(json.dumps(status.get('summary',{}),ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload physical audit snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-irve-physical-carrefour-audit
+          path: |
+            build/france_irve_physical/
+            build/france_irve_offers/
+            build/france_irve_status/
+          retention-days: 14
