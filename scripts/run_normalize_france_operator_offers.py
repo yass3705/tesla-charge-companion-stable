@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Compatibility entrypoint: resolve operator-rule offers on tariff networks.
+"""Compatibility entrypoint for tariff-network and physical-alias resolution.
 
-Station-specific matching remains based on the canonical station's technical
-operator. Only rule-template alias resolution is switched from the technical
-operator registry to france_irve_tariff_network_registry_v1.json.
+- operator-rule offers resolve on customer-facing tariff networks;
+- station-specific legacy sources may still reference an IRVE station identity
+  collapsed by the conservative physical dedupe layer. Those source IDs are
+  indexed as aliases of the retained primary station.
 """
 import normalize_france_operator_offers as normalizer
 
@@ -14,7 +15,6 @@ def tariff_network_lookup(registry):
     alias_rows = []
     for row in specs:
         aliases = list(row.get("aliases", []))
-        # provider/rule labels sometimes use the customer-facing canonical label.
         if row.get("label"):
             aliases.append(row["label"])
         for alias in aliases:
@@ -24,5 +24,24 @@ def tariff_network_lookup(registry):
     return by_id, alias_rows
 
 
+def alias_aware_station_indexes(stations):
+    by_id, raw, compact, by_operator = original_build_station_indexes(stations)
+    for station in stations:
+        sid = normalizer.clean(station.get("stationId"))
+        if not sid:
+            continue
+        for alias in station.get("physicalAliasStationIds") or []:
+            alias = normalizer.clean(alias)
+            if not alias:
+                continue
+            raw[alias].add(sid)
+            token = normalizer.compact_id(alias)
+            if token:
+                compact[token].add(sid)
+    return by_id, raw, compact, by_operator
+
+
+original_build_station_indexes = normalizer.build_station_indexes
 normalizer.operator_lookup = tariff_network_lookup
+normalizer.build_station_indexes = alias_aware_station_indexes
 normalizer.main()
