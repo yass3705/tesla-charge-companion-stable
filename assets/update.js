@@ -89,6 +89,19 @@
   // Register as early as possible so the next navigation is controlled by the worker.
   registerWorker();
 
+  // Test-branch bootstrap for the DOT-NL national catalogue. It runs only after
+  // the regular deferred scripts (app + France catalogue) have initialized, so
+  // the Netherlands loader can safely chain candidateStations without changing
+  // the production main branch boot order.
+  window.addEventListener('DOMContentLoaded',()=>{
+    if(document.querySelector('script[data-tcc-netherlands-catalog]'))return;
+    const script=document.createElement('script');
+    script.src='assets/netherlands-catalog.js?v=1';
+    script.dataset.tccNetherlandsCatalog='1';
+    script.onerror=()=>console.warn('[TCC] Catalogue Pays-Bas non chargé.');
+    document.head.appendChild(script);
+  },{once:true});
+
   // Opening/resuming the Home Screen app is the key iOS path.
   window.addEventListener('pageshow',()=>setTimeout(checkForUpdate,150));
   document.addEventListener('visibilitychange',()=>{
