@@ -9,6 +9,7 @@ on:
       - .github/workflows/build-netherlands-dotnl-test.yml
       - assets/netherlands-catalog.js
       - assets/ocpi-duration-pricing.js
+      - assets/ocpi-access-intervals.js
 
 permissions:
   contents: write
@@ -18,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DATA_LAB_COMMIT: a936e1c471b54ce219264091090e587d381616dd
+  DATA_LAB_COMMIT: 89b9705cc6656b1f63c882b6ca9d725c457a8ea5
   LOC_URL: https://opendata.ndw.nu/charging_point_locations_ocpi.json.gz
   TAR_URL: https://opendata.ndw.nu/charging_point_tariffs_ocpi.json.gz
   OUT_DIR: data/non_tesla_netherlands
@@ -31,19 +32,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Fetch validated DOT-NL compiler
         shell: bash
         run: |
           set -euo pipefail
-          curl -fsSL --retry 4 "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/${DATA_LAB_COMMIT}/scripts/dotnl_netherlands_build.py" -o /tmp/dotnl_build.py
-          curl -fsSL --retry 4 "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/${DATA_LAB_COMMIT}/scripts/dotnl_netherlands_runtime.py" -o /tmp/dotnl_runtime.py
-          python -m py_compile /tmp/dotnl_build.py /tmp/dotnl_runtime.py
-
+          BASE="https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/${DATA_LAB_COMMIT}/scripts"
+          curl -fsSL --retry 4 "$BASE/dotnl_netherlands_build.py" -o /tmp/dotnl_build.py
+          curl -fsSL --retry 4 "$BASE/dotnl_netherlands_runtime.py" -o /tmp/dotnl_runtime.py
+          curl -fsSL --retry 4 "$BASE/dotnl_netherlands_access_patch.py" -o /tmp/dotnl_access.py
+          python -m py_compile /tmp/dotnl_build.py /tmp/dotnl_runtime.py /tmp/dotnl_access.py
       - name: Download official DOT-NL snapshots
         shell: bash
         run: |
@@ -52,7 +52,6 @@ jobs:
           curl -fsSL --retry 4 --retry-all-errors --connect-timeout 30 --max-time 900 "$TAR_URL" -o /tmp/dotnl_tariffs.json.gz
           gzip -t /tmp/dotnl_locations.json.gz
           gzip -t /tmp/dotnl_tariffs.json.gz
-
       - name: Normalize and compile Netherlands runtime
         shell: bash
         run: |
@@ -60,7 +59,7 @@ jobs:
           rm -rf "$OUT_DIR"
           python /tmp/dotnl_build.py /tmp/dotnl_locations.json.gz /tmp/dotnl_tariffs.json.gz /tmp/dotnl_normalized.json.gz /tmp/dotnl_build_report.json
           python /tmp/dotnl_runtime.py /tmp/dotnl_normalized.json.gz "$OUT_DIR" "$OUT_DIR/runtime_report.json"
-
+          python /tmp/dotnl_access.py /tmp/dotnl_normalized.json.gz "$OUT_DIR" "$OUT_DIR/access_report.json"
       - name: Validate runtime before commit
         shell: bash
         run: |
@@ -70,25 +69,29 @@ jobs:
           root=os.environ['OUT_DIR']
           manifest=json.load(open(os.path.join(root,'manifest.json'),encoding='utf-8'))
           report=json.load(open(os.path.join(root,'runtime_report.json'),encoding='utf-8'))
+          access=json.load(open(os.path.join(root,'access_report.json'),encoding='utf-8'))
           with gzip.open(os.path.join(root,'all.json.gz'),'rt',encoding='utf-8') as f: rows=json.load(f)
+          compact=[r[7] for r in rows if len(r)>7 and isinstance(r[7],list)]
           checks={
-            'schemaV2':manifest.get('schemaVersion')==2,
+            'schemaV3':manifest.get('schemaVersion')==3,
             'countryNL':manifest.get('scope',{}).get('countryCode')=='NL',
             'teslaExcluded':manifest.get('scope',{}).get('teslaExcluded') is True,
             'durationBands':manifest.get('scope',{}).get('ocpiDurationBands') is True,
+            'openingTimes':manifest.get('scope',{}).get('ocpiOpeningTimes') is True,
+            'parkingRestrictions':manifest.get('scope',{}).get('ocpiParkingRestrictions') is True,
             'stations>70000':manifest.get('stationCount',0)>70000,
             'exactTariffs>100000':report.get('metrics',{}).get('exactPricedConnectors',0)>100000,
             'durationConfigs>5000':report.get('metrics',{}).get('durationBandConfigs',0)>5000,
-            'rowsMatch':len(rows)==manifest.get('stationCount')==report.get('stationCount'),
+            'knownOpeningHours>1000':sum(1 for x in compact if x and x[0] in (1,2))>1000,
+            'rowsMatch':len(rows)==manifest.get('stationCount')==report.get('stationCount')==len(compact),
             'tilesPresent':manifest.get('tileCount',0)>30,
             'noTeslaIds':all(not str(row[0]).startswith('NL:TSL:') for row in rows),
           }
-          print(json.dumps({'checks':checks,'coveragePct':report.get('coveragePct'),'stations':manifest.get('stationCount'),'tiles':manifest.get('tileCount')},indent=2))
+          print(json.dumps({'checks':checks,'coveragePct':report.get('coveragePct'),'access':access,'manifestAccess':manifest.get('accessCoverage'),'stations':manifest.get('stationCount'),'tiles':manifest.get('tileCount')},ensure_ascii=False,indent=2))
           failed=[k for k,v in checks.items() if not v]
           if failed:
             print('FAILED: '+', '.join(failed),file=sys.stderr);sys.exit(1)
           PY
-
       - name: Commit test runtime
         shell: bash
         run: |
