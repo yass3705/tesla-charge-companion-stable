@@ -1,4 +1,5 @@
 name: Audit France IRVE canonical
+# Read-only validation workflow: no runtime or production data write.
 
 on:
   workflow_dispatch:
