@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.1.1",
+  "dataset": "effia-direct-tariffs-france",
+  "networkId": "effia",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "source": "https://www.effia.com/electrique",
+  "secondarySources": [
+    "https://www.effia.com/parking/parking-paris-gare-du-nord-effia",
+    "https://www.effia.com/sites/default/files/CGV%20Abo%20%C3%A9lectrique%20GDN.pdf"
+  ],
+  "productionReady": false,
+  "scope": {
+    "physicalInventoryFromIrveOnly": true,
+    "standardTariffAppliesOnlyToSelectedParkings": true,
+    "selectedParkingListMustBeMatchedBeforeRanking": true,
+    "parkingExcludedFromChargingTariff": true,
+    "noPostChargeChargingFee": true,
+    "roamingProviderFeesRemainSeparate": true,
+    "typicalConnectorPowersKw": [2.3, 7.4]
+  },
+  "subscriptions": [
+    {
+      "id": "effia-gare-du-nord-park-charge",
+      "label": "EFFIA Park & Charge — Paris Gare du Nord",
+      "defaultSelected": false,
+      "quotaBased": true,
+      "rankableWhenSelected": false,
+      "blockedReason": "monthly_remaining_quota_not_tracked",
+      "chargingFeeEur": 1,
+      "chargingFeePeriod": "month",
+      "includedKwh": 150,
+      "overageEurPerKwh": 0.40,
+      "minimumCommitmentMonths": 12,
+      "parkingSubscriptionEurPerMonth": 219,
+      "parkingCostExcludedFromChargingComparison": true,
+      "eligibility": {
+        "parking": "Paris Gare du Nord - EFFIA",
+        "level": "-5",
+        "powerKw": 7.4,
+        "partner": "Alize Charge"
+      }
+    }
+  ],
+  "offers": [
+    {
+      "id": "effia-selected-parking-standard",
+      "channel": "direct",
+      "provider": "EFFIA Recharge Électrique",
+      "selectors": {
+        "requiresOfficialSelectedParkingMatch": true
+      },
+      "pricingRules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "currency": "EUR",
+          "pricePerKwh": 0.40,
+          "chargePerMinute": 0,
+          "durationPerMinute": 0,
+          "connectionFee": 1.50,
+          "occupancyPerMinute": 0,
+          "parkingPerMinute": 0
+        }
+      ],
+      "rankable": false,
+      "blockedReasons": ["official_selected_parking_list_not_yet_materialized"],
+      "note": "EFFIA publishes this unique tariff only for a selected list of car parks. It must not be applied to every EFFIA IRVE station until that list is matched."
+    },
+    {
+      "id": "effia-gare-du-nord-park-charge-reference",
+      "channel": "reference",
+      "subscriptionId": "effia-gare-du-nord-park-charge",
+      "provider": "EFFIA Park & Charge — Paris Gare du Nord",
+      "selectors": {
+        "parking": "Paris Gare du Nord - EFFIA",
+        "level": "-5",
+        "targetPowerKw": 7.4
+      },
+      "pricingRules": [],
+      "rankable": false,
+      "blockedReasons": ["monthly_remaining_quota_not_tracked"],
+      "note": "Charging subscription: 1 EUR/month includes 150 kWh, then 0.40 EUR/kWh. The separate 219 EUR/month parking subscription is not a charging-session cost."
+    }
+  ],
+  "notes": [
+    "EFFIA states that no extra charging fee is due after the battery has finished charging; normal parking charges still apply.",
+    "The 0.40 EUR/kWh + 1.50 EUR/session price excludes normal parking charges and possible roaming-provider fees.",
+    "QR/CB payment is available on equipped stations according to EFFIA, while mobility-card billing follows the mobility provider's terms."
+  ]
+}
