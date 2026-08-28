@@ -22,6 +22,17 @@ def dump(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def normalize_pricing_rules(rules):
+    out = []
+    for original in rules or []:
+        rule = dict(original)
+        window = rule.pop("occupancyWindow", None)
+        if window and "-" in str(window):
+            rule["occupancyStart"], rule["occupancyEnd"] = str(window).split("-", 1)
+        out.append(rule)
+    return out
+
+
 def base_row(data, offer, normalized_at):
     blocked = list(offer.get("blockedReasons") or [])
     rankable = bool(offer.get("rankable", True) and not blocked)
@@ -42,7 +53,7 @@ def base_row(data, offer, normalized_at):
         "kind": (offer.get("selectors") or {}).get("kind"),
         "minPowerKw": (offer.get("selectors") or {}).get("minPowerKw"),
         "maxPowerKw": (offer.get("selectors") or {}).get("maxPowerKw"),
-        "pricingRules": list(offer.get("pricingRules") or []),
+        "pricingRules": normalize_pricing_rules(offer.get("pricingRules") or []),
         "subscriptionId": offer.get("subscriptionId"),
         "validFrom": offer.get("validFrom"),
         "validTo": offer.get("validTo"),
@@ -110,6 +121,18 @@ def materialize_mobive(data, normalized_at):
     return result
 
 
+def materialize_subscriptions(data, normalized_at):
+    out = []
+    for sub in data.get("subscriptions") or []:
+        item = dict(sub)
+        item["tariffNetworkId"] = data["networkId"]
+        item["sourceUrl"] = data.get("source")
+        item["sourceUpdatedAt"] = data.get("verifiedAt")
+        item["normalizedAt"] = normalized_at
+        out.append(item)
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--indigo", default="data/indigo_recharge_direct_tariffs_v1.json")
@@ -120,6 +143,8 @@ def main():
 
     normalized_at = dt.datetime.now(dt.timezone.utc).isoformat()
     templates = []
+    subscriptions = []
+    partner_rules = []
     reports = {}
     for path, handler in [
         (args.indigo, materialize_simple),
@@ -128,21 +153,36 @@ def main():
     ]:
         data = load(path)
         rows = handler(data, normalized_at)
+        sub_rows = materialize_subscriptions(data, normalized_at)
         templates.extend(rows)
+        subscriptions.extend(sub_rows)
+        if data.get("partnerRoaming"):
+            partner_rules.append({
+                "tariffNetworkId": data["networkId"],
+                "sourceUrl": data.get("source"),
+                "sourceUpdatedAt": data.get("verifiedAt"),
+                "normalizedAt": normalized_at,
+                **dict(data["partnerRoaming"]),
+            })
         reports[data["networkId"]] = {
             "source": path,
             "templateCount": len(rows),
             "rankableCount": sum(1 for row in rows if row.get("rankable")),
-            "subscriptionCount": len(data.get("subscriptions") or []),
+            "subscriptionCount": len(sub_rows),
+            "partnerRuleCount": 1 if data.get("partnerRoaming") else 0,
         }
 
     out_dir = Path(args.out_dir)
     dump(out_dir / "new_network_rule_templates_v1_1.json", templates)
+    dump(out_dir / "new_network_subscriptions_v1_1.json", subscriptions)
+    dump(out_dir / "new_network_partner_rules_v1_1.json", partner_rules)
     report = {
-        "schemaVersion": "1.1.0",
+        "schemaVersion": "1.1.1",
         "productionReady": False,
         "templateCount": len(templates),
         "rankableCount": sum(1 for row in templates if row.get("rankable")),
+        "subscriptionCount": len(subscriptions),
+        "partnerRuleCount": len(partner_rules),
         "networks": reports,
     }
     dump(out_dir / "new_network_materialization_report.json", report)
