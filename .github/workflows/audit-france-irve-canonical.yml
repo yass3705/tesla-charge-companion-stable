@@ -8,16 +8,20 @@ on:
       - refactor/france-irve-canonical
     paths:
       - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
       - release/2026-08
     paths:
       - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
 
 permissions:
@@ -31,7 +35,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate builder syntax
-        run: python -m py_compile scripts/build_france_irve_canonical.py scripts/run_france_irve_canonical.py
+        run: |
+          python -m py_compile \
+            scripts/build_france_irve_canonical.py \
+            scripts/run_france_irve_canonical.py \
+            scripts/enrich_france_irve_network_identity.py \
+            scripts/normalize_france_operator_offers.py
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -53,24 +62,51 @@ jobs:
             --registry data/france_irve_operator_registry_v1.json \
             --out-dir build/france_irve
 
+      - name: Resolve technical CPO and tariff network separately
+        run: |
+          python scripts/enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry data/france_irve_tariff_network_registry_v1.json \
+            --out-dir build/france_irve_identity
+
+      - name: Normalize first legacy tariff sources
+        run: |
+          python scripts/normalize_france_operator_offers.py \
+            --canonical-dir build/france_irve_identity \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --adapter-registry data/france_operator_adapter_registry_v1.json \
+            --out-dir build/france_irve_offers
+
       - name: Print coverage summary
         run: |
           python - <<'PY'
           import json
-          report=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
-          print(json.dumps(report['summary'], ensure_ascii=False, indent=2))
-          print('\nOperators requiring their own/normalized base:')
-          for row in report['operators']:
-              if row['needsOwnBase'] and row['irvePdcCount']:
-                  print(f"- {row['label']}: {row['irvePdcCount']} PDC / {row['irveStationCount']} stations [{row['coverageStatus']}]")
-          print('\nTop unregistered IRVE operators:')
-          for row in report['unregisteredOperators'][:50]:
-              print(f"- {row['rawOperator']}: {row['pdcCount']} PDC / {row['stationCount']} stations")
+          pan=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
+          network=json.load(open('build/france_irve_identity/network_gap_report.json', encoding='utf-8'))
+          offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
+          print('PAN canonical summary:')
+          print(json.dumps(pan['summary'], ensure_ascii=False, indent=2))
+          print('\nTariff-network identity summary:')
+          print(json.dumps(network['summary'], ensure_ascii=False, indent=2))
+          print('\nPrioritized tariff-network work queue:')
+          for row in network['workQueue'][:50]:
+              print(f"- {row['label']}: {row['pdcCount']} PDC / {row['stationCount']} stations [{row['coverageStatus']}]")
+          print('\nTop unresolved network/brand names:')
+          for row in network['unresolvedNetworks'][:50]:
+              print(f"- {row['networkRaw']}: {row['pdcCount']} PDC / {row['stationCount']} stations")
+          print('\nLegacy-source normalization summary:')
+          print(json.dumps({k:v for k,v in offers.items() if k != 'sources'}, ensure_ascii=False, indent=2))
+          for source in offers.get('sources', []):
+              print(json.dumps(source, ensure_ascii=False))
           PY
 
       - name: Upload audit snapshot
         uses: actions/upload-artifact@v4
         with:
           name: france-irve-canonical-audit
-          path: build/france_irve/
+          path: |
+            build/france_irve/
+            build/france_irve_identity/
+            build/france_irve_offers/
           retention-days: 14
