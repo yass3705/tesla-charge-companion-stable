@@ -139,6 +139,7 @@ def main():
     parser.add_argument("--eborn", default="data/eborn_direct_tariffs_v1.json")
     parser.add_argument("--mobive", default="data/mobive_direct_tariffs_v1.json")
     parser.add_argument("--saemes", default="data/saemes_direct_tariffs_v1.json")
+    parser.add_argument("--qpark", default="data/qpark_izivia_tariffs_v1.json")
     parser.add_argument("--out-dir", default="build/france_irve_offers")
     args = parser.parse_args()
 
@@ -152,6 +153,7 @@ def main():
         (args.eborn, materialize_simple),
         (args.mobive, materialize_mobive),
         (args.saemes, materialize_simple),
+        (args.qpark, materialize_simple),
     ]:
         data = load(path)
         rows = handler(data, normalized_at)
@@ -179,7 +181,7 @@ def main():
     dump(out_dir / "new_network_subscriptions_v1_1.json", subscriptions)
     dump(out_dir / "new_network_partner_rules_v1_1.json", partner_rules)
     report = {
-        "schemaVersion": "1.1.1",
+        "schemaVersion": "1.1.2",
         "productionReady": False,
         "templateCount": len(templates),
         "rankableCount": sum(1 for row in templates if row.get("rankable")),
