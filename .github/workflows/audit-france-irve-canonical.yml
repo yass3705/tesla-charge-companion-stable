@@ -9,6 +9,7 @@ on:
     paths:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
       - 'data/france_operator_adapter_registry_v1.json'
       - 'data/france_operator_offer_contract_v1.json'
       - 'data/france_runtime_extracted_tariff_rules_v1.json'
@@ -18,6 +19,7 @@ on:
       - 'data/mobive_direct_tariffs_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
       - 'scripts/enrich_france_irve_network_identity.py'
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - 'scripts/normalize_france_operator_offers.py'
@@ -35,6 +37,7 @@ on:
     paths:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
       - 'data/france_operator_adapter_registry_v1.json'
       - 'data/france_operator_offer_contract_v1.json'
       - 'data/france_runtime_extracted_tariff_rules_v1.json'
@@ -44,6 +47,7 @@ on:
       - 'data/mobive_direct_tariffs_v1.json'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
       - 'scripts/enrich_france_irve_network_identity.py'
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - 'scripts/normalize_france_operator_offers.py'
@@ -71,6 +75,7 @@ jobs:
           python -m py_compile \
             scripts/build_france_irve_canonical.py \
             scripts/run_france_irve_canonical.py \
+            scripts/build_effective_france_tariff_network_registry.py \
             scripts/enrich_france_irve_network_identity.py \
             scripts/run_enrich_france_irve_network_identity.py \
             scripts/normalize_france_operator_offers.py \
@@ -84,6 +89,13 @@ jobs:
 
       - name: Test Indigo eborn and Mobive source semantics
         run: python scripts/test_france_new_network_bases.py
+
+      - name: Build effective tariff-network registry
+        run: |
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -110,14 +122,14 @@ jobs:
           python scripts/run_enrich_france_irve_network_identity.py \
             --canonical-dir build/france_irve \
             --operator-registry data/france_irve_operator_registry_v1.json \
-            --network-registry data/france_irve_tariff_network_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
             --out-dir build/france_irve_identity
 
       - name: Normalize first legacy tariff sources
         run: |
           python scripts/run_normalize_france_operator_offers.py \
             --canonical-dir build/france_irve_identity \
-            --operator-registry data/france_irve_tariff_network_registry_v1.json \
+            --operator-registry build/france_irve/effective_tariff_network_registry.json \
             --adapter-registry data/france_operator_adapter_registry_v1.json \
             --out-dir build/france_irve_offers
 
@@ -171,6 +183,7 @@ jobs:
                   json.load(handle)
               print('valid', path)
           for path in [
+              'build/france_irve/effective_tariff_network_registry.json',
               'build/france_irve_offers/operator_rule_templates.json',
               'build/france_irve_offers/network_rule_templates_v1_1.json',
               'build/france_irve_offers/offer_identity_finalization_report.json',
