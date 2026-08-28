@@ -1,0 +1,135 @@
+name: Audit Powerdot against canonical France IRVE
+# Read-only audit. Powerdot tariffs may enrich PAN IRVE but never create a physical station.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/audit_powerdot_irve_matching.py'
+      - 'scripts/build_france_irve_canonical.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-powerdot-irve-canonical.yml'
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - 'scripts/audit_powerdot_irve_matching.py'
+      - '.github/workflows/audit-powerdot-irve-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate audit syntax
+        run: |
+          python -m py_compile \
+            scripts/audit_powerdot_irve_matching.py \
+            scripts/build_france_irve_canonical.py \
+            scripts/run_france_irve_canonical.py \
+            scripts/build_effective_france_tariff_network_registry.py \
+            scripts/enrich_france_irve_network_identity.py \
+            scripts/run_enrich_france_irve_network_identity.py
+
+      - name: Read existing Powerdot direct artifact from main
+        run: |
+          mkdir -p .tmp/powerdot
+          git fetch --no-tags --depth=1 origin main
+          git show FETCH_HEAD:data/powerdot_direct_france.json.gz > .tmp/powerdot/powerdot_direct_france.json.gz
+          test -s .tmp/powerdot/powerdot_direct_france.json.gz
+          python - <<'PY'
+          import gzip, json
+          path='.tmp/powerdot/powerdot_direct_france.json.gz'
+          with gzip.open(path,'rt',encoding='utf-8') as handle:
+              data=json.load(handle)
+          print('Powerdot source:', json.dumps(data.get('source',{}), ensure_ascii=False))
+          print('Powerdot counts:', json.dumps(data.get('counts',{}), ensure_ascii=False))
+          print('chargers:', len(data.get('chargers') or []))
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download PAN IRVE static and dynamic snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Build canonical PAN inventory
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+
+      - name: Resolve physical CPO and tariff network identity
+        run: |
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Audit Powerdot exact PDC matching
+        run: |
+          python scripts/audit_powerdot_irve_matching.py \
+            --powerdot-gzip .tmp/powerdot/powerdot_direct_france.json.gz \
+            --canonical-dir build/france_irve_identity \
+            --geo-max-m 100 \
+            --out-dir build/france_irve_powerdot
+
+      - name: Validate Powerdot audit invariants
+        run: |
+          python - <<'PY'
+          import gzip, json, sys
+          report=json.load(open('build/france_irve_powerdot/powerdot_irve_match_report.json', encoding='utf-8'))
+          with gzip.open('build/france_irve_powerdot/powerdot_offer_candidates.json.gz','rt',encoding='utf-8') as handle:
+              candidates=json.load(handle)
+          assert report['policy']['tariffSourceMayCreatePhysicalStation'] is False
+          assert report['policy']['ambiguousOrUnmatchedRankable'] is False
+          assert all(report['sourceValidation'].values()), report['sourceValidation']
+          assert report['summary']['subscriptionActiveConnectorCount'] == 0
+          assert all(not row['rankableCandidate'] for row in candidates if row['matchMethod'].startswith('ambiguous') or row['matchMethod']=='unmatched')
+          print(json.dumps(report['summary'], ensure_ascii=False, indent=2))
+          print('matchMethods:', json.dumps(report['matchMethods'], ensure_ascii=False, indent=2))
+          print('tariffComponentTypes:', json.dumps(report['tariffComponentTypes'], ensure_ascii=False, indent=2))
+          print('statusLikeFieldsDiscovered:', json.dumps(report['statusLikeFieldsDiscovered'][:20], ensure_ascii=False, indent=2))
+          PY
+
+      - name: Upload Powerdot canonical audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-irve-powerdot-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_powerdot/
+          retention-days: 14
