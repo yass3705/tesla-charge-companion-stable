@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "country": "FR",
+  "purpose": "Canonical tariff/enrichment contract attached to PAN IRVE physical stations and PDCs",
+  "invariants": {
+    "mayCreatePhysicalStation": false,
+    "mayCreatePhysicalPdc": false,
+    "ambiguousMatchRankable": false,
+    "unknownTariffRankable": false,
+    "subscriptionsOptIn": true,
+    "monthlySubscriptionFeeAllocatedToSession": false,
+    "parkingSeparatedFromCharging": true,
+    "provenanceRequired": true
+  },
+  "sourceModes": {
+    "station_evse": "source exposes exact station/EVSE identifiers and station-specific pricing",
+    "station_power": "source exposes an exact station identifier and pricing by power/configuration",
+    "operator_rule": "official tariff grid applies to physical stations operated directly by the CPO subject to explicit rule filters",
+    "reference_only": "evidence is useful for display/audit but is not rankable",
+    "roaming": "eMSP offer attached separately from the physical CPO direct tariff"
+  },
+  "matchMethods": [
+    {"id":"exact_pdc_itinerance","rankable":true,"priority":1},
+    {"id":"exact_source_evse","rankable":true,"priority":2},
+    {"id":"exact_station_itinerance","rankable":true,"priority":3},
+    {"id":"exact_source_station","rankable":true,"priority":4},
+    {"id":"unique_geo_operator_100m","rankable":true,"priority":5,"requiresUniqueCandidate":true},
+    {"id":"ambiguous","rankable":false,"priority":98},
+    {"id":"unmatched","rankable":false,"priority":99}
+  ],
+  "offerFields": {
+    "offerId": "stable identifier inside the provider source",
+    "operatorId": "canonical physical CPO id from france_irve_operator_registry_v1.json",
+    "provider": "customer-facing tariff provider/plan label",
+    "channel": "direct | subscription | roaming | reference",
+    "sourceMode": "station_evse | station_power | operator_rule | reference_only | roaming",
+    "sourceStationId": "source-native station id when available",
+    "sourceEvseId": "source-native EVSE/PDC id when available",
+    "canonicalStationId": "PAN-derived station id after matching",
+    "canonicalPdcId": "PAN-derived PDC id after matching when applicable",
+    "matchMethod": "one of matchMethods",
+    "matchDistanceMeters": "only populated for geo fallback",
+    "kind": "AC | DC | null",
+    "minPowerKw": "optional lower power bound",
+    "maxPowerKw": "optional upper power bound",
+    "pricingRules": "structured kWh/minute/session/occupancy/parking/time-band rules",
+    "subscriptionId": "optional opt-in subscription selector",
+    "validFrom": "optional ISO date/time",
+    "validTo": "optional ISO date/time",
+    "rankable": "false unless match and tariff semantics are unambiguous",
+    "blockedReasons": "array of machine-readable reasons",
+    "sourceUrl": "upstream evidence or data-source identifier",
+    "sourceUpdatedAt": "upstream timestamp",
+    "normalizedAt": "TCC normalization timestamp"
+  },
+  "pricingRuleFields": {
+    "scope": "allDay | timeWindow | durationBand | powerBand",
+    "start": "HH:MM when applicable",
+    "end": "HH:MM when applicable",
+    "days": "optional weekday array",
+    "currency": "ISO currency",
+    "pricePerKwh": "energy charge",
+    "chargePerMinute": "charging time charge",
+    "connectionFee": "session/access fee",
+    "occupancyPerMinute": "post-threshold or concurrent occupancy fee",
+    "occupancyThresholdMinutes": "grace/threshold before occupancy fee",
+    "occupancyCap": "optional cap",
+    "parkingPerMinute": "parking fee only when explicitly part of charging transaction",
+    "notes": "optional structured-semantics note"
+  }
+}
