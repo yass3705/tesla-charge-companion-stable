@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Materialize newly researched France network tariff bases to contract v1.1.
+
+Physical stations remain exclusively PAN IRVE-derived. These templates attach
+only to an already-resolved `tariffNetworkId`.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+from pathlib import Path
+
+
+def load(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def dump(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def base_row(data, offer, normalized_at):
+    blocked = list(offer.get("blockedReasons") or [])
+    rankable = bool(offer.get("rankable", True) and not blocked)
+    return {
+        "offerId": offer["id"],
+        "physicalOperatorId": None,
+        "tariffNetworkId": data["networkId"],
+        "provider": offer.get("provider") or data["networkId"],
+        "channel": offer.get("channel", "direct"),
+        "sourceMode": "network_rule" if rankable else "reference_only",
+        "sourceStationId": None,
+        "sourceEvseId": None,
+        "canonicalStationId": None,
+        "canonicalPdcId": None,
+        "matchMethod": "network_scope",
+        "matchDistanceMeters": None,
+        "selectors": dict(offer.get("selectors") or {}),
+        "kind": (offer.get("selectors") or {}).get("kind"),
+        "minPowerKw": (offer.get("selectors") or {}).get("minPowerKw"),
+        "maxPowerKw": (offer.get("selectors") or {}).get("maxPowerKw"),
+        "pricingRules": list(offer.get("pricingRules") or []),
+        "subscriptionId": offer.get("subscriptionId"),
+        "validFrom": offer.get("validFrom"),
+        "validTo": offer.get("validTo"),
+        "rankable": rankable,
+        "blockedReasons": blocked,
+        "sourceUrl": data.get("source"),
+        "sourceUpdatedAt": data.get("verifiedAt"),
+        "normalizedAt": normalized_at,
+        "note": offer.get("note"),
+    }
+
+
+def materialize_simple(data, normalized_at):
+    return [base_row(data, offer, normalized_at) for offer in data.get("offers", [])]
+
+
+def split_window(value):
+    text = str(value or "00:00-24:00")
+    if "-" not in text:
+        return "00:00", "24:00"
+    return tuple(text.split("-", 1))
+
+
+def materialize_mobive(data, normalized_at):
+    result = []
+    for grid in data.get("grids", []):
+        departments = list(grid.get("departments") or [])
+        for offer in grid.get("offers", []):
+            start, end = split_window(offer.get("durationWindow"))
+            selectors = dict(offer.get("selectors") or {})
+            selectors["departments"] = departments
+            selectors["tariffGridId"] = grid.get("id")
+            item = {
+                "id": offer["id"],
+                "channel": offer.get("channel", "direct"),
+                "subscriptionId": offer.get("subscriptionId"),
+                "provider": offer.get("provider"),
+                "selectors": selectors,
+                "validFrom": grid.get("effectiveFrom"),
+                "pricingRules": [{
+                    "scope": "allDay",
+                    "start": "00:00",
+                    "end": "24:00",
+                    "days": None,
+                    "currency": "EUR",
+                    "pricePerKwh": offer.get("pricePerKwh"),
+                    "chargePerMinute": 0,
+                    "durationPerMinute": offer.get("durationPerMinute", 0),
+                    "durationThresholdMinutes": offer.get("durationThresholdMinutes", 0),
+                    "durationStart": start,
+                    "durationEnd": end,
+                    "durationCap": 0,
+                    "connectionFee": 0,
+                    "occupancyPerMinute": 0,
+                    "occupancyThresholdMinutes": 0,
+                    "occupancyCap": 0,
+                    "parkingPerMinute": 0,
+                    "totalTransactionCap": offer.get("transactionCapEur"),
+                    "rounding": "started_kwh_and_started_minute",
+                    "notes": "Mobive connection-duration surcharge; AC surcharge is inactive outside the stated daytime window."
+                }],
+                "rankable": True,
+            }
+            result.append(base_row(data, item, normalized_at))
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--indigo", default="data/indigo_recharge_direct_tariffs_v1.json")
+    parser.add_argument("--eborn", default="data/eborn_direct_tariffs_v1.json")
+    parser.add_argument("--mobive", default="data/mobive_direct_tariffs_v1.json")
+    parser.add_argument("--out-dir", default="build/france_irve_offers")
+    args = parser.parse_args()
+
+    normalized_at = dt.datetime.now(dt.timezone.utc).isoformat()
+    templates = []
+    reports = {}
+    for path, handler in [
+        (args.indigo, materialize_simple),
+        (args.eborn, materialize_simple),
+        (args.mobive, materialize_mobive),
+    ]:
+        data = load(path)
+        rows = handler(data, normalized_at)
+        templates.extend(rows)
+        reports[data["networkId"]] = {
+            "source": path,
+            "templateCount": len(rows),
+            "rankableCount": sum(1 for row in rows if row.get("rankable")),
+            "subscriptionCount": len(data.get("subscriptions") or []),
+        }
+
+    out_dir = Path(args.out_dir)
+    dump(out_dir / "new_network_rule_templates_v1_1.json", templates)
+    report = {
+        "schemaVersion": "1.1.0",
+        "productionReady": False,
+        "templateCount": len(templates),
+        "rankableCount": sum(1 for row in templates if row.get("rankable")),
+        "networks": reports,
+    }
+    dump(out_dir / "new_network_materialization_report.json", report)
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()
