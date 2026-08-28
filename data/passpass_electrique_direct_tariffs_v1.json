@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.1.1",
+  "dataset": "passpass-electrique-direct-tariffs-france",
+  "networkId": "passpass",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "validFrom": "2025-04-01",
+  "source": "https://passpasselectrique.fr/fr/tarifs/",
+  "productionReady": false,
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "billingContinuesWhileConnected": true,
+    "monthlySubscriberCapsRemovedSince": "2025-04-01",
+    "stationTariffClassRequired": true
+  },
+  "classification": {
+    "normal": {"minPowerKw": 3, "maxPowerKw": 22.5, "inference": "safe_from_official_network_description"},
+    "rapid": {"typicalPowerKw": [43, 50], "maxPowerKw": 60, "inference": "requires_station_class_or_supported_power"},
+    "ultra": {"minPowerKwExclusive": 60, "inference": "provisional_power_inference_for_newer_high_power_sites"},
+    "long_stay": {"requiresExplicitSiteTag": true, "examples": ["P+R", "covoiturage"]}
+  },
+  "subscriptions": [
+    {
+      "id": "passpass-electrique-account",
+      "label": "Pass Pass électrique — compte abonné",
+      "eligibility": "user_has_created_passpass_electrique_account",
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true,
+      "note": "The official tariff page considers a user subscribed once a Pass Pass électrique account has been created. No recurring fee is inferred here."
+    }
+  ],
+  "offers": [
+    {
+      "id": "passpass-public-normal",
+      "channel": "direct",
+      "provider": "Pass Pass électrique non-abonné",
+      "selectors": {"siteClass": "normal"},
+      "pricingRules": [
+        {"scope":"timeWindow","start":"07:00","end":"21:00","currency":"EUR","pricePerKwh":0.38,"durationPerMinute":0.08,"durationThresholdMinutes":180,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0},
+        {"scope":"timeWindow","start":"21:00","end":"07:00","currency":"EUR","pricePerKwh":0.38,"durationPerMinute":0.02,"durationThresholdMinutes":180,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-account-normal",
+      "channel": "subscription",
+      "subscriptionId": "passpass-electrique-account",
+      "provider": "Pass Pass électrique abonné",
+      "selectors": {"siteClass": "normal"},
+      "pricingRules": [
+        {"scope":"timeWindow","start":"07:00","end":"21:00","currency":"EUR","pricePerKwh":0.32,"durationPerMinute":0.04,"durationThresholdMinutes":180,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0},
+        {"scope":"timeWindow","start":"21:00","end":"07:00","currency":"EUR","pricePerKwh":0.32,"durationPerMinute":0.01,"durationThresholdMinutes":180,"durationCap":1.20,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-public-rapid",
+      "channel": "direct",
+      "provider": "Pass Pass électrique non-abonné",
+      "selectors": {"siteClass": "rapid"},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.51,"durationPerMinute":0.40,"durationThresholdMinutes":90,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-account-rapid",
+      "channel": "subscription",
+      "subscriptionId": "passpass-electrique-account",
+      "provider": "Pass Pass électrique abonné",
+      "selectors": {"siteClass": "rapid"},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.44,"durationPerMinute":0.20,"durationThresholdMinutes":90,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-public-ultra",
+      "channel": "direct",
+      "provider": "Pass Pass électrique non-abonné",
+      "selectors": {"siteClass": "ultra"},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.51,"durationPerMinute":0.40,"durationThresholdMinutes":45,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-account-ultra",
+      "channel": "subscription",
+      "subscriptionId": "passpass-electrique-account",
+      "provider": "Pass Pass électrique abonné",
+      "selectors": {"siteClass": "ultra"},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.44,"durationPerMinute":0.20,"durationThresholdMinutes":45,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-public-long-stay",
+      "channel": "direct",
+      "provider": "Pass Pass électrique non-abonné",
+      "selectors": {"siteClass": "long_stay"},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.38,"durationPerMinute":0.003333333333,"durationThresholdMinutes":840,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "passpass-account-long-stay",
+      "channel": "subscription",
+      "subscriptionId": "passpass-electrique-account",
+      "provider": "Pass Pass électrique abonné",
+      "selectors": {"siteClass": "long_stay"},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.32,"durationPerMinute":0.001666666667,"durationThresholdMinutes":840,"connectionFee":0,"occupancyPerMinute":0,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    }
+  ],
+  "notes": [
+    "Every started time or energy billing increment is due according to the official tariff page.",
+    "Duration charges represent connection time; billing may continue after the battery is full until the vehicle is unplugged.",
+    "Long-stay P+R/carpool pricing must never be inferred from charging power alone.",
+    "External-network roaming with a Pass Pass card remains a separate roaming offer and is not covered by these direct-network tariffs."
+  ]
+}
