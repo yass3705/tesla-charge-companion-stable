@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "1.1.0",
+  "dataset": "eborn-direct-tariffs-france",
+  "networkId": "eborn",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "source": "https://www.eborn.fr/tarifs/",
+  "productionReady": false,
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "networkCoverage": "eborn",
+    "postChargePenaltyStartsMinutesAfterChargeEnd": 30
+  },
+  "subscriptions": [
+    {
+      "id": "eborn-a-la-carte",
+      "label": "eborn À la carte",
+      "feeEur": 14,
+      "feePeriod": "year",
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true
+    },
+    {
+      "id": "eborn-au-forfait",
+      "label": "eborn Au forfait",
+      "feeEur": 49,
+      "feePeriod": "month",
+      "includedKwh": 250,
+      "defaultSelected": false,
+      "quotaBased": true,
+      "rankableWhenSelected": false,
+      "blockedReason": "monthly_remaining_quota_not_tracked",
+      "overagePolicy": "Beyond 250 kWh/month, eborn A-la-carte energy prices apply."
+    }
+  ],
+  "offers": [
+    {
+      "id": "eborn-public-accelerated",
+      "channel": "direct",
+      "provider": "eborn non-abonné",
+      "selectors": {"siteClass": "accelerated", "maxSitePowerKw": 25},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.433,"connectionFee":0,"occupancyPerMinute":0.075,"occupancyThresholdMinutes":30,"occupancyWindow":"08:00-20:00","parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "eborn-public-rapid",
+      "channel": "direct",
+      "provider": "eborn non-abonné",
+      "selectors": {"siteClass": "rapid", "minSitePowerKw": 25, "maxSitePowerKw": 60, "type2OnRapidSiteUsesThisClass": true},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.573,"connectionFee":0,"occupancyPerMinute":0.12,"occupancyThresholdMinutes":30,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "eborn-public-ultra",
+      "channel": "direct",
+      "provider": "eborn non-abonné",
+      "selectors": {"siteClass": "ultra", "minSitePowerKwExclusive": 60, "type2OnUltraSiteUsesThisClass": true},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.650,"connectionFee":0,"occupancyPerMinute":0.12,"occupancyThresholdMinutes":30,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "eborn-card-accelerated",
+      "channel": "subscription",
+      "subscriptionId": "eborn-a-la-carte",
+      "provider": "eborn À la carte",
+      "selectors": {"siteClass": "accelerated", "maxSitePowerKw": 25},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.310,"connectionFee":0,"occupancyPerMinute":0.05,"occupancyThresholdMinutes":30,"occupancyWindow":"08:00-20:00","parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "eborn-card-rapid",
+      "channel": "subscription",
+      "subscriptionId": "eborn-a-la-carte",
+      "provider": "eborn À la carte",
+      "selectors": {"siteClass": "rapid", "minSitePowerKw": 25, "maxSitePowerKw": 60},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.433,"connectionFee":0,"occupancyPerMinute":0.075,"occupancyThresholdMinutes":30,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "eborn-card-ultra",
+      "channel": "subscription",
+      "subscriptionId": "eborn-a-la-carte",
+      "provider": "eborn À la carte",
+      "selectors": {"siteClass": "ultra", "minSitePowerKwExclusive": 60},
+      "pricingRules": [
+        {"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.588,"connectionFee":0,"occupancyPerMinute":0.075,"occupancyThresholdMinutes":30,"parkingPerMinute":0}
+      ],
+      "rankable": true
+    },
+    {
+      "id": "eborn-monthly-quota-reference",
+      "channel": "reference",
+      "subscriptionId": "eborn-au-forfait",
+      "provider": "eborn Au forfait",
+      "selectors": {},
+      "pricingRules": [],
+      "rankable": false,
+      "blockedReasons": ["monthly_remaining_quota_not_tracked"],
+      "note": "49 EUR/month includes up to 250 kWh. Beyond the quota, A-la-carte energy tariffs apply; post-charge penalties remain according to power class."
+    }
+  ],
+  "partnerRoaming": {
+    "subscriptionId": "eborn-a-la-carte",
+    "effectiveSince": "2025-03-31",
+    "pricingRule": "partner_network_tariff_plus_15_percent",
+    "rankable": false,
+    "blockedReason": "partner_base_tariff_required"
+  },
+  "notes": [
+    "Post-charge penalty starts 30 minutes after end-of-charge detection.",
+    "For accelerated chargers below 25 kW, the post-charge penalty applies only between 08:00 and 20:00.",
+    "For non-subscribers, the rapid/ultra tariff also applies to lower-power Type 2 charging on those rapid/ultra stations.",
+    "Every started kWh is billed according to the official tariff page."
+  ]
+}
