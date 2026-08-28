@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.1.1",
   "dataset": "indigo-recharge-direct-tariffs-france",
   "networkId": "indigo",
   "country": "FR",
@@ -13,145 +13,41 @@
     "standardTariffsApplyToMostEquippedIndigoCarParks": true
   },
   "subscriptions": [
-    {
-      "id": "indigo-recharge-a-la-carte",
-      "label": "INDIGO Recharge À la Carte",
-      "feeEur": 0,
-      "feePeriod": "none",
-      "defaultSelected": false,
-      "quotaBased": false,
-      "rankableWhenSelected": true
-    },
-    {
-      "id": "indigo-recharge-100",
-      "label": "INDIGO Recharge 100 kWh",
-      "feeEur": 29.99,
-      "feePeriod": "month",
-      "includedKwh": 100,
-      "overageEurPerKwh": 0.55,
-      "defaultSelected": false,
-      "quotaBased": true,
-      "rankableWhenSelected": false,
-      "blockedReason": "monthly_remaining_quota_not_tracked"
-    },
-    {
-      "id": "indigo-recharge-200",
-      "label": "INDIGO Recharge 200 kWh",
-      "feeEur": 59.99,
-      "feePeriod": "month",
-      "includedKwh": 200,
-      "overageEurPerKwh": 0.55,
-      "defaultSelected": false,
-      "quotaBased": true,
-      "rankableWhenSelected": false,
-      "blockedReason": "monthly_remaining_quota_not_tracked"
-    },
-    {
-      "id": "indigo-recharge-300",
-      "label": "INDIGO Recharge 300 kWh",
-      "feeEur": 89.99,
-      "feePeriod": "month",
-      "includedKwh": 300,
-      "overageEurPerKwh": 0.55,
-      "defaultSelected": false,
-      "quotaBased": true,
-      "rankableWhenSelected": false,
-      "blockedReason": "monthly_remaining_quota_not_tracked"
-    }
+    {"id":"indigo-recharge-a-la-carte","label":"INDIGO Recharge À la Carte","feeEur":0,"feePeriod":"none","defaultSelected":false,"quotaBased":false,"rankableWhenSelected":true},
+    {"id":"indigo-recharge-100","label":"INDIGO Recharge 100 kWh","feeEur":29.99,"feePeriod":"month","includedKwh":100,"overageEurPerKwh":0.55,"defaultSelected":false,"quotaBased":true,"rankableWhenSelected":false,"blockedReason":"monthly_remaining_quota_not_tracked"},
+    {"id":"indigo-recharge-200","label":"INDIGO Recharge 200 kWh","feeEur":59.99,"feePeriod":"month","includedKwh":200,"overageEurPerKwh":0.55,"defaultSelected":false,"quotaBased":true,"rankableWhenSelected":false,"blockedReason":"monthly_remaining_quota_not_tracked"},
+    {"id":"indigo-recharge-300","label":"INDIGO Recharge 300 kWh","feeEur":89.99,"feePeriod":"month","includedKwh":300,"overageEurPerKwh":0.55,"defaultSelected":false,"quotaBased":true,"rankableWhenSelected":false,"blockedReason":"monthly_remaining_quota_not_tracked"}
   ],
   "offers": [
     {
-      "id": "indigo-public-standard",
-      "channel": "direct",
-      "provider": "INDIGO Recharge public",
-      "selectors": {
-        "excludeCities": ["Biarritz", "Nevers", "Saint-Germain-en-Laye", "Saint Germain en Laye", "Tours"]
-      },
-      "pricingRules": [
-        {
-          "scope": "allDay",
-          "start": "00:00",
-          "end": "24:00",
-          "currency": "EUR",
-          "pricePerKwh": 0.55,
-          "connectionFee": 0.99,
-          "durationPerMinute": 0.10,
-          "durationThresholdMinutes": 600,
-          "occupancyPerMinute": 0,
-          "parkingPerMinute": 0
-        }
-      ],
-      "rankable": true
+      "id":"indigo-public-standard","channel":"direct","provider":"INDIGO Recharge public",
+      "selectors":{"excludeCities":["Biarritz","Nevers","Saint-Germain-en-Laye","Saint Germain en Laye","Tours"]},
+      "pricingRules":[{"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.55,"connectionFee":0.99,"durationPerMinute":0.10,"durationThresholdMinutes":600,"occupancyPerMinute":0,"parkingPerMinute":0}],
+      "rankable":true
     },
     {
-      "id": "indigo-a-la-carte-standard",
-      "channel": "subscription",
-      "subscriptionId": "indigo-recharge-a-la-carte",
-      "provider": "INDIGO Recharge À la Carte",
-      "selectors": {
-        "excludeCities": ["Biarritz", "Nevers", "Saint-Germain-en-Laye", "Saint Germain en Laye", "Tours"]
-      },
-      "pricingRules": [
-        {
-          "scope": "allDay",
-          "start": "00:00",
-          "end": "24:00",
-          "currency": "EUR",
-          "pricePerKwh": 0.45,
-          "connectionFee": 0.49,
-          "durationPerMinute": 0.05,
-          "durationThresholdMinutes": 600,
-          "occupancyPerMinute": 0,
-          "parkingPerMinute": 0
-        }
-      ],
-      "rankable": true
+      "id":"indigo-a-la-carte-standard","channel":"subscription","subscriptionId":"indigo-recharge-a-la-carte","provider":"INDIGO Recharge À la Carte",
+      "selectors":{"excludeCities":["Biarritz","Nevers","Saint-Germain-en-Laye","Saint Germain en Laye","Tours"]},
+      "pricingRules":[{"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.45,"connectionFee":0.49,"durationPerMinute":0.05,"durationThresholdMinutes":600,"occupancyPerMinute":0,"parkingPerMinute":0}],
+      "rankable":true
     },
     {
-      "id": "indigo-a-la-carte-legacy-city",
-      "channel": "subscription",
-      "subscriptionId": "indigo-recharge-a-la-carte",
-      "provider": "INDIGO Recharge À la Carte — ancien tarif",
-      "selectors": {
-        "cities": ["Biarritz", "Nevers", "Saint-Germain-en-Laye", "Saint Germain en Laye", "Tours"]
-      },
-      "pricingRules": [
-        {
-          "scope": "allDay",
-          "start": "00:00",
-          "end": "24:00",
-          "currency": "EUR",
-          "pricePerKwh": 0.30,
-          "chargePerMinute": 0.03,
-          "connectionFee": 0,
-          "durationPerMinute": 0,
-          "occupancyPerMinute": 0,
-          "parkingPerMinute": 0
-        }
-      ],
-      "rankable": true,
-      "note": "Official FAQ explicitly gives this tariff where the 0.45 EUR/kWh A-la-Carte tariff does not yet apply."
+      "id":"indigo-a-la-carte-legacy-city","channel":"subscription","subscriptionId":"indigo-recharge-a-la-carte","provider":"INDIGO Recharge À la Carte — ancien tarif",
+      "selectors":{"cities":["Biarritz","Nevers","Saint-Germain-en-Laye","Saint Germain en Laye","Tours"]},
+      "pricingRules":[{"scope":"allDay","start":"00:00","end":"24:00","currency":"EUR","pricePerKwh":0.30,"chargePerMinute":0,"connectionFee":0,"durationPerMinute":0.03,"durationThresholdMinutes":0,"occupancyPerMinute":0,"parkingPerMinute":0}],
+      "rankable":true,
+      "note":"Official FAQ gives 0.30 EUR/kWh + 0.03 EUR/min where the 0.45 EUR/kWh A-la-Carte tariff does not yet apply; the minute component is conservatively treated as connected duration so planned unplug time is respected."
     },
     {
-      "id": "indigo-public-legacy-city-unresolved",
-      "channel": "reference",
-      "provider": "INDIGO Recharge public — exception locale",
-      "selectors": {
-        "cities": ["Biarritz", "Nevers", "Saint-Germain-en-Laye", "Saint Germain en Laye", "Tours"]
-      },
-      "pricingRules": [],
-      "rankable": false,
-      "blockedReasons": ["public_ad_hoc_tariff_not_explicitly_stated_for_legacy_city_exception"]
+      "id":"indigo-public-legacy-city-unresolved","channel":"reference","provider":"INDIGO Recharge public — exception locale",
+      "selectors":{"cities":["Biarritz","Nevers","Saint-Germain-en-Laye","Saint Germain en Laye","Tours"]},
+      "pricingRules":[],"rankable":false,"blockedReasons":["public_ad_hoc_tariff_not_explicitly_stated_for_legacy_city_exception"]
     },
     {
-      "id": "indigo-monthly-quota-reference",
-      "channel": "reference",
-      "provider": "INDIGO Recharge forfaits mensuels",
-      "selectors": {"excludeCities": ["Biarritz", "Nevers", "Saint-Germain-en-Laye", "Saint Germain en Laye", "Tours"]},
-      "pricingRules": [],
-      "rankable": false,
-      "blockedReasons": ["monthly_remaining_quota_not_tracked"],
-      "note": "100/200/300 kWh monthly bundles have zero session fee, 0.55 EUR/kWh overage and 0.05 EUR/min after 16h; the advertised 0.29 EUR/kWh is an effective full-quota rate and must not be applied as a marginal session price."
+      "id":"indigo-monthly-quota-reference","channel":"reference","provider":"INDIGO Recharge forfaits mensuels",
+      "selectors":{"excludeCities":["Biarritz","Nevers","Saint-Germain-en-Laye","Saint Germain en Laye","Tours"]},
+      "pricingRules":[],"rankable":false,"blockedReasons":["monthly_remaining_quota_not_tracked"],
+      "note":"100/200/300 kWh monthly bundles have zero session fee, 0.55 EUR/kWh overage and 0.05 EUR/min after 16h; the advertised 0.29 EUR/kWh is an effective full-quota rate and must not be applied as a marginal session price."
     }
   ]
 }
