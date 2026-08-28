@@ -1,0 +1,22 @@
+name: OCPI duration pricing tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/ocpi-duration-tariffs-nl
+    paths:
+      - assets/ocpi-duration-pricing.js
+      - tests/ocpi-duration-pricing.test.cjs
+      - .github/workflows/ocpi-duration-pricing-test.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run duration pricing tests
+        run: node tests/ocpi-duration-pricing.test.cjs
