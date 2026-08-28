@@ -9,6 +9,7 @@ on:
     paths:
       - 'data/france_irve_operator_registry_v1.json'
       - 'scripts/build_france_irve_canonical.py'
+      - 'scripts/run_france_irve_canonical.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
@@ -16,6 +17,7 @@ on:
     paths:
       - 'data/france_irve_operator_registry_v1.json'
       - 'scripts/build_france_irve_canonical.py'
+      - 'scripts/run_france_irve_canonical.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
 
 permissions:
@@ -29,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate builder syntax
-        run: python -m py_compile scripts/build_france_irve_canonical.py
+        run: python -m py_compile scripts/build_france_irve_canonical.py scripts/run_france_irve_canonical.py
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -45,7 +47,7 @@ jobs:
 
       - name: Build canonical non-production audit
         run: |
-          python scripts/build_france_irve_canonical.py \
+          python scripts/run_france_irve_canonical.py \
             --static-csv .tmp/irve/static.csv \
             --dynamic-csv .tmp/irve/dynamic.csv \
             --registry data/france_irve_operator_registry_v1.json \
