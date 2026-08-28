@@ -7,6 +7,7 @@ on:
       - feat/ocpi-duration-tariffs-nl
     paths:
       - assets/netherlands-catalog.js
+      - assets/netherlands-refresh.js
       - assets/ocpi-duration-pricing.js
       - assets/ocpi-access-intervals.js
       - assets/update.js
@@ -29,6 +30,7 @@ jobs:
           set -euo pipefail
           node --check assets/update.js
           node --check assets/netherlands-catalog.js
+          node --check assets/netherlands-refresh.js
           node --check assets/ocpi-duration-pricing.js
           node --check assets/ocpi-access-intervals.js
           node tests/ocpi-duration-pricing.test.cjs
@@ -89,7 +91,10 @@ jobs:
         run: |
           set -euo pipefail
           grep -q 'netherlands-catalog.js' assets/update.js
+          grep -q 'netherlands-refresh.js' assets/update.js
           grep -q 'ocpiDurationBands' assets/netherlands-catalog.js
           grep -q 'TCCOcpiDurationPricing' assets/netherlands-catalog.js
           grep -q 'ocpiOpeningTimes' assets/netherlands-catalog.js
           grep -q 'TCCOcpiAccessIntervals' assets/netherlands-catalog.js
+          grep -q 'refreshNetherlandsNationalData' assets/netherlands-refresh.js
+          grep -q 'cache.*no-store' assets/netherlands-refresh.js
