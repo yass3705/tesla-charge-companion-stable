@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "updatedAt": "2026-08-28",
   "sources": [
     {
@@ -45,6 +45,13 @@
       "mode": "operator_rule_multi",
       "path": "data/tariff_overlay_v1.json",
       "offerArray": "operatorOffers",
+      "subscriptionArray": "subscriptions"
+    },
+    {
+      "id": "regional-operator-overlay-v1",
+      "mode": "operator_rule_multi",
+      "path": "data/regional_tariff_overlay_v1.json",
+      "offerArray": "offers",
       "subscriptionArray": "subscriptions"
     }
   ]
