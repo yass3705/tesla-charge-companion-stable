@@ -1,9 +1,12 @@
-name: Build Netherlands DOT-NL test runtime
+name: Build Netherlands DOT-NL runtime
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '17 4 1 * *'
   push:
     branches:
+      - main
       - feat/ocpi-duration-tariffs-nl
     paths:
       - .github/workflows/build-netherlands-dotnl-test.yml
@@ -15,7 +18,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: netherlands-dotnl-test-runtime
+  group: netherlands-dotnl-runtime-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -82,7 +85,7 @@ jobs:
             'stations>70000':manifest.get('stationCount',0)>70000,
             'exactTariffs>100000':report.get('metrics',{}).get('exactPricedConnectors',0)>100000,
             'durationConfigs>5000':report.get('metrics',{}).get('durationBandConfigs',0)>5000,
-            'knownOpeningHours>1000':sum(1 for x in compact if x and x[0] in (1,2))>1000,
+            'knownOpeningHours>60000':sum(1 for x in compact if x and x[0] in (1,2))>60000,
             'rowsMatch':len(rows)==manifest.get('stationCount')==report.get('stationCount')==len(compact),
             'tilesPresent':manifest.get('tileCount',0)>30,
             'noTeslaIds':all(not str(row[0]).startswith('NL:TSL:') for row in rows),
@@ -92,14 +95,15 @@ jobs:
           if failed:
             print('FAILED: '+', '.join(failed),file=sys.stderr);sys.exit(1)
           PY
-      - name: Commit test runtime
+      - name: Commit runtime snapshot
         shell: bash
         run: |
           set -euo pipefail
+          TARGET_BRANCH="${GITHUB_REF_NAME}"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$OUT_DIR"
           git diff --cached --quiet && exit 0
-          git commit -m 'Refresh Netherlands DOT-NL test runtime'
-          git pull --rebase origin feat/ocpi-duration-tariffs-nl
-          git push origin HEAD:feat/ocpi-duration-tariffs-nl
+          git commit -m 'Refresh Netherlands DOT-NL runtime'
+          git pull --rebase origin "$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
