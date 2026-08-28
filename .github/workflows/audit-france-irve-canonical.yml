@@ -17,6 +17,7 @@ on:
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - 'scripts/normalize_france_operator_offers.py'
       - 'scripts/run_normalize_france_operator_offers.py'
+      - 'scripts/materialize_france_runtime_rules.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
@@ -32,6 +33,7 @@ on:
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - 'scripts/normalize_france_operator_offers.py'
       - 'scripts/run_normalize_france_operator_offers.py'
+      - 'scripts/materialize_france_runtime_rules.py'
       - '.github/workflows/audit-france-irve-canonical.yml'
 
 permissions:
@@ -52,7 +54,8 @@ jobs:
             scripts/enrich_france_irve_network_identity.py \
             scripts/run_enrich_france_irve_network_identity.py \
             scripts/normalize_france_operator_offers.py \
-            scripts/run_normalize_france_operator_offers.py
+            scripts/run_normalize_france_operator_offers.py \
+            scripts/materialize_france_runtime_rules.py
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -90,6 +93,12 @@ jobs:
             --adapter-registry data/france_operator_adapter_registry_v1.json \
             --out-dir build/france_irve_offers
 
+      - name: Materialize extracted runtime tariff rules
+        run: |
+          python scripts/materialize_france_runtime_rules.py \
+            --input data/france_runtime_extracted_tariff_rules_v1.json \
+            --out-dir build/france_irve_offers
+
       - name: Validate generated JSON payloads
         run: |
           python - <<'PY'
@@ -102,6 +111,13 @@ jobs:
               with gzip.open(path, 'rt', encoding='utf-8') as handle:
                   json.load(handle)
               print('valid', path)
+          for path in [
+              'build/france_irve_offers/operator_rule_templates.json',
+              'build/france_irve_offers/runtime_rule_templates.json',
+              'build/france_irve_offers/runtime_rule_materialization_report.json',
+          ]:
+              json.load(open(path, encoding='utf-8'))
+              print('valid', path)
           PY
 
       - name: Print coverage summary
@@ -111,6 +127,7 @@ jobs:
           pan=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
           network=json.load(open('build/france_irve_identity/network_gap_report.json', encoding='utf-8'))
           offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
+          runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json', encoding='utf-8'))
           print('PAN canonical summary:')
           print(json.dumps(pan['summary'], ensure_ascii=False, indent=2))
           print('\nTariff-network identity summary:')
@@ -125,6 +142,8 @@ jobs:
           print(json.dumps({k:v for k,v in offers.items() if k != 'sources'}, ensure_ascii=False, indent=2))
           for source in offers.get('sources', []):
               print(json.dumps(source, ensure_ascii=False))
+          print('\nRuntime-rule materialization summary:')
+          print(json.dumps(runtime, ensure_ascii=False, indent=2))
           PY
 
       - name: Upload audit snapshot
