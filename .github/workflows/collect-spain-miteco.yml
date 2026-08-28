@@ -1,0 +1,45 @@
+name: Collect Spain MITECO RIPREE
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 2 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-spain-miteco
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: spain-reve-preintegration
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download and normalize MITECO RIPREE
+        run: python scripts/miteco_es_collect.py
+
+      - name: Show metadata
+        run: cat data/spain_reve/miteco_metadata.json
+
+      - name: Commit refreshed pre-integration data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/spain_reve/miteco_ripree_raw.bin \
+                  data/spain_reve/miteco_ripree_normalized.json.gz \
+                  data/spain_reve/miteco_metadata.json
+          if git diff --cached --quiet; then
+            echo "No MITECO data changes"
+            exit 0
+          fi
+          git commit -m "data(es): refresh MITECO RIPREE pre-integration snapshot"
+          git push origin HEAD:spain-reve-preintegration
