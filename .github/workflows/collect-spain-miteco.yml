@@ -2,6 +2,12 @@ name: Collect Spain MITECO RIPREE
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/miteco_es_collect.py'
+      - '.github/workflows/collect-spain-miteco.yml'
+      - 'data/spain_reve/operator_aliases_es.json'
   schedule:
     - cron: '17 3 2 * *'
 
@@ -9,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: collect-spain-miteco
+  group: collect-spain-miteco-${{ github.event_name }}
   cancel-in-progress: false
 
 jobs:
@@ -18,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: spain-reve-preintegration
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'spain-reve-preintegration' }}
 
       - uses: actions/setup-python@v5
         with:
@@ -31,6 +37,7 @@ jobs:
         run: cat data/spain_reve/miteco_metadata.json
 
       - name: Commit refreshed pre-integration data
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
