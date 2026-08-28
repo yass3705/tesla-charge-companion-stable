@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.1.1",
   "country": "FR",
   "purpose": "Canonical tariff/enrichment contract attached to PAN IRVE physical stations and PDCs",
   "invariants": {
@@ -67,13 +67,19 @@
     "pricePerKwh": "energy charge",
     "chargePerMinute": "time fee while charging",
     "durationPerMinute": "connection/session-duration fee distinct from post-charge occupancy",
-    "durationThresholdMinutes": "threshold before duration fee",
+    "durationThresholdMinutes": "elapsed connection time before duration fee starts",
+    "durationStart": "optional clock-window start during which the duration surcharge is applied",
+    "durationEnd": "optional clock-window end during which the duration surcharge is applied",
     "durationCap": "optional duration-fee cap",
     "connectionFee": "session/access fee",
     "occupancyPerMinute": "post-charge or explicit occupancy fee",
-    "occupancyThresholdMinutes": "grace/threshold before occupancy fee",
+    "occupancyThresholdMinutes": "grace/threshold after charge end before occupancy fee",
+    "occupancyStart": "optional clock-window start for occupancy fee",
+    "occupancyEnd": "optional clock-window end for occupancy fee",
     "occupancyCap": "optional occupancy cap",
     "parkingPerMinute": "parking fee only when explicitly part of charging transaction",
+    "totalTransactionCap": "optional cap applied to the complete charging transaction",
+    "rounding": "optional billing rounding rule such as started_kwh_and_started_minute",
     "notes": "optional structured-semantics note"
   }
 }
