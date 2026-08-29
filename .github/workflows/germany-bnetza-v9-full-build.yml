@@ -6,6 +6,7 @@ on:
       - 'scripts/build_germany_bnetza_v9.py'
       - 'scripts/build_germany_bnetza_v9_v2.py'
       - 'scripts/build_germany_bnetza_v9_v3.py'
+      - 'scripts/build_germany_bnetza_v9_v4.py'
       - 'data/v9/germany-operator-aliases.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -23,7 +24,7 @@ jobs:
           python-version: '3.12'
       - name: Download and build official BNetzA catalogue
         run: |
-          python scripts/build_germany_bnetza_v9_v3.py \
+          python scripts/build_germany_bnetza_v9_v4.py \
             --out build/germany-static \
             --crosswalk build/germany-crosswalk.json \
             --aliases data/v9/germany-operator-aliases.json
@@ -42,6 +43,8 @@ jobs:
           rows=json.loads(gzip.decompress((root/'all.json.gz').read_bytes()))
           assert len(rows)==m['stationCount']
           assert all(46 <= r[3] <= 56 and 4 <= r[4] <= 16 for r in rows)
+          ids=[str(r[0]) for r in rows]
+          assert len(ids)==len(set(ids)), 'duplicate station IDs detected'
           print(json.dumps({k:m[k] for k in ('sourceRows','stationCount','evseCount','skippedRows','syntheticIdCount','tileCount','allBytes')},indent=2))
           PY
       - name: Upload Germany V9 pre-integration dataset
