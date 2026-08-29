@@ -57,8 +57,23 @@ function selectedOfferTest(){
   assert.equal(selected.find(o=>o.subscriptionId).pricing.pricePerKwh,0.39);
 }
 
+function nationalFallbackPolicyTest(){
+  const fallback={id:'irve',provider:'IRVE',kind:'national_fallback',countries:['FR'],pricing:{pricePerKwh:.60},sourceId:'france-national',priority:30};
+  const direct={id:'direct',provider:'Powerdot',kind:'direct',countries:['FR'],pricing:{pricePerKwh:.49},sourceId:'powerdot-direct',priority:130};
+  const roaming={id:'roaming',provider:'Electroverse',kind:'roaming',countries:['FR'],pricing:{pricePerKwh:.52},sourceId:'france-emsp-offers',priority:80};
+  const subscription={id:'sub',provider:'Atlante',kind:'subscription',subscriptionId:'atlante-plus',countries:['FR'],pricing:{pricePerKwh:.39},sourceId:'atlante-direct',priority:95};
+  let station={countryCode:'FR',offers:[fallback]};
+  assert.deepEqual(OfferEngine.eligibleOffers(station,[]).map(o=>o.id),['irve'],'IRVE must remain when it is the only usable tariff');
+  station={countryCode:'FR',offers:[fallback,direct,roaming]};
+  assert.deepEqual(OfferEngine.eligibleOffers(station,[]).map(o=>o.id).sort(),['direct','roaming'],'IRVE fallback must disappear when public direct/roaming tariffs exist');
+  station={countryCode:'FR',offers:[fallback,subscription]};
+  assert.deepEqual(OfferEngine.eligibleOffers(station,[]).map(o=>o.id),['irve'],'unselected subscription must not hide the public IRVE fallback');
+  assert.deepEqual(OfferEngine.eligibleOffers(station,['atlante-plus']).map(o=>o.id),['sub'],'selected subscription becomes usable and then replaces IRVE fallback');
+}
+
 dedupeAndProvenanceTest();
 explicitEquivalenceTest();
 subscriptionCoverageTest();
 selectedOfferTest();
-console.log(JSON.stringify({ok:true,module:'tcc-v9-offer-engine',invariants:['dedupe-equivalent-offers','preserve-direct-vs-roaming','offer-provenance','subscription-country-count-filter','multi-country-coverage-filter','partner-operator-filter']},null,2));
+nationalFallbackPolicyTest();
+console.log(JSON.stringify({ok:true,module:'tcc-v9-offer-engine',invariants:['dedupe-equivalent-offers','preserve-direct-vs-roaming','offer-provenance','subscription-country-count-filter','multi-country-coverage-filter','partner-operator-filter','national-tariff-fallback-only']},null,2));
