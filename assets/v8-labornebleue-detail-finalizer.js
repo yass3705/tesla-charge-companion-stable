@@ -1,6 +1,8 @@
 // Tesla Charge Companion V8 RC4.8 — finition d'affichage des tarifs La Borne Bleue.
 // Se place après le moteur d'abonnements afin que celui-ci ne puisse plus écraser
 // les créneaux horaires et l'indication du plafond nocturne.
+// Le bandeau Preview est volontairement hors périmètre : un seul propriétaire,
+// preview-storage.js généré par le pipeline Pages, peut le modifier.
 (function(){
   'use strict';
   const REVISION='rc48br-lbb-detail-finalizer';
@@ -123,20 +125,12 @@
     wrapped.__tccLbbDetailFinalizer=true;wrapped.__tccOriginal=original;
     api.applyAll=wrapped;wrappedApi=api;return true;
   }
-  function mark(){
-    if(!document.getElementById('tccPreviewBannerRc48brStyle')){
-      const s=document.createElement('style');s.id='tccPreviewBannerRc48brStyle';
-      s.textContent="#tccPreviewBanner::after{content:'V8 Preview · RC4.8 · rc48br · détail tarifaire La Borne Bleue explicite · plafond nocturne signalé · abonnements stables iOS · données canoniques France'!important}";
-      document.head.appendChild(s);
-    }
-    const b=document.getElementById('tccPreviewBanner');if(b){const label='V8 Preview · RC4.8 · rc48br · détail tarifaire La Borne Bleue explicite · plafond nocturne signalé · abonnements stables iOS · données canoniques France';b.dataset.stableLabel=label;b.setAttribute('aria-label',label);}
-  }
   function installObserver(){
     const root=document.getElementById('results');if(!root||observer)return !!root;
-    let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{wrapSubscriptions();decorateAll();mark();},80)});
+    let timer=null;observer=new MutationObserver(()=>{if(busy)return;clearTimeout(timer);timer=setTimeout(()=>{wrapSubscriptions();decorateAll();},80)});
     observer.observe(root,{childList:true,subtree:true,characterData:true});return true;
   }
-  function install(){wrapSubscriptions();installObserver();decorateAll();mark();}
+  function install(){wrapSubscriptions();installObserver();decorateAll();}
   let tries=0;const timer=setInterval(()=>{tries++;install();if(tries>120||(wrappedApi&&observer&&tries>20))clearInterval(timer)},250);
   document.addEventListener('click',e=>{if(e.target?.closest?.('.v8-simulate,#routeButton'))setTimeout(()=>{wrapSubscriptions();decorateAll();},120);},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,0),{once:true});else setTimeout(install,0);
