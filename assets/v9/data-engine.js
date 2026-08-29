@@ -100,9 +100,10 @@
 
   function stationConnectorKinds(station){const out=new Set();for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(text(c?.kind))out.add(text(c.kind).toUpperCase());return out;}
   function stationPowers(station){const out=[];for(const evse of station?.evses||[])for(const c of evse?.connectors||[]){const p=number(c?.powerKw);if(p!=null)out.push(p);}return out;}
+  function addIdentityToken(out,value){const v=text(value);if(!v)return;out.add(v);if(v.startsWith('alias:')&&v.length>6)out.add(v.slice(6));}
   function stationIdentityTokens(station){
-    const out=new Set([text(station?.id)]);for(const a of station?.aliases||[])out.add(text(a));for(const p of station?.provenance||[])if(text(p?.sourceStationId))out.add(text(p.sourceStationId));
-    for(const evse of station?.evses||[]){if(text(evse?.id))out.add(text(evse.id));for(const a of evse?.aliases||[])out.add(text(a));for(const p of evse?.pdcIds||[])out.add(text(p));}
+    const out=new Set();addIdentityToken(out,station?.id);for(const a of station?.aliases||[])addIdentityToken(out,a);for(const p of station?.provenance||[])if(text(p?.sourceStationId))addIdentityToken(out,p.sourceStationId);
+    for(const evse of station?.evses||[]){if(text(evse?.id))addIdentityToken(out,evse.id);for(const a of evse?.aliases||[])addIdentityToken(out,a);for(const p of evse?.pdcIds||[])addIdentityToken(out,p);}
     return out;
   }
   function anyExact(wanted,have){return(wanted||[]).some(v=>have.has(text(v)));}
