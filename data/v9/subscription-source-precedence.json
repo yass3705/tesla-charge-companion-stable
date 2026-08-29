@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "PRE_INTEGRATION_ONLY",
+  "canonicalSource": "data/v9/subscription-entitlements-global.json",
+  "policy": {
+    "selectionIdentityComesFromCanonicalSource": true,
+    "countryFilesMayContributeEvidenceAndCountrySpecificPrices": true,
+    "legacyCountryDefinitionsMustNotCreateIndependentSelections": true,
+    "pricingConflictBlocksActivation": true,
+    "unknownCountryEntitlementIsNotInferred": true
+  },
+  "superseded": [
+    {"selectionId":"atlante-go","legacySource":"data/v9/france-emsp-offers.json","canonicalSource":"data/v9/subscription-entitlements-global.json"},
+    {"selectionId":"fastned-gold","legacySource":"data/netherlands_direct_tariffs_v1.json","canonicalSource":"data/v9/subscription-entitlements-global.json"},
+    {"selectionId":"ionity-motion","legacySource":"data/netherlands_direct_tariffs_v1.json","canonicalSource":"data/v9/subscription-entitlements-global.json"},
+    {"selectionId":"ionity-power","legacySource":"data/netherlands_direct_tariffs_v1.json","canonicalSource":"data/v9/subscription-entitlements-global.json"}
+  ],
+  "unmanagedLegacy": [
+    "pluginn-chargepass-basic",
+    "pluginn-chargepass-intense"
+  ]
+}
