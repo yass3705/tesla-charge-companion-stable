@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-29T19:16:12.389624Z",
+  "mode": "verified_exact_station_or_evse",
+  "policy": {
+    "networkWideGeneralization": false,
+    "exactIdentityRequired": true,
+    "ecoModeNotActivatedWithoutSelectionModel": true,
+    "postChargeSeparateFromChargingTime": true,
+    "subscriptionsOptIn": true
+  },
+  "directOffers": [
+    {
+      "id": "etotem-nantes-planchonnais-dc-standard",
+      "selectionId": "etotem-nantes-planchonnais-dc-standard",
+      "provider": "e-Totem direct",
+      "operatorAliases": [
+        "e-Totem",
+        "E-Totem"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRETIE44172C11",
+        "FRETIE44172C12",
+        "FRETIE44172C13",
+        "FRETIE44172C14",
+        "FR*ETI*E44172*C11",
+        "FR*ETI*E44172*C12",
+        "FR*ETI*E44172*C13",
+        "FR*ETI*E44172*C14"
+      ],
+      "connectorKinds": [
+        "DC"
+      ],
+      "minPowerKw": 180,
+      "maxPowerKw": 180,
+      "currency": "EUR",
+      "priority": 130,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.5
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 10,
+          "blockMinutes": 15,
+          "blockEur": 3.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged"
+        }
+      },
+      "source": "data-lab/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse_set",
+      "defaultSelected": false,
+      "metadata": {
+        "timeZone": "Europe/Paris",
+        "networkWideGeneralization": false,
+        "stationName": "e-Totem - NANTES - St-Luce/Loire - Planchonnais",
+        "city": "Sainte-Luce-sur-Loire",
+        "verificationDate": "2026-08-22",
+        "ecoModeEurPerKwh": 0.4,
+        "ecoModeActivation": "not_modeled_yet"
+      }
+    },
+    {
+      "id": "etotem-nantes-planchonnais-ac-standard",
+      "selectionId": "etotem-nantes-planchonnais-ac-standard",
+      "provider": "e-Totem direct",
+      "operatorAliases": [
+        "e-Totem",
+        "E-Totem"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRETIE44172C15",
+        "FRETIE44172C16",
+        "FR*ETI*E44172*C15",
+        "FR*ETI*E44172*C16"
+      ],
+      "connectorKinds": [
+        "AC"
+      ],
+      "minPowerKw": 22,
+      "maxPowerKw": 22,
+      "currency": "EUR",
+      "priority": 130,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.4
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 10,
+          "blockMinutes": 15,
+          "blockEur": 1.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged"
+        }
+      },
+      "source": "data-lab/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse_set",
+      "defaultSelected": false,
+      "metadata": {
+        "timeZone": "Europe/Paris",
+        "networkWideGeneralization": false,
+        "stationName": "e-Totem - NANTES - St-Luce/Loire - Planchonnais",
+        "city": "Sainte-Luce-sur-Loire",
+        "verificationDate": "2026-08-22",
+        "ecoModeEurPerKwh": 0.3,
+        "ecoModeActivation": "not_modeled_yet"
+      }
+    },
+    {
+      "id": "etotem-la-rochelle-jb-marcet-standard",
+      "selectionId": "etotem-la-rochelle-jb-marcet-standard",
+      "provider": "e-Totem direct",
+      "operatorAliases": [
+        "e-Totem",
+        "E-Totem",
+        "E-TOTEM G10"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "stationIds": [
+        "FR*G10*P17300*B",
+        "FRG10P17300B"
+      ],
+      "currency": "EUR",
+      "priority": 130,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.69
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 15,
+          "blockMinutes": 5,
+          "blockEur": 1.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged"
+        }
+      },
+      "source": "data-lab/station_verifications/la_rochelle_place_jb_marcet_etotem_g10_app_2026_08_22.json",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_station",
+      "defaultSelected": false,
+      "metadata": {
+        "timeZone": "Europe/Paris",
+        "networkWideGeneralization": false,
+        "stationName": "VILLE DE LA ROCHELLE - PLACE JB MARCET",
+        "verificationDate": "2026-08-22",
+        "parkingTreatmentSiteSpecific": true
+      }
+    }
+  ],
+  "subscriptionOffers": [],
+  "deferred": [
+    {
+      "station": "AGGLOMERATION MONTARGOISE - COMMISSARIAT",
+      "city": "Montargis",
+      "reason": "exact_irve_station_or_evse_id_not_resolved_yet",
+      "verifiedTariff": {
+        "energyEurPerKwh": 0.3,
+        "postChargeGraceMinutes": 30,
+        "postChargeFeeEurPerBlock": 0.5,
+        "postChargeBillingBlockMinutes": 5,
+        "postChargeTrigger": "once_vehicle_is_charged"
+      }
+    }
+  ],
+  "identityEvidence": {
+    "nantes": {
+      "stationName": "e-Totem - NANTES - St-Luce/Loire - Planchonnais",
+      "evseIdsPlain": [
+        "FRETIE44172C11",
+        "FRETIE44172C12",
+        "FRETIE44172C13",
+        "FRETIE44172C14",
+        "FRETIE44172C15",
+        "FRETIE44172C16"
+      ],
+      "evseIdsStarred": [
+        "FR*ETI*E44172*C11",
+        "FR*ETI*E44172*C12",
+        "FR*ETI*E44172*C13",
+        "FR*ETI*E44172*C14",
+        "FR*ETI*E44172*C15",
+        "FR*ETI*E44172*C16"
+      ],
+      "resolution": "exact_pdc_identifiers"
+    },
+    "laRochelle": {
+      "stationName": "VILLE DE LA ROCHELLE - PLACE JB MARCET",
+      "stationIds": [
+        "FR*G10*P17300*B",
+        "FRG10P17300B"
+      ],
+      "resolution": "exact_station_identifier"
+    },
+    "montargis": {
+      "stationName": "AGGLOMERATION MONTARGOISE - COMMISSARIAT",
+      "resolution": "deferred_no_exact_identifier"
+    }
+  }
+}
