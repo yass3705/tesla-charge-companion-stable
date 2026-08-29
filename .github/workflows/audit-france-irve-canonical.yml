@@ -7,71 +7,15 @@ on:
     branches:
       - refactor/france-irve-canonical
     paths:
-      - 'data/france_irve_operator_registry_v1.json'
-      - 'data/france_irve_tariff_network_registry_v1.json'
-      - 'data/france_tariff_base_coverage_v1.json'
-      - 'data/france_operator_adapter_registry_v1.json'
-      - 'data/france_operator_offer_contract_v1.json'
-      - 'data/france_runtime_extracted_tariff_rules_v1.json'
-      - 'data/france_status_precedence_v1.json'
-      - 'data/indigo_recharge_direct_tariffs_v1.json'
-      - 'data/eborn_direct_tariffs_v1.json'
-      - 'data/mobive_direct_tariffs_v1.json'
-      - 'data/saemes_direct_tariffs_v1.json'
-      - 'data/qpark_izivia_tariffs_v1.json'
-      - 'data/carrefour_energies_22kw_offer_v1.json'
-      - 'data/carrefour_energies_benefits_v1.json'
-      - 'data/carrefour_energies_eligible_sites_v1.json'
-      - 'scripts/build_france_irve_canonical.py'
-      - 'scripts/run_france_irve_canonical.py'
-      - 'scripts/build_effective_france_tariff_network_registry.py'
-      - 'scripts/enrich_france_irve_network_identity.py'
-      - 'scripts/run_enrich_france_irve_network_identity.py'
-      - 'scripts/normalize_france_operator_offers.py'
-      - 'scripts/run_normalize_france_operator_offers.py'
-      - 'scripts/finalize_france_normalized_offers.py'
-      - 'scripts/materialize_france_runtime_rules.py'
-      - 'scripts/materialize_france_new_network_bases.py'
-      - 'scripts/materialize_carrefour_energies_22kw.py'
-      - 'scripts/test_france_new_network_bases.py'
-      - 'scripts/test_carrefour_energies_offer.py'
-      - 'scripts/resolve_france_operational_status.py'
-      - 'scripts/build_irve_tariff_fallback_candidates.py'
+      - 'data/**'
+      - 'scripts/**'
       - '.github/workflows/audit-france-irve-canonical.yml'
   pull_request:
     branches:
       - release/2026-08
     paths:
-      - 'data/france_irve_operator_registry_v1.json'
-      - 'data/france_irve_tariff_network_registry_v1.json'
-      - 'data/france_tariff_base_coverage_v1.json'
-      - 'data/france_operator_adapter_registry_v1.json'
-      - 'data/france_operator_offer_contract_v1.json'
-      - 'data/france_runtime_extracted_tariff_rules_v1.json'
-      - 'data/france_status_precedence_v1.json'
-      - 'data/indigo_recharge_direct_tariffs_v1.json'
-      - 'data/eborn_direct_tariffs_v1.json'
-      - 'data/mobive_direct_tariffs_v1.json'
-      - 'data/saemes_direct_tariffs_v1.json'
-      - 'data/qpark_izivia_tariffs_v1.json'
-      - 'data/carrefour_energies_22kw_offer_v1.json'
-      - 'data/carrefour_energies_benefits_v1.json'
-      - 'data/carrefour_energies_eligible_sites_v1.json'
-      - 'scripts/build_france_irve_canonical.py'
-      - 'scripts/run_france_irve_canonical.py'
-      - 'scripts/build_effective_france_tariff_network_registry.py'
-      - 'scripts/enrich_france_irve_network_identity.py'
-      - 'scripts/run_enrich_france_irve_network_identity.py'
-      - 'scripts/normalize_france_operator_offers.py'
-      - 'scripts/run_normalize_france_operator_offers.py'
-      - 'scripts/finalize_france_normalized_offers.py'
-      - 'scripts/materialize_france_runtime_rules.py'
-      - 'scripts/materialize_france_new_network_bases.py'
-      - 'scripts/materialize_carrefour_energies_22kw.py'
-      - 'scripts/test_france_new_network_bases.py'
-      - 'scripts/test_carrefour_energies_offer.py'
-      - 'scripts/resolve_france_operational_status.py'
-      - 'scripts/build_irve_tariff_fallback_candidates.py'
+      - 'data/**'
+      - 'scripts/**'
       - '.github/workflows/audit-france-irve-canonical.yml'
 
 permissions:
@@ -80,9 +24,11 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Validate builder syntax
         run: |
@@ -100,15 +46,31 @@ jobs:
             scripts/test_france_new_network_bases.py \
             scripts/test_carrefour_energies_offer.py \
             scripts/resolve_france_operational_status.py \
-            scripts/build_irve_tariff_fallback_candidates.py
+            scripts/build_irve_tariff_fallback_candidates.py \
+            scripts/audit_powerdot_connector_identity_v2.py \
+            scripts/audit_powerdot_connector_identity_v3.py \
+            scripts/materialize_france_powerdot_offers.py \
+            scripts/materialize_france_powerdot_offers_v2.py \
+            scripts/finalize_france_powerdot_offers.py \
+            scripts/finalize_irve_fallback_precedence.py \
+            scripts/test_powerdot_connector_identity_v3.py \
+            scripts/test_powerdot_materializer.py \
+            scripts/test_powerdot_materializer_v2.py \
+            scripts/test_finalize_france_powerdot_offers.py \
+            scripts/test_finalize_irve_fallback_precedence.py
           if [ -f scripts/materialize_carrefour_energies_22kw.py ]; then
             python -m py_compile scripts/materialize_carrefour_energies_22kw.py
           fi
 
-      - name: Test new official network tariff semantics
+      - name: Test tariff semantics
         run: |
           python scripts/test_france_new_network_bases.py
           python scripts/test_carrefour_energies_offer.py
+          python scripts/test_powerdot_connector_identity_v3.py
+          python scripts/test_powerdot_materializer.py
+          python scripts/test_powerdot_materializer_v2.py
+          python scripts/test_finalize_france_powerdot_offers.py
+          python scripts/test_finalize_irve_fallback_precedence.py
 
       - name: Build effective tariff-network registry
         run: |
@@ -116,6 +78,24 @@ jobs:
             --registry data/france_irve_tariff_network_registry_v1.json \
             --coverage data/france_tariff_base_coverage_v1.json \
             --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Fetch current stable Powerdot direct source
+        run: |
+          mkdir -p .tmp/powerdot
+          git fetch --no-tags --depth=1 origin main
+          git show origin/main:data/powerdot_direct_france.json.gz > .tmp/powerdot/powerdot_direct_france.json.gz
+          python - <<'PY'
+          import gzip,json
+          with gzip.open('.tmp/powerdot/powerdot_direct_france.json.gz','rt',encoding='utf-8') as f:
+              data=json.load(f)
+          source=data.get('source') or {}
+          assert source.get('sourceType') == 'direct_cpo_public_adhoc_api'
+          assert source.get('roaming') is False
+          assert str(source.get('emspCode') or '').strip() == ''
+          assert str(source.get('operator') or '').strip() == 'Power Dot France'
+          assert len(data.get('chargers') or []) >= 2200
+          print(json.dumps({'generatedAt':data.get('generatedAt'),'counts':data.get('counts'),'source':source},ensure_ascii=False,indent=2))
+          PY
 
       - name: Download PAN IRVE static and dynamic snapshots
         run: |
@@ -187,12 +167,90 @@ jobs:
             echo 'Carrefour station matcher not materialized yet; semantic inputs validated only.'
           fi
 
+      - name: Resolve safe Powerdot connector/PDC identity
+        run: |
+          mkdir -p build/france_irve_powerdot
+          python scripts/audit_powerdot_connector_identity_v2.py \
+            --powerdot-gzip .tmp/powerdot/powerdot_direct_france.json.gz \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_powerdot
+          python scripts/audit_powerdot_connector_identity_v3.py \
+            --powerdot-gzip .tmp/powerdot/powerdot_direct_france.json.gz \
+            --canonical-dir build/france_irve_identity \
+            --v2-safe build/france_irve_powerdot/powerdot_safe_pdc_tariff_candidates_v2.json.gz \
+            --out-dir build/france_irve_powerdot
+
+      - name: Materialize Powerdot exact-PDC direct offers
+        run: |
+          python scripts/materialize_france_powerdot_offers_v2.py \
+            --safe-candidates build/france_irve_powerdot/powerdot_safe_pdc_tariff_candidates_v3.json.gz \
+            --canonical-dir build/france_irve_identity \
+            --powerdot-gzip .tmp/powerdot/powerdot_direct_france.json.gz \
+            --out-dir build/france_irve_powerdot
+          python scripts/finalize_france_powerdot_offers.py \
+            --input build/france_irve_powerdot/powerdot_pdc_offers_v1_1.json.gz \
+            --out-dir build/france_irve_offers
+
+      - name: Validate Powerdot canonical contract
+        run: |
+          python - <<'PY'
+          import gzip,json
+          v2=json.load(open('build/france_irve_powerdot/powerdot_connector_identity_report_v2.json',encoding='utf-8'))['summary']
+          v3=json.load(open('build/france_irve_powerdot/powerdot_connector_identity_report_v3.json',encoding='utf-8'))['summary']
+          material=json.load(open('build/france_irve_powerdot/powerdot_materialization_report.json',encoding='utf-8'))['summary']
+          contract=json.load(open('build/france_irve_offers/powerdot_contract_report.json',encoding='utf-8'))
+          with gzip.open('build/france_irve_offers/powerdot_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f:
+              offers=json.load(f)
+          assert v3['baselineV2SafePdcCount'] == v2['safeCanonicalPdcTariffCount']
+          assert v3['safeCanonicalPdcTariffCount'] >= v3['baselineV2SafePdcCount']
+          assert v3['safeCanonicalPdcTariffPctOfReferenced'] >= 99
+          assert v3['unresolvedCanonicalPdcCount'] <= 50
+          assert v3['proposalConflictPdcCount'] == 0
+          assert v3['baselineConflictPdcCount'] == 0
+          assert material['safeCandidateCount'] == v3['safeCanonicalPdcTariffCount']
+          assert material['materializedOfferCount'] == material['rankableOfferCount']
+          assert material['blockedOfferCount'] == 0
+          assert material['canonicalPdcMissingCount'] == 0
+          assert contract['offerCount'] == len(offers) == material['materializedOfferCount']
+          assert contract['rankableOfferCount'] == len(offers)
+          assert contract['blockedOfferCount'] == 0
+          assert contract['physicalInventoryMutationCount'] == 0
+          assert len({row['canonicalPdcId'] for row in offers}) == len(offers)
+          assert all(row['matchMethod']=='exact_pdc_itinerance' for row in offers)
+          assert all(row['physicalOperatorId']=='powerdot' and row['tariffNetworkId']=='powerdot' for row in offers)
+          assert all(row['channel']=='direct' and row['subscriptionId'] is None for row in offers)
+          print('Powerdot v2',json.dumps(v2,ensure_ascii=False,indent=2))
+          print('Powerdot v3',json.dumps(v3,ensure_ascii=False,indent=2))
+          print('Powerdot materialization',json.dumps(material,ensure_ascii=False,indent=2))
+          print('Powerdot contract',json.dumps(contract,ensure_ascii=False,indent=2))
+          PY
+
       - name: Build strict IRVE tariff fallback candidates
         run: |
           python scripts/build_irve_tariff_fallback_candidates.py \
             --static-csv .tmp/irve/static.csv \
             --canonical-dir build/france_irve_identity \
             --out-dir build/france_irve_offers
+
+      - name: Enforce structured exact-PDC precedence over IRVE fallback
+        run: |
+          python scripts/finalize_irve_fallback_precedence.py \
+            --fallback build/france_irve_offers/irve_tariff_fallback_candidates.json.gz \
+            --structured-offers build/france_irve_offers/station_offers_v1_1.json.gz \
+            --structured-offers build/france_irve_offers/powerdot_pdc_offers_contract_v1_1.json.gz \
+            --report build/france_irve_offers/irve_tariff_fallback_precedence_report.json
+          python - <<'PY'
+          import gzip,json
+          with gzip.open('build/france_irve_offers/powerdot_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f:
+              powerdot={r['canonicalPdcId'] for r in json.load(f) if r.get('rankable')}
+          with gzip.open('build/france_irve_offers/irve_tariff_fallback_candidates.json.gz','rt',encoding='utf-8') as f:
+              fallback=json.load(f)
+          collision=[r['canonicalPdcId'] for r in fallback if r.get('rankable') and r.get('canonicalPdcId') in powerdot]
+          assert not collision, collision[:20]
+          report=json.load(open('build/france_irve_offers/irve_tariff_fallback_precedence_report.json',encoding='utf-8'))
+          assert report['structuredRankablePdcCount'] >= len(powerdot)
+          print(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
 
       - name: Resolve operational status precedence
         run: |
@@ -204,19 +262,21 @@ jobs:
       - name: Validate generated JSON payloads
         run: |
           python - <<'PY'
-          import gzip, json, os
-          for path in [
+          import gzip,json,os
+          gzip_paths=[
               'build/france_irve_identity/stations.json.gz',
               'build/france_irve_identity/charge_points.json.gz',
               'build/france_irve_offers/station_offers.json.gz',
               'build/france_irve_offers/station_offers_v1_1.json.gz',
+              'build/france_irve_offers/powerdot_pdc_offers_contract_v1_1.json.gz',
               'build/france_irve_offers/irve_tariff_fallback_candidates.json.gz',
+              'build/france_irve_powerdot/powerdot_safe_pdc_tariff_candidates_v3.json.gz',
               'build/france_irve_status/charge_point_status.json.gz',
-          ]:
-              with gzip.open(path, 'rt', encoding='utf-8') as handle:
-                  json.load(handle)
-              print('valid', path)
-          for path in [
+          ]
+          for path in gzip_paths:
+              with gzip.open(path,'rt',encoding='utf-8') as handle:json.load(handle)
+              print('valid',path)
+          json_paths=[
               'build/france_irve/effective_tariff_network_registry.json',
               'build/france_irve_offers/operator_rule_templates.json',
               'build/france_irve_offers/network_rule_templates_v1_1.json',
@@ -227,59 +287,51 @@ jobs:
               'build/france_irve_offers/new_network_subscriptions_v1_1.json',
               'build/france_irve_offers/new_network_partner_rules_v1_1.json',
               'build/france_irve_offers/new_network_materialization_report.json',
+              'build/france_irve_offers/powerdot_contract_report.json',
               'build/france_irve_offers/irve_tariff_fallback_report.json',
+              'build/france_irve_offers/irve_tariff_fallback_precedence_report.json',
               'build/france_irve_status/status_resolution_report.json',
-          ]:
-              json.load(open(path, encoding='utf-8'))
-              print('valid', path)
-          for path in [
-              'build/france_irve_offers/carrefour_22kw_station_offers.json',
-              'build/france_irve_offers/carrefour_22kw_match_report.json',
-          ]:
-              if os.path.exists(path):
-                  json.load(open(path, encoding='utf-8'))
-                  print('valid', path)
+              'build/france_irve_powerdot/powerdot_connector_identity_report_v3.json',
+              'build/france_irve_powerdot/powerdot_materialization_report.json',
+          ]
+          for path in json_paths:
+              json.load(open(path,encoding='utf-8'));print('valid',path)
+          for path in ['build/france_irve_offers/carrefour_22kw_station_offers.json','build/france_irve_offers/carrefour_22kw_match_report.json']:
+              if os.path.exists(path):json.load(open(path,encoding='utf-8'));print('valid',path)
           PY
 
       - name: Print coverage summary
         run: |
           python - <<'PY'
-          import json, os
-          pan=json.load(open('build/france_irve/operator_gap_report.json', encoding='utf-8'))
-          network=json.load(open('build/france_irve_identity/network_gap_report.json', encoding='utf-8'))
-          offers=json.load(open('build/france_irve_offers/match_report.json', encoding='utf-8'))
-          identities=json.load(open('build/france_irve_offers/offer_identity_finalization_report.json', encoding='utf-8'))
-          runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json', encoding='utf-8'))
-          newbases=json.load(open('build/france_irve_offers/new_network_materialization_report.json', encoding='utf-8'))
-          fallback=json.load(open('build/france_irve_offers/irve_tariff_fallback_report.json', encoding='utf-8'))
-          status=json.load(open('build/france_irve_status/status_resolution_report.json', encoding='utf-8'))
-          print('PAN canonical summary:')
-          print(json.dumps(pan['summary'], ensure_ascii=False, indent=2))
-          print('\nTariff-network identity summary:')
-          print(json.dumps(network['summary'], ensure_ascii=False, indent=2))
+          import json,os
+          pan=json.load(open('build/france_irve/operator_gap_report.json',encoding='utf-8'))
+          network=json.load(open('build/france_irve_identity/network_gap_report.json',encoding='utf-8'))
+          offers=json.load(open('build/france_irve_offers/match_report.json',encoding='utf-8'))
+          identities=json.load(open('build/france_irve_offers/offer_identity_finalization_report.json',encoding='utf-8'))
+          runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json',encoding='utf-8'))
+          newbases=json.load(open('build/france_irve_offers/new_network_materialization_report.json',encoding='utf-8'))
+          powerdot=json.load(open('build/france_irve_powerdot/powerdot_connector_identity_report_v3.json',encoding='utf-8'))
+          powerdot_contract=json.load(open('build/france_irve_offers/powerdot_contract_report.json',encoding='utf-8'))
+          fallback=json.load(open('build/france_irve_offers/irve_tariff_fallback_report.json',encoding='utf-8'))
+          fallback_precedence=json.load(open('build/france_irve_offers/irve_tariff_fallback_precedence_report.json',encoding='utf-8'))
+          status=json.load(open('build/france_irve_status/status_resolution_report.json',encoding='utf-8'))
+          print('PAN canonical summary:');print(json.dumps(pan['summary'],ensure_ascii=False,indent=2))
+          print('\nTariff-network identity summary:');print(json.dumps(network['summary'],ensure_ascii=False,indent=2))
           print('\nPrioritized tariff-network work queue:')
-          for row in network['workQueue'][:50]:
-              print(f"- {row['label']}: {row['pdcCount']} PDC / {row['stationCount']} stations [{row['coverageStatus']}]")
+          for row in network['workQueue'][:50]:print(f"- {row['label']}: {row['pdcCount']} PDC / {row['stationCount']} stations [{row['coverageStatus']}]")
           print('\nTop unresolved network/brand names:')
-          for row in network['unresolvedNetworks'][:50]:
-              print(f"- {row['networkRaw']}: {row['pdcCount']} PDC / {row['stationCount']} stations")
-          print('\nLegacy-source normalization summary:')
-          print(json.dumps({k:v for k,v in offers.items() if k != 'sources'}, ensure_ascii=False, indent=2))
-          for source in offers.get('sources', []):
-              print(json.dumps(source, ensure_ascii=False))
-          print('\nOffer identity finalization summary:')
-          print(json.dumps(identities, ensure_ascii=False, indent=2))
-          print('\nRuntime-rule materialization summary:')
-          print(json.dumps(runtime, ensure_ascii=False, indent=2))
-          print('\nNew official-network bases summary:')
-          print(json.dumps(newbases, ensure_ascii=False, indent=2))
+          for row in network['unresolvedNetworks'][:50]:print(f"- {row['networkRaw']}: {row['pdcCount']} PDC / {row['stationCount']} stations")
+          print('\nLegacy-source normalization summary:');print(json.dumps({k:v for k,v in offers.items() if k!='sources'},ensure_ascii=False,indent=2))
+          print('\nOffer identity finalization summary:');print(json.dumps(identities,ensure_ascii=False,indent=2))
+          print('\nRuntime-rule materialization summary:');print(json.dumps(runtime,ensure_ascii=False,indent=2))
+          print('\nNew official-network bases summary:');print(json.dumps(newbases,ensure_ascii=False,indent=2))
           if os.path.exists('build/france_irve_offers/carrefour_22kw_match_report.json'):
-              print('\nCarrefour 22 kW station matching summary:')
-              print(json.dumps(json.load(open('build/france_irve_offers/carrefour_22kw_match_report.json', encoding='utf-8')), ensure_ascii=False, indent=2))
-          print('\nIRVE fallback summary:')
-          print(json.dumps(fallback, ensure_ascii=False, indent=2))
-          print('\nOperational-status precedence summary:')
-          print(json.dumps(status['summary'], ensure_ascii=False, indent=2))
+              print('\nCarrefour 22 kW station matching summary:');print(json.dumps(json.load(open('build/france_irve_offers/carrefour_22kw_match_report.json',encoding='utf-8')),ensure_ascii=False,indent=2))
+          print('\nPowerdot exact-PDC identity summary:');print(json.dumps(powerdot['summary'],ensure_ascii=False,indent=2))
+          print('\nPowerdot canonical contract summary:');print(json.dumps(powerdot_contract,ensure_ascii=False,indent=2))
+          print('\nIRVE fallback summary:');print(json.dumps(fallback,ensure_ascii=False,indent=2))
+          print('\nIRVE fallback precedence summary:');print(json.dumps(fallback_precedence,ensure_ascii=False,indent=2))
+          print('\nOperational-status precedence summary:');print(json.dumps(status['summary'],ensure_ascii=False,indent=2))
           PY
 
       - name: Upload audit snapshot
@@ -291,4 +343,5 @@ jobs:
             build/france_irve_identity/
             build/france_irve_offers/
             build/france_irve_status/
+            build/france_irve_powerdot/
           retention-days: 14
