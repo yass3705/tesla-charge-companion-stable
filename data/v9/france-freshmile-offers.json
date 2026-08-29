@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-08-29T19:40:00Z",
+  "generatedAt": "2026-08-29T20:05:00Z",
   "mode": "verified_exact_station_or_evse",
   "policy": {
     "networkWideGeneralization": false,
@@ -47,25 +47,54 @@
         "verificationDate": "2026-08-22",
         "networkWideGeneralization": false
       }
+    },
+    {
+      "id": "freshmile-sdec15-saint-flour-georges-pompidou",
+      "selectionId": "freshmile-sdec15-saint-flour-georges-pompidou",
+      "provider": "Freshmile direct",
+      "countries": ["FR"],
+      "evseIds": ["FRFR1EQAHS1", "FRFR1EUSWB1", "FRFR1EYKHW1"],
+      "connectorKinds": ["AC", "DC"],
+      "minPowerKw": 22,
+      "maxPowerKw": 50,
+      "currency": "EUR",
+      "priority": 130,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "connectedTimeInitialMinutes": 15,
+            "connectedTimeInitialFlatEur": 6.0,
+            "connectedTimeAfterInitialPerMinuteEur": 0.15
+          }
+        ]
+      },
+      "source": "data-lab/station_verifications/freshmile_sdec15_saint_flour_allee_georges_pompidou_app_2026_08_22.json",
+      "identityEvidence": [
+        "IRVE-compatible listing: Allée Georges Pompidou, 15100 Saint-Flour",
+        "PDC FRFR1EQAHS1 = Type 2 22 kW",
+        "PDC FRFR1EUSWB1 = CCS 50 kW",
+        "PDC FRFR1EYKHW1 = CCS 50 kW"
+      ],
+      "verifiedScope": "exact_evse_set",
+      "defaultSelected": false,
+      "metadata": {
+        "timeZone": "Europe/Paris",
+        "network": "SDEC15 public IRVE",
+        "stationName": "Saint-Flour, Allée Georges Pompidou",
+        "verificationDate": "2026-08-22",
+        "billingPrecision": "per_second",
+        "networkWideGeneralization": false,
+        "stationIdIntentionallyOmitted": true,
+        "stationIdReason": "conflicting copied IRVE station identifiers; exact PDC identifiers are stable enough for activation"
+      }
     }
   ],
   "subscriptionOffers": [],
-  "deferred": [
-    {
-      "station": "Saint-Flour, Allée Georges Pompidou",
-      "network": "SDEC15 public IRVE",
-      "reason": "exact_irve_station_or_evse_id_unresolved",
-      "verifiedTariff": {
-        "connectorClasses": ["Type 2 22 kW", "CCS Combo 2 50 kW"],
-        "first15MinutesFlatEur": 6.0,
-        "after15MinutesEurPerMinute": 0.15,
-        "billingPrecision": "per_second"
-      },
-      "source": "data-lab/station_verifications/freshmile_sdec15_saint_flour_allee_georges_pompidou_app_2026_08_22.json"
-    }
-  ],
+  "deferred": [],
   "providerAudit": {
-    "Freshmile": "no safe national public tariff; station/local-network lookup required",
+    "Freshmile": "no safe national public tariff; only exact verified station/PDC rules active",
     "Powerdot": "no safe national public tariff; station/connector lookup required",
     "Qovoltis": "no safe national public tariff; station-specific Nomad/ad-hoc pricing",
     "Bump": "site manager controls public tariff; no safe network-wide value",
