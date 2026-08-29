@@ -7,7 +7,6 @@
   const text=v=>String(v==null?'':v).trim();
   const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
   const uniq=values=>[...new Set((values||[]).map(text).filter(Boolean))];
-  const number=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
 
   function e55cRules(payload,source={}){
     const profiles=payload?.profiles||{},stations=Array.isArray(payload?.stations)?payload.stations:[],rules=[];
@@ -17,14 +16,15 @@
         const profileId=text(config?.pricingProfileId),profile=profiles?.[profileId];
         if(config?.priceStatus!=='resolved_e55c_scan_pay'||!profile||!Array.isArray(profile.rules)||!profile.rules.length)continue;
         const evseIds=uniq([...(config?.evseIds||[]),...(config?.localEvseIds||[])]);
-        const kind=text(config?.kind).toUpperCase(),power=number(config?.powerKw);
+        if(!evseIds.length)continue;
+        const kind=text(config?.kind).toUpperCase();
         rules.push({
           id:`e55c-direct:${stationId||localStationId||'station'}:${index}`,
           provider:'E55C direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',
-          operatorIds:['e55c'],stationIds:uniq([stationId,localStationId]),evseIds,
-          connectorKinds:kind?[kind]:[],minPowerKw:power,maxPowerKw:power,
+          operatorIds:['e55c','electric-55-charging','electric-55'],stationIds:uniq([stationId,localStationId]),evseIds,
+          connectorKinds:kind?[kind]:[],
           pricing:{type:'rules',rules:clone(profile.rules)},priority:Number(source?.priority?.tariff||95),
-          metadata:{legacyDataset:text(payload?.dataset),pricingProfileId:profileId,priceStatus:text(config?.priceStatus),verified:true,paymentUrls:uniq(config?.paymentUrls||[])}
+          metadata:{legacyDataset:text(payload?.dataset),pricingProfileId:profileId,priceStatus:text(config?.priceStatus),verified:true,identityMode:'exact_evse',paymentUrls:uniq(config?.paymentUrls||[])}
         });
       }
     }
