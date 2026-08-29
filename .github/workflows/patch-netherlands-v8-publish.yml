@@ -1,0 +1,104 @@
+name: Patch Netherlands V8 publication
+
+on:
+  push:
+    branches:
+      - fix/netherlands-v8-publish
+    paths:
+      - .github/workflows/patch-netherlands-v8-publish.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/netherlands-v8-publish
+          fetch-depth: 0
+      - name: Patch Pages V8 composition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('.github/workflows/pages.yml')
+          s=p.read_text(encoding='utf-8')
+
+          def replace_once(old,new,label):
+              global s
+              if old not in s:
+                  raise SystemExit(f'Patch anchor missing: {label}')
+              s=s.replace(old,new,1)
+
+          replace_once(
+              '          cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france\n',
+              '          cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france\n'
+              '          rm -rf site/v8-preview/data/non_tesla_netherlands\n'
+              '          cp -R site/data/non_tesla_netherlands site/v8-preview/data/non_tesla_netherlands\n',
+              'Netherlands runtime copy')
+
+          replace_once(
+              '          cp site/assets/v8-belib-pricing.js site/v8-preview/assets/v8-belib-pricing.js\n',
+              '          cp site/assets/v8-belib-pricing.js site/v8-preview/assets/v8-belib-pricing.js\n'
+              '          for f in ocpi-duration-pricing.js ocpi-access-intervals.js netherlands-catalog.js netherlands-refresh.js; do\n'
+              '            cp "site/assets/$f" "site/v8-preview/assets/$f"\n'
+              '          done\n',
+              'Netherlands assets copy')
+
+          replace_once(
+              "          html=html.replace(france_tag,france_tag+'\\n<script src=\"assets/v8-belib-pricing.js?v=rc48-belib-1\" defer></script>',1)\n",
+              "          html=html.replace(france_tag,france_tag+'\\n<script src=\"assets/v8-belib-pricing.js?v=rc48-belib-1\" defer></script>',1)\n"
+              "          belib_tag='<script src=\"assets/v8-belib-pricing.js?v=rc48-belib-1\" defer></script>'\n"
+              "          nl_scripts=(\n"
+              "              '<script src=\"assets/ocpi-duration-pricing.js?v=nl-v3\" defer></script>\\n'\n"
+              "              '<script src=\"assets/ocpi-access-intervals.js?v=nl-v3\" defer></script>\\n'\n"
+              "              '<script src=\"assets/netherlands-catalog.js?v=nl-v3\" defer></script>\\n'\n"
+              "              '<script src=\"assets/netherlands-refresh.js?v=nl-v3\" defer></script>'\n"
+              "          )\n"
+              "          html=html.replace(belib_tag,belib_tag+'\\n'+nl_scripts,1)\n",
+              'Netherlands script injection')
+
+          replace_once(
+              '          node --check site/v8-preview/assets/v8-belib-pricing.js\n',
+              '          node --check site/v8-preview/assets/v8-belib-pricing.js\n'
+              '          node --check site/v8-preview/assets/ocpi-duration-pricing.js\n'
+              '          node --check site/v8-preview/assets/ocpi-access-intervals.js\n'
+              '          node --check site/v8-preview/assets/netherlands-catalog.js\n'
+              '          node --check site/v8-preview/assets/netherlands-refresh.js\n'
+              "          python - <<'PYNL'\n"
+              "          import json\n"
+              "          from pathlib import Path\n"
+              "          root=Path('site/v8-preview/data/non_tesla_netherlands')\n"
+              "          manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))\n"
+              "          scope=manifest.get('scope',{})\n"
+              "          checks={\n"
+              "              'schemaV3': manifest.get('schemaVersion')==3,\n"
+              "              'stations': manifest.get('stationCount',0)>70000,\n"
+              "              'countryNL': scope.get('countryCode')=='NL',\n"
+              "              'teslaExcluded': scope.get('teslaExcluded') is True,\n"
+              "              'durationBands': scope.get('ocpiDurationBands') is True,\n"
+              "              'openingTimes': scope.get('ocpiOpeningTimes') is True,\n"
+              "          }\n"
+              "          missing=[k for k,v in checks.items() if not v]\n"
+              "          if missing: raise SystemExit('Netherlands V8 publish validation failed: '+', '.join(missing))\n"
+              "          html=Path('site/v8-preview/index.html').read_text(encoding='utf-8')\n"
+              "          for name in ('ocpi-duration-pricing.js','ocpi-access-intervals.js','netherlands-catalog.js','netherlands-refresh.js'):\n"
+              "              if name not in html: raise SystemExit('Netherlands V8 script missing from index: '+name)\n"
+              "          print({'netherlandsV8Publish':checks,'stationCount':manifest.get('stationCount')})\n"
+              "          PYNL\n",
+              'Netherlands publish validation')
+
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/patch-netherlands-v8-publish.yml
+          git add .github/workflows/pages.yml
+          git diff --cached --check
+          git commit -m 'fix(v8): publish Netherlands national catalog'
+          git push origin HEAD:fix/netherlands-v8-publish
