@@ -13,7 +13,7 @@
     if(['hors_service','out_of_service','outoforder','out_of_order','inoperative'].includes(v))return'out_of_service';
     return'unknown';
   }
-  function updatedAtOf(raw,fallback){return raw?.updatedAt||raw?.last_updated||raw?.date_maj||raw?.dateMaj||fallback||null;}
+  function updatedAtOf(raw,fallback){return raw?.updatedAt||raw?.last_updated||raw?.date_maj||raw?.dateMaj||raw?.horodatage||fallback||null;}
   function stationKey(raw){return text(raw?.id_station_itinerance||raw?.idStationItinerance||raw?.stationId||raw?.station_id);}
   function pdcKey(raw){return text(raw?.id_pdc_itinerance||raw?.idPdcItinerance||raw?.evseId||raw?.pdcId);}
 
@@ -38,22 +38,21 @@
       const aliases=[];
       if(g.sid)aliases.push(`irve-station:${g.sid}`);
       for(const p of g.pdcs)if(p.id)aliases.push(`irve-pdc:${p.id}`);
-      stationFragments.push({
-        aliases,
-        sourceStationId:g.sid||g.pdcs[0]?.id||'',
-        status:{state,sourceId:'france-irve-dynamic',updatedAt:g.updatedAt,pdcs:g.pdcs},
-        updatedAt:g.updatedAt
-      });
+      stationFragments.push({aliases,sourceStationId:g.sid||g.pdcs[0]?.id||'',status:{state,sourceId:'france-irve-dynamic',updatedAt:g.updatedAt,pdcs:g.pdcs},updatedAt:g.updatedAt});
     }
     return{stationFragments,metadata:{generatedAt,maxAgeMinutes,recordCount:rows.length,stationCount:stationFragments.length}};
   }
 
+  async function jsonMaybeGzip(response){
+    if(!response.ok)throw new Error(`France IRVE dynamic status unavailable (${response.status})`);
+    const bytes=new Uint8Array(await response.arrayBuffer());let raw;
+    if(bytes[0]===0x1f&&bytes[1]===0x8b){if(typeof DecompressionStream!=='function')throw new Error('gzip decompression unavailable');raw=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();}
+    else raw=new TextDecoder().decode(bytes);
+    return JSON.parse(raw);
+  }
   function createLoader({url,fetchImpl,maxAgeMinutes=120}={}){
     const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for France IRVE status adapter');
-    return async function(){
-      const r=await f(url,{cache:'no-cache'});if(!r.ok)throw new Error(`France IRVE dynamic status unavailable (${r.status})`);
-      return normalizePayload(await r.json(),{maxAgeMinutes});
-    };
+    return async function(){const r=await f(url,{cache:'no-cache'});return normalizePayload(await jsonMaybeGzip(r),{maxAgeMinutes});};
   }
-  return{stateOf,normalizePayload,createLoader};
+  return{stateOf,normalizePayload,createLoader,jsonMaybeGzip};
 });
