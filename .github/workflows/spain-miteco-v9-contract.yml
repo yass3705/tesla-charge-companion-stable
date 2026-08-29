@@ -12,6 +12,7 @@ on:
       - 'scripts/test_subscription_dedupe_v9.py'
       - 'scripts/test_v9_subscription_picker.py'
       - 'scripts/test_v9_subscription_engine_bridge.py'
+      - 'scripts/test_v9_offer_engine.js'
       - 'tests/fixtures/spain_miteco_v9_sample.csv'
       - 'tests/fixtures/spain_reve_v9_sample.json'
       - 'data/v9/spain-operator-aliases.json'
@@ -21,6 +22,7 @@ on:
       - 'assets/v9-subscription-picker.js'
       - 'assets/v9-subscription-picker.css'
       - 'assets/v9-subscription-engine-bridge.js'
+      - 'assets/v9-offer-engine.js'
       - '.github/workflows/spain-miteco-v9-contract.yml'
   workflow_dispatch:
 
@@ -35,6 +37,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Validate Spain V9 static and crosswalk contract
         run: python scripts/test_spain_miteco_v9.py
       - name: Validate global multi-country subscription contract
@@ -45,3 +50,5 @@ jobs:
         run: python scripts/test_v9_subscription_picker.py
       - name: Validate V9 subscription engine bridge contract
         run: python scripts/test_v9_subscription_engine_bridge.py
+      - name: Validate V9 unified offer engine runtime
+        run: node scripts/test_v9_offer_engine.js
