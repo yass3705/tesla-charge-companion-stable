@@ -18,6 +18,7 @@
       nationalCompact:window.TCCV9Adapters.nationalCompact,
       directOffers:window.TCCV9Adapters.directOffers,
       legacyDirectTariffs:window.TCCV9Adapters.legacyDirectTariffs,
+      legacyDirectStations:window.TCCV9Adapters.legacyDirectStations,
       franceCrosswalk:window.TCCV9Adapters.franceCrosswalk,
       franceIrveStatus:window.TCCV9Adapters.franceIrveStatus
     };
