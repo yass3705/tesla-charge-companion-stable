@@ -63,6 +63,8 @@
         loaders[source.id]=adapters.legacyDirectTariffs.createLoader({url:join(basePath,source.path),fetchImpl,source});
       }else if(source.adapter==='direct-station-gzip'&&adapters.legacyDirectStations?.createLoader&&source.path){
         loaders[source.id]=adapters.legacyDirectStations.createLoader({url:join(basePath,source.path),fetchImpl,source});
+      }else if(source.adapter==='france-emsp-compact-v1'&&adapters.franceEmspCompact?.createLoader&&source.root&&source.manifest){
+        loaders[source.id]=adapters.franceEmspCompact.createLoader({base:join(basePath,source.root),manifestUrl:join(basePath,source.manifest),fetchImpl,source});
       }else if(source.adapter==='france-crosswalk-json'&&adapters.franceCrosswalk?.createLoader&&source.path){
         loaders[source.id]=adapters.franceCrosswalk.createLoader({url:join(basePath,source.path),fetchImpl});
       }else if(source.adapter==='france-irve-status-json'&&adapters.franceIrveStatus?.createLoader&&source.path){
