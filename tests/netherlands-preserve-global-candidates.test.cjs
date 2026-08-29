@@ -14,6 +14,7 @@ const assert=require('assert');
     temporarilyUnavailable:false
   };
   const snapshots=[];
+  const filterModes=[];
   const context={
     console,
     Intl,
@@ -53,6 +54,7 @@ const assert=require('assert');
     return Math.sqrt(dx*dx+dy*dy);
   }
   context.candidateStations=async function(filterMode='all',maxDistanceKm=0){
+    filterModes.push(filterMode);
     context.routeResults={};
     let list=context.stations.filter(st=>!st.temporarilyUnavailable&&(filterMode==='all'||st.source==='teslaSupercharger'||String(st.operator||'').toLowerCase()==='tesla'));
     list=list.map(st=>{st._airKm=distanceKm(st);return st;}).filter(st=>!(maxDistanceKm>0)||st._airKm<=maxDistanceKm).sort((a,b)=>a._airKm-b._airKm).slice(0,80);
@@ -102,7 +104,8 @@ const assert=require('assert');
   vm.runInContext(source,context,{filename:'assets/netherlands-catalog.js'});
 
   const result=await context.candidateStations('all',50);
-  assert.strictEqual(snapshots.length,2,'the NL wrapper must evaluate upstream and combined candidates');
+  assert.strictEqual(snapshots.length,2,'the NL wrapper must evaluate Tesla-only upstream and combined candidates');
+  assert.deepStrictEqual(filterModes,['tesla','all'],'the first NL pass must be Tesla-only so dense public catalogs cannot crowd it out');
   assert(snapshots[0].includes(tesla.id),'Tesla must exist in upstream/global shortlist');
   assert(!snapshots[1].includes(tesla.id),'fixture must reproduce dense DOT-NL crowd-out before merge');
   assert(result.stations.some(st=>st.id===tesla.id),'Tesla must be restored in the merged candidate list');
@@ -115,6 +118,7 @@ const assert=require('assert');
   console.log(JSON.stringify({
     ok:true,
     fixture:'dense Eindhoven DOT-NL crowd-out',
+    filterModes,
     firstPass:snapshots[0].length,
     secondPass:snapshots[1].length,
     merged:result.stations.length,
