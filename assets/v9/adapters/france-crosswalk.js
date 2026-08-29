@@ -6,17 +6,20 @@
   'use strict';
   const text=v=>String(v==null?'':v).trim();
   const uniq=xs=>[...new Set((xs||[]).map(text).filter(Boolean))];
+  const list=v=>Array.isArray(v)?v:(v==null||v===''?[]:[v]);
 
   function normalizeEntry(raw){
     const canonicalId=text(raw?.canonicalId||raw?.irveCanonicalId||raw?.stationCanonicalId);
     if(!canonicalId)return null;
+    const pdcIds=list(raw?.idPdcItinerance??raw?.id_pdc_itinerance??raw?.pdcIds);
     const aliases=uniq([
       ...(raw?.aliases||[]),
       raw?.idStationItinerance&&`irve-station:${raw.idStationItinerance}`,
-      ...(raw?.idPdcItinerance||raw?.pdcIds||[]).map?.(x=>`irve-pdc:${x}`)||[],
+      raw?.id_station_itinerance&&`irve-station:${raw.id_station_itinerance}`,
+      ...pdcIds.map(x=>`irve-pdc:${x}`),
       ...(raw?.sourceIds||[]).map(x=>`${text(x.source)}:${text(x.id)}`)
     ]);
-    return{canonicalId,aliases,sourceStationId:text(raw?.idStationItinerance||raw?.stationId||canonicalId),updatedAt:raw?.updatedAt||null};
+    return{canonicalId,aliases,sourceStationId:text(raw?.idStationItinerance||raw?.id_station_itinerance||raw?.stationId||canonicalId),updatedAt:raw?.updatedAt||null};
   }
 
   function normalizePayload(payload){
