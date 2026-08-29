@@ -1,4 +1,4 @@
-name: Patch Netherlands V8 publication
+name: Patch V8 publish contract injection support
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - .github/workflows/patch-netherlands-v8-publish.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   patch:
@@ -17,87 +17,95 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: fix/netherlands-v8-publish
-      - name: Build patched Pages workflow
+          fetch-depth: 0
+      - name: Add registry-driven script injection
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
 
-          p=Path('.github/workflows/pages.yml')
+          p=Path('scripts/sync_v8_publish_contract.py')
           s=p.read_text(encoding='utf-8')
+          marker='\ndef main() -> None:\n'
+          if marker not in s:
+              raise SystemExit('main() anchor missing')
+          if 'def inject_runtime_scripts(' not in s:
+              fn=r'''
 
-          def replace_once(old,new,label):
-              global s
-              if old not in s:
-                  raise SystemExit(f'Patch anchor missing: {label}')
-              s=s.replace(old,new,1)
+def inject_runtime_scripts(registry: dict, target_root: Path) -> int:
+    """Inject registry-declared runtime scripts after a stable existing script tag."""
+    config = registry.get("publish", {}).get("injectScripts") or {}
+    if not config:
+        return 0
+    if not isinstance(config, dict):
+        fail("publish.injectScripts must be an object")
 
-          replace_once(
-              '          cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france\n',
-              '          cp -R site/data/non_tesla_france site/v8-preview/data/non_tesla_france\n'
-              '          rm -rf site/v8-preview/data/non_tesla_netherlands\n'
-              '          cp -R site/data/non_tesla_netherlands site/v8-preview/data/non_tesla_netherlands\n',
-              'Netherlands runtime copy')
+    anchor = str(config.get("after") or "").strip()
+    paths = config.get("paths") or []
+    if not anchor or not isinstance(paths, list) or not paths:
+        fail("publish.injectScripts requires after and non-empty paths")
 
-          replace_once(
-              '          cp site/assets/v8-belib-pricing.js site/v8-preview/assets/v8-belib-pricing.js\n',
-              '          cp site/assets/v8-belib-pricing.js site/v8-preview/assets/v8-belib-pricing.js\n'
-              '          for f in ocpi-duration-pricing.js ocpi-access-intervals.js netherlands-catalog.js netherlands-refresh.js; do\n'
-              '            cp "site/assets/$f" "site/v8-preview/assets/$f"\n'
-              '          done\n',
-              'Netherlands assets copy')
+    index = target_root / "index.html"
+    if not index.is_file():
+        fail("preview index.html missing before runtime script injection")
+    html = index.read_text(encoding="utf-8")
 
-          replace_once(
-              "          html=html.replace(france_tag,france_tag+'\\n<script src=\"assets/v8-belib-pricing.js?v=rc48-belib-1\" defer></script>',1)\n",
-              "          html=html.replace(france_tag,france_tag+'\\n<script src=\"assets/v8-belib-pricing.js?v=rc48-belib-1\" defer></script>',1)\n"
-              "          belib_tag='<script src=\"assets/v8-belib-pricing.js?v=rc48-belib-1\" defer></script>'\n"
-              "          nl_scripts=(\n"
-              "              '<script src=\"assets/ocpi-duration-pricing.js?v=nl-v3\" defer></script>\\n'\n"
-              "              '<script src=\"assets/ocpi-access-intervals.js?v=nl-v3\" defer></script>\\n'\n"
-              "              '<script src=\"assets/netherlands-catalog.js?v=nl-v3\" defer></script>\\n'\n"
-              "              '<script src=\"assets/netherlands-refresh.js?v=nl-v3\" defer></script>'\n"
-              "          )\n"
-              "          html=html.replace(belib_tag,belib_tag+'\\n'+nl_scripts,1)\n",
-              'Netherlands script injection')
+    clean_paths: list[str] = []
+    for item in paths:
+        relative = str(item or "").strip()
+        if not relative.startswith("assets/") or not relative.endswith(".js"):
+            fail(f"invalid injected runtime script path: {relative!r}")
+        if relative in clean_paths:
+            fail(f"duplicate injected runtime script: {relative}")
+        path = safe_path(target_root, relative)
+        if not path.is_file():
+            fail(f"injected runtime script missing: {relative}")
+        clean_paths.append(relative)
+        html = re.sub(
+            rf'<script src="{re.escape(relative)}(?:\?[^\"]*)?" defer></script>\s*',
+            "",
+            html,
+        )
 
-          replace_once(
-              '          node --check site/v8-preview/assets/v8-belib-pricing.js\n',
-              '          node --check site/v8-preview/assets/v8-belib-pricing.js\n'
-              '          node --check site/v8-preview/assets/ocpi-duration-pricing.js\n'
-              '          node --check site/v8-preview/assets/ocpi-access-intervals.js\n'
-              '          node --check site/v8-preview/assets/netherlands-catalog.js\n'
-              '          node --check site/v8-preview/assets/netherlands-refresh.js\n'
-              "          python - <<'PYNL'\n"
-              "          import json\n"
-              "          from pathlib import Path\n"
-              "          root=Path('site/v8-preview/data/non_tesla_netherlands')\n"
-              "          manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))\n"
-              "          scope=manifest.get('scope',{})\n"
-              "          checks={\n"
-              "              'schemaV3': manifest.get('schemaVersion')==3,\n"
-              "              'stations': manifest.get('stationCount',0)>70000,\n"
-              "              'countryNL': scope.get('countryCode')=='NL',\n"
-              "              'teslaExcluded': scope.get('teslaExcluded') is True,\n"
-              "              'durationBands': scope.get('ocpiDurationBands') is True,\n"
-              "              'openingTimes': scope.get('ocpiOpeningTimes') is True,\n"
-              "          }\n"
-              "          missing=[k for k,v in checks.items() if not v]\n"
-              "          if missing: raise SystemExit('Netherlands V8 publish validation failed: '+', '.join(missing))\n"
-              "          html=Path('site/v8-preview/index.html').read_text(encoding='utf-8')\n"
-              "          for name in ('ocpi-duration-pricing.js','ocpi-access-intervals.js','netherlands-catalog.js','netherlands-refresh.js'):\n"
-              "              if name not in html: raise SystemExit('Netherlands V8 script missing from index: '+name)\n"
-              "          print({'netherlandsV8Publish':checks,'stationCount':manifest.get('stationCount')})\n"
-              "          PYNL\n",
-              'Netherlands publish validation')
+    anchor_pattern = re.compile(
+        rf'(<script src="{re.escape(anchor)}(?:\?[^\"]*)?" defer></script>)'
+    )
+    if not anchor_pattern.search(html):
+        fail(f"runtime script injection anchor missing: {anchor}")
+
+    tags = "\n".join(f'<script src="{relative}" defer></script>' for relative in clean_paths)
+    html = anchor_pattern.sub(lambda match: match.group(1) + "\n" + tags, html, count=1)
+    index.write_text(html, encoding="utf-8")
+
+    for relative in clean_paths:
+        if html.count(f'src="{relative}"') != 1:
+            fail(f"runtime script injection integrity failed: {relative}")
+    print(
+        f"V8 publish contract: injected {len(clean_paths)} runtime scripts after {anchor}"
+    )
+    return len(clean_paths)
+'''
+              s=s.replace(marker,fn+marker,1)
+
+          old='    validate_active_sources(registry, target_root)\n    deploy_id = install_preview_cache_guard(registry_path, target_root)\n'
+          new='    validate_active_sources(registry, target_root)\n    injected_scripts = inject_runtime_scripts(registry, target_root)\n    deploy_id = install_preview_cache_guard(registry_path, target_root)\n'
+          if old not in s:
+              raise SystemExit('publish execution anchor missing')
+          s=s.replace(old,new,1)
+
+          old_summary='        f"{sum(1 for s in registry.get(\'sources\', []) if s.get(\'status\') == \'active\')} active sources, "\n        f"{stamped_refs} deploy-stamped asset refs, preview deploy {deploy_id}"\n'
+          new_summary='        f"{sum(1 for s in registry.get(\'sources\', []) if s.get(\'status\') == \'active\')} active sources, "\n        f"{injected_scripts} injected runtime scripts, "\n        f"{stamped_refs} deploy-stamped asset refs, preview deploy {deploy_id}"\n'
+          if old_summary not in s:
+              raise SystemExit('summary anchor missing')
+          s=s.replace(old_summary,new_summary,1)
 
           p.write_text(s,encoding='utf-8')
-          out=Path('patched-pages.yml')
-          out.write_text(s,encoding='utf-8')
-          print('patched bytes',out.stat().st_size)
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: patched-pages-yml
-          path: patched-pages.yml
-          if-no-files-found: error
+          python -m py_compile scripts/sync_v8_publish_contract.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/sync_v8_publish_contract.py
+          git diff --cached --check
+          git commit -m 'feat(v8): support registry runtime script injection'
+          git push origin HEAD:fix/netherlands-v8-publish
