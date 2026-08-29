@@ -10,6 +10,7 @@
   const operatorIds=raw=>[...new Set((raw.operatorIds||raw.operatorAliases||[]).map(normOperator).filter(Boolean))];
   const countries=(raw,country)=>[...new Set([...(raw.countries||[]).map(c=>text(c).toUpperCase()),text(country).toUpperCase()].filter(Boolean))];
   const connectorKinds=raw=>[...new Set([...(raw.connectorKinds||[]),...(raw.kind?[raw.kind]:[])].map(v=>text(v).toUpperCase()).filter(Boolean))];
+  const ids=(...values)=>[...new Set(values.flat().map(text).filter(Boolean))];
 
   function pricing(raw){
     if(raw.pricing&&typeof raw.pricing==='object')return clone(raw.pricing);
@@ -23,6 +24,8 @@
       provider:text(raw.provider),
       operatorIds:operatorIds(raw),
       operatorAliases:Array.isArray(raw.operatorAliases)?clone(raw.operatorAliases):[],
+      stationIds:ids(raw.stationIds||[],raw.stationId,raw.sourceStationId),
+      evseIds:ids(raw.evseIds||[],raw.evseId,raw.idPdcItinerance,raw.id_pdc_itinerance),
       connectorKinds:connectorKinds(raw),
       countries:countries(raw,country),
       currency:text(raw.currency||raw.pricing?.currency||'EUR').toUpperCase(),
@@ -35,17 +38,14 @@
       metadata:{
         source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,
         monthlyFeeLabel:raw.monthlyFeeLabel||null,promotionEnd:raw.monthlyFeePromotionEnd||null,
-        defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null
+        defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null,customerProfile:raw.customerProfile||null,
+        parkingPolicy:clone(raw.parkingPolicy)||null,verifiedScope:raw.verifiedScope||null
       }
     };
   }
 
-  function directRule(raw,country){
-    return{...common(raw,country),kind:'direct',offerKind:'direct',subscriptionId:null};
-  }
-  function subscriptionRule(raw,country){
-    return{...common(raw,country),kind:'subscription',offerKind:'subscription',subscriptionId:text(raw.selectionId||raw.id),priority:Number(raw.priority??100)};
-  }
+  function directRule(raw,country){return{...common(raw,country),kind:'direct',offerKind:'direct',subscriptionId:null};}
+  function subscriptionRule(raw,country){return{...common(raw,country),kind:'subscription',offerKind:'subscription',subscriptionId:text(raw.selectionId||raw.id),priority:Number(raw.priority??100)};}
 
   function normalizePayload(payload){
     const country=text(payload?.country).toUpperCase();if(!country)throw new Error('direct offer payload country missing');
