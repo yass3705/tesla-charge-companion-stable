@@ -82,6 +82,8 @@ jobs:
         run: node tests/v9-e55c-migration.test.cjs
       - name: Fail-closed IONITY migration
         run: node tests/v9-ionity-migration.test.cjs
+      - name: Exact Atlante EVSE migration
+        run: node tests/v9-atlante-migration.test.cjs
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Unified runtime integration
