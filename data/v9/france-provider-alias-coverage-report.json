@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-29T23:47:46.165907Z",
+  "policy": {
+    "runtimeExactOnly": true,
+    "geographicCandidatesReviewOnly": true,
+    "noTariffActivationFromProximity": true,
+    "providerAliasDoesNotImplyTariffAvailability": true
+  },
+  "summary": {
+    "providerCount": 7,
+    "totalExactRuntimeAliases": 838,
+    "totalExactCanonicalStations": 797,
+    "totalReviewOnlyCandidates": 4405,
+    "aviaPicotyCombinedExactCanonicalStations": 41,
+    "aviaPicotyHasExactRuntimeIdentity": true,
+    "bumpHasExactRuntimeIdentity": false,
+    "powerdotHasExactRuntimeIdentity": false
+  },
+  "focus": {
+    "avia-picoty": {
+      "provider": "avia-picoty",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_picoty_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    "avia-volt": {
+      "provider": "avia-volt",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_volt_picoty_station_index.json"
+      ],
+      "candidateSourceFiles": []
+    },
+    "bump": {
+      "provider": "bump",
+      "status": "no_evidence",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [],
+      "candidateSourceFiles": []
+    },
+    "powerdot": {
+      "provider": "powerdot",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 2321,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 2321
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/powerdot_direct_france.json.gz"
+      ]
+    }
+  },
+  "providers": [
+    {
+      "provider": "allego",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 154,
+      "exactCanonicalStationCount": 154,
+      "reviewOnlyCandidateCount": 552,
+      "reviewOnlyCandidateKinds": {
+        "ambiguous_exact": 552
+      },
+      "exactSourceFiles": [
+        "data/national/allego_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": [
+        "data/national/allego_direct_stations_france.json.gz"
+      ]
+    },
+    {
+      "provider": "atlante",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 170,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 170
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/national/atlante_direct_stations_france.json.gz"
+      ]
+    },
+    {
+      "provider": "avia-picoty",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_picoty_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    {
+      "provider": "avia-volt",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_volt_picoty_station_index.json"
+      ],
+      "candidateSourceFiles": []
+    },
+    {
+      "provider": "belib",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 760,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 760
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/national/belib_stations_paris.json"
+      ]
+    },
+    {
+      "provider": "electric55",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 602,
+      "exactCanonicalStationCount": 602,
+      "reviewOnlyCandidateCount": 602,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 602
+      },
+      "exactSourceFiles": [
+        "data/national/electric55_stations_france.json"
+      ],
+      "candidateSourceFiles": [
+        "data/national/electric55_stations_france.json"
+      ]
+    },
+    {
+      "provider": "powerdot",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 2321,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 2321
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/powerdot_direct_france.json.gz"
+      ]
+    }
+  ]
+}
