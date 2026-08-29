@@ -147,10 +147,16 @@
     });
   }
 
-  function eligibleOffers(station,selectedSubscriptions=[],options={}){
+  function applyFallbackPolicy(offers,{countryCode,selectedSubscriptions=[]}={}){
     const selected=new Set((selectedSubscriptions||[]).map(text));
-    return dedupeOffers(station?.offers||[],{countryCode:options.countryCode||station?.countryCode}).filter(o=>!o.subscriptionId||selected.has(text(o.subscriptionId)));
+    const eligible=dedupeOffers(offers||[],{countryCode}).filter(o=>!o.subscriptionId||selected.has(text(o.subscriptionId)));
+    const hasRicherOffer=eligible.some(o=>text(o.kind)!=='national_fallback');
+    return hasRicherOffer?eligible.filter(o=>text(o.kind)!=='national_fallback'):eligible;
   }
 
-  return{dedupeOffers,mergeStationOffers,deriveSubscriptionOptions,eligibleOffers,materializeOffer,semanticKey,normalizedCountries,providerId};
+  function eligibleOffers(station,selectedSubscriptions=[],options={}){
+    return applyFallbackPolicy(station?.offers||[],{countryCode:options.countryCode||station?.countryCode,selectedSubscriptions});
+  }
+
+  return{dedupeOffers,mergeStationOffers,deriveSubscriptionOptions,eligibleOffers,applyFallbackPolicy,materializeOffer,semanticKey,normalizedCountries,providerId};
 });
