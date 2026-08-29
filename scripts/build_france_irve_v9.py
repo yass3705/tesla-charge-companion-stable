@@ -79,10 +79,11 @@ def build(source,out_dir,crosswalk_path):
             if not sid and pid: sid=pid.rsplit('*',1)[0]
             lat,lon=coords(row)
             if not sid or lat is None or lon is None: skipped+=1;continue
-            st=stations.setdefault(sid,{'id':sid,'name':'','address':'','operator':'','lat':lat,'lon':lon,'pdc':set(),'groups':{},'access':0,'updated':''})
+            st=stations.setdefault(sid,{'id':sid,'name':'','address':'','operator':'','network':'','lat':lat,'lon':lon,'pdc':set(),'groups':{},'access':0,'updated':''})
             st['name']=st['name'] or txt(row.get('nom_station')) or txt(row.get('nom_enseigne'))
             st['address']=st['address'] or ', '.join(x for x in [txt(row.get('adresse_station')),txt(row.get('code_insee_commune'))] if x)
             st['operator']=st['operator'] or txt(row.get('nom_operateur')) or txt(row.get('nom_enseigne')) or 'Autre'
+            st['network']=st['network'] or txt(row.get('nom_enseigne')) or txt(row.get('nom_operateur')) or 'Autre'
             st['access']=st['access'] or access(row.get('horaires'))
             updated=txt(row.get('date_maj'));st['updated']=max(st['updated'],updated)
             if pid:st['pdc'].add(pid)
@@ -101,7 +102,7 @@ def build(source,out_dir,crosswalk_path):
             pids=sorted(g['pdc']); cfg=f'irve-{i}-{g["kind"].lower()}-{str(g["power"]).replace(".","_")}'
             label=f'IRVE · {g["kind"]} {g["power"]:g} kW'
             configs.append([cfg,label,g['kind'],g['power'],len(pids) or 1,g['rules'],pids])
-        rows.append([sid,st['name'] or st['address'] or f'Borne {sid}',st['address'],round(st['lat'],6),round(st['lon'],6),st['operator'],len(st['pdc']) or sum(x[4] for x in configs),st['access'],configs,st['updated'] or generated[:10]])
+        rows.append([sid,st['name'] or st['address'] or f'Borne {sid}',st['address'],round(st['lat'],6),round(st['lon'],6),st['operator'],len(st['pdc']) or sum(x[4] for x in configs),st['access'],configs,st['updated'] or generated[:10],st['network']])
         cross.append({'canonicalId':f'FR:national:{sid}','idStationItinerance':sid,'pdcIds':sorted(st['pdc']),'aliases':[f'irve-station:{sid}'],'sourceIds':[],'updatedAt':st['updated'] or None})
     out=Path(out_dir);shutil.rmtree(out,ignore_errors=True);out.mkdir(parents=True,exist_ok=True)
     tiles=defaultdict(list)
