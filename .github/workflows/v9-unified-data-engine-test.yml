@@ -1,0 +1,53 @@
+name: V9 unified data engine
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - 'docs/v9-**'
+      - 'docs/v9/**'
+      - 'tests/v9-**'
+      - '.github/workflows/v9-unified-data-engine-test.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - 'tests/v9-**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unified-data-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax checks
+        run: |
+          node --check assets/v9/data-engine.js
+          node --check assets/v9/adapters/tesla-json.js
+          node --check assets/v9/adapters/national-compact.js
+      - name: Validate source registry
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('data/v9/source-registry.json','utf8'));
+          if(r.schemaVersion!==1||r.engine!=='tcc-v9-unified-data')throw new Error('invalid V9 registry');
+          const ids=r.sources.map(x=>x.id), unique=new Set(ids);
+          if(ids.length!==unique.size)throw new Error('duplicate source ids');
+          for(const source of r.sources){
+            if(!source.id||!source.adapter||!Array.isArray(source.countries)||!source.capabilities?.length)throw new Error(`invalid source ${source.id||'unknown'}`);
+          }
+          const required=['tesla-global','france-national','netherlands-dotnl','netherlands-direct-offers'];
+          for(const id of required)if(!unique.has(id))throw new Error(`missing source ${id}`);
+          if(r.rules.mergeBeforePrune!==true||r.rules.operatorsDerivedFromFinalStations!==true||r.rules.sourceMayRemoveForeignEntities!==false)throw new Error('V9 invariants missing');
+          console.log(`V9 registry OK: ${ids.length} sources`);
+          NODE
+      - name: Core invariants
+        run: node tests/v9-data-engine.test.cjs
+      - name: Compatibility adapters
+        run: node tests/v9-adapters.test.cjs
