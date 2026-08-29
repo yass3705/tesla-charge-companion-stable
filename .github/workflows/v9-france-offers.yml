@@ -10,6 +10,7 @@ on:
       - 'scripts/compile_france_v9_offers.py'
       - 'scripts/compile_belib_v9_offers.py'
       - 'scripts/compile_e55c_v9_offers.py'
+      - 'scripts/compile_etotem_v9_offers.py'
       - 'assets/v9/adapters/direct-offers.js'
       - '.github/workflows/v9-france-offers.yml'
 
@@ -51,6 +52,9 @@ jobs:
       - name: Compile exact E55C EVSE tariff layer
         run: python scripts/compile_e55c_v9_offers.py --station-verification data-lab/data/station_verifications/electric55_lons_le_saunier_rue_lecourbe_alize_2026_08_22.json --operator-source data-lab/data/operator_direct/electric55_official_france.json
 
+      - name: Compile exact e-Totem station and EVSE tariff layer
+        run: python scripts/compile_etotem_v9_offers.py --nantes data-lab/data/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json --larochelle data-lab/data/station_verifications/la_rochelle_place_jb_marcet_etotem_g10_app_2026_08_22.json --montargis data-lab/data/station_verifications/etotem_montargis_commissariat_app_2026_08_22.json
+
       - name: Validate offer safety
         run: |
           python - <<'PY'
@@ -60,8 +64,9 @@ jobs:
           e=json.loads(Path('data/v9/france-emsp-offers.json').read_text())
           b=json.loads(Path('data/v9/france-belib-offers.json').read_text())
           x=json.loads(Path('data/v9/france-e55c-offers.json').read_text())
+          t=json.loads(Path('data/v9/france-etotem-offers.json').read_text())
           r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
-          assert d['country']=='FR' and e['country']=='FR' and b['country']=='FR' and x['country']=='FR'
+          assert all(z['country']=='FR' for z in (d,e,b,x,t))
           assert d['policy']['subscriptionsOptIn'] is True
           assert d['policy']['directCpoAndRoamingSeparate'] is True
           assert len(d['directOffers'])>=10,r
@@ -74,10 +79,10 @@ jobs:
           assert b['policy']['connectedTimeBlocksPreservedExactly'] is True
           assert len(b['directOffers'])==4
           assert len(b['subscriptionOffers'])==8
-          assert {x['selectionId'] for x in b['subscriptionOffers']}=={'belib-nonresident','belib-resident'}
-          assert all(x.get('networkAliases') and not x.get('operatorAliases') for x in b['directOffers']+b['subscriptionOffers'])
-          assert any(rule.get('connectedTimeBlockRounding')=='started_block' for x in b['directOffers'] for rule in x['pricing']['rules'])
-          assert all(x['pricing']['longConnectionFee']['thresholdMinutes']==840 for x in b['directOffers']+b['subscriptionOffers'])
+          assert {q['selectionId'] for q in b['subscriptionOffers']}=={'belib-nonresident','belib-resident'}
+          assert all(q.get('networkAliases') and not q.get('operatorAliases') for q in b['directOffers']+b['subscriptionOffers'])
+          assert any(rule.get('connectedTimeBlockRounding')=='started_block' for q in b['directOffers'] for rule in q['pricing']['rules'])
+          assert all(q['pricing']['longConnectionFee']['thresholdMinutes']==840 for q in b['directOffers']+b['subscriptionOffers'])
           assert x['policy']['networkWideGeneralization'] is False
           assert x['policy']['exactEvseRequired'] is True
           assert x['policy']['wholesaleRatesExcluded'] is True
@@ -88,7 +93,16 @@ jobs:
           assert e55['priority']>b['directOffers'][0]['priority']
           assert [q['connectedTimePerMinuteEur'] for q in e55['pricing']['rules']]==[0.09,0.06]
           assert [(q['start'],q['end']) for q in e55['pricing']['rules']]==[('07:00','23:00'),('23:00','07:00')]
-          deferred={x.get('id') for x in r.get('deferred',[])}
+          assert t['policy']['networkWideGeneralization'] is False
+          assert t['policy']['exactIdentityRequired'] is True
+          assert t['policy']['ecoModeNotActivatedWithoutSelectionModel'] is True
+          assert len(t['directOffers'])==3
+          assert len(t['deferred'])==1 and 'MONTARGOISE' in t['deferred'][0]['station'].upper()
+          assert all(q.get('evseIds') or q.get('stationIds') for q in t['directOffers'])
+          assert all(q['verifiedScope'] in ('exact_evse_set','exact_station') for q in t['directOffers'])
+          assert {q['id'] for q in t['directOffers']}=={'etotem-nantes-planchonnais-dc-standard','etotem-nantes-planchonnais-ac-standard','etotem-la-rochelle-jb-marcet-standard'}
+          assert all(q['pricing'].get('postChargeFee',{}).get('rounding')=='started_block' for q in t['directOffers'])
+          deferred={q.get('id') for q in r.get('deferred',[])}
           assert 'electra-essential' in deferred
           assert 'electra-smart' in deferred
           assert 'belib-nonresident' in deferred
@@ -96,7 +110,8 @@ jobs:
           print(json.dumps({
             'generic':{k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},
             'belib':{'directOfferCount':len(b['directOffers']),'subscriptionOfferCount':len(b['subscriptionOffers'])},
-            'e55c':{'directOfferCount':len(x['directOffers']),'evseId':e55['evseIds'][0]}
+            'e55c':{'directOfferCount':len(x['directOffers']),'evseId':e55['evseIds'][0]},
+            'etotem':{'directOfferCount':len(t['directOffers']),'deferredCount':len(t['deferred'])}
           },indent=2))
           PY
 
@@ -107,7 +122,7 @@ jobs:
           rm -rf legacy-france-canonical data-lab
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-offer-compile-report.json
+          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-offer-compile-report.json
           if git diff --cached --quiet; then
             echo 'No offer changes'
             exit 0
