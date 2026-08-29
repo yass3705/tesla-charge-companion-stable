@@ -31,15 +31,23 @@
     return energy/(consumption/100);
   }
 
+  function stationSession(station,session={},options={}){
+    const id=text(station?.id||station?.canonicalId||station?.stationId);
+    const approach=num(options.approachEnergyKwhByStationId?.[id]??session.approachEnergyKwhByStationId?.[id]??station?.route?.approachEnergyKwh)??0;
+    const requested=num(session.energyKwh)??0;
+    const include=session.includeRouteEnergyInCharge!==false;
+    return{...session,requestedEnergyKwh:requested,approachEnergyKwh:approach,energyKwh:money(Math.max(0,requested+(include?approach:0)))};
+  }
+
   function evaluateStation(station,session={},options={}){
     const selectedSubscriptions=options.selectedSubscriptions||session.selectedSubscriptions||[];
     const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode});
     const targetCurrency=text(options.targetCurrency||session.targetCurrency||'EUR').toUpperCase();
     const fxRates=options.fxRates||session.fxRates||{};
-    const km=recoveredKm(session),evaluations=[];
+    const effectiveSession=stationSession(station,session,options),km=recoveredKm(session),evaluations=[];
 
     for(const offer of offers){
-      const result=PricingEngine.evaluateOffer(offer,session),currency=text(result.currency||offer.currency||'EUR').toUpperCase();
+      const result=PricingEngine.evaluateOffer(offer,effectiveSession),currency=text(result.currency||offer.currency||'EUR').toUpperCase();
       const rate=result.complete?fxRate(currency,targetCurrency,fxRates):null;
       const comparable=result.complete&&rate!=null;
       const normalizedTotal=comparable?money(result.totalEur*rate):null;
@@ -59,6 +67,7 @@
     return{
       stationId:text(station?.id||station?.canonicalId||station?.stationId),
       eligibleOfferCount:offers.length,comparableOfferCount:comparable.length,targetCurrency,recoveredKm:km,
+      requestedEnergyKwh:effectiveSession.requestedEnergyKwh,approachEnergyKwh:effectiveSession.approachEnergyKwh,billedEnergyKwh:effectiveSession.energyKwh,
       best,
       alternatives:comparable.slice(1),
       incomplete:evaluations.filter(x=>!x.comparable)
@@ -77,5 +86,5 @@
     return rows;
   }
 
-  return{evaluateStation,evaluateArea,recoveredKm,fxRate};
+  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession};
 });
