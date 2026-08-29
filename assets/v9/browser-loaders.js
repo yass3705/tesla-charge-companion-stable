@@ -5,7 +5,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
   const text=v=>String(v==null?'':v).trim();
-  const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
+  const num=v=>{if(v===null||v===undefined||v==='')return null;const n=Number(v);return Number.isFinite(n)?n:null;};
   const join=(base,path)=>`${String(base||'').replace(/\/$/,'')}/${String(path||'').replace(/^\//,'')}`;
 
   async function fetchJson(url,fetchImpl){
@@ -59,6 +59,10 @@
         loaders[source.id]=adapters.teslaJson.createLoader({url:join(basePath,source.path),fetchImpl});
       }else if(source.adapter==='direct-offer-json'&&adapters.directOffers?.createLoader&&source.path){
         loaders[source.id]=adapters.directOffers.createLoader({url:join(basePath,source.path),fetchImpl});
+      }else if(source.adapter==='france-crosswalk-json'&&adapters.franceCrosswalk?.createLoader&&source.path){
+        loaders[source.id]=adapters.franceCrosswalk.createLoader({url:join(basePath,source.path),fetchImpl});
+      }else if(source.adapter==='france-irve-status-json'&&adapters.franceIrveStatus?.createLoader&&source.path){
+        loaders[source.id]=adapters.franceIrveStatus.createLoader({url:join(basePath,source.path),fetchImpl,maxAgeMinutes:num(source.freshnessMaxMinutes)??120});
       }else if(/^national-compact-v\d+$/.test(source.adapter)&&adapters.nationalCompact){
         loaders[source.id]=createNationalLoader({source,basePath,adapter:adapters.nationalCompact,fetchImpl});
       }
