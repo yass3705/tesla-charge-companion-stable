@@ -55,9 +55,13 @@ jobs:
           const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
           for(const id of required)if(!unique.has(id))throw new Error(`missing source ${id}`);
           const franceDirect=r.sources.find(x=>x.id==='france-canonical-direct-offers');
-          if(franceDirect.path!=='data/tariff_overlay_v1.json'||franceDirect.active!==true)throw new Error('France direct migration source not bound');
+          if(franceDirect.path!=='data/v9/france-direct-offers.json'||franceDirect.active!==true)throw new Error('France direct migration source not bound to embedded snapshot');
           const franceEmsp=r.sources.find(x=>x.id==='france-emsp-offers');
           if(franceEmsp.active!==false)throw new Error('unbuilt France eMSP source must stay inactive');
+          for(const source of r.sources.filter(x=>x.active!==false)){
+            if(source.path && ['tesla-json','direct-offer-json'].includes(source.adapter) && !fs.existsSync(source.path))throw new Error(`active source path missing: ${source.id} -> ${source.path}`);
+            if(source.manifest && /^national-compact-v\d+$/.test(source.adapter) && !fs.existsSync(source.manifest))throw new Error(`active manifest missing: ${source.id} -> ${source.manifest}`);
+          }
           if(r.rules.mergeBeforePrune!==true||r.rules.operatorsDerivedFromFinalStations!==true||r.rules.sourceMayRemoveForeignEntities!==false)throw new Error('V9 invariants missing');
           if(r.rules.exactCrosswalkBeforeFuzzyMatching!==true||r.rules.dynamicStatusMustBeFresh!==true)throw new Error('France V9 safety invariants missing');
           console.log(`V9 registry OK: ${ids.length} sources`);
