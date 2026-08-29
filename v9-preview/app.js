@@ -9,11 +9,18 @@
   function render(area){
     const stations=area.stations||[];summary.textContent=`${stations.length} stations · ${area.operators?.length||0} opérateurs · ${area.subscriptions?.length||0} abonnements`;
     subsEl.innerHTML=area.subscriptions?.length?area.subscriptions.map(s=>`<span class="chip">${esc(s.provider)} · ${s.countryCount} pays</span>`).join(''):'<span class="muted">Aucun abonnement pour ce filtre.</span>';
-    stationsEl.innerHTML=stations.slice(0,100).map(st=>`<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div>${(st.offers||[]).map(o=>`<div class="offer">${esc(o.provider)} — ${esc(o.kind)} — ${esc(priceLabel(o))}${o.subscriptionId?' · abonnement':''}</div>`).join('')}</div>`).join('')||'<span class="muted">Aucune station.</span>';
+    stationsEl.innerHTML=stations.slice(0,100).map(st=>`<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div>${(st.offers||[]).map(o=>`<div class="offer">${esc(o.provider)} — ${esc(o.kind)} — ${esc(priceLabel(o))}${o.subscriptionId?' · abonnement':''}${o.metadata?.verified?' · vérifié':''}</div>`).join('')}</div>`).join('')||'<span class="muted">Aucune station.</span>';
   }
   try{
     const registry=await fetch('../data/v9/source-registry.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`registre ${r.status}`);return r.json();});
-    const adapters={teslaJson:window.TCCV9Adapters.teslaJson,nationalCompact:window.TCCV9Adapters.nationalCompact,directOffers:window.TCCV9Adapters.directOffers};
+    const adapters={
+      teslaJson:window.TCCV9Adapters.teslaJson,
+      nationalCompact:window.TCCV9Adapters.nationalCompact,
+      directOffers:window.TCCV9Adapters.directOffers,
+      legacyDirectTariffs:window.TCCV9Adapters.legacyDirectTariffs,
+      franceCrosswalk:window.TCCV9Adapters.franceCrosswalk,
+      franceIrveStatus:window.TCCV9Adapters.franceIrveStatus
+    };
     const loaders=window.TCCV9BrowserLoaders.createRegistryLoaders({registry,basePath:'..',adapters});
     engine=window.TCCV9RuntimeEngine.createEngine({registry,loaders});
     setStatus(`Moteur V9 prêt · ${Object.keys(loaders).length} sources navigateur actives.`,'ok');
