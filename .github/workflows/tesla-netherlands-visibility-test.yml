@@ -1,0 +1,30 @@
+name: Tesla Netherlands visibility regression
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tesla-netherlands-visibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: site
+
+      - name: Checkout V8 release contract
+        uses: actions/checkout@v4
+        with:
+          ref: release/2026-08
+          path: rc
+
+      - name: Validate Eindhoven 50 km and Tesla global source
+        run: node site/scripts/test_tesla_netherlands_visibility.mjs site rc
