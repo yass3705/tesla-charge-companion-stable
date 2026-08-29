@@ -11,15 +11,26 @@ assert.deepEqual(L.selectTiles(manifest,{}),[]);
 const registry={sources:[
   {id:'tesla-global',adapter:'tesla-json',path:'data/tesla.json',active:true},
   {id:'france-national',adapter:'national-compact-v2',manifest:'data/fr/manifest.json',root:'data/fr/',countries:['FR'],active:true},
+  {id:'france-crosswalk',adapter:'france-crosswalk-json',path:'data/fr-crosswalk.json',active:true,optional:true},
+  {id:'france-provider-crosswalk',adapter:'france-crosswalk-json',path:'data/fr-provider-crosswalk.json',active:true,optional:true},
+  {id:'france-irve-dynamic',adapter:'france-irve-status-json',path:'data/fr-status.json.gz',freshnessMaxMinutes:120,active:true,optional:true},
   {id:'france-offers',adapter:'direct-offer-json',path:'data/offers.json',active:true},
   {id:'future',adapter:'unknown',active:true},
   {id:'off',adapter:'direct-offer-json',path:'data/off.json',active:false}
 ]};
+const calls=[];
 const adapters={
   teslaJson:{createLoader:()=>async()=>[]},
   directOffers:{createLoader:()=>async()=>({offerRules:[]})},
+  franceCrosswalk:{createLoader:args=>{calls.push(['crosswalk',args.url]);return async()=>[];}},
+  franceIrveStatus:{createLoader:args=>{calls.push(['status',args.url,args.maxAgeMinutes]);return async()=>[];}},
   nationalCompact:{normalizeRow:x=>x}
 };
 const loaders=L.createRegistryLoaders({registry,adapters,fetchImpl:async()=>{throw new Error('not called');}});
-assert.deepEqual(Object.keys(loaders).sort(),['france-national','france-offers','tesla-global']);
-console.log(JSON.stringify({ok:true,selectedTiles:['near'],loaderIds:Object.keys(loaders).sort()},null,2));
+assert.deepEqual(Object.keys(loaders).sort(),['france-crosswalk','france-irve-dynamic','france-national','france-offers','france-provider-crosswalk','tesla-global']);
+assert.deepEqual(calls,[
+  ['crosswalk','../data/fr-crosswalk.json'],
+  ['crosswalk','../data/fr-provider-crosswalk.json'],
+  ['status','../data/fr-status.json.gz',120]
+]);
+console.log(JSON.stringify({ok:true,selectedTiles:['near'],loaderIds:Object.keys(loaders).sort(),adapterCalls:calls},null,2));
