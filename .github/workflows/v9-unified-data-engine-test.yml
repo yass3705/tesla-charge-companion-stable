@@ -38,6 +38,7 @@ jobs:
           node --check assets/v9/adapters/tesla-json.js
           node --check assets/v9/adapters/national-compact.js
           node --check assets/v9/adapters/direct-offers.js
+          node --check assets/v9/adapters/legacy-direct-tariffs.js
           node --check assets/v9/adapters/france-crosswalk.js
           node --check assets/v9/adapters/france-irve-status.js
           node --check v9-preview/app.js
@@ -59,7 +60,7 @@ jobs:
           const franceEmsp=r.sources.find(x=>x.id==='france-emsp-offers');
           if(franceEmsp.active!==false)throw new Error('unbuilt France eMSP source must stay inactive');
           for(const source of r.sources.filter(x=>x.active!==false)){
-            if(source.path && ['tesla-json','direct-offer-json'].includes(source.adapter) && !fs.existsSync(source.path))throw new Error(`active source path missing: ${source.id} -> ${source.path}`);
+            if(source.path && ['tesla-json','direct-offer-json','direct-tariff-gzip'].includes(source.adapter) && !fs.existsSync(source.path))throw new Error(`active source path missing: ${source.id} -> ${source.path}`);
             if(source.manifest && /^national-compact-v\d+$/.test(source.adapter) && !fs.existsSync(source.manifest))throw new Error(`active manifest missing: ${source.id} -> ${source.manifest}`);
           }
           if(r.rules.mergeBeforePrune!==true||r.rules.operatorsDerivedFromFinalStations!==true||r.rules.sourceMayRemoveForeignEntities!==false)throw new Error('V9 invariants missing');
@@ -74,6 +75,8 @@ jobs:
         run: node tests/v9-browser-loaders.test.cjs
       - name: France physical/status/tariff model
         run: node tests/v9-france-model.test.cjs
+      - name: Exact E55C tariff migration
+        run: node tests/v9-e55c-migration.test.cjs
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Unified runtime integration
