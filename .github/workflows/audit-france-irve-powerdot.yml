@@ -120,32 +120,40 @@ jobs:
           assert report['productionReady'] is False
           assert summary['sourceLocationCount'] == len(rows)
           assert summary['sourceLocationCount'] > 1000
-          assert summary['sourceConnectorCount'] >= summary['structuredConnectorCount']
+          assert summary['sourceConnectorCount'] >= summary['sourceStructuredTariffConnectorCount']
           assert summary['subscriptionActiveConnectorCount'] == 0
-          assert summary['rankableLocationCount'] <= summary['structuredTariffLocationCount']
+          assert summary['rankableLocationCandidateCount'] <= summary['sourceStructuredTariffLocationCount']
+          assert summary['exactCanonicalIrvePdcCoveragePct'] >= 95.0
+          assert summary['rankableLocationCandidatePct'] >= 95.0
           assert all(row['matchMethod'] in {'exact_pdc','geo_unique_powerdot','ambiguous_exact_pdc','ambiguous_exact_station','ambiguous_geo','unmatched'} for row in rows)
           assert all(not row['rankableCandidate'] for row in rows if row['matchMethod'] not in {'exact_pdc','geo_unique_powerdot'})
           print(json.dumps(summary, ensure_ascii=False, indent=2))
           PY
 
       - name: Print Powerdot matching diagnostics
+        if: always()
         run: |
           python - <<'PY'
-          import json
-          report=json.load(open('build/france_irve_powerdot/powerdot_irve_match_report.json',encoding='utf-8'))
+          import json, os
+          path='build/france_irve_powerdot/powerdot_irve_match_report.json'
+          if not os.path.exists(path):
+              print('Powerdot report not generated')
+              raise SystemExit(0)
+          report=json.load(open(path,encoding='utf-8'))
           print('Powerdot summary:')
           print(json.dumps(report['summary'],ensure_ascii=False,indent=2))
           print('\nSource validation:')
-          print(json.dumps(report['sourceValidation'],ensure_ascii=False,indent=2))
+          print(json.dumps(report.get('sourceValidation',{}),ensure_ascii=False,indent=2))
           print('\nMatch methods:')
-          print(json.dumps(report['matchMethods'],ensure_ascii=False,indent=2))
+          print(json.dumps(report.get('matchMethods',{}),ensure_ascii=False,indent=2))
           print('\nTariff component types:')
-          print(json.dumps(report['tariffs'],ensure_ascii=False,indent=2))
+          print(json.dumps(report.get('tariffs',{}),ensure_ascii=False,indent=2))
           print('\nStatus-like fields found in source:')
-          print(json.dumps(report['statusLikeFields'],ensure_ascii=False,indent=2))
+          print(json.dumps(report.get('statusLikeFields',{}),ensure_ascii=False,indent=2))
           PY
 
       - name: Upload Powerdot audit snapshot
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: france-irve-powerdot-audit
@@ -153,4 +161,5 @@ jobs:
             build/france_irve_powerdot/
             build/france_irve_identity/network_gap_report.json
             build/france_irve/operator_gap_report.json
+          if-no-files-found: warn
           retention-days: 14
