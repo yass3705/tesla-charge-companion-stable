@@ -88,6 +88,8 @@ jobs:
         run: node tests/v9-atlante-migration.test.cjs
       - name: Exact Powerdot PDC migration
         run: node tests/v9-powerdot-migration.test.cjs
+      - name: Exact e-Totem PDC migration
+        run: node tests/v9-etotem-migration.test.cjs
       - name: Exact Freshmile station/PDC migration
         run: node tests/v9-france-freshmile-offers.test.cjs
       - name: Unified offers and subscriptions
