@@ -37,7 +37,22 @@ r=Pricing.evaluateOffer(longSession,{energyKwh:20,durationMinutes:900,startAt:'2
 assert.equal(r.complete,false,'unknown published hourly rounding must never be silently guessed');
 assert.equal(r.longConnection.reason,'hourly_rounding_unspecified');
 
+const etotem={id:'etotem-test',currency:'EUR',pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.40}],postChargeFee:{graceMinutes:10,blockMinutes:15,blockEur:1,rounding:'started_block',trigger:'once_vehicle_is_charged'}}};
+r=Pricing.evaluateOffer(etotem,{energyKwh:10,durationMinutes:30,postChargeMinutes:10,startAt:'2026-08-29T12:00:00Z'});
+assert.equal(r.complete,true);
+assert.equal(r.totalEur,4);
+assert.equal(r.components.postCharge.costEur,0);
+r=Pricing.evaluateOffer(etotem,{energyKwh:10,durationMinutes:30,postChargeMinutes:11,startAt:'2026-08-29T12:00:00Z'});
+assert.equal(r.complete,true);
+assert.equal(r.components.postCharge.blocks,1);
+assert.equal(r.components.postCharge.costEur,1);
+assert.equal(r.totalEur,5);
+r=Pricing.evaluateOffer(etotem,{energyKwh:10,durationMinutes:30,postChargeMinutes:26,startAt:'2026-08-29T12:00:00Z'});
+assert.equal(r.components.postCharge.blocks,2);
+assert.equal(r.components.postCharge.costEur,2);
+assert.equal(r.totalEur,6);
+
 assert.equal(Pricing.minuteOfDay('2026-01-15T22:15:00Z','Europe/Paris'),23*60+15,'winter timezone conversion must use CET');
 assert.equal(Pricing.minuteOfDay('2026-08-29T21:15:00Z','Europe/Paris'),23*60+15,'summer timezone conversion must use CEST');
 
-console.log(JSON.stringify({ok:true,invariants:['started-15m-blocks','per-minute-pricing','station-local-timezone','dst-aware-timezone','overnight-window','window-crossing-fail-safe','unknown-hourly-rounding-fail-safe']},null,2));
+console.log(JSON.stringify({ok:true,invariants:['started-15m-blocks','per-minute-pricing','station-local-timezone','dst-aware-timezone','overnight-window','window-crossing-fail-safe','unknown-hourly-rounding-fail-safe','post-charge-grace','post-charge-started-blocks']},null,2));
