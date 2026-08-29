@@ -160,11 +160,18 @@
         const result=await loader(query,clone(source));if(Array.isArray(result))return{source,fragments:result,offerRules:[]};
         return{source,fragments:Array.isArray(result?.stations)?result.stations:Array.isArray(result?.stationFragments)?result.stationFragments:[],offerRules:Array.isArray(result?.offerRules)?result.offerRules:[]};
       }));
-      const items=[],ruleItems=[],diagnostics={sources:{},errors:[]};
+      const items=[],ruleItems=[],diagnostics={sources:{},errors:[]},requiredFailures=[];
       settled.forEach((entry,index)=>{
-        const source=applicable[index];if(entry.status==='rejected'){diagnostics.errors.push({sourceId:source.id,message:text(entry.reason?.message||entry.reason)});diagnostics.sources[source.id]={loaded:false,stationCount:0,offerRuleCount:0};return;}
+        const source=applicable[index];if(entry.status==='rejected'){
+          const failure={sourceId:source.id,message:text(entry.reason?.message||entry.reason)};
+          diagnostics.errors.push(failure);diagnostics.sources[source.id]={loaded:false,stationCount:0,offerRuleCount:0};if(source.optional!==true)requiredFailures.push(failure);return;
+        }
         const{fragments,offerRules,skipped}=entry.value;diagnostics.sources[source.id]={loaded:!skipped,stationCount:fragments.length,offerRuleCount:offerRules.length,skipped:skipped||null};for(const fragment of fragments)items.push({source,fragment});for(const rule of offerRules)ruleItems.push({source,rule});
       });
+      if(requiredFailures.length){
+        const error=new Error(`required data source failed: ${requiredFailures.map(f=>f.sourceId).join(', ')}`);
+        error.code='TCC_V9_REQUIRED_SOURCE_FAILED';error.failures=requiredFailures;error.diagnostics=diagnostics;throw error;
+      }
       const merged=applyOfferRules(resolveEntities(items),ruleItems),inRadius=merged.filter(st=>!query.origin||!Number.isFinite(Number(query.radiusKm))||distanceKm(query.origin,st)<=Number(query.radiusKm)+1e-9),filtered=inRadius.filter(st=>stationMatchesFilters(st,query.filters||{})),operators=deriveOperators(filtered),routingCandidates=selectRoutingCandidates(filtered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2});
       return{query:clone(query),stations:filtered,operators,routingCandidates,freshness:{generatedAt:new Date().toISOString()},diagnostics:{...diagnostics,fragmentCount:items.length,offerRuleCount:ruleItems.length,mergedStationCount:merged.length,inRadiusCount:inRadius.length,filteredCount:filtered.length,routingCandidateCount:routingCandidates.length}};
     }
