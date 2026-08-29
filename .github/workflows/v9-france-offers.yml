@@ -9,6 +9,7 @@ on:
     paths:
       - 'scripts/compile_france_v9_offers.py'
       - 'scripts/compile_belib_v9_offers.py'
+      - 'scripts/compile_e55c_v9_offers.py'
       - 'assets/v9/adapters/direct-offers.js'
       - '.github/workflows/v9-france-offers.yml'
 
@@ -47,6 +48,9 @@ jobs:
       - name: Compile exact Belib official tariff layer
         run: python scripts/compile_belib_v9_offers.py --input data-lab/data/operator_direct/belib_official_paris.json
 
+      - name: Compile exact E55C EVSE tariff layer
+        run: python scripts/compile_e55c_v9_offers.py --station-verification data-lab/data/station_verifications/electric55_lons_le_saunier_rue_lecourbe_alize_2026_08_22.json --operator-source data-lab/data/operator_direct/electric55_official_france.json
+
       - name: Validate offer safety
         run: |
           python - <<'PY'
@@ -55,8 +59,9 @@ jobs:
           d=json.loads(Path('data/v9/france-direct-offers.json').read_text())
           e=json.loads(Path('data/v9/france-emsp-offers.json').read_text())
           b=json.loads(Path('data/v9/france-belib-offers.json').read_text())
+          x=json.loads(Path('data/v9/france-e55c-offers.json').read_text())
           r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
-          assert d['country']=='FR' and e['country']=='FR' and b['country']=='FR'
+          assert d['country']=='FR' and e['country']=='FR' and b['country']=='FR' and x['country']=='FR'
           assert d['policy']['subscriptionsOptIn'] is True
           assert d['policy']['directCpoAndRoamingSeparate'] is True
           assert len(d['directOffers'])>=10,r
@@ -73,7 +78,16 @@ jobs:
           assert all(x.get('networkAliases') and not x.get('operatorAliases') for x in b['directOffers']+b['subscriptionOffers'])
           assert any(rule.get('connectedTimeBlockRounding')=='started_block' for x in b['directOffers'] for rule in x['pricing']['rules'])
           assert all(x['pricing']['longConnectionFee']['thresholdMinutes']==840 for x in b['directOffers']+b['subscriptionOffers'])
-          # Placeholders that only reference old runtime code must not become rankable fake prices in the generic layer.
+          assert x['policy']['networkWideGeneralization'] is False
+          assert x['policy']['exactEvseRequired'] is True
+          assert x['policy']['wholesaleRatesExcluded'] is True
+          assert len(x['directOffers'])==1 and not x['subscriptionOffers']
+          e55=x['directOffers'][0]
+          assert e55['verifiedScope']=='exact_evse'
+          assert e55['evseIds']==['FR*55C*EFR39000*P7PPFG*1']
+          assert e55['priority']>b['directOffers'][0]['priority']
+          assert [q['connectedTimePerMinuteEur'] for q in e55['pricing']['rules']]==[0.09,0.06]
+          assert [(q['start'],q['end']) for q in e55['pricing']['rules']]==[('07:00','23:00'),('23:00','07:00')]
           deferred={x.get('id') for x in r.get('deferred',[])}
           assert 'electra-essential' in deferred
           assert 'electra-smart' in deferred
@@ -81,7 +95,8 @@ jobs:
           assert 'belib-resident' in deferred
           print(json.dumps({
             'generic':{k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},
-            'belib':{'directOfferCount':len(b['directOffers']),'subscriptionOfferCount':len(b['subscriptionOffers'])}
+            'belib':{'directOfferCount':len(b['directOffers']),'subscriptionOfferCount':len(b['subscriptionOffers'])},
+            'e55c':{'directOfferCount':len(x['directOffers']),'evseId':e55['evseIds'][0]}
           },indent=2))
           PY
 
@@ -92,7 +107,7 @@ jobs:
           rm -rf legacy-france-canonical data-lab
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-offer-compile-report.json
+          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-offer-compile-report.json
           if git diff --cached --quiet; then
             echo 'No offer changes'
             exit 0
