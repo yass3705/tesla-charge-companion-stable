@@ -1,14 +1,15 @@
 (function(root,factory){
   if(typeof module==='object'&&module.exports){
-    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'));
+    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'),require('./session-engine.js'));
   }else{
-    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine);
+    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine,root.TCCV9SessionEngine);
   }
-})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine){
+})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine,SessionEngine){
   'use strict';
 
   if(!DataEngine)throw new Error('TCC V9 data engine is required');
   if(!OfferEngine)throw new Error('TCC V9 offer engine is required');
+  if(!SessionEngine)throw new Error('TCC V9 session engine is required');
 
   const text=v=>String(v==null?'':v).trim();
   const country=v=>text(v).toUpperCase();
@@ -78,12 +79,30 @@
       const stationById=new Map(stations.map(st=>[st.id,st]));
       const routingCandidates=(area.routingCandidates||[]).map(st=>stationById.get(st.id)||st);
       const subscriptions=deriveSubscriptionOptions(stations,query.subscriptionFilters||{});
+      let sessionEvaluations=null,rankedStations=null;
+      if(query.session){
+        const rows=SessionEngine.evaluateArea(stations,query.session,{
+          selectedSubscriptions:query.selectedSubscriptions||query.session.selectedSubscriptions||[],
+          targetCurrency:query.targetCurrency||query.session.targetCurrency||'EUR',
+          fxRates:query.fxRates||query.session.fxRates||{},
+          sortBy:query.sortBy||'total'
+        });
+        sessionEvaluations=Object.fromEntries(rows.map(row=>[row.evaluation.stationId,row.evaluation]));
+        rankedStations=rows.map(row=>row.station);
+      }
       return{
         ...area,
         stations,
         routingCandidates,
         subscriptions,
-        diagnostics:{...(area.diagnostics||{}),subscriptionOptionCount:subscriptions.length}
+        sessionEvaluations,
+        rankedStations,
+        diagnostics:{
+          ...(area.diagnostics||{}),
+          subscriptionOptionCount:subscriptions.length,
+          sessionEvaluatedStationCount:sessionEvaluations?Object.keys(sessionEvaluations).length:0,
+          sessionComparableStationCount:sessionEvaluations?Object.values(sessionEvaluations).filter(x=>x?.best).length:0
+        }
       };
     }
 
@@ -93,7 +112,9 @@
       eligibleOffers:OfferEngine.eligibleOffers,
       deriveSubscriptionOptions,
       dedupeOffers:OfferEngine.dedupeOffers,
-      mergeStationOffers:OfferEngine.mergeStationOffers
+      mergeStationOffers:OfferEngine.mergeStationOffers,
+      evaluateStation:SessionEngine.evaluateStation,
+      evaluateArea:SessionEngine.evaluateArea
     };
   }
 
