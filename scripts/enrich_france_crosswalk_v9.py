@@ -24,7 +24,6 @@ LON_KEYS=('longitude','lon','lng')
 
 
 def txt(v):return str(v or '').strip()
-def norm(v):return re.sub(r'[^a-z0-9]+','-',txt(v).lower()).strip('-')
 def scalar(v):return isinstance(v,(str,int,float)) and txt(v)!=''
 def vals(record,keys):
     out=[]
@@ -74,19 +73,25 @@ def bucket(lat,lon,scale=100):return (round(lat*scale),round(lon*scale))
 
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument('--crosswalk',default='data/v9/france-crosswalk.json')
+    ap.add_argument('--base-crosswalk',default='data/v9/france-crosswalk.json')
+    ap.add_argument('--output',default='data/v9/france-provider-crosswalk.json')
     ap.add_argument('--data-lab',default='data-lab')
     ap.add_argument('--candidates',default='data/v9/france-crosswalk-candidates.json')
     a=ap.parse_args()
-    p=Path(a.crosswalk);payload=json.loads(p.read_text(encoding='utf-8'));entries=payload.get('entries',[])
+
+    base_path=Path(a.base_crosswalk)
+    base=json.loads(base_path.read_text(encoding='utf-8'))
+    entries=base.get('entries',[])
     station_map={};pdc_map={};canonical={}
     for e in entries:
-        cid=txt(e.get('canonicalId'));canonical[cid]=e
+        cid=txt(e.get('canonicalId'))
+        if not cid:continue
+        canonical[cid]=e
         sid=txt(e.get('idStationItinerance') or e.get('id_station_itinerance'))
         if sid:station_map[sid]=cid
         for pid in e.get('pdcIds',[]) or []:
             if txt(pid):pdc_map[txt(pid)]=cid
-        e.setdefault('aliases',[]);e.setdefault('sourceIds',[])
+
     spatial=defaultdict(list)
     static_manifest=Path('data/v9/france-static/all.json.gz')
     if static_manifest.exists():
@@ -94,10 +99,9 @@ def main():
             for r in json.load(f):
                 if len(r)>=5:
                     spatial[bucket(float(r[3]),float(r[4]))].append((txt(r[0]),float(r[3]),float(r[4]),txt(r[1])))
-    exact_added=0;exact_records=0;candidate_rows=[];files_seen=0;records_seen=0
-    seen_alias=set()
-    for e in entries:
-        for s in e.get('sourceIds',[]) or []:seen_alias.add((txt(e.get('canonicalId')),txt(s.get('source')),txt(s.get('id'))))
+
+    overlay=defaultdict(lambda:{'aliases':set(),'sourceIds':[]})
+    seen_alias=set();candidate_rows=[];files_seen=0;records_seen=0;exact_records=0;exact_added=0
     for spec in SOURCE_SPECS:
         path=Path(a.data_lab)/spec['path']
         if not path.exists():continue
@@ -115,19 +119,17 @@ def main():
                 if pid in pdc_map:matches.append(('pdc',pid,pdc_map[pid]))
             cids=sorted(set(m[2] for m in matches))
             if len(cids)==1:
-                exact_records+=1;cid=cids[0];e=canonical[cid]
+                exact_records+=1;cid=cids[0]
                 provider_ids=[]
                 for v in vals(rec,PROVIDER_ID_KEYS):
                     if v not in station_map and v not in pdc_map and len(v)>=2:provider_ids.append(v)
-                # Also preserve the exact IRVE identifier under the provider namespace when the provider dataset uses it as its own station key.
                 if not provider_ids:
                     provider_ids=[m[1] for m in matches if m[0]=='station'][:1]
                 for pid in dict.fromkeys(provider_ids):
                     key=(cid,spec['provider'],pid)
                     if key in seen_alias:continue
-                    e['sourceIds'].append({'source':spec['provider'],'id':pid,'match':'exact_irve_identifier','file':spec['path']})
-                    alias=f"{spec['provider']}:{pid}"
-                    if alias not in e['aliases']:e['aliases'].append(alias)
+                    overlay[cid]['sourceIds'].append({'source':spec['provider'],'id':pid,'match':'exact_irve_identifier','file':spec['path']})
+                    overlay[cid]['aliases'].add(f"{spec['provider']}:{pid}")
                     seen_alias.add(key);exact_added+=1
                 continue
             if len(cids)>1:
@@ -135,8 +137,7 @@ def main():
                 continue
             lat=first_num(rec,LAT_KEYS);lon=first_num(rec,LON_KEYS)
             if lat is None or lon is None or not spatial:continue
-            nearby=[]
-            br,bc=bucket(lat,lon)
+            nearby=[];br,bc=bucket(lat,lon)
             for dr in (-1,0,1):
                 for dc in (-1,0,1):
                     for sid,slat,slon,sname in spatial.get((br+dr,bc+dc),[]):
@@ -145,12 +146,21 @@ def main():
             nearby.sort()
             if nearby:
                 candidate_rows.append({'provider':spec['provider'],'file':spec['path'],'kind':'geo_candidate_only','name':first_text(rec,NAME_KEYS),'providerIds':vals(rec,PROVIDER_ID_KEYS)[:10],'latitude':lat,'longitude':lon,'nearby':[{'distanceM':d,'idStationItinerance':sid,'name':name} for d,sid,name in nearby[:5]]})
-    for e in entries:
-        e['aliases']=sorted(set(txt(x) for x in e.get('aliases',[]) if txt(x)))
-        e['sourceIds']=sorted(e.get('sourceIds',[]),key=lambda x:(txt(x.get('source')),txt(x.get('id')),txt(x.get('file'))))
-    payload['enrichment']={'filesSeen':files_seen,'recordsSeen':records_seen,'exactMatchedRecords':exact_records,'exactAliasesAdded':exact_added,'candidateCount':len(candidate_rows),'policy':'Only exact existing IRVE station/PDC identifiers create active provider aliases; geographic matches are review-only.'}
-    p.write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+
+    output_entries=[]
+    for cid in sorted(overlay):
+        item=overlay[cid]
+        if not item['aliases'] and not item['sourceIds']:continue
+        output_entries.append({
+          'canonicalId':cid,
+          'aliases':sorted(item['aliases']),
+          'sourceIds':sorted(item['sourceIds'],key=lambda x:(txt(x.get('source')),txt(x.get('id')),txt(x.get('file'))))
+        })
+
+    meta={'filesSeen':files_seen,'recordsSeen':records_seen,'exactMatchedRecords':exact_records,'exactAliasesAdded':exact_added,'stationsEnriched':len(output_entries),'candidateCount':len(candidate_rows),'policy':'Provider overlay only: exact existing IRVE station/PDC identifiers create active aliases; geographic matches are review-only. Base IRVE crosswalk is never modified.'}
+    out={'schemaVersion':1,'country':'FR','kind':'provider-crosswalk-overlay','baseCrosswalk':'data/v9/france-crosswalk.json','entries':output_entries,'enrichment':meta}
+    op=Path(a.output);op.parent.mkdir(parents=True,exist_ok=True);op.write_text(json.dumps(out,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
     cp=Path(a.candidates);cp.parent.mkdir(parents=True,exist_ok=True);cp.write_text(json.dumps({'schemaVersion':1,'country':'FR','policy':'review_only_never_runtime','count':len(candidate_rows),'candidates':candidate_rows},ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
-    print(json.dumps(payload['enrichment'],indent=2))
+    print(json.dumps(meta,indent=2))
 
 if __name__=='__main__':main()
