@@ -8,10 +8,14 @@ on:
       - 'scripts/test_spain_miteco_v9.py'
       - 'scripts/compile_global_subscriptions_v9.py'
       - 'scripts/test_global_subscriptions_v9.py'
+      - 'scripts/dedupe_global_subscriptions_v9.py'
+      - 'scripts/test_subscription_dedupe_v9.py'
       - 'tests/fixtures/spain_miteco_v9_sample.csv'
       - 'tests/fixtures/spain_reve_v9_sample.json'
       - 'data/v9/spain-operator-aliases.json'
       - 'data/v9/subscription-entitlements-global.json'
+      - 'data/v9/france-emsp-offers.json'
+      - 'data/netherlands_direct_tariffs_v1.json'
       - '.github/workflows/spain-miteco-v9-contract.yml'
   workflow_dispatch:
 
@@ -30,3 +34,5 @@ jobs:
         run: python scripts/test_spain_miteco_v9.py
       - name: Validate global multi-country subscription contract
         run: python scripts/test_global_subscriptions_v9.py
+      - name: Validate legacy subscription dedupe contract
+        run: python scripts/test_subscription_dedupe_v9.py
