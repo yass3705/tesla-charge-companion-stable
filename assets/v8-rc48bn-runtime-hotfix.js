@@ -2,10 +2,92 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48ce-pre-expansion-direct';
+  const REVISION='rc48cf-nl-protected-area-cache';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
+  let protectedAreaCacheValue=window.TCC_V8_AREA_CACHE||null;
+  let protectedAreaCacheInstalled=false;
+  const protectedPreparedState=new WeakMap();
+
+  function isTeslaStation(st){return st?.source==='teslaSupercharger'||norm(st?.operator)==='tesla';}
+  function stationKey(st){return text(st?.id)||text(st?.catalogStationId)||`${Number(st?.latitude)}|${Number(st?.longitude)}|${norm(st?.operator)}`;}
+  function mergeProtectedStations(current,protectedStations){
+    const out=[],seen=new Set();
+    for(const st of [...(Array.isArray(current)?current:[]),...(Array.isArray(protectedStations)?protectedStations:[])]){
+      if(!st)continue;const key=stationKey(st);if(!key||seen.has(key))continue;seen.add(key);out.push(st);
+    }
+    return out;
+  }
+  function physicalCount(list){
+    const seen=new Set();
+    for(const st of list||[]){const key=text(st?.catalogStationId)||text(st?.baseStationId)||text(st?.id).split('::')[0];if(key)seen.add(key);}
+    return seen.size;
+  }
+  function refreshProtectedAreaUi(prepared){
+    const apply=()=>{try{window.TCCV8DynamicOperators?.refresh?.(prepared?.stations||[]);}catch(e){}};
+    apply();requestAnimationFrame?.(apply);setTimeout(apply,180);setTimeout(apply,550);
+    const status=document.getElementById('routeStatus');
+    if(status&&/borne\(s\) mise\(s\) à jour/.test(text(status.textContent))){
+      const count=physicalCount(prepared?.stations||[]);
+      status.textContent=text(status.textContent).replace(/^✓\s*\d+\s+borne\(s\)/,`✓ ${count} borne(s)`);
+    }
+  }
+  function protectPreparedAssignments(prepared,protectedStations){
+    if(!prepared||!Array.isArray(prepared.stations)||!protectedStations?.length)return;
+    const existing=protectedPreparedState.get(prepared);
+    if(existing){existing.protectedStations=mergeProtectedStations(existing.protectedStations,protectedStations);existing.value=mergeProtectedStations(existing.value,existing.protectedStations);return;}
+    const state={value:mergeProtectedStations(prepared.stations,protectedStations),protectedStations:protectedStations.slice()};
+    protectedPreparedState.set(prepared,state);
+    try{
+      Object.defineProperty(prepared,'stations',{
+        configurable:true,enumerable:true,
+        get(){return state.value;},
+        set(next){state.value=mergeProtectedStations(next,state.protectedStations);queueMicrotask(()=>refreshProtectedAreaUi(prepared));}
+      });
+    }catch(e){prepared.stations=state.value;}
+  }
+  async function ensureNetherlandsTesla(cache){
+    const prepared=cache?.prepared;
+    if(!prepared||!Array.isArray(prepared.stations)||!Number(prepared.netherlandsCatalogLoaded||0))return false;
+    const present=prepared.stations.filter(isTeslaStation);
+    if(present.length){protectPreparedAssignments(prepared,present);refreshProtectedAreaUi(prepared);return true;}
+    const radius=Math.max(0,Number(prepared.maxDistanceKm||document.getElementById('simMaxDistance')?.value||0));
+    const current=window.candidateStations;
+    if(typeof current!=='function')return false;
+    let routesBefore={};try{routesBefore={...(routeResults||{})};}catch(e){}
+    try{
+      const tesla=await current.call(window,'tesla',radius);
+      const protectedStations=(tesla?.stations||[]).filter(isTeslaStation);
+      if(!protectedStations.length)return false;
+      let teslaRoutes={};try{teslaRoutes={...(routeResults||{})};}catch(e){}
+      prepared.stations=mergeProtectedStations(prepared.stations,protectedStations);
+      protectPreparedAssignments(prepared,protectedStations);
+      prepared.protectedTeslaCandidateCount=protectedStations.length;
+      try{routeResults={...routesBefore,...teslaRoutes};}catch(e){}
+      refreshProtectedAreaUi(prepared);
+      console.info(`[TCC V8] ${protectedStations.length} candidat(s) Tesla restauré(s) après les overlays Pays-Bas.`);
+      return true;
+    }catch(err){
+      try{routeResults=routesBefore;}catch(e){}
+      console.warn('[TCC V8] Protection Tesla Pays-Bas indisponible :',err?.message||err);return false;
+    }
+  }
+  function installProtectedAreaCache(){
+    if(protectedAreaCacheInstalled)return true;
+    try{
+      Object.defineProperty(window,'TCC_V8_AREA_CACHE',{
+        configurable:true,enumerable:true,
+        get(){return protectedAreaCacheValue;},
+        set(value){protectedAreaCacheValue=value;queueMicrotask(()=>ensureNetherlandsTesla(value));}
+      });
+      protectedAreaCacheInstalled=true;
+      if(protectedAreaCacheValue)queueMicrotask(()=>ensureNetherlandsTesla(protectedAreaCacheValue));
+      return true;
+    }catch(err){console.warn('[TCC V8] Garde cache de zone indisponible :',err?.message||err);return false;}
+  }
+
+  installProtectedAreaCache();
 
   function loadDirectOfferPipeline(){
     if(window.TCCV8DirectPipeline||document.querySelector('script[data-tcc-direct-offer-pipeline]'))return true;
@@ -115,6 +197,6 @@
   document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadDirectOfferPipeline();loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();loadReveoDirect();loadYawayConnectDirect();loadAldiDirect();installMetadataGuard()}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
-  window.TCCV8RC48BNHotfix={revision:REVISION,loadDirectOfferPipeline,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48ce : pipeline direct pré-expansion et couche CPO France chargés.');
+  window.TCCV8RC48BNHotfix={revision:REVISION,loadDirectOfferPipeline,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,installProtectedAreaCache,ensureNetherlandsTesla,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
+  console.info('[TCC V8] rc48cf : cache de zone Pays-Bas protégé contre l’éviction des Superchargeurs Tesla.');
 })();
