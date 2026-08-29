@@ -1,0 +1,141 @@
+name: Netherlands V8 functional QA
+
+on:
+  push:
+    branches:
+      - fix/netherlands-v8-publish
+    paths:
+      - .github/workflows/netherlands-v8-functional-qa.yml
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current main data/runtime
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+      - name: Checkout patched V8 release
+        uses: actions/checkout@v4
+        with:
+          ref: fix/netherlands-v8-release-registry
+          path: rc
+      - name: Compose V8 preview contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p preview
+          rsync -a --delete --exclude='.git/' --exclude='.github/' rc/ preview/
+          python site/scripts/sync_v8_publish_contract.py \
+            --registry rc/data/v8_tariff_sources.json \
+            --source-root site \
+            --target-root preview
+          test -f preview/data/non_tesla_netherlands/manifest.json
+          test -f preview/data/non_tesla_netherlands/all.json.gz
+          for f in ocpi-duration-pricing.js ocpi-access-intervals.js netherlands-catalog.js netherlands-refresh.js; do
+            test -f "preview/assets/$f"
+            node --check "preview/assets/$f"
+            grep -q "$f" preview/index.html
+          done
+          node site/tests/ocpi-duration-pricing.test.cjs
+          node site/tests/ocpi-access-intervals.test.cjs
+      - name: Audit representative Netherlands cities and tariff cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import gzip,json,math
+          from collections import Counter
+          from pathlib import Path
+
+          root=Path('preview/data/non_tesla_netherlands')
+          manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
+          report=json.loads((root/'runtime_report.json').read_text(encoding='utf-8'))
+          with gzip.open(root/'all.json.gz','rt',encoding='utf-8') as f:
+              rows=json.load(f)
+
+          def hav(lat1,lon1,lat2,lon2):
+              r=6371.0088
+              p1,p2=math.radians(lat1),math.radians(lat2)
+              dp=math.radians(lat2-lat1); dl=math.radians(lon2-lon1)
+              a=math.sin(dp/2)**2+math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+              return 2*r*math.asin(math.sqrt(a))
+
+          cities={
+              'Amsterdam':(52.3676,4.9041),
+              'Rotterdam':(51.9244,4.4777),
+              'Utrecht':(52.0907,5.1214),
+              'Eindhoven':(51.4416,5.4697),
+              'Groningen':(53.2194,6.5665),
+          }
+          city_stats={}
+          for name,(lat,lon) in cities.items():
+              nearby=[]
+              for row in rows:
+                  try: d=hav(lat,lon,float(row[3]),float(row[4]))
+                  except Exception: continue
+                  if d<=10: nearby.append((d,row))
+              nearby.sort(key=lambda x:x[0])
+              if len(nearby)<20:
+                  raise SystemExit(f'Insufficient NL catalog density near {name}: {len(nearby)} within 10 km')
+              priced=0; hpc=0; ac=0
+              for _,row in nearby:
+                  for cfg in (row[8] or []):
+                      power=float(cfg[3] or 0)
+                      if power>=150: hpc+=1
+                      if 0<power<=22: ac+=1
+                      if cfg[5]: priced+=1
+              city_stats[name]={
+                  'stations10km':len(nearby),
+                  'pricedConfigs':priced,
+                  'acConfigs':ac,
+                  'hpcConfigs':hpc,
+                  'nearest':[{'km':round(d,2),'id':r[0],'name':r[1],'operator':r[5],'status':r[10]} for d,r in nearby[:3]],
+              }
+
+          operators=Counter(str(r[5] or 'UNKNOWN') for r in rows)
+          statuses=Counter(str(r[10] if len(r)>10 else 'UNKNOWN') for r in rows)
+          duration=[]; scheduled=[]; examples_by_operator={}
+          for row in rows:
+              op=str(row[5] or 'UNKNOWN')
+              if op.lower() in {'fastned','ionity','allego','lidl'} and op.lower() not in examples_by_operator:
+                  examples_by_operator[op.lower()]={'id':row[0],'name':row[1],'operator':op,'configs':[]}
+                  for cfg in (row[8] or [])[:3]:
+                      examples_by_operator[op.lower()]['configs'].append({'label':cfg[1],'kind':cfg[2],'powerKw':cfg[3],'rules':cfg[5][:2] if cfg[5] else []})
+              access=row[7] if len(row)>7 else None
+              if isinstance(access,list) and access and access[0]==2 and len(scheduled)<5:
+                  scheduled.append({'id':row[0],'name':row[1],'operator':op,'access':access})
+              for cfg in (row[8] or []):
+                  for rule in (cfg[5] or []):
+                      bands=rule[12] if len(rule)>12 and isinstance(rule[12],list) else []
+                      if bands and len(duration)<5:
+                          duration.append({'id':row[0],'name':row[1],'operator':op,'config':cfg[1],'rule':rule})
+
+          scope=manifest.get('scope',{})
+          checks={
+              'schemaV3':manifest.get('schemaVersion')==3,
+              'stationCount':len(rows)==manifest.get('stationCount') and len(rows)>70000,
+              'tiles':manifest.get('tileCount',0)>30,
+              'countryNL':scope.get('countryCode')=='NL',
+              'teslaExcluded':scope.get('teslaExcluded') is True and all(not str(r[0]).startswith('NL:TSL:') for r in rows),
+              'exactCoverage':report.get('coveragePct',{}).get('exactTariffConnectors',0)>55,
+              'durationCases':len(duration)>0,
+              'scheduledCases':len(scheduled)>0,
+              'statusCoverage':sum(statuses.values())==len(rows),
+          }
+          failed=[k for k,v in checks.items() if not v]
+          result={
+              'checks':checks,
+              'manifestStations':manifest.get('stationCount'),
+              'coveragePct':report.get('coveragePct'),
+              'cityStats':city_stats,
+              'topOperators':operators.most_common(15),
+              'statuses':statuses,
+              'operatorExamples':examples_by_operator,
+              'durationExamples':duration,
+              'scheduledExamples':scheduled,
+          }
+          print(json.dumps(result,ensure_ascii=False,indent=2))
+          if failed: raise SystemExit('FAILED: '+', '.join(failed))
+          PY
