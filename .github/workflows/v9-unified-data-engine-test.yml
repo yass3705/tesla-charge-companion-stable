@@ -54,10 +54,12 @@ jobs:
           for(const source of r.sources){
             if(!source.id||!source.adapter||!Array.isArray(source.countries)||!source.capabilities?.length)throw new Error(`invalid source ${source.id||'unknown'}`);
           }
-          const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
+          const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-freshmile-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
           for(const id of required)if(!unique.has(id))throw new Error(`missing source ${id}`);
           const franceDirect=r.sources.find(x=>x.id==='france-canonical-direct-offers');
           if(franceDirect.path!=='data/v9/france-direct-offers.json'||franceDirect.active!==true)throw new Error('France direct migration source not bound to embedded snapshot');
+          const freshmile=r.sources.find(x=>x.id==='france-freshmile-offers');
+          if(freshmile.path!=='data/v9/france-freshmile-offers.json'||freshmile.active!==true)throw new Error('Freshmile exact V9 source not bound to embedded snapshot');
           const franceEmsp=r.sources.find(x=>x.id==='france-emsp-offers');
           if(franceEmsp.active!==false)throw new Error('unbuilt France eMSP source must stay inactive');
           for(const source of r.sources.filter(x=>x.active!==false)){
@@ -84,6 +86,8 @@ jobs:
         run: node tests/v9-ionity-migration.test.cjs
       - name: Exact Atlante EVSE migration
         run: node tests/v9-atlante-migration.test.cjs
+      - name: Exact Freshmile station/PDC migration
+        run: node tests/v9-france-freshmile-offers.test.cjs
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Unified runtime integration
