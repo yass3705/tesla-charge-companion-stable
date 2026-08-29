@@ -6,7 +6,7 @@ const Direct=require('../assets/v9/adapters/direct-offers.js');
 
 const staticStation={
   canonicalId:'FR:irve:station-1',aliases:['irve-station:FR*S1','irve-pdc:FR*P1','irve-pdc:FR*P2'],sourceStationId:'FR*S1',countryCode:'FR',
-  name:'IRVE Test',address:'1 rue Test',latitude:48.8,longitude:2.1,physicalOperator:{id:'operator-x',name:'Operator X'},
+  name:'IRVE Test',address:'1 rue Test',latitude:48.8,longitude:2.1,physicalOperator:{id:'operator-x',name:'Operator X'},networkBrand:'Network Y',
   evses:[
     {id:'FR*P1',aliases:['irve-pdc:FR*P1'],connectors:[{id:'c1',kind:'AC',powerKw:22}]},
     {id:'FR*P2',aliases:['irve-pdc:FR*P2'],connectors:[{id:'c2',kind:'DC',powerKw:150}]}
@@ -49,25 +49,28 @@ async function scopedOffers(){
     {id:'wrong-station',provider:'Operator X',operatorIds:['operator-x'],stationIds:['other-station'],pricePerKwh:0.10},
     {id:'wrong-power',provider:'Operator X',operatorIds:['operator-x'],minPowerKw:200,pricePerKwh:0.20},
     {id:'right-dc',provider:'Operator X',operatorIds:['operator-x'],evseIds:['FR*P2'],minPowerKw:100,maxPowerKw:180,connectorKinds:['DC'],pricePerKwh:0.30},
-    {id:'right-ac',provider:'Operator X',operatorIds:['operator-x'],evseIds:['FR*P1'],maxPowerKw:22,connectorKinds:['AC'],pricePerKwh:0.40}
+    {id:'right-ac',provider:'Operator X',operatorIds:['operator-x'],evseIds:['FR*P1'],maxPowerKw:22,connectorKinds:['AC'],pricePerKwh:0.40},
+    {id:'right-network',provider:'Network Y tariff',operatorAliases:['other-technical-cpo'],networkAliases:['Network Y'],pricePerKwh:0.50},
+    {id:'wrong-network',provider:'Network Z tariff',operatorAliases:['other-technical-cpo'],networkAliases:['Network Z'],pricePerKwh:0.60},
+    {id:'physical-only',provider:'Physical tariff',operatorAliases:['operator-x'],networkAliases:['Network Z'],directOperatorOnly:true,pricePerKwh:0.70}
   ]});
   const registry={sources:[
     {id:'france-national',countries:['FR'],priority:{identity:55,connectors:60},active:true},
     {id:'france-direct',countries:['FR'],priority:{tariff:95},active:true}
   ]};
-  const engine=Engine.createEngine({registry,loaders:{
-    'france-national':async()=>[staticStation],
-    'france-direct':async()=>payload
-  }});
+  const engine=Engine.createEngine({registry,loaders:{'france-national':async()=>[staticStation],'france-direct':async()=>payload}});
   const st=(await engine.queryArea({countryCode:'FR'})).stations[0];
   assert.ok(st.offers.some(o=>o.id==='right-dc'));
   assert.ok(st.offers.some(o=>o.id==='right-ac'));
+  assert.ok(st.offers.some(o=>o.id==='right-network'),'tariff may match an explicit network brand even when the technical CPO differs');
+  assert.ok(st.offers.some(o=>o.id==='physical-only'),'physical-only tariff must still match its technical CPO');
   assert.ok(!st.offers.some(o=>o.id==='wrong-station'),'station-scoped verified tariff must not leak network-wide');
   assert.ok(!st.offers.some(o=>o.id==='wrong-power'),'power-scoped tariff must not apply to incompatible station');
+  assert.ok(!st.offers.some(o=>o.id==='wrong-network'),'unrelated network tariff must not leak to the station');
 }
 
 (async()=>{
   await crosswalkAndStatus();
   await scopedOffers();
-  console.log(JSON.stringify({ok:true,model:'france-v9',invariants:['sparse-crosswalk-safe','fresh-status-only','station-scope','evse-scope','power-scope']},null,2));
+  console.log(JSON.stringify({ok:true,model:'france-v9',invariants:['sparse-crosswalk-safe','fresh-status-only','station-scope','evse-scope','power-scope','operator-network-separation']},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
