@@ -5,11 +5,10 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
   'use strict';
   const text=v=>String(v==null?'':v).trim();
-  const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
   const uniq=values=>[...new Set((values||[]).map(text).filter(Boolean))];
   const number=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
 
-  function ionityPricing(price){return{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:Number(price),chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0}]};}
+  function kwhPricing(price){return{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:Number(price),chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0}]};}
 
   function ionityRules(payload,source={}){
     const locations=Array.isArray(payload?.locations)?payload.locations:[],rules=[];
@@ -32,8 +31,28 @@
           provider:'IONITY Direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',
           operatorIds:['ionity'],stationIds:uniq([`ionity:${uuid}`,locationId?`ionity-location:${locationId}`:'']),
           connectorKinds:[group.kind],minPowerKw:group.power,maxPowerKw:group.power,
-          pricing:ionityPricing(group.price),priority:Number(source?.priority?.tariff||95),
+          pricing:kwhPricing(group.price),priority:Number(source?.priority?.tariff||95),
           metadata:{legacyDataset:text(payload?.dataset),sourceLocationUuid:uuid,sourceLocationId:locationId,verified:true,identityMode:'explicit_provider_crosswalk',connectorRefs:refs}
+        });
+      }
+    }
+    return rules;
+  }
+
+  function atlanteRules(payload,source={}){
+    const locations=Array.isArray(payload?.locations)?payload.locations:[],rules=[];
+    for(const location of locations){
+      const locationId=text(location?.id||location?.uuid||location?.locationId);
+      let index=0;
+      for(const connector of location?.connectors||[]){
+        const evseId=text(connector?.evseId),kind=text(connector?.kind).toUpperCase(),price=number(connector?.pricePerKwhEur);
+        if(!evseId||!['AC','DC'].includes(kind)||!(price>0))continue;
+        rules.push({
+          id:`atlante-direct:${locationId||'location'}:${index++}`,
+          provider:'Atlante direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',
+          operatorIds:['atlante','atlante-france'],evseIds:[evseId],connectorKinds:[kind],
+          pricing:kwhPricing(price),priority:Number(source?.priority?.tariff||95),
+          metadata:{legacyDataset:text(payload?.dataset),sourceLocationId:locationId,sourceConnectorId:text(connector?.connectorId||connector?.externalConnectorId),sourceEvseId:evseId,verified:true,identityMode:'exact_evse'}
         });
       }
     }
@@ -44,6 +63,9 @@
     const dataset=text(payload?.dataset).toLowerCase();
     if(dataset==='ionity-direct-operated-stations-france'||(Array.isArray(payload?.locations)&&payload?.scope?.requiredCpoIdentifier==='IONITY_CPO')){
       return{offerRules:ionityRules(payload,source),metadata:{dataset:payload?.dataset||'ionity',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'provider-crosswalk-only'}};
+    }
+    if(dataset==='atlante-direct-operated-stations-france'||(Array.isArray(payload?.locations)&&payload?.scope?.requiredCpo==='FRATL'&&payload?.scope?.requiredPartyId==='ATL')){
+      return{offerRules:atlanteRules(payload,source),metadata:{dataset:payload?.dataset||'atlante',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-evse'}};
     }
     return{offerRules:[],metadata:{dataset:payload?.dataset||'unknown',adapter:'legacy-direct-stations',unsupported:true}};
   }
@@ -67,5 +89,5 @@
     };
   }
 
-  return{ionityPricing,ionityRules,normalizePayload,readJsonMaybeGzip,createLoader};
+  return{kwhPricing,ionityPricing:kwhPricing,ionityRules,atlanteRules,normalizePayload,readJsonMaybeGzip,createLoader};
 });
