@@ -9,6 +9,7 @@ SOURCE_SPECS=[
   {'provider':'allego','path':'data/national/allego_direct_stations_france.json.gz'},
   {'provider':'atlante','path':'data/national/atlante_direct_stations_france.json.gz'},
   {'provider':'avia-picoty','path':'data/national/avia_picoty_direct_stations_france.json.gz'},
+  {'provider':'powerdot','path':'data/national/powerdot_direct_france.json.gz'},
   {'provider':'bump','path':'data/national/bump_direct_inventory_france.json.gz'},
   {'provider':'bump','path':'data/national/bump_direct_stations_france.json.gz'},
   {'provider':'belib','path':'data/national/belib_stations_paris.json'},
