@@ -69,8 +69,19 @@ async function scopedOffers(){
   assert.ok(!st.offers.some(o=>o.id==='wrong-network'),'unrelated network tariff must not leak to the station');
 }
 
+function subscriptionSelectionSemantics(){
+  const payload=Direct.normalizePayload({country:'FR',subscriptionOffers:[
+    {id:'belib-nonresident-flex',selectionId:'belib-nonresident',provider:"Belib' abonné non-résident",networkAliases:['Belib'],minPowerKw:7,maxPowerKw:7,pricing:{type:'rules',rules:[{connectedTimeBlockMinutes:15,connectedTimeBlockEur:0.37}]}},
+    {id:'belib-nonresident-boost',selectionId:'belib-nonresident',provider:"Belib' abonné non-résident",networkAliases:['Belib'],minPowerKw:22,maxPowerKw:22,pricing:{type:'rules',rules:[{connectedTimeBlockMinutes:15,connectedTimeBlockEur:2.0}]}}
+  ]});
+  assert.equal(payload.offerRules.length,2);
+  assert.deepEqual(payload.offerRules.map(x=>x.id),['belib-nonresident-flex','belib-nonresident-boost'],'tariff class rule ids must remain distinct');
+  assert.ok(payload.offerRules.every(x=>x.subscriptionId==='belib-nonresident'),'all class rules must share one selectable subscription id');
+}
+
 (async()=>{
   await crosswalkAndStatus();
   await scopedOffers();
-  console.log(JSON.stringify({ok:true,model:'france-v9',invariants:['sparse-crosswalk-safe','fresh-status-only','station-scope','evse-scope','power-scope','operator-network-separation']},null,2));
+  subscriptionSelectionSemantics();
+  console.log(JSON.stringify({ok:true,model:'france-v9',invariants:['sparse-crosswalk-safe','fresh-status-only','station-scope','evse-scope','power-scope','operator-network-separation','subscription-class-rule-identity']},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
