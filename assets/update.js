@@ -86,10 +86,10 @@
     }
   }
 
-  // Test-branch bootstrap for the DOT-NL national catalogue. It runs only after
+  // Production bootstrap for the DOT-NL national catalogue. It runs only after
   // the regular deferred scripts (app + France catalogue) have initialized, so
   // the Netherlands loader can safely chain candidateStations without changing
-  // the production main branch boot order.
+  // the established stable-root boot order.
   window.addEventListener('DOMContentLoaded',()=>{
     if(document.querySelector('script[data-tcc-netherlands-catalog]'))return;
     const script=document.createElement('script');
