@@ -24,15 +24,11 @@ function distanceKm(a,b){
   return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
 }
 
-// Same geographic point used by the Eindhoven regression fixture in the catalogue
-// integration test. It is deliberately the city centre, not the Supercharger itself.
 const eindhovenCity={latitude:51.4416,longitude:5.4697};
 const eindhovenAirKm=distanceKm(eindhovenCity,eindhoven);
 assert.ok(eindhovenAirKm<=25,`Tesla Eindhoven must be within the user's 25 km search radius; air distance is ${eindhovenAirKm.toFixed(2)} km`);
 assert.notEqual(eindhoven.temporarilyUnavailable,true,'Tesla Eindhoven must not be filtered as temporarily unavailable');
 
-// Reproduce the base candidateStations Tesla predicate + 25 km air-distance prefilter
-// against the real published Tesla catalogue.
 const teslaWithin25Km=tesla.filter(st=>
   st?.temporarilyUnavailable!==true&&
   ((String(st?.operator||'').toLowerCase()==='tesla')||st?.source==='teslaSupercharger')&&
@@ -64,18 +60,14 @@ const dynamicFilter=read(releaseRoot,'assets/v8-dynamic-filter.js');
 assert.ok(dynamicFilter.includes("if(st?.source==='teslaSupercharger')return'Tesla';"),'V8 operator filter must canonicalize Tesla Superchargers to Tesla');
 assert.ok(dynamicFilter.includes("candidateStations('all',maxDistanceKm)"),'V8 operator list must be built from the complete prepared area');
 
-// Reproduce the exact persistent failure reported on iPhone: a dense DOT-NL area
-// has already filled the 80-station shortlist, Tesla was evicted by a downstream
-// France-only overlay, and the final V8 area cache receives those 80 stations.
-// The release guard must restore the real Tesla Eindhoven candidate and then keep
-// it protected if another late overlay assigns an 80-station array again.
 const hotfix=read(releaseRoot,'assets/v8-rc48bn-runtime-hotfix.js');
 for(const token of [
-  "REVISION='rc48cf-nl-protected-area-cache'",
+  "REVISION='rc48cg-nl-final-operator-sync'",
   "Object.defineProperty(window,'TCC_V8_AREA_CACHE'",
   'ensureNetherlandsTesla',
-  'protectPreparedAssignments'
-])assert.ok(hotfix.includes(token),`V8 Netherlands Tesla cache guard missing: ${token}`);
+  'protectPreparedAssignments',
+  'ensureTeslaOperatorChoice'
+])assert.ok(hotfix.includes(token),`V8 Netherlands Tesla cache/operator guard missing: ${token}`);
 
 const denseLocals=Array.from({length:80},(_,i)=>({
   id:`nl-regression-${i}`,
@@ -86,6 +78,18 @@ const denseLocals=Array.from({length:80},(_,i)=>({
   longitude:5.4697+i/100000
 }));
 const statusEl={textContent:'✓ 80 borne(s) mise(s) à jour dans un rayon routier maximal de 25 km. Tu peux lancer la simulation.'};
+const hintEl={textContent:'11 opérateur(s) disponibles dans la zone chargée.'};
+const operatorInputs=Array.from({length:11},(_,i)=>({type:'checkbox',value:`NL operator ${i}`,checked:false}));
+const operatorHost={
+  dataset:{},
+  children:operatorInputs.slice(),
+  querySelectorAll(selector){return selector==='input[type=checkbox]'?this.children.filter(x=>x?.type==='checkbox'):[];},
+  appendChild(node){
+    this.children.push(node);
+    if(node?.children)for(const child of node.children)if(child?.type==='checkbox')this.children.push(child);
+    return node;
+  }
+};
 const refreshSnapshots=[];
 const context={
   console,
@@ -106,8 +110,13 @@ const context={
     addEventListener:()=>{},
     querySelector:()=>null,
     querySelectorAll:()=>[],
-    getElementById(id){if(id==='simMaxDistance')return {value:'25'};if(id==='routeStatus')return statusEl;return null;},
-    createElement:()=>({dataset:{},style:{}}),
+    getElementById(id){if(id==='simMaxDistance')return {value:'25'};if(id==='routeStatus')return statusEl;if(id==='augOperatorChoices')return operatorHost;if(id==='tccDynamicOperatorHint')return hintEl;return null;},
+    createElement(tag){
+      if(tag==='label')return {className:'',children:[],appendChild(node){this.children.push(node);return node;}};
+      if(tag==='input')return {type:'',value:'',checked:false};
+      return {dataset:{},style:{},appendChild:()=>{}};
+    },
+    createTextNode:text=>({textContent:String(text)}),
     head:{appendChild:()=>{}},
     documentElement:{}
   },
@@ -128,9 +137,9 @@ assert.ok(context.routeResults['nl-regression-0'],'existing DOT-NL route metadat
 assert.ok(context.routeResults[eindhoven.id],'Tesla route metadata must be merged into the prepared area');
 assert.match(statusEl.textContent,/^✓ 81 borne\(s\)/,'the visible prepared-station count must reflect the restored Tesla candidate');
 assert.ok(refreshSnapshots.some(ids=>ids.includes(eindhoven.id)),'dynamic operator choices must be refreshed with Tesla');
+assert.ok(operatorHost.querySelectorAll('input[type=checkbox]').some(input=>input.value==='Tesla'),'final operator DOM must contain the Tesla checkbox even if the remembered dynamic snapshot is stale');
+assert.match(hintEl.textContent,/12 opérateur\(s\)/,'operator hint must reflect Tesla after final cache protection');
 
-// Simulate Fastned/LBB/another late overlay replacing the station array after the
-// cache was prepared. The protected property must merge Tesla back automatically.
 prepared.stations=denseLocals.slice();
 await new Promise(resolve=>setImmediate(resolve));
 assert.equal(prepared.stations.length,81,'late overlay re-truncation must not reduce the protected Netherlands cache back to 80');
@@ -166,6 +175,7 @@ console.log(JSON.stringify({
   preparedBeforeProtection:80,
   preparedAfterProtection:prepared.stations.length,
   teslaProtectedAfterLateRetruncate:true,
+  teslaOperatorVisible:operatorHost.querySelectorAll('input[type=checkbox]').some(input=>input.value==='Tesla'),
   visibleStatus:statusEl.textContent,
   dotNlPreservesGlobalStations:true,
   operatorFilterExposesTesla:true,
