@@ -45,6 +45,7 @@ jobs:
           node --check assets/v9/adapters/france-irve-status.js
           node --check tests/v9-france-coverage-audit.cjs
           node --check tests/v9-france-direct-identity-audit.cjs
+          node --check tests/v9-ionity-crosswalk-audit.cjs
           node --check v9-preview/app.js
       - name: Validate source registry
         run: |
@@ -104,6 +105,8 @@ jobs:
         run: node tests/v9-france-coverage-audit.cjs
       - name: France direct identity audit
         run: node tests/v9-france-direct-identity-audit.cjs
+      - name: IONITY deterministic crosswalk audit
+        run: node tests/v9-ionity-crosswalk-audit.cjs
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Unified runtime integration
