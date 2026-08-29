@@ -6,11 +6,13 @@ on:
     paths:
       - 'assets/v9/pricing-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
+      - 'tests/v9-qovoltis-pricing.test.cjs'
       - '.github/workflows/v9-pricing-engine.yml'
   pull_request:
     paths:
       - 'assets/v9/pricing-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
+      - 'tests/v9-qovoltis-pricing.test.cjs'
   workflow_dispatch:
 
 permissions:
@@ -26,3 +28,4 @@ jobs:
         with:
           node-version: 22
       - run: node tests/v9-pricing-engine.test.cjs
+      - run: node tests/v9-qovoltis-pricing.test.cjs
