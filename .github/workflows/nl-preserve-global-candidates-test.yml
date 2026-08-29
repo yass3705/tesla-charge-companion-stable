@@ -1,0 +1,24 @@
+name: Netherlands preserve global candidates test
+
+on:
+  push:
+    branches:
+      - fix/nl-preserve-global-candidates
+    paths:
+      - assets/netherlands-catalog.js
+      - tests/netherlands-preserve-global-candidates.test.cjs
+      - .github/workflows/nl-preserve-global-candidates-test.yml
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Netherlands catalog syntax
+        run: node --check assets/netherlands-catalog.js
+      - name: Reproduce dense Eindhoven crowd-out and preserve Tesla
+        run: node tests/netherlands-preserve-global-candidates.test.cjs
