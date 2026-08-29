@@ -12,6 +12,7 @@ const pdc='FRS82EXQVP1';
 const station={
   id:'FR:national:FRS82PMMQAZA',countryCode:'FR',name:'Montauban, Mandoune',
   physicalOperator:{id:'sde82',name:'SDE82'},networkBrand:'Freshmile',
+  provenance:[{sourceId:'france-national',sourceStationId:'FRS82PMMQAZA'}],
   evses:[{id:pdc,pdcIds:[pdc],connectors:[{id:`${pdc}:type2`,kind:'AC',powerKw:22}]}],
   offers:[{
     id:'france-national:FRS82PMMQAZA:fallback',provider:'IRVE national',kind:'national_fallback',countries:['FR'],currency:'EUR',
@@ -29,7 +30,7 @@ const wrongElectra={
   pricing:{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:.20}]},metadata:{identityMode:'exact_irve_pdc'}
 };
 
-assert.equal(Engine.ruleMatchesStation(direct,station),true,'real direct Freshmile offer must match its exact PDC');
+assert.equal(Engine.ruleMatchesStation(direct,station),true,'real direct Freshmile offer must match canonical station identity + exact PDC');
 assert.equal(Engine.ruleMatchesStation(electroverse,station),true,'roaming offer must match the same exact PDC');
 assert.equal(Engine.ruleMatchesStation(wrongElectra,station),false,'a cheaper roaming tariff on another PDC must never leak');
 
@@ -63,5 +64,5 @@ console.log(JSON.stringify({
   storedOfferKinds:merged.offers.map(o=>o.kind).sort(),
   eligibleOfferKinds:eligible.map(o=>o.kind).sort(),
   directQuoteEur:directQuote.totalEur,roamingQuoteEur:roamingQuote.totalEur,
-  invariants:['real-direct-pdc','direct-and-roaming-coexist','irve-fallback-only','no-cross-pdc-leakage']
+  invariants:['real-direct-pdc','canonical-station-provenance','direct-and-roaming-coexist','irve-fallback-only','no-cross-pdc-leakage']
 },null,2));
