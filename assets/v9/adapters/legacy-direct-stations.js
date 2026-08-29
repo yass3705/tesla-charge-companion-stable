@@ -70,7 +70,7 @@
         const pricing=powerdotPricing(connector?.tariff);if(!pricing.rules.length)continue;
         if(connector?.tariff?.subscriptionActive===true)continue;
         const kind=powerdotConnectorKind(connector),power=number(connector?.maxPowerKw);
-        rules.push({id:`powerdot-direct:${text(location?.id||location?.uid)||'location'}:${index++}`,provider:'Powerdot direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:pricing.rules[0]?.currency||'EUR',operatorIds:['powerdot','power-dot','power-dot-france'],evseIds:pdcIds,connectorKinds:[kind],minPowerKw:power,maxPowerKw:power,pricing,priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceType:text(payload?.sourceType),sourceLocationId:text(location?.id),sourceLocationUid:text(location?.uid),chargerName,tariffId:text(connector?.tariff?.id),physicalReference:text(connector?.physicalReference),verified:true,identityMode:'exact_irve_pdc_with_compact_ocpi_alias',roaming:false}});
+        rules.push({id:`powerdot-direct:${text(location?.id||location?.uid)||'location'}:${index++}`,provider:'Powerdot direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:pricing.rules[0]?.currency||'EUR',operatorIds:['powerdot','power-dot','power-dot-france'],evseIds:pdcIds,connectorKinds:[kind],minPowerKw:power,maxPowerKw:power,pricing,priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceType:text(payload?.sourceType||payload?.source?.sourceType),sourceLocationId:text(location?.id),sourceLocationUid:text(location?.uid),chargerName,tariffId:text(connector?.tariff?.id),physicalReference:text(connector?.physicalReference),verified:true,identityMode:'exact_irve_pdc_with_compact_ocpi_alias',roaming:false}});
       }
     }
     return rules;
@@ -80,7 +80,8 @@
     const dataset=text(payload?.dataset).toLowerCase();
     if(dataset==='ionity-direct-operated-stations-france'||(Array.isArray(payload?.locations)&&payload?.scope?.requiredCpoIdentifier==='IONITY_CPO'))return{offerRules:ionityRules(payload,source),metadata:{dataset:payload?.dataset||'ionity',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'provider-crosswalk-only'}};
     if(dataset==='atlante-direct-operated-stations-france'||(Array.isArray(payload?.locations)&&payload?.scope?.requiredCpo==='FRATL'&&payload?.scope?.requiredPartyId==='ATL'))return{offerRules:atlanteRules(payload,source),metadata:{dataset:payload?.dataset||'atlante',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-evse'}};
-    if(Array.isArray(payload?.chargers)&&(text(payload?.sourceType).toLowerCase()==='direct_cpo_public_adhoc_api'||text(payload?.operator).toLowerCase().includes('power dot')))return{offerRules:powerdotRules(payload,source),metadata:{dataset:payload?.dataset||'powerdot',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-irve-pdc'}};
+    const powerdotSourceType=text(payload?.sourceType||payload?.source?.sourceType).toLowerCase(),powerdotOperator=text(payload?.operator||payload?.source?.operator).toLowerCase();
+    if(Array.isArray(payload?.chargers)&&(powerdotSourceType==='direct_cpo_public_adhoc_api'||powerdotOperator.includes('power dot')))return{offerRules:powerdotRules(payload,source),metadata:{dataset:payload?.dataset||'powerdot',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-irve-pdc',sourceType:powerdotSourceType,operator:powerdotOperator}};
     return{offerRules:[],metadata:{dataset:payload?.dataset||'unknown',adapter:'legacy-direct-stations',unsupported:true}};
   }
 
