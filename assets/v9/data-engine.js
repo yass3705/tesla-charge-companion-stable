@@ -47,20 +47,10 @@
     if(typeof p==='number')return p;
     return number(p?.[family])??number(p?.default)??50;
   }
-
   function rank(source,family,fragment){return{score:priorityFor(source,family,fragment),sourceId:text(source?.id)||'unknown'};}
-  function rankWins(next,current){
-    if(!current)return true;
-    if(next.score!==current.score)return next.score>current.score;
-    return next.sourceId.localeCompare(current.sourceId)<0;
-  }
+  function rankWins(next,current){if(!current)return true;if(next.score!==current.score)return next.score>current.score;return next.sourceId.localeCompare(current.sourceId)<0;}
 
-  const FAMILY_FIELDS={
-    identity:['countryCode','name','address','latitude','longitude','physicalOperator','networkBrand'],
-    connectors:['evses'],
-    access:['access'],
-    status:['status']
-  };
+  const FAMILY_FIELDS={identity:['countryCode','name','address','latitude','longitude','physicalOperator','networkBrand'],connectors:['evses'],access:['access'],status:['status']};
 
   function fragmentKeys(fragment,source){
     const keys=[];
@@ -70,179 +60,99 @@
     if(sourceStationId)keys.push(`source:${text(source?.id)}:${sourceStationId}`);
     return uniq(keys);
   }
-
-  function deterministicFragmentKey(item){
-    const f=item.fragment,s=item.source;
-    return [
-      String(9999-priorityFor(s,'identity',f)).padStart(4,'0'),
-      text(s?.id),text(f?.canonicalId),text(f?.id),text(f?.name),String(f?.latitude??''),String(f?.longitude??'')
-    ].join('|');
-  }
-
+  function deterministicFragmentKey(item){const f=item.fragment,s=item.source;return[String(9999-priorityFor(s,'identity',f)).padStart(4,'0'),text(s?.id),text(f?.canonicalId),text(f?.id),text(f?.name),String(f?.latitude??''),String(f?.longitude??'')].join('|');}
   function newEntity(fragment,source){
     const baseId=text(fragment?.canonicalId)||`station:${text(source?.id)}:${text(fragment?.sourceStationId||fragment?.id||norm(fragment?.name)||'unknown')}`;
-    return{
-      id:baseId,
-      aliases:[],countryCode:'',name:'',address:'',latitude:null,longitude:null,
-      physicalOperator:{id:'unknown',name:'Unknown'},networkBrand:'',evses:[],access:null,status:null,
-      offers:[],provenance:[],
-      _fieldRanks:{},_offerRanks:{},_keys:new Set()
-    };
+    return{id:baseId,aliases:[],countryCode:'',name:'',address:'',latitude:null,longitude:null,physicalOperator:{id:'unknown',name:'Unknown'},networkBrand:'',evses:[],access:null,status:null,offers:[],provenance:[],_fieldRanks:{},_offerRanks:{},_keys:new Set()};
   }
-
-  function normalizeOperator(value){
-    const name=text(typeof value==='object'?value?.name:value)||'Unknown';
-    return{id:operatorId(typeof value==='object'?(value?.id||name):name),name};
-  }
-
+  function normalizeOperator(value){const name=text(typeof value==='object'?value?.name:value)||'Unknown';return{id:operatorId(typeof value==='object'?(value?.id||name):name),name};}
   function applyFamily(entity,fragment,source,family){
-    const nextRank=rank(source,family,fragment);
-    const current=entity._fieldRanks[family];
-    if(!rankWins(nextRank,current))return;
-    for(const field of FAMILY_FIELDS[family]||[]){
-      if(fragment[field]===undefined||fragment[field]===null)continue;
-      if(field==='physicalOperator')entity[field]=normalizeOperator(fragment[field]);
-      else entity[field]=clone(fragment[field]);
-    }
+    const nextRank=rank(source,family,fragment),current=entity._fieldRanks[family];if(!rankWins(nextRank,current))return;
+    for(const field of FAMILY_FIELDS[family]||[]){if(fragment[field]===undefined||fragment[field]===null)continue;entity[field]=field==='physicalOperator'?normalizeOperator(fragment[field]):clone(fragment[field]);}
     entity._fieldRanks[family]=nextRank;
   }
 
-  function offerSemanticKey(offer,countryCode){
-    return [text(offer?.id)||text(offer?.offerId)||'offer',text(offer?.kind)||'unknown',text(offer?.subscriptionId),operatorId(offer?.provider),text(countryCode).toUpperCase()].join('|');
-  }
-
+  function offerSemanticKey(offer,countryCode){return[text(offer?.id)||text(offer?.offerId)||'offer',text(offer?.kind)||'unknown',text(offer?.subscriptionId),operatorId(offer?.provider),text(countryCode).toUpperCase()].join('|');}
   function materializeOffer(offer,countryCode){
-    const out=clone(offer)||{};
-    const country=text(countryCode).toUpperCase();
-    const countries=(out.countries||[]).map(x=>text(x).toUpperCase());
+    const out=clone(offer)||{},country=text(countryCode).toUpperCase(),countries=(out.countries||[]).map(x=>text(x).toUpperCase());
     if(countries.length&&!countries.includes('*')&&!countries.includes(country))return null;
     if(out.ratesByCountry&&out.ratesByCountry[country])out.pricing={...(out.pricing||{}),...clone(out.ratesByCountry[country])};
-    out.countryCode=country;
-    return out;
+    out.countryCode=country;return out;
   }
-
   function mergeOffers(entity,fragment,source){
     for(const raw of fragment?.offers||[]){
-      const offer=materializeOffer(raw,entity.countryCode||fragment?.countryCode);
-      if(!offer)continue;
-      offer.sourceId=offer.sourceId||source.id;
-      const key=offerSemanticKey(offer,entity.countryCode||fragment?.countryCode);
-      const nextRank={score:number(offer.priority)??priorityFor(source,'tariff',fragment),sourceId:text(source.id)};
-      const current=entity._offerRanks[key];
-      if(current&&!rankWins(nextRank,current))continue;
-      const index=entity.offers.findIndex(o=>offerSemanticKey(o,entity.countryCode)===key);
-      if(index>=0)entity.offers[index]=offer;else entity.offers.push(offer);
-      entity._offerRanks[key]=nextRank;
+      const offer=materializeOffer(raw,entity.countryCode||fragment?.countryCode);if(!offer)continue;offer.sourceId=offer.sourceId||source.id;
+      const key=offerSemanticKey(offer,entity.countryCode||fragment?.countryCode),nextRank={score:number(offer.priority)??priorityFor(source,'tariff',fragment),sourceId:text(source.id)},current=entity._offerRanks[key];
+      if(current&&!rankWins(nextRank,current))continue;offer.priority=nextRank.score;
+      const index=entity.offers.findIndex(o=>offerSemanticKey(o,entity.countryCode)===key);if(index>=0)entity.offers[index]=offer;else entity.offers.push(offer);entity._offerRanks[key]=nextRank;
     }
   }
-
   function mergeFragment(entity,fragment,source){
     for(const family of Object.keys(FAMILY_FIELDS))applyFamily(entity,fragment,source,family);
-    const aliases=fragmentKeys(fragment,source);
-    entity.aliases=uniq([...entity.aliases,...aliases]);
-    for(const k of aliases)entity._keys.add(k);
-    entity.provenance.push({sourceId:source.id,sourceStationId:text(fragment?.sourceStationId||fragment?.id),updatedAt:fragment?.updatedAt||null});
-    mergeOffers(entity,fragment,source);
-    return entity;
+    const aliases=fragmentKeys(fragment,source);entity.aliases=uniq([...entity.aliases,...aliases]);for(const k of aliases)entity._keys.add(k);
+    entity.provenance.push({sourceId:source.id,sourceStationId:text(fragment?.sourceStationId||fragment?.id),updatedAt:fragment?.updatedAt||null});mergeOffers(entity,fragment,source);return entity;
   }
-
-  function publicEntity(entity){
-    const out={...entity};
-    delete out._fieldRanks;delete out._offerRanks;delete out._keys;
-    out.aliases=uniq(out.aliases).sort();
-    out.provenance=out.provenance.slice().sort((a,b)=>`${a.sourceId}|${a.sourceStationId}`.localeCompare(`${b.sourceId}|${b.sourceStationId}`));
-    out.offers=out.offers.slice().sort((a,b)=>offerSemanticKey(a,out.countryCode).localeCompare(offerSemanticKey(b,out.countryCode)));
-    return out;
-  }
-
+  function publicEntity(entity){const out={...entity};delete out._fieldRanks;delete out._offerRanks;delete out._keys;out.aliases=uniq(out.aliases).sort();out.provenance=out.provenance.slice().sort((a,b)=>`${a.sourceId}|${a.sourceStationId}`.localeCompare(`${b.sourceId}|${b.sourceStationId}`));out.offers=out.offers.slice().sort((a,b)=>offerSemanticKey(a,out.countryCode).localeCompare(offerSemanticKey(b,out.countryCode)));return out;}
   function resolveEntities(items){
-    const ordered=items.slice().sort((a,b)=>deterministicFragmentKey(a).localeCompare(deterministicFragmentKey(b)));
-    const entities=[],keyIndex=new Map();
-    for(const item of ordered){
-      const keys=fragmentKeys(item.fragment,item.source);
-      let entity=null;
-      for(const key of keys){if(keyIndex.has(key)){entity=keyIndex.get(key);break;}}
-      if(!entity){entity=newEntity(item.fragment,item.source);entities.push(entity);}
-      mergeFragment(entity,item.fragment,item.source);
-      for(const key of entity._keys)keyIndex.set(key,entity);
-    }
+    const ordered=items.slice().sort((a,b)=>deterministicFragmentKey(a).localeCompare(deterministicFragmentKey(b))),entities=[],keyIndex=new Map();
+    for(const item of ordered){const keys=fragmentKeys(item.fragment,item.source);let entity=null;for(const key of keys){if(keyIndex.has(key)){entity=keyIndex.get(key);break;}}if(!entity){entity=newEntity(item.fragment,item.source);entities.push(entity);}mergeFragment(entity,item.fragment,item.source);for(const key of entity._keys)keyIndex.set(key,entity);}
     return entities.map(publicEntity).sort((a,b)=>a.id.localeCompare(b.id));
+  }
+
+  function stationConnectorKinds(station){const out=new Set();for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(text(c?.kind))out.add(text(c.kind).toUpperCase());return out;}
+  function ruleMatchesStation(rule,station){
+    const country=text(station?.countryCode).toUpperCase(),countries=(rule?.countries||[]).map(x=>text(x).toUpperCase());if(countries.length&&!countries.includes('*')&&!countries.includes(country))return false;
+    const aliases=[...(rule?.operatorIds||[]),...(rule?.operatorAliases||[])].map(operatorId);if(aliases.length&&!aliases.includes(operatorId(station?.physicalOperator)))return false;
+    const kinds=(rule?.connectorKinds||[]).map(x=>text(x).toUpperCase());if(kinds.length){const have=stationConnectorKinds(station);if(!kinds.some(k=>have.has(k)))return false;}
+    return true;
+  }
+  function ruleToOffer(rule,station,source){
+    const offer=materializeOffer({
+      id:rule.id,provider:rule.provider,kind:rule.offerKind||'direct',subscriptionId:rule.subscriptionId||null,countries:rule.countries||[station.countryCode],currency:rule.currency||'EUR',
+      connectorKinds:clone(rule.connectorKinds)||[],pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
+    },station.countryCode);
+    if(offer){offer.sourceId=source.id;offer.priority=number(offer.priority)??priorityFor(source,'tariff',rule);}return offer;
+  }
+  function applyOfferRules(stations,ruleItems){
+    return (stations||[]).map(station=>{
+      const out={...station,offers:(station.offers||[]).map(clone)},ranks=new Map(out.offers.map(o=>[offerSemanticKey(o,out.countryCode),{score:number(o.priority)??0,sourceId:text(o.sourceId)}]));
+      for(const {rule,source} of ruleItems||[]){if(!ruleMatchesStation(rule,out))continue;const offer=ruleToOffer(rule,out,source);if(!offer)continue;const key=offerSemanticKey(offer,out.countryCode),next={score:number(offer.priority)??priorityFor(source,'tariff',rule),sourceId:text(source.id)},current=ranks.get(key);if(current&&!rankWins(next,current))continue;const i=out.offers.findIndex(o=>offerSemanticKey(o,out.countryCode)===key);if(i>=0)out.offers[i]=offer;else out.offers.push(offer);ranks.set(key,next);}
+      out.offers.sort((a,b)=>offerSemanticKey(a,out.countryCode).localeCompare(offerSemanticKey(b,out.countryCode)));return out;
+    });
   }
 
   function stationMatchesFilters(station,filters={}){
     if(filters.status&&filters.status!=='all'&&text(station?.status?.state)!==text(filters.status))return false;
-    const selectedOperators=(filters.operatorIds||[]).map(operatorId);
-    if(selectedOperators.length&&!selectedOperators.includes(operatorId(station?.physicalOperator)))return false;
-    const minPower=number(filters.minPowerKw),maxPower=number(filters.maxPowerKw);
-    if(minPower!=null||maxPower!=null){
-      const powers=[];
-      for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(number(c?.powerKw)!=null)powers.push(number(c.powerKw));
-      if(!powers.length)return false;
-      if(minPower!=null&&!powers.some(p=>p>=minPower))return false;
-      if(maxPower!=null&&!powers.some(p=>p<=maxPower))return false;
-    }
-    return true;
+    const selectedOperators=(filters.operatorIds||[]).map(operatorId);if(selectedOperators.length&&!selectedOperators.includes(operatorId(station?.physicalOperator)))return false;
+    const minPower=number(filters.minPowerKw),maxPower=number(filters.maxPowerKw);if(minPower!=null||maxPower!=null){const powers=[];for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(number(c?.powerKw)!=null)powers.push(number(c.powerKw));if(!powers.length)return false;if(minPower!=null&&!powers.some(p=>p>=minPower))return false;if(maxPower!=null&&!powers.some(p=>p<=maxPower))return false;}return true;
   }
-
-  function deriveOperators(stations){
-    const map=new Map();
-    for(const st of stations||[]){
-      const op=normalizeOperator(st?.physicalOperator);
-      const row=map.get(op.id)||{id:op.id,name:op.name,count:0};row.count++;if(row.name==='Unknown'&&op.name!=='Unknown')row.name=op.name;map.set(op.id,row);
-    }
-    return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name));
-  }
-
-  function eligibleOffers(station,selectedSubscriptions=[]){
-    const selected=new Set((selectedSubscriptions||[]).map(text));
-    return (station?.offers||[]).filter(o=>!o.subscriptionId||selected.has(text(o.subscriptionId)));
-  }
-
+  function deriveOperators(stations){const map=new Map();for(const st of stations||[]){const op=normalizeOperator(st?.physicalOperator),row=map.get(op.id)||{id:op.id,name:op.name,count:0};row.count++;if(row.name==='Unknown'&&op.name!=='Unknown')row.name=op.name;map.set(op.id,row);}return[...map.values()].sort((a,b)=>a.name.localeCompare(b.name));}
+  function eligibleOffers(station,selectedSubscriptions=[]){const selected=new Set((selectedSubscriptions||[]).map(text));return(station?.offers||[]).filter(o=>!o.subscriptionId||selected.has(text(o.subscriptionId)));}
   function selectRoutingCandidates(stations,{origin,budget=80,perOperatorFloor=2}={}){
-    const sorted=(stations||[]).map(st=>({st,d:distanceKm(origin,st)})).sort((a,b)=>a.d-b.d||a.st.id.localeCompare(b.st.id));
-    const byOperator=new Map();
-    for(const row of sorted){const id=operatorId(row.st.physicalOperator);if(!byOperator.has(id))byOperator.set(id,[]);byOperator.get(id).push(row);}
-    const chosen=new Map();
-    for(const rows of byOperator.values())for(const row of rows.slice(0,Math.max(1,perOperatorFloor)))chosen.set(row.st.id,row.st);
-    const target=Math.max(Number(budget)||0,chosen.size);
-    for(const row of sorted){if(chosen.size>=target)break;chosen.set(row.st.id,row.st);}
-    return [...chosen.values()].sort((a,b)=>distanceKm(origin,a)-distanceKm(origin,b)||a.id.localeCompare(b.id));
+    const sorted=(stations||[]).map(st=>({st,d:distanceKm(origin,st)})).sort((a,b)=>a.d-b.d||a.st.id.localeCompare(b.st.id)),byOperator=new Map();for(const row of sorted){const id=operatorId(row.st.physicalOperator);if(!byOperator.has(id))byOperator.set(id,[]);byOperator.get(id).push(row);}const chosen=new Map();for(const rows of byOperator.values())for(const row of rows.slice(0,Math.max(1,perOperatorFloor)))chosen.set(row.st.id,row.st);const target=Math.max(Number(budget)||0,chosen.size);for(const row of sorted){if(chosen.size>=target)break;chosen.set(row.st.id,row.st);}return[...chosen.values()].sort((a,b)=>distanceKm(origin,a)-distanceKm(origin,b)||a.id.localeCompare(b.id));
   }
 
   function createEngine({registry={sources:[]},loaders={}}={}){
-    const sources=(registry.sources||[]).map(clone);
-    const loaderMap=new Map(Object.entries(loaders||{}));
+    const sources=(registry.sources||[]).map(clone),loaderMap=new Map(Object.entries(loaders||{}));let api;
     function registerLoader(sourceId,loader){if(typeof loader!=='function')throw new Error('loader must be a function');loaderMap.set(sourceId,loader);return api;}
     async function queryArea(query={}){
       const applicable=sources.filter(s=>sourceApplies(s,query));
       const settled=await Promise.allSettled(applicable.map(async source=>{
-        const loader=loaderMap.get(source.id);
-        if(typeof loader!=='function')return{source,fragments:[],skipped:'loader_missing'};
+        const loader=loaderMap.get(source.id);if(typeof loader!=='function')return{source,fragments:[],offerRules:[],skipped:'loader_missing'};
         const result=await loader(query,clone(source));
-        const fragments=Array.isArray(result)?result:Array.isArray(result?.stations)?result.stations:[];
-        return{source,fragments};
+        if(Array.isArray(result))return{source,fragments:result,offerRules:[]};
+        return{source,fragments:Array.isArray(result?.stations)?result.stations:Array.isArray(result?.stationFragments)?result.stationFragments:[],offerRules:Array.isArray(result?.offerRules)?result.offerRules:[]};
       }));
-      const items=[],diagnostics={sources:{},errors:[]};
+      const items=[],ruleItems=[],diagnostics={sources:{},errors:[]};
       settled.forEach((entry,index)=>{
-        const source=applicable[index];
-        if(entry.status==='rejected'){diagnostics.errors.push({sourceId:source.id,message:text(entry.reason?.message||entry.reason)});diagnostics.sources[source.id]={loaded:false,count:0};return;}
-        const {fragments,skipped}=entry.value;diagnostics.sources[source.id]={loaded:!skipped,count:fragments.length,skipped:skipped||null};
-        for(const fragment of fragments)items.push({source,fragment});
+        const source=applicable[index];if(entry.status==='rejected'){diagnostics.errors.push({sourceId:source.id,message:text(entry.reason?.message||entry.reason)});diagnostics.sources[source.id]={loaded:false,stationCount:0,offerRuleCount:0};return;}
+        const {fragments,offerRules,skipped}=entry.value;diagnostics.sources[source.id]={loaded:!skipped,stationCount:fragments.length,offerRuleCount:offerRules.length,skipped:skipped||null};for(const fragment of fragments)items.push({source,fragment});for(const rule of offerRules)ruleItems.push({source,rule});
       });
-      const merged=resolveEntities(items);
-      const inRadius=merged.filter(st=>!query.origin||!Number.isFinite(Number(query.radiusKm))||distanceKm(query.origin,st)<=Number(query.radiusKm)+1e-9);
-      const filtered=inRadius.filter(st=>stationMatchesFilters(st,query.filters||{}));
-      const operators=deriveOperators(filtered);
-      const routingCandidates=selectRoutingCandidates(filtered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2});
-      return{
-        query:clone(query),stations:filtered,operators,routingCandidates,
-        freshness:{generatedAt:new Date().toISOString()},
-        diagnostics:{...diagnostics,fragmentCount:items.length,mergedStationCount:merged.length,inRadiusCount:inRadius.length,filteredCount:filtered.length,routingCandidateCount:routingCandidates.length}
-      };
+      const merged=applyOfferRules(resolveEntities(items),ruleItems),inRadius=merged.filter(st=>!query.origin||!Number.isFinite(Number(query.radiusKm))||distanceKm(query.origin,st)<=Number(query.radiusKm)+1e-9),filtered=inRadius.filter(st=>stationMatchesFilters(st,query.filters||{})),operators=deriveOperators(filtered),routingCandidates=selectRoutingCandidates(filtered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2});
+      return{query:clone(query),stations:filtered,operators,routingCandidates,freshness:{generatedAt:new Date().toISOString()},diagnostics:{...diagnostics,fragmentCount:items.length,offerRuleCount:ruleItems.length,mergedStationCount:merged.length,inRadiusCount:inRadius.length,filteredCount:filtered.length,routingCandidateCount:routingCandidates.length}};
     }
-    const api={queryArea,registerLoader,deriveOperators,eligibleOffers,selectRoutingCandidates,sources:()=>clone(sources)};
-    return api;
+    api={queryArea,registerLoader,deriveOperators,eligibleOffers,selectRoutingCandidates,sources:()=>clone(sources)};return api;
   }
 
-  return{createEngine,resolveEntities,deriveOperators,eligibleOffers,selectRoutingCandidates,materializeOffer,operatorId,distanceKm,sourceApplies};
+  return{createEngine,resolveEntities,applyOfferRules,deriveOperators,eligibleOffers,selectRoutingCandidates,materializeOffer,operatorId,distanceKm,sourceApplies,ruleMatchesStation};
 });
