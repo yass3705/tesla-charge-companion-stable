@@ -30,17 +30,19 @@
 
   function common(raw,country){
     const physicalOnly=raw.directOperatorOnly===true;
+    const exactEvses=evseIdentityVariants(raw.evseIds||[],raw.evseId,raw.idPdcItinerance,raw.id_pdc_itinerance);
+    const exactEvseScope=exactEvses.length>0&&text(raw.verifiedScope).toLowerCase()==='exact_evse';
     return{
       id:text(raw.id||raw.selectionId),provider:text(raw.provider),
       operatorIds:operatorIds(raw),operatorAliases:Array.isArray(raw.operatorAliases)?clone(raw.operatorAliases):[],
       networkIds:physicalOnly?[]:networkIds(raw),networkAliases:physicalOnly?[]:(Array.isArray(raw.networkAliases)?clone(raw.networkAliases):[]),
       stationIds:ids(raw.stationIds||[],raw.stationId,raw.sourceStationId),
-      evseIds:evseIdentityVariants(raw.evseIds||[],raw.evseId,raw.idPdcItinerance,raw.id_pdc_itinerance),
+      evseIds:exactEvses,
       connectorKinds:connectorKinds(raw),countries:countries(raw,country),
       currency:text(raw.currency||raw.pricing?.currency||'EUR').toUpperCase(),pricing:pricing(raw),
-      minPowerKw:raw.minPowerKw==null?undefined:raw.minPowerKw,maxPowerKw:raw.maxPowerKw==null?undefined:raw.maxPowerKw,
+      minPowerKw:exactEvseScope?undefined:(raw.minPowerKw==null?undefined:raw.minPowerKw),maxPowerKw:exactEvseScope?undefined:(raw.maxPowerKw==null?undefined:raw.maxPowerKw),
       directOperatorOnly:physicalOnly,priority:Number(raw.priority??95),sourceId:text(raw.sourceId||raw.source)||'direct-offers',
-      metadata:{source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,monthlyFeeLabel:raw.monthlyFeeLabel||null,annualFeeEur:raw.annualFeeEur??null,promotionEnd:raw.monthlyFeePromotionEnd||null,defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null,customerProfile:raw.customerProfile||null,parkingPolicy:clone(raw.parkingPolicy)||null,verifiedScope:raw.verifiedScope||null,...(clone(raw.metadata)||{})}
+      metadata:{source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,monthlyFeeLabel:raw.monthlyFeeLabel||null,annualFeeEur:raw.annualFeeEur??null,promotionEnd:raw.monthlyFeePromotionEnd||null,defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null,customerProfile:raw.customerProfile||null,parkingPolicy:clone(raw.parkingPolicy)||null,verifiedScope:raw.verifiedScope||null,exactEvsePowerConstraintSuppressed:exactEvseScope,...(clone(raw.metadata)||{})}
     };
   }
 
