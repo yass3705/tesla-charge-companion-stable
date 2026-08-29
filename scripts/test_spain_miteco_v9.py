@@ -4,10 +4,11 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURE=ROOT/'tests/fixtures/spain_miteco_v9_sample.csv'
+REVE=ROOT/'tests/fixtures/spain_reve_v9_sample.json'
 ALIASES=ROOT/'data/v9/spain-operator-aliases.json'
 
 with tempfile.TemporaryDirectory() as td:
-    td=Path(td);out=td/'spain-static';cross=td/'spain-crosswalk.json'
+    td=Path(td);out=td/'spain-static';cross=td/'spain-crosswalk.json';enriched=td/'spain-crosswalk-reve.json'
     subprocess.run(['python',str(ROOT/'scripts/build_spain_miteco_v9.py'),'--input',str(FIXTURE),'--out',str(out),'--crosswalk',str(cross),'--aliases',str(ALIASES)],check=True)
     manifest=json.loads((out/'manifest.json').read_text(encoding='utf-8'))
     assert manifest['schemaVersion']==2
@@ -27,4 +28,13 @@ with tempfile.TemporaryDirectory() as td:
     assert entry['canonicalId']=='ES:national:ES-MAD-001'
     assert entry['reveLocationIds']==[] and entry['reveEvseIds']==[]
     assert sorted(entry['mitecoEvseIds'])==['ES*IBC*E001','ES*IBC*E002']
-print('Spain MITECO V9 contract OK')
+    subprocess.run(['python',str(ROOT/'scripts/enrich_spain_reve_crosswalk_v9.py'),'--crosswalk',str(cross),'--catalog',str(out/'all.json.gz'),'--reve',str(REVE),'--out',str(enriched)],check=True)
+    ecw=json.loads(enriched.read_text(encoding='utf-8'))
+    assert ecw['stats']['exactEvse']==2
+    assert ecw['stats']['ambiguous']==0
+    assert ecw['stats']['unresolved']==0
+    madrid=next(e for e in ecw['entries'] if e['mitecoId']=='ES-MAD-001')
+    assert madrid['reveMatchMethod']=='exact_evse'
+    assert madrid['reveLocationIds']==['REVE-MAD-001']
+    assert sorted(madrid['reveEvseIds'])==['ES*IBC*E001','ES*IBC*E002']
+print('Spain MITECO + REVE V9 contract OK')
