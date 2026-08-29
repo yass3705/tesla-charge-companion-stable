@@ -10,53 +10,24 @@
 
   function e55cRules(payload,source={}){
     const profiles=payload?.profiles||{},stations=Array.isArray(payload?.stations)?payload.stations:[],rules=[];
-    for(const station of stations){
-      const stationId=text(station?.stationId),localStationId=text(station?.localStationId);
-      for(const [index,config] of (station?.configurations||[]).entries()){
-        const profileId=text(config?.pricingProfileId),profile=profiles?.[profileId];
-        if(config?.priceStatus!=='resolved_e55c_scan_pay'||!profile||!Array.isArray(profile.rules)||!profile.rules.length)continue;
-        const evseIds=uniq([...(config?.evseIds||[]),...(config?.localEvseIds||[])]);
-        if(!evseIds.length)continue;
-        const kind=text(config?.kind).toUpperCase();
-        rules.push({
-          id:`e55c-direct:${stationId||localStationId||'station'}:${index}`,
-          provider:'E55C direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',
-          operatorIds:['e55c','electric-55-charging','electric-55'],evseIds,
-          connectorKinds:kind?[kind]:[],
-          pricing:{type:'rules',rules:clone(profile.rules)},priority:Number(source?.priority?.tariff||95),
-          metadata:{legacyDataset:text(payload?.dataset),sourceStationId:stationId,sourceLocalStationId:localStationId,pricingProfileId:profileId,priceStatus:text(config?.priceStatus),verified:true,identityMode:'exact_evse',paymentUrls:uniq(config?.paymentUrls||[])}
-        });
-      }
-    }
-    return rules;
+    for(const station of stations){const stationId=text(station?.stationId),localStationId=text(station?.localStationId);for(const [index,config] of (station?.configurations||[]).entries()){
+      const profileId=text(config?.pricingProfileId),profile=profiles?.[profileId];if(config?.priceStatus!=='resolved_e55c_scan_pay'||!profile||!Array.isArray(profile.rules)||!profile.rules.length)continue;
+      const evseIds=uniq([...(config?.evseIds||[]),...(config?.localEvseIds||[])]);if(!evseIds.length)continue;const kind=text(config?.kind).toUpperCase();
+      rules.push({id:`e55c-direct:${stationId||localStationId||'station'}:${index}`,provider:'E55C direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',operatorIds:['e55c','electric-55-charging','electric-55'],evseIds,connectorKinds:kind?[kind]:[],pricing:{type:'rules',rules:clone(profile.rules)},priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceStationId:stationId,sourceLocalStationId:localStationId,pricingProfileId:profileId,priceStatus:text(config?.priceStatus),verified:true,identityMode:'exact_evse',paymentUrls:uniq(config?.paymentUrls||[])}});
+    }}return rules;
   }
 
-  function normalizePayload(payload,source={}){
-    const dataset=text(payload?.dataset).toLowerCase();
-    if(dataset==='e55c-operated-france-tcc-v8'||(Array.isArray(payload?.stations)&&payload?.profiles&&payload?.scope?.strictOperatorValue==='ELECTRIC 55 CHARGING')){
-      return{offerRules:e55cRules(payload,source),metadata:{dataset:payload?.dataset||'e55c',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-tariffs',mode:'e55c-exact-evse'}};
-    }
-    return{offerRules:[],metadata:{dataset:payload?.dataset||'unknown',adapter:'legacy-direct-tariffs',unsupported:true}};
-  }
+  function etotemNorm(value){return text(value).replace(/\u00a0/g,' ').replace(/\s+/g,' ').trim();}
+  function etotemNumber(value){const n=Number(String(value??'').replace(',','.'));return Number.isFinite(n)?n:null;}
+  function etotemSections(value){const source=etotemNorm(value),marks=[];for(const match of source.matchAll(/\b(AC|DC)\b\s*[:\-–—]/gi))marks.push({kind:match[1].toUpperCase(),index:match.index});marks.sort((a,b)=>a.index-b.index);const out={};for(let i=0;i<marks.length;i++){const mark=marks[i],end=marks[i+1]?.index??source.length;if(!out[mark.kind])out[mark.kind]=source.slice(mark.index,end).trim();}return{source,...out};}
+  function etotemPriceCandidates(segment){const s=etotemNorm(segment),items=[];for(const match of s.matchAll(/(\d+(?:[.,]\d+)?)\s*€\s*(?:\/|par)?\s*kwh/gi)){const price=etotemNumber(match[1]);if(!(price>0))continue;const before=s.slice(Math.max(0,match.index-130),match.index),after=s.slice(match.index+match[0].length,Math.min(s.length,match.index+match[0].length+50));const eco=/\b(?:mode|tarif|offre)?\s*eco\b/.test(before.slice(-70).toLowerCase());let min=null,max=null;const ranges=[...(before.matchAll(/(\d+(?:[.,]\d+)?)\s*(?:-|–|—|à|a)\s*(\d+(?:[.,]\d+)?)\s*kw/gi))];if(ranges.length){const r=ranges.at(-1);min=etotemNumber(r[1]);max=etotemNumber(r[2]);}if(min==null){const upto=[...(before.matchAll(/jusqu(?:'|’|\s)*(?:a|à)?\s*(\d+(?:[.,]\d+)?)\s*kw/gi))];if(upto.length){min=0;max=etotemNumber(upto.at(-1)[1]);}}if(min==null){const single=[...(before.matchAll(/(\d+(?:[.,]\d+)?)\s*kw/gi))];if(single.length){const p=etotemNumber(single.at(-1)[1]);if(p!=null){min=Math.max(0,p-.6);max=p+.6;}}}items.push({price,eco,minKw:min,maxKw:max});}return items;}
+  function etotemEnergyPrice(record,kind,powerKw){const sections=etotemSections(record?.tariffText||''),segment=sections[kind]||sections.source;let candidates=etotemPriceCandidates(segment).filter(x=>!x.eco);if(!candidates.length&&segment!==sections.source)candidates=etotemPriceCandidates(sections.source).filter(x=>!x.eco);if(!candidates.length)return null;const matches=candidates.filter(x=>x.minKw!=null&&x.maxKw!=null&&powerKw>=x.minKw-1e-9&&powerKw<=x.maxKw+1e-9);if(matches.length===1)return matches[0].price;const unbounded=candidates.filter(x=>x.minKw==null&&x.maxKw==null),unique=[...new Set(unbounded.map(x=>x.price.toFixed(6)))];if(unique.length===1)return Number(unique[0]);if(candidates.length===1)return candidates[0].price;return null;}
+  function etotemPostCharge(record,kind){const sections=etotemSections(record?.tariffText||''),segment=sections[kind]||sections.source,lower=segment.toLowerCase();if(/sans[^.;]{0,40}post[- ]charge/.test(lower))return{idlePerMinute:0,idleGraceMinutes:0,idleCap:0,idleCapStart:'00:00',idleCapEnd:'24:00'};if(!/(?:post[- ]charge|une fois[^.;]{0,45}v[eé]hicule[^.;]{0,30}(?:charg[eé]|recharg[eé])|apr[eè]s[^.;]{0,30}(?:fin de )?charge)/i.test(segment))return{idlePerMinute:0,idleGraceMinutes:0,idleCap:0,idleCapStart:'00:00',idleCapEnd:'24:00'};const graceMatch=segment.match(/(\d+)\s*min(?:ute)?s?\s+gratuite?s?/i),grace=graceMatch?Number(graceMatch[1]):0;const fees=[...segment.matchAll(/(\d+(?:[.,]\d+)?)\s*€\s*(?:\/|par\s+(?:tranche[^0-9]{0,25})?)\s*(\d+)\s*min/gi)].map(m=>({eur:etotemNumber(m[1]),minutes:Number(m[2])})).filter(x=>x.eur>=0&&x.minutes>0),unique=[...new Map(fees.map(x=>[`${x.eur}|${x.minutes}`,x])).values()],rate=unique.length===1?unique[0].eur/unique[0].minutes:0;let idleCap=0,idleCapStart='00:00',idleCapEnd='24:00';const cap=segment.match(/plafonn?[eé][^0-9]{0,12}(\d+(?:[.,]\d+)?)\s*€(?:[^0-9]{0,25}(\d{1,2})h(?:\d{2})?[^0-9]{0,15}(\d{1,2})h(?:\d{2})?)?/i);if(cap){idleCap=etotemNumber(cap[1])||0;if(cap[2]&&cap[3]){idleCapStart=`${cap[2].padStart(2,'0')}:00`;idleCapEnd=`${cap[3].padStart(2,'0')}:00`;}}return{idlePerMinute:rate,idleGraceMinutes:grace,idleCap,idleCapStart,idleCapEnd};}
+  function etotemRules(payload,source={}){const rules=[];for(const record of Array.isArray(payload?.stations)?payload.stations:[]){if(record?.resolved!==true||!text(record?.tariffText))continue;const stationId=text(record?.stationId);for(const [index,pdc] of (record?.pdcs||[]).entries()){const pdcId=text(pdc?.id),power=Number(pdc?.powerKw||0),connectors=(pdc?.connectors||[]).map(x=>text(x).toUpperCase());if(!pdcId||!(power>0))continue;const kind=connectors.some(x=>x.includes('CCS')||x.includes('CHADEMO'))?'DC':'AC',price=etotemEnergyPrice(record,kind,power);if(price==null)continue;const post=etotemPostCharge(record,kind),pricing={type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:price,chargePerMinute:0,connectionFee:0,idlePerMinute:Number(post.idlePerMinute||0),idleGraceMinutes:Number(post.idleGraceMinutes||0),idleCap:Number(post.idleCap||0),idleCapStart:post.idleCapStart||'00:00',idleCapEnd:post.idleCapEnd||'24:00',afterMinutesRate:0,afterMinutesThreshold:0}]};rules.push({id:`etotem-direct:${stationId||'station'}:${index}`,provider:'e-Totem direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',operatorIds:['etotem','e-totem','semob','saint-etienne-metropole'],evseIds:[pdcId],connectorKinds:[kind],minPowerKw:power,maxPowerKw:power,pricing,priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceStationId:stationId,sourceApiStationId:text(record?.api?.sIdPool),network:text(record?.api?.sNomReseau),verified:true,identityMode:'exact_pdc',matchMethod:text(record?.matchMethod),rawTariffText:text(record?.tariffText)}});}}return rules;}
 
-  async function readJsonMaybeGzip(response){
-    if(!response.ok)throw new Error(`legacy tariff source unavailable (${response.status})`);
-    const bytes=new Uint8Array(await response.arrayBuffer());let raw;
-    if(bytes[0]===0x1f&&bytes[1]===0x8b){
-      if(typeof DecompressionStream!=='function')throw new Error('gzip decompression unavailable');
-      raw=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
-    }else raw=new TextDecoder().decode(bytes);
-    return JSON.parse(raw);
-  }
+  function normalizePayload(payload,source={}){const dataset=text(payload?.dataset).toLowerCase();if(dataset==='e55c-operated-france-tcc-v8'||(Array.isArray(payload?.stations)&&payload?.profiles&&payload?.scope?.strictOperatorValue==='ELECTRIC 55 CHARGING'))return{offerRules:e55cRules(payload,source),metadata:{dataset:payload?.dataset||'e55c',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-tariffs',mode:'e55c-exact-evse'}};if((dataset.includes('etotem')||dataset.includes('e-totem'))||((payload?.stations||[]).some(x=>x?.resolved&&x?.tariffText&&Array.isArray(x?.pdcs))))return{offerRules:etotemRules(payload,source),metadata:{dataset:payload?.dataset||'etotem',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-tariffs',mode:'etotem-exact-pdc'}};return{offerRules:[],metadata:{dataset:payload?.dataset||'unknown',adapter:'legacy-direct-tariffs',unsupported:true}};}
 
-  function createLoader({url,fetchImpl,source}={}){
-    const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for legacy direct tariffs');
-    let cache=null;
-    return async function(){
-      if(!cache)cache=f(url,{cache:'no-cache'}).then(readJsonMaybeGzip).then(payload=>normalizePayload(payload,source||{})).catch(error=>{cache=null;throw error;});
-      return cache;
-    };
-  }
-
-  return{e55cRules,normalizePayload,readJsonMaybeGzip,createLoader};
+  async function readJsonMaybeGzip(response){if(!response.ok)throw new Error(`legacy tariff source unavailable (${response.status})`);const bytes=new Uint8Array(await response.arrayBuffer());let raw;if(bytes[0]===0x1f&&bytes[1]===0x8b){if(typeof DecompressionStream!=='function')throw new Error('gzip decompression unavailable');raw=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();}else raw=new TextDecoder().decode(bytes);return JSON.parse(raw);}
+  function createLoader({url,fetchImpl,source}={}){const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for legacy direct tariffs');let cache=null;return async function(){if(!cache)cache=f(url,{cache:'no-cache'}).then(readJsonMaybeGzip).then(payload=>normalizePayload(payload,source||{})).catch(error=>{cache=null;throw error;});return cache;};}
+  return{e55cRules,etotemSections,etotemPriceCandidates,etotemEnergyPrice,etotemPostCharge,etotemRules,normalizePayload,readJsonMaybeGzip,createLoader};
 });
