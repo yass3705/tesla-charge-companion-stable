@@ -19,11 +19,15 @@ with tempfile.TemporaryDirectory() as td:
     assert any(x['subscriptionId']=='fastned-gold' and x['pricing']['rules'][0]['pricePerKwh']==0.43 for x in fr)
     assert any(x['subscriptionId']=='fastned-gold' and x['pricing']['rules'][0]['pricePerKwh']==0.41 for x in es)
     assert any(x['subscriptionId']=='fastned-gold' and x['pricing']['rules'][0]['pricePerKwh']==0.54 for x in nl)
+    assert any(x['subscriptionId']=='electra-plus-smart' and x['countries']==['ES'] and x['pricing']['rules'][0]['pricePerKwh']==0.54 and 'Fastned' in x['networkAliases'] for x in es)
+    assert any(x['subscriptionId']=='electra-plus-smart' and x['countries']==['FR'] and x['pricing']['rules'][0]['pricePerKwh']==0.49 and 'IONITY' in x['networkAliases'] for x in fr)
+    assert any(x['subscriptionId']=='electra-plus-essential' and x['reason']=='price_not_materialized' and x['benefit'].get('discountPerKwh')==0.1 for x in reports['ES']['deferred'])
+    assert any(x['subscriptionId']=='electra-plus-smart' and x['reason']=='price_not_materialized' and x['benefit'].get('discountPerKwh')==0.2 for x in reports['ES']['deferred'])
     assert any(x['subscriptionId']=='ionity-motion' and x['pricing']['rules'][0]['pricePerKwh']==0.54 for x in nl)
     assert any(x['subscriptionId']=='ionity-power' and x['pricing']['rules'][0]['pricePerKwh']==0.43 for x in nl)
     assert not any(x['subscriptionId'].startswith('repsol-') for x in es)
     assert any(x['subscriptionId']=='wenea-everyday' and x['reason']=='price_not_materialized' for x in reports['ES']['deferred'])
     assert any(x['subscriptionId']=='repsol-movilidad-100' and x['reason']=='price_not_materialized' for x in reports['ES']['deferred'])
     common=set(x['subscriptionId'] for x in fr)&set(x['subscriptionId'] for x in es)
-    assert {'atlante-go','fastned-gold','zunder-easy','zunder-pro'}<=common
+    assert {'atlante-go','fastned-gold','zunder-easy','zunder-pro','electra-plus-smart'}<=common
 print('Global V9 subscription contract OK')
