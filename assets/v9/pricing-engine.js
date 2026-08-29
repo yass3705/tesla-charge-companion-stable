@@ -66,23 +66,47 @@
     const fixed=num(rule?.connectedTimeComponentEur);if(fixed!=null&&fixed!==0){components.connectedTimeComponent=money(fixed);total+=components.connectedTimeComponent;}
     return{totalEur:money(total),components};
   }
-  function evaluatePostChargeFee(fee,{postChargeMinutes=0}={}){
+  function exemptWindowContains(window,minute){
+    const start=hm(window?.start,null),end=hm(window?.end,null);if(start==null||end==null)return false;
+    if(start===end)return true;
+    if(end>start)return minute>=start&&minute<end;
+    return minute>=start||minute<end;
+  }
+  function postChargeBillableMinutes(fee,{postChargeMinutes=0,postChargeStartAt=null}={},timeZone=null){
+    const duration=Math.max(0,num(postChargeMinutes)??0),grace=Math.max(0,num(fee?.graceMinutes)??0),afterGrace=Math.max(0,duration-grace);
+    const windows=Array.isArray(fee?.exemptLocalWindows)?fee.exemptLocalWindows.filter(Boolean):[];
+    if(afterGrace<=0)return{complete:true,duration,grace,afterGrace,billableMinutes:0,exemptMinutes:0};
+    if(!windows.length)return{complete:true,duration,grace,afterGrace,billableMinutes:afterGrace,exemptMinutes:0};
+    if(!postChargeStartAt)return{complete:false,reason:'post_charge_exemption_requires_start_time',duration,grace,afterGrace};
+    const start=new Date(postChargeStartAt);if(Number.isNaN(start.getTime()))return{complete:false,reason:'invalid_post_charge_start_time',duration,grace,afterGrace};
+    const billableStartMs=start.getTime()+grace*60000;let remaining=afterGrace,offset=0,billable=0,exempt=0;
+    while(remaining>1e-9){
+      const slice=Math.min(1,remaining),mid=new Date(billableStartMs+(offset+slice/2)*60000),minute=minuteOfDay(mid,timeZone);
+      if(minute==null)return{complete:false,reason:'post_charge_exemption_timezone_unresolved',duration,grace,afterGrace};
+      if(windows.some(w=>exemptWindowContains(w,minute)))exempt+=slice;else billable+=slice;
+      remaining-=slice;offset+=slice;
+    }
+    return{complete:true,duration,grace,afterGrace,billableMinutes:money(billable),exemptMinutes:money(exempt)};
+  }
+  function evaluatePostChargeFee(fee,session={},timeZone=null){
     if(!fee)return{totalEur:0,component:null};
-    const duration=Math.max(0,num(postChargeMinutes)??0),grace=Math.max(0,num(fee.graceMinutes)??0),billable=Math.max(0,duration-grace);
-    if(billable<=0)return{totalEur:0,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:0,costEur:0}};
+    const span=postChargeBillableMinutes(fee,session,timeZone);if(span.complete===false)return{totalEur:0,component:null,complete:false,reason:span.reason};
+    const duration=span.duration,grace=span.grace,billable=span.billableMinutes,exemptMinutes=span.exemptMinutes;
+    const baseComponent={postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,exemptMinutes,costEur:0};
+    if(billable<=0)return{totalEur:0,component:baseComponent};
     const blockMinutes=num(fee.blockMinutes),blockEur=num(fee.blockEur);
     if(blockMinutes>0&&blockEur!=null){
       const blocks=fee.rounding==='started_block'?Math.ceil(billable/blockMinutes):billable/blockMinutes,costEur=money(blocks*blockEur);
-      return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,blocks,blockMinutes,unitPriceEur:blockEur,costEur}};
+      return{totalEur:costEur,component:{...baseComponent,blocks,blockMinutes,unitPriceEur:blockEur,costEur}};
     }
-    const perMinute=num(fee.eurPerMinute);if(perMinute!=null){const costEur=money(billable*perMinute);return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,eurPerMinute:perMinute,costEur}};}
+    const perMinute=num(fee.eurPerMinute);if(perMinute!=null){const costEur=money(billable*perMinute);return{totalEur:costEur,component:{...baseComponent,eurPerMinute:perMinute,costEur}};}
     return{totalEur:0,component:null,complete:false,reason:'unsupported_post_charge_fee'};
   }
   function evaluateOffer(offer,session={}){
     const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;
     if(pricing.type!=='rules'){
       const rate=num(pricing.pricePerKwh);if(rate==null)return{complete:false,reason:'unsupported_pricing',offerId:offer?.id||null};
-      const energy=Math.max(0,num(session.energyKwh)??0),base=money(rate*energy),post=evaluatePostChargeFee(pricing.postChargeFee,session);
+      const energy=Math.max(0,num(session.energyKwh)??0),base=money(rate*energy),post=evaluatePostChargeFee(pricing.postChargeFee,session,timeZone);
       if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null};
       return{complete:true,totalEur:money(base+post.totalEur),components:{energy:base,...(post.component?{postCharge:post.component}:{})},offerId:offer?.id||null,currency:offer?.currency||'EUR'};
     }
@@ -93,9 +117,9 @@
     if(longFee&&duration>(num(longFee.thresholdMinutes)??Infinity)){
       const rate=num(longFee.eurPerHourAfterThreshold);if(rate!=null){const excess=duration-Number(longFee.thresholdMinutes);longConnection={complete:false,reason:'hourly_rounding_unspecified',excessMinutes:excess,rateEurPerHour:rate};}
     }
-    const post=evaluatePostChargeFee(pricing.postChargeFee,session);if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null,timeZone};
+    const post=evaluatePostChargeFee(pricing.postChargeFee,session,timeZone);if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null,timeZone};
     total+=post.totalEur;const components={...base.components,...(post.component?{postCharge:post.component}:{})};
     return{complete:!longConnection,totalEur:money(total),components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,timeZone};
   }
-  return{evaluateOffer,evaluateRule,evaluatePostChargeFee,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
+  return{evaluateOffer,evaluateRule,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
 });
