@@ -11,6 +11,7 @@ on:
       - 'scripts/compile_belib_v9_offers.py'
       - 'scripts/compile_e55c_v9_offers.py'
       - 'scripts/compile_etotem_v9_offers.py'
+      - 'scripts/compile_qovoltis_v9_offers.py'
       - 'assets/v9/adapters/direct-offers.js'
       - '.github/workflows/v9-france-offers.yml'
 
@@ -55,6 +56,9 @@ jobs:
       - name: Compile exact e-Totem station and EVSE tariff layer
         run: python scripts/compile_etotem_v9_offers.py --nantes data-lab/data/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json --larochelle data-lab/data/station_verifications/la_rochelle_place_jb_marcet_etotem_g10_app_2026_08_22.json --montargis data-lab/data/station_verifications/etotem_montargis_commissariat_app_2026_08_22.json
 
+      - name: Compile exact SYDER-QOVOLTIS territorial tariff layer
+        run: python scripts/compile_qovoltis_v9_offers.py --input data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json
+
       - name: Validate offer safety
         run: |
           python - <<'PY'
@@ -65,8 +69,9 @@ jobs:
           b=json.loads(Path('data/v9/france-belib-offers.json').read_text())
           x=json.loads(Path('data/v9/france-e55c-offers.json').read_text())
           t=json.loads(Path('data/v9/france-etotem-offers.json').read_text())
+          q=json.loads(Path('data/v9/france-qovoltis-offers.json').read_text())
           r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
-          assert all(z['country']=='FR' for z in (d,e,b,x,t))
+          assert all(z['country']=='FR' for z in (d,e,b,x,t,q))
           assert d['policy']['subscriptionsOptIn'] is True
           assert d['policy']['directCpoAndRoamingSeparate'] is True
           assert len(d['directOffers'])>=10,r
@@ -79,10 +84,10 @@ jobs:
           assert b['policy']['connectedTimeBlocksPreservedExactly'] is True
           assert len(b['directOffers'])==4
           assert len(b['subscriptionOffers'])==8
-          assert {q['selectionId'] for q in b['subscriptionOffers']}=={'belib-nonresident','belib-resident'}
-          assert all(q.get('networkAliases') and not q.get('operatorAliases') for q in b['directOffers']+b['subscriptionOffers'])
-          assert any(rule.get('connectedTimeBlockRounding')=='started_block' for q in b['directOffers'] for rule in q['pricing']['rules'])
-          assert all(q['pricing']['longConnectionFee']['thresholdMinutes']==840 for q in b['directOffers']+b['subscriptionOffers'])
+          assert {z['selectionId'] for z in b['subscriptionOffers']}=={'belib-nonresident','belib-resident'}
+          assert all(z.get('networkAliases') and not z.get('operatorAliases') for z in b['directOffers']+b['subscriptionOffers'])
+          assert any(rule.get('connectedTimeBlockRounding')=='started_block' for z in b['directOffers'] for rule in z['pricing']['rules'])
+          assert all(z['pricing']['longConnectionFee']['thresholdMinutes']==840 for z in b['directOffers']+b['subscriptionOffers'])
           assert x['policy']['networkWideGeneralization'] is False
           assert x['policy']['exactEvseRequired'] is True
           assert x['policy']['wholesaleRatesExcluded'] is True
@@ -91,18 +96,41 @@ jobs:
           assert e55['verifiedScope']=='exact_evse'
           assert e55['evseIds']==['FR*55C*EFR39000*P7PPFG*1']
           assert e55['priority']>b['directOffers'][0]['priority']
-          assert [q['connectedTimePerMinuteEur'] for q in e55['pricing']['rules']]==[0.09,0.06]
-          assert [(q['start'],q['end']) for q in e55['pricing']['rules']]==[('07:00','23:00'),('23:00','07:00')]
+          assert [z['connectedTimePerMinuteEur'] for z in e55['pricing']['rules']]==[0.09,0.06]
+          assert [(z['start'],z['end']) for z in e55['pricing']['rules']]==[('07:00','23:00'),('23:00','07:00')]
           assert t['policy']['networkWideGeneralization'] is False
           assert t['policy']['exactIdentityRequired'] is True
           assert t['policy']['ecoModeNotActivatedWithoutSelectionModel'] is True
           assert len(t['directOffers'])==3
           assert len(t['deferred'])==1 and 'MONTARGOISE' in t['deferred'][0]['station'].upper()
-          assert all(q.get('evseIds') or q.get('stationIds') for q in t['directOffers'])
-          assert all(q['verifiedScope'] in ('exact_evse_set','exact_station') for q in t['directOffers'])
-          assert {q['id'] for q in t['directOffers']}=={'etotem-nantes-planchonnais-dc-standard','etotem-nantes-planchonnais-ac-standard','etotem-la-rochelle-jb-marcet-standard'}
-          assert all(q['pricing'].get('postChargeFee',{}).get('rounding')=='started_block' for q in t['directOffers'])
-          deferred={q.get('id') for q in r.get('deferred',[])}
+          assert all(z.get('evseIds') or z.get('stationIds') for z in t['directOffers'])
+          assert all(z['verifiedScope'] in ('exact_evse_set','exact_station') for z in t['directOffers'])
+          assert {z['id'] for z in t['directOffers']}=={'etotem-nantes-planchonnais-dc-standard','etotem-nantes-planchonnais-ac-standard','etotem-la-rochelle-jb-marcet-standard'}
+          assert all(z['pricing'].get('postChargeFee',{}).get('rounding')=='started_block' for z in t['directOffers'])
+          assert q['policy']['identityMode']=='physical_network_and_territory'
+          assert q['policy']['territory']=='Rhône hors Métropole de Lyon'
+          assert q['policy']['subscriptionsOptIn'] is True
+          assert q['policy']['lowerPowerNightPostChargeExemptionPreserved'] is True
+          assert q['policy']['roamingSeparate'] is True
+          assert len(q['directOffers'])==2 and len(q['subscriptionOffers'])==2
+          assert {z['selectionId'] for z in q['subscriptionOffers']}=={'syder-qovoltis-card'}
+          assert all(z.get('networkAliases') and not z.get('operatorAliases') for z in q['directOffers']+q['subscriptionOffers'])
+          assert all(z['verifiedScope']=='exact_network_territory_power_customer_profile' for z in q['directOffers']+q['subscriptionOffers'])
+          low=[z for z in q['directOffers'] if z['maxPowerKw']==50][0]
+          high=[z for z in q['directOffers'] if z.get('minPowerKw',0)>50][0]
+          assert low['pricing']['rules'][0]['pricePerKwh']==0.35
+          assert high['pricing']['rules'][0]['pricePerKwh']==0.50
+          assert low['pricing']['postChargeFee']['graceMinutes']==30
+          assert low['pricing']['postChargeFee']['blockEur']==4.0
+          assert low['pricing']['postChargeFee']['exemptLocalWindows']==[{'start':'22:00','end':'07:00'}]
+          assert high['pricing']['postChargeFee']['graceMinutes']==60
+          assert high['pricing']['postChargeFee']['rounding']=='started_block'
+          card_low=[z for z in q['subscriptionOffers'] if z['maxPowerKw']==50][0]
+          card_high=[z for z in q['subscriptionOffers'] if z.get('minPowerKw',0)>50][0]
+          assert card_low['pricing']['rules'][0]['pricePerKwh']==0.25
+          assert card_high['pricing']['rules'][0]['pricePerKwh']==0.40
+          assert card_low['metadata']['oneTimeCardPurchaseEur']==7.2
+          deferred={z.get('id') for z in r.get('deferred',[])}
           assert 'electra-essential' in deferred
           assert 'electra-smart' in deferred
           assert 'belib-nonresident' in deferred
@@ -111,7 +139,8 @@ jobs:
             'generic':{k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},
             'belib':{'directOfferCount':len(b['directOffers']),'subscriptionOfferCount':len(b['subscriptionOffers'])},
             'e55c':{'directOfferCount':len(x['directOffers']),'evseId':e55['evseIds'][0]},
-            'etotem':{'directOfferCount':len(t['directOffers']),'deferredCount':len(t['deferred'])}
+            'etotem':{'directOfferCount':len(t['directOffers']),'deferredCount':len(t['deferred'])},
+            'qovoltis':{'directOfferCount':len(q['directOffers']),'subscriptionOfferCount':len(q['subscriptionOffers'])}
           },indent=2))
           PY
 
@@ -122,7 +151,7 @@ jobs:
           rm -rf legacy-france-canonical data-lab
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-offer-compile-report.json
+          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-qovoltis-offers.json data/v9/france-offer-compile-report.json
           if git diff --cached --quiet; then
             echo 'No offer changes'
             exit 0
