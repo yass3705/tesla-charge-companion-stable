@@ -37,18 +37,32 @@
   function minutesUntilRuleBoundary(rule,startAt,timeZone){
     if(!rule||rule.scope==='allDay')return Infinity;
     const minute=minuteOfDay(startAt,timeZone);if(minute==null)return null;
-    const end=hm(rule.end,1440);
-    let delta=end-minute;if(delta<=0)delta+=1440;return delta;
+    const end=hm(rule.end,1440);let delta=end-minute;if(delta<=0)delta+=1440;return delta;
   }
   function evaluateRule(rule,{energyKwh=0,durationMinutes=0}={}){
     const energy=Math.max(0,num(energyKwh)??0),duration=Math.max(0,num(durationMinutes)??0),components={};let total=0;
-    const perKwh=num(rule?.pricePerKwh);if(perKwh!=null){components.energy=money(energy*perKwh);total+=components.energy;}
+    const perKwh=num(rule?.pricePerKwh);
+    if(perKwh!=null){
+      const billedEnergy=rule?.energyRounding==='started_kwh'&&energy>0?Math.ceil(energy):energy;
+      components.energy=money(billedEnergy*perKwh);total+=components.energy;
+      if(billedEnergy!==energy)components.energyBilling={actualKwh:energy,billedKwh:billedEnergy,rounding:'started_kwh'};
+    }
     const blockMinutes=num(rule?.connectedTimeBlockMinutes),blockEur=num(rule?.connectedTimeBlockEur);
     if(blockMinutes>0&&blockEur!=null){
       const blocks=rule?.connectedTimeBlockRounding==='started_block'?Math.ceil(duration/blockMinutes):duration/blockMinutes;
       components.connectedTimeBlocks={blocks,blockMinutes,unitPriceEur:blockEur,costEur:money(blocks*blockEur)};total+=components.connectedTimeBlocks.costEur;
     }
     const perMinute=num(rule?.connectedTimePerMinuteEur);if(perMinute!=null){components.connectedTimePerMinute=money(duration*perMinute);total+=components.connectedTimePerMinute;}
+    const freeMinutes=num(rule?.connectedTimeFreeMinutes),afterFree=num(rule?.connectedTimePerMinuteAfterFreeEur);
+    if(freeMinutes!=null&&freeMinutes>=0&&afterFree!=null){
+      const billableMinutes=Math.max(0,duration-freeMinutes),costEur=money(billableMinutes*afterFree);
+      components.connectedTimeAfterFree={freeMinutes,billableMinutes,eurPerMinute:afterFree,costEur};total+=costEur;
+    }
+    const initialMinutes=num(rule?.connectedTimeInitialMinutes),initialFlat=num(rule?.connectedTimeInitialFlatEur),afterInitial=num(rule?.connectedTimeAfterInitialPerMinuteEur);
+    if(initialMinutes>0&&initialFlat!=null&&afterInitial!=null&&duration>0){
+      const excessMinutes=Math.max(0,duration-initialMinutes),costEur=money(initialFlat+excessMinutes*afterInitial);
+      components.connectedTimeInitialTier={initialMinutes,initialFlatEur:initialFlat,excessMinutes,eurPerMinuteAfterInitial:afterInitial,costEur};total+=costEur;
+    }
     const fixed=num(rule?.connectedTimeComponentEur);if(fixed!=null&&fixed!==0){components.connectedTimeComponent=money(fixed);total+=components.connectedTimeComponent;}
     return{totalEur:money(total),components};
   }
@@ -58,12 +72,10 @@
     if(billable<=0)return{totalEur:0,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:0,costEur:0}};
     const blockMinutes=num(fee.blockMinutes),blockEur=num(fee.blockEur);
     if(blockMinutes>0&&blockEur!=null){
-      const blocks=fee.rounding==='started_block'?Math.ceil(billable/blockMinutes):billable/blockMinutes;
-      const costEur=money(blocks*blockEur);
+      const blocks=fee.rounding==='started_block'?Math.ceil(billable/blockMinutes):billable/blockMinutes,costEur=money(blocks*blockEur);
       return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,blocks,blockMinutes,unitPriceEur:blockEur,costEur}};
     }
-    const perMinute=num(fee.eurPerMinute);
-    if(perMinute!=null){const costEur=money(billable*perMinute);return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,eurPerMinute:perMinute,costEur}};}
+    const perMinute=num(fee.eurPerMinute);if(perMinute!=null){const costEur=money(billable*perMinute);return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,eurPerMinute:perMinute,costEur}};}
     return{totalEur:0,component:null,complete:false,reason:'unsupported_post_charge_fee'};
   }
   function evaluateOffer(offer,session={}){
@@ -76,21 +88,13 @@
     }
     const rule=matchingRule(pricing,session.startAt,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
     const duration=Math.max(0,num(session.durationMinutes)??0),boundary=minutesUntilRuleBoundary(rule,session.startAt,timeZone);
-    if(boundary!=null&&Number.isFinite(boundary)&&duration>boundary+1e-9){
-      return{complete:false,reason:'tariff_window_crossing_requires_segmentation',offerId:offer?.id||null,boundaryMinutes:boundary,matchedRule:rule,timeZone};
-    }
+    if(boundary!=null&&Number.isFinite(boundary)&&duration>boundary+1e-9)return{complete:false,reason:'tariff_window_crossing_requires_segmentation',offerId:offer?.id||null,boundaryMinutes:boundary,matchedRule:rule,timeZone};
     const base=evaluateRule(rule,session),longFee=pricing.longConnectionFee;let longConnection=null,total=base.totalEur;
     if(longFee&&duration>(num(longFee.thresholdMinutes)??Infinity)){
-      const rate=num(longFee.eurPerHourAfterThreshold);
-      if(rate!=null){
-        const excess=duration-Number(longFee.thresholdMinutes);
-        longConnection={complete:false,reason:'hourly_rounding_unspecified',excessMinutes:excess,rateEurPerHour:rate};
-      }
+      const rate=num(longFee.eurPerHourAfterThreshold);if(rate!=null){const excess=duration-Number(longFee.thresholdMinutes);longConnection={complete:false,reason:'hourly_rounding_unspecified',excessMinutes:excess,rateEurPerHour:rate};}
     }
-    const post=evaluatePostChargeFee(pricing.postChargeFee,session);
-    if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null,timeZone};
-    total+=post.totalEur;
-    const components={...base.components,...(post.component?{postCharge:post.component}:{})};
+    const post=evaluatePostChargeFee(pricing.postChargeFee,session);if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null,timeZone};
+    total+=post.totalEur;const components={...base.components,...(post.component?{postCharge:post.component}:{})};
     return{complete:!longConnection,totalEur:money(total),components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,timeZone};
   }
   return{evaluateOffer,evaluateRule,evaluatePostChargeFee,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
