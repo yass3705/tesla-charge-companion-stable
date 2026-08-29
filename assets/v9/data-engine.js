@@ -21,6 +21,8 @@
     if(n.includes('powerdot'))return'powerdot';
     if(n.includes('atlante'))return'atlante';
     if(n.includes('lidl'))return'lidl';
+    if(n.includes('electroverse'))return'electroverse';
+    if(n==='electra'||n.startsWith('electra-'))return'electra';
     return n;
   }
 
@@ -67,8 +69,11 @@
   }
   function normalizeOperator(value){const name=text(typeof value==='object'?value?.name:value)||'Unknown';return{id:operatorId(typeof value==='object'?(value?.id||name):name),name};}
   function applyFamily(entity,fragment,source,family){
+    const fields=FAMILY_FIELDS[family]||[];
+    const provided=fields.filter(field=>fragment[field]!==undefined&&fragment[field]!==null);
+    if(!provided.length)return;
     const nextRank=rank(source,family,fragment),current=entity._fieldRanks[family];if(!rankWins(nextRank,current))return;
-    for(const field of FAMILY_FIELDS[family]||[]){if(fragment[field]===undefined||fragment[field]===null)continue;entity[field]=field==='physicalOperator'?normalizeOperator(fragment[field]):clone(fragment[field]);}
+    for(const field of provided)entity[field]=field==='physicalOperator'?normalizeOperator(fragment[field]):clone(fragment[field]);
     entity._fieldRanks[family]=nextRank;
   }
 
@@ -100,16 +105,30 @@
   }
 
   function stationConnectorKinds(station){const out=new Set();for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(text(c?.kind))out.add(text(c.kind).toUpperCase());return out;}
+  function stationPowers(station){const out=[];for(const evse of station?.evses||[])for(const c of evse?.connectors||[]){const p=number(c?.powerKw);if(p!=null)out.push(p);}return out;}
+  function stationIdentityTokens(station){
+    const out=new Set([text(station?.id)]);
+    for(const a of station?.aliases||[])out.add(text(a));
+    for(const p of station?.provenance||[])if(text(p?.sourceStationId))out.add(text(p.sourceStationId));
+    for(const evse of station?.evses||[]){if(text(evse?.id))out.add(text(evse.id));for(const a of evse?.aliases||[])out.add(text(a));}
+    return out;
+  }
+  function anyExact(wanted,have){return(wanted||[]).some(v=>have.has(text(v)));}
   function ruleMatchesStation(rule,station){
     const country=text(station?.countryCode).toUpperCase(),countries=(rule?.countries||[]).map(x=>text(x).toUpperCase());if(countries.length&&!countries.includes('*')&&!countries.includes(country))return false;
     const aliases=[...(rule?.operatorIds||[]),...(rule?.operatorAliases||[])].map(operatorId);if(aliases.length&&!aliases.includes(operatorId(station?.physicalOperator)))return false;
+    const ids=stationIdentityTokens(station);
+    if((rule?.stationIds||[]).length&&!anyExact(rule.stationIds,ids))return false;
+    if((rule?.evseIds||[]).length&&!anyExact(rule.evseIds,ids))return false;
     const kinds=(rule?.connectorKinds||[]).map(x=>text(x).toUpperCase());if(kinds.length){const have=stationConnectorKinds(station);if(!kinds.some(k=>have.has(k)))return false;}
+    const min=number(rule?.minPowerKw),max=number(rule?.maxPowerKw);if(min!=null||max!=null){const powers=stationPowers(station);if(!powers.length)return false;if(!powers.some(p=>(min==null||p>=min)&&(max==null||p<=max)))return false;}
     return true;
   }
   function ruleToOffer(rule,station,source){
     const offer=materializeOffer({
       id:rule.id,provider:rule.provider,kind:rule.offerKind||'direct',subscriptionId:rule.subscriptionId||null,countries:rule.countries||[station.countryCode],currency:rule.currency||'EUR',
-      connectorKinds:clone(rule.connectorKinds)||[],pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
+      connectorKinds:clone(rule.connectorKinds)||[],operatorIds:clone(rule.operatorIds)||[],stationIds:clone(rule.stationIds)||[],evseIds:clone(rule.evseIds)||[],minPowerKw:rule.minPowerKw??null,maxPowerKw:rule.maxPowerKw??null,
+      pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
     },station.countryCode);
     if(offer){offer.sourceId=source.id;offer.priority=number(offer.priority)??priorityFor(source,'tariff',rule);}return offer;
   }
@@ -124,7 +143,7 @@
   function stationMatchesFilters(station,filters={}){
     if(filters.status&&filters.status!=='all'&&text(station?.status?.state)!==text(filters.status))return false;
     const selectedOperators=(filters.operatorIds||[]).map(operatorId);if(selectedOperators.length&&!selectedOperators.includes(operatorId(station?.physicalOperator)))return false;
-    const minPower=number(filters.minPowerKw),maxPower=number(filters.maxPowerKw);if(minPower!=null||maxPower!=null){const powers=[];for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(number(c?.powerKw)!=null)powers.push(number(c.powerKw));if(!powers.length)return false;if(minPower!=null&&!powers.some(p=>p>=minPower))return false;if(maxPower!=null&&!powers.some(p=>p<=maxPower))return false;}return true;
+    const minPower=number(filters.minPowerKw),maxPower=number(filters.maxPowerKw);if(minPower!=null||maxPower!=null){const powers=stationPowers(station);if(!powers.length)return false;if(minPower!=null&&!powers.some(p=>p>=minPower))return false;if(maxPower!=null&&!powers.some(p=>p<=maxPower))return false;}return true;
   }
   function deriveOperators(stations){const map=new Map();for(const st of stations||[]){const op=normalizeOperator(st?.physicalOperator),row=map.get(op.id)||{id:op.id,name:op.name,count:0};row.count++;if(row.name==='Unknown'&&op.name!=='Unknown')row.name=op.name;map.set(op.id,row);}return[...map.values()].sort((a,b)=>a.name.localeCompare(b.name));}
   function eligibleOffers(station,selectedSubscriptions=[]){const selected=new Set((selectedSubscriptions||[]).map(text));return(station?.offers||[]).filter(o=>!o.subscriptionId||selected.has(text(o.subscriptionId)));}
@@ -154,5 +173,5 @@
     api={queryArea,registerLoader,deriveOperators,eligibleOffers,selectRoutingCandidates,sources:()=>clone(sources)};return api;
   }
 
-  return{createEngine,resolveEntities,applyOfferRules,deriveOperators,eligibleOffers,selectRoutingCandidates,materializeOffer,operatorId,distanceKm,sourceApplies,ruleMatchesStation};
+  return{createEngine,resolveEntities,applyOfferRules,deriveOperators,eligibleOffers,selectRoutingCandidates,materializeOffer,operatorId,distanceKm,sourceApplies,ruleMatchesStation,stationIdentityTokens};
 });
