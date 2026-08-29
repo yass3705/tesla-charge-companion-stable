@@ -23,10 +23,10 @@ def pricing_rule(values,start='00:00',end='24:00'):
         rule['connectedTimeComponentEur']=values['connectedTimeComponentEur']
     return rule
 
-def offer(offer_id,provider,klass,rules,source,subscription=False,annual_fee=None,profile=None):
+def offer(offer_id,provider,klass,rules,source,subscription=False,selection_id=None,annual_fee=None,profile=None):
     power=CLASSES[klass]['powerKw']
     row={
-      'id':offer_id,'selectionId':offer_id,'provider':provider,'networkAliases':["Belib'",'Belib','BELIB'],
+      'id':offer_id,'selectionId':selection_id or offer_id,'provider':provider,'networkAliases':["Belib'",'Belib','BELIB'],
       'countries':['FR'],'minPowerKw':power,'maxPowerKw':power,'currency':'EUR','priority':115 if not subscription else 120,
       'pricing':{'type':'rules','rules':rules},'source':source,'directOperatorOnly':False,
       'verifiedScope':'network_brand_exact_power','defaultSelected':False,
@@ -48,14 +48,14 @@ def main():
     direct=[];subs=[]
     for klass in CLASSES:
         direct.append(offer(f'belib-visitor-{klass}','Belib direct',klass,[pricing_rule(src['visitor'][klass])],source))
-        subs.append(offer(f'belib-nonresident-{klass}',"Belib' abonné non-résident",klass,[pricing_rule(src['subscriptions']['nonResident'][klass])],source,True,src['subscriptions']['annualFeeEur'],'nonResident'))
+        subs.append(offer(f'belib-nonresident-{klass}',"Belib' abonné non-résident",klass,[pricing_rule(src['subscriptions']['nonResident'][klass])],source,True,'belib-nonresident',src['subscriptions']['annualFeeEur'],'nonResident'))
         resident=src['subscriptions']['residentParis']
         rules=[
           pricing_rule(resident['day'][klass],'08:00','20:00'),
           pricing_rule(resident['night2000To2300'][klass],'20:00','23:00'),
           pricing_rule(resident['night2300To0800'][klass],'23:00','08:00')
         ]
-        subs.append(offer(f'belib-resident-{klass}',"Belib' abonné résident Paris",klass,rules,source,True,src['subscriptions']['annualFeeEur'],'residentParis'))
+        subs.append(offer(f'belib-resident-{klass}',"Belib' abonné résident Paris",klass,rules,source,True,'belib-resident',src['subscriptions']['annualFeeEur'],'residentParis'))
     long_fee=src.get('fees',{}).get('longConnection',{})
     for row in direct+subs:
         row['pricing']['longConnectionFee']={
@@ -73,6 +73,6 @@ def main():
       'sourceEvidence':{'effectiveFrom':src.get('sourceEvidence',{}).get('tariffEffectiveFrom'),'fingerprint':src.get('sourceEvidence',{}).get('relevantTariffFingerprintSha256')}
     }
     out=Path(args.output);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print(json.dumps({'output':str(out),'directOfferCount':len(direct),'subscriptionOfferCount':len(subs),'classes':list(CLASSES)},ensure_ascii=False))
+    print(json.dumps({'output':str(out),'directOfferCount':len(direct),'subscriptionOfferCount':len(subs),'classes':list(CLASSES),'subscriptionIds':['belib-nonresident','belib-resident']},ensure_ascii=False))
 
 if __name__=='__main__':main()
