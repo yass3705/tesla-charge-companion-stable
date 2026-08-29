@@ -96,6 +96,8 @@ jobs:
         run: node tests/v9-france-freshmile-offers.test.cjs
       - name: Exact Electroverse/Electra PDC migration
         run: node tests/v9-france-emsp-migration.test.cjs
+      - name: France tariff hierarchy regression
+        run: node tests/v9-france-tariff-hierarchy.test.cjs
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Unified runtime integration
