@@ -22,6 +22,24 @@ function distanceKm(a,b){
   const h=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;
   return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
 }
+
+// Same geographic point used by the Eindhoven regression fixture in the catalogue
+// integration test. It is deliberately the city centre, not the Supercharger itself.
+const eindhovenCity={latitude:51.4416,longitude:5.4697};
+const eindhovenAirKm=distanceKm(eindhovenCity,eindhoven);
+assert.ok(eindhovenAirKm<=25,`Tesla Eindhoven must be within the user's 25 km search radius; air distance is ${eindhovenAirKm.toFixed(2)} km`);
+assert.notEqual(eindhoven.temporarilyUnavailable,true,'Tesla Eindhoven must not be filtered as temporarily unavailable');
+
+// Reproduce the base candidateStations Tesla predicate + 25 km air-distance prefilter
+// against the real published Tesla catalogue.
+const teslaWithin25Km=tesla.filter(st=>
+  st?.temporarilyUnavailable!==true&&
+  ((String(st?.operator||'').toLowerCase()==='tesla')||st?.source==='teslaSupercharger')&&
+  Number.isFinite(Number(st?.latitude))&&Number.isFinite(Number(st?.longitude))&&
+  distanceKm(eindhovenCity,st)<=25+1e-9
+).sort((a,b)=>distanceKm(eindhovenCity,a)-distanceKm(eindhovenCity,b));
+assert.ok(teslaWithin25Km.some(st=>st?.id===eindhoven.id),'The real Tesla Eindhoven entry must survive the exact Tesla candidate predicate at 25 km');
+
 const aroundEindhoven=tesla.filter(st=>
   st?.source==='teslaSupercharger'&&
   String(st?.countryCode||'').toUpperCase()==='NL'&&
@@ -33,10 +51,12 @@ assert.ok(aroundEindhoven.some(st=>/best/i.test(`${st?.name||''} ${st?.address||
 
 const nlCatalog=read(mainRoot,'assets/netherlands-catalog.js');
 for(const token of [
+  "previousCandidateStations('tesla',maxDistanceKm)",
   'const originalStations=stations',
   'stations=[...originalStations,...extra]',
+  'result.stations=mergeCandidateStations(upstream,result)',
   'finally{stations=originalStations;}'
-])assert.ok(nlCatalog.includes(token),`Netherlands catalog must preserve the pre-existing global stations: ${token}`);
+])assert.ok(nlCatalog.includes(token),`Netherlands catalog must preserve the pre-existing Tesla/global stations: ${token}`);
 assert.ok(nlCatalog.includes("if(filterMode!=='all')return previousCandidateStations"),'DOT-NL must only extend the all-operators path');
 
 const dynamicFilter=read(releaseRoot,'assets/v8-dynamic-filter.js');
@@ -52,9 +72,24 @@ assert.ok((teslaSource?.artifactPaths||[]).includes('data/tesla_stations.json'))
 
 console.log(JSON.stringify({
   ok:true,
-  fixture:'Eindhoven 50 km',
-  teslaEindhoven:{id:eindhoven.id,stalls:eindhoven.stalls,powerKw:eindhoven.powerKw},
-  teslaSitesWithin50Km:aroundEindhoven.map(st=>({id:st.id,name:st.name,distanceKm:Number(distanceKm(eindhoven,st).toFixed(1))})),
+  fixture:'Eindhoven city centre 25 km',
+  teslaEindhoven:{
+    id:eindhoven.id,
+    name:eindhoven.name,
+    address:eindhoven.address,
+    latitude:eindhoven.latitude,
+    longitude:eindhoven.longitude,
+    stalls:eindhoven.stalls,
+    powerKw:eindhoven.powerKw,
+    temporarilyUnavailable:!!eindhoven.temporarilyUnavailable,
+    distanceFromEindhovenCityKm:Number(eindhovenAirKm.toFixed(2))
+  },
+  teslaSitesWithin25Km:teslaWithin25Km.map(st=>({
+    id:st.id,
+    name:st.name,
+    distanceKm:Number(distanceKm(eindhovenCity,st).toFixed(2)),
+    temporarilyUnavailable:!!st.temporarilyUnavailable
+  })),
   dotNlPreservesGlobalStations:true,
   operatorFilterExposesTesla:true,
   canonicalTeslaPublishedFromMain:true
