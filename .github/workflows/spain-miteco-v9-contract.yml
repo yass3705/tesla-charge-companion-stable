@@ -10,12 +10,15 @@ on:
       - 'scripts/test_global_subscriptions_v9.py'
       - 'scripts/dedupe_global_subscriptions_v9.py'
       - 'scripts/test_subscription_dedupe_v9.py'
+      - 'scripts/test_v9_subscription_picker.py'
       - 'tests/fixtures/spain_miteco_v9_sample.csv'
       - 'tests/fixtures/spain_reve_v9_sample.json'
       - 'data/v9/spain-operator-aliases.json'
       - 'data/v9/subscription-entitlements-global.json'
       - 'data/v9/france-emsp-offers.json'
       - 'data/netherlands_direct_tariffs_v1.json'
+      - 'assets/v9-subscription-picker.js'
+      - 'assets/v9-subscription-picker.css'
       - '.github/workflows/spain-miteco-v9-contract.yml'
   workflow_dispatch:
 
@@ -36,3 +39,5 @@ jobs:
         run: python scripts/test_global_subscriptions_v9.py
       - name: Validate legacy subscription dedupe contract
         run: python scripts/test_subscription_dedupe_v9.py
+      - name: Validate V9 subscription picker contract
+        run: python scripts/test_v9_subscription_picker.py
