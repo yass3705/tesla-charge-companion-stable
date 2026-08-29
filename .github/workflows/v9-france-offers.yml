@@ -1,0 +1,82 @@
+name: V9 France offer overlays
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '11 5 2 * *'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/compile_france_v9_offers.py'
+      - '.github/workflows/v9-france-offers.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-france-offers
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-stable
+          ref: refactor/france-irve-canonical
+          path: legacy-france-canonical
+          fetch-depth: 1
+
+      - name: Compile conservative direct and eMSP layers
+        run: python scripts/compile_france_v9_offers.py --input legacy-france-canonical/data/tariff_overlay_v1.json
+
+      - name: Validate offer safety
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('data/v9/france-direct-offers.json').read_text())
+          e=json.loads(Path('data/v9/france-emsp-offers.json').read_text())
+          r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
+          assert d['country']=='FR' and e['country']=='FR'
+          assert d['policy']['subscriptionsOptIn'] is True
+          assert d['policy']['directCpoAndRoamingSeparate'] is True
+          assert len(d['directOffers'])>=10,r
+          assert len(e['subscriptionOffers'])>=3,r
+          for row in d['directOffers']+d['subscriptionOffers']+e['subscriptionOffers']:
+            assert row.get('operatorAliases'),row
+            assert isinstance(row.get('pricing'),dict),row
+          # Placeholders that only reference old runtime code must not become rankable fake prices.
+          deferred={x.get('id') for x in r.get('deferred',[])}
+          assert 'electra-essential' in deferred
+          assert 'electra-smart' in deferred
+          assert 'belib-nonresident' in deferred
+          assert 'belib-resident' in deferred
+          print(json.dumps({k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},indent=2))
+          PY
+
+      - name: Publish V9 offer overlays
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf legacy-france-canonical
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-offer-compile-report.json
+          if git diff --cached --quiet; then
+            echo 'No offer changes'
+            exit 0
+          fi
+          git commit -m "data(v9): refresh France conservative offer overlays [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin refactor/unified-data-engine-v9
+            if git push origin HEAD:refactor/unified-data-engine-v9; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
