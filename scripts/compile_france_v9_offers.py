@@ -20,23 +20,31 @@ def pricing_from(row):
     }
     return {'type':'rules','rules':[rule]}
 
+def physical_only(row):
+    if row.get('directOperatorOnly') is True:return True
+    note=text(row.get('note')).lower()
+    return ('physical' in note and 'only' in note) or ('bornes exploitées' in note) or ('bornes exploitees' in note)
+
 def normalized(row,kind,source_path,priority):
     pricing=pricing_from(row)
     if pricing is None:return None,'price_not_materialized'
     aliases=uniq(row.get('operatorAliases') or row.get('operatorIds') or [])
     if not aliases:return None,'operator_scope_missing'
+    direct_only=physical_only(row)
+    explicit_network=uniq(row.get('networkAliases') or row.get('networkIds') or [])
+    network_aliases=[] if direct_only else (explicit_network or aliases)
     out={
       'id':text(row.get('id')),'selectionId':text(row.get('selectionId') or row.get('id')),
-      'provider':text(row.get('provider')) or text(row.get('id')),'operatorAliases':aliases,'countries':['FR'],
+      'provider':text(row.get('provider')) or text(row.get('id')),'operatorAliases':aliases,'networkAliases':network_aliases,'countries':['FR'],
       'connectorKinds':uniq([text(row.get('kind')).upper()] if text(row.get('kind')) else []),
       'pricing':pricing,'currency':text(row.get('currency')) or text(pricing.get('currency')) or 'EUR',
-      'priority':priority,'directOperatorOnly':row.get('directOperatorOnly') is True,
+      'priority':priority,'directOperatorOnly':direct_only,
       'source':text(row.get('source')) or source_path,'note':text(row.get('note')) or None,
       'minPowerKw':row.get('minPowerKw'),'maxPowerKw':row.get('maxPowerKw'),
       'monthlyFeeEur':row.get('monthlyFeeEur'),'monthlyFeeLabel':row.get('monthlyFeeLabel'),
       'monthlyFeePromotionEnd':row.get('monthlyFeePromotionEnd'),'defaultSelected':row.get('defaultSelected') is True,
       'runtime':row.get('runtime'),'customerProfile':row.get('customerProfile'),
-      'verifiedScope':'operator_power' if row.get('minPowerKw') is not None or row.get('maxPowerKw') is not None else 'operator_network'
+      'verifiedScope':'physical_operator_power' if direct_only and (row.get('minPowerKw') is not None or row.get('maxPowerKw') is not None) else ('physical_operator' if direct_only else ('operator_or_network_power' if row.get('minPowerKw') is not None or row.get('maxPowerKw') is not None else 'operator_or_network'))
     }
     if kind=='subscription':out['subscriptionId']=out['selectionId']
     return {k:v for k,v in out.items() if v is not None},None
@@ -56,29 +64,18 @@ def main():
         if item:direct.append(item)
         else:deferred.append({'id':row.get('id'),'kind':'direct','reason':why})
     for row in src.get('subscriptions',[]):
-        offer_type=text(row.get('offerType')).lower()
-        target=emsp if 'emsp' in offer_type else direct
-        priority=82 if target is emsp else 100
+        offer_type=text(row.get('offerType')).lower();target=emsp if 'emsp' in offer_type else direct;priority=82 if target is emsp else 100
         item,why=normalized(row,'subscription',source_path,priority)
         if item:target.append(item)
         else:deferred.append({'id':row.get('id'),'kind':'subscription','reason':why,'runtime':row.get('runtime')})
     direct.sort(key=lambda x:x['id']);emsp.sort(key=lambda x:x['id'])
     now=datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
-    policy={
-      'sourceMode':'conservative_verified_runtime_migration','subscriptionsOptIn':True,'monthlyFeeAllocatedToSession':False,
-      'stationSpecificSourcesCompiledSeparately':True,'deferredUnknownPricesNotRankable':True,
-      'directCpoAndRoamingSeparate':True,'preservePowerAndPricingRules':True
-    }
+    policy={'sourceMode':'conservative_verified_runtime_migration','subscriptionsOptIn':True,'monthlyFeeAllocatedToSession':False,'stationSpecificSourcesCompiledSeparately':True,'deferredUnknownPricesNotRankable':True,'directCpoAndRoamingSeparate':True,'preservePowerAndPricingRules':True,'physicalOperatorAndNetworkBrandSeparate':True}
     direct_payload={'schemaVersion':1,'country':'FR','generatedAt':now,'mode':'conservative','policy':policy,'directOffers':[x for x in direct if not x.get('subscriptionId')],'subscriptionOffers':[x for x in direct if x.get('subscriptionId')]}
     emsp_payload={'schemaVersion':1,'country':'FR','generatedAt':now,'mode':'conservative','policy':policy,'directOffers':[],'subscriptionOffers':emsp}
     for path,payload in ((a.direct_out,direct_payload),(a.emsp_out,emsp_payload)):
         p=Path(path);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
-    report={
-      'schemaVersion':1,'generatedAt':now,'source':source_path,
-      'directOfferCount':len(direct_payload['directOffers']),'directSubscriptionCount':len(direct_payload['subscriptionOffers']),
-      'emspSubscriptionCount':len(emsp),'deferredCount':len(deferred),'deferred':deferred,
-      'upstreamDeferredValidated':src.get('deferredValidated',[])
-    }
+    report={'schemaVersion':1,'generatedAt':now,'source':source_path,'directOfferCount':len(direct_payload['directOffers']),'directSubscriptionCount':len(direct_payload['subscriptionOffers']),'emspSubscriptionCount':len(emsp),'deferredCount':len(deferred),'deferred':deferred,'physicalOnlyCount':sum(1 for x in direct+emsp if x.get('directOperatorOnly')),'networkScopedCount':sum(1 for x in direct+emsp if x.get('networkAliases')),'upstreamDeferredValidated':src.get('deferredValidated',[])}
     Path(a.report_out).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(report,ensure_ascii=False,indent=2))
 
