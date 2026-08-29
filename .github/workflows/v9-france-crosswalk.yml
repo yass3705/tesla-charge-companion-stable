@@ -54,14 +54,17 @@ jobs:
           assert meta.get('recordsSeen',0)>0,meta
           assert meta.get('stationsEnriched',0)>0,meta
           base_ids={e.get('canonicalId') for e in base['entries']}
+          powerdot=[]
           for e in overlay['entries']:
             assert e.get('canonicalId') in base_ids,e.get('canonicalId')
             for s in e.get('sourceIds',[]):
               assert s.get('match')=='exact_irve_identifier',s
+              if s.get('source')=='powerdot': powerdot.append((e.get('canonicalId'),s.get('id')))
             assert all(not str(a).startswith('geo:') for a in e.get('aliases',[]))
+          assert powerdot,'Powerdot exact IRVE aliases missing from provider overlay'
           assert candidates.get('policy')=='review_only_never_runtime'
           assert candidates.get('count')==len(candidates.get('candidates',[]))
-          print(json.dumps(meta,indent=2))
+          print(json.dumps({**meta,'powerdotExactAliases':len(powerdot)},indent=2))
           PY
 
       - name: Publish provider overlay and review candidates
