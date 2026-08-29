@@ -1,0 +1,75 @@
+name: V9 France provider crosswalk
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '47 4 2 * *'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/enrich_france_crosswalk_v9.py'
+      - '.github/workflows/v9-france-crosswalk.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-france-provider-crosswalk
+  cancel-in-progress: true
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          fetch-depth: 1
+
+      - name: Enrich only from exact IRVE identifiers
+        run: python scripts/enrich_france_crosswalk_v9.py
+
+      - name: Validate crosswalk safety
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          cw=json.loads(Path('data/v9/france-crosswalk.json').read_text())
+          c=json.loads(Path('data/v9/france-crosswalk-candidates.json').read_text())
+          assert len(cw['entries'])>30000
+          meta=cw.get('enrichment',{})
+          assert meta.get('filesSeen',0)>=3,meta
+          assert meta.get('recordsSeen',0)>0,meta
+          for e in cw['entries']:
+            for s in e.get('sourceIds',[]):
+              assert s.get('match')=='exact_irve_identifier',s
+          assert c.get('policy')=='review_only_never_runtime'
+          assert c.get('count')==len(c.get('candidates',[]))
+          print(json.dumps(meta,indent=2))
+          PY
+
+      - name: Publish crosswalk and review candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf data-lab
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-crosswalk.json data/v9/france-crosswalk-candidates.json
+          if git diff --cached --quiet; then
+            echo 'No crosswalk changes'
+            exit 0
+          fi
+          git commit -m "data(v9): enrich France provider crosswalk [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin refactor/unified-data-engine-v9
+            if git push origin HEAD:refactor/unified-data-engine-v9; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
