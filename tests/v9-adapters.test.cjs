@@ -1,6 +1,7 @@
 const assert=require('node:assert/strict');
 const Tesla=require('../assets/v9/adapters/tesla-json.js');
 const National=require('../assets/v9/adapters/national-compact.js');
+const Direct=require('../assets/v9/adapters/direct-offers.js');
 
 const tesla=Tesla.normalizeStation({
   id:'tesla-eindhoven-netherlands',countryCode:'NL',name:'Tesla Eindhoven, Netherlands',address:'322 Aalsterweg',latitude:51.407102,longitude:5.479618,
@@ -42,8 +43,25 @@ assert.deepEqual(nl.access.parkingRestrictions,['EV_ONLY']);
 assert.equal(nl.offers[0].pricing.rules[0].ocpiDurationBands[0][0],'TIME');
 assert.equal(nl.offers[0].pricing.rules[0].ocpiDurationBands[0][1],18000);
 
+const overlay=Direct.normalizePayload({
+  schemaVersion:'1.4.2',country:'FR',operatorOffers:[
+    {id:'fastned-standard',provider:'Fastned direct',offerType:'operator_direct',operatorAliases:['Fastned'],kind:'DC',pricing:{type:'rules',rules:[{billing:'kwh',currency:'EUR',pricePerKwh:0.61}]},source:'data-lab/fastned_official_france.json'}
+  ],subscriptions:[
+    {id:'fastned-gold',provider:'Fastned Gold',offerType:'subscription',operatorAliases:['Fastned'],kind:'DC',pricePerKwh:0.43,currency:'EUR',monthlyFeeEur:5.99,defaultSelected:false,source:'data-lab/fastned_official_france.json'}
+  ]
+});
+assert.equal(overlay.offerRules.length,2);
+assert.equal(overlay.offerRules[0].kind,'direct');
+assert.equal(overlay.offerRules[0].pricing.type,'rules');
+assert.deepEqual(overlay.offerRules[0].operatorIds,['fastned']);
+assert.equal(overlay.offerRules[1].kind,'subscription');
+assert.equal(overlay.offerRules[1].subscriptionId,'fastned-gold');
+assert.equal(overlay.offerRules[1].pricing.pricePerKwh,0.43);
+assert.equal(overlay.offerRules[1].metadata.monthlyFeeEur,5.99);
+assert.equal(overlay.offerRules[1].metadata.defaultSelected,false);
+
 console.log(JSON.stringify({
   ok:true,
-  adapters:{tesla:true,franceCompactV1:true,netherlandsCompactV3:true},
-  retainedFeatures:['Tesla global identity','national fallback offers','OCPI duration bands','NL access/parking restrictions']
+  adapters:{tesla:true,franceCompactV1:true,netherlandsCompactV3:true,directOfferOverlay:true},
+  retainedFeatures:['Tesla global identity','national fallback offers','OCPI duration bands','NL access/parking restrictions','V8 direct tariff rule migration','subscription opt-in metadata']
 },null,2));
