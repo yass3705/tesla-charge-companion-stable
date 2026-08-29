@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/build_germany_bnetza_v9.py'
       - 'scripts/build_germany_bnetza_v9_v2.py'
+      - 'scripts/build_germany_bnetza_v9_v3.py'
       - 'data/v9/germany-operator-aliases.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -22,7 +23,7 @@ jobs:
           python-version: '3.12'
       - name: Download and build official BNetzA catalogue
         run: |
-          python scripts/build_germany_bnetza_v9_v2.py \
+          python scripts/build_germany_bnetza_v9_v3.py \
             --out build/germany-static \
             --crosswalk build/germany-crosswalk.json \
             --aliases data/v9/germany-operator-aliases.json
