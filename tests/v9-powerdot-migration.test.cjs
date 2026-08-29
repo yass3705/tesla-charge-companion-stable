@@ -3,8 +3,7 @@ const Engine=require('../assets/v9/data-engine.js');
 const Adapter=require('../assets/v9/adapters/legacy-direct-stations.js');
 
 const payload={
-  sourceType:'direct_cpo_public_adhoc_api',
-  operator:'Power Dot France',
+  source:{sourceType:'direct_cpo_public_adhoc_api',operator:'Power Dot France',roaming:false},
   chargers:[{
     location:{id:'loc-1',uid:'uid-1',countryCode:'FR'},
     chargerName:'PD-01',
@@ -24,6 +23,7 @@ const payload={
 };
 const source={id:'powerdot-direct-france',priority:{tariff:95}};
 const normalized=Adapter.normalizePayload(payload,source);
+assert.equal(normalized.metadata.sourceType,'direct_cpo_public_adhoc_api','published nested source metadata must identify Powerdot');
 assert.equal(normalized.offerRules.length,1,'only exact-PDC public direct tariff should survive');
 assert.deepEqual(normalized.offerRules[0].evseIds,['FR*POD*E123*1','FRPODE1231']);
 assert.equal(normalized.offerRules[0].pricing.rules[0].pricePerKwh,0.49);
