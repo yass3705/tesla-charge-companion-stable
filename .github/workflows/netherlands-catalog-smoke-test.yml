@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - feat/ocpi-duration-tariffs-nl
     paths:
       - assets/netherlands-catalog.js
@@ -14,6 +15,7 @@ on:
       - assets/update.js
       - tests/ocpi-duration-pricing.test.cjs
       - tests/ocpi-access-intervals.test.cjs
+      - tests/netherlands-preserve-global-candidates.test.cjs
       - data/non_tesla_netherlands/**
       - .github/workflows/netherlands-catalog-smoke-test.yml
 
@@ -36,6 +38,7 @@ jobs:
           node --check assets/ocpi-access-intervals.js
           node tests/ocpi-duration-pricing.test.cjs
           node tests/ocpi-access-intervals.test.cjs
+          node tests/netherlands-preserve-global-candidates.test.cjs
 
       - name: Validate committed Netherlands runtime
         shell: bash
@@ -87,7 +90,7 @@ jobs:
               sys.exit(1)
           PY
 
-      - name: Validate test-branch bootstrap wiring
+      - name: Validate catalog wiring
         shell: bash
         run: |
           set -euo pipefail
@@ -97,5 +100,7 @@ jobs:
           grep -q 'TCCOcpiDurationPricing' assets/netherlands-catalog.js
           grep -q 'ocpiOpeningTimes' assets/netherlands-catalog.js
           grep -q 'TCCOcpiAccessIntervals' assets/netherlands-catalog.js
+          grep -q 'upstreamStationsPreserved' assets/netherlands-catalog.js
+          grep -q 'mergeCandidateStations' assets/netherlands-catalog.js
           grep -q 'refreshNetherlandsNationalData' assets/netherlands-refresh.js
           grep -q 'cache.*no-store' assets/netherlands-refresh.js

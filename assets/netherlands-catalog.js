@@ -133,17 +133,43 @@
     const tiles=(manifest.tiles||[]).filter(t=>intersects(t,lat,lon,radiusKm));if(!tiles.length)return [];return (await Promise.all(tiles.map(t=>readGzipJson(t.file,version)))).flat();
   }
 
+  function mergeCandidateStations(upstream,catalogResult){
+    const merged=[],seen=new Set();
+    for(const st of [...(upstream?.stations||[]),...(catalogResult?.stations||[])]){
+      if(!st)continue;const key=String(st.id||st.catalogStationId||`${st.latitude}|${st.longitude}|${st.operator||''}`);if(seen.has(key))continue;seen.add(key);merged.push(st);
+    }
+    return merged;
+  }
+
   if(typeof candidateStations!=='function'){console.warn('[TCC] Catalogue Pays-Bas non chargé : candidateStations indisponible.');return;}
   const previousCandidateStations=candidateStations;
   candidateStations=async function(filterMode='tesla',maxDistanceKm=0){
     if(filterMode!=='all')return previousCandidateStations(filterMode,maxDistanceKm);
-    const originText=document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position';const origin=await resolveOrigin(originText);const radius=Number(maxDistanceKm)||0;
-    const rows=await rowsNear(origin.lat,origin.lon,radius);if(!rows.length)return previousCandidateStations(filterMode,maxDistanceKm);
+
+    // Important en zone dense : le moteur historique limite à 80 candidats avant
+    // calcul routier. On évalue donc d'abord les couches globales (notamment Tesla),
+    // puis DOT-NL, et on fusionne les deux résultats. Ainsi des dizaines de bornes AC
+    // très proches ne peuvent plus évincer tous les Superchargeurs du rayon demandé.
+    const upstream=await previousCandidateStations(filterMode,maxDistanceKm);
+    let upstreamRoutes={};try{upstreamRoutes={...(routeResults||{})};}catch(e){}
+
+    const origin=upstream?.origin||await resolveOrigin(document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position');
+    const radius=Number(maxDistanceKm)||0;
+    const rows=await rowsNear(origin.lat,origin.lon,radius);if(!rows.length)return upstream;
     await Promise.all([ensureDurationPricing(),ensureAccessIntervals()]);const dayIndex=dayIndexFromSimulation(),dateStr=simulationDate();const catalog=rows.map(r=>stationFromRow(r,dayIndex,dateStr));
     const originalStations=stations;const ids=new Set(originalStations.map(s=>s.id));const extra=catalog.filter(s=>!ids.has(s.id));
-    try{stations=[...originalStations,...extra];const result=await previousCandidateStations(filterMode,maxDistanceKm);if(result)result.netherlandsCatalogLoaded=extra.length;return result;}finally{stations=originalStations;}
+    try{
+      stations=[...originalStations,...extra];
+      const result=await previousCandidateStations(filterMode,maxDistanceKm);
+      if(!result)return upstream;
+      result.stations=mergeCandidateStations(upstream,result);
+      result.netherlandsCatalogLoaded=extra.length;
+      result.upstreamStationsPreserved=(upstream?.stations||[]).length;
+      try{routeResults={...upstreamRoutes,...(routeResults||{})};}catch(e){}
+      return result;
+    }finally{stations=originalStations;}
   };
 
-  window.TCCNetherlandsCatalog={loadManifest,rowsNear,accessFromCompact,clearCache(){rawCache.clear();manifestPromise=null;},get cachedFragments(){return rawCache.size;}};
-  console.info('[TCC] Catalogue national Pays-Bas hors Tesla prêt (DOT-NL, tarifs + horaires OCPI, chargement géographique à la demande).');
+  window.TCCNetherlandsCatalog={loadManifest,rowsNear,accessFromCompact,mergeCandidateStations,clearCache(){rawCache.clear();manifestPromise=null;},get cachedFragments(){return rawCache.size;}};
+  console.info('[TCC] Catalogue national Pays-Bas hors Tesla prêt (DOT-NL, tarifs + horaires OCPI, chargement géographique à la demande, candidats globaux préservés).');
 })();
