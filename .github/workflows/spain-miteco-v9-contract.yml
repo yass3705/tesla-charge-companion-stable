@@ -4,8 +4,10 @@ on:
   pull_request:
     paths:
       - 'scripts/build_spain_miteco_v9.py'
+      - 'scripts/enrich_spain_reve_crosswalk_v9.py'
       - 'scripts/test_spain_miteco_v9.py'
       - 'tests/fixtures/spain_miteco_v9_sample.csv'
+      - 'tests/fixtures/spain_reve_v9_sample.json'
       - 'data/v9/spain-operator-aliases.json'
       - '.github/workflows/spain-miteco-v9-contract.yml'
   workflow_dispatch:
@@ -21,5 +23,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate Spain V9 static contract
+      - name: Validate Spain V9 static and crosswalk contract
         run: python scripts/test_spain_miteco_v9.py
