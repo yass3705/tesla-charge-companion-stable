@@ -86,6 +86,8 @@ jobs:
         run: node tests/v9-ionity-migration.test.cjs
       - name: Exact Atlante EVSE migration
         run: node tests/v9-atlante-migration.test.cjs
+      - name: Exact Powerdot PDC migration
+        run: node tests/v9-powerdot-migration.test.cjs
       - name: Exact Freshmile station/PDC migration
         run: node tests/v9-france-freshmile-offers.test.cjs
       - name: Unified offers and subscriptions
