@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-29T18:27:28.018420Z",
+  "mode": "verified_exact_evse",
+  "policy": {
+    "networkWideGeneralization": false,
+    "exactEvseRequired": true,
+    "wholesaleRatesExcluded": true,
+    "emspPricesSeparate": true,
+    "subscriptionsOptIn": true
+  },
+  "directOffers": [
+    {
+      "id": "e55c-lons-le-saunier-lecourbe-direct",
+      "selectionId": "e55c-lons-le-saunier-lecourbe-direct",
+      "provider": "Electric 55 direct",
+      "operatorAliases": [
+        "Electric 55",
+        "Electric 55 Charging",
+        "E55C"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FR*55C*EFR39000*P7PPFG*1"
+      ],
+      "connectorKinds": [
+        "AC"
+      ],
+      "minPowerKw": 22,
+      "maxPowerKw": 22,
+      "currency": "EUR",
+      "priority": 130,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "07:00",
+            "end": "23:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.09
+          },
+          {
+            "scope": "timeWindow",
+            "start": "23:00",
+            "end": "07:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.06
+          }
+        ]
+      },
+      "source": "data-lab/station_verifications/electric55_lons_le_saunier_rue_lecourbe_alize_2026_08_22.json",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "timeZone": "Europe/Paris",
+        "networkWideGeneralization": false,
+        "stationName": "Electric 55",
+        "stationAddress": "Rue Lecourbe, 39000 Lons-le-Saunier",
+        "verificationDate": "2026-08-22",
+        "consumerPriceSource": "direct_cpo_portal",
+        "dayNightWindowSource": "official_e55c_operator_reference",
+        "alizeRetailKeptSeparate": true
+      }
+    }
+  ],
+  "subscriptionOffers": [],
+  "sourceEvidence": {
+    "evseId": "FR*55C*EFR39000*P7PPFG*1",
+    "stationVerificationDate": "2026-08-22",
+    "operatorFingerprint": "800b769445e07ffb17a353513fe725091427db1bfa9cf9037fa002d668f3a8e0"
+  }
+}
