@@ -9,7 +9,7 @@ SOURCE_SPECS=[
   {'provider':'allego','path':'data/national/allego_direct_stations_france.json.gz'},
   {'provider':'atlante','path':'data/national/atlante_direct_stations_france.json.gz'},
   {'provider':'avia-picoty','path':'data/national/avia_picoty_direct_stations_france.json.gz'},
-  {'provider':'powerdot','path':'data/national/powerdot_direct_france.json.gz'},
+  {'provider':'powerdot','path':'data/powerdot_direct_france.json.gz','root':'stable'},
   {'provider':'bump','path':'data/national/bump_direct_inventory_france.json.gz'},
   {'provider':'bump','path':'data/national/bump_direct_stations_france.json.gz'},
   {'provider':'belib','path':'data/national/belib_stations_paris.json'},
@@ -104,7 +104,7 @@ def main():
     overlay=defaultdict(lambda:{'aliases':set(),'sourceIds':[]})
     seen_alias=set();candidate_rows=[];files_seen=0;records_seen=0;exact_records=0;exact_added=0
     for spec in SOURCE_SPECS:
-        path=Path(a.data_lab)/spec['path']
+        path=Path(spec['path']) if spec.get('root')=='stable' else Path(a.data_lab)/spec['path']
         if not path.exists():continue
         files_seen+=1
         try:data=read_json(path)
