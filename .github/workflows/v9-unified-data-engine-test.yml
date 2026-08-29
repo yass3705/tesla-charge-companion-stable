@@ -31,6 +31,7 @@ jobs:
           node --check assets/v9/data-engine.js
           node --check assets/v9/adapters/tesla-json.js
           node --check assets/v9/adapters/national-compact.js
+          node --check assets/v9/adapters/direct-offers.js
       - name: Validate source registry
         run: |
           node - <<'NODE'
@@ -51,3 +52,5 @@ jobs:
         run: node tests/v9-data-engine.test.cjs
       - name: Compatibility adapters
         run: node tests/v9-adapters.test.cjs
+      - name: Real Eindhoven composition
+        run: node tests/v9-real-eindhoven.test.cjs
