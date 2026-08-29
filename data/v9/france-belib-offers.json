@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-29T18:18:04.677060Z",
+  "mode": "official_exact",
+  "policy": {
+    "subscriptionsOptIn": true,
+    "parkingExcluded": true,
+    "reservationExcludedFromChargeCost": true,
+    "networkBrandOnly": true,
+    "physicalOperatorMayDiffer": true,
+    "connectedTimeBlocksPreservedExactly": true
+  },
+  "directOffers": [
+    {
+      "id": "belib-visitor-moto",
+      "selectionId": "belib-visitor-moto",
+      "provider": "Belib direct",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 3.7,
+      "maxPowerKw": 3.7,
+      "currency": "EUR",
+      "priority": 115,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 0.22,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "moto",
+        "publishedPowerKw": 3.7,
+        "connectionBillingExact": true
+      }
+    },
+    {
+      "id": "belib-visitor-flex",
+      "selectionId": "belib-visitor-flex",
+      "provider": "Belib direct",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 7,
+      "maxPowerKw": 7,
+      "currency": "EUR",
+      "priority": 115,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 0.57,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "flex",
+        "publishedPowerKw": 7,
+        "connectionBillingExact": true
+      }
+    },
+    {
+      "id": "belib-visitor-boost",
+      "selectionId": "belib-visitor-boost",
+      "provider": "Belib direct",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 22,
+      "maxPowerKw": 22,
+      "currency": "EUR",
+      "priority": 115,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 2.3,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "boost",
+        "publishedPowerKw": 22,
+        "connectionBillingExact": true
+      }
+    },
+    {
+      "id": "belib-visitor-boostPlus",
+      "selectionId": "belib-visitor-boostPlus",
+      "provider": "Belib direct",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 50,
+      "maxPowerKw": 50,
+      "currency": "EUR",
+      "priority": 115,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.42
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "boostPlus",
+        "publishedPowerKw": 50,
+        "connectionBillingExact": true
+      }
+    }
+  ],
+  "subscriptionOffers": [
+    {
+      "id": "belib-nonresident-moto",
+      "selectionId": "belib-nonresident",
+      "provider": "Belib' abonné non-résident",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 3.7,
+      "maxPowerKw": 3.7,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 0.17,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "nonResident",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "moto",
+        "publishedPowerKw": 3.7,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-resident-moto",
+      "selectionId": "belib-resident",
+      "provider": "Belib' abonné résident Paris",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 3.7,
+      "maxPowerKw": 3.7,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "08:00",
+            "end": "20:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 0.17,
+            "connectedTimeBlockRounding": "started_block"
+          },
+          {
+            "scope": "timeWindow",
+            "start": "20:00",
+            "end": "23:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeComponentEur": 0.0
+          },
+          {
+            "scope": "timeWindow",
+            "start": "23:00",
+            "end": "08:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.25,
+            "connectedTimeComponentEur": 0.0
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "residentParis",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "moto",
+        "publishedPowerKw": 3.7,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-nonresident-flex",
+      "selectionId": "belib-nonresident",
+      "provider": "Belib' abonné non-résident",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 7,
+      "maxPowerKw": 7,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 0.37,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "nonResident",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "flex",
+        "publishedPowerKw": 7,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-resident-flex",
+      "selectionId": "belib-resident",
+      "provider": "Belib' abonné résident Paris",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 7,
+      "maxPowerKw": 7,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "08:00",
+            "end": "20:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 0.37,
+            "connectedTimeBlockRounding": "started_block"
+          },
+          {
+            "scope": "timeWindow",
+            "start": "20:00",
+            "end": "23:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.33,
+            "connectedTimeComponentEur": 0.0
+          },
+          {
+            "scope": "timeWindow",
+            "start": "23:00",
+            "end": "08:00",
+            "currency": "EUR",
+            "pricePerKwh": 0.25,
+            "connectedTimeComponentEur": 0.0
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "residentParis",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "flex",
+        "publishedPowerKw": 7,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-nonresident-boost",
+      "selectionId": "belib-nonresident",
+      "provider": "Belib' abonné non-résident",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 22,
+      "maxPowerKw": 22,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 2.0,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "nonResident",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "boost",
+        "publishedPowerKw": 22,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-resident-boost",
+      "selectionId": "belib-resident",
+      "provider": "Belib' abonné résident Paris",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 22,
+      "maxPowerKw": 22,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "08:00",
+            "end": "20:00",
+            "currency": "EUR",
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 2.0,
+            "connectedTimeBlockRounding": "started_block"
+          },
+          {
+            "scope": "timeWindow",
+            "start": "20:00",
+            "end": "23:00",
+            "currency": "EUR",
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 2.0,
+            "connectedTimeBlockRounding": "started_block"
+          },
+          {
+            "scope": "timeWindow",
+            "start": "23:00",
+            "end": "08:00",
+            "currency": "EUR",
+            "connectedTimeBlockMinutes": 15,
+            "connectedTimeBlockEur": 2.0,
+            "connectedTimeBlockRounding": "started_block"
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "residentParis",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "boost",
+        "publishedPowerKw": 22,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-nonresident-boostPlus",
+      "selectionId": "belib-nonresident",
+      "provider": "Belib' abonné non-résident",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 50,
+      "maxPowerKw": 50,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.38
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "nonResident",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "boostPlus",
+        "publishedPowerKw": 50,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    },
+    {
+      "id": "belib-resident-boostPlus",
+      "selectionId": "belib-resident",
+      "provider": "Belib' abonné résident Paris",
+      "networkAliases": [
+        "Belib'",
+        "Belib",
+        "BELIB"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "minPowerKw": 50,
+      "maxPowerKw": 50,
+      "currency": "EUR",
+      "priority": 120,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "timeWindow",
+            "start": "08:00",
+            "end": "20:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.38
+          },
+          {
+            "scope": "timeWindow",
+            "start": "20:00",
+            "end": "23:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.38
+          },
+          {
+            "scope": "timeWindow",
+            "start": "23:00",
+            "end": "08:00",
+            "currency": "EUR",
+            "connectedTimePerMinuteEur": 0.38
+          }
+        ],
+        "longConnectionFee": {
+          "thresholdMinutes": 840,
+          "eurPerHourAfterThreshold": 10.0,
+          "basis": "connection_time"
+        }
+      },
+      "source": "data-lab/belib_official_paris.json",
+      "directOperatorOnly": false,
+      "verifiedScope": "network_brand_exact_power",
+      "defaultSelected": false,
+      "customerProfile": "residentParis",
+      "metadata": {
+        "network": "Belib",
+        "chargerClass": "boostPlus",
+        "publishedPowerKw": 50,
+        "connectionBillingExact": true
+      },
+      "monthlyFeeLabel": "7 €/an",
+      "annualFeeEur": 7.0
+    }
+  ],
+  "sourceEvidence": {
+    "effectiveFrom": "2025-06-02",
+    "fingerprint": "942dd028d9c22f5e1377eca780ac14b970734db4ecca28904b8493ef1a9b3d48"
+  }
+}
