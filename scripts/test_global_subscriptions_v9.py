@@ -28,6 +28,12 @@ with tempfile.TemporaryDirectory() as td:
     assert not any(x['subscriptionId'].startswith('repsol-') for x in es)
     assert any(x['subscriptionId']=='wenea-everyday' and x['reason']=='price_not_materialized' for x in reports['ES']['deferred'])
     assert any(x['subscriptionId']=='repsol-movilidad-100' and x['reason']=='price_not_materialized' for x in reports['ES']['deferred'])
+    assert any(x['subscriptionId']=='totalenergies-chargeplus-smart-es' and x['reason']=='price_not_materialized' and x['benefit'].get('discountPercent')==10 for x in reports['ES']['deferred'])
+    assert any(x['subscriptionId']=='electroverse-ionity' and x['reason']=='price_not_materialized' and x['benefit'].get('discountPercent')==40 for x in reports['ES']['deferred'])
+    assert any(x['subscriptionId']=='electroverse-powerdot' and x['reason']=='price_not_materialized' and x['benefit'].get('discountPercent')==29 for x in reports['ES']['deferred'])
+    assert any(x['subscriptionId']=='electroverse-iberdrola-bp-pulse-es' and x['reason']=='price_not_materialized' and x['benefit'].get('discountPercent')==22 for x in reports['ES']['deferred'])
     common=set(x['subscriptionId'] for x in fr)&set(x['subscriptionId'] for x in es)
     assert {'atlante-go','fastned-gold','zunder-easy','zunder-pro','electra-plus-smart'}<=common
+    deferred_common=set(x['subscriptionId'] for x in reports['FR']['deferred'])&set(x['subscriptionId'] for x in reports['ES']['deferred'])
+    assert {'electroverse-ionity','electroverse-powerdot'}<=deferred_common
 print('Global V9 subscription contract OK')
