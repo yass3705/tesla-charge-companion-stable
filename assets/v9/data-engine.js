@@ -9,12 +9,12 @@
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
   const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
   const uniq=values=>[...new Set((values||[]).filter(Boolean))];
-  const number=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
+  const number=v=>{if(v===null||v===undefined||v==='')return null;const n=Number(v);return Number.isFinite(n)?n:null;};
 
   function operatorId(value){
     const raw=typeof value==='object'?(value?.id||value?.name):value;
     const n=norm(raw);
-    if(!n)return 'unknown';
+    if(!n)return'unknown';
     if(n==='tesla'||n.startsWith('tesla-'))return'tesla';
     if(n.includes('ionity'))return'ionity';
     if(n.includes('fastned'))return'fastned';
@@ -36,17 +36,14 @@
 
   function sourceApplies(source,query){
     if(source?.active===false)return false;
-    const countries=Array.isArray(source?.countries)?source.countries:['*'];
-    const country=text(query?.countryCode).toUpperCase();
+    const countries=Array.isArray(source?.countries)?source.countries:['*'],country=text(query?.countryCode).toUpperCase();
     if(!country||countries.includes('*'))return true;
     return countries.map(x=>text(x).toUpperCase()).includes(country);
   }
 
   function priorityFor(source,family,fragment){
-    const override=number(fragment?.fieldPriority?.[family]);
-    if(override!=null)return override;
-    const p=source?.priority;
-    if(typeof p==='number')return p;
+    const override=number(fragment?.fieldPriority?.[family]);if(override!=null)return override;
+    const p=source?.priority;if(typeof p==='number')return p;
     return number(p?.[family])??number(p?.default)??50;
   }
   function rank(source,family,fragment){return{score:priorityFor(source,family,fragment),sourceId:text(source?.id)||'unknown'};}
@@ -58,8 +55,7 @@
     const keys=[];
     if(fragment?.canonicalId)keys.push(`canonical:${text(fragment.canonicalId)}`);
     for(const a of fragment?.aliases||[])if(text(a))keys.push(`alias:${text(a)}`);
-    const sourceStationId=text(fragment?.sourceStationId||fragment?.id);
-    if(sourceStationId)keys.push(`source:${text(source?.id)}:${sourceStationId}`);
+    const sourceStationId=text(fragment?.sourceStationId||fragment?.id);if(sourceStationId)keys.push(`source:${text(source?.id)}:${sourceStationId}`);
     return uniq(keys);
   }
   function deterministicFragmentKey(item){const f=item.fragment,s=item.source;return[String(9999-priorityFor(s,'identity',f)).padStart(4,'0'),text(s?.id),text(f?.canonicalId),text(f?.id),text(f?.name),String(f?.latitude??''),String(f?.longitude??'')].join('|');}
@@ -69,9 +65,7 @@
   }
   function normalizeOperator(value){const name=text(typeof value==='object'?value?.name:value)||'Unknown';return{id:operatorId(typeof value==='object'?(value?.id||name):name),name};}
   function applyFamily(entity,fragment,source,family){
-    const fields=FAMILY_FIELDS[family]||[];
-    const provided=fields.filter(field=>fragment[field]!==undefined&&fragment[field]!==null);
-    if(!provided.length)return;
+    const fields=FAMILY_FIELDS[family]||[],provided=fields.filter(field=>fragment[field]!==undefined&&fragment[field]!==null);if(!provided.length)return;
     const nextRank=rank(source,family,fragment),current=entity._fieldRanks[family];if(!rankWins(nextRank,current))return;
     for(const field of provided)entity[field]=field==='physicalOperator'?normalizeOperator(fragment[field]):clone(fragment[field]);
     entity._fieldRanks[family]=nextRank;
@@ -107,16 +101,21 @@
   function stationConnectorKinds(station){const out=new Set();for(const evse of station?.evses||[])for(const c of evse?.connectors||[])if(text(c?.kind))out.add(text(c.kind).toUpperCase());return out;}
   function stationPowers(station){const out=[];for(const evse of station?.evses||[])for(const c of evse?.connectors||[]){const p=number(c?.powerKw);if(p!=null)out.push(p);}return out;}
   function stationIdentityTokens(station){
-    const out=new Set([text(station?.id)]);
-    for(const a of station?.aliases||[])out.add(text(a));
-    for(const p of station?.provenance||[])if(text(p?.sourceStationId))out.add(text(p.sourceStationId));
-    for(const evse of station?.evses||[]){if(text(evse?.id))out.add(text(evse.id));for(const a of evse?.aliases||[])out.add(text(a));}
+    const out=new Set([text(station?.id)]);for(const a of station?.aliases||[])out.add(text(a));for(const p of station?.provenance||[])if(text(p?.sourceStationId))out.add(text(p.sourceStationId));
+    for(const evse of station?.evses||[]){if(text(evse?.id))out.add(text(evse.id));for(const a of evse?.aliases||[])out.add(text(a));for(const p of evse?.pdcIds||[])out.add(text(p));}
     return out;
   }
   function anyExact(wanted,have){return(wanted||[]).some(v=>have.has(text(v)));}
+  function identityScopeMatches(rule,station){
+    const operatorAliases=[...(rule?.operatorIds||[]),...(rule?.operatorAliases||[])].map(operatorId).filter(v=>v&&v!=='unknown');
+    const networkAliases=[...(rule?.networkIds||[]),...(rule?.networkAliases||[])].map(operatorId).filter(v=>v&&v!=='unknown');
+    if(!operatorAliases.length&&!networkAliases.length)return true;
+    const op=operatorId(station?.physicalOperator),network=operatorId(station?.networkBrand);
+    return(operatorAliases.length&&operatorAliases.includes(op))||(networkAliases.length&&networkAliases.includes(network));
+  }
   function ruleMatchesStation(rule,station){
     const country=text(station?.countryCode).toUpperCase(),countries=(rule?.countries||[]).map(x=>text(x).toUpperCase());if(countries.length&&!countries.includes('*')&&!countries.includes(country))return false;
-    const aliases=[...(rule?.operatorIds||[]),...(rule?.operatorAliases||[])].map(operatorId);if(aliases.length&&!aliases.includes(operatorId(station?.physicalOperator)))return false;
+    if(!identityScopeMatches(rule,station))return false;
     const ids=stationIdentityTokens(station);
     if((rule?.stationIds||[]).length&&!anyExact(rule.stationIds,ids))return false;
     if((rule?.evseIds||[]).length&&!anyExact(rule.evseIds,ids))return false;
@@ -127,15 +126,15 @@
   function ruleToOffer(rule,station,source){
     const offer=materializeOffer({
       id:rule.id,provider:rule.provider,kind:rule.offerKind||'direct',subscriptionId:rule.subscriptionId||null,countries:rule.countries||[station.countryCode],currency:rule.currency||'EUR',
-      connectorKinds:clone(rule.connectorKinds)||[],operatorIds:clone(rule.operatorIds)||[],stationIds:clone(rule.stationIds)||[],evseIds:clone(rule.evseIds)||[],minPowerKw:rule.minPowerKw??null,maxPowerKw:rule.maxPowerKw??null,
+      connectorKinds:clone(rule.connectorKinds)||[],operatorIds:clone(rule.operatorIds)||[],networkIds:clone(rule.networkIds)||[],networkAliases:clone(rule.networkAliases)||[],stationIds:clone(rule.stationIds)||[],evseIds:clone(rule.evseIds)||[],minPowerKw:rule.minPowerKw??null,maxPowerKw:rule.maxPowerKw??null,
       pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
     },station.countryCode);
     if(offer){offer.sourceId=source.id;offer.priority=number(offer.priority)??priorityFor(source,'tariff',rule);}return offer;
   }
   function applyOfferRules(stations,ruleItems){
-    return (stations||[]).map(station=>{
+    return(stations||[]).map(station=>{
       const out={...station,offers:(station.offers||[]).map(clone)},ranks=new Map(out.offers.map(o=>[offerSemanticKey(o,out.countryCode),{score:number(o.priority)??0,sourceId:text(o.sourceId)}]));
-      for(const {rule,source} of ruleItems||[]){if(!ruleMatchesStation(rule,out))continue;const offer=ruleToOffer(rule,out,source);if(!offer)continue;const key=offerSemanticKey(offer,out.countryCode),next={score:number(offer.priority)??priorityFor(source,'tariff',rule),sourceId:text(source.id)},current=ranks.get(key);if(current&&!rankWins(next,current))continue;const i=out.offers.findIndex(o=>offerSemanticKey(o,out.countryCode)===key);if(i>=0)out.offers[i]=offer;else out.offers.push(offer);ranks.set(key,next);}
+      for(const{rule,source}of ruleItems||[]){if(!ruleMatchesStation(rule,out))continue;const offer=ruleToOffer(rule,out,source);if(!offer)continue;const key=offerSemanticKey(offer,out.countryCode),next={score:number(offer.priority)??priorityFor(source,'tariff',rule),sourceId:text(source.id)},current=ranks.get(key);if(current&&!rankWins(next,current))continue;const i=out.offers.findIndex(o=>offerSemanticKey(o,out.countryCode)===key);if(i>=0)out.offers[i]=offer;else out.offers.push(offer);ranks.set(key,next);}
       out.offers.sort((a,b)=>offerSemanticKey(a,out.countryCode).localeCompare(offerSemanticKey(b,out.countryCode)));return out;
     });
   }
@@ -158,14 +157,13 @@
       const applicable=sources.filter(s=>sourceApplies(s,query));
       const settled=await Promise.allSettled(applicable.map(async source=>{
         const loader=loaderMap.get(source.id);if(typeof loader!=='function')return{source,fragments:[],offerRules:[],skipped:'loader_missing'};
-        const result=await loader(query,clone(source));
-        if(Array.isArray(result))return{source,fragments:result,offerRules:[]};
+        const result=await loader(query,clone(source));if(Array.isArray(result))return{source,fragments:result,offerRules:[]};
         return{source,fragments:Array.isArray(result?.stations)?result.stations:Array.isArray(result?.stationFragments)?result.stationFragments:[],offerRules:Array.isArray(result?.offerRules)?result.offerRules:[]};
       }));
       const items=[],ruleItems=[],diagnostics={sources:{},errors:[]};
       settled.forEach((entry,index)=>{
         const source=applicable[index];if(entry.status==='rejected'){diagnostics.errors.push({sourceId:source.id,message:text(entry.reason?.message||entry.reason)});diagnostics.sources[source.id]={loaded:false,stationCount:0,offerRuleCount:0};return;}
-        const {fragments,offerRules,skipped}=entry.value;diagnostics.sources[source.id]={loaded:!skipped,stationCount:fragments.length,offerRuleCount:offerRules.length,skipped:skipped||null};for(const fragment of fragments)items.push({source,fragment});for(const rule of offerRules)ruleItems.push({source,rule});
+        const{fragments,offerRules,skipped}=entry.value;diagnostics.sources[source.id]={loaded:!skipped,stationCount:fragments.length,offerRuleCount:offerRules.length,skipped:skipped||null};for(const fragment of fragments)items.push({source,fragment});for(const rule of offerRules)ruleItems.push({source,rule});
       });
       const merged=applyOfferRules(resolveEntities(items),ruleItems),inRadius=merged.filter(st=>!query.origin||!Number.isFinite(Number(query.radiusKm))||distanceKm(query.origin,st)<=Number(query.radiusKm)+1e-9),filtered=inRadius.filter(st=>stationMatchesFilters(st,query.filters||{})),operators=deriveOperators(filtered),routingCandidates=selectRoutingCandidates(filtered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2});
       return{query:clone(query),stations:filtered,operators,routingCandidates,freshness:{generatedAt:new Date().toISOString()},diagnostics:{...diagnostics,fragmentCount:items.length,offerRuleCount:ruleItems.length,mergedStationCount:merged.length,inRadiusCount:inRadius.length,filteredCount:filtered.length,routingCandidateCount:routingCandidates.length}};
@@ -173,5 +171,5 @@
     api={queryArea,registerLoader,deriveOperators,eligibleOffers,selectRoutingCandidates,sources:()=>clone(sources)};return api;
   }
 
-  return{createEngine,resolveEntities,applyOfferRules,deriveOperators,eligibleOffers,selectRoutingCandidates,materializeOffer,operatorId,distanceKm,sourceApplies,ruleMatchesStation,stationIdentityTokens};
+  return{createEngine,resolveEntities,applyOfferRules,deriveOperators,eligibleOffers,selectRoutingCandidates,materializeOffer,operatorId,distanceKm,sourceApplies,ruleMatchesStation,stationIdentityTokens,identityScopeMatches};
 });
