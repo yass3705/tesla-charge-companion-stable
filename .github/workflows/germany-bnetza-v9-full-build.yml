@@ -1,0 +1,52 @@
+name: Germany V9 full BNetzA build
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/build_germany_bnetza_v9.py'
+      - 'data/v9/germany-operator-aliases.json'
+      - '.github/workflows/germany-bnetza-v9-full-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and build official BNetzA catalogue
+        run: |
+          python scripts/build_germany_bnetza_v9.py \
+            --out build/germany-static \
+            --crosswalk build/germany-crosswalk.json \
+            --aliases data/v9/germany-operator-aliases.json
+      - name: Validate national build volumes and contract
+        run: |
+          python - <<'PY'
+          import gzip,json,pathlib
+          root=pathlib.Path('build/germany-static')
+          m=json.loads((root/'manifest.json').read_text())
+          assert m['country']=='DE'
+          assert m['sourceRows'] > 50000, m
+          assert m['stationCount'] > 50000, m
+          assert m['stationCount'] >= m['sourceRows'] * 0.95, m
+          assert m['evseCount'] >= m['stationCount'], m
+          assert m['skippedRows'] <= m['sourceRows'] * 0.05, m
+          rows=json.loads(gzip.decompress((root/'all.json.gz').read_bytes()))
+          assert len(rows)==m['stationCount']
+          assert all(46 <= r[3] <= 56 and 4 <= r[4] <= 16 for r in rows)
+          print(json.dumps({k:m[k] for k in ('sourceRows','stationCount','evseCount','skippedRows','tileCount','allBytes')},indent=2))
+          PY
+      - name: Upload Germany V9 pre-integration dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: germany-v9-bnetza-preintegration
+          path: |
+            build/germany-static/
+            build/germany-crosswalk.json
+          retention-days: 7
