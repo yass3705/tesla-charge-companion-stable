@@ -43,6 +43,7 @@ jobs:
           node --check assets/v9/adapters/france-emsp-compact.js
           node --check assets/v9/adapters/france-crosswalk.js
           node --check assets/v9/adapters/france-irve-status.js
+          node --check tests/v9-france-coverage-audit.cjs
           node --check v9-preview/app.js
       - name: Validate source registry
         run: |
@@ -98,6 +99,8 @@ jobs:
         run: node tests/v9-france-emsp-migration.test.cjs
       - name: France tariff hierarchy regression
         run: node tests/v9-france-tariff-hierarchy.test.cjs
+      - name: France national tariff coverage audit
+        run: node tests/v9-france-coverage-audit.cjs
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Unified runtime integration
