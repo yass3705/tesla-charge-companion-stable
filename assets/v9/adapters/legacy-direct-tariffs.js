@@ -21,10 +21,10 @@
         rules.push({
           id:`e55c-direct:${stationId||localStationId||'station'}:${index}`,
           provider:'E55C direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',
-          operatorIds:['e55c','electric-55-charging','electric-55'],stationIds:uniq([stationId,localStationId]),evseIds,
+          operatorIds:['e55c','electric-55-charging','electric-55'],evseIds,
           connectorKinds:kind?[kind]:[],
           pricing:{type:'rules',rules:clone(profile.rules)},priority:Number(source?.priority?.tariff||95),
-          metadata:{legacyDataset:text(payload?.dataset),pricingProfileId:profileId,priceStatus:text(config?.priceStatus),verified:true,identityMode:'exact_evse',paymentUrls:uniq(config?.paymentUrls||[])}
+          metadata:{legacyDataset:text(payload?.dataset),sourceStationId:stationId,sourceLocalStationId:localStationId,pricingProfileId:profileId,priceStatus:text(config?.priceStatus),verified:true,identityMode:'exact_evse',paymentUrls:uniq(config?.paymentUrls||[])}
         });
       }
     }
