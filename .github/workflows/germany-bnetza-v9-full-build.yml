@@ -7,6 +7,7 @@ on:
       - 'scripts/build_germany_bnetza_v9_v2.py'
       - 'scripts/build_germany_bnetza_v9_v3.py'
       - 'scripts/build_germany_bnetza_v9_v4.py'
+      - 'scripts/group_germany_bnetza_v9_sites.py'
       - 'data/v9/germany-operator-aliases.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -28,7 +29,7 @@ jobs:
             --out build/germany-static \
             --crosswalk build/germany-crosswalk.json \
             --aliases data/v9/germany-operator-aliases.json
-      - name: Validate national build volumes and contract
+      - name: Validate national facility build
         run: |
           python - <<'PY'
           import gzip,json,pathlib
@@ -44,8 +45,36 @@ jobs:
           assert len(rows)==m['stationCount']
           assert all(46 <= r[3] <= 56 and 4 <= r[4] <= 16 for r in rows)
           ids=[str(r[0]) for r in rows]
-          assert len(ids)==len(set(ids)), 'duplicate station IDs detected'
+          assert len(ids)==len(set(ids)), 'duplicate facility IDs detected'
           print(json.dumps({k:m[k] for k in ('sourceRows','stationCount','evseCount','skippedRows','syntheticIdCount','tileCount','allBytes')},indent=2))
+          PY
+      - name: Group facilities into user-facing sites
+        run: |
+          python scripts/group_germany_bnetza_v9_sites.py \
+            --input-root build/germany-static \
+            --input-crosswalk build/germany-crosswalk.json \
+            --out build/germany-sites \
+            --crosswalk build/germany-site-crosswalk.json
+      - name: Validate grouped Germany site contract
+        run: |
+          python - <<'PY'
+          import gzip,json,pathlib
+          root=pathlib.Path('build/germany-sites')
+          m=json.loads((root/'manifest.json').read_text())
+          rows=json.loads(gzip.decompress((root/'all.json.gz').read_bytes()))
+          cw=json.loads(pathlib.Path('build/germany-site-crosswalk.json').read_text())
+          assert m['country']=='DE'
+          assert m['facilityCount'] > m['siteCount'] > 50000, m
+          assert m['siteCount'] < m['facilityCount'] * 0.90, m
+          assert m['evseCount'] >= m['siteCount'], m
+          assert m['multiFacilitySiteCount'] > 5000, m
+          assert m['maxFacilitiesPerSite'] >= 10, m
+          assert len(rows)==m['siteCount']==len(cw['entries'])
+          ids=[str(r[0]) for r in rows]
+          assert len(ids)==len(set(ids)), 'duplicate site IDs detected'
+          assert sum(e['facilityCount'] for e in cw['entries'])==m['facilityCount']
+          assert all(46 <= r[3] <= 56 and 4 <= r[4] <= 16 for r in rows)
+          print(json.dumps({k:m[k] for k in ('facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},indent=2))
           PY
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
@@ -54,4 +83,6 @@ jobs:
           path: |
             build/germany-static/
             build/germany-crosswalk.json
+            build/germany-sites/
+            build/germany-site-crosswalk.json
           retention-days: 7
