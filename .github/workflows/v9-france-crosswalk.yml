@@ -2,6 +2,9 @@ name: V9 France provider crosswalk
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ['V9 France IRVE static baseline']
+    types: [completed]
   schedule:
     - cron: '47 4 2 * *'
   push:
@@ -19,6 +22,7 @@ concurrency:
 
 jobs:
   enrich:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'refactor/unified-data-engine-v9')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,41 +36,47 @@ jobs:
           path: data-lab
           fetch-depth: 1
 
-      - name: Enrich only from exact IRVE identifiers
+      - name: Build provider overlay from exact IRVE identifiers
         run: python scripts/enrich_france_crosswalk_v9.py
 
-      - name: Validate crosswalk safety
+      - name: Validate crosswalk safety and isolation
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          cw=json.loads(Path('data/v9/france-crosswalk.json').read_text())
-          c=json.loads(Path('data/v9/france-crosswalk-candidates.json').read_text())
-          assert len(cw['entries'])>30000
-          meta=cw.get('enrichment',{})
+          base=json.loads(Path('data/v9/france-crosswalk.json').read_text())
+          overlay=json.loads(Path('data/v9/france-provider-crosswalk.json').read_text())
+          candidates=json.loads(Path('data/v9/france-crosswalk-candidates.json').read_text())
+          assert len(base['entries'])>30000
+          assert overlay.get('kind')=='provider-crosswalk-overlay'
+          meta=overlay.get('enrichment',{})
           assert meta.get('filesSeen',0)>=3,meta
           assert meta.get('recordsSeen',0)>0,meta
-          for e in cw['entries']:
+          assert meta.get('stationsEnriched',0)>0,meta
+          base_ids={e.get('canonicalId') for e in base['entries']}
+          for e in overlay['entries']:
+            assert e.get('canonicalId') in base_ids,e.get('canonicalId')
             for s in e.get('sourceIds',[]):
               assert s.get('match')=='exact_irve_identifier',s
-          assert c.get('policy')=='review_only_never_runtime'
-          assert c.get('count')==len(c.get('candidates',[]))
+            assert all(not str(a).startswith('geo:') for a in e.get('aliases',[]))
+          assert candidates.get('policy')=='review_only_never_runtime'
+          assert candidates.get('count')==len(candidates.get('candidates',[]))
           print(json.dumps(meta,indent=2))
           PY
 
-      - name: Publish crosswalk and review candidates
+      - name: Publish provider overlay and review candidates
         shell: bash
         run: |
           set -euo pipefail
           rm -rf data-lab
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-crosswalk.json data/v9/france-crosswalk-candidates.json
+          git add data/v9/france-provider-crosswalk.json data/v9/france-crosswalk-candidates.json
           if git diff --cached --quiet; then
-            echo 'No crosswalk changes'
+            echo 'No provider crosswalk changes'
             exit 0
           fi
-          git commit -m "data(v9): enrich France provider crosswalk [run ${GITHUB_RUN_ID}]"
+          git commit -m "data(v9): refresh France provider crosswalk [run ${GITHUB_RUN_ID}]"
           for attempt in 1 2 3; do
             git pull --rebase origin refactor/unified-data-engine-v9
             if git push origin HEAD:refactor/unified-data-engine-v9; then exit 0; fi
