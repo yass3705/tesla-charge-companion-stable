@@ -26,5 +26,8 @@ jobs:
           ref: release/2026-08
           path: rc
 
-      - name: Validate Eindhoven 50 km and Tesla global source
+      - name: Validate Eindhoven 25 km and Tesla global source
         run: node site/scripts/test_tesla_netherlands_visibility.mjs site rc
+
+      - name: Validate final Tesla operator UI
+        run: node site/scripts/test_v8_nl_operator_ui.mjs rc
