@@ -1,0 +1,25 @@
+name: Germany V9 pre-integration contract
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/build_germany_bnetza_v9.py'
+      - 'scripts/test_germany_bnetza_v9.py'
+      - 'tests/fixtures/germany_bnetza_v9_sample.csv'
+      - 'data/v9/germany-operator-aliases.json'
+      - '.github/workflows/germany-bnetza-v9-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Germany BNetzA V9 static and crosswalk contract
+        run: python scripts/test_germany_bnetza_v9.py
