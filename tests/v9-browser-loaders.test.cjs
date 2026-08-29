@@ -11,6 +11,7 @@ assert.deepEqual(L.selectTiles(manifest,{}),[]);
 const registry={sources:[
   {id:'tesla-global',adapter:'tesla-json',path:'data/tesla.json',active:true},
   {id:'france-national',adapter:'national-compact-v2',manifest:'data/fr/manifest.json',root:'data/fr/',countries:['FR'],active:true},
+  {id:'france-emsp-offers',adapter:'france-emsp-compact-v1',manifest:'data/legacy-fr/manifest.json',root:'data/legacy-fr/',countries:['FR'],priority:{tariff:80},active:true},
   {id:'france-crosswalk',adapter:'france-crosswalk-json',path:'data/fr-crosswalk.json',active:true,optional:true},
   {id:'france-provider-crosswalk',adapter:'france-crosswalk-json',path:'data/fr-provider-crosswalk.json',active:true,optional:true},
   {id:'france-irve-dynamic',adapter:'france-irve-status-json',path:'data/fr-status.json.gz',freshnessMaxMinutes:120,active:true,optional:true},
@@ -27,13 +28,15 @@ const adapters={
   directOffers:{createLoader:()=>async()=>({offerRules:[]})},
   legacyDirectTariffs:{createLoader:args=>{calls.push(['legacy-tariff',args.url,args.source.id]);return async()=>({offerRules:[]});}},
   legacyDirectStations:{createLoader:args=>{calls.push(['legacy-station',args.url,args.source.id]);return async()=>({offerRules:[]});}},
+  franceEmspCompact:{createLoader:args=>{calls.push(['emsp',args.base,args.manifestUrl,args.source.id]);return async()=>({offerRules:[]});}},
   franceCrosswalk:{createLoader:args=>{calls.push(['crosswalk',args.url]);return async()=>[];}},
   franceIrveStatus:{createLoader:args=>{calls.push(['status',args.url,args.maxAgeMinutes]);return async()=>[];}},
   nationalCompact:{normalizeRow:x=>x}
 };
 const loaders=L.createRegistryLoaders({registry,adapters,fetchImpl:async()=>{throw new Error('not called');}});
-assert.deepEqual(Object.keys(loaders).sort(),['atlante','e55c','france-crosswalk','france-irve-dynamic','france-national','france-offers','france-provider-crosswalk','ionity','tesla-global']);
+assert.deepEqual(Object.keys(loaders).sort(),['atlante','e55c','france-crosswalk','france-emsp-offers','france-irve-dynamic','france-national','france-offers','france-provider-crosswalk','ionity','tesla-global']);
 assert.deepEqual(calls,[
+  ['emsp','../data/legacy-fr/','../data/legacy-fr/manifest.json','france-emsp-offers'],
   ['crosswalk','../data/fr-crosswalk.json'],
   ['crosswalk','../data/fr-provider-crosswalk.json'],
   ['status','../data/fr-status.json.gz',120],
