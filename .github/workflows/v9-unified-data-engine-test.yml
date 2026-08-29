@@ -36,6 +36,8 @@ jobs:
           node --check assets/v9/pricing-engine.js
           node --check assets/v9/session-engine.js
           node --check assets/v9/station-score-engine.js
+          node --check assets/v9/routing-engine.js
+          node --check assets/v9/browser-routing.js
           node --check assets/v9/runtime-engine.js
           node --check assets/v9/browser-loaders.js
           node --check assets/v9/adapters/tesla-json.js
@@ -50,6 +52,7 @@ jobs:
           node --check tests/v9-france-direct-identity-audit.cjs
           node --check tests/v9-ionity-crosswalk-audit.cjs
           node --check tests/v9-station-score-engine.test.cjs
+          node --check tests/v9-routing-engine.test.cjs
           node --check v9-preview/app.js
       - name: Validate source registry
         run: |
@@ -115,6 +118,8 @@ jobs:
         run: node tests/v9-offer-engine.test.cjs
       - name: Station scoring
         run: node tests/v9-station-score-engine.test.cjs
+      - name: Routing and approach energy
+        run: node tests/v9-routing-engine.test.cjs
       - name: Unified runtime integration
         run: node tests/v9-runtime-engine.test.cjs
       - name: Real Eindhoven composition
