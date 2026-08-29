@@ -13,10 +13,12 @@ on:
       - 'scripts/test_v9_subscription_picker.py'
       - 'scripts/test_v9_subscription_engine_bridge.py'
       - 'scripts/test_v9_offer_engine.js'
+      - 'scripts/test_spain_conditional_subscriptions_v9.py'
       - 'tests/fixtures/spain_miteco_v9_sample.csv'
       - 'tests/fixtures/spain_reve_v9_sample.json'
       - 'data/v9/spain-operator-aliases.json'
       - 'data/v9/subscription-entitlements-global.json'
+      - 'data/v9/spain-conditional-subscription-evidence.json'
       - 'data/v9/france-emsp-offers.json'
       - 'data/netherlands_direct_tariffs_v1.json'
       - 'assets/v9-subscription-picker.js'
@@ -52,3 +54,5 @@ jobs:
         run: python scripts/test_v9_subscription_engine_bridge.py
       - name: Validate V9 unified offer engine runtime
         run: node scripts/test_v9_offer_engine.js
+      - name: Validate Spain conditional subscription evidence
+        run: python scripts/test_spain_conditional_subscriptions_v9.py
