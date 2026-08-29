@@ -5,26 +5,56 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
   'use strict';
   const text=v=>String(v==null?'':v).trim();
+  const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
+  const normOperator=v=>text(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const operatorIds=raw=>[...new Set((raw.operatorIds||raw.operatorAliases||[]).map(normOperator).filter(Boolean))];
+  const countries=(raw,country)=>[...new Set([...(raw.countries||[]).map(c=>text(c).toUpperCase()),text(country).toUpperCase()].filter(Boolean))];
+  const connectorKinds=raw=>[...new Set([...(raw.connectorKinds||[]),...(raw.kind?[raw.kind]:[])].map(v=>text(v).toUpperCase()).filter(Boolean))];
+
+  function pricing(raw){
+    if(raw.pricing&&typeof raw.pricing==='object')return clone(raw.pricing);
+    if(raw.pricePerKwh!=null)return{type:'kwh',pricePerKwh:Number(raw.pricePerKwh||0)};
+    return{type:'unknown'};
+  }
+
+  function common(raw,country){
+    return{
+      id:text(raw.selectionId||raw.id),
+      provider:text(raw.provider),
+      operatorIds:operatorIds(raw),
+      operatorAliases:Array.isArray(raw.operatorAliases)?clone(raw.operatorAliases):[],
+      connectorKinds:connectorKinds(raw),
+      countries:countries(raw,country),
+      currency:text(raw.currency||raw.pricing?.currency||'EUR').toUpperCase(),
+      pricing:pricing(raw),
+      minPowerKw:raw.minPowerKw??null,
+      maxPowerKw:raw.maxPowerKw??null,
+      directOperatorOnly:raw.directOperatorOnly===true,
+      priority:Number(raw.priority??95),
+      sourceId:text(raw.sourceId||raw.source)||'direct-offers',
+      metadata:{
+        source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,
+        monthlyFeeLabel:raw.monthlyFeeLabel||null,promotionEnd:raw.monthlyFeePromotionEnd||null,
+        defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null
+      }
+    };
+  }
 
   function directRule(raw,country){
-    return{
-      id:text(raw.id),provider:text(raw.provider),offerKind:'direct',subscriptionId:null,
-      operatorAliases:Array.isArray(raw.operatorAliases)?raw.operatorAliases:[],connectorKinds:raw.kind?[text(raw.kind).toUpperCase()]:[],countries:[country],currency:text(raw.currency||'EUR').toUpperCase(),
-      pricing:{type:'kwh',pricePerKwh:Number(raw.pricePerKwh||0)},priority:95,
-      metadata:{source:raw.source||null,note:raw.note||null,monthlyFeeEur:null}
-    };
+    return{...common(raw,country),kind:'direct',offerKind:'direct',subscriptionId:null};
   }
   function subscriptionRule(raw,country){
-    return{
-      id:text(raw.selectionId||raw.id),provider:text(raw.provider),offerKind:'subscription',subscriptionId:text(raw.selectionId||raw.id),
-      operatorAliases:Array.isArray(raw.operatorAliases)?raw.operatorAliases:[],connectorKinds:raw.kind?[text(raw.kind).toUpperCase()]:[],countries:[country],currency:text(raw.currency||'EUR').toUpperCase(),
-      pricing:{type:'kwh',pricePerKwh:Number(raw.pricePerKwh||0)},priority:100,
-      metadata:{source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,monthlyFeeLabel:raw.monthlyFeeLabel||null,promotionEnd:raw.monthlyFeePromotionEnd||null}
-    };
+    return{...common(raw,country),kind:'subscription',offerKind:'subscription',subscriptionId:text(raw.selectionId||raw.id),priority:Number(raw.priority??100)};
   }
+
   function normalizePayload(payload){
     const country=text(payload?.country).toUpperCase();if(!country)throw new Error('direct offer payload country missing');
-    return{offerRules:[...(payload?.directOffers||[]).map(x=>directRule(x,country)),...(payload?.subscriptionOffers||[]).map(x=>subscriptionRule(x,country))],metadata:{schemaVersion:payload?.schemaVersion||1,country,generatedAt:payload?.generatedAt||null,policy:payload?.policy||{}}};
+    const direct=payload?.directOffers||payload?.operatorOffers||[];
+    const subscriptions=payload?.subscriptionOffers||payload?.subscriptions||[];
+    return{
+      offerRules:[...direct.map(x=>directRule(x,country)),...subscriptions.map(x=>subscriptionRule(x,country))],
+      metadata:{schemaVersion:payload?.schemaVersion||1,country,generatedAt:payload?.generatedAt||null,policy:payload?.policy||{},mode:payload?.mode||null}
+    };
   }
   function createLoader({url,fetchImpl}={}){
     const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for direct offer adapter');let promise=null;
