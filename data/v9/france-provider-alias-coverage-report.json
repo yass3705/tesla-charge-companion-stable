@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "country": "FR",
-  "generatedAt": "2026-08-29T23:55:33.751827Z",
+  "generatedAt": "2026-08-29T23:58:50.197829Z",
   "policy": {
     "runtimeExactOnly": true,
     "geographicCandidatesReviewOnly": true,
@@ -10,15 +10,15 @@
     "noSyntheticNetworkWideTariff": true
   },
   "summary": {
-    "providerCount": 7,
-    "totalExactRuntimeAliases": 838,
-    "totalExactCanonicalStations": 797,
+    "providerCount": 8,
+    "totalExactRuntimeAliases": 4686,
+    "totalExactCanonicalStations": 989,
     "totalReviewOnlyCandidates": 4405,
     "aviaPicotyCombinedExactCanonicalStations": 41,
     "aviaPicotyDualConfirmedCanonicalStations": 41,
     "aviaPicotyHasExactRuntimeIdentity": true,
     "aviaPicotyHasRankableTariff": false,
-    "bumpHasExactRuntimeIdentity": false,
+    "bumpHasExactRuntimeIdentity": true,
     "powerdotHasExactRuntimeIdentity": false
   },
   "aviaPicotyTariffReadiness": {
@@ -136,12 +136,15 @@
     },
     "bump": {
       "provider": "bump",
-      "status": "no_evidence",
-      "exactRuntimeAliasCount": 0,
-      "exactCanonicalStationCount": 0,
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 1886,
+      "exactCanonicalStationCount": 192,
       "reviewOnlyCandidateCount": 0,
       "reviewOnlyCandidateKinds": {},
-      "exactSourceFiles": [],
+      "exactSourceFiles": [
+        "data/national/bump_direct_inventory_france.json.gz",
+        "data/national/bump_direct_stations_france.json.gz"
+      ],
       "candidateSourceFiles": []
     },
     "powerdot": {
@@ -163,7 +166,7 @@
     {
       "provider": "allego",
       "status": "exact_runtime_aliases_available",
-      "exactRuntimeAliasCount": 154,
+      "exactRuntimeAliasCount": 239,
       "exactCanonicalStationCount": 154,
       "reviewOnlyCandidateCount": 552,
       "reviewOnlyCandidateKinds": {
@@ -229,9 +232,22 @@
       ]
     },
     {
+      "provider": "bump",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 1886,
+      "exactCanonicalStationCount": 192,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/bump_direct_inventory_france.json.gz",
+        "data/national/bump_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    {
       "provider": "electric55",
       "status": "exact_runtime_aliases_available",
-      "exactRuntimeAliasCount": 602,
+      "exactRuntimeAliasCount": 2479,
       "exactCanonicalStationCount": 602,
       "reviewOnlyCandidateCount": 602,
       "reviewOnlyCandidateKinds": {

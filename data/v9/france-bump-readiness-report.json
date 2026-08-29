@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "country": "FR",
   "provider": "bump",
-  "generatedAt": "2026-08-29T23:55:34.884108Z",
+  "generatedAt": "2026-08-29T23:58:51.562688Z",
   "policy": {
     "runtimeExactOnly": true,
     "geographicFallbackAllowed": false,
@@ -10,7 +10,7 @@
     "tariffActivationRequiresExactCanonicalIdentity": true
   },
   "summary": {
-    "currentExactCrosswalkAliasCount": 0,
+    "currentExactCrosswalkAliasCount": 1886,
     "exactIrveValuesFoundAcrossDirectSources": 1886,
     "exactMatchFields": {
       "idPdcItinerance": 5653,
@@ -22,10 +22,411 @@
       "tariffsGraphql": 30,
       "tariffsTcc": 30
     },
-    "identityGapLikelyParserRelated": true,
-    "runtimeTariffEligible": false
+    "identityGapLikelyParserRelated": false,
+    "runtimeTariffEligible": true
   },
-  "currentExactAliasesSample": [],
+  "currentExactAliasesSample": [
+    {
+      "canonicalId": "FR:national:FRBMPP111368P50039591232699",
+      "id": "FRBMPE6330"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP111368P50039591232699",
+      "id": "FRBMPE9191"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP111368P50039591232699",
+      "id": "FRBMPE9531"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE1151"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE2682"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE3845"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE3966"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE4051"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE4502"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE5329"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE5591"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE6119"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE7146"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE7849"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE9574"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE2344"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE4459"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE5427"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE6442"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE7349"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE9460"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE4510"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE5898"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE6294"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE6897"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE2459"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE2531"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE3420"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE7380"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE1981"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE5359"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE7191"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE9551"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE1605"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2090"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2211"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2469"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2660"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2804"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2973"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE4751"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE5289"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE6443"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE7150"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE7841"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE1987"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE3779"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE4828"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE5822"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE7358"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE8273"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE1261"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE2192"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE4236"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE6902"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE7085"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE7433"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE2976"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE4527"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE4581"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE5294"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE7086"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE7416"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE7552"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE8298"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE1513"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE3265"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE3643"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE6152"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE2225"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE5349"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE5562"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE6093"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE8156"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE5079"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE5734"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE7840"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE8660"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE9775"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE1254"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE2559"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE2726"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE2832"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE3431"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE8376"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE9828"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE9982"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154416P500424816506570",
+      "id": "FRBMPE8155"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154416P500424816506570",
+      "id": "FRBMPE8263"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154416P500424816506570",
+      "id": "FRBMPE8336"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE1595"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE2537"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE6110"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE6167"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE7013"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE7174"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE7483"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE9474"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167300P500016734358620",
+      "id": "FRBMPE1641"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167300P500016734358620",
+      "id": "FRBMPE3184"
+    }
+  ],
   "sources": {
     "inventory": {
       "source": "data-lab/data/national/bump_direct_inventory_france.json.gz",
@@ -2968,5 +3369,5 @@
       ]
     }
   },
-  "next": "Extend the provider crosswalk parser only for deterministic Bump fields proven to equal PAN station/PDC identifiers, then rebuild and re-audit."
+  "next": "Semantically validate the TCC tariff representation and compile offers only onto exact Bump canonical aliases."
 }
