@@ -29,13 +29,15 @@
       {"path":"assets/ocpi-duration-pricing.js","target":"assets/ocpi-duration-pricing.js","kind":"file","required":true},
       {"path":"assets/ocpi-access-intervals.js","target":"assets/ocpi-access-intervals.js","kind":"file","required":true},
       {"path":"assets/netherlands-catalog.js","target":"assets/netherlands-catalog.js","kind":"file","required":true},
-      {"path":"assets/netherlands-refresh.js","target":"assets/netherlands-refresh.js","kind":"file","required":true}
+      {"path":"assets/netherlands-refresh.js","target":"assets/netherlands-refresh.js","kind":"file","required":true},
+      {"path":"data/netherlands_direct_tariffs_v1.json","target":"data/netherlands_direct_tariffs_v1.json","kind":"file","required":true},
+      {"path":"assets/v8-netherlands-tariffs.js","target":"assets/v8-netherlands-tariffs.js","kind":"file","required":true}
     ]
   },
   "sources": [
     {"id":"runtime-integrity-guard","label":"Isolation runtime preview","status":"active","integration":"runtime-guard","artifactPaths":[],"runtimeModules":["assets/v8-runtime-integrity-guard.js"]},
     {"id":"france-national-catalog","label":"Electroverse + Electra national","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_france/manifest.json","data/non_tesla_france/all.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
-    {"id":"netherlands-national-catalog","label":"DOT-NL national Netherlands","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_netherlands/manifest.json","data/non_tesla_netherlands/all.json.gz"],"runtimeModules":["assets/ocpi-duration-pricing.js","assets/ocpi-access-intervals.js","assets/netherlands-catalog.js","assets/netherlands-refresh.js"]},
+    {"id":"netherlands-national-catalog","label":"DOT-NL national Netherlands + direct overlays","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_netherlands/manifest.json","data/non_tesla_netherlands/all.json.gz","data/netherlands_direct_tariffs_v1.json"],"runtimeModules":["assets/ocpi-duration-pricing.js","assets/ocpi-access-intervals.js","assets/netherlands-catalog.js","assets/netherlands-refresh.js","assets/v8-netherlands-tariffs.js"]},
     {"id":"e55c-direct","label":"E55C direct","status":"active","integration":"catalog-direct","artifactPaths":["data/e55c_station_tariffs_v1.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
     {"id":"belib-direct","label":"Belib direct","status":"active","integration":"catalog-direct","artifactPaths":["data/belib_station_tariffs_v1.json.gz"],"runtimeModules":["assets/france-catalog.js","assets/v8-belib-pricing.js"]},
     {"id":"ionity-direct","label":"IONITY Direct","status":"active","integration":"catalog-direct","artifactPaths":["data/ionity_direct_stations_france.json.gz"],"runtimeModules":["assets/france-catalog.js"]},
