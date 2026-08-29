@@ -12,6 +12,7 @@ on:
     paths:
       - 'scripts/enrich_france_crosswalk_v9.py'
       - 'scripts/audit_france_provider_alias_coverage.py'
+      - 'scripts/audit_bump_v9_readiness.py'
       - '.github/workflows/v9-france-crosswalk.yml'
 
 permissions:
@@ -43,6 +44,9 @@ jobs:
       - name: Build provider alias coverage audit
         run: python scripts/audit_france_provider_alias_coverage.py
 
+      - name: Audit Bump identity and tariff readiness
+        run: python scripts/audit_bump_v9_readiness.py
+
       - name: Validate crosswalk safety and isolation
         run: |
           python - <<'PY'
@@ -52,6 +56,7 @@ jobs:
           overlay=json.loads(Path('data/v9/france-provider-crosswalk.json').read_text())
           candidates=json.loads(Path('data/v9/france-crosswalk-candidates.json').read_text())
           coverage=json.loads(Path('data/v9/france-provider-alias-coverage-report.json').read_text())
+          bump=json.loads(Path('data/v9/france-bump-readiness-report.json').read_text())
           assert len(base['entries'])>30000
           assert overlay.get('kind')=='provider-crosswalk-overlay'
           meta=overlay.get('enrichment',{})
@@ -72,6 +77,8 @@ jobs:
           assert policy.get('runtimeExactOnly') is True
           assert policy.get('geographicCandidatesReviewOnly') is True
           assert policy.get('noTariffActivationFromProximity') is True
+          assert policy.get('providerAliasDoesNotImplyTariffAvailability') is True
+          assert policy.get('noSyntheticNetworkWideTariff') is True
           summary=coverage.get('summary',{})
           assert summary.get('aviaPicotyCombinedExactCanonicalStations',0)>0,summary
           focus=coverage.get('focus',{})
@@ -80,8 +87,17 @@ jobs:
           if focus['bump']['exactRuntimeAliasCount']==0:
             assert focus['bump']['status'] in ('review_only_no_exact_runtime_alias','no_evidence')
           assert focus['avia-picoty']['exactRuntimeAliasCount']>0 or focus['avia-volt']['exactRuntimeAliasCount']>0
+          assert bump.get('provider')=='bump'
+          bp=bump.get('policy',{})
+          assert bp.get('runtimeExactOnly') is True
+          assert bp.get('geographicFallbackAllowed') is False
+          assert bp.get('tariffDataCannotCreatePhysicalStations') is True
+          bs=bump.get('summary',{})
+          assert bs.get('directTariffSourcesPresent') is True,bs
+          if bs.get('currentExactCrosswalkAliasCount',0)==0:
+            assert bs.get('runtimeTariffEligible') is False,bs
           powerdot_exact=provider_counts.get('powerdot',0)
-          print(json.dumps({**meta,'providerExactAliases':provider_counts,'powerdotExactAliases':powerdot_exact,'powerdotResolution':'exact' if powerdot_exact else 'unresolved_no_exact_identifier_no_fuzzy_fallback','coverageSummary':summary,'coverageFocus':focus},indent=2))
+          print(json.dumps({**meta,'providerExactAliases':provider_counts,'powerdotExactAliases':powerdot_exact,'powerdotResolution':'exact' if powerdot_exact else 'unresolved_no_exact_identifier_no_fuzzy_fallback','coverageSummary':summary,'coverageFocus':focus,'bumpReadiness':bs,'bumpNext':bump.get('next')},indent=2))
           PY
 
       - name: Publish provider overlay and review candidates
@@ -91,7 +107,7 @@ jobs:
           rm -rf data-lab
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-provider-crosswalk.json data/v9/france-crosswalk-candidates.json data/v9/france-provider-alias-coverage-report.json
+          git add data/v9/france-provider-crosswalk.json data/v9/france-crosswalk-candidates.json data/v9/france-provider-alias-coverage-report.json data/v9/france-bump-readiness-report.json
           if git diff --cached --quiet; then
             echo 'No provider crosswalk changes'
             exit 0
