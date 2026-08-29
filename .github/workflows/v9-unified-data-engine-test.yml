@@ -11,11 +11,12 @@ on:
       - 'tests/v9-**'
       - '.github/workflows/v9-unified-data-engine-test.yml'
   push:
-    branches: [main]
+    branches: [main, 'refactor/unified-data-engine-v9']
     paths:
       - 'assets/v9/**'
       - 'data/v9/**'
       - 'tests/v9-**'
+      - '.github/workflows/v9-unified-data-engine-test.yml'
   workflow_dispatch:
 
 permissions:
@@ -29,6 +30,8 @@ jobs:
       - name: Syntax checks
         run: |
           node --check assets/v9/data-engine.js
+          node --check assets/v9/offer-engine.js
+          node --check assets/v9/runtime-engine.js
           node --check assets/v9/adapters/tesla-json.js
           node --check assets/v9/adapters/national-compact.js
           node --check assets/v9/adapters/direct-offers.js
@@ -52,5 +55,9 @@ jobs:
         run: node tests/v9-data-engine.test.cjs
       - name: Compatibility adapters
         run: node tests/v9-adapters.test.cjs
+      - name: Unified offers and subscriptions
+        run: node tests/v9-offer-engine.test.cjs
+      - name: Unified runtime integration
+        run: node tests/v9-runtime-engine.test.cjs
       - name: Real Eindhoven composition
         run: node tests/v9-real-eindhoven.test.cjs
