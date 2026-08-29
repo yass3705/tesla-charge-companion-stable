@@ -147,10 +147,9 @@
     if(filterMode!=='all')return previousCandidateStations(filterMode,maxDistanceKm);
 
     // Important en zone dense : le moteur historique limite à 80 candidats avant
-    // calcul routier. On évalue donc d'abord les couches globales (notamment Tesla),
-    // puis DOT-NL, et on fusionne les deux résultats. Ainsi des dizaines de bornes AC
-    // très proches ne peuvent plus évincer tous les Superchargeurs du rayon demandé.
-    const upstream=await previousCandidateStations(filterMode,maxDistanceKm);
+    // calcul routier. On évalue donc d'abord Tesla seul, puis DOT-NL, et on fusionne
+    // les deux résultats. Ainsi la densité AC locale ne peut jamais évincer Tesla.
+    const upstream=await previousCandidateStations('tesla',maxDistanceKm);
     let upstreamRoutes={};try{upstreamRoutes={...(routeResults||{})};}catch(e){}
 
     const origin=upstream?.origin||await resolveOrigin(document.getElementById('simOrigin')?.value?.trim()||localStorage.getItem('tccDefaultOrigin')||'Ma position');
@@ -171,5 +170,5 @@
   };
 
   window.TCCNetherlandsCatalog={loadManifest,rowsNear,accessFromCompact,mergeCandidateStations,clearCache(){rawCache.clear();manifestPromise=null;},get cachedFragments(){return rawCache.size;}};
-  console.info('[TCC] Catalogue national Pays-Bas hors Tesla prêt (DOT-NL, tarifs + horaires OCPI, chargement géographique à la demande, candidats globaux préservés).');
+  console.info('[TCC] Catalogue national Pays-Bas hors Tesla prêt (DOT-NL, tarifs + horaires OCPI, chargement géographique à la demande, candidats Tesla préservés).');
 })();
