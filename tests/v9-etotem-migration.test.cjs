@@ -9,16 +9,16 @@ const payload={dataset:'etotem-direct-tariffs-france',stations:[
   {stationId:'ET-4',resolved:true,tariffText:'AC : texte sans prix structurable',pdcs:[{id:'FR*ETT*E4*1',powerKw:22,connectors:['T2']}]}
 ]};
 const normalized=Adapter.normalizePayload(payload,{priority:{tariff:95}});
-assert.equal(normalized.offerRules.length,2,'only resolved PDCs with unambiguous standard prices should survive');
+assert.equal(normalized.offerRules.length,1,'only resolved PDCs with an unambiguous standard price should survive');
 const first=normalized.offerRules.find(r=>r.evseIds.includes('FR*ETT*E1*1'));
 assert(first);
 assert.equal(first.pricing.rules[0].pricePerKwh,0.45);
 assert.equal(first.pricing.rules[0].idleGraceMinutes,10);
 assert.equal(first.pricing.rules[0].idlePerMinute,0.1);
 assert.equal(first.pricing.rules[0].idleCap,12);
-const eco=normalized.offerRules.find(r=>r.evseIds.includes('FR*ETT*E2*1'));
-assert(eco);
-assert.equal(eco.pricing.rules[0].pricePerKwh,0.55,'Eco price must not replace standard public direct tariff');
+assert.ok(!normalized.offerRules.some(r=>r.evseIds.includes('FR*ETT*E2*1')),'mixed Eco/standard wording must remain fail-closed when the standard price is ambiguous');
+assert.ok(!normalized.offerRules.some(r=>r.evseIds.includes('FR*ETT*E3*1')),'unresolved station must be excluded');
+assert.ok(!normalized.offerRules.some(r=>r.evseIds.includes('FR*ETT*E4*1')),'unparseable tariff must be excluded');
 
 const registry={sources:[
   {id:'france-national',countries:['FR'],priority:{identity:55,connectors:60,tariff:30},active:true},
