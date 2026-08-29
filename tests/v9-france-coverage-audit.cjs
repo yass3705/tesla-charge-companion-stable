@@ -10,6 +10,18 @@ const readGzipJson=p=>JSON.parse(zlib.gunzipSync(fs.readFileSync(p)).toString('u
 const norm=v=>String(v==null?'':v).trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 const pdcNorm=v=>String(v==null?'':v).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
 const uniq=a=>[...new Set((a||[]).filter(Boolean))];
+const operatorId=value=>{
+  const n=norm(value);if(!n)return'unknown';
+  if(n==='tesla'||n.startsWith('tesla-'))return'tesla';
+  if(n.includes('ionity'))return'ionity';
+  if(n.includes('fastned'))return'fastned';
+  if(n.includes('powerdot')||n.includes('power-dot'))return'powerdot';
+  if(n.includes('atlante'))return'atlante';
+  if(n.includes('lidl'))return'lidl';
+  if(n.includes('electroverse'))return'electroverse';
+  if(n==='electra'||n.startsWith('electra-'))return'electra';
+  return n;
+};
 
 const registry=readJson('data/v9/source-registry.json');
 const nationalManifest=readJson('data/v9/france-static/manifest.json');
@@ -42,8 +54,8 @@ for(const rule of emspRules){
   for(const pdc of rule.evseIds||[]){
     const key=String(pdc);if(!key)continue;
     if(!emspByPdc.has(key))emspByPdc.set(key,new Set());
-    emspByPdc.get(key).add(norm(rule.provider));
-    const nk=pdcNorm(key);if(nk){if(!emspByNormalizedPdc.has(nk))emspByNormalizedPdc.set(nk,new Set());emspByNormalizedPdc.get(nk).add(norm(rule.provider));}
+    emspByPdc.get(key).add(operatorId(rule.provider));
+    const nk=pdcNorm(key);if(nk){if(!emspByNormalizedPdc.has(nk))emspByNormalizedPdc.set(nk,new Set());emspByNormalizedPdc.get(nk).add(operatorId(rule.provider));}
   }
 }
 
@@ -57,7 +69,9 @@ for(const rule of directRules){
 function stationTokens(stationId){return new Set([stationId,`FR:national:${stationId}`,`irve-station:${stationId}`,`national:FR:${stationId}`,...(aliasesByStation.get(stationId)||[])]);}
 function exactStationRuleMatches(rule,tokens){return (rule.stationIds||[]).some(id=>tokens.has(String(id)));}
 function scopedRuleMatches(rule,{operator,network,kind,power}){
-  const op=norm(operator),net=norm(network),ops=(rule.operatorIds||[]).map(norm),nets=(rule.networkIds||[]).map(norm);
+  const op=operatorId(operator),net=operatorId(network);
+  const ops=[...(rule.operatorIds||[]),...(rule.operatorAliases||[])].map(operatorId).filter(v=>v&&v!=='unknown');
+  const nets=[...(rule.networkIds||[]),...(rule.networkAliases||[])].map(operatorId).filter(v=>v&&v!=='unknown');
   if(ops.length||nets.length){if(!ops.includes(op)&&!nets.includes(net))return false;}
   const kinds=(rule.connectorKinds||[]).map(x=>String(x).toUpperCase());if(kinds.length&&!kinds.includes(kind))return false;
   const min=Number(rule.minPowerKw),max=Number(rule.maxPowerKw);if(Number.isFinite(min)&&power<min)return false;if(Number.isFinite(max)&&power>max)return false;return true;
