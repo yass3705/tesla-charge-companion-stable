@@ -20,16 +20,17 @@
   }
 
   function common(raw,country){
+    const physicalOnly=raw.directOperatorOnly===true;
     return{
       id:text(raw.selectionId||raw.id),provider:text(raw.provider),
       operatorIds:operatorIds(raw),operatorAliases:Array.isArray(raw.operatorAliases)?clone(raw.operatorAliases):[],
-      networkIds:networkIds(raw),networkAliases:Array.isArray(raw.networkAliases)?clone(raw.networkAliases):[],
+      networkIds:physicalOnly?[]:networkIds(raw),networkAliases:physicalOnly?[]:(Array.isArray(raw.networkAliases)?clone(raw.networkAliases):[]),
       stationIds:ids(raw.stationIds||[],raw.stationId,raw.sourceStationId),
       evseIds:ids(raw.evseIds||[],raw.evseId,raw.idPdcItinerance,raw.id_pdc_itinerance),
       connectorKinds:connectorKinds(raw),countries:countries(raw,country),
       currency:text(raw.currency||raw.pricing?.currency||'EUR').toUpperCase(),pricing:pricing(raw),
       minPowerKw:raw.minPowerKw==null?undefined:raw.minPowerKw,maxPowerKw:raw.maxPowerKw==null?undefined:raw.maxPowerKw,
-      directOperatorOnly:raw.directOperatorOnly===true,priority:Number(raw.priority??95),sourceId:text(raw.sourceId||raw.source)||'direct-offers',
+      directOperatorOnly:physicalOnly,priority:Number(raw.priority??95),sourceId:text(raw.sourceId||raw.source)||'direct-offers',
       metadata:{source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,monthlyFeeLabel:raw.monthlyFeeLabel||null,promotionEnd:raw.monthlyFeePromotionEnd||null,defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null,customerProfile:raw.customerProfile||null,parkingPolicy:clone(raw.parkingPolicy)||null,verifiedScope:raw.verifiedScope||null}
     };
   }
