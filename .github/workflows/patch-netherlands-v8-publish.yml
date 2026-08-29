@@ -1,4 +1,4 @@
-name: Prepare Netherlands V8 release registry
+name: Rebuild clean Netherlands V8 release diff
 
 on:
   push:
@@ -16,78 +16,59 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: fix/netherlands-v8-release-registry
+          ref: release/2026-08
           fetch-depth: 0
-      - name: Add Netherlands catalog to V8 release contract
+      - name: Recreate targeted Netherlands V8 release branch
         shell: bash
         run: |
           set -euo pipefail
+          git switch -C fix/netherlands-v8-release-registry
           python - <<'PY'
-          import json
           from pathlib import Path
 
-          index_path=Path('index.html')
-          html=index_path.read_text(encoding='utf-8')
-          marker='<script src="assets/france-catalog.js?v=8004" defer></script>'
-          nl_tags='\n'.join([
-              '<script src="assets/ocpi-duration-pricing.js?v=nl-v3" defer></script>',
-              '<script src="assets/ocpi-access-intervals.js?v=nl-v3" defer></script>',
-              '<script src="assets/netherlands-catalog.js?v=nl-v3" defer></script>',
-              '<script src="assets/netherlands-refresh.js?v=nl-v3" defer></script>',
+          index=Path('index.html')
+          html=index.read_text(encoding='utf-8')
+          anchor='<script src="assets/france-catalog.js?v=8004" defer></script>'
+          tags='\n'.join([
+            '<script src="assets/ocpi-duration-pricing.js?v=nl-v3" defer></script>',
+            '<script src="assets/ocpi-access-intervals.js?v=nl-v3" defer></script>',
+            '<script src="assets/netherlands-catalog.js?v=nl-v3" defer></script>',
+            '<script src="assets/netherlands-refresh.js?v=nl-v3" defer></script>',
           ])
-          if 'assets/netherlands-catalog.js' not in html:
-              if marker not in html:
-                  raise SystemExit('France catalog script anchor missing in V8 release index')
-              html=html.replace(marker,marker+'\n'+nl_tags,1)
-              index_path.write_text(html,encoding='utf-8')
+          if anchor not in html: raise SystemExit('V8 France catalog anchor missing')
+          html=html.replace(anchor,anchor+'\n'+tags,1)
+          index.write_text(html,encoding='utf-8')
 
-          registry_path=Path('data/v8_tariff_sources.json')
-          registry=json.loads(registry_path.read_text(encoding='utf-8'))
-          publish=registry.setdefault('publish',{})
-          copies=publish.setdefault('copyFromMain',[])
-          wanted=[
-              {'path':'data/non_tesla_netherlands','target':'data/non_tesla_netherlands','kind':'directory','required':True},
-              {'path':'assets/ocpi-duration-pricing.js','target':'assets/ocpi-duration-pricing.js','kind':'file','required':True},
-              {'path':'assets/ocpi-access-intervals.js','target':'assets/ocpi-access-intervals.js','kind':'file','required':True},
-              {'path':'assets/netherlands-catalog.js','target':'assets/netherlands-catalog.js','kind':'file','required':True},
-              {'path':'assets/netherlands-refresh.js','target':'assets/netherlands-refresh.js','kind':'file','required':True},
-          ]
-          existing_targets={str(item.get('target')) for item in copies}
-          for item in wanted:
-              if item['target'] not in existing_targets:
-                  copies.append(item)
-                  existing_targets.add(item['target'])
+          reg=Path('data/v8_tariff_sources.json')
+          s=reg.read_text(encoding='utf-8')
+          s=s.replace('"updatedAt": "2026-08-27"','"updatedAt": "2026-08-29"',1)
 
-          sources=registry.setdefault('sources',[])
-          source_id='netherlands-national-catalog'
-          source={
-              'id':source_id,
-              'label':'DOT-NL national Netherlands',
-              'status':'active',
-              'integration':'catalog',
-              'artifactPaths':['data/non_tesla_netherlands/manifest.json','data/non_tesla_netherlands/all.json.gz'],
-              'runtimeModules':['assets/ocpi-duration-pricing.js','assets/ocpi-access-intervals.js','assets/netherlands-catalog.js','assets/netherlands-refresh.js'],
-          }
-          replaced=False
-          for i,item in enumerate(sources):
-              if item.get('id')==source_id:
-                  sources[i]=source
-                  replaced=True
-                  break
-          if not replaced:
-              sources.append(source)
-          registry['updatedAt']='2026-08-29'
-          registry_path.write_text(json.dumps(registry,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          copy_anchor='      {"path":"assets/v8-belib-pricing.js","target":"assets/v8-belib-pricing.js","kind":"file","required":true}\n'
+          copy_repl=(
+            '      {"path":"assets/v8-belib-pricing.js","target":"assets/v8-belib-pricing.js","kind":"file","required":true},\n'
+            '      {"path":"data/non_tesla_netherlands","target":"data/non_tesla_netherlands","kind":"directory","required":true},\n'
+            '      {"path":"assets/ocpi-duration-pricing.js","target":"assets/ocpi-duration-pricing.js","kind":"file","required":true},\n'
+            '      {"path":"assets/ocpi-access-intervals.js","target":"assets/ocpi-access-intervals.js","kind":"file","required":true},\n'
+            '      {"path":"assets/netherlands-catalog.js","target":"assets/netherlands-catalog.js","kind":"file","required":true},\n'
+            '      {"path":"assets/netherlands-refresh.js","target":"assets/netherlands-refresh.js","kind":"file","required":true}\n'
+          )
+          if copy_anchor not in s: raise SystemExit('V8 copy registry anchor missing')
+          s=s.replace(copy_anchor,copy_repl,1)
 
-          check_html=index_path.read_text(encoding='utf-8')
+          source_anchor='    {"id":"france-national-catalog","label":"Electroverse + Electra national","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_france/manifest.json","data/non_tesla_france/all.json.gz"],"runtimeModules":["assets/france-catalog.js"]},\n'
+          nl_source='    {"id":"netherlands-national-catalog","label":"DOT-NL national Netherlands","status":"active","integration":"catalog","artifactPaths":["data/non_tesla_netherlands/manifest.json","data/non_tesla_netherlands/all.json.gz"],"runtimeModules":["assets/ocpi-duration-pricing.js","assets/ocpi-access-intervals.js","assets/netherlands-catalog.js","assets/netherlands-refresh.js"]},\n'
+          if source_anchor not in s: raise SystemExit('V8 France source registry anchor missing')
+          s=s.replace(source_anchor,source_anchor+nl_source,1)
+          reg.write_text(s,encoding='utf-8')
+
           for name in ('ocpi-duration-pricing.js','ocpi-access-intervals.js','netherlands-catalog.js','netherlands-refresh.js'):
-              if check_html.count(name)!=1:
-                  raise SystemExit('Unexpected V8 script count for '+name)
-          json.loads(registry_path.read_text(encoding='utf-8'))
+            if index.read_text(encoding='utf-8').count(name)!=1: raise SystemExit('Bad script count: '+name)
+            if reg.read_text(encoding='utf-8').count('"path":"assets/'+name+'"')!=1: raise SystemExit('Bad copy count: '+name)
           PY
+          python -m json.tool data/v8_tariff_sources.json >/dev/null
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html data/v8_tariff_sources.json
           git diff --cached --check
           git commit -m 'feat(v8): register Netherlands national catalog'
-          git push origin HEAD:fix/netherlands-v8-release-registry
+          git push --force origin HEAD:fix/netherlands-v8-release-registry
