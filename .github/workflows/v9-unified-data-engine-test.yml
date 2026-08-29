@@ -10,6 +10,7 @@ on:
       - 'docs/v9-**'
       - 'docs/v9/**'
       - 'tests/v9-**'
+      - 'scripts/v9/**'
       - '.github/workflows/v9-unified-data-engine-test.yml'
   push:
     branches: [main, 'refactor/unified-data-engine-v9']
@@ -18,6 +19,7 @@ on:
       - 'data/v9/**'
       - 'v9-preview/**'
       - 'tests/v9-**'
+      - 'scripts/v9/**'
       - '.github/workflows/v9-unified-data-engine-test.yml'
   workflow_dispatch:
 
@@ -53,6 +55,7 @@ jobs:
           node --check tests/v9-ionity-crosswalk-audit.cjs
           node --check tests/v9-station-score-engine.test.cjs
           node --check tests/v9-routing-engine.test.cjs
+          node --check scripts/v9/build-france-ionity-crosswalk.cjs
           node --check v9-preview/app.js
       - name: Validate source registry
         run: |
@@ -114,6 +117,15 @@ jobs:
         run: node tests/v9-france-direct-identity-audit.cjs
       - name: IONITY deterministic crosswalk audit
         run: node tests/v9-ionity-crosswalk-audit.cjs
+      - name: Build IONITY deterministic crosswalk artifact
+        run: node scripts/v9/build-france-ionity-crosswalk.cjs artifacts/france-ionity-crosswalk.json
+      - name: Upload IONITY crosswalk artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-ionity-crosswalk
+          path: artifacts/france-ionity-crosswalk.json
+          if-no-files-found: error
+          retention-days: 7
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
       - name: Station scoring
