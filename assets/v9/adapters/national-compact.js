@@ -6,6 +6,7 @@
   'use strict';
   const text=v=>String(v==null?'':v).trim();
   const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
+  const uniq=values=>[...new Set((values||[]).map(text).filter(Boolean))];
   const toMin=v=>{if(v==='24:00')return 1440;const m=text(v).match(/^(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):0;};
   const toHHMM=m=>{m=Math.max(0,Math.min(1440,Math.round(m)));return m===1440?'24:00':`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;};
 
@@ -51,18 +52,20 @@
 
   function normalizeRow(row,{countryCode,sourceId,schemaVersion=1,queryDate}={}){
     if(!Array.isArray(row)||!row[0])return null;
+    const cc=text(countryCode).toUpperCase(),isNl=cc==='NL',isFr=cc==='FR';
     const dateStr=queryDate||new Date().toISOString().slice(0,10),d=new Date(`${dateStr}T12:00:00`),dayIndex=Number.isFinite(d.getTime())?d.getDay():new Date().getDay();
     const stationId=text(row[0]),configs=row[8]||[],evses=[],offers=[];
     for(const [index,c] of configs.entries()){
-      const cfgId=text(c?.[0])||`${stationId}:cfg:${index}`,label=text(c?.[1]),provider=providerFromLabel(label),pricing=pricingFromRows(c?.[5],dayIndex);
-      evses.push({id:cfgId,label,stalls:Number(c?.[4]||0),connectors:[{id:`${cfgId}:connector`,kind:text(c?.[2]||'AC').toUpperCase(),powerKw:Number(c?.[3]||11)}]});
-      if(pricing.rules.length)offers.push({id:`${sourceId}:${stationId}:${cfgId}`,provider,kind:'national_fallback',subscriptionId:null,countries:[countryCode],currency:pricing.rules[0]?.currency||'EUR',evseIds:[cfgId],pricing});
+      const cfgId=text(c?.[0])||`${stationId}:cfg:${index}`,label=text(c?.[1]),provider=providerFromLabel(label),pricing=pricingFromRows(c?.[5],dayIndex),pdcIds=uniq(Array.isArray(c?.[6])?c[6]:[]);
+      const evseAliases=isFr?pdcIds.map(id=>`irve-pdc:${id}`):[];
+      evses.push({id:cfgId,aliases:evseAliases,pdcIds:isFr?pdcIds:undefined,label,stalls:Number(c?.[4]||0),connectors:[{id:`${cfgId}:connector`,kind:text(c?.[2]||'AC').toUpperCase(),powerKw:Number(c?.[3]||11)}]});
+      if(pricing.rules.length)offers.push({id:`${sourceId}:${stationId}:${cfgId}`,provider,kind:'national_fallback',subscriptionId:null,countries:[countryCode],currency:pricing.rules[0]?.currency||'EUR',evseIds:uniq([cfgId,...pdcIds]),pricing});
     }
-    const isNl=text(countryCode).toUpperCase()==='NL';
+    const aliases=[`${sourceId}:${stationId}`,`national:${cc}:${stationId}`];if(isFr)aliases.push(`irve-station:${stationId}`);
     return{
-      canonicalId:`${text(countryCode).toUpperCase()}:national:${stationId}`,
-      aliases:[`${sourceId}:${stationId}`,`national:${text(countryCode).toUpperCase()}:${stationId}`],
-      sourceStationId:stationId,countryCode:text(countryCode).toUpperCase(),name:text(row[1]||row[2])||`Station ${countryCode}`,address:text(row[2]),
+      canonicalId:`${cc}:national:${stationId}`,
+      aliases,
+      sourceStationId:stationId,countryCode:cc,name:text(row[1]||row[2])||`Station ${countryCode}`,address:text(row[2]),
       latitude:Number(row[3]),longitude:Number(row[4]),physicalOperator:{name:text(row[5])||'Unknown'},networkBrand:text(row[5]),
       evses,access:isNl?netherlandsAccess(row[7],dateStr):franceAccess(row[7]),
       status:isNl?statusFromValue(row[10],sourceId,row[9]):{state:'unknown',sourceId,updatedAt:row[9]||null},
