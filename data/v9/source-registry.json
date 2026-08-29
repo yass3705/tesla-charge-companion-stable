@@ -10,6 +10,14 @@
     "exactCrosswalkBeforeFuzzyMatching": true,
     "dynamicStatusMustBeFresh": true
   },
+  "subscriptionCoverage": [
+    {
+      "subscriptionId": "fastned-gold",
+      "countries": ["FR", "NL"],
+      "operatorIds": ["fastned"],
+      "evidenceSources": ["france-canonical-direct-offers", "netherlands-direct-offers"]
+    }
+  ],
   "sources": [
     {"id":"tesla-global","label":"Tesla Superchargers global","adapter":"tesla-json","path":"data/tesla_stations.json","countries":["*"],"capabilities":["inventory","connectors","access","tariff"],"priority":{"identity":100,"connectors":100,"access":95,"status":80,"tariff":100},"refresh":"on-demand-or-published-snapshot","active":true},
     {"id":"france-national","label":"France IRVE static physical baseline","adapter":"national-compact-v2","root":"data/v9/france-static/","manifest":"data/v9/france-static/manifest.json","countries":["FR"],"capabilities":["inventory","connectors","access","tariff_fallback"],"priority":{"identity":55,"connectors":60,"access":55,"status":0,"tariff":30},"refresh":"monthly-or-on-demand","active":true},
