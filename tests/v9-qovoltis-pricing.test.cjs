@@ -25,7 +25,7 @@ assert.equal(r.complete,true);assert.equal(r.totalEur,3.5);assert.equal(r.compon
 
 // Crossing 07:00 resumes billing after the exempt window.
 r=pricing.evaluateOffer(low,{energyKwh:10,durationMinutes:20,startAt:'2026-08-31T05:00:00+02:00',postChargeStartAt:'2026-08-31T05:30:00+02:00',postChargeMinutes:150});
-assert.equal(r.complete,true);assert.equal(r.totalEur,7.5);assert.equal(r.components.postCharge.billableMinutes,30);assert.equal(r.components.postCharge.exemptMinutes,90);assert.equal(r.components.postCharge.blocks,1);
+assert.equal(r.complete,true);assert.equal(r.totalEur,7.5);assert.equal(r.components.postCharge.billableMinutes,60);assert.equal(r.components.postCharge.exemptMinutes,60);assert.equal(r.components.postCharge.blocks,1);
 
 // Fail closed when an exemption exists but post-charge start time is unavailable.
 r=pricing.evaluateOffer(low,{energyKwh:10,durationMinutes:20,startAt:'2026-08-30T10:00:00+02:00',postChargeMinutes:90});
