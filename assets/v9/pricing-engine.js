@@ -6,9 +6,16 @@
   'use strict';
   const num=v=>{if(v===null||v===undefined||v==='')return null;const n=Number(v);return Number.isFinite(n)?n:null;};
   const money=v=>Math.round((Number(v)+Number.EPSILON)*1000000)/1000000;
-  function minuteOfDay(value){
+  function minuteOfDay(value,timeZone){
     if(typeof value==='number'&&Number.isFinite(value))return ((Math.floor(value)%1440)+1440)%1440;
     const d=value instanceof Date?value:new Date(value);if(Number.isNaN(d.getTime()))return null;
+    if(timeZone){
+      try{
+        const parts=new Intl.DateTimeFormat('en-GB',{timeZone,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(d);
+        const get=t=>Number(parts.find(p=>p.type===t)?.value||0);
+        return get('hour')*60+get('minute')+get('second')/60;
+      }catch(_){return null;}
+    }
     return d.getHours()*60+d.getMinutes()+d.getSeconds()/60;
   }
   function hm(v,fallback){
@@ -22,14 +29,14 @@
     if(end>start)return minute>=start&&minute<end;
     return minute>=start||minute<end;
   }
-  function matchingRule(pricing,startAt){
+  function matchingRule(pricing,startAt,timeZone){
     const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
-    if(!rules.length)return null;const minute=minuteOfDay(startAt);if(minute==null)return rules.find(r=>r.scope==='allDay')||null;
+    if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay')||null;
     return rules.find(r=>ruleContains(r,minute))||null;
   }
-  function minutesUntilRuleBoundary(rule,startAt){
+  function minutesUntilRuleBoundary(rule,startAt,timeZone){
     if(!rule||rule.scope==='allDay')return Infinity;
-    const minute=minuteOfDay(startAt);if(minute==null)return null;
+    const minute=minuteOfDay(startAt,timeZone);if(minute==null)return null;
     const end=hm(rule.end,1440);
     let delta=end-minute;if(delta<=0)delta+=1440;return delta;
   }
@@ -46,15 +53,15 @@
     return{totalEur:money(total),components};
   }
   function evaluateOffer(offer,session={}){
-    const pricing=offer?.pricing||{};
+    const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;
     if(pricing.type!=='rules'){
       const rate=num(pricing.pricePerKwh);if(rate==null)return{complete:false,reason:'unsupported_pricing',offerId:offer?.id||null};
       const energy=Math.max(0,num(session.energyKwh)??0);return{complete:true,totalEur:money(rate*energy),components:{energy:money(rate*energy)},offerId:offer?.id||null,currency:offer?.currency||'EUR'};
     }
-    const rule=matchingRule(pricing,session.startAt);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null};
-    const duration=Math.max(0,num(session.durationMinutes)??0),boundary=minutesUntilRuleBoundary(rule,session.startAt);
+    const rule=matchingRule(pricing,session.startAt,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
+    const duration=Math.max(0,num(session.durationMinutes)??0),boundary=minutesUntilRuleBoundary(rule,session.startAt,timeZone);
     if(boundary!=null&&Number.isFinite(boundary)&&duration>boundary+1e-9){
-      return{complete:false,reason:'tariff_window_crossing_requires_segmentation',offerId:offer?.id||null,boundaryMinutes:boundary,matchedRule:rule};
+      return{complete:false,reason:'tariff_window_crossing_requires_segmentation',offerId:offer?.id||null,boundaryMinutes:boundary,matchedRule:rule,timeZone};
     }
     const base=evaluateRule(rule,session),longFee=pricing.longConnectionFee;let longConnection=null,total=base.totalEur;
     if(longFee&&duration>(num(longFee.thresholdMinutes)??Infinity)){
@@ -64,7 +71,7 @@
         longConnection={complete:false,reason:'hourly_rounding_unspecified',excessMinutes:excess,rateEurPerHour:rate};
       }
     }
-    return{complete:!longConnection,totalEur:money(total),components:base.components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule};
+    return{complete:!longConnection,totalEur:money(total),components:base.components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,timeZone};
   }
   return{evaluateOffer,evaluateRule,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
 });
