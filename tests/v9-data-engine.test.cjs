@@ -102,27 +102,44 @@ async function fieldPriorityAndOffersTest(){
   assert.equal(Engine.materializeOffer(direct.offers[1],'FR').pricing.pricePerKwh,0.39,'the same subscription must materialize a different country rate');
 }
 
-async function sourceFailureIsolationTest(){
+async function optionalSourceFailureIsolationTest(){
   const r={sources:[
     {id:'good',countries:['NL'],priority:{identity:50},active:true},
-    {id:'broken',countries:['NL'],priority:{identity:99},active:true}
+    {id:'broken',countries:['NL'],priority:{identity:99},active:true,optional:true}
   ]};
   const engine=Engine.createEngine({registry:r,loaders:{good:async()=>[teslaEindhoven],broken:async()=>{throw new Error('offline')}}});
   const area=await engine.queryArea({countryCode:'NL'});
-  assert.equal(area.stations.length,1,'one failed source must not erase healthy sources');
+  assert.equal(area.stations.length,1,'one failed optional source must not erase healthy sources');
   assert.equal(area.diagnostics.errors.length,1);
   assert.equal(area.diagnostics.errors[0].sourceId,'broken');
+}
+
+async function requiredSourceFailureTest(){
+  const r={sources:[
+    {id:'france-national',countries:['FR'],priority:{identity:50},active:true},
+    {id:'optional-overlay',countries:['FR'],priority:{tariff:99},active:true,optional:true}
+  ]};
+  const engine=Engine.createEngine({registry:r,loaders:{
+    'france-national':async()=>{throw new Error('national baseline unavailable')},
+    'optional-overlay':async()=>[]
+  }});
+  await assert.rejects(
+    ()=>engine.queryArea({countryCode:'FR'}),
+    err=>err?.code==='TCC_V9_REQUIRED_SOURCE_FAILED'&&err.failures?.[0]?.sourceId==='france-national',
+    'a failed required physical baseline must fail the query explicitly'
+  );
 }
 
 (async()=>{
   const dense=await denseAreaTest();
   await sourceOrderTest();
   await fieldPriorityAndOffersTest();
-  await sourceFailureIsolationTest();
+  await optionalSourceFailureIsolationTest();
+  await requiredSourceFailureTest();
   console.log(JSON.stringify({
     ok:true,
     engine:'tcc-v9-unified-data',
     denseFixture:{stations:dense.stations.length,operators:dense.operators.length,routingCandidates:dense.routingCandidates.length,teslaVisible:dense.operators.some(o=>o.id==='tesla')},
-    invariants:['merge-before-prune','operator-from-final-state','source-order-independent','field-level-priority','multi-country-subscription','source-failure-isolation']
+    invariants:['merge-before-prune','operator-from-final-state','source-order-independent','field-level-priority','multi-country-subscription','optional-source-failure-isolation','required-source-fail-closed']
   },null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
