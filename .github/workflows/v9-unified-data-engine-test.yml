@@ -6,6 +6,7 @@ on:
     paths:
       - 'assets/v9/**'
       - 'data/v9/**'
+      - 'v9-preview/**'
       - 'docs/v9-**'
       - 'docs/v9/**'
       - 'tests/v9-**'
@@ -15,6 +16,7 @@ on:
     paths:
       - 'assets/v9/**'
       - 'data/v9/**'
+      - 'v9-preview/**'
       - 'tests/v9-**'
       - '.github/workflows/v9-unified-data-engine-test.yml'
   workflow_dispatch:
@@ -32,11 +34,13 @@ jobs:
           node --check assets/v9/data-engine.js
           node --check assets/v9/offer-engine.js
           node --check assets/v9/runtime-engine.js
+          node --check assets/v9/browser-loaders.js
           node --check assets/v9/adapters/tesla-json.js
           node --check assets/v9/adapters/national-compact.js
           node --check assets/v9/adapters/direct-offers.js
           node --check assets/v9/adapters/france-crosswalk.js
           node --check assets/v9/adapters/france-irve-status.js
+          node --check v9-preview/app.js
       - name: Validate source registry
         run: |
           node - <<'NODE'
@@ -50,6 +54,10 @@ jobs:
           }
           const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
           for(const id of required)if(!unique.has(id))throw new Error(`missing source ${id}`);
+          const franceDirect=r.sources.find(x=>x.id==='france-canonical-direct-offers');
+          if(franceDirect.path!=='data/tariff_overlay_v1.json'||franceDirect.active!==true)throw new Error('France direct migration source not bound');
+          const franceEmsp=r.sources.find(x=>x.id==='france-emsp-offers');
+          if(franceEmsp.active!==false)throw new Error('unbuilt France eMSP source must stay inactive');
           if(r.rules.mergeBeforePrune!==true||r.rules.operatorsDerivedFromFinalStations!==true||r.rules.sourceMayRemoveForeignEntities!==false)throw new Error('V9 invariants missing');
           if(r.rules.exactCrosswalkBeforeFuzzyMatching!==true||r.rules.dynamicStatusMustBeFresh!==true)throw new Error('France V9 safety invariants missing');
           console.log(`V9 registry OK: ${ids.length} sources`);
@@ -58,6 +66,8 @@ jobs:
         run: node tests/v9-data-engine.test.cjs
       - name: Compatibility adapters
         run: node tests/v9-adapters.test.cjs
+      - name: Browser loader selection
+        run: node tests/v9-browser-loaders.test.cjs
       - name: France physical/status/tariff model
         run: node tests/v9-france-model.test.cjs
       - name: Unified offers and subscriptions
