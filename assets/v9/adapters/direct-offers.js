@@ -12,6 +12,15 @@
   const countries=(raw,country)=>[...new Set([...(raw.countries||[]).map(c=>text(c).toUpperCase()),text(country).toUpperCase()].filter(Boolean))];
   const connectorKinds=raw=>[...new Set([...(raw.connectorKinds||[]),...(raw.kind?[raw.kind]:[])].map(v=>text(v).toUpperCase()).filter(Boolean))];
   const ids=(...values)=>[...new Set(values.flat().map(text).filter(Boolean))];
+  function evseIdentityVariants(...values){
+    const out=[];
+    for(const raw of ids(...values)){
+      out.push(raw);
+      const compact=raw.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if(compact&&compact!==raw)out.push(compact);
+    }
+    return[...new Set(out)];
+  }
 
   function pricing(raw){
     if(raw.pricing&&typeof raw.pricing==='object')return clone(raw.pricing);
@@ -26,7 +35,7 @@
       operatorIds:operatorIds(raw),operatorAliases:Array.isArray(raw.operatorAliases)?clone(raw.operatorAliases):[],
       networkIds:physicalOnly?[]:networkIds(raw),networkAliases:physicalOnly?[]:(Array.isArray(raw.networkAliases)?clone(raw.networkAliases):[]),
       stationIds:ids(raw.stationIds||[],raw.stationId,raw.sourceStationId),
-      evseIds:ids(raw.evseIds||[],raw.evseId,raw.idPdcItinerance,raw.id_pdc_itinerance),
+      evseIds:evseIdentityVariants(raw.evseIds||[],raw.evseId,raw.idPdcItinerance,raw.id_pdc_itinerance),
       connectorKinds:connectorKinds(raw),countries:countries(raw,country),
       currency:text(raw.currency||raw.pricing?.currency||'EUR').toUpperCase(),pricing:pricing(raw),
       minPowerKw:raw.minPowerKw==null?undefined:raw.minPowerKw,maxPowerKw:raw.maxPowerKw==null?undefined:raw.maxPowerKw,
@@ -46,5 +55,5 @@
     const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for direct offer adapter');let promise=null;
     return async function(){if(!promise)promise=f(url,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`direct offers unavailable (${r.status})`);return r.json();}).then(normalizePayload).catch(e=>{promise=null;throw e;});return promise;};
   }
-  return{directRule,subscriptionRule,normalizePayload,createLoader};
+  return{directRule,subscriptionRule,normalizePayload,evseIdentityVariants,createLoader};
 });
