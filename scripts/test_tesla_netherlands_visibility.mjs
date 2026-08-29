@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 
 const mainRoot=path.resolve(process.argv[2]||'.');
 const releaseRoot=path.resolve(process.argv[3]||'.');
@@ -63,6 +64,78 @@ const dynamicFilter=read(releaseRoot,'assets/v8-dynamic-filter.js');
 assert.ok(dynamicFilter.includes("if(st?.source==='teslaSupercharger')return'Tesla';"),'V8 operator filter must canonicalize Tesla Superchargers to Tesla');
 assert.ok(dynamicFilter.includes("candidateStations('all',maxDistanceKm)"),'V8 operator list must be built from the complete prepared area');
 
+// Reproduce the exact persistent failure reported on iPhone: a dense DOT-NL area
+// has already filled the 80-station shortlist, Tesla was evicted by a downstream
+// France-only overlay, and the final V8 area cache receives those 80 stations.
+// The release guard must restore the real Tesla Eindhoven candidate and then keep
+// it protected if another late overlay assigns an 80-station array again.
+const hotfix=read(releaseRoot,'assets/v8-rc48bn-runtime-hotfix.js');
+for(const token of [
+  "REVISION='rc48cf-nl-protected-area-cache'",
+  "Object.defineProperty(window,'TCC_V8_AREA_CACHE'",
+  'ensureNetherlandsTesla',
+  'protectPreparedAssignments'
+])assert.ok(hotfix.includes(token),`V8 Netherlands Tesla cache guard missing: ${token}`);
+
+const denseLocals=Array.from({length:80},(_,i)=>({
+  id:`nl-regression-${i}`,
+  catalogStationId:`NL:REG:${i}`,
+  operator:`NL operator ${i%11}`,
+  source:'netherlandsNationalCatalog',
+  latitude:51.4416+i/100000,
+  longitude:5.4697+i/100000
+}));
+const statusEl={textContent:'✓ 80 borne(s) mise(s) à jour dans un rayon routier maximal de 25 km. Tu peux lancer la simulation.'};
+const refreshSnapshots=[];
+const context={
+  console,
+  WeakMap,Map,Set,Array,Number,String,Date,JSON,Math,Promise,
+  setTimeout:(fn)=>{fn();return 1;},
+  clearTimeout:()=>{},
+  queueMicrotask,
+  requestAnimationFrame:(fn)=>{fn();return 1;},
+  routeResults:{'nl-regression-0':{distanceKm:1,durationMin:2}},
+  candidateStations:async function(mode,maxDistanceKm){
+    assert.equal(mode,'tesla','cache repair must request the protected Tesla-only path');
+    assert.equal(Number(maxDistanceKm),25,'cache repair must preserve the user radius');
+    context.routeResults={[eindhoven.id]:{distanceKm:4.2,durationMin:8}};
+    return {origin:{lat:eindhovenCity.latitude,lon:eindhovenCity.longitude},stations:[eindhoven],maxDistanceKm:25};
+  },
+  document:{
+    readyState:'loading',
+    addEventListener:()=>{},
+    querySelector:()=>null,
+    querySelectorAll:()=>[],
+    getElementById(id){if(id==='simMaxDistance')return {value:'25'};if(id==='routeStatus')return statusEl;return null;},
+    createElement:()=>({dataset:{},style:{}}),
+    head:{appendChild:()=>{}},
+    documentElement:{}
+  },
+  MutationObserver:function(){this.observe=()=>{};},
+  TCCV8DynamicOperators:{refresh(list){refreshSnapshots.push((list||[]).map(st=>st.id));}}
+};
+context.window=context;
+vm.createContext(context);
+vm.runInContext(hotfix,context,{filename:'assets/v8-rc48bn-runtime-hotfix.js'});
+
+context.TCC_V8_AREA_CACHE={prepared:{stations:denseLocals.slice(),netherlandsCatalogLoaded:80,maxDistanceKm:25}};
+await new Promise(resolve=>setImmediate(resolve));
+const prepared=context.TCC_V8_AREA_CACHE.prepared;
+assert.equal(prepared.stations.length,81,'the final Netherlands cache must contain the 80 dense DOT-NL stations plus Tesla');
+assert.ok(prepared.stations.some(st=>st?.id===eindhoven.id),'Tesla Eindhoven must be restored into the final V8 area cache');
+assert.equal(prepared.protectedTeslaCandidateCount,1,'the cache must expose the protected Tesla count');
+assert.ok(context.routeResults['nl-regression-0'],'existing DOT-NL route metadata must survive Tesla repair');
+assert.ok(context.routeResults[eindhoven.id],'Tesla route metadata must be merged into the prepared area');
+assert.match(statusEl.textContent,/^✓ 81 borne\(s\)/,'the visible prepared-station count must reflect the restored Tesla candidate');
+assert.ok(refreshSnapshots.some(ids=>ids.includes(eindhoven.id)),'dynamic operator choices must be refreshed with Tesla');
+
+// Simulate Fastned/LBB/another late overlay replacing the station array after the
+// cache was prepared. The protected property must merge Tesla back automatically.
+prepared.stations=denseLocals.slice();
+await new Promise(resolve=>setImmediate(resolve));
+assert.equal(prepared.stations.length,81,'late overlay re-truncation must not reduce the protected Netherlands cache back to 80');
+assert.ok(prepared.stations.some(st=>st?.id===eindhoven.id),'late overlays must never evict Tesla Eindhoven again');
+
 const registry=JSON.parse(read(releaseRoot,'data/v8_tariff_sources.json'));
 const publishEntries=registry?.publish?.copyFromMain||[];
 assert.ok(publishEntries.some(entry=>entry?.path==='data/tesla_stations.json'&&entry?.target==='data/tesla_stations.json'&&entry?.required===true),'V8 publish contract must copy the canonical Tesla catalog from main');
@@ -72,7 +145,7 @@ assert.ok((teslaSource?.artifactPaths||[]).includes('data/tesla_stations.json'))
 
 console.log(JSON.stringify({
   ok:true,
-  fixture:'Eindhoven city centre 25 km',
+  fixture:'Eindhoven city centre 25 km + dense 80-station DOT-NL cache',
   teslaEindhoven:{
     id:eindhoven.id,
     name:eindhoven.name,
@@ -90,6 +163,10 @@ console.log(JSON.stringify({
     distanceKm:Number(distanceKm(eindhovenCity,st).toFixed(2)),
     temporarilyUnavailable:!!st.temporarilyUnavailable
   })),
+  preparedBeforeProtection:80,
+  preparedAfterProtection:prepared.stations.length,
+  teslaProtectedAfterLateRetruncate:true,
+  visibleStatus:statusEl.textContent,
   dotNlPreservesGlobalStations:true,
   operatorFilterExposesTesla:true,
   canonicalTeslaPublishedFromMain:true
