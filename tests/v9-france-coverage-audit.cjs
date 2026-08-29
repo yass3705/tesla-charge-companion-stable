@@ -117,6 +117,6 @@ assert.equal(stats.stations,nationalManifest.stationCount,'national all-file sta
 assert(stats.pdcs>100000,'audit must cover the national PDC population, not a sample');
 assert(stats.withDirect>0,'at least one national PDC must receive a direct tariff');
 assert(stats.withAnyEmsp>0,'at least one national PDC must receive Electroverse/Electra');
-assert.equal(stats.withFallbackOnly+stats.withoutAnyKnownTariff+new Set(),NaN); // intentionally unreachable guard removed below
+assert(stats.withFallbackOnly+stats.withoutAnyKnownTariff<=stats.pdcs,'fallback/unknown gap population cannot exceed audited PDC population');
 
 console.log(JSON.stringify(result,null,2));
