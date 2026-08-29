@@ -62,11 +62,12 @@
       if(pricing.rules.length)offers.push({id:`${sourceId}:${stationId}:${cfgId}`,provider,kind:'national_fallback',subscriptionId:null,countries:[countryCode],currency:pricing.rules[0]?.currency||'EUR',evseIds:uniq([cfgId,...pdcIds]),pricing});
     }
     const aliases=[`${sourceId}:${stationId}`,`national:${cc}:${stationId}`];if(isFr)aliases.push(`irve-station:${stationId}`);
+    const networkBrand=isFr?text(row[10]||row[5]):text(row[5]);
     return{
       canonicalId:`${cc}:national:${stationId}`,
       aliases,
       sourceStationId:stationId,countryCode:cc,name:text(row[1]||row[2])||`Station ${countryCode}`,address:text(row[2]),
-      latitude:Number(row[3]),longitude:Number(row[4]),physicalOperator:{name:text(row[5])||'Unknown'},networkBrand:text(row[5]),
+      latitude:Number(row[3]),longitude:Number(row[4]),physicalOperator:{name:text(row[5])||'Unknown'},networkBrand,
       evses,access:isNl?netherlandsAccess(row[7],dateStr):franceAccess(row[7]),
       status:isNl?statusFromValue(row[10],sourceId,row[9]):{state:'unknown',sourceId,updatedAt:row[9]||null},
       offers,updatedAt:row[9]||null,legacy:{schemaVersion,stalls:Number(row[6]||0)}
