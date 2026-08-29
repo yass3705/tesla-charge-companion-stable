@@ -2,7 +2,7 @@
 // L'UI abonnements n'est plus gérée ici : elle est centralisée dans v8-compare-subscriptions.js.
 (function(){
   'use strict';
-  const REVISION='rc48cf-nl-protected-area-cache';
+  const REVISION='rc48cg-nl-final-operator-sync';
   const text=v=>String(v==null?'':v).trim();
   const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   let resultsObserver=null;
@@ -24,9 +24,29 @@
     for(const st of list||[]){const key=text(st?.catalogStationId)||text(st?.baseStationId)||text(st?.id).split('::')[0];if(key)seen.add(key);}
     return seen.size;
   }
+  function ensureTeslaOperatorChoice(prepared){
+    const teslaCount=(prepared?.stations||[]).filter(isTeslaStation).length;
+    if(!teslaCount)return false;
+    const host=document.getElementById('augOperatorChoices');if(!host)return false;
+    let inputs=[...host.querySelectorAll('input[type=checkbox]')];
+    if(inputs.some(input=>norm(input.value)==='tesla'))return true;
+    const checkedByDefault=inputs.length>0&&inputs.every(input=>input.checked);
+    const label=document.createElement('label');label.className='operator-choice';
+    const input=document.createElement('input');input.type='checkbox';input.value='Tesla';input.checked=checkedByDefault;
+    label.appendChild(input);label.appendChild(document.createTextNode(' Tesla'));host.appendChild(label);
+    inputs=[...host.querySelectorAll('input[type=checkbox]')];
+    const hint=document.getElementById('tccDynamicOperatorHint');
+    if(hint)hint.textContent=`${inputs.length} opérateur(s) disponibles dans la zone chargée.`;
+    host.dataset.tccDynamic='1';
+    return true;
+  }
   function refreshProtectedAreaUi(prepared){
-    const apply=()=>{try{window.TCCV8DynamicOperators?.refresh?.(prepared?.stations||[]);}catch(e){}};
-    apply();requestAnimationFrame?.(apply);setTimeout(apply,180);setTimeout(apply,550);
+    const apply=()=>{
+      try{window.TCCV8DynamicOperators?.refresh?.(prepared?.stations||[]);}catch(e){}
+      try{ensureTeslaOperatorChoice(prepared);}catch(e){}
+    };
+    [0,80,180,400,800,1200,2000,3200].forEach(delay=>delay?setTimeout(apply,delay):apply());
+    requestAnimationFrame?.(apply);
     const status=document.getElementById('routeStatus');
     if(status&&/borne\(s\) mise\(s\) à jour/.test(text(status.textContent))){
       const count=physicalCount(prepared?.stations||[]);
@@ -51,7 +71,7 @@
     const prepared=cache?.prepared;
     if(!prepared||!Array.isArray(prepared.stations)||!Number(prepared.netherlandsCatalogLoaded||0))return false;
     const present=prepared.stations.filter(isTeslaStation);
-    if(present.length){protectPreparedAssignments(prepared,present);refreshProtectedAreaUi(prepared);return true;}
+    if(present.length){prepared.protectedTeslaCandidateCount=present.length;protectPreparedAssignments(prepared,present);refreshProtectedAreaUi(prepared);return true;}
     const radius=Math.max(0,Number(prepared.maxDistanceKm||document.getElementById('simMaxDistance')?.value||0));
     const current=window.candidateStations;
     if(typeof current!=='function')return false;
@@ -197,6 +217,6 @@
   document.addEventListener('click',event=>{if(event.target?.closest?.('.v8-simulate,#routeButton')){loadDirectOfferPipeline();loadFranceCpoGap();loadDrivecoDirect();loadAllegoDirect();loadReveoDirect();loadYawayConnectDirect();loadAldiDirect();installMetadataGuard()}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else queueMicrotask(boot);
 
-  window.TCCV8RC48BNHotfix={revision:REVISION,loadDirectOfferPipeline,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,installProtectedAreaCache,ensureNetherlandsTesla,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
-  console.info('[TCC V8] rc48cf : cache de zone Pays-Bas protégé contre l’éviction des Superchargeurs Tesla.');
+  window.TCCV8RC48BNHotfix={revision:REVISION,loadDirectOfferPipeline,loadFranceCpoGap,loadDrivecoDirect,loadAllegoDirect,loadReveoDirect,loadYawayConnectDirect,loadAldiDirect,installMetadataGuard,installProtectedAreaCache,ensureNetherlandsTesla,ensureTeslaOperatorChoice,renderSubscriptions,cleanDirectFallbacks,prepareLbbSubscriptionRows,refreshResults};
+  console.info('[TCC V8] rc48cg : cache Pays-Bas + filtre opérateurs synchronisés avec Tesla.');
 })();
