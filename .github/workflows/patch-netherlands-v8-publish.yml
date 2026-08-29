@@ -1,4 +1,4 @@
-name: Patch V8 publish contract injection support
+name: Prepare Netherlands V8 release registry
 
 on:
   push:
@@ -11,101 +11,83 @@ permissions:
   contents: write
 
 jobs:
-  patch:
+  patch-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: fix/netherlands-v8-publish
+          ref: fix/netherlands-v8-release-registry
           fetch-depth: 0
-      - name: Add registry-driven script injection
+      - name: Add Netherlands catalog to V8 release contract
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
+          import json
           from pathlib import Path
 
-          p=Path('scripts/sync_v8_publish_contract.py')
-          s=p.read_text(encoding='utf-8')
-          marker='\ndef main() -> None:\n'
-          if marker not in s:
-              raise SystemExit('main() anchor missing')
-          if 'def inject_runtime_scripts(' not in s:
-              fn=r'''
+          index_path=Path('index.html')
+          html=index_path.read_text(encoding='utf-8')
+          marker='<script src="assets/france-catalog.js?v=8004" defer></script>'
+          nl_tags='\n'.join([
+              '<script src="assets/ocpi-duration-pricing.js?v=nl-v3" defer></script>',
+              '<script src="assets/ocpi-access-intervals.js?v=nl-v3" defer></script>',
+              '<script src="assets/netherlands-catalog.js?v=nl-v3" defer></script>',
+              '<script src="assets/netherlands-refresh.js?v=nl-v3" defer></script>',
+          ])
+          if 'assets/netherlands-catalog.js' not in html:
+              if marker not in html:
+                  raise SystemExit('France catalog script anchor missing in V8 release index')
+              html=html.replace(marker,marker+'\n'+nl_tags,1)
+              index_path.write_text(html,encoding='utf-8')
 
-def inject_runtime_scripts(registry: dict, target_root: Path) -> int:
-    """Inject registry-declared runtime scripts after a stable existing script tag."""
-    config = registry.get("publish", {}).get("injectScripts") or {}
-    if not config:
-        return 0
-    if not isinstance(config, dict):
-        fail("publish.injectScripts must be an object")
+          registry_path=Path('data/v8_tariff_sources.json')
+          registry=json.loads(registry_path.read_text(encoding='utf-8'))
+          publish=registry.setdefault('publish',{})
+          copies=publish.setdefault('copyFromMain',[])
+          wanted=[
+              {'path':'data/non_tesla_netherlands','target':'data/non_tesla_netherlands','kind':'directory','required':True},
+              {'path':'assets/ocpi-duration-pricing.js','target':'assets/ocpi-duration-pricing.js','kind':'file','required':True},
+              {'path':'assets/ocpi-access-intervals.js','target':'assets/ocpi-access-intervals.js','kind':'file','required':True},
+              {'path':'assets/netherlands-catalog.js','target':'assets/netherlands-catalog.js','kind':'file','required':True},
+              {'path':'assets/netherlands-refresh.js','target':'assets/netherlands-refresh.js','kind':'file','required':True},
+          ]
+          existing_targets={str(item.get('target')) for item in copies}
+          for item in wanted:
+              if item['target'] not in existing_targets:
+                  copies.append(item)
+                  existing_targets.add(item['target'])
 
-    anchor = str(config.get("after") or "").strip()
-    paths = config.get("paths") or []
-    if not anchor or not isinstance(paths, list) or not paths:
-        fail("publish.injectScripts requires after and non-empty paths")
+          sources=registry.setdefault('sources',[])
+          source_id='netherlands-national-catalog'
+          source={
+              'id':source_id,
+              'label':'DOT-NL national Netherlands',
+              'status':'active',
+              'integration':'catalog',
+              'artifactPaths':['data/non_tesla_netherlands/manifest.json','data/non_tesla_netherlands/all.json.gz'],
+              'runtimeModules':['assets/ocpi-duration-pricing.js','assets/ocpi-access-intervals.js','assets/netherlands-catalog.js','assets/netherlands-refresh.js'],
+          }
+          replaced=False
+          for i,item in enumerate(sources):
+              if item.get('id')==source_id:
+                  sources[i]=source
+                  replaced=True
+                  break
+          if not replaced:
+              sources.append(source)
+          registry['updatedAt']='2026-08-29'
+          registry_path.write_text(json.dumps(registry,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
-    index = target_root / "index.html"
-    if not index.is_file():
-        fail("preview index.html missing before runtime script injection")
-    html = index.read_text(encoding="utf-8")
-
-    clean_paths: list[str] = []
-    for item in paths:
-        relative = str(item or "").strip()
-        if not relative.startswith("assets/") or not relative.endswith(".js"):
-            fail(f"invalid injected runtime script path: {relative!r}")
-        if relative in clean_paths:
-            fail(f"duplicate injected runtime script: {relative}")
-        path = safe_path(target_root, relative)
-        if not path.is_file():
-            fail(f"injected runtime script missing: {relative}")
-        clean_paths.append(relative)
-        html = re.sub(
-            rf'<script src="{re.escape(relative)}(?:\?[^\"]*)?" defer></script>\s*',
-            "",
-            html,
-        )
-
-    anchor_pattern = re.compile(
-        rf'(<script src="{re.escape(anchor)}(?:\?[^\"]*)?" defer></script>)'
-    )
-    if not anchor_pattern.search(html):
-        fail(f"runtime script injection anchor missing: {anchor}")
-
-    tags = "\n".join(f'<script src="{relative}" defer></script>' for relative in clean_paths)
-    html = anchor_pattern.sub(lambda match: match.group(1) + "\n" + tags, html, count=1)
-    index.write_text(html, encoding="utf-8")
-
-    for relative in clean_paths:
-        if html.count(f'src="{relative}"') != 1:
-            fail(f"runtime script injection integrity failed: {relative}")
-    print(
-        f"V8 publish contract: injected {len(clean_paths)} runtime scripts after {anchor}"
-    )
-    return len(clean_paths)
-'''
-              s=s.replace(marker,fn+marker,1)
-
-          old='    validate_active_sources(registry, target_root)\n    deploy_id = install_preview_cache_guard(registry_path, target_root)\n'
-          new='    validate_active_sources(registry, target_root)\n    injected_scripts = inject_runtime_scripts(registry, target_root)\n    deploy_id = install_preview_cache_guard(registry_path, target_root)\n'
-          if old not in s:
-              raise SystemExit('publish execution anchor missing')
-          s=s.replace(old,new,1)
-
-          old_summary='        f"{sum(1 for s in registry.get(\'sources\', []) if s.get(\'status\') == \'active\')} active sources, "\n        f"{stamped_refs} deploy-stamped asset refs, preview deploy {deploy_id}"\n'
-          new_summary='        f"{sum(1 for s in registry.get(\'sources\', []) if s.get(\'status\') == \'active\')} active sources, "\n        f"{injected_scripts} injected runtime scripts, "\n        f"{stamped_refs} deploy-stamped asset refs, preview deploy {deploy_id}"\n'
-          if old_summary not in s:
-              raise SystemExit('summary anchor missing')
-          s=s.replace(old_summary,new_summary,1)
-
-          p.write_text(s,encoding='utf-8')
+          check_html=index_path.read_text(encoding='utf-8')
+          for name in ('ocpi-duration-pricing.js','ocpi-access-intervals.js','netherlands-catalog.js','netherlands-refresh.js'):
+              if check_html.count(name)!=1:
+                  raise SystemExit('Unexpected V8 script count for '+name)
+          json.loads(registry_path.read_text(encoding='utf-8'))
           PY
-          python -m py_compile scripts/sync_v8_publish_contract.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add scripts/sync_v8_publish_contract.py
+          git add index.html data/v8_tariff_sources.json
           git diff --cached --check
-          git commit -m 'feat(v8): support registry runtime script injection'
-          git push origin HEAD:fix/netherlands-v8-publish
+          git commit -m 'feat(v8): register Netherlands national catalog'
+          git push origin HEAD:fix/netherlands-v8-release-registry
