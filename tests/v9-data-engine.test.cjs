@@ -130,16 +130,42 @@ async function requiredSourceFailureTest(){
   );
 }
 
+function exactTariffScopeLeakageTest(){
+  const source={id:'france-etotem-offers',priority:{tariff:130}};
+  const rule={
+    id:'etotem-planchonnais-ac',provider:'e-Totem direct',countries:['FR'],operatorAliases:['e-Totem'],
+    evseIds:['FRETIE44172C15','FR*ETI*E44172*C15'],connectorKinds:['AC'],minPowerKw:22,maxPowerKw:22,
+    currency:'EUR',priority:130,pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.40}]}
+  };
+  const target={
+    id:'irve-planchonnais',aliases:['irve-station:FRETIE44172P1'],countryCode:'FR',name:'Planchonnais',
+    physicalOperator:{id:'e-totem',name:'e-Totem'},networkBrand:'Nantes Métropole / e-Totem',
+    evses:[{id:'FRETIE44172C15',connectors:[{id:'type2',powerKw:22,kind:'AC'}]}],offers:[],provenance:[]
+  };
+  const foreignSameOperator={
+    id:'irve-other-etotem',aliases:['irve-station:OTHER'],countryCode:'FR',name:'Other e-Totem station',
+    physicalOperator:{id:'e-totem',name:'e-Totem'},networkBrand:'e-Totem',
+    evses:[{id:'FR*G10*E99999*1',connectors:[{id:'type2',powerKw:22,kind:'AC'}]}],offers:[],provenance:[]
+  };
+  assert.equal(Engine.ruleMatchesStation(rule,target),true,'the exact verified PDC must match');
+  assert.equal(Engine.ruleMatchesStation(rule,foreignSameOperator),false,'same operator, connector and power must never be enough for a station-scoped tariff');
+  const [a,b]=Engine.applyOfferRules([target,foreignSameOperator],[{rule,source}]);
+  assert.equal(a.offers.length,1,'the exact target receives the tariff');
+  assert.equal(a.offers[0].pricing.rules[0].pricePerKwh,0.40);
+  assert.equal(b.offers.length,0,'a different e-Totem station must receive no leaked tariff');
+}
+
 (async()=>{
   const dense=await denseAreaTest();
   await sourceOrderTest();
   await fieldPriorityAndOffersTest();
   await optionalSourceFailureIsolationTest();
   await requiredSourceFailureTest();
+  exactTariffScopeLeakageTest();
   console.log(JSON.stringify({
     ok:true,
     engine:'tcc-v9-unified-data',
     denseFixture:{stations:dense.stations.length,operators:dense.operators.length,routingCandidates:dense.routingCandidates.length,teslaVisible:dense.operators.some(o=>o.id==='tesla')},
-    invariants:['merge-before-prune','operator-from-final-state','source-order-independent','field-level-priority','multi-country-subscription','optional-source-failure-isolation','required-source-fail-closed']
+    invariants:['merge-before-prune','operator-from-final-state','source-order-independent','field-level-priority','multi-country-subscription','optional-source-failure-isolation','required-source-fail-closed','exact-station-tariff-no-network-leakage']
   },null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
