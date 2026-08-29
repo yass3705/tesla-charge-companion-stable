@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-08-29T18:18:04.677060Z",
+  "generatedAt": "2026-08-29T18:24:21.223409Z",
   "mode": "official_exact",
   "policy": {
     "subscriptionsOptIn": true,
@@ -9,7 +9,8 @@
     "reservationExcludedFromChargeCost": true,
     "networkBrandOnly": true,
     "physicalOperatorMayDiffer": true,
-    "connectedTimeBlocksPreservedExactly": true
+    "connectedTimeBlocksPreservedExactly": true,
+    "tariffTimeZone": "Europe/Paris"
   },
   "directOffers": [
     {
@@ -56,7 +57,8 @@
         "network": "Belib",
         "chargerClass": "moto",
         "publishedPowerKw": 3.7,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       }
     },
     {
@@ -103,7 +105,8 @@
         "network": "Belib",
         "chargerClass": "flex",
         "publishedPowerKw": 7,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       }
     },
     {
@@ -149,7 +152,8 @@
         "network": "Belib",
         "chargerClass": "boost",
         "publishedPowerKw": 22,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       }
     },
     {
@@ -193,7 +197,8 @@
         "network": "Belib",
         "chargerClass": "boostPlus",
         "publishedPowerKw": 50,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       }
     }
   ],
@@ -243,7 +248,8 @@
         "network": "Belib",
         "chargerClass": "moto",
         "publishedPowerKw": 3.7,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -309,7 +315,8 @@
         "network": "Belib",
         "chargerClass": "moto",
         "publishedPowerKw": 3.7,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -359,7 +366,8 @@
         "network": "Belib",
         "chargerClass": "flex",
         "publishedPowerKw": 7,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -425,7 +433,8 @@
         "network": "Belib",
         "chargerClass": "flex",
         "publishedPowerKw": 7,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -474,7 +483,8 @@
         "network": "Belib",
         "chargerClass": "boost",
         "publishedPowerKw": 22,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -541,7 +551,8 @@
         "network": "Belib",
         "chargerClass": "boost",
         "publishedPowerKw": 22,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -588,7 +599,8 @@
         "network": "Belib",
         "chargerClass": "boostPlus",
         "publishedPowerKw": 50,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
@@ -649,7 +661,8 @@
         "network": "Belib",
         "chargerClass": "boostPlus",
         "publishedPowerKw": 50,
-        "connectionBillingExact": true
+        "connectionBillingExact": true,
+        "timeZone": "Europe/Paris"
       },
       "monthlyFeeLabel": "7 €/an",
       "annualFeeEur": 7.0
