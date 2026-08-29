@@ -64,7 +64,7 @@ jobs:
           const freshmile=r.sources.find(x=>x.id==='france-freshmile-offers');
           if(freshmile.path!=='data/v9/france-freshmile-offers.json'||freshmile.active!==true)throw new Error('Freshmile exact V9 source not bound to embedded snapshot');
           const franceEmsp=r.sources.find(x=>x.id==='france-emsp-offers');
-          if(franceEmsp.active!==true||franceEmsp.adapter!=='france-emsp-compact-v1'||franceEmsp.manifest!=='data/non_tesla_france/manifest.json')throw new Error('France eMSP exact PDC source not active');
+          if(franceEmsp.active!==false||franceEmsp.adapter!=='france-emsp-compact-v1'||franceEmsp.manifest!=='data/non_tesla_france/manifest.json'||!franceEmsp.disabledReason)throw new Error('France legacy eMSP tariff source must remain explicitly disabled until a genuine tariff snapshot exists');
           if(!fs.existsSync(franceEmsp.manifest))throw new Error('France eMSP manifest missing');
           for(const source of r.sources.filter(x=>x.active!==false)){
             if(source.path && ['tesla-json','direct-offer-json','direct-tariff-gzip','direct-station-gzip'].includes(source.adapter) && !fs.existsSync(source.path))throw new Error(`active source path missing: ${source.id} -> ${source.path}`);
