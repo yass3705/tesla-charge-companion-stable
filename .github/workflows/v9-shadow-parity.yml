@@ -1,0 +1,23 @@
+name: V9 shadow parity
+
+on:
+  pull_request:
+    paths:
+      - 'assets/v9/**'
+      - 'tests/v9-shadow-parity.test.cjs'
+      - '.github/workflows/v9-shadow-parity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shadow-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run V8 to V9 shadow parity contract
+        run: node tests/v9-shadow-parity.test.cjs
