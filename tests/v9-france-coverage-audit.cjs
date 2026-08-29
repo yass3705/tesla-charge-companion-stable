@@ -15,7 +15,7 @@ const registry=readJson('data/v9/source-registry.json');
 const nationalManifest=readJson('data/v9/france-static/manifest.json');
 const nationalRows=readGzipJson(`data/v9/france-static/${nationalManifest.allFile}`);
 const emspManifest=readJson('data/non_tesla_france/manifest.json');
-const emspRows=readGzipJson(`data/non_tesla_france/${emspManifest.allFile}`);
+const emspRows=(emspManifest.tiles||[]).flatMap(tile=>readGzipJson(`data/non_tesla_france/${tile.file}`));
 const providerCrosswalk=readJson('data/v9/france-provider-crosswalk.json');
 
 const aliasesByStation=new Map();
@@ -50,9 +50,8 @@ for(const rule of emspRules){
 const directByPdc=new Map(),directStationRules=[],directScopedRules=[];
 for(const rule of directRules){
   const pdcs=uniq(rule.evseIds||[]),stations=uniq(rule.stationIds||[]);
-  if(pdcs.length){
-    for(const pdc of pdcs){if(!directByPdc.has(pdc))directByPdc.set(pdc,[]);directByPdc.get(pdc).push(rule);}
-  }else if(stations.length)directStationRules.push(rule);else directScopedRules.push(rule);
+  if(pdcs.length){for(const pdc of pdcs){if(!directByPdc.has(pdc))directByPdc.set(pdc,[]);directByPdc.get(pdc).push(rule);}}
+  else if(stations.length)directStationRules.push(rule);else directScopedRules.push(rule);
 }
 
 function stationTokens(stationId){return new Set([stationId,`FR:national:${stationId}`,`irve-station:${stationId}`,`national:FR:${stationId}`,...(aliasesByStation.get(stationId)||[])]);}
@@ -90,15 +89,15 @@ for(const row of nationalRows){
 const pct=n=>stats.pdcs?Math.round(n*10000/stats.pdcs)/100:0;
 const topGaps=[...operatorStats.values()].filter(x=>x.pdcs>=20).map(x=>({...x,richCoverage:x.direct+x.emsp,gap:x.fallbackOnly+x.none})).sort((a,b)=>b.gap-a.gap||b.pdcs-a.pdcs).slice(0,25);
 const result={
-  generatedFrom:{nationalGeneratedAt:nationalManifest.generatedAt,emspGeneratedAt:emspManifest.generatedAt||null,nationalStations:nationalManifest.stationCount,nationalPdcCount:nationalManifest.pdcCount,emspRuleCount:emspRules.length,emspExactPdcCount:emspByPdc.size},
+  generatedFrom:{nationalGeneratedAt:nationalManifest.generatedAt,emspGeneratedAt:emspManifest.generatedAt||null,nationalStations:nationalManifest.stationCount,nationalPdcCount:nationalManifest.pdcCount,emspTileCount:(emspManifest.tiles||[]).length,emspRows:emspRows.length,emspRuleCount:emspRules.length,emspExactPdcCount:emspByPdc.size},
   identityDiagnostics:{nationalPdcSamples,emspPdcSamples:[...emspByPdc.keys()].slice(0,12),exactOverlap:stats.withAnyEmsp,separatorInsensitiveOverlap:stats.withNormalizedEmspIdentity},
   exactPdcAudit:{...stats,percent:{direct:pct(stats.withDirect),electroverse:pct(stats.withElectroverse),electra:pct(stats.withElectra),anyEmsp:pct(stats.withAnyEmsp),separatorInsensitiveEmspIdentity:pct(stats.withNormalizedEmspIdentity),directAndEmsp:pct(stats.withDirectAndEmsp),fallbackOnly:pct(stats.withFallbackOnly),noKnownTariff:pct(stats.withoutAnyKnownTariff)}},
   directSourcePdcHits:Object.fromEntries([...sourceHits.entries()].sort((a,b)=>b[1]-a[1])),topCoverageGapsByPhysicalOperator:topGaps
 };
 
+console.log(JSON.stringify(result,null,2));
 assert.equal(stats.stations,nationalManifest.stationCount,'national all-file station count must match manifest');
 assert(stats.pdcs>100000,'audit must cover the national PDC population, not a sample');
 assert(stats.withDirect>0,'at least one national PDC must receive a direct tariff');
-assert(emspRules.length>0,'legacy eMSP snapshot must expose roaming tariff rules');
+assert(emspRows.length>1000,'eMSP tiled runtime snapshot must contain station rows');
 assert(stats.withFallbackOnly+stats.withoutAnyKnownTariff<=stats.pdcs,'fallback/unknown gap population cannot exceed audited PDC population');
-console.log(JSON.stringify(result,null,2));
