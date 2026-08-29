@@ -1,0 +1,28 @@
+name: V9 pricing engine
+
+on:
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/pricing-engine.js'
+      - 'tests/v9-pricing-engine.test.cjs'
+      - '.github/workflows/v9-pricing-engine.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/pricing-engine.js'
+      - 'tests/v9-pricing-engine.test.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tests/v9-pricing-engine.test.cjs
