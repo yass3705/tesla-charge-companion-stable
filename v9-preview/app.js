@@ -19,6 +19,7 @@
       directOffers:window.TCCV9Adapters.directOffers,
       legacyDirectTariffs:window.TCCV9Adapters.legacyDirectTariffs,
       legacyDirectStations:window.TCCV9Adapters.legacyDirectStations,
+      franceEmspCompact:window.TCCV9Adapters.franceEmspCompact,
       franceCrosswalk:window.TCCV9Adapters.franceCrosswalk,
       franceIrveStatus:window.TCCV9Adapters.franceIrveStatus
     };
