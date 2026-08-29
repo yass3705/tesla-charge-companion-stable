@@ -3,7 +3,7 @@
 // officiels opérateur applicables aux stations physiquement exploitées par le réseau.
 (function(root){
   'use strict';
-  const VERSION='nl-tariffs-20260829-1';
+  const VERSION='nl-tariffs-20260829-2';
   const DATA_URL='data/netherlands_direct_tariffs_v1.json';
   let dataPromise=null,observer=null,applyTimer=null,registerTimer=null,busy=false;
 
@@ -47,7 +47,8 @@
   function rowTotal(kwh,offer){return Math.max(0,Number(kwh||0))*Math.max(0,Number(offer.pricePerKwh||0));}
   function insertBeforeNote(box,row){const note=box.querySelector('.v8-offer-note');if(note)note.before(row);else box.appendChild(row);}
   function setRowContent(row,offer,kwh,{subscription=false}={}){
-    const total=rowTotal(kwh,offer),planFee=subscription?(offer.monthlyFeeLabel||Number.isFinite(Number(offer.monthlyFeeEur))?`${Number(offer.monthlyFeeEur).toFixed(2).replace('.',',')} €/mois`:''):'';
+    const total=rowTotal(kwh,offer);
+    const planFee=subscription?(offer.monthlyFeeLabel||(Number.isFinite(Number(offer.monthlyFeeEur))?`${Number(offer.monthlyFeeEur).toFixed(2).replace('.',',')} €/mois`:'')):'';
     row.dataset.tccProvider=offer.provider;
     if(subscription){row.dataset.subscriptionId=offer.selectionId||offer.id;row.dataset.subscriptionOfferId=offer.id;}
     row.innerHTML=`<div class="v8-offer-provider">${esc(offer.provider)}${subscription?'<span class="v8-electra-tag">abonnement</span>':''}${planFee?`<span class="v8-electra-planfee">${esc(planFee)}</span>`:''}</div><div class="v8-offer-price">${esc(priceLabel(offer))}</div><div class="v8-offer-total">${euro(total)}</div>`;
@@ -58,7 +59,7 @@
     let changed=false;const ctx=cardContext(card);
     for(const offer of data.directOffers||[]){
       if(!offerMatches(ctx,offer))continue;
-      let row=box.querySelector(`[data-netherlands-direct-offer-id="${CSS.escape(offer.id)}"]`);
+      let row=box.querySelector(`[data-netherlands-direct-offer-id="${offer.id}"]`);
       if(!row){row=document.createElement('div');row.className='v8-offer-row v8-nl-direct-row';row.dataset.netherlandsDirectOfferId=offer.id;insertBeforeNote(box,row);changed=true;}
       const expected=`${offer.provider}|${priceLabel(offer)}|${euro(rowTotal(kwh,offer))}`;
       if(row.dataset.nlSignature!==expected){setRowContent(row,offer,kwh);row.dataset.nlSignature=expected;changed=true;}
@@ -69,7 +70,7 @@
     let changed=false;const ctx=cardContext(card);
     for(const offer of data.subscriptionOffers||[]){
       if(!offerMatches(ctx,offer))continue;
-      let row=box.querySelector(`[data-subscription-offer-id="${CSS.escape(offer.id)}"]`);
+      let row=box.querySelector(`[data-subscription-offer-id="${offer.id}"]`);
       if(!row&&offer.selectionId==='fastned-gold')row=box.querySelector('[data-subscription-offer-id="fastned-gold"]');
       if(!row){row=document.createElement('div');row.className='v8-offer-row v8-nl-subscription-row';row.dataset.subscriptionOfferId=offer.id;insertBeforeNote(box,row);changed=true;}
       row.classList.add('v8-nl-subscription-row');
@@ -103,7 +104,7 @@
       {id:'ionity-motion-control',selectionId:'ionity-motion',provider:'IONITY Motion',offerType:'subscription',monthlyFeeEur:5.99,defaultSelected:false,source:'https://www.ionity.eu/nl/abonnementen'},
       {id:'ionity-power-control',selectionId:'ionity-power',provider:'IONITY Power',offerType:'subscription',monthlyFeeEur:11.99,defaultSelected:false,source:'https://www.ionity.eu/nl/abonnementen'}
     ];
-    for(const plan of controls)if(!existing.has(plan.selectionId))api.registerPlan(plan);
+    for(const plan of controls)if(!existing.has(plan.selectionId)){api.registerPlan(plan);existing.add(plan.selectionId);}
     const fastned=(data?.subscriptionOffers||[]).find(x=>x.selectionId==='fastned-gold');
     if(fastned&&!existing.has('fastned-gold'))api.registerPlan({id:'fastned-gold-control',selectionId:'fastned-gold',provider:'Fastned Gold',offerType:'subscription',monthlyFeeEur:fastned.monthlyFeeEur,monthlyFeeLabel:fastned.monthlyFeeLabel,defaultSelected:false,source:fastned.source});
     return true;
@@ -116,7 +117,11 @@
   }
   function boot(){
     loadData().then(data=>{if(data)registerSubscriptionControls(data);}).catch(()=>{});
-    let tries=0;registerTimer=setInterval(()=>{tries++;const a=installObserver();ensureRegistered().catch(()=>{});if(a&&root.TCCV8Subscriptions?.registerPlan||tries>180){if(a&&root.TCCV8Subscriptions?.registerPlan){clearInterval(registerTimer);registerTimer=null;setTimeout(()=>applyAll().catch(()=>{}),250);}}},100);
+    let tries=0;registerTimer=setInterval(()=>{
+      tries++;const a=installObserver();ensureRegistered().catch(()=>{});
+      if(a&&root.TCCV8Subscriptions?.registerPlan){clearInterval(registerTimer);registerTimer=null;setTimeout(()=>applyAll().catch(()=>{}),250);}
+      else if(tries>180){clearInterval(registerTimer);registerTimer=null;}
+    },100);
   }
 
   const api={version:VERSION,loadData,isNetherlandsCard,cardContext,operatorMatches,offerMatches,rowTotal,applyCard,applyAll,registerSubscriptionControls};
