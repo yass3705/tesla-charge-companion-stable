@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-29T16:56:13.915072Z",
+  "generatedAt": "2026-08-29T17:00:40.884230Z",
   "source": "legacy-france-canonical/data/tariff_overlay_v1.json",
   "directOfferCount": 16,
   "directSubscriptionCount": 4,
@@ -32,6 +32,8 @@
       "runtime": "existing_belib_direct"
     }
   ],
+  "physicalOnlyCount": 4,
+  "networkScopedCount": 21,
   "upstreamDeferredValidated": [
     {
       "operator": "Plenitude On The Road",
