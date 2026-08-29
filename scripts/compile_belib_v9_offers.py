@@ -31,7 +31,7 @@ def offer(offer_id,provider,klass,rules,source,subscription=False,selection_id=N
       'pricing':{'type':'rules','rules':rules},'source':source,'directOperatorOnly':False,
       'verifiedScope':'network_brand_exact_power','defaultSelected':False,
       'customerProfile':profile,
-      'metadata':{'network':'Belib','chargerClass':klass,'publishedPowerKw':power,'connectionBillingExact':True}
+      'metadata':{'network':'Belib','chargerClass':klass,'publishedPowerKw':power,'connectionBillingExact':True,'timeZone':'Europe/Paris'}
     }
     if subscription:
         row['monthlyFeeLabel']='7 €/an'
@@ -67,12 +67,13 @@ def main():
     payload={
       'schemaVersion':1,'country':'FR','generatedAt':now,'mode':'official_exact','policy':{
         'subscriptionsOptIn':True,'parkingExcluded':True,'reservationExcludedFromChargeCost':True,
-        'networkBrandOnly':True,'physicalOperatorMayDiffer':True,'connectedTimeBlocksPreservedExactly':True
+        'networkBrandOnly':True,'physicalOperatorMayDiffer':True,'connectedTimeBlocksPreservedExactly':True,
+        'tariffTimeZone':'Europe/Paris'
       },
       'directOffers':direct,'subscriptionOffers':subs,
       'sourceEvidence':{'effectiveFrom':src.get('sourceEvidence',{}).get('tariffEffectiveFrom'),'fingerprint':src.get('sourceEvidence',{}).get('relevantTariffFingerprintSha256')}
     }
     out=Path(args.output);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print(json.dumps({'output':str(out),'directOfferCount':len(direct),'subscriptionOfferCount':len(subs),'classes':list(CLASSES),'subscriptionIds':['belib-nonresident','belib-resident']},ensure_ascii=False))
+    print(json.dumps({'output':str(out),'directOfferCount':len(direct),'subscriptionOfferCount':len(subs),'classes':list(CLASSES),'subscriptionIds':['belib-nonresident','belib-resident'],'timeZone':'Europe/Paris'},ensure_ascii=False))
 
 if __name__=='__main__':main()
