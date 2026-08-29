@@ -1,15 +1,16 @@
 (function(root,factory){
   if(typeof module==='object'&&module.exports){
-    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'),require('./session-engine.js'));
+    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'),require('./session-engine.js'),require('./station-score-engine.js'));
   }else{
-    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine,root.TCCV9SessionEngine);
+    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine,root.TCCV9SessionEngine,root.TCCV9StationScoreEngine);
   }
-})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine,SessionEngine){
+})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine,SessionEngine,StationScoreEngine){
   'use strict';
 
   if(!DataEngine)throw new Error('TCC V9 data engine is required');
   if(!OfferEngine)throw new Error('TCC V9 offer engine is required');
   if(!SessionEngine)throw new Error('TCC V9 session engine is required');
+  if(!StationScoreEngine)throw new Error('TCC V9 station score engine is required');
 
   const text=v=>String(v==null?'':v).trim();
   const country=v=>text(v).toUpperCase();
@@ -79,16 +80,21 @@
       const stationById=new Map(stations.map(st=>[st.id,st]));
       const routingCandidates=(area.routingCandidates||[]).map(st=>stationById.get(st.id)||st);
       const subscriptions=deriveSubscriptionOptions(stations,query.subscriptionFilters||{});
-      let sessionEvaluations=null,rankedStations=null;
+      let sessionEvaluations=null,stationScores=null,rankedStations=null;
       if(query.session){
         const rows=SessionEngine.evaluateArea(stations,query.session,{
           selectedSubscriptions:query.selectedSubscriptions||query.session.selectedSubscriptions||[],
           targetCurrency:query.targetCurrency||query.session.targetCurrency||'EUR',
           fxRates:query.fxRates||query.session.fxRates||{},
-          sortBy:query.sortBy||'total'
+          sortBy:'total'
         });
         sessionEvaluations=Object.fromEntries(rows.map(row=>[row.evaluation.stationId,row.evaluation]));
-        rankedStations=rows.map(row=>row.station);
+        const scored=StationScoreEngine.scoreArea(stations,sessionEvaluations,query.session,{
+          route:query.route||area.routes||{},
+          sortBy:query.sortBy||query.session.sortBy||'finalCost'
+        });
+        stationScores=Object.fromEntries(scored.map(row=>[row.score.stationId,row.score]));
+        rankedStations=scored.map(row=>row.station);
       }
       return{
         ...area,
@@ -96,12 +102,15 @@
         routingCandidates,
         subscriptions,
         sessionEvaluations,
+        stationScores,
         rankedStations,
         diagnostics:{
           ...(area.diagnostics||{}),
           subscriptionOptionCount:subscriptions.length,
           sessionEvaluatedStationCount:sessionEvaluations?Object.keys(sessionEvaluations).length:0,
-          sessionComparableStationCount:sessionEvaluations?Object.values(sessionEvaluations).filter(x=>x?.best).length:0
+          sessionComparableStationCount:sessionEvaluations?Object.values(sessionEvaluations).filter(x=>x?.best).length:0,
+          scoredStationCount:stationScores?Object.keys(stationScores).length:0,
+          fullyScoredStationCount:stationScores?Object.values(stationScores).filter(x=>x?.complete?.pricing&&x?.complete?.route&&x?.complete?.charging).length:0
         }
       };
     }
@@ -114,7 +123,9 @@
       dedupeOffers:OfferEngine.dedupeOffers,
       mergeStationOffers:OfferEngine.mergeStationOffers,
       evaluateStation:SessionEngine.evaluateStation,
-      evaluateArea:SessionEngine.evaluateArea
+      evaluateArea:SessionEngine.evaluateArea,
+      scoreStation:StationScoreEngine.scoreStation,
+      scoreArea:StationScoreEngine.scoreArea
     };
   }
 
