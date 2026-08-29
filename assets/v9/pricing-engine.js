@@ -52,11 +52,27 @@
     const fixed=num(rule?.connectedTimeComponentEur);if(fixed!=null&&fixed!==0){components.connectedTimeComponent=money(fixed);total+=components.connectedTimeComponent;}
     return{totalEur:money(total),components};
   }
+  function evaluatePostChargeFee(fee,{postChargeMinutes=0}={}){
+    if(!fee)return{totalEur:0,component:null};
+    const duration=Math.max(0,num(postChargeMinutes)??0),grace=Math.max(0,num(fee.graceMinutes)??0),billable=Math.max(0,duration-grace);
+    if(billable<=0)return{totalEur:0,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:0,costEur:0}};
+    const blockMinutes=num(fee.blockMinutes),blockEur=num(fee.blockEur);
+    if(blockMinutes>0&&blockEur!=null){
+      const blocks=fee.rounding==='started_block'?Math.ceil(billable/blockMinutes):billable/blockMinutes;
+      const costEur=money(blocks*blockEur);
+      return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,blocks,blockMinutes,unitPriceEur:blockEur,costEur}};
+    }
+    const perMinute=num(fee.eurPerMinute);
+    if(perMinute!=null){const costEur=money(billable*perMinute);return{totalEur:costEur,component:{postChargeMinutes:duration,graceMinutes:grace,billableMinutes:billable,eurPerMinute:perMinute,costEur}};}
+    return{totalEur:0,component:null,complete:false,reason:'unsupported_post_charge_fee'};
+  }
   function evaluateOffer(offer,session={}){
     const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;
     if(pricing.type!=='rules'){
       const rate=num(pricing.pricePerKwh);if(rate==null)return{complete:false,reason:'unsupported_pricing',offerId:offer?.id||null};
-      const energy=Math.max(0,num(session.energyKwh)??0);return{complete:true,totalEur:money(rate*energy),components:{energy:money(rate*energy)},offerId:offer?.id||null,currency:offer?.currency||'EUR'};
+      const energy=Math.max(0,num(session.energyKwh)??0),base=money(rate*energy),post=evaluatePostChargeFee(pricing.postChargeFee,session);
+      if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null};
+      return{complete:true,totalEur:money(base+post.totalEur),components:{energy:base,...(post.component?{postCharge:post.component}:{})},offerId:offer?.id||null,currency:offer?.currency||'EUR'};
     }
     const rule=matchingRule(pricing,session.startAt,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
     const duration=Math.max(0,num(session.durationMinutes)??0),boundary=minutesUntilRuleBoundary(rule,session.startAt,timeZone);
@@ -71,7 +87,11 @@
         longConnection={complete:false,reason:'hourly_rounding_unspecified',excessMinutes:excess,rateEurPerHour:rate};
       }
     }
-    return{complete:!longConnection,totalEur:money(total),components:base.components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,timeZone};
+    const post=evaluatePostChargeFee(pricing.postChargeFee,session);
+    if(post.complete===false)return{complete:false,reason:post.reason,offerId:offer?.id||null,timeZone};
+    total+=post.totalEur;
+    const components={...base.components,...(post.component?{postCharge:post.component}:{})};
+    return{complete:!longConnection,totalEur:money(total),components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,timeZone};
   }
-  return{evaluateOffer,evaluateRule,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
+  return{evaluateOffer,evaluateRule,evaluatePostChargeFee,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
 });
