@@ -7,6 +7,7 @@ on:
       - 'v9-shadow/**'
       - 'tests/v9-shadow-parity.test.cjs'
       - 'tests/v9-shadow-session-parity.test.cjs'
+      - 'tests/v9-shadow-session-timing-parity.test.cjs'
       - 'tests/v9-shadow-scenario-matrix.test.cjs'
       - '.github/workflows/v9-shadow-parity.yml'
   push:
@@ -16,6 +17,7 @@ on:
       - 'v9-shadow/**'
       - 'tests/v9-shadow-parity.test.cjs'
       - 'tests/v9-shadow-session-parity.test.cjs'
+      - 'tests/v9-shadow-session-timing-parity.test.cjs'
       - 'tests/v9-shadow-scenario-matrix.test.cjs'
       - '.github/workflows/v9-shadow-parity.yml'
   workflow_dispatch:
@@ -38,11 +40,14 @@ jobs:
           node --check assets/v9/v8-shadow-adapter.js
           node --check tests/v9-shadow-parity.test.cjs
           node --check tests/v9-shadow-session-parity.test.cjs
+          node --check tests/v9-shadow-session-timing-parity.test.cjs
           node --check tests/v9-shadow-scenario-matrix.test.cjs
           node --check v9-shadow/app.js
       - name: Run station identity parity contract
         run: node tests/v9-shadow-parity.test.cjs
       - name: Run full session parity contract
         run: node tests/v9-shadow-session-parity.test.cjs
+      - name: Run SOC and charge timing parity contract
+        run: node tests/v9-shadow-session-timing-parity.test.cjs
       - name: Run shadow scenario matrix contract
         run: node tests/v9-shadow-scenario-matrix.test.cjs
