@@ -53,6 +53,11 @@ const targetSummary=Object.fromEntries(Object.keys(targetMatchers).map(key=>{
   }];
 }));
 const summary={nationalGeneratedAt:manifest.generatedAt,iziviaNetworkCount:networks.length,iziviaStations:networks.reduce((s,r)=>s+r.stations,0),iziviaPdcs:networks.reduce((s,r)=>s+r.pdcs,0),topNetworks:networks.slice(0,40),knownTargets,targetSummary,candidateStations};
+const reportPath=process.env.IZIVIA_AUDIT_REPORT;
+if(reportPath){
+  fs.mkdirSync(require('node:path').dirname(reportPath),{recursive:true});
+  fs.writeFileSync(reportPath,JSON.stringify(summary,null,2)+'\n');
+}
 console.log(JSON.stringify(summary,null,2));
 console.log('IZIVIA_TARGET_SUMMARY='+JSON.stringify(targetSummary));
 assert(summary.iziviaPdcs>1000,'IZIVIA audit must cover a meaningful national population');
