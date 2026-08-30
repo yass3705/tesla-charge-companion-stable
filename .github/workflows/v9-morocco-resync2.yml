@@ -1,0 +1,43 @@
+name: V9 Morocco resync2 validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260830b']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'assets/v9/adapters/morocco-nonproduction.js'
+      - 'assets/v9/browser-loaders.js'
+      - 'data/v9/source-registry.json'
+      - 'tests/v9-morocco-resync2-smoke.test.cjs'
+      - '.github/workflows/v9-morocco-resync2.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'assets/v9/adapters/morocco-nonproduction.js'
+      - 'assets/v9/browser-loaders.js'
+      - 'data/v9/source-registry.json'
+      - 'tests/v9-morocco-resync2-smoke.test.cjs'
+      - '.github/workflows/v9-morocco-resync2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check
+        run: |
+          node --check assets/v9/adapters/morocco-public.js
+          node --check assets/v9/adapters/morocco-nonproduction.js
+          node --check assets/v9/browser-loaders.js
+          node --check tests/v9-morocco-resync2-smoke.test.cjs
+          node -e "JSON.parse(require('fs').readFileSync('data/v9/source-registry.json','utf8'))"
+      - name: Validate sanitized public Morocco datasets and registry wiring
+        run: node tests/v9-morocco-resync2-smoke.test.cjs
