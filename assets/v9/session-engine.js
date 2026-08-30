@@ -47,7 +47,12 @@
     const effectiveSession=stationSession(station,session,options),km=recoveredKm(session),evaluations=[];
 
     for(const offer of offers){
-      const result=PricingEngine.evaluateOffer(offer,effectiveSession),currency=text(result.currency||offer.currency||'EUR').toUpperCase();
+      const postChargeMinutes=Math.max(0,num(effectiveSession.postChargeMinutes)??0);
+      const unknownPostCharge=offer?.pricing?.postChargeFeeUnknown===true||offer?.metadata?.postChargeFeeUnknown===true;
+      const result=unknownPostCharge&&postChargeMinutes>0
+        ?{complete:false,reason:'post_charge_fee_unknown_for_station',offerId:text(offer.id||offer.offerId),postChargeMinutes}
+        :PricingEngine.evaluateOffer(offer,effectiveSession);
+      const currency=text(result.currency||offer.currency||'EUR').toUpperCase();
       const rate=result.complete?fxRate(currency,targetCurrency,fxRates):null;
       const comparable=result.complete&&rate!=null;
       const normalizedTotal=comparable?money(result.totalEur*rate):null;
