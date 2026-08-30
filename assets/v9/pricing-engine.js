@@ -47,6 +47,8 @@
       components.energy=money(billedEnergy*perKwh);total+=components.energy;
       if(billedEnergy!==energy)components.energyBilling={actualKwh:energy,billedKwh:billedEnergy,rounding:'started_kwh'};
     }
+    const pricePerMinute=num(rule?.pricePerMinute);
+    if(pricePerMinute!=null){components.connectedTimePerMinute=money(duration*pricePerMinute);total+=components.connectedTimePerMinute;}
     const blockMinutes=num(rule?.connectedTimeBlockMinutes),blockEur=num(rule?.connectedTimeBlockEur);
     if(blockMinutes>0&&blockEur!=null){
       const blocks=rule?.connectedTimeBlockRounding==='started_block'?Math.ceil(duration/blockMinutes):duration/blockMinutes;
