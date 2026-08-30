@@ -34,17 +34,30 @@ let st=Runtime.applySelectedSubscriptions(fastnedStation,['fastned-gold'],config
 assert.equal(st.physicalOperator.name,'Fastned','cross-border subscription must not overwrite physical CPO identity');
 assert.equal(st.eligibleOffers.some(o=>o.subscriptionId==='fastned-gold'),true);
 assert.equal(st.rankableOffers.find(o=>o.subscriptionId==='fastned-gold').pricing.pricePerKwh,0.43);
+assert.equal(st.subscriptionAdvisories.length,0);
 
 const ionityStation={id:'fr-ionity',countryCode:'FR',name:'IONITY test',physicalOperator:{id:'ionity',name:'IONITY'},offers:[{id:'public-ionity',provider:'IONITY',kind:'direct',countries:['FR'],pricing:{pricePerKwh:0.59},sourceId:'direct',priority:95}]};
 st=Runtime.applySelectedSubscriptions(ionityStation,['ionity-power'],config,{});
-assert.equal(st.eligibleOffers.some(o=>o.subscriptionId==='ionity-power'),true,'minimum may be displayed');
+assert.equal(st.eligibleOffers.some(o=>o.subscriptionId==='ionity-power'),false,'non-rankable minimum must not enter tariff eligibility');
 assert.equal(st.rankableOffers.some(o=>o.subscriptionId==='ionity-power'),false,'minimum must be excluded from ranking');
+assert.equal(st.subscriptionAdvisories.some(o=>o.subscriptionId==='ionity-power'&&o.pricing.pricePerKwh===0.33),true,'minimum remains visible as advisory');
 st=Runtime.applySelectedSubscriptions(ionityStation,['ionity-power'],config,{subscriptionStationPrices:{'fr-ionity':{'ionity-power':{pricePerKwh:0.35,currency:'EUR'}}}});
 assert.equal(st.rankableOffers.some(o=>o.subscriptionId==='ionity-power'&&o.pricing.pricePerKwh===0.35),true,'confirmed station price becomes rankable');
+assert.equal(st.subscriptionAdvisories.length,0);
+
+const fallbackStation={id:'fr-ionity-fallback',countryCode:'FR',name:'IONITY fallback test',physicalOperator:{id:'ionity',name:'IONITY'},offers:[{id:'national-fallback',provider:'IRVE',kind:'national_fallback',countries:['FR'],pricing:{pricePerKwh:0.70},sourceId:'national',priority:30}]};
+st=Runtime.applySelectedSubscriptions(fallbackStation,['ionity-power'],config,{});
+assert.deepEqual(st.rankableOffers.map(o=>o.id),['national-fallback'],'non-rankable advisory must never hide the usable national fallback');
+assert.equal(st.subscriptionAdvisories.some(o=>o.subscriptionId==='ionity-power'),true);
+
+const enbwFallback={id:'fr-enbw-fallback',countryCode:'FR',name:'EnBW partner test',physicalOperator:{id:'powerdot',name:'Powerdot'},offers:[{id:'national-fallback-2',provider:'IRVE',kind:'national_fallback',countries:['FR'],pricing:{pricePerKwh:0.68},sourceId:'national',priority:30}]};
+st=Runtime.applySelectedSubscriptions(enbwFallback,['enbw-mobility-plus-m'],config,{});
+assert.deepEqual(st.rankableOffers.map(o=>o.id),['national-fallback-2'],'station-specific-required advisory must not hide fallback');
+assert.equal(st.subscriptionAdvisories[0].metadata.resolutionStatus,'station-specific-required');
 
 const options=Cross.subscriptionOptions(config);
 assert.deepEqual(options.find(x=>x.id==='fastned-gold').countries.sort(),['BE','CH','DE','DK','ES','FR','GB','IT','NL']);
 assert.equal(options.find(x=>x.id==='ionity-power').countryCount,23);
 assert.equal(options.find(x=>x.id==='enbw-mobility-plus-m').countryCount,17);
 
-console.log(JSON.stringify({ok:true,module:'tcc-v9-cross-border-runtime',invariants:['single-global-selection','country-local-price','no-home-price-fallback','preserve-physical-cpo','ionity-minimum-not-rankable','exact-station-override-rankable','enbw-station-specific-only']},null,2));
+console.log(JSON.stringify({ok:true,module:'tcc-v9-cross-border-runtime',invariants:['single-global-selection','country-local-price','no-home-price-fallback','preserve-physical-cpo','advisory-never-hides-fallback','ionity-minimum-not-rankable','exact-station-override-rankable','enbw-station-specific-only']},null,2));
