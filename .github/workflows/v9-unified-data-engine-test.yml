@@ -60,6 +60,7 @@ jobs:
           node --check tests/v9-vehicle-profile-engine.test.cjs
           node --check tests/v9-charge-model-engine.test.cjs
           node --check tests/v9-session-planner-engine.test.cjs
+          node --check tests/v9-pricing-window-segmentation.test.cjs
           node --check tests/v9-station-score-engine.test.cjs
           node --check tests/v9-charge-score-integration.test.cjs
           node --check tests/v9-routing-engine.test.cjs
@@ -149,6 +150,8 @@ jobs:
         run: node tests/v9-charge-model-engine.test.cjs
       - name: SOC target and unplug deadline planning
         run: node tests/v9-session-planner-engine.test.cjs
+      - name: Tariff-window and post-charge segmentation
+        run: node tests/v9-pricing-window-segmentation.test.cjs
       - name: Station scoring
         run: node tests/v9-station-score-engine.test.cjs
       - name: Routed SOC charge integration
