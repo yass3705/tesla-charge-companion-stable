@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "country": "FR",
-  "generatedAt": "2026-08-30T11:49:58.877811Z",
+  "generatedAt": "2026-08-30T11:53:06.047098Z",
   "mode": "exact_pdc_direct_tariffs",
   "policy": {
     "exactPdcRequired": true,
@@ -10,8 +10,10 @@
     "sourceRankableRequired": true,
     "unsupportedTimeChangingTariffsFailClosed": true,
     "conditionalFeeConditionsSupported": [
-      "energy_above_kwh"
+      "energy_above_kwh",
+      "session_duration_after_minutes"
     ],
+    "conditionalFeeConditionsUseAndSemantics": true,
     "sessionDurationSurchargeSupported": true,
     "minimumTotalAppliedAfterAllSessionComponents": true,
     "subscriptionsOptIn": true
@@ -9629,6 +9631,734 @@
         "semanticFamily": "static_components",
         "sourceStatus": "rankable_static",
         "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe8460",
+      "selectionId": "bump-direct-frbmpe8460",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230819P"
+      ],
+      "evseIds": [
+        "FRBMPE8460"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "472c448a-fd03-1450-bf9b-ace501a74b76",
+        "tariffGroupId": "d20897f0-4c1c-4a6a-b1a1-8bfef98a133b",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+        "appEvseId": "943593fc-571f-7d83-6a7e-5f25ca5ddc54",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe8996",
+      "selectionId": "bump-direct-frbmpe8996",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230819P"
+      ],
+      "evseIds": [
+        "FRBMPE8996"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "472c448a-fd03-1450-bf9b-ace501a74b76",
+        "tariffGroupId": "d20897f0-4c1c-4a6a-b1a1-8bfef98a133b",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+        "appEvseId": "943593fc-571f-7d83-6a7e-5f25ca5ddc54",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe6354",
+      "selectionId": "bump-direct-frbmpe6354",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230819P"
+      ],
+      "evseIds": [
+        "FRBMPE6354"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "472c448a-fd03-1450-bf9b-ace501a74b76",
+        "tariffGroupId": "d20897f0-4c1c-4a6a-b1a1-8bfef98a133b",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+        "appEvseId": "943593fc-571f-7d83-6a7e-5f25ca5ddc54",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe2659",
+      "selectionId": "bump-direct-frbmpe2659",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230819P"
+      ],
+      "evseIds": [
+        "FRBMPE2659"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "472c448a-fd03-1450-bf9b-ace501a74b76",
+        "tariffGroupId": "d20897f0-4c1c-4a6a-b1a1-8bfef98a133b",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+        "appEvseId": "943593fc-571f-7d83-6a7e-5f25ca5ddc54",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe3856",
+      "selectionId": "bump-direct-frbmpe3856",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230819P"
+      ],
+      "evseIds": [
+        "FRBMPE3856"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "472c448a-fd03-1450-bf9b-ace501a74b76",
+        "tariffGroupId": "d20897f0-4c1c-4a6a-b1a1-8bfef98a133b",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+        "appEvseId": "943593fc-571f-7d83-6a7e-5f25ca5ddc54",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe9607",
+      "selectionId": "bump-direct-frbmpe9607",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPE9607"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "22cd6433-7d20-19ea-ac7b-dbff75048b2b",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe4917",
+      "selectionId": "bump-direct-frbmpe4917",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPE4917"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "22cd6433-7d20-19ea-ac7b-dbff75048b2b",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe4036",
+      "selectionId": "bump-direct-frbmpe4036",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPE4036"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "22cd6433-7d20-19ea-ac7b-dbff75048b2b",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe6871",
+      "selectionId": "bump-direct-frbmpe6871",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPE6871"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "22cd6433-7d20-19ea-ac7b-dbff75048b2b",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp0121",
+      "selectionId": "bump-direct-frbmpebmp0121",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP0121"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "3d4d4629-b512-e46e-7188-8540f7a37cd0",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp0120",
+      "selectionId": "bump-direct-frbmpebmp0120",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP0120"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "837e6a8e-43c4-bc97-ddf1-4c59bf844a67",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp0101",
+      "selectionId": "bump-direct-frbmpebmp0101",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP0101"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "22cd6433-7d20-19ea-ac7b-dbff75048b2b",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp0201",
+      "selectionId": "bump-direct-frbmpebmp0201",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230820P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP0201"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.55
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.2,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "5f0bc286-12d9-0555-6123-6577fc5e7651",
+        "tariffGroupId": "7bc497de-754f-45c7-8a85-04662aff7714",
+        "tariffName": "Bump - SAGS -LES ARCS 2000 - MONT BLANC - Base Tarif",
+        "appEvseId": "e5a388a1-ffd5-64c2-6369-0990a7a95d2a",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
         "timeZone": "Europe/Paris"
       }
     },
@@ -71244,6 +71974,62 @@
       }
     },
     {
+      "id": "bump-direct-frbmpe1727",
+      "selectionId": "bump-direct-frbmpe1727",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP254884P"
+      ],
+      "evseIds": [
+        "FRBMPE1727"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 1.0
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 1.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "cf8e9fcd-4759-c59d-e7ac-ef21f264c3f4",
+        "tariffGroupId": "6d5c1793-0d41-4b12-923e-d43c33835ac5",
+        "tariffName": "Bump - SAGS - Porte de Clignancourt - Paris - Base Tarif",
+        "appEvseId": "7bca34dc-07f3-36b3-46c2-1674336f5550",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "7",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
       "id": "bump-direct-frbmpe4178",
       "selectionId": "bump-direct-frbmpe4178",
       "provider": "Bump direct",
@@ -77685,6 +78471,118 @@
       }
     },
     {
+      "id": "bump-direct-frbmpebmp2029",
+      "selectionId": "bump-direct-frbmpebmp2029",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP734804P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP2029"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.5
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 0.5
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 2.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "9cfef4f6-d9ea-532b-073f-ff84108520d2",
+        "tariffGroupId": "6f84e706-f44c-4258-a078-f59651a71714",
+        "tariffName": "Camping l'Eglantier - Ambleteuse - Base Tarif",
+        "appEvseId": "a5c97bad-a385-001f-c0ef-b5373d5dbdcf",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp2028",
+      "selectionId": "bump-direct-frbmpebmp2028",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP734804P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP2028"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.5
+          }
+        ],
+        "conditionalSessionFees": [
+          {
+            "amountEur": 1.0,
+            "conditions": [
+              {
+                "kind": "energy_above_kwh",
+                "value": 0.5
+              },
+              {
+                "kind": "session_duration_after_minutes",
+                "value": 2.0
+              }
+            ]
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "9cfef4f6-d9ea-532b-073f-ff84108520d2",
+        "tariffGroupId": "6f84e706-f44c-4258-a078-f59651a71714",
+        "tariffName": "Camping l'Eglantier - Ambleteuse - Base Tarif",
+        "appEvseId": "49026ff9-fe50-333c-9ba6-80842471dc56",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_duration_conditional_flat_fee",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
       "id": "bump-direct-frbmpe9128",
       "selectionId": "bump-direct-frbmpe9128",
       "provider": "Bump direct",
@@ -78457,370 +79355,6 @@
     {
       "idPdcItinerance": "FRBMPE8462",
       "reason": "source_not_rankable"
-    },
-    {
-      "idPdcItinerance": "FRBMPE8460",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE8996",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE6354",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE2659",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE3856",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE9607",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE4917",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE4036",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE6871",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP0121",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP0120",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP0101",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP0201",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.2,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.55
-        }
-      ]
     },
     {
       "idPdcItinerance": "FRBMPE7456",
@@ -80519,34 +81053,6 @@
       "reason": "no_exact_bump_crosswalk"
     },
     {
-      "idPdcItinerance": "FRBMPE1727",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 1.0
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        }
-      ]
-    },
-    {
       "idPdcItinerance": "FRBMPE2060",
       "reason": "no_exact_bump_crosswalk"
     },
@@ -80597,79 +81103,25 @@
     {
       "idPdcItinerance": "FRBMPE3231",
       "reason": "no_exact_bump_crosswalk"
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP2029",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 0.5
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 2
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.5
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP2028",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "flat_fee",
-          "amountEur": 1.0,
-          "conditions": [
-            {
-              "kind": "energy_above_kwh",
-              "value": 0.5
-            },
-            {
-              "kind": "session_duration_after_minutes",
-              "value": 2
-            }
-          ]
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.5
-        }
-      ]
     }
   ],
   "summary": {
     "exactBumpAliases": 1886,
-    "offers": 1726,
+    "offers": 1742,
     "staticOffers": 1091,
     "timeChangingSeen": 659,
-    "temporalOffers": 635,
+    "temporalOffers": 651,
     "temporalOffersByFamily": {
       "minimum_energy_post_charge_occupancy": 7,
+      "minimum_energy_duration_conditional_flat_fee": 16,
       "minimum_energy_conditional_flat_fee": 622,
       "minimum_energy_session_duration_surcharge": 6
     },
     "conditionalEnergyOffers": 622,
+    "combinedEnergyDurationOffers": 16,
     "postChargeOccupancyOffers": 7,
     "sessionDurationSurchargeOffers": 6,
-    "timeChangingDeferred": 24,
-    "deferred": 526
+    "timeChangingDeferred": 8,
+    "deferred": 510
   }
 }
