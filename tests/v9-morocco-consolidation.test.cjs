@@ -35,12 +35,12 @@ const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
   assert.ok(alWaha.provenance.some(p=>p.sourceId==='morocco-kilowatt-public'));
   assert.ok(alWaha.provenance.some(p=>p.sourceId==='morocco-totalenergies-hosts'));
 
-  const alWahaDuplicates=area.stations.filter(s=>(s.aliases||[]).includes('totalenergies-host:al-waha')||(s.aliases||[]).includes('kilowatt-station:62e29ef59ad98566676cf824'));
+  const alWahaDuplicates=area.stations.filter(s=>(s.aliases||[]).includes('alias:totalenergies-host:al-waha')||(s.aliases||[]).includes('alias:kilowatt-station:62e29ef59ad98566676cf824'));
   assert.equal(alWahaDuplicates.length,1,'AL WAHA must not be duplicated across Kilowatt and TotalEnergies');
 
   const fastVolt=area.stations.filter(s=>s.physicalOperator.name==='FastVolt / Afrimobility');
   assert.equal(fastVolt.length,97);
-  const alBoustane=fastVolt.find(s=>(s.aliases||[]).includes('fastvolt-charger:W00057'));
+  const alBoustane=fastVolt.find(s=>(s.provenance||[]).some(p=>p.sourceId==='morocco-fastvolt-public'&&p.sourceStationId==='W00057'));
   assert.ok(alBoustane);
   assert.equal(alBoustane.access.siteBrand,'Afriquia');
   assert.equal(alBoustane.evses[0].connectors.filter(c=>c.kind==='DC'&&c.powerKw===360).length,4);
