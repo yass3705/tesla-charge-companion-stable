@@ -11,6 +11,7 @@ assert policy['physicalCpoIdentityPreserved'] is True
 assert policy['roamingSeparatedFromDirectCpo'] is True
 subs=d['subscriptions']; ids=[s['id'] for s in subs]
 assert len(ids)==len(set(ids))
+by_id={s['id']:s for s in subs}
 for s in subs:
  assert 'DE' in s['coverageCountries'],s['id']
  assert len(s['coverageCountries'])==len(set(s['coverageCountries'])),s['id']
@@ -22,6 +23,12 @@ for s in subs:
  else:
   assert s.get('rankableAbroad') is False,s['id']
   assert 'countryPrices' not in s,s['id']
+# Country-specific policy coverage must exactly match its verified matrix.
+fastned=json.loads(Path('data/v9/fastned-gold-country-prices.json').read_text())
+ionity=json.loads(Path('data/v9/ionity-monthly-country-prices.json').read_text())
+assert set(by_id['fastned-gold']['coverageCountries'])==set(fastned['prices'])
+for sid in ('ionity-motion','ionity-power'):
+ assert set(by_id[sid]['coverageCountries'])==set(ionity['subscriptions'][sid]),sid
 # Critical regression guards: German prices must never be interpreted as foreign prices.
 for s in subs:
  assert 'defaultForeignPrice' not in s,s['id']
@@ -29,4 +36,4 @@ for s in subs:
 # Aral cross-border remains deferred until its eMSP matrix is explicit.
 deferred={x['id'] for x in d.get('deferred',[])}
 assert {'aral-pulse-extra','aral-pulse-klassik','aral-pulse-adac-e-charge'} <= deferred
-print(json.dumps({'subscriptions':len(subs),'countrySpecific':sum(s['pricingMode']=='country-specific' for s in subs),'stationSpecificRoaming':sum(s['pricingMode']=='station-specific-roaming' for s in subs),'status':'ok'}))
+print(json.dumps({'subscriptions':len(subs),'fastnedCountries':len(fastned['prices']),'ionityCountries':len(ionity['subscriptions']['ionity-power']),'status':'ok'}))
