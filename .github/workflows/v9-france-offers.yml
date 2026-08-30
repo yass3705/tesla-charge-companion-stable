@@ -12,6 +12,7 @@ on:
       - 'scripts/compile_e55c_v9_offers.py'
       - 'scripts/compile_etotem_v9_offers.py'
       - 'scripts/compile_qovoltis_v9_offers.py'
+      - 'scripts/compile_bump_v9_offers.py'
       - 'assets/v9/adapters/direct-offers.js'
       - '.github/workflows/v9-france-offers.yml'
 
@@ -59,6 +60,9 @@ jobs:
       - name: Compile exact SYDER-QOVOLTIS territorial tariff layer
         run: python scripts/compile_qovoltis_v9_offers.py --input data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json
 
+      - name: Compile exact Bump PDC tariff layer
+        run: python scripts/compile_bump_v9_offers.py --tariffs data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz
+
       - name: Validate offer safety
         run: |
           python - <<'PY'
@@ -70,8 +74,9 @@ jobs:
           x=json.loads(Path('data/v9/france-e55c-offers.json').read_text())
           t=json.loads(Path('data/v9/france-etotem-offers.json').read_text())
           q=json.loads(Path('data/v9/france-qovoltis-offers.json').read_text())
+          u=json.loads(Path('data/v9/france-bump-offers.json').read_text())
           r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
-          assert all(z['country']=='FR' for z in (d,e,b,x,t,q))
+          assert all(z['country']=='FR' for z in (d,e,b,x,t,q,u))
           assert d['policy']['subscriptionsOptIn'] is True
           assert d['policy']['directCpoAndRoamingSeparate'] is True
           assert len(d['directOffers'])>=10,r
@@ -130,6 +135,15 @@ jobs:
           assert card_low['pricing']['rules'][0]['pricePerKwh']==0.25
           assert card_high['pricing']['rules'][0]['pricePerKwh']==0.40
           assert card_low['metadata']['oneTimeCardPurchaseEur']==7.2
+          assert u['policy']['exactPdcRequired'] is True
+          assert u['policy']['geographicFallbackAllowed'] is False
+          assert u['policy']['timeChangingTariffsFailClosed'] is True
+          assert u['summary']['exactBumpAliases']==1886
+          assert len(u['directOffers'])>0
+          assert all(z['verifiedScope']=='exact_evse' and len(z['evseIds'])==1 for z in u['directOffers'])
+          assert all(z['metadata']['timeChanging'] is False for z in u['directOffers'])
+          assert all(z['pricing']['rules'][0].get('scope')=='allDay' for z in u['directOffers'])
+          assert all(z.get('reason')!='no_exact_bump_crosswalk' for z in u['deferred'] if z.get('idPdcItinerance','').startswith('FRBMP'))
           deferred={z.get('id') for z in r.get('deferred',[])}
           assert 'electra-essential' in deferred
           assert 'electra-smart' in deferred
@@ -140,7 +154,8 @@ jobs:
             'belib':{'directOfferCount':len(b['directOffers']),'subscriptionOfferCount':len(b['subscriptionOffers'])},
             'e55c':{'directOfferCount':len(x['directOffers']),'evseId':e55['evseIds'][0]},
             'etotem':{'directOfferCount':len(t['directOffers']),'deferredCount':len(t['deferred'])},
-            'qovoltis':{'directOfferCount':len(q['directOffers']),'subscriptionOfferCount':len(q['subscriptionOffers'])}
+            'qovoltis':{'directOfferCount':len(q['directOffers']),'subscriptionOfferCount':len(q['subscriptionOffers'])},
+            'bump':u['summary']
           },indent=2))
           PY
 
@@ -151,7 +166,7 @@ jobs:
           rm -rf legacy-france-canonical data-lab
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-qovoltis-offers.json data/v9/france-offer-compile-report.json
+          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-qovoltis-offers.json data/v9/france-bump-offers.json data/v9/france-offer-compile-report.json
           if git diff --cached --quiet; then
             echo 'No offer changes'
             exit 0
