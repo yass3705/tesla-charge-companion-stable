@@ -17,4 +17,21 @@ const p=require('../assets/v9/pricing-engine.js');
   const r=p.evaluateRule({scope:'allDay',pricePerKwh:0.4,connectedTimePerMinuteEur:0.02,sessionFeeEur:0.3,minimumSessionEur:1},{energyKwh:5,durationMinutes:30});
   assert.equal(r.totalEur,2.9);
 }
+{
+  const offer={id:'bump-occupancy',currency:'EUR',pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.4}],postChargeFee:{graceMinutes:180,eurPerMinute:0.12},minimumTotalEur:0.5}};
+  const r=p.evaluateOffer(offer,{energyKwh:0.25,durationMinutes:10,postChargeMinutes:190});
+  assert.equal(r.complete,true);
+  assert.equal(r.components.energy,0.1);
+  assert.equal(r.components.postCharge.costEur,1.2);
+  assert.equal(r.totalEur,1.3);
+  assert.equal(r.components.minimumTotal,undefined);
+}
+{
+  const offer={id:'bump-minimum',currency:'EUR',pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.4}],postChargeFee:{graceMinutes:180,eurPerMinute:0.12},minimumTotalEur:0.5}};
+  const r=p.evaluateOffer(offer,{energyKwh:0.25,durationMinutes:10,postChargeMinutes:180});
+  assert.equal(r.complete,true);
+  assert.equal(r.totalEur,0.5);
+  assert.equal(r.components.minimumTotal.preMinimumTotalEur,0.1);
+  assert.equal(r.components.minimumTotal.topUpEur,0.4);
+}
 console.log('v9 Bump pricing component regressions: ok');
