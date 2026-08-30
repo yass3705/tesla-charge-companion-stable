@@ -1,0 +1,24 @@
+name: Germany V9 direct offers contract
+
+on:
+  pull_request:
+    paths:
+      - 'data/v9/germany-direct-offers.json'
+      - 'data/v9/germany-direct-offers-aral-extension.json'
+      - 'scripts/test_germany_direct_offers_v9.py'
+      - '.github/workflows/germany-direct-offers-v9-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Germany direct offers
+        run: python scripts/test_germany_direct_offers_v9.py
