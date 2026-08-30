@@ -6,9 +6,12 @@ on:
     paths:
       - 'assets/v9/pricing-engine.js'
       - 'assets/v9/session-engine.js'
+      - 'assets/v9/charge-model-engine.js'
+      - 'assets/v9/session-planner-engine.js'
       - 'assets/v9/offer-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
       - 'tests/v9-pricing-window-segmentation.test.cjs'
+      - 'tests/v9-energy-timeline-pricing.test.cjs'
       - 'tests/v9-qovoltis-pricing.test.cjs'
       - 'tests/v9-bump-pricing.test.cjs'
       - 'tests/v9-session-engine.test.cjs'
@@ -17,9 +20,12 @@ on:
     paths:
       - 'assets/v9/pricing-engine.js'
       - 'assets/v9/session-engine.js'
+      - 'assets/v9/charge-model-engine.js'
+      - 'assets/v9/session-planner-engine.js'
       - 'assets/v9/offer-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
       - 'tests/v9-pricing-window-segmentation.test.cjs'
+      - 'tests/v9-energy-timeline-pricing.test.cjs'
       - 'tests/v9-qovoltis-pricing.test.cjs'
       - 'tests/v9-bump-pricing.test.cjs'
       - 'tests/v9-session-engine.test.cjs'
@@ -39,6 +45,7 @@ jobs:
           node-version: 22
       - run: node tests/v9-pricing-engine.test.cjs
       - run: node tests/v9-pricing-window-segmentation.test.cjs
+      - run: node tests/v9-energy-timeline-pricing.test.cjs
       - run: node tests/v9-qovoltis-pricing.test.cjs
       - run: node tests/v9-bump-pricing.test.cjs
       - run: node tests/v9-session-engine.test.cjs
