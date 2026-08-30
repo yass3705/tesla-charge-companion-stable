@@ -40,14 +40,28 @@ def build_exact_temporal_pricing(point):
     rules=point.get('rules') or []
     if not isinstance(rules,list) or len(rules)!=3 or not all(isinstance(r,dict) for r in rules):return None,None
     by_kind={r.get('kind'):r for r in rules}
-    if set(by_kind)!={'minimum_total','energy','post_charge_occupancy'}:return None,None
-    minimum_rule=by_kind['minimum_total'];energy_rule=by_kind['energy'];occupancy=by_kind['post_charge_occupancy']
-    if set(minimum_rule)!={'kind','amountEur'} or set(energy_rule)!={'kind','eurPerKwh'} or set(occupancy)!={'kind','eurPerMinute','graceMinutes'}:return None,None
-    minimum=norm_price(minimum_rule.get('amountEur'));energy=norm_price(energy_rule.get('eurPerKwh'));per_minute=norm_price(occupancy.get('eurPerMinute'));grace=norm_price(occupancy.get('graceMinutes'))
-    if minimum is None or minimum<0 or energy is None or energy<0 or per_minute is None or per_minute<0 or grace is None or grace<0:return None,None
-    pricing={'type':'rules','rules':[{'scope':'allDay','pricePerKwh':energy}],'postChargeFee':{'graceMinutes':grace,'eurPerMinute':per_minute},'minimumTotalEur':minimum}
-    if point.get('parkingText'):pricing['parkingText']=point.get('parkingText')
-    return pricing,'minimum_energy_post_charge_occupancy'
+    kinds=set(by_kind)
+    if kinds=={'minimum_total','energy','post_charge_occupancy'}:
+        minimum_rule=by_kind['minimum_total'];energy_rule=by_kind['energy'];occupancy=by_kind['post_charge_occupancy']
+        if set(minimum_rule)!={'kind','amountEur'} or set(energy_rule)!={'kind','eurPerKwh'} or set(occupancy)!={'kind','eurPerMinute','graceMinutes'}:return None,None
+        minimum=norm_price(minimum_rule.get('amountEur'));energy=norm_price(energy_rule.get('eurPerKwh'));per_minute=norm_price(occupancy.get('eurPerMinute'));grace=norm_price(occupancy.get('graceMinutes'))
+        if minimum is None or minimum<0 or energy is None or energy<0 or per_minute is None or per_minute<0 or grace is None or grace<0:return None,None
+        pricing={'type':'rules','rules':[{'scope':'allDay','pricePerKwh':energy}],'postChargeFee':{'graceMinutes':grace,'eurPerMinute':per_minute},'minimumTotalEur':minimum}
+        if point.get('parkingText'):pricing['parkingText']=point.get('parkingText')
+        return pricing,'minimum_energy_post_charge_occupancy'
+    if kinds=={'minimum_total','energy','flat_fee'}:
+        minimum_rule=by_kind['minimum_total'];energy_rule=by_kind['energy'];flat_rule=by_kind['flat_fee']
+        if set(minimum_rule)!={'kind','amountEur'} or set(energy_rule)!={'kind','eurPerKwh'} or set(flat_rule)!={'kind','amountEur','conditions'}:return None,None
+        conditions=flat_rule.get('conditions')
+        if not isinstance(conditions,list) or len(conditions)!=1 or not isinstance(conditions[0],dict):return None,None
+        condition=conditions[0]
+        if set(condition)!={'kind','value'} or condition.get('kind')!='energy_above_kwh':return None,None
+        minimum=norm_price(minimum_rule.get('amountEur'));energy=norm_price(energy_rule.get('eurPerKwh'));flat=norm_price(flat_rule.get('amountEur'));threshold=norm_price(condition.get('value'))
+        if any(v is None or v<0 for v in (minimum,energy,flat,threshold)):return None,None
+        pricing={'type':'rules','rules':[{'scope':'allDay','pricePerKwh':energy}],'conditionalSessionFees':[{'amountEur':flat,'conditions':[{'kind':'energy_above_kwh','value':threshold}]}],'minimumTotalEur':minimum}
+        if point.get('parkingText'):pricing['parkingText']=point.get('parkingText')
+        return pricing,'minimum_energy_conditional_flat_fee'
+    return None,None
 
 def make_offer(point,pid,cid,pricing,time_changing,semantic_family=None):
     return {'id':f'bump-direct-{pid.lower()}','selectionId':f'bump-direct-{pid.lower()}','provider':'Bump direct','countries':['FR'],'canonicalStationIds':[cid],'evseIds':[pid],'currency':'EUR','priority':125,'pricing':pricing,'source':'data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz','directOperatorOnly':True,'verifiedScope':'exact_evse','defaultSelected':False,'metadata':{'tariffId':point.get('tariffId'),'tariffGroupId':point.get('tariffGroupId'),'tariffName':point.get('tariffName'),'appEvseId':point.get('appEvseId'),'timeChanging':time_changing,'semanticFamily':semantic_family,'sourceStatus':point.get('status'),'powerKw':point.get('powerKw'),'timeZone':'Europe/Paris'}}
@@ -59,7 +73,7 @@ def main():
         cid=entry.get('canonicalId')
         for s in entry.get('sourceIds',[]) or []:
             if s.get('source')=='bump' and s.get('match')=='exact_irve_identifier':exact[str(s.get('id'))]=cid
-    offers=[];deferred=[];seen=set();time_changing_seen=0;temporal_compiled=0;static_compiled=0
+    offers=[];deferred=[];seen=set();time_changing_seen=0;temporal_compiled=0;static_compiled=0;family_counts={}
     for point in walk_points(source):
         pid=str(point.get('idPdcItinerance') or '').strip()
         if not pid or pid in seen:continue
@@ -72,11 +86,11 @@ def main():
             time_changing_seen+=1
             pricing,family=build_exact_temporal_pricing(point)
             if pricing:
-                offers.append(make_offer(point,pid,cid,pricing,True,family));temporal_compiled+=1;continue
+                offers.append(make_offer(point,pid,cid,pricing,True,family));temporal_compiled+=1;family_counts[family]=family_counts.get(family,0)+1;continue
             deferred.append({'idPdcItinerance':pid,'reason':'unsupported_time_changing_rule_family','sourceRules':point.get('rules') or []});continue
         pricing=build_static_pricing(point)
         if not pricing:deferred.append({'idPdcItinerance':pid,'reason':'no_rankable_price_components'});continue
         offers.append(make_offer(point,pid,cid,pricing,False,'static_components'));static_compiled+=1
-    payload={'schemaVersion':2,'country':'FR','generatedAt':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),'mode':'exact_pdc_direct_tariffs','policy':{'exactPdcRequired':True,'geographicFallbackAllowed':False,'tariffDataCannotCreatePhysicalStations':True,'sourceRankableRequired':True,'unsupportedTimeChangingTariffsFailClosed':True,'minimumTotalAppliedAfterAllSessionComponents':True,'subscriptionsOptIn':True},'directOffers':offers,'subscriptionOffers':[],'deferred':deferred,'summary':{'exactBumpAliases':len(exact),'offers':len(offers),'staticOffers':static_compiled,'timeChangingSeen':time_changing_seen,'temporalOffers':temporal_compiled,'timeChangingDeferred':time_changing_seen-temporal_compiled,'deferred':len(deferred)}}
+    payload={'schemaVersion':3,'country':'FR','generatedAt':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),'mode':'exact_pdc_direct_tariffs','policy':{'exactPdcRequired':True,'geographicFallbackAllowed':False,'tariffDataCannotCreatePhysicalStations':True,'sourceRankableRequired':True,'unsupportedTimeChangingTariffsFailClosed':True,'conditionalFeeConditionsSupported':['energy_above_kwh'],'minimumTotalAppliedAfterAllSessionComponents':True,'subscriptionsOptIn':True},'directOffers':offers,'subscriptionOffers':[],'deferred':deferred,'summary':{'exactBumpAliases':len(exact),'offers':len(offers),'staticOffers':static_compiled,'timeChangingSeen':time_changing_seen,'temporalOffers':temporal_compiled,'temporalOffersByFamily':family_counts,'conditionalEnergyOffers':family_counts.get('minimum_energy_conditional_flat_fee',0),'postChargeOccupancyOffers':family_counts.get('minimum_energy_post_charge_occupancy',0),'timeChangingDeferred':time_changing_seen-temporal_compiled,'deferred':len(deferred)}}
     out=Path(args.output);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print(json.dumps(payload['summary'],indent=2))
 if __name__=='__main__':main()
