@@ -5,16 +5,18 @@
   let engine=null,selectedSubscriptions=new Set();
   function setStatus(message,kind=''){status.className=kind||'muted';status.textContent=message;}
   function maxPower(st){let m=0;for(const e of st.evses||[])for(const c of e.connectors||[])m=Math.max(m,Number(c.powerKw||0));return m;}
-  function priceLabel(o){const p=o.pricing||{};if(p.pricePerKwh!=null)return `${Number(p.pricePerKwh).toFixed(3)} ${o.currency||'EUR'}/kWh`;const rs=p.rules||[];const vals=[...new Set(rs.map(r=>r.pricePerKwh).filter(v=>v!=null))];return vals.length?`${vals.map(v=>Number(v).toFixed(3)).join(' / ')} ${o.currency||'EUR'}/kWh`:p.type||'tarif non classable';}
+  function priceLabel(o){const p=o.pricing||{};if(p.pricePerKwh!=null)return `${Number(p.pricePerKwh).toFixed(3)} ${o.currency||'EUR'}/kWh`;const rs=p.rules||[];const vals=[...new Set(rs.map(r=>r.pricePerKwh).filter(v=>v!=null))];return vals.length?`${vals.map(v=>Number(v).toFixed(3)).join(' / ')} ${o.currency||'EUR'}/kWh`:p.type||'prix exact requis';}
   function renderSubscriptions(subscriptions){
     subsEl.innerHTML=subscriptions?.length?subscriptions.map(s=>`<label class="chip"><input type="checkbox" data-sub="${esc(s.id)}" ${selectedSubscriptions.has(s.id)?'checked':''}> ${esc(s.provider)} · ${s.countryCount??'global'} pays</label>`).join(''):'<span class="muted">Aucun abonnement pour ce filtre.</span>';
     subsEl.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('change',()=>{if(el.checked)selectedSubscriptions.add(el.dataset.sub);else selectedSubscriptions.delete(el.dataset.sub);$('selectedSummary').textContent=selectedSubscriptions.size?`${selectedSubscriptions.size} abonnement(s) sélectionné(s) · relance le chargement pour appliquer les tarifs.`:'Aucun abonnement sélectionné.';}));
     $('selectedSummary').textContent=selectedSubscriptions.size?`${selectedSubscriptions.size} abonnement(s) sélectionné(s).`:'Aucun abonnement sélectionné.';
   }
+  function offerHtml(o){return`<div class="offer">${esc(o.provider)} — ${esc(o.kind)} — ${esc(priceLabel(o))}${o.subscriptionId?' · abonnement':''}${o.metadata?.crossBorderResolved?' · cross-border':''}${o.metadata?.verified?' · vérifié':''}</div>`;}
+  function advisoryHtml(o){const reason=o.metadata?.reason?` · ${esc(o.metadata.reason)}`:'';return`<div class="offer muted">ℹ ${esc(o.provider)} — ${esc(priceLabel(o))} · indicatif, non classable${reason}</div>`;}
   function render(area){
     const stations=area.stations||[];summary.textContent=`${stations.length} stations · ${area.operators?.length||0} opérateurs · ${area.subscriptions?.length||0} abonnements · ${area.selectedSubscriptions?.length||0} sélectionné(s)`;
     renderSubscriptions(area.subscriptions||[]);
-    stationsEl.innerHTML=stations.slice(0,100).map(st=>`<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div>${(st.eligibleOffers||st.offers||[]).map(o=>`<div class="offer">${esc(o.provider)} — ${esc(o.kind)} — ${esc(priceLabel(o))}${o.subscriptionId?' · abonnement':''}${o.metadata?.crossBorderResolved?' · cross-border':''}${o.metadata?.rankable===false?' · non classable':''}${o.metadata?.verified?' · vérifié':''}</div>`).join('')}</div>`).join('')||'<span class="muted">Aucune station.</span>';
+    stationsEl.innerHTML=stations.slice(0,100).map(st=>`<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div>${(st.rankableOffers||st.eligibleOffers||st.offers||[]).map(offerHtml).join('')}${(st.subscriptionAdvisories||[]).map(advisoryHtml).join('')}</div>`).join('')||'<span class="muted">Aucune station.</span>';
   }
   try{
     const [registry,policy,fastned,ionity]=await Promise.all([
