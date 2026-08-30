@@ -58,11 +58,12 @@ jobs:
       - name: Validate grouped Germany site contract
         run: |
           python - <<'PY'
-          import gzip,json,pathlib
+          import gzip,json,pathlib,re,unicodedata
           root=pathlib.Path('build/germany-sites')
           m=json.loads((root/'manifest.json').read_text())
           rows=json.loads(gzip.decompress((root/'all.json.gz').read_bytes()))
           cw=json.loads(pathlib.Path('build/germany-site-crosswalk.json').read_text())
+          norm=lambda v: re.sub(r'[^a-z0-9]+','_', ''.join(c for c in unicodedata.normalize('NFKD',str(v or '')) if not unicodedata.combining(c)).lower()).strip('_')
           assert m['country']=='DE'
           assert m['facilityCount'] > m['siteCount'] > 50000, m
           assert m['siteCount'] < m['facilityCount'] * 0.90, m
@@ -74,7 +75,15 @@ jobs:
           assert len(ids)==len(set(ids)), 'duplicate site IDs detected'
           assert sum(e['facilityCount'] for e in cw['entries'])==m['facilityCount']
           assert all(46 <= r[3] <= 56 and 4 <= r[4] <= 16 for r in rows)
-          print(json.dumps({k:m[k] for k in ('facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},indent=2))
+          # Tesla stays in the raw traceability layer but must never enter the non-Tesla runtime baseline.
+          assert m.get('teslaExcludedFromRuntimeBaseline') is True, m
+          assert m.get('excludedTeslaFacilityCount',0) > 0, m
+          assert m['sourceFacilityCount'] == m['facilityCount'] + m['excludedTeslaFacilityCount'], m
+          assert cw.get('teslaExcludedFromRuntimeBaseline') is True, cw
+          assert not any(norm(r[5])=='tesla' for r in rows), 'Tesla site leaked into grouped runtime rows'
+          assert not any(norm(e.get('operator'))=='tesla' for e in cw['entries']), 'Tesla site leaked into grouped crosswalk'
+          assert not any(any(norm(raw)=='tesla' or norm(raw).startswith('tesla_') for raw in e.get('rawOperators',[])) for e in cw['entries']), 'Tesla raw operator leaked into grouped crosswalk'
+          print(json.dumps({k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},indent=2))
           PY
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
