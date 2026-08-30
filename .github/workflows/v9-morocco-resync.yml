@@ -8,6 +8,7 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
       - 'assets/v9/session-engine.js'
       - 'data/v9/source-registry.json'
       - 'tests/v9-morocco-resync-smoke.test.cjs'
@@ -17,6 +18,7 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
       - 'assets/v9/session-engine.js'
       - 'data/v9/source-registry.json'
       - 'tests/v9-morocco-resync-smoke.test.cjs'
@@ -39,8 +41,9 @@ jobs:
           node --check assets/v9/adapters/morocco-public.js
           node --check assets/v9/adapters/morocco-nonproduction.js
           node --check assets/v9/browser-loaders.js
+          node --check assets/v9/pricing-engine.js
           node --check assets/v9/session-engine.js
           node --check tests/v9-morocco-resync-smoke.test.cjs
           node -e "JSON.parse(require('fs').readFileSync('data/v9/source-registry.json','utf8'))"
-      - name: Validate sanitized public Morocco datasets and source semantics
+      - name: Validate sanitized public Morocco datasets, source semantics and MAD pricing
         run: node tests/v9-morocco-resync-smoke.test.cjs
