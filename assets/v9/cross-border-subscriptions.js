@@ -6,7 +6,7 @@
   'use strict';
   const text=v=>String(v==null?'':v).trim();
   const cc=v=>text(v).toUpperCase();
-  const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
+  const num=v=>{if(v==null||text(v)==='')return null;const n=Number(v);return Number.isFinite(n)?n:null;};
   const norm=v=>text(typeof v==='object'?(v?.id||v?.name):v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-');
   function operatorId(v){const n=norm(v);if(n.includes('fastned'))return'fastned';if(n.includes('ionity'))return'ionity';if(n.includes('enbw'))return'enbw';return n||'unknown';}
   function policyMap(config){return new Map((config?.policy?.subscriptions||[]).map(s=>[text(s.id),s]));}
