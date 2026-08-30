@@ -7,6 +7,15 @@
   const text=v=>String(v==null?'':v).trim();
   const uniq=values=>[...new Set((values||[]).map(text).filter(Boolean))];
   const number=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
+  function evseIdentityVariants(values){
+    const out=[];
+    for(const raw of uniq(values||[])){
+      out.push(raw);
+      const compact=raw.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if(compact&&compact!==raw)out.push(compact);
+    }
+    return uniq(out);
+  }
 
   function kwhPricing(price){return{type:'rules',rules:[{scope:'allDay',start:'00:00',end:'24:00',billing:'kwh',currency:'EUR',pricePerKwh:Number(price),chargePerMinute:0,connectionFee:0,idlePerMinute:0,afterMinutesRate:0,afterMinutesThreshold:0}]};}
 
@@ -39,7 +48,7 @@
       for(const connector of location?.connectors||[]){
         const evseId=text(connector?.evseId),kind=text(connector?.kind).toUpperCase(),price=number(connector?.pricePerKwhEur);
         if(!evseId||!['AC','DC'].includes(kind)||!(price>0))continue;
-        rules.push({id:`atlante-direct:${locationId||'location'}:${index++}`,provider:'Atlante direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',operatorIds:['atlante','atlante-france'],evseIds:[evseId],connectorKinds:[kind],pricing:kwhPricing(price),priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceLocationId:locationId,sourceConnectorId:text(connector?.connectorId||connector?.externalConnectorId),sourceEvseId:evseId,verified:true,identityMode:'exact_evse'}});
+        rules.push({id:`atlante-direct:${locationId||'location'}:${index++}`,provider:'Atlante direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:'EUR',operatorIds:['atlante','atlante-france'],evseIds:evseIdentityVariants([evseId]),connectorKinds:[kind],pricing:kwhPricing(price),priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceLocationId:locationId,sourceConnectorId:text(connector?.connectorId||connector?.externalConnectorId),sourceEvseId:evseId,verified:true,identityMode:'exact_evse_with_compact_ocpi_alias'}});
       }
     }
     return rules;
@@ -55,13 +64,13 @@
     const rules=[];let index=0;
     for(const entry of Array.isArray(payload?.chargers)?payload.chargers:[]){
       const location=entry?.location||{};if(text(location?.countryCode).toUpperCase()!=='FR')continue;
-      const pdcIds=uniq(entry?.irvePdcIds||[]);if(!pdcIds.length)continue;
+      const pdcIds=evseIdentityVariants(entry?.irvePdcIds||[]);if(!pdcIds.length)continue;
       const chargerName=text(entry?.chargerName||entry?.charger?.chargerName);
       for(const connector of entry?.charger?.connectors||[]){
         const pricing=powerdotPricing(connector?.tariff);if(!pricing.rules.length)continue;
         if(connector?.tariff?.subscriptionActive===true)continue;
         const kind=powerdotConnectorKind(connector),power=number(connector?.maxPowerKw);
-        rules.push({id:`powerdot-direct:${text(location?.id||location?.uid)||'location'}:${index++}`,provider:'Powerdot direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:pricing.rules[0]?.currency||'EUR',operatorIds:['powerdot','power-dot','power-dot-france'],evseIds:pdcIds,connectorKinds:[kind],minPowerKw:power,maxPowerKw:power,pricing,priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceType:text(payload?.sourceType),sourceLocationId:text(location?.id),sourceLocationUid:text(location?.uid),chargerName,tariffId:text(connector?.tariff?.id),physicalReference:text(connector?.physicalReference),verified:true,identityMode:'exact_irve_pdc',roaming:false}});
+        rules.push({id:`powerdot-direct:${text(location?.id||location?.uid)||'location'}:${index++}`,provider:'Powerdot direct',offerKind:'direct',subscriptionId:null,countries:['FR'],currency:pricing.rules[0]?.currency||'EUR',operatorIds:['powerdot','power-dot','power-dot-france'],evseIds:pdcIds,connectorKinds:[kind],minPowerKw:power,maxPowerKw:power,pricing,priority:Number(source?.priority?.tariff||95),metadata:{legacyDataset:text(payload?.dataset),sourceType:text(payload?.sourceType||payload?.source?.sourceType),sourceLocationId:text(location?.id),sourceLocationUid:text(location?.uid),chargerName,tariffId:text(connector?.tariff?.id),physicalReference:text(connector?.physicalReference),verified:true,identityMode:'exact_irve_pdc_with_compact_ocpi_alias',roaming:false}});
       }
     }
     return rules;
@@ -71,12 +80,13 @@
     const dataset=text(payload?.dataset).toLowerCase();
     if(dataset==='ionity-direct-operated-stations-france'||(Array.isArray(payload?.locations)&&payload?.scope?.requiredCpoIdentifier==='IONITY_CPO'))return{offerRules:ionityRules(payload,source),metadata:{dataset:payload?.dataset||'ionity',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'provider-crosswalk-only'}};
     if(dataset==='atlante-direct-operated-stations-france'||(Array.isArray(payload?.locations)&&payload?.scope?.requiredCpo==='FRATL'&&payload?.scope?.requiredPartyId==='ATL'))return{offerRules:atlanteRules(payload,source),metadata:{dataset:payload?.dataset||'atlante',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-evse'}};
-    if(Array.isArray(payload?.chargers)&&(text(payload?.sourceType).toLowerCase()==='direct_cpo_public_adhoc_api'||text(payload?.operator).toLowerCase().includes('power dot')))return{offerRules:powerdotRules(payload,source),metadata:{dataset:payload?.dataset||'powerdot',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-irve-pdc'}};
+    const powerdotSourceType=text(payload?.sourceType||payload?.source?.sourceType).toLowerCase(),powerdotOperator=text(payload?.operator||payload?.source?.operator).toLowerCase();
+    if(Array.isArray(payload?.chargers)&&(powerdotSourceType==='direct_cpo_public_adhoc_api'||powerdotOperator.includes('power dot')))return{offerRules:powerdotRules(payload,source),metadata:{dataset:payload?.dataset||'powerdot',generatedAt:payload?.generatedAt||null,adapter:'legacy-direct-stations',mode:'exact-irve-pdc',sourceType:powerdotSourceType,operator:powerdotOperator}};
     return{offerRules:[],metadata:{dataset:payload?.dataset||'unknown',adapter:'legacy-direct-stations',unsupported:true}};
   }
 
   async function readJsonMaybeGzip(response){if(!response.ok)throw new Error(`legacy direct station source unavailable (${response.status})`);const bytes=new Uint8Array(await response.arrayBuffer());let raw;if(bytes[0]===0x1f&&bytes[1]===0x8b){if(typeof DecompressionStream!=='function')throw new Error('gzip decompression unavailable');raw=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();}else raw=new TextDecoder().decode(bytes);return JSON.parse(raw);}
   function createLoader({url,fetchImpl,source}={}){const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for legacy direct stations');let cache=null;return async function(){if(!cache)cache=f(url,{cache:'no-cache'}).then(readJsonMaybeGzip).then(payload=>normalizePayload(payload,source||{})).catch(error=>{cache=null;throw error;});return cache;};}
 
-  return{kwhPricing,ionityPricing:kwhPricing,ionityRules,atlanteRules,powerdotConnectorKind,powerdotPricing,powerdotRules,normalizePayload,readJsonMaybeGzip,createLoader};
+  return{kwhPricing,ionityPricing:kwhPricing,ionityRules,atlanteRules,powerdotConnectorKind,powerdotPricing,powerdotRules,evseIdentityVariants,normalizePayload,readJsonMaybeGzip,createLoader};
 });

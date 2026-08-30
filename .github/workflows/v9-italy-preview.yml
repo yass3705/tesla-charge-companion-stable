@@ -1,0 +1,44 @@
+name: V9 Italy preview validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/italy-v9-preview
+      - feature/italy-v9-duferco
+    paths:
+      - v9-preview/app.js
+      - v9-preview/index.html
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - .github/workflows/v9-italy-preview.yml
+  pull_request:
+    paths:
+      - v9-preview/app.js
+      - v9-preview/index.html
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - .github/workflows/v9-italy-preview.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax checks
+        run: |
+          node --check v9-preview/app.js
+          node --check tests/v9-italy-runtime-smoke.test.cjs
+      - name: Verify Italy is exposed in preview
+        run: |
+          grep -q '<option value="IT">Italie</option>' v9-preview/index.html
+          grep -Eq "==='IT'" v9-preview/app.js
+          grep -q "'subCountries').value='IT'" v9-preview/app.js
+          grep -q "atlante_go" v9-preview/app.js
+      - name: Run published Italy runtime smoke test
+        run: node tests/v9-italy-runtime-smoke.test.cjs

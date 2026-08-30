@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-30T11:53:05.978535Z",
+  "mode": "verified_exact_network_territory",
+  "policy": {
+    "identityMode": "physical_network_and_territory",
+    "territory": "Rhône hors Métropole de Lyon",
+    "powerClassRequired": true,
+    "customerProfileRequired": true,
+    "subscriptionsOptIn": true,
+    "rfidCardIsOptInEntitlement": true,
+    "rfidCardRecurringFeeEur": 0,
+    "postChargePreservedExactly": true,
+    "lowerPowerNightPostChargeExemptionPreserved": true,
+    "roamingSeparate": true,
+    "noGeographicFallback": true
+  },
+  "directOffers": [
+    {
+      "id": "syder-qovoltis-le50-public",
+      "selectionId": "syder-qovoltis-le50-public",
+      "provider": "SYDER-QOVOLTIS direct",
+      "networkAliases": [
+        "SYDER-QOVOLTIS",
+        "SYDER QOVOLTIS",
+        "QOVOLTIS SYDER"
+      ],
+      "operatorAliases": [],
+      "countries": [
+        "FR"
+      ],
+      "connectorKinds": [
+        "AC",
+        "DC"
+      ],
+      "minPowerKw": 0,
+      "maxPowerKw": 50,
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.35
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 30,
+          "blockMinutes": 60,
+          "blockEur": 4.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged",
+          "exemptLocalWindows": [
+            {
+              "start": "22:00",
+              "end": "07:00"
+            }
+          ]
+        }
+      },
+      "source": "data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json",
+      "directOperatorOnly": false,
+      "customerProfile": "other_user",
+      "verifiedScope": "exact_network_territory_power_customer_profile",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "SYDER-QOVOLTIS",
+        "authority": "Syndicat Départemental d’Énergies du Rhône",
+        "territory": "Rhône hors Métropole de Lyon",
+        "identityMode": "physical_network_and_territory",
+        "timeZone": "Europe/Paris",
+        "roamingSeparate": true,
+        "networkWideGeneralization": true,
+        "stationRuleReplicationRequired": false
+      }
+    },
+    {
+      "id": "syder-qovoltis-gt50-public",
+      "selectionId": "syder-qovoltis-gt50-public",
+      "provider": "SYDER-QOVOLTIS direct",
+      "networkAliases": [
+        "SYDER-QOVOLTIS",
+        "SYDER QOVOLTIS",
+        "QOVOLTIS SYDER"
+      ],
+      "operatorAliases": [],
+      "countries": [
+        "FR"
+      ],
+      "connectorKinds": [
+        "AC",
+        "DC"
+      ],
+      "minPowerKw": 50.000001,
+      "maxPowerKw": null,
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.5
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 60,
+          "blockMinutes": 60,
+          "blockEur": 4.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged"
+        }
+      },
+      "source": "data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json",
+      "directOperatorOnly": false,
+      "customerProfile": "other_user",
+      "verifiedScope": "exact_network_territory_power_customer_profile",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "SYDER-QOVOLTIS",
+        "authority": "Syndicat Départemental d’Énergies du Rhône",
+        "territory": "Rhône hors Métropole de Lyon",
+        "identityMode": "physical_network_and_territory",
+        "timeZone": "Europe/Paris",
+        "roamingSeparate": true,
+        "networkWideGeneralization": true,
+        "stationRuleReplicationRequired": false
+      }
+    }
+  ],
+  "subscriptionOffers": [
+    {
+      "id": "syder-qovoltis-le50-card",
+      "selectionId": "syder-qovoltis-card",
+      "provider": "SYDER-QOVOLTIS direct",
+      "networkAliases": [
+        "SYDER-QOVOLTIS",
+        "SYDER QOVOLTIS",
+        "QOVOLTIS SYDER"
+      ],
+      "operatorAliases": [],
+      "countries": [
+        "FR"
+      ],
+      "connectorKinds": [
+        "AC",
+        "DC"
+      ],
+      "minPowerKw": 0,
+      "maxPowerKw": 50,
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.25
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 30,
+          "blockMinutes": 60,
+          "blockEur": 4.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged",
+          "exemptLocalWindows": [
+            {
+              "start": "22:00",
+              "end": "07:00"
+            }
+          ]
+        }
+      },
+      "source": "data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json",
+      "directOperatorOnly": false,
+      "customerProfile": "syder_qovoltis_card",
+      "verifiedScope": "exact_network_territory_power_customer_profile",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "SYDER-QOVOLTIS",
+        "authority": "Syndicat Départemental d’Énergies du Rhône",
+        "territory": "Rhône hors Métropole de Lyon",
+        "identityMode": "physical_network_and_territory",
+        "timeZone": "Europe/Paris",
+        "roamingSeparate": true,
+        "networkWideGeneralization": true,
+        "stationRuleReplicationRequired": false,
+        "oneTimeCardPurchaseEur": 7.2,
+        "recurringSubscriptionFeeEur": 0
+      },
+      "subscriptionId": "syder-qovoltis-card"
+    },
+    {
+      "id": "syder-qovoltis-gt50-card",
+      "selectionId": "syder-qovoltis-card",
+      "provider": "SYDER-QOVOLTIS direct",
+      "networkAliases": [
+        "SYDER-QOVOLTIS",
+        "SYDER QOVOLTIS",
+        "QOVOLTIS SYDER"
+      ],
+      "operatorAliases": [],
+      "countries": [
+        "FR"
+      ],
+      "connectorKinds": [
+        "AC",
+        "DC"
+      ],
+      "minPowerKw": 50.000001,
+      "maxPowerKw": null,
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.4
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 60,
+          "blockMinutes": 60,
+          "blockEur": 4.0,
+          "rounding": "started_block",
+          "trigger": "once_vehicle_is_charged"
+        }
+      },
+      "source": "data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json",
+      "directOperatorOnly": false,
+      "customerProfile": "syder_qovoltis_card",
+      "verifiedScope": "exact_network_territory_power_customer_profile",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "SYDER-QOVOLTIS",
+        "authority": "Syndicat Départemental d’Énergies du Rhône",
+        "territory": "Rhône hors Métropole de Lyon",
+        "identityMode": "physical_network_and_territory",
+        "timeZone": "Europe/Paris",
+        "roamingSeparate": true,
+        "networkWideGeneralization": true,
+        "stationRuleReplicationRequired": false,
+        "oneTimeCardPurchaseEur": 7.2,
+        "recurringSubscriptionFeeEur": 0
+      },
+      "subscriptionId": "syder-qovoltis-card"
+    }
+  ],
+  "sourceEvidence": {
+    "page": {
+      "url": "https://www.syder.fr/missions/syder-nos-missions-mobilite-electrique/",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "sha256": "2768263d60c237654de7977c955ea5180e4379a05263ccd3d51dfdfedcb9c06b"
+    },
+    "tariffImage": {
+      "url": "https://www.syder.fr/wp-content/uploads/2024/07/Capturefiche-tarif.png",
+      "httpStatus": 200,
+      "contentType": "image/png",
+      "sha256": "64c9a11c7cd51b9a97a2e0ee49258bff45582955aab9d39e30dae5db7f0c5c04"
+    },
+    "manualWebVerificationDate": "2026-08-21"
+  },
+  "networkSnapshot": {
+    "municipalities": 85,
+    "epci": 2,
+    "stationsAt2025_12_31": 182
+  }
+}

@@ -33,5 +33,26 @@ const initialTier={id:'freshmile-time-tier',currency:'EUR',pricing:{type:'rules'
 r=Pricing.evaluateOffer(initialTier,{durationMinutes:10,startAt:'2026-08-29T12:00:00Z'});assert.equal(r.totalEur,6);
 r=Pricing.evaluateOffer(initialTier,{durationMinutes:20,startAt:'2026-08-29T12:00:00Z'});assert.equal(r.totalEur,6.75);
 
+// Duferco-style calendar pricing: Monday-Saturday bands, Sunday/Italian-holiday rate,
+// and discounted sessions must start/end inside the same local band/day.
+const dufercoQf={id:'duferco-qf',currency:'EUR',metadata:{timeZone:'Europe/Rome'},pricing:{type:'rules',holidayCalendar:'IT',rules:[
+  {scope:'allDay',holidayOnly:true,pricePerKwh:0.52,mustEndSameLocalDay:true},
+  {scope:'allDay',daysOfWeek:[0],excludeHolidays:true,pricePerKwh:0.52,mustEndSameLocalDay:true},
+  {scope:'timeWindow',daysOfWeek:[1,2,3,4,5,6],excludeHolidays:true,start:'08:00',end:'12:00',pricePerKwh:0.74,mustEndSameLocalDay:true},
+  {scope:'timeWindow',daysOfWeek:[1,2,3,4,5,6],excludeHolidays:true,start:'12:00',end:'15:00',pricePerKwh:0.52,mustEndSameLocalDay:true},
+  {scope:'timeWindow',daysOfWeek:[1,2,3,4,5,6],excludeHolidays:true,start:'15:00',end:'22:00',pricePerKwh:0.74,mustEndSameLocalDay:true},
+  {scope:'timeWindow',daysOfWeek:[1,2,3,4,5,6],excludeHolidays:true,start:'22:00',end:'08:00',pricePerKwh:0.52,mustEndSameLocalDay:true}
+]}};
+r=Pricing.evaluateOffer(dufercoQf,{energyKwh:20,durationMinutes:30,startAt:'2026-08-31T07:00:00Z'});assert.equal(r.complete,true);assert.equal(r.totalEur,14.8);assert.equal(r.matchedRule.pricePerKwh,0.74);
+r=Pricing.evaluateOffer(dufercoQf,{energyKwh:20,durationMinutes:30,startAt:'2026-08-31T11:00:00Z'});assert.equal(r.complete,true);assert.equal(r.totalEur,10.4);assert.equal(r.matchedRule.pricePerKwh,0.52);
+r=Pricing.evaluateOffer(dufercoQf,{energyKwh:20,durationMinutes:30,startAt:'2026-08-30T14:00:00Z'});assert.equal(r.complete,true);assert.equal(r.totalEur,10.4);assert.equal(r.matchedRule.scope,'allDay');
+// 8 December is an Italian national holiday even though it is a weekday.
+r=Pricing.evaluateOffer(dufercoQf,{energyKwh:20,durationMinutes:30,startAt:'2026-12-08T09:00:00Z'});assert.equal(r.complete,true);assert.equal(r.totalEur,10.4);assert.equal(r.matchedRule.holidayOnly,true);
+// Crossing a band or midnight fails closed.
+r=Pricing.evaluateOffer(dufercoQf,{energyKwh:20,durationMinutes:20,startAt:'2026-08-31T09:50:00Z'});assert.equal(r.complete,false);assert.equal(r.boundaryMinutes,10);
+r=Pricing.evaluateOffer(dufercoQf,{energyKwh:20,durationMinutes:20,startAt:'2026-08-31T21:50:00Z'});assert.equal(r.complete,false);assert.equal(r.boundaryMinutes,10);
+assert.equal(Pricing.isHoliday('IT','2026-12-08T09:00:00Z','Europe/Rome'),true);
+assert.equal(Pricing.isHoliday('IT','2026-08-31T09:00:00Z','Europe/Rome'),false);
+
 assert.equal(Pricing.minuteOfDay('2026-01-15T22:15:00Z','Europe/Paris'),23*60+15);assert.equal(Pricing.minuteOfDay('2026-08-29T21:15:00Z','Europe/Paris'),23*60+15);
-console.log(JSON.stringify({ok:true,invariants:['started-15m-blocks','per-minute-pricing','station-local-timezone','dst-aware-timezone','overnight-window','window-crossing-fail-safe','unknown-hourly-rounding-fail-safe','post-charge-grace','post-charge-started-blocks','started-kwh','connected-time-free-allowance','initial-time-tier']},null,2));
+console.log(JSON.stringify({ok:true,invariants:['started-15m-blocks','per-minute-pricing','station-local-timezone','dst-aware-timezone','overnight-window','window-crossing-fail-safe','unknown-hourly-rounding-fail-safe','post-charge-grace','post-charge-started-blocks','started-kwh','connected-time-free-allowance','initial-time-tier','calendar-days','italy-holiday-calendar','same-local-day-fail-safe']},null,2));

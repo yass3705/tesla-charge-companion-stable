@@ -1,0 +1,41 @@
+name: V9 calendar tariff rules
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-calendar-tariff-rules
+    paths:
+      - assets/v9/pricing-engine.js
+      - assets/v9/session-engine.js
+      - tests/v9-pricing-engine.test.cjs
+      - tests/v9-unknown-postcharge.test.cjs
+      - .github/workflows/v9-calendar-tariff-rules.yml
+  pull_request:
+    paths:
+      - assets/v9/pricing-engine.js
+      - assets/v9/session-engine.js
+      - tests/v9-pricing-engine.test.cjs
+      - tests/v9-unknown-postcharge.test.cjs
+      - .github/workflows/v9-calendar-tariff-rules.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Calendar pricing syntax
+        run: |
+          node --check assets/v9/pricing-engine.js
+          node --check assets/v9/session-engine.js
+      - name: Pricing engine regression and Italy calendar cases
+        run: node tests/v9-pricing-engine.test.cjs
+      - name: Unknown post-charge fee fail-closed policy
+        run: node tests/v9-unknown-postcharge.test.cjs

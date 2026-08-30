@@ -125,7 +125,11 @@ def main():
                 for v in vals(rec,PROVIDER_ID_KEYS):
                     if v not in station_map and v not in pdc_map and len(v)>=2:provider_ids.append(v)
                 if not provider_ids:
-                    provider_ids=[m[1] for m in matches if m[0]=='station'][:1]
+                    # If the source exposes no distinct provider-side identifier, retain the
+                    # exact IRVE identifier that established canonical identity. This is
+                    # especially important for PDC-only sources such as Bump: the prior
+                    # station-only fallback silently discarded exact PDC matches.
+                    provider_ids=[m[1] for m in matches]
                 for pid in dict.fromkeys(provider_ids):
                     key=(cid,spec['provider'],pid)
                     if key in seen_alias:continue
