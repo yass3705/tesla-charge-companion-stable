@@ -18,10 +18,8 @@ const rules=Direct.normalizePayload(offersPayload).offerRules;
 const source={id:'italy-verified-offers',priority:{tariff:130}};
 
 const stations=rows.map(row=>National.normalizeRow(row,{countryCode:'IT',sourceId:'italy-pun'})).filter(Boolean);
+const maxPower=st=>Math.max(0,...(st.evses||[]).flatMap(e=>(e.connectors||[]).map(c=>Number(c.powerKw)||0)));
 
-// Italy commercial overlays are exact-EVSE scoped. Index them once so the
-// functional QA exercises the production matcher without an O(stations*rules)
-// national cross-product.
 const rulesByEvse=new Map();
 for(const rule of rules){
   for(const eid of rule.evseIds||[]){
@@ -55,8 +53,8 @@ const zones={
 const zoneResults={};
 for(const [name,origin] of Object.entries(zones)){
   const within50=enriched.filter(s=>Data.distanceKm(origin,s)<=50);
-  const available=within50.filter(s=>Data.stationMatchesFilters(s,{status:'available'}));
-  const fast=available.filter(s=>Data.stationMatchesFilters(s,{minPowerKw:50}));
+  const available=within50.filter(s=>s.status?.state==='available');
+  const fast=available.filter(s=>maxPower(s)>=50);
   assert.ok(within50.length>20,`${name}: implausibly low station coverage`);
   assert.ok(available.length>0,`${name}: no available stations`);
   assert.ok(fast.length>0,`${name}: no >=50 kW stations`);
