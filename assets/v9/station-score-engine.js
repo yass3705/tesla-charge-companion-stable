@@ -12,6 +12,7 @@
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
   const round=v=>Math.round((Number(v)+Number.EPSILON)*1000000)/1000000;
   const text=v=>String(v==null?'':v).trim();
+  const addMinutes=(value,minutes)=>{if(!value||num(minutes)==null)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;return new Date(d.getTime()+Number(minutes)*60000).toISOString();};
 
   function routeMetrics(station,route={}){
     const stationId=text(station?.id||station?.canonicalId||station?.stationId);
@@ -54,32 +55,24 @@
   }
 
   function scoreStation(station,evaluation,session={},options={}){
-    const route=routeMetrics(station,options.route||session.route||{});
-    const charge=chargingDetails(station,session,route),chargeMinutes=charge.minutes;
-    const dwellAfterCharge=postChargeMinutes(session,chargeMinutes);
-    const price=evaluation?.best?.total;
-    const distanceKm=route.distanceKm;
-    const driveMinutes=route.driveMinutes;
+    const route=routeMetrics(station,options.route||session.route||{}),plan=options.plan||null;
+    const fallbackCharge=plan?null:chargingDetails(station,session,route);
+    const chargeMinutes=num(plan?.chargingMinutes??fallbackCharge?.minutes),dwellAfterCharge=num(plan?.postChargeMinutes)??postChargeMinutes(session,chargeMinutes);
+    const chargeModel=plan?.chargeModel||fallbackCharge;
+    const price=evaluation?.best?.total,distanceKm=route.distanceKm,driveMinutes=route.driveMinutes;
     const totalTimeMinutes=(driveMinutes!=null?driveMinutes:0)+(chargeMinutes!=null?chargeMinutes:0)+dwellAfterCharge;
-    const recoveredKm=num(evaluation?.recoveredKm);
-    const costPerRecoveredKm=price!=null&&recoveredKm?round(price/recoveredKm):null;
+    const recoveredKm=num(evaluation?.recoveredKm),costPerRecoveredKm=price!=null&&recoveredKm?round(price/recoveredKm):null;
+    const chargeStartAt=plan?.chargeStartAt||session.chargeStartAt||session.startAt||null;
+    const chargeCompleteAt=plan?.postChargeStartAt||addMinutes(chargeStartAt,chargeMinutes);
     return{
-      stationId:text(station?.id||station?.canonicalId||station?.stationId),
-      route,
-      chargingMinutes:chargeMinutes,
-      chargeModel:charge,
-      postChargeMinutes:dwellAfterCharge,
-      totalTimeMinutes:round(totalTimeMinutes),
-      finalCost:price,
-      costPerRecoveredKm,
-      distanceKm,
-      driveMinutes,
-      bestOffer:evaluation?.best||null,
-      complete:{
-        pricing:price!=null,
-        route:distanceKm!=null&&driveMinutes!=null,
-        charging:chargeMinutes!=null
-      }
+      stationId:text(station?.id||station?.canonicalId||station?.stationId),route,
+      chargingMinutes:chargeMinutes,chargeModel,postChargeMinutes:dwellAfterCharge,totalTimeMinutes:round(totalTimeMinutes),
+      finalCost:price,costPerRecoveredKm,distanceKm,driveMinutes,bestOffer:evaluation?.best||null,
+      arrivalSoc:num(plan?.arrivalSoc??session.arrivalSoc),endSoc:num(plan?.actualTargetSoc??session.targetSoc),requestedTargetSoc:num(plan?.requestedTargetSoc??session.requestedTargetSoc??session.targetSoc),
+      targetReached:plan?.targetReached==null?(session.targetReached==null?null:!!session.targetReached):!!plan.targetReached,
+      deliveredEnergyKwh:num(plan?.deliveredEnergyKwh??session.energyKwh),chargeStartAt,chargeCompleteAt,disconnectAt:plan?.disconnectAt||session.disconnectAt||null,
+      energyTimeline:Array.isArray(plan?.effectiveSession?.energyTimeline)?plan.effectiveSession.energyTimeline:(Array.isArray(session.energyTimeline)?session.energyTimeline:null),
+      complete:{pricing:price!=null,route:distanceKm!=null&&driveMinutes!=null,charging:chargeMinutes!=null,session:plan?plan.targetReached!=null:true}
     };
   }
 
@@ -94,7 +87,7 @@
   }
 
   function scoreArea(stations,evaluations={},session={},options={}){
-    const rows=(stations||[]).map(station=>({station,score:scoreStation(station,evaluations?.[station?.id],session,options)}));
+    const rows=(stations||[]).map(station=>({station,score:scoreStation(station,evaluations?.[station?.id],session,{...options,plan:options.plans?.[station?.id]||options.plan})}));
     return sortRows(rows,options.sortBy||session.sortBy||'finalCost');
   }
 
