@@ -15,9 +15,9 @@ const high={
 let r=pricing.evaluateOffer(low,{energyKwh:10,durationMinutes:20,startAt:'2026-08-30T10:00:00+02:00',postChargeStartAt:'2026-08-30T10:20:00+02:00',postChargeMinutes:31});
 assert.equal(r.complete,true);assert.equal(r.totalEur,7.5);assert.equal(r.components.postCharge.billableMinutes,1);assert.equal(r.components.postCharge.blocks,1);
 
-// Night <=50 kW: after grace, 22:00-07:00 occupancy is exempt.
+// Crossing into the night exemption: the 10 billable minutes before 22:00 still start one 4 EUR block; 22:00-07:00 is exempt.
 r=pricing.evaluateOffer(low,{energyKwh:10,durationMinutes:20,startAt:'2026-08-30T21:00:00+02:00',postChargeStartAt:'2026-08-30T21:20:00+02:00',postChargeMinutes:120});
-assert.equal(r.complete,true);assert.equal(r.totalEur,3.5);assert.equal(r.components.postCharge.billableMinutes,10);assert.equal(r.components.postCharge.exemptMinutes,80);assert.equal(r.components.postCharge.blocks,1);
+assert.equal(r.complete,true);assert.equal(r.totalEur,7.5);assert.equal(r.components.postCharge.billableMinutes,10);assert.equal(r.components.postCharge.exemptMinutes,80);assert.equal(r.components.postCharge.blocks,1);
 
 // Entire billable period in the night exemption: no post-charge fee.
 r=pricing.evaluateOffer(low,{energyKwh:10,durationMinutes:20,startAt:'2026-08-30T22:00:00+02:00',postChargeStartAt:'2026-08-30T22:10:00+02:00',postChargeMinutes:90});
