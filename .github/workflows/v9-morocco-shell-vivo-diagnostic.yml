@@ -1,0 +1,37 @@
+name: V9 Morocco Shell Vivo diagnostic validation
+
+on:
+  push:
+    paths:
+      - 'assets/v9/adapters/morocco-shell-vivo-diagnostic.js'
+      - 'tests/v9-morocco-shell-vivo-diagnostic.test.cjs'
+      - '.github/workflows/v9-morocco-shell-vivo-diagnostic.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/adapters/morocco-shell-vivo-diagnostic.js'
+      - 'tests/v9-morocco-shell-vivo-diagnostic.test.cjs'
+      - '.github/workflows/v9-morocco-shell-vivo-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit-test diagnostic-only attribution policy
+        run: node tests/v9-morocco-shell-vivo-diagnostic.test.cjs
+      - name: Validate sanitized public Melloussa report remains non-production
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/shell-vivo/melloussa-ev-charging-conflict-2026-08-29.json'
+          curl --fail --silent --show-error --location "$URL" -o /tmp/melloussa.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/melloussa.json', 'utf8'));
+          if (report.assessment?.production_ready !== false) throw new Error('Melloussa unexpectedly production-ready');
+          if (report.modeling?.operator_cpo !== 'unresolved') throw new Error('CPO unexpectedly resolved');
+          if (report.modeling?.site_brand !== 'Shell') throw new Error('Shell site_brand missing');
+          NODE
