@@ -39,6 +39,7 @@ jobs:
           node --check assets/v9/session-engine.js
           node --check assets/v9/vehicle-profile-engine.js
           node --check assets/v9/charge-model-engine.js
+          node --check assets/v9/session-planner-engine.js
           node --check assets/v9/station-score-engine.js
           node --check assets/v9/routing-engine.js
           node --check assets/v9/browser-routing.js
@@ -58,6 +59,7 @@ jobs:
           node --check tests/v9-ionity-crosswalk-audit.cjs
           node --check tests/v9-vehicle-profile-engine.test.cjs
           node --check tests/v9-charge-model-engine.test.cjs
+          node --check tests/v9-session-planner-engine.test.cjs
           node --check tests/v9-station-score-engine.test.cjs
           node --check tests/v9-charge-score-integration.test.cjs
           node --check tests/v9-routing-engine.test.cjs
@@ -145,6 +147,8 @@ jobs:
         run: node tests/v9-vehicle-profile-engine.test.cjs
       - name: SOC-aware charge model
         run: node tests/v9-charge-model-engine.test.cjs
+      - name: SOC target and unplug deadline planning
+        run: node tests/v9-session-planner-engine.test.cjs
       - name: Station scoring
         run: node tests/v9-station-score-engine.test.cjs
       - name: Routed SOC charge integration
