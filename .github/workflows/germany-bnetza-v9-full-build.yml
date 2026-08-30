@@ -8,6 +8,7 @@ on:
       - 'scripts/build_germany_bnetza_v9_v3.py'
       - 'scripts/build_germany_bnetza_v9_v4.py'
       - 'scripts/group_germany_bnetza_v9_sites.py'
+      - 'scripts/audit_germany_operator_normalization_v9.py'
       - 'data/v9/germany-operator-aliases.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -99,6 +100,8 @@ jobs:
           assert mega and mega[0]['facilityCount']==m['maxFacilitiesPerSite']
           print(json.dumps({'grouped':{k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},'megaSiteAudit':mega[:10]},indent=2,ensure_ascii=False))
           PY
+      - name: Audit operator canonicalization coverage
+        run: python scripts/audit_germany_operator_normalization_v9.py --min-coverage 0.35
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
         with:
