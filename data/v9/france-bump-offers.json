@@ -1,7 +1,7 @@
 {
   "schemaVersion": 6,
   "country": "FR",
-  "generatedAt": "2026-08-30T18:03:11.797481Z",
+  "generatedAt": "2026-08-30T18:05:21.171350Z",
   "mode": "exact_pdc_direct_tariffs",
   "policy": {
     "exactPdcRequired": true,
@@ -16,7 +16,7 @@
     "conditionalFeeConditionsUseAndSemantics": true,
     "sessionDurationSurchargeSupported": true,
     "energyTimeBandsSupported": true,
-    "energyTimeBandCrossingFailsClosedUntilSessionSegmentation": true,
+    "energyTimeBandCrossingSegmentedByPricingEngine": true,
     "postChargeOccupancyTimeBandsSupported": true,
     "minimumTotalAppliedAfterAllSessionComponents": true,
     "subscriptionsOptIn": true
