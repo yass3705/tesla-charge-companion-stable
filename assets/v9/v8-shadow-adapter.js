@@ -26,7 +26,7 @@
   function recoveredKm(deliveredEnergyKwh,consumptionKwhPer100Km){const energy=num(deliveredEnergyKwh),consumption=num(consumptionKwhPer100Km);return energy!=null&&energy>0&&consumption!=null&&consumption>0?round(energy/(consumption/100)):null;}
 
   function normalizeLegacyRows(rows=[],options={}){
-    const consumption=num(options.consumptionKwhPer100Km)??15,groups=new Map();
+    const consumption=num(options.consumptionKwhPer100Km)??15,startSoc=num(options.startSoc),groups=new Map();
     for(const row of rows){const st=row?.station||row?.st||{},id=stationId(st);if(!id)continue;if(!groups.has(id))groups.set(id,{base:row?.baseStation||st,rows:[]});groups.get(id).rows.push({...row,station:st});}
     const stations=[],sessionByStationId={};
     for(const [id,group] of groups){
@@ -35,7 +35,8 @@
       const best=pool[0]||{},r=best.result||best.r||{},route=best.route||{},occupied=num(r?.pricingDetails?.occupiedMinutes)??num(r?.occupiedMinutes)??num(r?.allowed),drive=num(route.durationMin??route.driveMinutes)??0,delivered=num(r.deliveredBatt??r.deliveredEnergyKwh),km=recoveredKm(delivered,consumption),total=num(r.total);
       stations.push(legacyStation(group.base,group.rows.map(x=>x.station?.id)));
       const reached=num(r.reached??r.reachedSoc),targetReached=r.targetReached!=null?!!r.targetReached:(r.truncated===true?false:(reached!=null?true:null));
-      sessionByStationId[id]={finalCost:total,reachedSoc:reached,targetReached,totalTimeMinutes:occupied!=null?round(drive+occupied):null,driveMinutes:drive,chargingMinutes:num(r.allowed??r.chargingMinutes),connectedMinutes:occupied,costPerRecoveredKm:total!=null&&km?round(total/km):null,recoveredKm:km,deliveredEnergyKwh:delivered,billedEnergyKwh:num(r.deliveredBilled??r.billedEnergyKwh),configurationId:text(best.station?.id)||null,configurationLabel:text(best.station?.configurationLabel)||null,chargeStartAt:best.chargeStartAt||null,unknown:!!r.unknown,unavailable:!!r.unavailable};
+      const charging=num(r.allowed??r.chargingMinutes),chargeStartAt=best.chargeStartAt||null,chargeCompleteAt=chargeStartAt&&charging!=null?addMinutes(chargeStartAt,charging)?.toISOString?.()||null:null;
+      sessionByStationId[id]={finalCost:total,arrivalSoc:startSoc,reachedSoc:reached,endSoc:reached,targetReached,totalTimeMinutes:occupied!=null?round(drive+occupied):null,driveMinutes:drive,chargingMinutes:charging,connectedMinutes:occupied,costPerRecoveredKm:total!=null&&km?round(total/km):null,recoveredKm:km,deliveredEnergyKwh:delivered,billedEnergyKwh:num(r.deliveredBilled??r.billedEnergyKwh),configurationId:text(best.station?.id)||null,configurationLabel:text(best.station?.configurationLabel)||null,chargeStartAt,chargeCompleteAt,unknown:!!r.unknown,unavailable:!!r.unavailable};
     }
     return{stations,sessionByStationId};
   }
@@ -61,7 +62,7 @@
         const baseId=st.baseStationId||stationId(st),route=routes?.[baseId]||{},arrivalDate=addMinutes(departure,num(route.durationMin)??0),arrival=dateTimeParts(arrivalDate||departure);
         return{station:st,baseStation:baseById.get(baseId)||st,route,chargeStartAt:arrivalDate?.toISOString?.()||null,result:win.simulate(st,arrival.date,arrival.time,now,target,condition,profile,unplugTime)};
       });
-      const normalized=normalizeLegacyRows(rows,{consumptionKwhPer100Km:session.consumptionKwhPer100Km});
+      const normalized=normalizeLegacyRows(rows,{consumptionKwhPer100Km:session.consumptionKwhPer100Km,startSoc:now});
       return{...normalized,origin:{lat:num(prepared.origin?.lat),lon:num(prepared.origin?.lon),label:text(prepared.origin?.label)},rawRows:rows,engine:'v8-live-browser',v8Profile:profile,v8Condition:condition};
     }
     return{ready,query};
