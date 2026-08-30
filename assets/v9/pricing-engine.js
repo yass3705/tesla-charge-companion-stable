@@ -118,15 +118,20 @@
   function evaluateConditionalSessionFees(fees,session={}){
     if(fees==null)return{complete:true,totalEur:0,component:null};
     if(!Array.isArray(fees))return{complete:false,totalEur:0,component:null,reason:'invalid_conditional_session_fees'};
-    const energy=Math.max(0,num(session.energyKwh)??0),items=[];let total=0;
+    const energy=Math.max(0,num(session.energyKwh)??0),duration=Math.max(0,num(session.durationMinutes)??0),items=[];let total=0;
     for(const fee of fees){
       const amount=num(fee?.amountEur),conditions=fee?.conditions;
       if(amount==null||amount<0||!Array.isArray(conditions)||!conditions.length)return{complete:false,totalEur:0,component:null,reason:'invalid_conditional_session_fee'};
       let applies=true;const evaluated=[];
       for(const condition of conditions){
-        if(condition?.kind!=='energy_above_kwh')return{complete:false,totalEur:0,component:null,reason:'unsupported_conditional_fee_condition',conditionKind:condition?.kind||null};
         const threshold=num(condition?.value);if(threshold==null||threshold<0)return{complete:false,totalEur:0,component:null,reason:'invalid_conditional_fee_threshold'};
-        const matched=energy>threshold;evaluated.push({kind:'energy_above_kwh',value:threshold,actualEnergyKwh:energy,matched});if(!matched)applies=false;
+        let matched=false,detail=null;
+        if(condition?.kind==='energy_above_kwh'){
+          matched=energy>threshold;detail={kind:'energy_above_kwh',value:threshold,actualEnergyKwh:energy,matched};
+        }else if(condition?.kind==='session_duration_after_minutes'){
+          matched=duration>threshold;detail={kind:'session_duration_after_minutes',value:threshold,actualDurationMinutes:duration,matched};
+        }else return{complete:false,totalEur:0,component:null,reason:'unsupported_conditional_fee_condition',conditionKind:condition?.kind||null};
+        evaluated.push(detail);if(!matched)applies=false;
       }
       const costEur=applies?money(amount):0;if(applies)total+=costEur;
       items.push({amountEur:amount,applied:applies,costEur,conditions:evaluated});
