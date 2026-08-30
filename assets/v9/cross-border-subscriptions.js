@@ -12,20 +12,24 @@
   function policyMap(config){return new Map((config?.policy?.subscriptions||[]).map(s=>[text(s.id),s]));}
   function unavailable(id,country,reason){return{subscriptionId:id,country,status:'unavailable',rankable:false,usedFallback:false,reason};}
   function exact(id,country,price,currency,semantics,source){return{subscriptionId:id,country,status:'exact',rankable:true,usedFallback:false,pricePerKwh:Number(price),currency:cc(currency),priceSemantics:semantics,source};}
+  function operatorScopeError(id,op){
+    if(id==='fastned-gold'&&op!=='fastned')return'Fastned Gold only applies to Fastned physical stations';
+    if((id==='ionity-motion'||id==='ionity-power')&&op!=='ionity')return'IONITY subscription only applies to IONITY physical stations';
+    return null;
+  }
   function resolve({subscriptionId,countryCode,physicalOperator,exactStationPrice=null,exactStationCurrency=null}={},config={}){
     const id=text(subscriptionId),country=cc(countryCode),op=operatorId(physicalOperator),subs=policyMap(config),policy=subs.get(id);
     if(!id||!country)return unavailable(id,country,'subscription and country required');
     if(!policy)return unavailable(id,country,'subscription not active in cross-border policy');
     const coverage=(policy.coverageCountries||[]).map(cc);if(!coverage.includes(country))return unavailable(id,country,'country outside subscription coverage');
+    const scopeError=operatorScopeError(id,op);if(scopeError)return unavailable(id,country,scopeError);
     const stationPrice=num(exactStationPrice);
     if(stationPrice!=null){if(!exactStationCurrency)return unavailable(id,country,'exact station currency required with exact station price');return exact(id,country,stationPrice,exactStationCurrency,'station-specific','exact-station-override');}
     if(id==='fastned-gold'){
-      if(op!=='fastned')return unavailable(id,country,'Fastned Gold only applies to Fastned physical stations');
       const p=config?.fastned?.prices?.[country];if(!p)return unavailable(id,country,'country absent from Fastned Gold matrix');
       return exact(id,country,p.pricePerKwh,p.currency,'exact-country','fastned-gold-country-prices');
     }
     if(id==='ionity-motion'||id==='ionity-power'){
-      if(op!=='ionity')return unavailable(id,country,'IONITY subscription only applies to IONITY physical stations');
       const p=config?.ionity?.subscriptions?.[id]?.[country];if(!p)return unavailable(id,country,'country absent from IONITY matrix');
       return{subscriptionId:id,country,status:'minimum',rankable:false,usedFallback:false,pricePerKwh:Number(p.pricePerKwh),currency:cc(p.currency),priceSemantics:'country-minimum',source:'ionity-monthly-country-prices',reason:'IONITY publishes a country minimum; station price may be higher'};
     }
