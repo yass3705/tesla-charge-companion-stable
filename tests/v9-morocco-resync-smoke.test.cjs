@@ -3,6 +3,7 @@ const fs=require('fs');
 const physical=require('../assets/v9/adapters/morocco-public.js');
 const nonprod=require('../assets/v9/adapters/morocco-nonproduction.js');
 const browserLoaders=require('../assets/v9/browser-loaders.js');
+const pricingEngine=require('../assets/v9/pricing-engine.js');
 const sessionEngine=require('../assets/v9/session-engine.js');
 
 const RAW='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco';
@@ -43,6 +44,13 @@ const sources=[
   const dcOffers=alBoustane.offers.filter(o=>sessionEngine.offerMatchesChargingKind(o,'DC'));
   assert.equal(dcOffers.length,1,'mixed FastVolt station must expose only one DC-compatible offer to a DC session');
   assert.deepEqual(dcOffers[0].connectorKinds,['DC'],'AC tariff must not leak into a DC session');
+  const directPricing=pricingEngine.evaluateOffer(dcOffers[0],{durationMinutes:10,startAt:'2026-08-30T12:00:00Z'});
+  assert.equal(directPricing.complete,true,'currency-neutral FastVolt minute pricing must be evaluable');
+  assert.equal(directPricing.totalEur,25,'10 minutes at 2.5 MAD/min must equal 25 MAD');
+  assert.equal(directPricing.currency,'MAD','pricing result must preserve offer currency');
+  const stationPricing=sessionEngine.evaluateStation(alBoustane,{durationMinutes:10,energyKwh:0,targetCurrency:'MAD'});
+  assert.equal(stationPricing.best?.total,25,'unified session engine must keep the FastVolt DC total at 25 MAD');
+  assert.equal(stationPricing.best?.currency,'MAD','unified session engine must preserve MAD');
 
   const kilowatt=await physical.createLoader({source:sources[2]})();
   assert.equal(kilowatt.length,43,'Kilowatt production count');
@@ -63,5 +71,5 @@ const sources=[
   assert.equal(overlay.access.appSource,'EVOne');
   assert.equal(overlay.access.accessNetwork,'EVPlug');
 
-  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),browserLoaderCount:Object.keys(wired).filter(k=>k.startsWith('morocco-')).length,evgo:evgo.length,evgoEvses:43,fastvolt:fastvolt.length,fastvoltMixedStationChargingKind:sessionEngine.stationChargingKind(alBoustane),kilowatt:kilowatt.length,totalenergies:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
+  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),browserLoaderCount:Object.keys(wired).filter(k=>k.startsWith('morocco-')).length,evgo:evgo.length,evgoEvses:43,fastvolt:fastvolt.length,fastvoltMixedStationChargingKind:sessionEngine.stationChargingKind(alBoustane),fastvoltTenMinuteDcMad:stationPricing.best?.total,kilowatt:kilowatt.length,totalenergies:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
