@@ -1,0 +1,116 @@
+name: V9 sync Italy with Enel
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-enel-italy
+    paths:
+      - scripts/v9_build_italy_catalog.py
+      - scripts/v9_enrich_italy_enel_offers.py
+      - assets/v9/session-engine.js
+      - tests/v9-enel-session-start-pricing.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - data/v9/source-registry.json
+      - .github/workflows/v9-sync-italy-enel.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DATA_REPO: yass3705/tesla-charge-companion-data-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical Italy V9 Enel candidate
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list \
+            --repo "$DATA_REPO" \
+            --workflow italy-v9-enel-overlay.yml \
+            --branch research/italy-consolidation-v9-a2a \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/italy
+          gh run download "$RUN_ID" \
+            --repo "$DATA_REPO" \
+            -n italy-v9-enel-overlay-candidate \
+            -D /tmp/italy
+          INPUT="$(find /tmp/italy -type f -name italy_v9_candidate.json.gz | head -n1)"
+          test -n "$INPUT" && test -s "$INPUT"
+          cp "$INPUT" /tmp/italy_v9_candidate.json.gz
+          echo "Using canonical data-lab Enel run $RUN_ID"
+
+      - name: Build V9 Italy catalogue and baseline offers
+        run: |
+          python scripts/v9_build_italy_catalog.py --input /tmp/italy_v9_candidate.json.gz
+
+      - name: Enrich Enel session-start and Plug&Go offers
+        run: |
+          python scripts/v9_enrich_italy_enel_offers.py --input /tmp/italy_v9_candidate.json.gz
+
+      - name: Validate published counts and Enel semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          offers=json.loads(Path('data/v9/italy-offers.json').read_text())
+          report=json.loads(Path('data/v9/italy-build-report.json').read_text())
+          manifest=json.loads(Path('data/v9/italy-static/manifest.json').read_text())
+          assert manifest['stationCount']==29696
+          assert report['directOffers']==48409
+          assert report['subscriptionOffers']==48330
+          assert report['emspOffers']==2281
+          assert report['enelDirectOffers']==22783
+          assert report['enelSubscriptionOffers']['enel_plug_and_go_super']==22783
+          assert report['enelSubscriptionOffers']['enel_plug_and_go_explorer']==22783
+          assert len(offers['directOffers'])==48409
+          assert len(offers['subscriptionOffers'])==48330
+          assert len(offers['emspOffers'])==2281
+          assert offers['policy']['sessionStartLockedTariffsSupported'] is True
+          enel=[o for o in offers['directOffers'] if o.get('provider')=='Enel X Way']
+          assert len(enel)==22783
+          assert all(o['pricing'].get('priceSelectionBasis')=='session_start_local_time' for o in enel)
+          assert all(o.get('metadata',{}).get('timeZone')=='Europe/Rome' for o in enel)
+          sup=[o for o in offers['subscriptionOffers'] if o.get('selectionId')=='enel_plug_and_go_super']
+          exp=[o for o in offers['subscriptionOffers'] if o.get('selectionId')=='enel_plug_and_go_explorer']
+          assert len(sup)==22783 and len(exp)==22783
+          assert all(o['pricing'].get('priceSelectionBasis')=='session_start_local_time' for o in sup+exp)
+          print(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Test Enel session-start pricing engine
+        run: node tests/v9-enel-session-start-pricing.test.cjs
+
+      - name: Test complete Italy runtime
+        run: node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Publish generated Italy V9 data on Enel branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-static data/v9/italy-offers.json data/v9/italy-build-report.json
+          if git diff --cached --quiet; then
+            echo 'Italy Enel generated data already current'
+            exit 0
+          fi
+          git commit -m 'data(v9): publish Italy catalogue with Enel'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
