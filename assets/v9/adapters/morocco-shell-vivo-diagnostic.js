@@ -3,10 +3,17 @@
 
   const SOURCE_ID = 'morocco-shell-vivo-diagnostic';
 
+  function unresolvedToNull(value) {
+    return !value || value === 'unresolved' ? null : value;
+  }
+
   function adaptShellVivoDiagnostic(report) {
     const candidate = report && report.station_candidate ? report.station_candidate : {};
     const modeling = report && report.modeling ? report.modeling : {};
     const assessment = report && report.assessment ? report.assessment : {};
+    const coordinates = candidate.shell_directory_coordinates || candidate.coordinates || {};
+    const accessNetwork = unresolvedToNull(modeling.app_source_access_network || modeling.access_network);
+    const networkBrand = unresolvedToNull(modeling.network_brand);
 
     return {
       sourceId: SOURCE_ID,
@@ -14,14 +21,14 @@
       productionEligible: false,
       diagnosticOnly: true,
       name: candidate.name || null,
-      latitude: candidate.shell_directory_coordinates && candidate.shell_directory_coordinates.lat,
-      longitude: candidate.shell_directory_coordinates && candidate.shell_directory_coordinates.lng,
+      latitude: coordinates.lat,
+      longitude: coordinates.lng,
       physicalOperator: null,
-      networkBrand: null,
+      networkBrand,
       access: {
         siteBrand: modeling.site_brand || 'Shell',
-        appSource: null,
-        accessNetwork: null
+        appSource: unresolvedToNull(modeling.app_source),
+        accessNetwork
       },
       offers: [],
       status: {
@@ -29,9 +36,9 @@
         statusSource: null
       },
       diagnostic: {
-        cpoUnresolved: modeling.operator_cpo === 'unresolved',
-        tariffChannelUnresolved: modeling.tariff_channel === 'unresolved',
-        statusSourceUnresolved: modeling.status_source === 'unresolved',
+        cpoUnresolved: modeling.operator_cpo === 'unresolved' || !modeling.operator_cpo,
+        tariffChannelUnresolved: modeling.tariff_channel === 'unresolved' || !modeling.tariff_channel,
+        statusSourceUnresolved: modeling.status_source === 'unresolved' || !modeling.status_source,
         reason: assessment.reason || null
       }
     };
