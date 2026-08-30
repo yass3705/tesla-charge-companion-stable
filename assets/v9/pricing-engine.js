@@ -18,6 +18,36 @@
     }
     return d.getHours()*60+d.getMinutes()+d.getSeconds()/60;
   }
+  function localDateParts(value,timeZone){
+    const d=value instanceof Date?value:new Date(value);if(Number.isNaN(d.getTime()))return null;
+    try{
+      if(timeZone){
+        const parts=new Intl.DateTimeFormat('en-CA',{timeZone,year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'}).formatToParts(d);
+        const get=t=>parts.find(p=>p.type===t)?.value;
+        const weekdays={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+        const weekday=weekdays[get('weekday')];
+        const year=Number(get('year')),month=Number(get('month')),day=Number(get('day'));
+        if(!Number.isFinite(year)||!Number.isFinite(month)||!Number.isFinite(day)||weekday==null)return null;
+        return{year,month,day,weekday,key:`${String(year).padStart(4,'0')}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`};
+      }
+      return{year:d.getFullYear(),month:d.getMonth()+1,day:d.getDate(),weekday:d.getDay(),key:`${String(d.getFullYear()).padStart(4,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+    }catch(_){return null;}
+  }
+  function easterSundayUtc(year){
+    const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
+    return new Date(Date.UTC(year,month-1,day));
+  }
+  function italianHolidayKeys(year){
+    const fixed=['01-01','01-06','04-25','05-01','06-02','08-15','11-01','12-08','12-25','12-26'].map(md=>`${year}-${md}`);
+    const easter=easterSundayUtc(year),monday=new Date(easter.getTime()+86400000);
+    fixed.push(`${monday.getUTCFullYear()}-${String(monday.getUTCMonth()+1).padStart(2,'0')}-${String(monday.getUTCDate()).padStart(2,'0')}`);
+    return new Set(fixed);
+  }
+  function isHoliday(calendar,value,timeZone){
+    if(!calendar)return false;const p=localDateParts(value,timeZone);if(!p)return null;
+    if(String(calendar).toUpperCase()==='IT')return italianHolidayKeys(p.year).has(p.key);
+    return false;
+  }
   function hm(v,fallback){
     if(!v)return fallback;const m=String(v).match(/^(\d{1,2}):(\d{2})$/);if(!m)return fallback;
     const h=Number(m[1]),min=Number(m[2]);if(h===24&&min===0)return 1440;if(h>23||min>59)return fallback;return h*60+min;
@@ -29,15 +59,32 @@
     if(end>start)return minute>=start&&minute<end;
     return minute>=start||minute<end;
   }
+  function ruleDayMatches(rule,startAt,timeZone,pricing){
+    const days=Array.isArray(rule?.daysOfWeek)?rule.daysOfWeek.map(Number).filter(n=>n>=0&&n<=6):null;
+    const constrained=Boolean(days?.length||rule?.holidayOnly===true||rule?.excludeHolidays===true);
+    if(!constrained)return true;
+    if(!startAt)return false;
+    const parts=localDateParts(startAt,timeZone);if(!parts)return false;
+    const holiday=isHoliday(pricing?.holidayCalendar,startAt,timeZone);
+    if(rule?.holidayOnly===true&&holiday!==true)return false;
+    if(rule?.excludeHolidays===true&&holiday===true)return false;
+    if(days?.length&&!days.includes(parts.weekday))return false;
+    return true;
+  }
   function matchingRule(pricing,startAt,timeZone){
     const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
-    if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay')||null;
-    return rules.find(r=>ruleContains(r,minute))||null;
+    if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay'&&ruleDayMatches(r,startAt,timeZone,pricing))||null;
+    return rules.find(r=>ruleDayMatches(r,startAt,timeZone,pricing)&&ruleContains(r,minute))||null;
   }
   function minutesUntilRuleBoundary(rule,startAt,timeZone){
-    if(!rule||rule.scope==='allDay')return Infinity;
+    if(!rule)return Infinity;
     const minute=minuteOfDay(startAt,timeZone);if(minute==null)return null;
-    const end=hm(rule.end,1440);let delta=end-minute;if(delta<=0)delta+=1440;return delta;
+    let delta=Infinity;
+    if(rule.scope!=='allDay'){
+      const end=hm(rule.end,1440);delta=end-minute;if(delta<=0)delta+=1440;
+    }
+    if(rule.mustEndSameLocalDay===true)delta=Math.min(delta,1440-minute);
+    return delta;
   }
   function evaluateRule(rule,{energyKwh=0,durationMinutes=0}={}){
     const energy=Math.max(0,num(energyKwh)??0),duration=Math.max(0,num(durationMinutes)??0),components={};let total=0;
@@ -47,8 +94,6 @@
       components.energy=money(billedEnergy*perKwh);total+=components.energy;
       if(billedEnergy!==energy)components.energyBilling={actualKwh:energy,billedKwh:billedEnergy,rounding:'started_kwh'};
     }
-    const pricePerMinute=num(rule?.pricePerMinute);
-    if(pricePerMinute!=null){components.connectedTimePerMinute=money(duration*pricePerMinute);total+=components.connectedTimePerMinute;}
     const blockMinutes=num(rule?.connectedTimeBlockMinutes),blockEur=num(rule?.connectedTimeBlockEur);
     if(blockMinutes>0&&blockEur!=null){
       const blocks=rule?.connectedTimeBlockRounding==='started_block'?Math.ceil(duration/blockMinutes):duration/blockMinutes;
@@ -125,5 +170,5 @@
     total+=post.totalEur;const components={...base.components,...(post.component?{postCharge:post.component}:{})};
     return{complete:!longConnection,totalEur:money(total),components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,timeZone};
   }
-  return{evaluateOffer,evaluateRule,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,minuteOfDay,minutesUntilRuleBoundary};
+  return{evaluateOffer,evaluateRule,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary};
 });
