@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "stage": "preview",
+  "canaryPercent": 0,
+  "killSwitch": false,
+  "requireReadiness": true,
+  "salt": "tcc-v9-rollout-v1",
+  "v8Path": "./",
+  "previewPath": "v9-preview/",
+  "productionPath": "v9-preview/",
+  "notes": "V8 remains production. Canary is disabled until an explicit promotion after readiness review."
+}
