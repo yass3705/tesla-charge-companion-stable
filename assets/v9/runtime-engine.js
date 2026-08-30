@@ -1,10 +1,10 @@
 (function(root,factory){
   if(typeof module==='object'&&module.exports){
-    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'));
+    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'),require('./cross-border-subscriptions.js'));
   }else{
-    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine);
+    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine,root.TCCV9CrossBorderSubscriptions);
   }
-})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine){
+})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine,CrossBorder){
   'use strict';
 
   if(!DataEngine)throw new Error('TCC V9 data engine is required');
@@ -64,17 +64,56 @@
     });
   }
 
+  function mergeSubscriptionRows(rows){
+    const map=new Map();
+    for(const row of rows||[]){
+      const key=text(row.id);if(!key)continue;
+      const current=map.get(key);
+      if(!current){map.set(key,{...row,countries:[...(row.countries||[])],operatorIds:[...(row.operatorIds||[])],sourceIds:[...(row.sourceIds||[])]});continue;}
+      const globalCoverage=current.globalCoverage===true||row.globalCoverage===true;
+      const countries=uniq([...(current.countries||[]),...(row.countries||[])]).sort();
+      map.set(key,{...current,...row,countries,globalCoverage,countryCount:globalCoverage?null:countries.length,operatorIds:uniq([...(current.operatorIds||[]),...(row.operatorIds||[])]).sort(),sourceIds:uniq([...(current.sourceIds||[]),...(row.sourceIds||[])]).sort()});
+    }
+    return[...map.values()];
+  }
+
+  function exactStationOverride(query,station,subscriptionId){
+    const all=query?.subscriptionStationPrices||{};
+    const byStation=all[station?.id]||all[station?.canonicalId]||{};
+    return byStation?.[subscriptionId]||null;
+  }
+
+  function applySelectedSubscriptions(station,selectedSubscriptions=[],crossBorderConfig={},query={}){
+    if(!CrossBorder||!crossBorderConfig?.policy||!(selectedSubscriptions||[]).length)return station;
+    let out={...station,offers:[...(station?.offers||[])]};
+    const policyById=new Map((crossBorderConfig.policy.subscriptions||[]).map(s=>[text(s.id),s]));
+    for(const id of selectedSubscriptions||[]){
+      const subscription=policyById.get(text(id));if(!subscription)continue;
+      const override=exactStationOverride(query,station,id);
+      const resolved=CrossBorder.resolve({subscriptionId:id,countryCode:station.countryCode||query.countryCode,physicalOperator:station.physicalOperator,exactStationPrice:override?.pricePerKwh,exactStationCurrency:override?.currency},crossBorderConfig);
+      const offer=CrossBorder.toOffer(resolved,subscription,station);if(offer)out=OfferEngine.mergeStationOffers(out,[offer],{countryCode:station.countryCode||query.countryCode});
+    }
+    out.eligibleOffers=OfferEngine.eligibleOffers(out,selectedSubscriptions,{countryCode:out.countryCode||query.countryCode});
+    out.rankableOffers=(out.eligibleOffers||[]).filter(o=>o?.metadata?.rankable!==false);
+    return out;
+  }
+
   function createEngine(config={}){
-    const base=DataEngine.createEngine(config),coverage=coverageIndex(config.registry||{});
+    const base=DataEngine.createEngine(config),coverage=coverageIndex(config.registry||{}),crossBorderConfig=config.crossBorderPricing||{};
 
     function deriveSubscriptionOptions(stations,filters={}){
       const local=OfferEngine.deriveSubscriptionOptions(stations,{});
-      return filterSubscriptions(applyCoverage(local,coverage),filters);
+      const cross=CrossBorder&&crossBorderConfig?.policy?CrossBorder.subscriptionOptions(crossBorderConfig):[];
+      return filterSubscriptions(applyCoverage(mergeSubscriptionRows([...local,...cross]),coverage),filters);
     }
 
     async function queryArea(query={}){
       const area=await base.queryArea(query);
-      const stations=(area.stations||[]).map(station=>OfferEngine.mergeStationOffers(station,[],{countryCode:station.countryCode||query.countryCode}));
+      const selected=uniq((query.selectedSubscriptions||[]).map(text));
+      const stations=(area.stations||[]).map(station=>{
+        const merged=OfferEngine.mergeStationOffers(station,[],{countryCode:station.countryCode||query.countryCode});
+        return applySelectedSubscriptions(merged,selected,crossBorderConfig,query);
+      });
       const stationById=new Map(stations.map(st=>[st.id,st]));
       const routingCandidates=(area.routingCandidates||[]).map(st=>stationById.get(st.id)||st);
       const subscriptions=deriveSubscriptionOptions(stations,query.subscriptionFilters||{});
@@ -83,7 +122,8 @@
         stations,
         routingCandidates,
         subscriptions,
-        diagnostics:{...(area.diagnostics||{}),subscriptionOptionCount:subscriptions.length}
+        selectedSubscriptions:selected,
+        diagnostics:{...(area.diagnostics||{}),subscriptionOptionCount:subscriptions.length,selectedSubscriptionCount:selected.length,crossBorderPricingEnabled:!!(CrossBorder&&crossBorderConfig?.policy)}
       };
     }
 
@@ -92,10 +132,11 @@
       queryArea,
       eligibleOffers:OfferEngine.eligibleOffers,
       deriveSubscriptionOptions,
+      applySelectedSubscriptions:(station,selected,query={})=>applySelectedSubscriptions(station,selected,crossBorderConfig,query),
       dedupeOffers:OfferEngine.dedupeOffers,
       mergeStationOffers:OfferEngine.mergeStationOffers
     };
   }
 
-  return{createEngine,applyCoverage,filterSubscriptions};
+  return{createEngine,applyCoverage,filterSubscriptions,mergeSubscriptionRows,applySelectedSubscriptions};
 });
