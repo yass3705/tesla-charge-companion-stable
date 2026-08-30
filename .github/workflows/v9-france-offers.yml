@@ -143,7 +143,10 @@ jobs:
           assert all(z['verifiedScope']=='exact_evse' and len(z['evseIds'])==1 for z in u['directOffers'])
           assert all(z['metadata']['timeChanging'] is False for z in u['directOffers'])
           assert all(z['pricing']['rules'][0].get('scope')=='allDay' for z in u['directOffers'])
-          assert all(z.get('reason')!='no_exact_bump_crosswalk' for z in u['deferred'] if z.get('idPdcItinerance','').startswith('FRBMP'))
+          exact_offer_ids={z['evseIds'][0] for z in u['directOffers']}
+          assert len(exact_offer_ids)==len(u['directOffers'])
+          assert len(exact_offer_ids)<=u['summary']['exactBumpAliases']
+          assert sum(1 for z in u['deferred'] if z.get('reason')=='time_changing_tariff_not_yet_semantically_compiled')==u['summary']['timeChangingDeferred']
           deferred={z.get('id') for z in r.get('deferred',[])}
           assert 'electra-essential' in deferred
           assert 'electra-smart' in deferred
