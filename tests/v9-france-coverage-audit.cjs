@@ -10,6 +10,20 @@ const readGzipJson=p=>JSON.parse(zlib.gunzipSync(fs.readFileSync(p)).toString('u
 const norm=v=>String(v==null?'':v).trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 const pdcNorm=v=>String(v==null?'':v).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
 const uniq=a=>[...new Set((a||[]).filter(Boolean))];
+// Mirrors assets/v9/data-engine.js operatorId exactly. Use this ONLY for applicability.
+const runtimeId=value=>{
+  const n=norm(typeof value==='object'?(value?.id||value?.name):value);if(!n)return'unknown';
+  if(n==='tesla'||n.startsWith('tesla-'))return'tesla';
+  if(n.includes('ionity'))return'ionity';
+  if(n.includes('fastned'))return'fastned';
+  if(n.includes('powerdot'))return'powerdot';
+  if(n.includes('atlante'))return'atlante';
+  if(n.includes('lidl'))return'lidl';
+  if(n.includes('electroverse'))return'electroverse';
+  if(n==='electra'||n.startsWith('electra-'))return'electra';
+  return n;
+};
+// Reporting-only grouping. Never use this looser mapping to decide whether a tariff applies.
 const operatorId=value=>{
   const n=norm(value);if(!n)return'unknown';
   if(n==='tesla'||n.startsWith('tesla-'))return'tesla';
@@ -20,7 +34,8 @@ const operatorId=value=>{
   if(n.includes('lidl'))return'lidl';
   if(n.includes('electroverse'))return'electroverse';
   if(n==='electra'||n.startsWith('electra-'))return'electra';
-  if(n.includes('izivia'))return'izivia';
+  if(n.includes('sigeif'))return'sigeif';
+  if(n==='izivia'||n.startsWith('izivia-'))return'izivia';
   if(n.includes('freshmile'))return'freshmile';
   if(n.includes('qovoltis'))return'qovoltis';
   if(n.includes('e-totem')||n.includes('etotem'))return'etotem';
@@ -28,7 +43,7 @@ const operatorId=value=>{
   if(n.includes('totalenergies'))return'totalenergies';
   if(n.includes('driveco'))return'driveco';
   if(n.includes('bouygues-energies'))return'bouygues-energies-services';
-  if(n.includes('easycharge'))return'easycharge';
+  if(n==='easycharge'||n.startsWith('easycharge-'))return'easycharge';
   if(n.includes('groupe-indigo')||n==='indigo')return'indigo';
   if(n.includes('allego'))return'allego';
   if(n.includes('spie-citynetworks'))return'spie-citynetworks';
@@ -83,9 +98,9 @@ for(const rule of directRules){
 function stationTokens(stationId){return new Set([stationId,`FR:national:${stationId}`,`irve-station:${stationId}`,`national:FR:${stationId}`,...(aliasesByStation.get(stationId)||[])]);}
 function exactStationRuleMatches(rule,tokens){return (rule.stationIds||[]).some(id=>tokens.has(String(id)));}
 function scopedRuleMatches(rule,{operator,network,kind,power}){
-  const op=operatorId(operator),net=operatorId(network);
-  const ops=[...(rule.operatorIds||[]),...(rule.operatorAliases||[])].map(operatorId).filter(v=>v&&v!=='unknown');
-  const nets=[...(rule.networkIds||[]),...(rule.networkAliases||[])].map(operatorId).filter(v=>v&&v!=='unknown');
+  const op=runtimeId(operator),net=runtimeId(network);
+  const ops=[...(rule.operatorIds||[]),...(rule.operatorAliases||[])].map(runtimeId).filter(v=>v&&v!=='unknown');
+  const nets=[...(rule.networkIds||[]),...(rule.networkAliases||[])].map(runtimeId).filter(v=>v&&v!=='unknown');
   if(ops.length||nets.length){if(!ops.includes(op)&&!nets.includes(net))return false;}
   const kinds=(rule.connectorKinds||[]).map(x=>String(x).toUpperCase());if(kinds.length&&!kinds.includes(kind))return false;
   const min=Number(rule.minPowerKw),max=Number(rule.maxPowerKw);if(Number.isFinite(min)&&power<min)return false;if(Number.isFinite(max)&&power>max)return false;return true;
@@ -104,7 +119,7 @@ for(const row of nationalRows){
     const kind=String(cfg?.[2]||'AC').toUpperCase(),power=Number(cfg?.[3]||0),pricing=cfg?.[5]||[],pdcs=uniq(Array.isArray(cfg?.[6])?cfg[6].map(String):[]);
     for(const pdc of pdcs){
       stats.pdcs++;if(nationalPdcSamples.length<12)nationalPdcSamples.push(pdc);
-      if(canonicalOperator==='tesla'){stats.teslaPdcs++;continue;}
+      if(runtimeId(operator)==='tesla'){stats.teslaPdcs++;continue;}
       stats.nonTeslaPdcs++;
       const direct=directMatches(stationId,pdc,{operator,network,kind,power}),providers=emspByPdc.get(pdc)||new Set(),normalizedProviders=emspByNormalizedPdc.get(pdcNorm(pdc))||new Set();
       const hasDirect=direct.length>0,hasDirectExact=direct.some(r=>r._matchScope==='pdc'||r._matchScope==='station'),hasDirectScoped=direct.some(r=>r._matchScope==='operator_or_network'),hasEv=providers.has('electroverse'),hasElectra=providers.has('electra'),hasEmsp=hasEv||hasElectra,hasNormalizedEmsp=normalizedProviders.size>0,hasFallback=pricing.length>0;
@@ -127,7 +142,7 @@ const actionBuckets={
 };
 const result={
   generatedFrom:{nationalGeneratedAt:nationalManifest.generatedAt,emspGeneratedAt:emspManifest.generatedAt||null,nationalStations:nationalManifest.stationCount,nationalPdcCount:nationalManifest.pdcCount,emspTileCount:(emspManifest.tiles||[]).length,emspRows:emspRows.length,emspRuleCount:emspRules.length,emspExactPdcCount:emspByPdc.size},
-  scope:{physicalInventory:'france-national',teslaExcludedFromNonTeslaCoverage:true,auditedNonTeslaPdcs:stats.nonTeslaPdcs,excludedTeslaPdcs:stats.teslaPdcs},
+  scope:{physicalInventory:'france-national',teslaExcludedFromNonTeslaCoverage:true,auditedNonTeslaPdcs:stats.nonTeslaPdcs,excludedTeslaPdcs:stats.teslaPdcs,applicabilityIdentity:'mirrors_data_engine_operatorId'},
   identityDiagnostics:{nationalPdcSamples,emspPdcSamples:[...emspByPdc.keys()].slice(0,12),exactOverlap:stats.withAnyEmsp,separatorInsensitiveOverlap:stats.withNormalizedEmspIdentity},
   exactPdcAudit:{...stats,percentOfNonTesla:{direct:pct(stats.withDirect),directExact:pct(stats.withDirectExact),directScoped:pct(stats.withDirectScoped),electroverse:pct(stats.withElectroverse),electra:pct(stats.withElectra),anyEmsp:pct(stats.withAnyEmsp),separatorInsensitiveEmspIdentity:pct(stats.withNormalizedEmspIdentity),directAndEmsp:pct(stats.withDirectAndEmsp),fallbackOnly:pct(stats.withFallbackOnly),noKnownTariff:pct(stats.withoutAnyKnownTariff)}},
   directSourcePdcHits:Object.fromEntries([...sourceHits.entries()].sort((a,b)=>b[1]-a[1])),topCoverageGapsByCanonicalOperator:topGaps,actionBuckets
@@ -145,3 +160,4 @@ assert.equal(emspRules.length,0,'legacy eMSP snapshot is expected to remain non-
 assert(stats.withFallbackOnly+stats.withoutAnyKnownTariff<=stats.nonTeslaPdcs,'fallback/unknown gap population cannot exceed audited non-Tesla PDC population');
 assert(!topGaps.some(x=>x.operatorId==='tesla'),'Tesla must not appear in non-Tesla tariff gap ranking');
 assert(!topGaps.some(x=>x.operatorId==='izivia'&&x.labels.length<2),'IZIVIA spelling variants should be canonicalized into one operator bucket');
+assert(!operatorRows.some(x=>x.operatorId==='easycharge'&&x.labels.some(v=>/Zunder/i.test(v))),'Zunder/Grupo Easycharger must not be conflated with EASYCHARGE France');
