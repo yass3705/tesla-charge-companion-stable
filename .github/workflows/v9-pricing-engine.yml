@@ -8,6 +8,7 @@ on:
       - 'assets/v9/session-engine.js'
       - 'assets/v9/offer-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
+      - 'tests/v9-pricing-window-segmentation.test.cjs'
       - 'tests/v9-qovoltis-pricing.test.cjs'
       - 'tests/v9-bump-pricing.test.cjs'
       - 'tests/v9-session-engine.test.cjs'
@@ -18,6 +19,7 @@ on:
       - 'assets/v9/session-engine.js'
       - 'assets/v9/offer-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
+      - 'tests/v9-pricing-window-segmentation.test.cjs'
       - 'tests/v9-qovoltis-pricing.test.cjs'
       - 'tests/v9-bump-pricing.test.cjs'
       - 'tests/v9-session-engine.test.cjs'
@@ -36,6 +38,7 @@ jobs:
         with:
           node-version: 22
       - run: node tests/v9-pricing-engine.test.cjs
+      - run: node tests/v9-pricing-window-segmentation.test.cjs
       - run: node tests/v9-qovoltis-pricing.test.cjs
       - run: node tests/v9-bump-pricing.test.cjs
       - run: node tests/v9-session-engine.test.cjs
