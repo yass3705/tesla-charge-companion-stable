@@ -91,7 +91,7 @@ jobs:
           assert u['policy']['conditionalFeeConditionsUseAndSemantics'] is True
           assert u['policy']['sessionDurationSurchargeSupported'] is True
           assert u['policy']['energyTimeBandsSupported'] is True
-          assert u['policy']['energyTimeBandCrossingFailsClosedUntilSessionSegmentation'] is True
+          assert u['policy']['energyTimeBandCrossingSegmentedByPricingEngine'] is True
           assert u['policy']['postChargeOccupancyTimeBandsSupported'] is True
           assert u['summary']['exactBumpAliases']==1886
           assert len(u['directOffers'])==u['summary']['offers']
