@@ -13,6 +13,7 @@
   const text=v=>String(v==null?'':v).trim();
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
   const money=v=>Math.round((Number(v)+Number.EPSILON)*1000000)/1000000;
+  const addMinutes=(value,minutes)=>{const d=value instanceof Date?new Date(value.getTime()):new Date(value);if(Number.isNaN(d.getTime()))return null;return new Date(d.getTime()+Number(minutes||0)*60000);};
 
   function fxRate(currency,targetCurrency,fxRates={}){
     const from=text(currency||targetCurrency||'EUR').toUpperCase(),to=text(targetCurrency||from).toUpperCase();
@@ -53,6 +54,47 @@
     };
   }
 
+  function timelineEnergy(pricing,session,timeZone){
+    const rows=Array.isArray(session.chargeTimeline)?session.chargeTimeline:[];
+    if(!rows.length||!session.startAt)return null;
+    let total=0;const segments=[];
+    for(const step of rows){
+      const offset=Math.max(0,num(step.offsetMinutes)??0),duration=Math.max(0,num(step.durationMinutes)??0),energy=Math.max(0,num(step.energyKwh)??0);
+      if(duration<=1e-9||energy<=0)continue;
+      let used=0;
+      while(used<duration-1e-9){
+        const at=addMinutes(session.startAt,offset+used);if(!at)return{complete:false,reason:'invalid_charge_timeline_start'};
+        const rule=PricingEngine.matchingRule(pricing,at,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule',segmentStartAt:at.toISOString()};
+        if(!PricingEngine.segmentableRule(rule))return{complete:false,reason:'tariff_window_crossing_unsupported_components',segmentStartAt:at.toISOString(),matchedRule:rule};
+        let boundary=PricingEngine.minutesUntilRuleBoundary(rule,at,timeZone);if(boundary==null)return{complete:false,reason:'unresolved_tariff_boundary'};
+        if(!Number.isFinite(boundary))boundary=duration-used;
+        const slice=Math.min(duration-used,Math.max(boundary,1e-6)),sliceEnergy=energy*(slice/duration),rate=num(rule.pricePerKwh),cost=rate==null?0:sliceEnergy*rate;
+        total+=cost;
+        segments.push({startAt:at.toISOString(),durationMinutes:money(slice),energyKwh:money(sliceEnergy),pricePerKwh:rate,costEur:money(cost),startSoc:num(step.startSoc),endSoc:num(step.endSoc),powerKw:num(step.powerKw),rule});
+        used+=slice;
+        if(segments.length>4096)return{complete:false,reason:'charge_timeline_segmentation_guard'};
+      }
+    }
+    return{complete:true,totalEur:money(total),segments};
+  }
+
+  function evaluateTimelineOffer(offer,session={}){
+    const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;
+    if(pricing.type!=='rules'||pricing.priceSelectionBasis==='session_start_local_time'||!Array.isArray(session.chargeTimeline)||!session.chargeTimeline.length||!session.startAt)return null;
+    const rule=PricingEngine.matchingRule(pricing,session.startAt,timeZone);if(!rule)return null;
+    const duration=Math.max(0,num(session.durationMinutes)??0),boundary=PricingEngine.minutesUntilRuleBoundary(rule,session.startAt,timeZone);
+    if(boundary==null||!Number.isFinite(boundary)||duration<=boundary+1e-9)return null;
+    const threshold=num(pricing.longConnectionFee?.thresholdMinutes);if(threshold!=null&&duration>threshold)return null;
+    const timeBase=PricingEngine.evaluateSegmentedRules(pricing,{...session,energyKwh:0},timeZone);if(timeBase.complete===false)return{...timeBase,offerId:text(offer?.id||offer?.offerId),timeZone};
+    const energyBase=timelineEnergy(pricing,session,timeZone);if(!energyBase||energyBase.complete===false)return energyBase?{...energyBase,offerId:text(offer?.id||offer?.offerId),timeZone}:null;
+    const conditional=PricingEngine.evaluateConditionalSessionFees(pricing.conditionalSessionFees,session);if(conditional.complete===false)return{complete:false,reason:conditional.reason,offerId:text(offer?.id||offer?.offerId),timeZone};
+    const post=PricingEngine.evaluatePostChargeFee(pricing.postChargeFee,session,timeZone);if(post.complete===false)return{complete:false,reason:post.reason,offerId:text(offer?.id||offer?.offerId),timeZone};
+    const total=timeBase.totalEur+energyBase.totalEur+conditional.totalEur+post.totalEur;
+    const components={...timeBase.components,energyTimeline:{segments:energyBase.segments,costEur:energyBase.totalEur},...(conditional.component?{conditionalSessionFees:conditional.component}:{}),...(post.component?{postCharge:post.component}:{})};
+    const finalized=PricingEngine.applyMinimumTotal(pricing,total,components);
+    return{complete:true,totalEur:finalized.totalEur,components:finalized.components,offerId:text(offer?.id||offer?.offerId),currency:offer?.currency||'EUR',matchedRule:rule,segmented:true,energyTimelineApplied:true,timeZone};
+  }
+
   function evaluateStation(station,session={},options={}){
     const selectedSubscriptions=options.selectedSubscriptions||session.selectedSubscriptions||[];
     const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode});
@@ -64,9 +106,10 @@
       const postChargeMinutes=Math.max(0,num(effectiveSession.postChargeMinutes)??0);
       const unknownPostCharge=offer?.pricing?.postChargeFeeUnknown===true||offer?.metadata?.postChargeFeeUnknown===true;
       const locked=evaluateSessionStartLockedOffer(offer,effectiveSession);
+      const timeline=locked?null:evaluateTimelineOffer(offer,effectiveSession);
       const result=unknownPostCharge&&postChargeMinutes>0
         ?{complete:false,reason:'post_charge_fee_unknown_for_station',offerId:text(offer.id||offer.offerId),postChargeMinutes}
-        :(locked||PricingEngine.evaluateOffer(offer,effectiveSession));
+        :(locked||timeline||PricingEngine.evaluateOffer(offer,effectiveSession));
       const currency=text(result.currency||offer.currency||'EUR').toUpperCase();
       const rate=result.complete?fxRate(currency,targetCurrency,fxRates):null;
       const comparable=result.complete&&rate!=null;
@@ -106,5 +149,5 @@
     return rows;
   }
 
-  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateSessionStartLockedOffer};
+  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateSessionStartLockedOffer,evaluateTimelineOffer,timelineEnergy};
 });
