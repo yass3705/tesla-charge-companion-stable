@@ -1,52 +1,28 @@
 (async function(){
   'use strict';
-  const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const status=$('status'),stationsEl=$('stations'),summary=$('summary'),subsEl=$('subs');
-  let engine=null,selectedSubscriptions=new Set();
+  const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+  const status=$('status'),stationsEl=$('stations'),summary=$('summary'),subsEl=$('subs');let engine=null;
   function setStatus(message,kind=''){status.className=kind||'muted';status.textContent=message;}
   function maxPower(st){let m=0;for(const e of st.evses||[])for(const c of e.connectors||[])m=Math.max(m,Number(c.powerKw||0));return m;}
-  function priceLabel(o){const p=o.pricing||{};if(p.pricePerKwh!=null)return `${Number(p.pricePerKwh).toFixed(3)} ${o.currency||'EUR'}/kWh`;const rs=p.rules||[];const vals=[...new Set(rs.map(r=>r.pricePerKwh).filter(v=>v!=null))];return vals.length?`${vals.map(v=>Number(v).toFixed(3)).join(' / ')} ${o.currency||'EUR'}/kWh`:p.type||'prix exact requis';}
-  function renderSubscriptions(subscriptions){
-    subsEl.innerHTML=subscriptions?.length?subscriptions.map(s=>`<label class="chip"><input type="checkbox" data-sub="${esc(s.id)}" ${selectedSubscriptions.has(s.id)?'checked':''}> ${esc(s.provider)} · ${s.countryCount??'global'} pays</label>`).join(''):'<span class="muted">Aucun abonnement pour ce filtre.</span>';
-    subsEl.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('change',()=>{if(el.checked)selectedSubscriptions.add(el.dataset.sub);else selectedSubscriptions.delete(el.dataset.sub);$('selectedSummary').textContent=selectedSubscriptions.size?`${selectedSubscriptions.size} abonnement(s) sélectionné(s) · relance le chargement pour appliquer les tarifs.`:'Aucun abonnement sélectionné.';}));
-    $('selectedSummary').textContent=selectedSubscriptions.size?`${selectedSubscriptions.size} abonnement(s) sélectionné(s).`:'Aucun abonnement sélectionné.';
-  }
-  function offerHtml(o){return`<div class="offer">${esc(o.provider)} — ${esc(o.kind)} — ${esc(priceLabel(o))}${o.subscriptionId?' · abonnement':''}${o.metadata?.crossBorderResolved?' · cross-border':''}${o.metadata?.verified?' · vérifié':''}</div>`;}
-  function advisoryHtml(o){const reason=o.metadata?.reason?` · ${esc(o.metadata.reason)}`:'';return`<div class="offer muted">ℹ ${esc(o.provider)} — ${esc(priceLabel(o))} · indicatif, non classable${reason}</div>`;}
+  function priceLabel(o){const p=o.pricing||{};if(p.pricePerKwh!=null)return`${Number(p.pricePerKwh).toFixed(3)} ${o.currency||'EUR'}/kWh`;const rs=p.rules||[],vals=[...new Set(rs.map(r=>r.pricePerKwh).filter(v=>v!=null))];return vals.length?`${vals.map(v=>Number(v).toFixed(3)).join(' / ')} ${o.currency||'EUR'}/kWh`:p.type||'prix exact requis';}
+  function fmt(v,d=1){return v==null?'—':Number(v).toFixed(d);}
+  function selectedIds(){return $('selectedSubscriptions').value.split(',').map(x=>x.trim()).filter(Boolean);}
+  function setSelectedIds(ids){$('selectedSubscriptions').value=[...new Set(ids.filter(Boolean))].join(',');}
+  function renderSubscriptions(rows){const selected=new Set(selectedIds());subsEl.innerHTML=rows?.length?rows.map(s=>`<label class="chip"><input type="checkbox" data-sub="${esc(s.id)}" ${selected.has(s.id)?'checked':''}> ${esc(s.provider)} · ${s.countryCount==null?'global':s.countryCount+' pays'}</label>`).join(''):'<span class="muted">Aucun abonnement pour ce filtre.</span>';subsEl.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('change',()=>{const next=new Set(selectedIds());if(el.checked)next.add(el.dataset.sub);else next.delete(el.dataset.sub);setSelectedIds([...next]);}));}
+  function advisoryHtml(o){const reason=o.metadata?.reason?` · ${esc(o.metadata.reason)}`:'';return`<div class="offer advisory">ℹ ${esc(o.provider)} — ${esc(priceLabel(o))} · indicatif, non classable${reason}</div>`;}
   function render(area){
-    const stations=area.stations||[];summary.textContent=`${stations.length} stations · ${area.operators?.length||0} opérateurs · ${area.subscriptions?.length||0} abonnements · ${area.selectedSubscriptions?.length||0} sélectionné(s)`;
+    const stations=area.rankedStations||area.stations||[],vp=area.vehicleProfile,es=area.effectiveSession||{},missed=area.diagnostics?.targetMissedStationCount||0;
+    summary.textContent=`${(area.stations||[]).length} stations · ${area.operators?.length||0} opérateurs · ${area.subscriptions?.length||0} abonnements · ${area.selectedSubscriptions?.length||0} sélectionné(s) · ${area.diagnostics?.routedStationCount||0}/${area.diagnostics?.routingRequestedCount||0} routées · ${area.diagnostics?.fullyScoredStationCount||0} complètement scorées · ${missed} objectif(s) SOC non atteignable(s)${vp?' · profil '+vp.label:''}`;
     renderSubscriptions(area.subscriptions||[]);
-    stationsEl.innerHTML=stations.slice(0,100).map(st=>`<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div>${(st.rankableOffers||st.eligibleOffers||st.offers||[]).map(offerHtml).join('')}${(st.subscriptionAdvisories||[]).map(advisoryHtml).join('')}</div>`).join('')||'<span class="muted">Aucune station.</span>';
+    stationsEl.innerHTML=stations.slice(0,100).map(st=>{const ev=area.sessionEvaluations?.[st.id],best=ev?.best,score=area.stationScores?.[st.id],route=area.routes?.byStationId?.[st.id],cm=score?.chargeModel,plan=area.sessionPlans?.[st.id];return `<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div>${best?`<div class="best">Meilleur : ${esc(best.provider)}${best.subscriptionId?' · '+esc(best.subscriptionId):''} · ${Number(best.total).toFixed(2)} ${esc(best.targetCurrency)}${best.costPerRecoveredKm!=null?' · '+Number(best.costPerRecoveredKm).toFixed(4)+' €/km récupéré':''}</div>`:'<div class="best muted">Aucune offre comparable pour cette session</div>'}${plan?`<div class="offer ${plan.targetReached?'ok':'warn'}">SOC · arrivée ${fmt(plan.arrivalSoc)}% · cible demandée ${fmt(plan.requestedTargetSoc)}% · atteinte ${fmt(plan.actualTargetSoc)}% · énergie délivrée ${fmt(plan.deliveredEnergyKwh,2)} kWh${plan.targetReached?' · objectif atteint':' · limité par heure de débranchement'}</div>`:''}${score?`<div class="offer">Score · coût ${fmt(score.finalCost,2)} € · distance ${fmt(score.distanceKm)} km · trajet ${fmt(score.driveMinutes)} min · charge ${fmt(score.chargingMinutes)} min · occupation après charge ${fmt(score.postChargeMinutes)} min · total ${fmt(score.totalTimeMinutes)} min</div>`:''}${cm?`<div class="offer">Recharge ${esc(cm.profile||'')} · ${esc(cm.chargingKind||'')} · limite véhicule ${fmt(cm.vehicleLimitKw)} kW · puissance moyenne ${fmt(cm.averagePowerKw)} kW</div>`:''}${route?`<div class="offer">Routage ${esc(route.provider||'')} · énergie pour atteindre la borne ${fmt(route.approachEnergyKwh,2)} kWh</div>`:''}${ev?`<div class="offer">Énergie facturée ${fmt(ev.billedEnergyKwh,2)} kWh · autonomie récupérée ${fmt(ev.recoveredKm)} km</div>`:''}${(st.offers||[]).map(o=>`<div class="offer">${esc(o.provider)} — ${esc(o.kind)} — ${esc(priceLabel(o))}${o.subscriptionId?' · abonnement':''}${o.metadata?.crossBorderResolved?' · cross-border':''}${o.metadata?.verified?' · vérifié':''}</div>`).join('')}${(st.subscriptionAdvisories||[]).map(advisoryHtml).join('')}</div>`;}).join('')||'<span class="muted">Aucune station.</span>';
+    if(vp)setStatus(`Profil ${vp.label} · ${fmt(es.batteryCapacityKwh)} kWh · ${fmt(es.consumptionKwhPer100Km)} kWh/100 km · AC ${fmt(es.vehicleMaxAcKw)} kW · DC ${fmt(es.vehicleMaxDcKw)} kW.`,'ok');
   }
   try{
-    const [registry,policy,fastned,ionity]=await Promise.all([
-      fetch('../data/v9/source-registry.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`registre ${r.status}`);return r.json();}),
-      fetch('../data/v9/germany-cross-border-subscriptions.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`politique cross-border ${r.status}`);return r.json();}),
-      fetch('../data/v9/fastned-gold-country-prices.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`matrice Fastned ${r.status}`);return r.json();}),
-      fetch('../data/v9/ionity-monthly-country-prices.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`matrice IONITY ${r.status}`);return r.json();})
-    ]);
-    const adapters={
-      teslaJson:window.TCCV9Adapters.teslaJson,
-      nationalCompact:window.TCCV9Adapters.nationalCompact,
-      directOffers:window.TCCV9Adapters.directOffers,
-      legacyDirectTariffs:window.TCCV9Adapters.legacyDirectTariffs,
-      legacyDirectStations:window.TCCV9Adapters.legacyDirectStations,
-      franceEmspCompact:window.TCCV9Adapters.franceEmspCompact,
-      franceCrosswalk:window.TCCV9Adapters.franceCrosswalk,
-      franceIrveStatus:window.TCCV9Adapters.franceIrveStatus
-    };
-    const loaders=window.TCCV9BrowserLoaders.createRegistryLoaders({registry,basePath:'..',adapters});
-    engine=window.TCCV9RuntimeEngine.createEngine({registry,loaders,crossBorderPricing:{policy,fastned,ionity}});
-    setStatus(`Moteur V9 prêt · ${Object.keys(loaders).length} sources navigateur actives · résolution cross-border active en preview.`,'ok');
+    const [registry,vehicleProfiles,policy,fastned,ionity]=await Promise.all([fetch('../data/v9/source-registry.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`registre ${r.status}`);return r.json();}),fetch('../data/v9/vehicle-profiles.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`profils véhicule ${r.status}`);return r.json();}),fetch('../data/v9/germany-cross-border-subscriptions.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`politique cross-border ${r.status}`);return r.json();}),fetch('../data/v9/fastned-gold-country-prices.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`matrice Fastned ${r.status}`);return r.json();}),fetch('../data/v9/ionity-monthly-country-prices.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`matrice IONITY ${r.status}`);return r.json();})]);
+    const adapters={teslaJson:window.TCCV9Adapters.teslaJson,nationalCompact:window.TCCV9Adapters.nationalCompact,directOffers:window.TCCV9Adapters.directOffers,legacyDirectTariffs:window.TCCV9Adapters.legacyDirectTariffs,legacyDirectStations:window.TCCV9Adapters.legacyDirectStations,franceEmspCompact:window.TCCV9Adapters.franceEmspCompact,franceCrosswalk:window.TCCV9Adapters.franceCrosswalk,franceIrveStatus:window.TCCV9Adapters.franceIrveStatus};
+    const loaders=window.TCCV9BrowserLoaders.createRegistryLoaders({registry,basePath:'..',adapters}),routeProvider=window.TCCV9BrowserRouting.osrmProvider();engine=window.TCCV9RuntimeEngine.createEngine({registry,loaders,routeProvider,vehicleProfiles,crossBorderPricing:{policy,fastned,ionity}});
+    const profiles=engine.vehicleProfiles();$('vehicleProfile').innerHTML=profiles.map(p=>`<option value="${esc(p.id)}">${esc(p.label)}</option>`).join('');setStatus(`Moteur V9 prêt · ${Object.keys(loaders).length} sources · ${profiles.length} profil(s) véhicule · routage OSRM · cross-border actif en preview.`,'ok');
   }catch(err){setStatus(`Initialisation impossible : ${err.message}`,'err');return;}
-  $('country').addEventListener('change',()=>{if($('country').value==='NL'){$('lat').value='51.4416';$('lon').value='5.4697';}else{$('lat').value='48.798';$('lon').value='2.061';}});
-  $('load').addEventListener('click',async()=>{
-    try{
-      setStatus('Chargement des sources et fusion V9…');stationsEl.innerHTML='';
-      const countryCode=$('country').value,lat=Number($('lat').value),lon=Number($('lon').value),radiusKm=Number($('radius').value||15);
-      const countryCodes=$('subCountries').value.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);
-      const area=await engine.queryArea({countryCode,origin:{lat,lon},radiusKm,filters:{},selectedSubscriptions:[...selectedSubscriptions],subscriptionFilters:{minCountries:Number($('minCountries').value||1),countryCodes,coverageMode:'all'}});
-      render(area);setStatus(`Fusion terminée. ${area.diagnostics?.errors?.length||0} erreur(s) source.`,(area.diagnostics?.errors?.length||0)?'err':'ok');
-    }catch(err){setStatus(`Erreur : ${err.message}`,'err');}
-  });
+  $('country').addEventListener('change',()=>{const c=$('country').value;if(c==='NL'){$('lat').value='51.4416';$('lon').value='5.4697';$('subCountries').value='NL';}else if(c==='IT'){$('lat').value='41.9028';$('lon').value='12.4964';$('subCountries').value='IT';}else{$('lat').value='48.798';$('lon').value='2.061';$('subCountries').value='FR';}});
+  $('load').addEventListener('click',async()=>{try{setStatus('Chargement, fusion, routage, planification SOC, tarification et scoring V9…');stationsEl.innerHTML='';const countryCode=$('country').value,lat=Number($('lat').value),lon=Number($('lon').value),radiusKm=Number($('radius').value||15),countryCodes=$('subCountries').value.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean),selectedSubscriptions=selectedIds(),session={startSoc:Number($('startSoc').value),targetSoc:Number($('targetSoc').value),targetCurrency:'EUR',startAt:$('startAt').value||null,disconnectAt:$('disconnectAt').value||null};const area=await engine.queryArea({countryCode,origin:{lat,lon},radiusKm,filters:{},vehicleProfileId:$('vehicleProfile').value,subscriptionFilters:{minCountries:Number($('minCountries').value||1),countryCodes,coverageMode:'all'},selectedSubscriptions,session,sortBy:$('sortBy').value});render(area);const re=area.diagnostics?.routingErrorCount||0,se=area.diagnostics?.errors?.length||0;if(se||re)setStatus(`Terminé · ${area.diagnostics?.routedStationCount||0} routes · ${se} erreur(s) source · ${re} erreur(s) routage.`,'err');}catch(err){setStatus(`Erreur : ${err.message}`,'err');}});
 })();
