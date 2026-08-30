@@ -8,6 +8,8 @@ TILE=.5
 def t(v): return str(v or '').strip()
 def n(v):
  s=unicodedata.normalize('NFKD',t(v));s=''.join(c for c in s if not unicodedata.combining(c)).lower();return re.sub(r'[^a-z0-9]+','_',s).strip('_')
+def is_tesla_operator(v):
+ x=n(v);return x=='tesla' or x.startswith('tesla_')
 def tile(lat,lon):
  a=math.floor(lat/TILE)*TILE;b=math.floor(lon/TILE)*TILE;fmt=lambda x:str(round(x*2)).replace('-','m');return f't_{fmt(a)}_{fmt(b)}'
 def site_key(r): return '|'.join([n(r[5]),n(r[2]),f'{float(r[3]):.6f}',f'{float(r[4]):.6f}'])
@@ -26,7 +28,11 @@ def commissioning_date(v):
 def main():
  a=argparse.ArgumentParser();a.add_argument('--input-root',required=True);a.add_argument('--input-crosswalk',required=True);a.add_argument('--out',required=True);a.add_argument('--crosswalk',required=True);x=a.parse_args()
  inp=Path(x.input_root);all_rows=loadgz(inp/'all.json.gz');cw=json.loads(Path(x.input_crosswalk).read_text());entry_by_id={str(e['bnetzaId']):e for e in cw.get('entries',[])}
- excluded_tesla=[r for r in all_rows if n(r[5])=='tesla'];rows=[r for r in all_rows if n(r[5])!='tesla']
+ def facility_is_tesla(r):
+  if is_tesla_operator(r[5]):return True
+  e=entry_by_id.get(str(r[0]),{})
+  return is_tesla_operator(e.get('rawOperator'))
+ excluded_tesla=[r for r in all_rows if facility_is_tesla(r)];rows=[r for r in all_rows if not facility_is_tesla(r)]
  groups=defaultdict(list)
  for r in rows: groups[site_key(r)].append(r)
  outrows=[];outcw=[];multi=0;maxfac=0;facility_count=0;evse_total=0
