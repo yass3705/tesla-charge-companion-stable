@@ -10,6 +10,12 @@ on:
       - 'scripts/test_germany_country_price_matrices_v9.py'
       - 'scripts/resolve_v9_cross_border_tariff.py'
       - 'scripts/test_v9_cross_border_tariff_resolver.py'
+      - 'assets/v9/cross-border-subscriptions.js'
+      - 'assets/v9/runtime-engine.js'
+      - 'v9-preview/app.js'
+      - 'v9-preview/index.html'
+      - 'tests/v9-cross-border-runtime.test.cjs'
+      - 'tests/v9-runtime-engine.test.cjs'
       - '.github/workflows/germany-cross-border-v9-contract.yml'
   workflow_dispatch:
 
@@ -24,6 +30,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Validate Germany cross-border subscriptions
         run: python scripts/test_germany_cross_border_subscriptions_v9.py
       - name: Validate Fastned and IONITY country price matrices
@@ -34,3 +43,7 @@ jobs:
         run: |
           python scripts/resolve_v9_cross_border_tariff.py fastned-gold FR
           python scripts/resolve_v9_cross_border_tariff.py ionity-power FR
+      - name: Validate browser/runtime cross-border integration
+        run: node tests/v9-cross-border-runtime.test.cjs
+      - name: Regression-test V9 runtime engine
+        run: node tests/v9-runtime-engine.test.cjs
