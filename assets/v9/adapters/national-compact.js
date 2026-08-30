@@ -48,11 +48,11 @@
     return{kind:'ocpi',limited:!(shown.length===1&&shown[0][0]==='00:00'&&shown[0][1]==='24:00'),date:dateStr,intervals:shown,parkingType,parkingRestrictions,raw:clone(compact)};
   }
 
-  function statusFromValue(value,sourceId,updatedAt){const v=text(value).toUpperCase();return{state:v==='IN_SERVICE'||v==='AVAILABLE'?'available':v==='OUT_OF_SERVICE'||v==='INOPERATIVE'||v==='OUTOFORDER'?'out_of_service':'unknown',sourceId,updatedAt:updatedAt||null};}
+  function statusFromValue(value,sourceId,updatedAt){const v=text(value).toUpperCase();return{state:v==='IN_SERVICE'||v==='AVAILABLE'||v==='OPERATIONAL'?'available':v==='OUT_OF_SERVICE'||v==='INOPERATIVE'||v==='OUTOFORDER'||v==='NON_OPERATIONAL'?'out_of_service':'unknown',sourceId,updatedAt:updatedAt||null};}
 
   function normalizeRow(row,{countryCode,sourceId,schemaVersion=1,queryDate}={}){
     if(!Array.isArray(row)||!row[0])return null;
-    const cc=text(countryCode).toUpperCase(),isNl=cc==='NL',isFr=cc==='FR';
+    const cc=text(countryCode).toUpperCase(),isNl=cc==='NL',isFr=cc==='FR',isIt=cc==='IT';
     const dateStr=queryDate||new Date().toISOString().slice(0,10),d=new Date(`${dateStr}T12:00:00`),dayIndex=Number.isFinite(d.getTime())?d.getDay():new Date().getDay();
     const stationId=text(row[0]),configs=row[8]||[],evses=[],offers=[];
     for(const [index,c] of configs.entries()){
@@ -62,14 +62,14 @@
       if(pricing.rules.length)offers.push({id:`${sourceId}:${stationId}:${cfgId}`,provider,kind:'national_fallback',subscriptionId:null,countries:[countryCode],currency:pricing.rules[0]?.currency||'EUR',evseIds:uniq([cfgId,...pdcIds]),pricing});
     }
     const aliases=[`${sourceId}:${stationId}`,`national:${cc}:${stationId}`];if(isFr)aliases.push(`irve-station:${stationId}`);
-    const networkBrand=isFr?text(row[10]||row[5]):text(row[5]);
+    const networkBrand=isFr?text(row[10]||row[5]):isIt?text(row[11]||row[5]):text(row[5]);
     return{
       canonicalId:`${cc}:national:${stationId}`,
       aliases,
       sourceStationId:stationId,countryCode:cc,name:text(row[1]||row[2])||`Station ${countryCode}`,address:text(row[2]),
       latitude:Number(row[3]),longitude:Number(row[4]),physicalOperator:{name:text(row[5])||'Unknown'},networkBrand,
       evses,access:isNl?netherlandsAccess(row[7],dateStr):franceAccess(row[7]),
-      status:isNl?statusFromValue(row[10],sourceId,row[9]):{state:'unknown',sourceId,updatedAt:row[9]||null},
+      status:(isNl||isIt)?statusFromValue(row[10],sourceId,row[9]):{state:'unknown',sourceId,updatedAt:row[9]||null},
       offers,updatedAt:row[9]||null,legacy:{schemaVersion,stalls:Number(row[6]||0)}
     };
   }

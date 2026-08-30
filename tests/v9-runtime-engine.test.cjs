@@ -24,7 +24,13 @@ const engine=Runtime.createEngine({registry,loaders:{
 }});
 
 (async()=>{
-  const area=await engine.queryArea({countryCode:'FR',subscriptionFilters:{minCountries:2}});
+  const area=await engine.queryArea({
+    countryCode:'FR',
+    subscriptionFilters:{minCountries:2},
+    selectedSubscriptions:['atlante-plus','fastned-gold'],
+    session:{energyKwh:20,consumptionKwhPer100Km:15,targetCurrency:'EUR'},
+    sortBy:'costPerRecoveredKm'
+  });
   assert.equal(area.stations.length,2);
   const powerdot=area.stations.find(x=>x.physicalOperator.id==='powerdot');
   assert.equal(powerdot.offers.filter(o=>o.kind==='roaming').length,1,'runtime must dedupe equivalent eMSP offers');
@@ -40,5 +46,12 @@ const engine=Runtime.createEngine({registry,loaders:{
   assert.equal(area.routingCandidates.length,2);
   const selected=engine.eligibleOffers(powerdot,['atlante-plus']);
   assert.ok(selected.some(o=>o.subscriptionId==='atlante-plus'));
-  console.log(JSON.stringify({ok:true,module:'tcc-v9-runtime-engine',stations:area.stations.length,subscriptions:area.subscriptions.map(x=>({id:x.id,countries:x.countries}))},null,2));
+  assert.equal(area.diagnostics.sessionEvaluatedStationCount,2);
+  assert.equal(area.diagnostics.sessionComparableStationCount,2);
+  assert.ok(area.sessionEvaluations[powerdot.id]);
+  assert.equal(area.sessionEvaluations[powerdot.id].best.subscriptionId,'atlante-plus');
+  assert.equal(area.sessionEvaluations[powerdot.id].best.total,7.8);
+  assert.equal(area.sessionEvaluations[powerdot.id].best.costPerRecoveredKm,0.0585);
+  assert.equal(area.rankedStations[0].id,powerdot.id,'cheapest recovered-km station should rank first');
+  console.log(JSON.stringify({ok:true,module:'tcc-v9-runtime-engine',stations:area.stations.length,subscriptions:area.subscriptions.map(x=>({id:x.id,countries:x.countries})),best:area.sessionEvaluations[powerdot.id].best},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});

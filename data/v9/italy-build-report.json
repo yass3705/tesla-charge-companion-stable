@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-08-30T11:14:39.750794Z",
+  "stations": 29696,
+  "tiles": 72,
+  "directOffers": 48409,
+  "subscriptionOffers": 48330,
+  "emspOffers": 2281,
+  "sourceCounts": {
+    "punEvseCount": 75025,
+    "punStationCount": 29696,
+    "rankableDirectEvseCount": 48409,
+    "rankableDirectCoveragePct": 64.52,
+    "rankableDirectByOperator": {
+      "A2A e-moving": 5618,
+      "Duferco Mobility": 1648,
+      "Enel X Way": 22783,
+      "Plenitude On The Road": 18360
+    },
+    "rankableSelectedSubscriptionEvseCount": 25547,
+    "rankableSelectedSubscriptionCoveragePct": 34.05,
+    "rankableSelectedSubscriptionByOffer": {
+      "atlante_go:Atlante": 1937,
+      "atlante_go:ChargeLeague": 827,
+      "enel_plug_and_go_explorer:Enel X Way": 22783,
+      "enel_plug_and_go_super:Enel X Way": 22783
+    },
+    "rankableEmspEvseCount": 2281,
+    "rankableEmspCoveragePct": 3.04,
+    "rankableEmspByProvider": {
+      "NextCharge": 2281
+    },
+    "blockedReasons": {
+      "ges_nextcharge:not_rankable_emsp": 35,
+      "plenitude:official_summer_offer_exclusion": 1362
+    }
+  },
+  "enelDirectOffers": 22783,
+  "enelSubscriptionOffers": {
+    "enel_plug_and_go_super": 22783,
+    "enel_plug_and_go_explorer": 22783
+  }
+}

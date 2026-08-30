@@ -1,0 +1,33 @@
+name: V9 Italy functional QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - qa/italy-v9-functional
+    paths:
+      - tests/v9-italy-functional-qa.test.cjs
+      - .github/workflows/v9-italy-functional-qa.yml
+      - assets/v9/**
+      - data/v9/italy-**
+  pull_request:
+    paths:
+      - tests/v9-italy-functional-qa.test.cjs
+      - .github/workflows/v9-italy-functional-qa.yml
+      - assets/v9/**
+      - data/v9/italy-**
+
+permissions:
+  contents: read
+
+jobs:
+  functional-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run Italy real-data functional QA
+        run: node tests/v9-italy-functional-qa.test.cjs

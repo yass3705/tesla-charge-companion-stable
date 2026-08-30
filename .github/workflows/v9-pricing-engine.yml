@@ -5,12 +5,30 @@ on:
     branches: ['refactor/unified-data-engine-v9']
     paths:
       - 'assets/v9/pricing-engine.js'
+      - 'assets/v9/session-engine.js'
+      - 'assets/v9/charge-model-engine.js'
+      - 'assets/v9/session-planner-engine.js'
+      - 'assets/v9/offer-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
+      - 'tests/v9-pricing-window-segmentation.test.cjs'
+      - 'tests/v9-energy-timeline-pricing.test.cjs'
+      - 'tests/v9-qovoltis-pricing.test.cjs'
+      - 'tests/v9-bump-pricing.test.cjs'
+      - 'tests/v9-session-engine.test.cjs'
       - '.github/workflows/v9-pricing-engine.yml'
   pull_request:
     paths:
       - 'assets/v9/pricing-engine.js'
+      - 'assets/v9/session-engine.js'
+      - 'assets/v9/charge-model-engine.js'
+      - 'assets/v9/session-planner-engine.js'
+      - 'assets/v9/offer-engine.js'
       - 'tests/v9-pricing-engine.test.cjs'
+      - 'tests/v9-pricing-window-segmentation.test.cjs'
+      - 'tests/v9-energy-timeline-pricing.test.cjs'
+      - 'tests/v9-qovoltis-pricing.test.cjs'
+      - 'tests/v9-bump-pricing.test.cjs'
+      - 'tests/v9-session-engine.test.cjs'
   workflow_dispatch:
 
 permissions:
@@ -26,3 +44,8 @@ jobs:
         with:
           node-version: 22
       - run: node tests/v9-pricing-engine.test.cjs
+      - run: node tests/v9-pricing-window-segmentation.test.cjs
+      - run: node tests/v9-energy-timeline-pricing.test.cjs
+      - run: node tests/v9-qovoltis-pricing.test.cjs
+      - run: node tests/v9-bump-pricing.test.cjs
+      - run: node tests/v9-session-engine.test.cjs
