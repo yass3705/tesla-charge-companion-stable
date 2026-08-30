@@ -101,7 +101,7 @@ jobs:
           print(json.dumps({'grouped':{k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},'megaSiteAudit':mega[:10]},indent=2,ensure_ascii=False))
           PY
       - name: Audit operator canonicalization coverage
-        run: python scripts/audit_germany_operator_normalization_v9.py --min-coverage 0.35
+        run: python scripts/audit_germany_operator_normalization_v9.py --min-coverage 0.47
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
         with:
