@@ -7,6 +7,6 @@
   "salt": "tcc-v9-rollout-v1",
   "v8Path": "./",
   "previewPath": "v9-preview/",
-  "productionPath": "v9-preview/",
-  "notes": "V8 remains production. Canary is disabled until an explicit promotion after readiness review."
+  "productionPath": "v9-app/",
+  "notes": "V8 remains production. Canary is disabled at 0%. v9-app is an isolated production candidate, distinct from v9-preview."
 }
