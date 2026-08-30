@@ -37,6 +37,7 @@ jobs:
           node --check assets/v9/offer-engine.js
           node --check assets/v9/pricing-engine.js
           node --check assets/v9/session-engine.js
+          node --check assets/v9/vehicle-profile-engine.js
           node --check assets/v9/charge-model-engine.js
           node --check assets/v9/station-score-engine.js
           node --check assets/v9/routing-engine.js
@@ -54,6 +55,7 @@ jobs:
           node --check tests/v9-france-coverage-audit.cjs
           node --check tests/v9-france-direct-identity-audit.cjs
           node --check tests/v9-ionity-crosswalk-audit.cjs
+          node --check tests/v9-vehicle-profile-engine.test.cjs
           node --check tests/v9-charge-model-engine.test.cjs
           node --check tests/v9-station-score-engine.test.cjs
           node --check tests/v9-charge-score-integration.test.cjs
@@ -86,7 +88,9 @@ jobs:
           }
           if(r.rules.mergeBeforePrune!==true||r.rules.operatorsDerivedFromFinalStations!==true||r.rules.sourceMayRemoveForeignEntities!==false)throw new Error('V9 invariants missing');
           if(r.rules.exactCrosswalkBeforeFuzzyMatching!==true||r.rules.dynamicStatusMustBeFresh!==true)throw new Error('France V9 safety invariants missing');
-          console.log(`V9 registry OK: ${ids.length} sources`);
+          const vehicles=JSON.parse(fs.readFileSync('data/v9/vehicle-profiles.json','utf8'));
+          if(vehicles.schemaVersion!==1||!Array.isArray(vehicles.profiles)||!vehicles.profiles.length)throw new Error('invalid vehicle profile catalog');
+          console.log(`V9 registry OK: ${ids.length} sources · ${vehicles.profiles.length} vehicle profile(s)`);
           NODE
       - name: Core invariants
         run: node tests/v9-data-engine.test.cjs
@@ -131,6 +135,8 @@ jobs:
           retention-days: 7
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
+      - name: Unified vehicle profiles
+        run: node tests/v9-vehicle-profile-engine.test.cjs
       - name: SOC-aware charge model
         run: node tests/v9-charge-model-engine.test.cjs
       - name: Station scoring
