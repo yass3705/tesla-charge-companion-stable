@@ -8,6 +8,8 @@ on:
       - 'data/v9/ionity-monthly-country-prices.json'
       - 'scripts/test_germany_cross_border_subscriptions_v9.py'
       - 'scripts/test_germany_country_price_matrices_v9.py'
+      - 'scripts/resolve_v9_cross_border_tariff.py'
+      - 'scripts/test_v9_cross_border_tariff_resolver.py'
       - '.github/workflows/germany-cross-border-v9-contract.yml'
   workflow_dispatch:
 
@@ -26,3 +28,9 @@ jobs:
         run: python scripts/test_germany_cross_border_subscriptions_v9.py
       - name: Validate Fastned and IONITY country price matrices
         run: python scripts/test_germany_country_price_matrices_v9.py
+      - name: Validate cross-border tariff resolver
+        run: python scripts/test_v9_cross_border_tariff_resolver.py
+      - name: Smoke-test resolver CLI
+        run: |
+          python scripts/resolve_v9_cross_border_tariff.py fastned-gold FR
+          python scripts/resolve_v9_cross_border_tariff.py ionity-power FR
