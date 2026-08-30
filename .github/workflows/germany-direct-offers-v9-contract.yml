@@ -5,6 +5,7 @@ on:
     paths:
       - 'data/v9/germany-direct-offers.json'
       - 'data/v9/germany-direct-offers-aral-extension.json'
+      - 'data/v9/germany-direct-offers-enbw-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
