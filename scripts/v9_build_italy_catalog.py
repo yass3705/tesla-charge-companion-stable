@@ -56,7 +56,6 @@ def access_rows(opening: Any) -> list[list[Any]]:
             weekday = int(weekday)
         except (TypeError, ValueError):
             continue
-        # OCPI weekdays are 1=Monday..7=Sunday; JS Date is 0=Sunday..6=Saturday.
         day = weekday % 7 if 1 <= weekday <= 7 else weekday
         if not 0 <= day <= 6:
             continue
@@ -137,7 +136,6 @@ def post_charge_fee(tariff: dict[str, Any]) -> dict[str, Any] | None:
     if rate is None or rate <= 0 or not policy:
         return None
     text = json.dumps(policy, ensure_ascii=False).lower() if isinstance(policy, (dict, list)) else str(policy).lower()
-    # Fail closed unless policy text clearly describes an idle/post-charge fee.
     if not any(token in text for token in ("idle", "post", "after", "occup", "sosta")):
         return None
     grace = 0
@@ -195,13 +193,19 @@ def build_offers(evses: list[dict[str, Any]], payload: dict[str, Any], generated
                 "metadata": {"network": s.get("network"), "channel": "subscription", "mustNotOverwriteDirectTariff": bool(s.get("mustNotOverwriteDirectTariff", True))},
             })
         for m in evse.get("tccV9EmspTariffs") or []:
-            if m.get("rankable") is not True or m.get("rankableAsCpoDirect") is not False:
+            if not isinstance(m, dict) or m.get("channel") != "emsp" or m.get("rankable") is not True:
+                continue
+            # Consolidation guarantees this layer is NextCharge/eMSP and never CPO-direct.
+            if m.get("rankableAsCpoDirect") is True:
+                continue
+            if str(m.get("currency") or "EUR").upper() != "EUR":
                 continue
             prices = m.get("prices") or {}
-            energy = finite(prices.get("energyEurPerKwh"))
-            time_rate = finite(prices.get("timeEurPerMin")) or 0
-            parking_rate = finite(prices.get("parkingEurPerMin")) or 0
-            session_fee = finite(prices.get("sessionEur")) or 0
+            # Consolidated schema deliberately keeps canonical component names.
+            energy = finite(prices.get("energy"))
+            time_rate = finite(prices.get("time")) or 0
+            parking_rate = finite(prices.get("parking")) or 0
+            session_fee = finite(prices.get("session")) or 0
             if energy is None and not time_rate and not parking_rate and not session_fee:
                 continue
             rule: dict[str, Any] = {"scope": "allDay", "start": "00:00", "end": "24:00", "currency": "EUR"}
@@ -215,7 +219,7 @@ def build_offers(evses: list[dict[str, Any]], payload: dict[str, Any], generated
                 "id": f"it:emsp:{str(m.get('provider') or 'emsp').lower()}:{eid}",
                 **exact_offer_common(eid, str(m.get("provider") or "eMSP"), str(m.get("source") or "validated eMSP source"), 90),
                 "pricing": {"type": "rules", "rules": [rule]},
-                "metadata": {"channel": "emsp", "billedBy": m.get("billedBy"), "restrictions": m.get("restrictions") or {}, "originalPrices": prices, "rankableAsCpoDirect": False},
+                "metadata": {"channel": "emsp", "billedBy": m.get("billedBy"), "restrictions": m.get("restrictions") or {}, "originalPrices": prices, "rankableAsCpoDirect": False, "mustNotOverwriteDirectOrSelectedSubscription": bool(m.get("mustNotOverwriteDirectOrSelectedSubscription", True))},
             })
     return {
         "schemaVersion": 1,
