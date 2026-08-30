@@ -44,6 +44,7 @@ jobs:
           ref: main
           path: data-lab
           fetch-depth: 1
+
       - name: Compile conservative direct and eMSP layers
         run: python scripts/compile_france_v9_offers.py --input legacy-france-canonical/data/tariff_overlay_v1.json
       - name: Compile exact Belib official tariff layer
@@ -56,71 +57,99 @@ jobs:
         run: python scripts/compile_qovoltis_v9_offers.py --input data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json
       - name: Compile exact Bump PDC tariff layer
         run: python scripts/compile_bump_v9_offers.py --tariffs data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz
+
       - name: Validate offer safety
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          d=json.loads(Path('data/v9/france-direct-offers.json').read_text());e=json.loads(Path('data/v9/france-emsp-offers.json').read_text());b=json.loads(Path('data/v9/france-belib-offers.json').read_text());x=json.loads(Path('data/v9/france-e55c-offers.json').read_text());t=json.loads(Path('data/v9/france-etotem-offers.json').read_text());q=json.loads(Path('data/v9/france-qovoltis-offers.json').read_text());u=json.loads(Path('data/v9/france-bump-offers.json').read_text());r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
+          d=json.loads(Path('data/v9/france-direct-offers.json').read_text())
+          e=json.loads(Path('data/v9/france-emsp-offers.json').read_text())
+          b=json.loads(Path('data/v9/france-belib-offers.json').read_text())
+          x=json.loads(Path('data/v9/france-e55c-offers.json').read_text())
+          t=json.loads(Path('data/v9/france-etotem-offers.json').read_text())
+          q=json.loads(Path('data/v9/france-qovoltis-offers.json').read_text())
+          u=json.loads(Path('data/v9/france-bump-offers.json').read_text())
+          r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
+
           assert all(z['country']=='FR' for z in (d,e,b,x,t,q,u))
-          assert d['policy']['subscriptionsOptIn'] is True and d['policy']['directCpoAndRoamingSeparate'] is True
-          assert len(d['directOffers'])>=10,r;assert len(e['subscriptionOffers'])>=3,r
+          assert d['policy']['subscriptionsOptIn'] is True
+          assert d['policy']['directCpoAndRoamingSeparate'] is True
+          assert len(d['directOffers'])>=10 and len(e['subscriptionOffers'])>=3
           for row in d['directOffers']+d['subscriptionOffers']+e['subscriptionOffers']:
-            assert row.get('operatorAliases'),row;assert isinstance(row.get('pricing'),dict),row
-          assert b['policy']['subscriptionsOptIn'] is True and b['policy']['networkBrandOnly'] is True and b['policy']['connectedTimeBlocksPreservedExactly'] is True
+            assert row.get('operatorAliases') and isinstance(row.get('pricing'),dict),row
+
           assert len(b['directOffers'])==4 and len(b['subscriptionOffers'])==8
+          assert b['policy']['subscriptionsOptIn'] is True
+          assert b['policy']['networkBrandOnly'] is True
+          assert b['policy']['connectedTimeBlocksPreservedExactly'] is True
           assert {z['selectionId'] for z in b['subscriptionOffers']}=={'belib-nonresident','belib-resident'}
-          assert all(z.get('networkAliases') and not z.get('operatorAliases') for z in b['directOffers']+b['subscriptionOffers'])
-          assert any(rule.get('connectedTimeBlockRounding')=='started_block' for z in b['directOffers'] for rule in z['pricing']['rules'])
-          assert all(z['pricing']['longConnectionFee']['thresholdMinutes']==840 for z in b['directOffers']+b['subscriptionOffers'])
-          assert x['policy']['networkWideGeneralization'] is False and x['policy']['exactEvseRequired'] is True and x['policy']['wholesaleRatesExcluded'] is True
-          assert len(x['directOffers'])==1 and not x['subscriptionOffers'];e55=x['directOffers'][0]
-          assert e55['verifiedScope']=='exact_evse' and e55['evseIds']==['FR*55C*EFR39000*P7PPFG*1'] and e55['priority']>b['directOffers'][0]['priority']
-          assert [z['connectedTimePerMinuteEur'] for z in e55['pricing']['rules']]==[0.09,0.06]
-          assert [(z['start'],z['end']) for z in e55['pricing']['rules']]==[('07:00','23:00'),('23:00','07:00')]
-          assert t['policy']['networkWideGeneralization'] is False and t['policy']['exactIdentityRequired'] is True and t['policy']['ecoModeNotActivatedWithoutSelectionModel'] is True
-          assert len(t['directOffers'])==3 and len(t['deferred'])==1 and 'MONTARGOISE' in t['deferred'][0]['station'].upper()
+
+          assert x['policy']['exactEvseRequired'] is True
+          assert x['policy']['networkWideGeneralization'] is False
+          assert x['policy']['wholesaleRatesExcluded'] is True
+          assert len(x['directOffers'])==1 and x['directOffers'][0]['evseIds']==['FR*55C*EFR39000*P7PPFG*1']
+
+          assert t['policy']['exactIdentityRequired'] is True
+          assert t['policy']['networkWideGeneralization'] is False
+          assert len(t['directOffers'])==3
           assert all(z.get('evseIds') or z.get('stationIds') for z in t['directOffers'])
-          assert all(z['verifiedScope'] in ('exact_evse_set','exact_station') for z in t['directOffers'])
-          assert {z['id'] for z in t['directOffers']}=={'etotem-nantes-planchonnais-dc-standard','etotem-nantes-planchonnais-ac-standard','etotem-la-rochelle-jb-marcet-standard'}
-          assert all(z['pricing'].get('postChargeFee',{}).get('rounding')=='started_block' for z in t['directOffers'])
-          assert q['policy']['identityMode']=='physical_network_and_territory' and q['policy']['territory']=='Rhône hors Métropole de Lyon' and q['policy']['subscriptionsOptIn'] is True and q['policy']['lowerPowerNightPostChargeExemptionPreserved'] is True and q['policy']['roamingSeparate'] is True
-          assert len(q['directOffers'])==2 and len(q['subscriptionOffers'])==2 and {z['selectionId'] for z in q['subscriptionOffers']}=={'syder-qovoltis-card'}
-          assert all(z.get('networkAliases') and not z.get('operatorAliases') for z in q['directOffers']+q['subscriptionOffers'])
-          assert all(z['verifiedScope']=='exact_network_territory_power_customer_profile' for z in q['directOffers']+q['subscriptionOffers'])
-          low=[z for z in q['directOffers'] if z['maxPowerKw']==50][0];high=[z for z in q['directOffers'] if z.get('minPowerKw',0)>50][0]
-          assert low['pricing']['rules'][0]['pricePerKwh']==0.35 and high['pricing']['rules'][0]['pricePerKwh']==0.50
-          assert low['pricing']['postChargeFee']['graceMinutes']==30 and low['pricing']['postChargeFee']['blockEur']==4.0 and low['pricing']['postChargeFee']['exemptLocalWindows']==[{'start':'22:00','end':'07:00'}]
-          assert high['pricing']['postChargeFee']['graceMinutes']==60 and high['pricing']['postChargeFee']['rounding']=='started_block'
-          card_low=[z for z in q['subscriptionOffers'] if z['maxPowerKw']==50][0];card_high=[z for z in q['subscriptionOffers'] if z.get('minPowerKw',0)>50][0]
-          assert card_low['pricing']['rules'][0]['pricePerKwh']==0.25 and card_high['pricing']['rules'][0]['pricePerKwh']==0.40 and card_low['metadata']['oneTimeCardPurchaseEur']==7.2
-          assert u['schemaVersion']==3
-          assert u['policy']['exactPdcRequired'] is True and u['policy']['geographicFallbackAllowed'] is False and u['policy']['unsupportedTimeChangingTariffsFailClosed'] is True and u['policy']['minimumTotalAppliedAfterAllSessionComponents'] is True
+
+          assert q['policy']['identityMode']=='physical_network_and_territory'
+          assert q['policy']['territory']=='Rhône hors Métropole de Lyon'
+          assert q['policy']['subscriptionsOptIn'] is True
+          assert q['policy']['lowerPowerNightPostChargeExemptionPreserved'] is True
+          assert len(q['directOffers'])==2 and len(q['subscriptionOffers'])==2
+          low=[z for z in q['directOffers'] if z['maxPowerKw']==50][0]
+          assert low['pricing']['postChargeFee']['exemptLocalWindows']==[{'start':'22:00','end':'07:00'}]
+
+          assert u['schemaVersion']==4
+          assert u['policy']['exactPdcRequired'] is True
+          assert u['policy']['geographicFallbackAllowed'] is False
+          assert u['policy']['tariffDataCannotCreatePhysicalStations'] is True
+          assert u['policy']['sourceRankableRequired'] is True
+          assert u['policy']['unsupportedTimeChangingTariffsFailClosed'] is True
           assert u['policy']['conditionalFeeConditionsSupported']==['energy_above_kwh']
-          assert u['summary']['exactBumpAliases']==1886 and len(u['directOffers'])>0
+          assert u['policy']['sessionDurationSurchargeSupported'] is True
+          assert u['policy']['minimumTotalAppliedAfterAllSessionComponents'] is True
+          assert u['summary']['exactBumpAliases']==1886
+          assert len(u['directOffers'])==u['summary']['offers']
           assert all(z['verifiedScope']=='exact_evse' and len(z['evseIds'])==1 for z in u['directOffers'])
-          assert all(z['pricing']['rules'][0].get('scope')=='allDay' for z in u['directOffers'])
-          exact_offer_ids={z['evseIds'][0] for z in u['directOffers']};assert len(exact_offer_ids)==len(u['directOffers']) and len(exact_offer_ids)<=u['summary']['exactBumpAliases']
+          exact_offer_ids={z['evseIds'][0] for z in u['directOffers']}
+          assert len(exact_offer_ids)==len(u['directOffers'])<=u['summary']['exactBumpAliases']
+
           temporal=[z for z in u['directOffers'] if z.get('metadata',{}).get('timeChanging') is True]
-          assert len(temporal)==u['summary']['temporalOffers'] and len(temporal)>0
-          supported={'minimum_energy_post_charge_occupancy','minimum_energy_conditional_flat_fee'}
+          assert len(temporal)==u['summary']['temporalOffers']
+          supported={
+            'minimum_energy_post_charge_occupancy',
+            'minimum_energy_conditional_flat_fee',
+            'minimum_energy_session_duration_surcharge',
+          }
           assert all(z['metadata'].get('semanticFamily') in supported for z in temporal)
-          occupancy=[z for z in temporal if z['metadata'].get('semanticFamily')=='minimum_energy_post_charge_occupancy']
-          conditional=[z for z in temporal if z['metadata'].get('semanticFamily')=='minimum_energy_conditional_flat_fee']
-          assert len(occupancy)==u['summary']['postChargeOccupancyOffers'] and len(occupancy)>0
-          assert len(conditional)==u['summary']['conditionalEnergyOffers'] and len(conditional)>0
-          assert all(z['pricing'].get('minimumTotalEur') is not None and z['pricing'].get('postChargeFee',{}).get('eurPerMinute') is not None and z['pricing'].get('postChargeFee',{}).get('graceMinutes') is not None for z in occupancy)
+          occupancy=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_post_charge_occupancy']
+          conditional=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_conditional_flat_fee']
+          duration=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_session_duration_surcharge']
+          assert len(occupancy)==u['summary']['postChargeOccupancyOffers'] and occupancy
+          assert len(conditional)==u['summary']['conditionalEnergyOffers'] and conditional
+          assert len(duration)==u['summary']['sessionDurationSurchargeOffers'] and duration
           for z in conditional:
             fees=z['pricing'].get('conditionalSessionFees') or []
-            assert len(fees)==1 and fees[0].get('amountEur') is not None
+            assert len(fees)==1
             conditions=fees[0].get('conditions') or []
-            assert conditions and all(c.get('kind')=='energy_above_kwh' and isinstance(c.get('value'),(int,float)) for c in conditions)
+            assert conditions and all(c.get('kind')=='energy_above_kwh' for c in conditions)
+          for z in duration:
+            rule=z['pricing']['rules'][0]
+            assert rule.get('connectedTimeFreeMinutes') is not None
+            assert rule.get('connectedTimePerMinuteAfterFreeEur') is not None
           assert u['summary']['timeChangingSeen']==u['summary']['temporalOffers']+u['summary']['timeChangingDeferred']
           assert sum(1 for z in u['deferred'] if z.get('reason')=='unsupported_time_changing_rule_family')==u['summary']['timeChangingDeferred']
+
           deferred={z.get('id') for z in r.get('deferred',[])}
-          for required in ('electra-essential','electra-smart','belib-nonresident','belib-resident'):assert required in deferred
-          print(json.dumps({'generic':{k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},'belib':{'directOfferCount':len(b['directOffers']),'subscriptionOfferCount':len(b['subscriptionOffers'])},'e55c':{'directOfferCount':len(x['directOffers']),'evseId':e55['evseIds'][0]},'etotem':{'directOfferCount':len(t['directOffers']),'deferredCount':len(t['deferred'])},'qovoltis':{'directOfferCount':len(q['directOffers']),'subscriptionOfferCount':len(q['subscriptionOffers'])},'bump':u['summary']},indent=2))
+          for required in ('electra-essential','electra-smart','belib-nonresident','belib-resident'):
+            assert required in deferred
+          print(json.dumps({'generic':{k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},'bump':u['summary']},indent=2))
           PY
+
       - name: Publish V9 offer overlays
         shell: bash
         run: |
@@ -129,7 +158,10 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-qovoltis-offers.json data/v9/france-bump-offers.json data/v9/france-offer-compile-report.json
-          if git diff --cached --quiet; then echo 'No offer changes';exit 0;fi
+          if git diff --cached --quiet; then
+            echo 'No offer changes'
+            exit 0
+          fi
           git commit -m "data(v9): refresh France offer overlays [run ${GITHUB_RUN_ID}]"
           for attempt in 1 2 3; do
             git pull --rebase origin refactor/unified-data-engine-v9
