@@ -147,6 +147,20 @@ def post_charge_fee(tariff: dict[str, Any]) -> dict[str, Any] | None:
     return {"eurPerMinute": rate, "graceMinutes": grace}
 
 
+def direct_pricing(tariff: dict[str, Any]) -> dict[str, Any] | None:
+    rate = finite(tariff.get("eurPerKwh"))
+    if rate is not None:
+        return pricing_kwh(float(rate), post_charge_fee(tariff))
+    if tariff.get("pricingType") != "rules" or not isinstance(tariff.get("pricingRules"), list) or not tariff.get("pricingRules"):
+        return None
+    pricing: dict[str, Any] = {"type": "rules", "rules": tariff["pricingRules"]}
+    if tariff.get("holidayCalendar"):
+        pricing["holidayCalendar"] = tariff["holidayCalendar"]
+    if tariff.get("postChargeFeeUnknown") is True:
+        pricing["postChargeFeeUnknown"] = True
+    return pricing
+
+
 def exact_offer_common(evse_id: str, provider: str, source: str, priority: int) -> dict[str, Any]:
     return {
         "provider": provider,
@@ -167,16 +181,25 @@ def build_offers(evses: list[dict[str, Any]], payload: dict[str, Any], generated
         if not eid:
             continue
         d = evse.get("tccV9DirectTariff")
-        if evse.get("tccV9RankableDirect") is True and isinstance(d, dict) and finite(d.get("eurPerKwh")) is not None:
-            provider = str(d.get("operator") or evse.get("operator") or "Direct operator")
-            rate = float(d["eurPerKwh"])
-            direct.append({
-                "id": f"it:direct:{eid}",
-                **exact_offer_common(eid, provider, str(d.get("source") or "validated operator source"), 130),
-                "directOperatorOnly": True,
-                "pricing": pricing_kwh(rate, post_charge_fee(d)),
-                "metadata": {"channel": "operator_direct", "tariffClass": d.get("tariffClass"), "feePolicy": d.get("feePolicy"), "occupancyPolicy": d.get("occupancyPolicy")},
-            })
+        if evse.get("tccV9RankableDirect") is True and isinstance(d, dict):
+            pricing = direct_pricing(d)
+            if pricing is not None:
+                provider = str(d.get("operator") or evse.get("operator") or "Direct operator")
+                direct.append({
+                    "id": f"it:direct:{eid}",
+                    **exact_offer_common(eid, provider, str(d.get("source") or "validated operator source"), 130),
+                    "directOperatorOnly": True,
+                    "pricing": pricing,
+                    "metadata": {
+                        "channel": "operator_direct",
+                        "tariffClass": d.get("tariffClass"),
+                        "feePolicy": d.get("feePolicy"),
+                        "occupancyPolicy": d.get("occupancyPolicy"),
+                        "timeZone": d.get("timeZone"),
+                        "postChargeFeePolicy": d.get("postChargeFeePolicy"),
+                        "termsSource": d.get("termsSource"),
+                    },
+                })
         for s in evse.get("tccV9SubscriptionTariffs") or []:
             if s.get("rankableWhenSelected") is not True or finite(s.get("eurPerKwh")) is None:
                 continue
@@ -195,13 +218,11 @@ def build_offers(evses: list[dict[str, Any]], payload: dict[str, Any], generated
         for m in evse.get("tccV9EmspTariffs") or []:
             if not isinstance(m, dict) or m.get("channel") != "emsp" or m.get("rankable") is not True:
                 continue
-            # Consolidation guarantees this layer is NextCharge/eMSP and never CPO-direct.
             if m.get("rankableAsCpoDirect") is True:
                 continue
             if str(m.get("currency") or "EUR").upper() != "EUR":
                 continue
             prices = m.get("prices") or {}
-            # Consolidated schema deliberately keeps canonical component names.
             energy = finite(prices.get("energy"))
             time_rate = finite(prices.get("time")) or 0
             parking_rate = finite(prices.get("parking")) or 0
@@ -230,6 +251,8 @@ def build_offers(evses: list[dict[str, Any]], payload: dict[str, Any], generated
             "exactEvseOnly": True,
             "punFallbackTariffPromoted": False,
             "emspNeverMasqueradesAsDirect": True,
+            "calendarAwareDirectTariffs": True,
+            "unknownStationSpecificPostChargeFeesFailClosed": True,
         },
         "directOffers": direct,
         "subscriptionOffers": subscriptions,
