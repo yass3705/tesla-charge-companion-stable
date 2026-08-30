@@ -8,20 +8,30 @@
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
   const round=v=>Math.round((Number(v)+Number.EPSILON)*1000000)/1000000;
   const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
+  const text=v=>String(v==null?'':v).trim().toUpperCase();
 
-  // Relative DC fallback profile. It is intentionally generic and can be
-  // replaced per vehicle through session.chargeCurve.
   const GENERIC_DC_CURVE=[
     {soc:0,factor:0.90},{soc:10,factor:1.00},{soc:30,factor:0.96},
     {soc:50,factor:0.82},{soc:70,factor:0.62},{soc:80,factor:0.45},
     {soc:90,factor:0.25},{soc:95,factor:0.14},{soc:100,factor:0.06}
   ];
 
-  function stationPowerKw(station){
-    let power=0;
-    for(const evse of station?.evses||[])for(const c of evse?.connectors||[])power=Math.max(power,num(c?.powerKw)??0);
-    return power||null;
+  function connectorKind(connector={}){
+    const kind=text(connector.kind||connector.currentType||connector.powerType);
+    if(kind.includes('DC')||kind.includes('CCS')||kind.includes('CHADEMO'))return'DC';
+    if(kind.includes('AC')||kind.includes('TYPE2')||kind.includes('TYPE 2'))return'AC';
+    const power=num(connector.powerKw);return power!=null&&power>22?'DC':'AC';
   }
+
+  function stationCapability(station){
+    let selected=null;
+    for(const evse of station?.evses||[])for(const c of evse?.connectors||[]){
+      const power=num(c?.powerKw);if(power==null||power<=0)continue;
+      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(c)};
+    }
+    return selected||{powerKw:null,kind:null};
+  }
+  function stationPowerKw(station){return stationCapability(station).powerKw;}
 
   function normalizeCurve(raw){
     const rows=(raw||[]).map(p=>({soc:num(p?.soc),powerKw:num(p?.powerKw),factor:num(p?.factor)})).filter(p=>p.soc!=null&&(p.powerKw!=null||p.factor!=null)).sort((a,b)=>a.soc-b.soc);
@@ -39,9 +49,9 @@
     const t=(x-a.soc)/(b.soc-a.soc);return value(a)+(value(b)-value(a))*t;
   }
 
-  function resolveCurve(session,availablePowerKw){
-    const custom=normalizeCurve(session?.chargeCurve);if(custom)return{curve:custom,profile:'custom'};
-    if(session?.disableSocCurve===true||availablePowerKw<=22)return{curve:null,profile:'flat'};
+  function resolveCurve(session,availablePowerKw,chargingKind){
+    const custom=normalizeCurve(session?.chargeCurve);if(custom&&chargingKind!=='AC')return{curve:custom,profile:'custom'};
+    if(session?.disableSocCurve===true||chargingKind==='AC'||availablePowerKw<=22)return{curve:null,profile:'flat'};
     return{curve:GENERIC_DC_CURVE,profile:'generic-dc-conservative'};
   }
 
@@ -54,19 +64,21 @@
   }
 
   function estimate(station,session={}){
-    const stationPower=stationPowerKw(station),vehicleMax=num(session.vehicleMaxChargeKw);
+    const capability=stationCapability(station),stationPower=capability.powerKw,chargingKind=capability.kind;
+    const legacyMax=num(session.vehicleMaxChargeKw),kindMax=chargingKind==='AC'?num(session.vehicleMaxAcKw):num(session.vehicleMaxDcKw),vehicleMax=kindMax??legacyMax;
     let availablePower=stationPower??vehicleMax;
     if(vehicleMax!=null&&vehicleMax>0)availablePower=availablePower?Math.min(availablePower,vehicleMax):vehicleMax;
     const efficiency=clamp(num(session.chargeEfficiency)??0.92,0.01,1);
     let energy=num(session.energyKwh);
     const soc=resolveSoc(session,energy);
     if(soc.capacity&&soc.targetSoc!=null)energy=soc.capacity*(soc.targetSoc-soc.startSoc)/100;
-    if(energy==null||energy<=0||!availablePower||availablePower<=0)return{minutes:null,energyKwh:energy,profile:'unavailable',averagePowerKw:null,startSoc:soc.startSoc,targetSoc:soc.targetSoc,stationPowerKw:stationPower,availablePowerKw:availablePower};
+    const base={chargingKind,stationPowerKw:stationPower,vehicleLimitKw:vehicleMax,availablePowerKw:availablePower,startSoc:soc.startSoc,targetSoc:soc.targetSoc};
+    if(energy==null||energy<=0||!availablePower||availablePower<=0)return{...base,minutes:null,energyKwh:energy,profile:'unavailable',averagePowerKw:null};
 
-    const resolved=resolveCurve(session,availablePower);
+    const resolved=resolveCurve(session,availablePower,chargingKind);
     if(!resolved.curve||!soc.capacity||soc.targetSoc==null){
       const minutes=(energy/(availablePower*efficiency))*60;
-      return{minutes:round(minutes),energyKwh:round(energy),profile:resolved.profile,averagePowerKw:round(energy/(minutes/60)),startSoc:soc.startSoc,targetSoc:soc.targetSoc,stationPowerKw:stationPower,availablePowerKw:availablePower};
+      return{...base,minutes:round(minutes),energyKwh:round(energy),profile:resolved.profile,averagePowerKw:round(energy/(minutes/60))};
     }
 
     const stepSoc=clamp(num(session.socStepPercent)??0.25,0.05,2),capacity=soc.capacity;
@@ -78,8 +90,8 @@
       const power=Math.min(availablePower,curvePower);
       minutes+=(batteryEnergy/(power*efficiency))*60;delivered+=batteryEnergy;s=next;
     }
-    return{minutes:round(minutes),energyKwh:round(delivered),profile:resolved.profile,averagePowerKw:round(delivered/(minutes/60)),startSoc:soc.startSoc,targetSoc:soc.targetSoc,stationPowerKw:stationPower,availablePowerKw:availablePower};
+    return{...base,minutes:round(minutes),energyKwh:round(delivered),profile:resolved.profile,averagePowerKw:round(delivered/(minutes/60))};
   }
 
-  return{estimate,stationPowerKw,normalizeCurve,interpolate,GENERIC_DC_CURVE};
+  return{estimate,stationPowerKw,stationCapability,connectorKind,normalizeCurve,interpolate,GENERIC_DC_CURVE};
 });
