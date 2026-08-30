@@ -22,16 +22,32 @@ jobs:
       - uses: actions/checkout@v4
       - name: Unit-test diagnostic-only attribution policy
         run: node tests/v9-morocco-shell-vivo-diagnostic.test.cjs
-      - name: Validate sanitized public Melloussa report remains non-production
+      - name: Fetch sanitized public Morocco Shell/Vivo reports
         shell: bash
         run: |
           set -euo pipefail
-          URL='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/shell-vivo/melloussa-ev-charging-conflict-2026-08-29.json'
-          curl --fail --silent --show-error --location "$URL" -o /tmp/melloussa.json
+          BASE='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/shell-vivo'
+          curl --fail --silent --show-error --location "$BASE/melloussa-ev-charging-conflict-2026-08-29.json" -o /tmp/melloussa.json
+          curl --fail --silent --show-error --location "$BASE/al-jazira-evidence-2026-08-30.json" -o /tmp/al-jazira.json
+      - name: Validate diagnostics remain attribution-safe
+        shell: bash
+        run: |
           node - <<'NODE'
           const fs = require('fs');
-          const report = JSON.parse(fs.readFileSync('/tmp/melloussa.json', 'utf8'));
-          if (report.assessment?.production_ready !== false) throw new Error('Melloussa unexpectedly production-ready');
-          if (report.modeling?.operator_cpo !== 'unresolved') throw new Error('CPO unexpectedly resolved');
-          if (report.modeling?.site_brand !== 'Shell') throw new Error('Shell site_brand missing');
+          const {adaptShellVivoDiagnostic}=require('./assets/v9/adapters/morocco-shell-vivo-diagnostic.js');
+          const melloussa = JSON.parse(fs.readFileSync('/tmp/melloussa.json', 'utf8'));
+          const alJazira = JSON.parse(fs.readFileSync('/tmp/al-jazira.json', 'utf8'));
+          if (melloussa.assessment?.production_ready !== false) throw new Error('Melloussa unexpectedly production-ready');
+          if (melloussa.modeling?.operator_cpo !== 'unresolved') throw new Error('Melloussa CPO unexpectedly resolved');
+          const out=adaptShellVivoDiagnostic(alJazira);
+          if (out.name !== 'Shell Al Jazira') throw new Error('Al Jazira name missing');
+          if (out.latitude !== 33.779558 || out.longitude !== -7.232679) throw new Error('Al Jazira coordinate candidate changed');
+          if (out.networkBrand !== 'Shell Recharge') throw new Error('Shell Recharge network brand missing');
+          if (out.access.siteBrand !== 'Shell' || out.access.accessNetwork !== 'Shell Recharge') throw new Error('Shell dimensions conflated');
+          if (out.physicalOperator !== null || !out.diagnostic.cpoUnresolved) throw new Error('CPO must remain unresolved');
+          if (out.offers.length !== 0 || !out.diagnostic.tariffChannelUnresolved) throw new Error('secondary free evidence must not become direct tariff');
+          if (out.status.statusSource !== null || !out.diagnostic.statusSourceUnresolved) throw new Error('live status source must remain unresolved');
+          if (out.diagnostic.connectorPowerCandidate?.rapid_power_kw !== 120) throw new Error('secondary power candidate missing');
+          if (!out.diagnostic.secondaryFreeEvidence) throw new Error('secondary free corroboration marker missing');
+          console.log(JSON.stringify({name:out.name,networkBrand:out.networkBrand,operatorCandidate:out.diagnostic.operatorCandidate,productionEligible:out.productionEligible}));
           NODE
