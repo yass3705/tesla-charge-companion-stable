@@ -1,0 +1,109 @@
+name: V9 sync Italy Ewiva Enel eMSP
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-ewiva-enel-emsp
+    paths:
+      - scripts/v9_add_ewiva_enel_emsp.py
+      - scripts/v9_register_ewiva_enel.py
+      - data/v9/source-registry.json
+      - .github/workflows/v9-sync-italy-ewiva.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DATA_REPO: yass3705/tesla-charge-companion-data-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical Ewiva candidate
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list --repo "$DATA_REPO" --workflow ewiva-enel-emsp-italy-v9.yml --branch research/italy-consolidation-v9-a2a --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/ewiva
+          gh run download "$RUN_ID" --repo "$DATA_REPO" -n ewiva-enel-emsp-italy-v9-candidate -D /tmp/ewiva
+          CANDIDATE="$(find /tmp/ewiva -type f -name ewiva_enel_emsp_italy_candidate.json.gz | head -n1)"
+          test -n "$CANDIDATE" && test -s "$CANDIDATE"
+          cp "$CANDIDATE" /tmp/ewiva_candidate.json.gz
+          echo "Using Ewiva run $RUN_ID"
+
+      - name: Add Ewiva eMSP and Plug&Go Super offers
+        run: python scripts/v9_add_ewiva_enel_emsp.py --candidate /tmp/ewiva_candidate.json.gz
+
+      - name: Register Ewiva subscription coverage
+        run: python scripts/v9_register_ewiva_enel.py
+
+      - name: Validate Ewiva counts and exact EVSE identity
+        run: |
+          python - <<'PY'
+          import gzip,json
+          from pathlib import Path
+          offers=json.loads(Path('data/v9/italy-offers.json').read_text())
+          report=json.loads(Path('data/v9/italy-build-report.json').read_text())
+          registry=json.loads(Path('data/v9/source-registry.json').read_text())
+          with gzip.open('data/v9/italy-static/all.json.gz','rt',encoding='utf-8') as fh: rows=json.load(fh)
+          ids={str(cfg[0]) for r in rows for cfg in (r[8] or []) if cfg and cfg[0]}
+          ew_emsp=[o for o in offers['emspOffers'] if str(o.get('id','')).startswith('it:emsp:enel-on-your-way:ewiva:')]
+          ew_super=[o for o in offers['subscriptionOffers'] if str(o.get('id','')).startswith('it:subscription:enel_plug_and_go_super:ewiva:')]
+          assert len(ew_emsp)==1678
+          assert len(ew_super)==1678
+          assert len(offers['emspOffers'])==3959
+          assert len(offers['subscriptionOffers'])==50008
+          assert all(o['evseIds'][0] in ids for o in ew_emsp+ew_super)
+          assert all(o.get('metadata',{}).get('network')=='Ewiva' for o in ew_emsp+ew_super)
+          assert all(o.get('metadata',{}).get('rankableAsCpoDirect') is False for o in ew_emsp)
+          assert report['ewivaEnelOnYourWay']['evse']==1678
+          cov={x['subscriptionId']:x for x in registry['subscriptionCoverage']}
+          assert 'ewiva' in cov['enel_plug_and_go_super']['operatorIds']
+          print(json.dumps(report['ewivaEnelOnYourWay'],ensure_ascii=False,indent=2))
+          PY
+
+      - name: Validate Ewiva runtime pricing and post-charge penalties
+        run: |
+          node - <<'JS'
+          const fs=require('fs');
+          const Direct=require('./assets/v9/adapters/direct-offers.js');
+          const Session=require('./assets/v9/session-engine.js');
+          const offers=JSON.parse(fs.readFileSync('data/v9/italy-offers.json','utf8'));
+          const rawBasic=offers.emspOffers.find(o=>o.id.startsWith('it:emsp:enel-on-your-way:ewiva:')&&o.metadata?.tariffClass==='HPC');
+          const eid=rawBasic.evseIds[0];
+          const rawSuper=offers.subscriptionOffers.find(o=>o.evseIds?.[0]===eid&&o.id.startsWith('it:subscription:enel_plug_and_go_super:ewiva:'));
+          const normalized=Direct.normalizePayload({country:'IT',emspOffers:[rawBasic],subscriptionOffers:[rawSuper]}).offerRules;
+          const station={id:'IT:ewiva:test',countryCode:'IT',offers:normalized};
+          const session={energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-30T18:00:00Z',postChargeMinutes:0};
+          let r=Session.evaluateStation(station,session,{selectedSubscriptions:[]});
+          if(r.best?.total!==17.2||r.best?.kind!=='emsp')throw new Error(`bad Ewiva Basic ${JSON.stringify(r.best)}`);
+          r=Session.evaluateStation(station,session,{selectedSubscriptions:['enel_plug_and_go_super']});
+          if(r.best?.total!==16.2||r.best?.kind!=='subscription')throw new Error(`bad Ewiva Super ${JSON.stringify(r.best)}`);
+          r=Session.evaluateStation(station,{...session,postChargeMinutes:1},{selectedSubscriptions:[]});
+          if(r.best?.total!==17.5)throw new Error(`bad Ewiva HPC penalty ${JSON.stringify(r.best)}`);
+          console.log({basic:17.2,super:16.2,hpcOneMinutePostCharge:17.5});
+          JS
+
+      - name: Publish Ewiva-generated V9 data
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json data/v9/italy-build-report.json data/v9/source-registry.json
+          if git diff --cached --quiet; then echo 'Ewiva V9 data already current'; exit 0; fi
+          git commit -m 'data(v9): publish Ewiva Enel On Your Way offers'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
