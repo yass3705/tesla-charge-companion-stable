@@ -1,0 +1,36 @@
+name: V9 Morocco EVOne overlay policy validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-evone-overlay-policy']
+    paths:
+      - 'assets/v9/adapters/morocco-evone-overlay.js'
+      - 'tests/v9-morocco-evone-overlay.test.cjs'
+      - '.github/workflows/v9-morocco-evone-policy-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test EVOne overlay invariants
+        run: node tests/v9-morocco-evone-overlay.test.cjs
+      - name: Verify public policy report is reachable
+        run: |
+          curl --fail --silent --show-error --location \
+            --max-time 20 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evone/production-status-policy.json \
+            -o /tmp/evone-policy.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/evone-policy.json'))
+          assert p['production_status_policy']['allowed']==['Available','Occupied','Charging']
+          assert p['production_status_policy']['excluded']==['Faulted','Offline','Unknown','Unavailable']
+          assert p['modeling_constraints']['evone_roaming_visibility_does_not_imply_cpo_operator'] is True
+          print('EVOne policy OK')
+          PY
