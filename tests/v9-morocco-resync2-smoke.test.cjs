@@ -4,6 +4,7 @@ const physical=require('../assets/v9/adapters/morocco-public.js');
 const nonprod=require('../assets/v9/adapters/morocco-nonproduction.js');
 const browserLoaders=require('../assets/v9/browser-loaders.js');
 const pricingEngine=require('../assets/v9/pricing-engine.js');
+const sessionEngine=require('../assets/v9/session-engine.js');
 
 const RAW='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco';
 const sources=[
@@ -46,6 +47,17 @@ const sources=[
   assert.equal(tenMinutes.currency,'MAD','FastVolt result currency remains MAD');
   assert.equal(tenMinutes.components.connectedTimePerMinute,25,'currency-neutral per-minute component');
 
+  assert.equal(sessionEngine.stationChargingKind(alBoustane),'DC','mixed station charging kind follows the highest-power connector');
+  const dcCompatible=alBoustane.offers.filter(o=>sessionEngine.offerMatchesChargingKind(o,'DC'));
+  assert.equal(dcCompatible.length,1,'DC session must keep only one FastVolt tariff');
+  assert.deepEqual(dcCompatible[0].connectorKinds,['DC'],'AC tariff must not leak into a DC session');
+  const fastvoltSession=sessionEngine.evaluateStation(alBoustane,{durationMinutes:10,energyKwh:0,startAt:'2026-08-30T12:00:00Z',targetCurrency:'MAD'});
+  assert.equal(fastvoltSession.chargingKind,'DC','session engine must expose DC charging kind');
+  assert.equal(fastvoltSession.eligibleOfferCount,1,'session engine must filter out FastVolt AC offer');
+  assert(fastvoltSession.best,'FastVolt DC session must remain comparable');
+  assert.equal(fastvoltSession.best.total,25,'session engine must price 10 DC minutes at 25 MAD');
+  assert.equal(fastvoltSession.best.currency,'MAD','session engine must preserve MAD');
+
   const legacyMinute=pricingEngine.evaluateRule({connectedTimePerMinuteEur:0.5},{durationMinutes:10});
   assert.equal(legacyMinute.totalEur,5,'legacy EUR per-minute field remains compatible');
 
@@ -68,5 +80,5 @@ const sources=[
   assert.equal(overlay.access.appSource,'EVOne');
   assert.equal(overlay.access.accessNetwork,'EVPlug');
 
-  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),evgoStations:evgo.length,evgoEvses:43,fastvoltStations:fastvolt.length,fastvoltTenMinuteDcMAD:tenMinutes.totalEur,kilowattStations:kilowatt.length,totalenergiesHosts:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
+  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),evgoStations:evgo.length,evgoEvses:43,fastvoltStations:fastvolt.length,fastvoltChargingKind:fastvoltSession.chargingKind,fastvoltEligibleOffers:fastvoltSession.eligibleOfferCount,fastvoltTenMinuteDcMAD:fastvoltSession.best.total,kilowattStations:kilowatt.length,totalenergiesHosts:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
