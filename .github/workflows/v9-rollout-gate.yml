@@ -1,0 +1,57 @@
+name: V9 rollout safety gate
+
+on:
+  push:
+    branches: [main, 'refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/rollout-engine.js'
+      - 'assets/v9/readiness-engine.js'
+      - 'data/v9/rollout-config.json'
+      - 'tests/v9-rollout-engine.test.cjs'
+      - 'tests/v9-readiness-engine.test.cjs'
+      - 'v9-rollout/**'
+      - '.github/workflows/v9-rollout-gate.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/rollout-engine.js'
+      - 'assets/v9/readiness-engine.js'
+      - 'data/v9/rollout-config.json'
+      - 'tests/v9-rollout-engine.test.cjs'
+      - 'tests/v9-readiness-engine.test.cjs'
+      - 'v9-rollout/**'
+      - '.github/workflows/v9-rollout-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rollout-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: |
+          node --check assets/v9/rollout-engine.js
+          node --check assets/v9/readiness-engine.js
+          node --check tests/v9-rollout-engine.test.cjs
+          node --check tests/v9-readiness-engine.test.cjs
+      - name: Rollout contract
+        run: node tests/v9-rollout-engine.test.cjs
+      - name: Readiness contract
+        run: node tests/v9-readiness-engine.test.cjs
+      - name: Safe versioned configuration
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const c=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
+          if(c.schemaVersion!==1)throw new Error('invalid rollout config schema');
+          if(!['preview','canary','production'].includes(c.stage))throw new Error('invalid rollout stage');
+          if(c.requireReadiness!==true)throw new Error('readiness must remain mandatory');
+          if(c.stage==='preview'&&Number(c.canaryPercent)!==0)throw new Error('preview must not allocate canary traffic');
+          if(c.stage==='production'&&c.productionPath==='v9-preview/')throw new Error('production stage may not target preview path');
+          console.log(JSON.stringify({ok:true,stage:c.stage,canaryPercent:c.canaryPercent,killSwitch:c.killSwitch},null,2));
+          NODE
