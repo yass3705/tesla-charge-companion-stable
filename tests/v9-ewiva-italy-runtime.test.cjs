@@ -33,4 +33,5 @@ const hpcSuper=ewivaSuper.find(o=>o.metadata?.tariffClass==='HPC');
 assert.ok(hpcSuper);
 assert.equal(hpcSuper.pricing.rules[0].pricePerKwh,0.81);
 
+// Keep the dedicated Ewiva workflow as the publication gate for these totals.
 console.log('V9 Ewiva Italy runtime publication: OK');
