@@ -59,9 +59,12 @@ jobs:
         run: |
           python - <<'PY'
           import gzip,json,pathlib,re,unicodedata
+          raw_root=pathlib.Path('build/germany-static')
           root=pathlib.Path('build/germany-sites')
           m=json.loads((root/'manifest.json').read_text())
           rows=json.loads(gzip.decompress((root/'all.json.gz').read_bytes()))
+          raw_rows=json.loads(gzip.decompress((raw_root/'all.json.gz').read_bytes()))
+          raw_by_id={str(r[0]):r for r in raw_rows}
           cw=json.loads(pathlib.Path('build/germany-site-crosswalk.json').read_text())
           norm=lambda v: re.sub(r'[^a-z0-9]+','_', ''.join(c for c in unicodedata.normalize('NFKD',str(v or '')) if not unicodedata.combining(c)).lower()).strip('_')
           assert m['country']=='DE'
@@ -69,7 +72,7 @@ jobs:
           assert m['siteCount'] < m['facilityCount'] * 0.90, m
           assert m['evseCount'] >= m['siteCount'], m
           assert m['multiFacilitySiteCount'] > 5000, m
-          assert m['maxFacilitiesPerSite'] >= 10, m
+          assert 10 <= m['maxFacilitiesPerSite'] <= 300, 'unexpected mega-site: manual grouping review required'
           assert len(rows)==m['siteCount']==len(cw['entries'])
           ids=[str(r[0]) for r in rows]
           assert len(ids)==len(set(ids)), 'duplicate site IDs detected'
@@ -83,7 +86,18 @@ jobs:
           assert not any(norm(r[5])=='tesla' for r in rows), 'Tesla site leaked into grouped runtime rows'
           assert not any(norm(e.get('operator'))=='tesla' for e in cw['entries']), 'Tesla site leaked into grouped crosswalk'
           assert not any(any(norm(raw)=='tesla' or norm(raw).startswith('tesla_') for raw in e.get('rawOperators',[])) for e in cw['entries']), 'Tesla raw operator leaked into grouped crosswalk'
-          print(json.dumps({k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},indent=2))
+          # Audit very large groups against their raw facilities. Address, coordinates and canonical operator
+          # must remain identical; station display names may legitimately differ (e.g. numbered wallboxes).
+          mega=[]
+          for e in sorted(cw['entries'],key=lambda x:x['facilityCount'],reverse=True):
+            if e['facilityCount'] < 50: break
+            src=[raw_by_id[str(fid)] for fid in e['bnetzaIds']]
+            assert len(src)==e['facilityCount'], f"missing raw facilities for {e['siteId']}"
+            dims={(r[2],float(r[3]),float(r[4]),r[5]) for r in src}
+            assert len(dims)==1, f"incoherent mega-site grouping for {e['siteId']}: {dims}"
+            mega.append({'siteId':e['siteId'],'facilityCount':e['facilityCount'],'distinctNames':len({r[1] for r in src}),'operator':src[0][5],'address':src[0][2]})
+          assert mega and mega[0]['facilityCount']==m['maxFacilitiesPerSite']
+          print(json.dumps({'grouped':{k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},'megaSiteAudit':mega[:10]},indent=2,ensure_ascii=False))
           PY
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
