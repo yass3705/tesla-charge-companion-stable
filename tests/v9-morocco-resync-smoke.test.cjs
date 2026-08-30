@@ -3,6 +3,7 @@ const fs=require('fs');
 const physical=require('../assets/v9/adapters/morocco-public.js');
 const nonprod=require('../assets/v9/adapters/morocco-nonproduction.js');
 const browserLoaders=require('../assets/v9/browser-loaders.js');
+const sessionEngine=require('../assets/v9/session-engine.js');
 
 const RAW='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco';
 const sources=[
@@ -36,6 +37,12 @@ const sources=[
   assert.equal(fastvolt.length,97,'FastVolt production count');
   assert(fastvolt.every(s=>s.physicalOperator?.name==='FastVolt / Afrimobility'),'FastVolt CPO attribution');
   assert(fastvolt.every(s=>(s.offers||[]).every(o=>o.metadata?.tariffChannel==='FastVolt direct')),'FastVolt tariff channel');
+  const alBoustane=fastvolt.find(s=>s.sourceStationId==='W00057');
+  assert(alBoustane,'FastVolt Al Boustane must exist');
+  assert.equal(sessionEngine.stationChargingKind(alBoustane),'DC','highest-power charging kind must be DC');
+  const dcOffers=alBoustane.offers.filter(o=>sessionEngine.offerMatchesChargingKind(o,'DC'));
+  assert.equal(dcOffers.length,1,'mixed FastVolt station must expose only one DC-compatible offer to a DC session');
+  assert.deepEqual(dcOffers[0].connectorKinds,['DC'],'AC tariff must not leak into a DC session');
 
   const kilowatt=await physical.createLoader({source:sources[2]})();
   assert.equal(kilowatt.length,43,'Kilowatt production count');
@@ -56,5 +63,5 @@ const sources=[
   assert.equal(overlay.access.appSource,'EVOne');
   assert.equal(overlay.access.accessNetwork,'EVPlug');
 
-  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),browserLoaderCount:Object.keys(wired).filter(k=>k.startsWith('morocco-')).length,evgo:evgo.length,evgoEvses:43,fastvolt:fastvolt.length,kilowatt:kilowatt.length,totalenergies:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
+  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),browserLoaderCount:Object.keys(wired).filter(k=>k.startsWith('morocco-')).length,evgo:evgo.length,evgoEvses:43,fastvolt:fastvolt.length,fastvoltMixedStationChargingKind:sessionEngine.stationChargingKind(alBoustane),kilowatt:kilowatt.length,totalenergies:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
