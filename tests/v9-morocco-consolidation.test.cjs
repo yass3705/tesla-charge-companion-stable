@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const DataEngine=require('../assets/v9/data-engine.js');
 const BrowserLoaders=require('../assets/v9/browser-loaders.js');
+const PricingEngine=require('../assets/v9/pricing-engine.js');
 const Morocco=require('../assets/v9/adapters/morocco-public.js');
 const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
 
@@ -45,7 +46,14 @@ const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
   assert.equal(alBoustane.access.siteBrand,'Afriquia');
   assert.equal(alBoustane.evses[0].connectors.filter(c=>c.kind==='DC'&&c.powerKw===360).length,4);
   assert.equal(alBoustane.evses[0].connectors.filter(c=>c.kind==='AC'&&c.powerKw===22).length,2);
-  assert.ok(alBoustane.offers.some(o=>o.metadata?.tariffChannel==='FastVolt direct'));
+  const fastVoltDc=alBoustane.offers.find(o=>o.connectorKinds?.includes('DC'));
+  assert.ok(fastVoltDc);
+  assert.equal(fastVoltDc.currency,'MAD');
+  assert.equal(fastVoltDc.pricing.rules[0].pricePerMinute,2.5);
+  const tenMinuteDc=PricingEngine.evaluateOffer(fastVoltDc,{durationMinutes:10,energyKwh:20});
+  assert.equal(tenMinuteDc.complete,true);
+  assert.equal(tenMinuteDc.currency,'MAD');
+  assert.equal(tenMinuteDc.totalEur,25,'10 minutes FastVolt DC must evaluate to 25 MAD native amount');
 
   const evgo=area.stations.filter(s=>s.networkBrand==='EVGO');
   assert.equal(evgo.length,17);
@@ -75,5 +83,12 @@ const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
   assert.equal(shell.networkBrand,'Shell Recharge');
   assert.deepEqual(shell.offers,[]);
 
-  console.log(JSON.stringify({ok:true,physicalSources:sources.map(s=>s.id),mergedStations:area.stations.length,evgo:evgo.length,fastVolt:fastVolt.length,kilowatt:kilowatt.length,totalEnergiesUnknownHosts:unknownTotalHosts.length,alWaha:{id:alWaha.id,cpo:alWaha.physicalOperator.name,siteBrand:alWaha.access.siteBrand,provenance:alWaha.provenance.map(p=>p.sourceId)},evoneProductionPolicy:Policies.allowedStatuses,shellVivo:'diagnostic_only'},null,2));
+  const previewHtml=fs.readFileSync('v9-preview/index.html','utf8');
+  const previewApp=fs.readFileSync('v9-preview/app.js','utf8');
+  assert.match(previewHtml,/option value="MA">Maroc/);
+  assert.match(previewHtml,/adapters\/morocco-public\.js/);
+  assert.match(previewApp,/moroccoPublic:window\.TCCV9Adapters\.moroccoPublic/);
+  assert.match(previewApp,/countryCode==='MA'\?'MAD':'EUR'/);
+
+  console.log(JSON.stringify({ok:true,physicalSources:sources.map(s=>s.id),mergedStations:area.stations.length,evgo:evgo.length,fastVolt:fastVolt.length,kilowatt:kilowatt.length,totalEnergiesUnknownHosts:unknownTotalHosts.length,fastVoltDcTenMinutesMad:tenMinuteDc.totalEur,alWaha:{id:alWaha.id,cpo:alWaha.physicalOperator.name,siteBrand:alWaha.access.siteBrand,provenance:alWaha.provenance.map(p=>p.sourceId)},evoneProductionPolicy:Policies.allowedStatuses,shellVivo:'diagnostic_only',previewCountry:'MA',previewCurrency:'MAD'},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
