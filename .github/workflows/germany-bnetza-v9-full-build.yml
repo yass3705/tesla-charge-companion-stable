@@ -9,7 +9,12 @@ on:
       - 'scripts/build_germany_bnetza_v9_v4.py'
       - 'scripts/group_germany_bnetza_v9_sites.py'
       - 'scripts/audit_germany_operator_normalization_v9.py'
+      - 'scripts/audit_germany_direct_offer_site_linkage_v9.py'
+      - 'scripts/build_germany_direct_offers_v9.py'
       - 'data/v9/germany-operator-aliases.json'
+      - 'data/v9/germany-direct-offers.json'
+      - 'data/v9/germany-direct-offers-aral-extension.json'
+      - 'data/v9/germany-direct-offers-enbw-extension.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
 
@@ -102,6 +107,10 @@ jobs:
           PY
       - name: Audit operator canonicalization coverage
         run: python scripts/audit_germany_operator_normalization_v9.py --min-coverage 0.47
+      - name: Build effective Germany direct offers
+        run: python scripts/build_germany_direct_offers_v9.py --out build/germany-direct-offers.json
+      - name: Audit real site-to-direct-offer linkage
+        run: python scripts/audit_germany_direct_offer_site_linkage_v9.py --sites build/germany-sites/all.json.gz --offers build/germany-direct-offers.json
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
         with:
@@ -111,4 +120,5 @@ jobs:
             build/germany-crosswalk.json
             build/germany-sites/
             build/germany-site-crosswalk.json
+            build/germany-direct-offers.json
           retention-days: 7
