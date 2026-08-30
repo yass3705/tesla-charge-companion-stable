@@ -21,7 +21,7 @@
       driveMinutes:num(r.driveMinutes??r.durationMinutes??r.duration_min),
       detourKm:num(r.detourKm),
       detourMinutes:num(r.detourMinutes),
-      energyToStationKwh:num(r.energyToStationKwh)
+      energyToStationKwh:num(r.energyToStationKwh??r.approachEnergyKwh)
     };
   }
 
