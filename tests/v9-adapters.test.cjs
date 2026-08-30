@@ -1,4 +1,5 @@
 const assert=require('node:assert/strict');
+const fs=require('node:fs');
 const Tesla=require('../assets/v9/adapters/tesla-json.js');
 const National=require('../assets/v9/adapters/national-compact.js');
 const Direct=require('../assets/v9/adapters/direct-offers.js');
@@ -60,8 +61,22 @@ assert.equal(overlay.offerRules[1].pricing.pricePerKwh,0.43);
 assert.equal(overlay.offerRules[1].metadata.monthlyFeeEur,5.99);
 assert.equal(overlay.offerRules[1].metadata.defaultSelected,false);
 
+const registry=JSON.parse(fs.readFileSync('data/v9/source-registry.json','utf8'));
+const frSources=registry.sources.filter(s=>Array.isArray(s.countries)&&s.countries.includes('FR')&&s.active!==false);
+const nonTeslaInventory=frSources.filter(s=>s.id!=='tesla-global'&&s.capabilities.includes('inventory'));
+assert.deepEqual(nonTeslaInventory.map(s=>s.id),['france-national']);
+for(const id of ['ionity-direct-france','atlante-direct-france','powerdot-direct-france']){
+  const source=registry.sources.find(s=>s.id===id);
+  assert(source,`missing ${id}`);
+  assert.deepEqual(source.capabilities,['tariff']);
+  assert.equal(source.priority.tariff,95);
+  assert.equal(source.priority.identity,undefined);
+  assert.equal(source.priority.connectors,undefined);
+}
+
 console.log(JSON.stringify({
   ok:true,
   adapters:{tesla:true,franceCompactV1:true,netherlandsCompactV3:true,directOfferOverlay:true},
+  franceInventoryContract:{nonTeslaPhysicalBaseline:'france-national',legacyDirectSourcesTariffOnly:true},
   retainedFeatures:['Tesla global identity','national fallback offers','OCPI duration bands','NL access/parking restrictions','V8 direct tariff rule migration','subscription opt-in metadata']
 },null,2));
