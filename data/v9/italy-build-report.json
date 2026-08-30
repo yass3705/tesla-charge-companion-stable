@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-08-30T00:00:02.898494Z",
+  "stations": 29696,
+  "tiles": 72,
+  "directOffers": 23978,
+  "subscriptionOffers": 2764,
+  "emspOffers": 2281,
+  "sourceCounts": {
+    "punEvseCount": 75025,
+    "punStationCount": 29696,
+    "rankableDirectEvseCount": 23978,
+    "rankableDirectCoveragePct": 31.96,
+    "rankableDirectByOperator": {
+      "A2A e-moving": 5618,
+      "Plenitude On The Road": 18360
+    },
+    "rankableSelectedSubscriptionEvseCount": 2764,
+    "rankableSelectedSubscriptionCoveragePct": 3.68,
+    "rankableSelectedSubscriptionByOffer": {
+      "atlante_go:Atlante": 1937,
+      "atlante_go:ChargeLeague": 827
+    },
+    "rankableEmspEvseCount": 2281,
+    "rankableEmspCoveragePct": 3.04,
+    "rankableEmspByProvider": {
+      "NextCharge": 2281
+    },
+    "blockedReasons": {
+      "ges_nextcharge:not_rankable_emsp": 35,
+      "plenitude:official_summer_offer_exclusion": 1362
+    }
+  }
+}

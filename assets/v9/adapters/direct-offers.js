@@ -48,14 +48,15 @@
 
   function directRule(raw,country){return{...common(raw,country),kind:'direct',offerKind:'direct',subscriptionId:null};}
   function subscriptionRule(raw,country){return{...common(raw,country),kind:'subscription',offerKind:'subscription',subscriptionId:text(raw.selectionId||raw.id),priority:Number(raw.priority??100)};}
+  function emspRule(raw,country){return{...common(raw,country),kind:'emsp',offerKind:'emsp',subscriptionId:null,directOperatorOnly:false,priority:Number(raw.priority??80)};}
   function normalizePayload(payload){
     const country=text(payload?.country).toUpperCase();if(!country)throw new Error('direct offer payload country missing');
-    const direct=payload?.directOffers||payload?.operatorOffers||[],subscriptions=payload?.subscriptionOffers||payload?.subscriptions||[];
-    return{offerRules:[...direct.map(x=>directRule(x,country)),...subscriptions.map(x=>subscriptionRule(x,country))],metadata:{schemaVersion:payload?.schemaVersion||1,country,generatedAt:payload?.generatedAt||null,policy:payload?.policy||{},mode:payload?.mode||null}};
+    const direct=payload?.directOffers||payload?.operatorOffers||[],subscriptions=payload?.subscriptionOffers||payload?.subscriptions||[],emsp=payload?.emspOffers||[];
+    return{offerRules:[...direct.map(x=>directRule(x,country)),...subscriptions.map(x=>subscriptionRule(x,country)),...emsp.map(x=>emspRule(x,country))],metadata:{schemaVersion:payload?.schemaVersion||1,country,generatedAt:payload?.generatedAt||null,policy:payload?.policy||{},mode:payload?.mode||null}};
   }
   function createLoader({url,fetchImpl}={}){
     const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for direct offer adapter');let promise=null;
     return async function(){if(!promise)promise=f(url,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`direct offers unavailable (${r.status})`);return r.json();}).then(normalizePayload).catch(e=>{promise=null;throw e;});return promise;};
   }
-  return{directRule,subscriptionRule,normalizePayload,evseIdentityVariants,createLoader};
+  return{directRule,subscriptionRule,emspRule,normalizePayload,evseIdentityVariants,createLoader};
 });

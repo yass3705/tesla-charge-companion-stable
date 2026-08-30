@@ -16,6 +16,12 @@
       "countries": ["FR", "NL"],
       "operatorIds": ["fastned"],
       "evidenceSources": ["france-canonical-direct-offers", "netherlands-direct-offers"]
+    },
+    {
+      "subscriptionId": "atlante_go",
+      "countries": ["IT"],
+      "operatorIds": ["atlante", "electra", "ionity"],
+      "evidenceSources": ["italy-verified-offers"]
     }
   ],
   "sources": [
@@ -38,6 +44,8 @@
     {"id":"etotem-direct-france","label":"e-Totem legacy tariff source (replaced incrementally by exact V9 station/EVSE layer)","adapter":"direct-tariff-gzip","path":"data/etotem_direct_tariffs_france.json.gz","countries":["FR"],"operatorIds":["etotem"],"capabilities":["tariff"],"priority":{"tariff":95},"refresh":"legacy","active":false,"optional":true},
     {"id":"netherlands-dotnl","label":"DOT-NL national catalogue","adapter":"national-compact-v3","root":"data/non_tesla_netherlands/","manifest":"data/non_tesla_netherlands/manifest.json","countries":["NL"],"capabilities":["inventory","connectors","access","status","tariff_fallback"],"priority":{"identity":60,"connectors":65,"access":70,"status":65,"tariff":35},"refresh":"monthly-static-plus-dynamic-overlay","active":true},
     {"id":"netherlands-direct-offers","label":"Netherlands verified direct offers","adapter":"direct-offer-json","path":"data/netherlands_direct_tariffs_v1.json","countries":["NL"],"capabilities":["tariff","subscription"],"priority":{"tariff":95},"refresh":"on-demand","active":true,"optional":true},
+    {"id":"italy-pun","label":"Italy GSE PUN national physical baseline","adapter":"national-compact-v4","root":"data/v9/italy-static/","manifest":"data/v9/italy-static/manifest.json","countries":["IT"],"capabilities":["inventory","connectors","access","status"],"priority":{"identity":60,"connectors":65,"access":60,"status":70,"tariff":0},"refresh":"monthly-or-on-demand","active":true},
+    {"id":"italy-verified-offers","label":"Italy verified direct, subscription and eMSP offers","adapter":"direct-offer-json","path":"data/v9/italy-offers.json","countries":["IT"],"capabilities":["tariff","subscription"],"priority":{"tariff":130},"refresh":"monthly-or-on-demand-source-change","active":true,"optional":true},
     {"id":"user-stations","label":"User-added stations","adapter":"runtime-user-stations","countries":["*"],"capabilities":["inventory","connectors","access","tariff"],"priority":{"identity":110,"connectors":110,"access":110,"status":40,"tariff":110},"refresh":"runtime","active":true,"optional":true}
   ]
 }
