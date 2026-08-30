@@ -1,6 +1,8 @@
 const assert=require('assert');
+const fs=require('fs');
 const physical=require('../assets/v9/adapters/morocco-public.js');
 const nonprod=require('../assets/v9/adapters/morocco-nonproduction.js');
+const browserLoaders=require('../assets/v9/browser-loaders.js');
 
 const RAW='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco';
 const sources=[
@@ -11,6 +13,14 @@ const sources=[
 ];
 
 (async()=>{
+  const registry=JSON.parse(fs.readFileSync(require.resolve('../data/v9/source-registry.json'),'utf8'));
+  const ma=registry.sources.filter(s=>s.active!==false&&Array.isArray(s.countries)&&s.countries.includes('MA'));
+  assert.deepEqual(ma.map(s=>s.id).sort(),sources.map(s=>s.id).sort(),'registry must contain exactly the four physical Morocco public sources');
+  assert(ma.every(s=>s.adapter==='morocco-public-v1'),'Morocco physical registry adapter');
+  assert(!ma.some(s=>/evone|evplug|shell|vivo/i.test(s.id)),'eMSP/diagnostic source must not enter physical registry');
+  const wired=browserLoaders.createRegistryLoaders({registry,adapters:{moroccoPublic:physical}});
+  for(const source of sources)assert.equal(typeof wired[source.id],'function',`browser loader wired for ${source.id}`);
+
   const evgo=await physical.createLoader({source:sources[0]})();
   assert.equal(evgo.length,17,'EVGO station count');
   assert.equal(evgo.flatMap(s=>s.evses||[]).length,43,'EVGO EVSE count');
@@ -46,5 +56,5 @@ const sources=[
   assert.equal(overlay.access.appSource,'EVOne');
   assert.equal(overlay.access.accessNetwork,'EVPlug');
 
-  console.log(JSON.stringify({ok:true,evgo:evgo.length,evgoEvses:43,fastvolt:fastvolt.length,kilowatt:kilowatt.length,totalenergies:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
+  console.log(JSON.stringify({ok:true,registryMoroccoSources:ma.map(s=>s.id),browserLoaderCount:Object.keys(wired).filter(k=>k.startsWith('morocco-')).length,evgo:evgo.length,evgoEvses:43,fastvolt:fastvolt.length,kilowatt:kilowatt.length,totalenergies:te.length,evoneProduction:['Available','Occupied','Charging']},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
