@@ -69,6 +69,9 @@
         loaders[source.id]=adapters.franceCrosswalk.createLoader({url:join(basePath,source.path),fetchImpl});
       }else if(source.adapter==='france-irve-status-json'&&adapters.franceIrveStatus?.createLoader&&source.path){
         loaders[source.id]=adapters.franceIrveStatus.createLoader({url:join(basePath,source.path),fetchImpl,maxAgeMinutes:num(source.freshnessMaxMinutes)??120});
+      }else if(source.adapter==='morocco-public-v1'&&adapters.moroccoPublic?.createLoader){
+        const prepared=adapters.moroccoPublic.createLoader({source,fetchImpl});
+        loaders[source.id]=async query=>{const loader=await prepared;return loader(query);};
       }else if(/^national-compact-v\d+$/.test(source.adapter)&&adapters.nationalCompact){
         loaders[source.id]=createNationalLoader({source,basePath,adapter:adapters.nationalCompact,fetchImpl});
       }
