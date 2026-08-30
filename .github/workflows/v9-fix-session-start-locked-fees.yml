@@ -1,0 +1,72 @@
+name: V9 fix session-start locked fees
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-ewiva-enel-emsp
+    paths:
+      - .github/workflows/v9-fix-session-start-locked-fees.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Patch session-start locked evaluation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('assets/v9/session-engine.js')
+          s=p.read_text(encoding='utf-8')
+          old="""  function evaluateSessionStartLockedOffer(offer,session={}){\n    const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;\n    if(pricing.type!=='rules'||pricing.priceSelectionBasis!=='session_start_local_time')return null;\n    const rule=PricingEngine.matchingRule(pricing,session.startAt,timeZone);\n    if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:text(offer?.id||offer?.offerId),timeZone};\n    const base=PricingEngine.evaluateRule(rule,session);\n    const finalized=PricingEngine.applyMinimumTotal(pricing,base.totalEur,base.components);\n    return{\n      complete:true,totalEur:finalized.totalEur,components:finalized.components,\n      offerId:text(offer?.id||offer?.offerId),currency:offer?.currency||'EUR',matchedRule:rule,\n      segmented:false,timeZone,priceSelectionBasis:'session_start_local_time'\n    };\n  }\n"""
+          new="""  function evaluateSessionStartLockedOffer(offer,session={}){\n    const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;\n    if(pricing.type!=='rules'||pricing.priceSelectionBasis!=='session_start_local_time')return null;\n    const rule=PricingEngine.matchingRule(pricing,session.startAt,timeZone);\n    if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:text(offer?.id||offer?.offerId),timeZone};\n    const base=PricingEngine.evaluateRule(rule,session);\n    const conditional=PricingEngine.evaluateConditionalSessionFees(pricing.conditionalSessionFees,session);\n    if(conditional.complete===false)return{complete:false,reason:conditional.reason,offerId:text(offer?.id||offer?.offerId),timeZone,conditionKind:conditional.conditionKind||null};\n    const post=PricingEngine.evaluatePostChargeFee(pricing.postChargeFee,session,timeZone);\n    if(post.complete===false)return{complete:false,reason:post.reason,offerId:text(offer?.id||offer?.offerId),timeZone};\n    const total=base.totalEur+conditional.totalEur+post.totalEur;\n    const components={...base.components,...(conditional.component?{conditionalSessionFees:conditional.component}:{}),...(post.component?{postCharge:post.component}:{})};\n    const finalized=PricingEngine.applyMinimumTotal(pricing,total,components);\n    return{\n      complete:true,totalEur:finalized.totalEur,components:finalized.components,\n      offerId:text(offer?.id||offer?.offerId),currency:offer?.currency||'EUR',matchedRule:rule,\n      segmented:false,timeZone,priceSelectionBasis:'session_start_local_time'\n    };\n  }\n"""
+          if old not in s:
+              raise SystemExit('target function not found or already changed')
+          p.write_text(s.replace(old,new),encoding='utf-8')
+          PY
+
+      - name: Test locked tariff keeps energy rate and adds fees
+        run: |
+          node - <<'JS'
+          const Session=require('./assets/v9/session-engine.js');
+          const offer={
+            id:'locked-test',provider:'Enel On Your Way',kind:'emsp',countries:['IT'],currency:'EUR',
+            pricing:{type:'rules',priceSelectionBasis:'session_start_local_time',rules:[
+              {scope:'timeWindow',start:'07:00',end:'21:00',pricePerKwh:.86},
+              {scope:'timeWindow',start:'21:00',end:'07:00',pricePerKwh:.50}
+            ],postChargeFee:{eurPerMinute:.30,graceMinutes:0}},
+            metadata:{timeZone:'Europe/Rome'}
+          };
+          const station={id:'IT:test',countryCode:'IT',offers:[offer]};
+          const session={energyKwh:20,durationMinutes:180,startAt:'2026-08-30T18:00:00Z',postChargeMinutes:1,consumptionKwhPer100Km:15,targetCurrency:'EUR'};
+          const r=Session.evaluateStation(station,session,{});
+          if(r.best?.total!==17.5)throw new Error(`locked post-charge fee lost: ${JSON.stringify(r.best)}`);
+          if(r.best?.result?.segmented!==false)throw new Error('session-start tariff unexpectedly segmented');
+          if(r.best?.result?.components?.postCharge?.costEur!==.3)throw new Error('post-charge component missing');
+          console.log(JSON.stringify(r.best,null,2));
+          JS
+
+      - name: Run existing pricing and Italy runtime tests
+        run: |
+          node tests/v9-pricing-engine.test.cjs
+          node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Commit generic engine fix
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/v9/session-engine.js
+          if git diff --cached --quiet; then echo 'engine already patched'; exit 0; fi
+          git commit -m 'fix(v9): apply fees to session-start locked tariffs'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
