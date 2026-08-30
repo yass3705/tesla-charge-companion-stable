@@ -146,7 +146,7 @@ jobs:
           exact_offer_ids={z['evseIds'][0] for z in u['directOffers']}
           assert len(exact_offer_ids)==len(u['directOffers'])
           assert len(exact_offer_ids)<=u['summary']['exactBumpAliases']
-          assert sum(1 for z in u['deferred'] if z.get('reason')=='time_changing_tariff_not_yet_semantically_compiled')==u['summary']['timeChangingDeferred']
+          assert sum(1 for z in u['deferred'] if z.get('reason')=='time_changing_tariff_requires_semantic_compiler')==u['summary']['timeChangingDeferred']
           deferred={z.get('id') for z in r.get('deferred',[])}
           assert 'electra-essential' in deferred
           assert 'electra-smart' in deferred
