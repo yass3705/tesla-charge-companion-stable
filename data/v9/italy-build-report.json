@@ -3,8 +3,8 @@
   "stations": 29696,
   "tiles": 72,
   "directOffers": 48409,
-  "subscriptionOffers": 48330,
-  "emspOffers": 2281,
+  "subscriptionOffers": 50008,
+  "emspOffers": 3959,
   "sourceCounts": {
     "punEvseCount": 75025,
     "punStationCount": 29696,
@@ -38,5 +38,22 @@
   "enelSubscriptionOffers": {
     "enel_plug_and_go_super": 22783,
     "enel_plug_and_go_explorer": 22783
+  },
+  "ewivaEnelOnYourWay": {
+    "stations": 854,
+    "evse": 1678,
+    "basicEmspOffers": 1678,
+    "plugAndGoSuperOffers": 1678,
+    "byTariffClass": {
+      "HPC": 1640,
+      "DC": 31,
+      "AC": 7
+    },
+    "postChargeEurPerMin": {
+      "AC": 0.1,
+      "DC": 0.2,
+      "HPC": 0.3
+    },
+    "explorerRankable": false
   }
 }
