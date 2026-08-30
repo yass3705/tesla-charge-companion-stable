@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "country": "FR",
-  "generatedAt": "2026-08-30T11:53:06.047098Z",
+  "generatedAt": "2026-08-30T18:03:11.797481Z",
   "mode": "exact_pdc_direct_tariffs",
   "policy": {
     "exactPdcRequired": true,
@@ -15,6 +15,9 @@
     ],
     "conditionalFeeConditionsUseAndSemantics": true,
     "sessionDurationSurchargeSupported": true,
+    "energyTimeBandsSupported": true,
+    "energyTimeBandCrossingFailsClosedUntilSessionSegmentation": true,
+    "postChargeOccupancyTimeBandsSupported": true,
     "minimumTotalAppliedAfterAllSessionComponents": true,
     "subscriptionsOptIn": true
   },
@@ -4899,6 +4902,210 @@
         "timeChanging": false,
         "semanticFamily": "static_components",
         "sourceStatus": "rankable_static",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe8022",
+      "selectionId": "bump-direct-frbmpe8022",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP203739P"
+      ],
+      "evseIds": [
+        "FRBMPE8022"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 15.0,
+          "eurPerMinute": 0.2,
+          "exemptLocalWindows": [
+            {
+              "start": "23:00",
+              "end": "09:00"
+            }
+          ]
+        },
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffGroupId": "c42ece65-6a4d-46d2-bc24-168c9c2674a0",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "appEvseId": "870d6c39-4ec6-a53a-937d-7b507a7c2220",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_post_charge_occupancy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe3493",
+      "selectionId": "bump-direct-frbmpe3493",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP203739P"
+      ],
+      "evseIds": [
+        "FRBMPE3493"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 15.0,
+          "eurPerMinute": 0.2,
+          "exemptLocalWindows": [
+            {
+              "start": "23:00",
+              "end": "09:00"
+            }
+          ]
+        },
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffGroupId": "c42ece65-6a4d-46d2-bc24-168c9c2674a0",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "appEvseId": "b2dbff70-26c5-109c-2ba8-2bda9870d6c7",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_post_charge_occupancy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe9492",
+      "selectionId": "bump-direct-frbmpe9492",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP203739P"
+      ],
+      "evseIds": [
+        "FRBMPE9492"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 15.0,
+          "eurPerMinute": 0.2,
+          "exemptLocalWindows": [
+            {
+              "start": "23:00",
+              "end": "09:00"
+            }
+          ]
+        },
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffGroupId": "c42ece65-6a4d-46d2-bc24-168c9c2674a0",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "appEvseId": "24c7405a-3662-d6b8-6af0-d79a79a0043a",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_post_charge_occupancy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe8140",
+      "selectionId": "bump-direct-frbmpe8140",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP203739P"
+      ],
+      "evseIds": [
+        "FRBMPE8140"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.45
+          }
+        ],
+        "postChargeFee": {
+          "graceMinutes": 15.0,
+          "eurPerMinute": 0.2,
+          "exemptLocalWindows": [
+            {
+              "start": "23:00",
+              "end": "09:00"
+            }
+          ]
+        },
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffGroupId": "c42ece65-6a4d-46d2-bc24-168c9c2674a0",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "appEvseId": "92f1c2a9-8542-7c81-f56c-5c9a41cb200c",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_post_charge_occupancy_time_bands",
+        "sourceStatus": "rankable_rule_based",
         "powerKw": "22",
         "timeZone": "Europe/Paris"
       }
@@ -24707,6 +24914,198 @@
         "semanticFamily": "static_components",
         "sourceStatus": "rankable_static",
         "powerKw": "150",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp1957",
+      "selectionId": "bump-direct-frbmpebmp1957",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP734872P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP1957"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "start": "10:00",
+            "end": "17:00",
+            "pricePerKwh": 0.25
+          },
+          {
+            "start": "17:00",
+            "end": "10:00",
+            "pricePerKwh": 0.395
+          }
+        ],
+        "minimumTotalEur": 0.5,
+        "requiresSegmentationOnTariffBoundary": true
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffGroupId": "742ec1b2-56e0-4569-ba48-9e1c7cb8b2b7",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "appEvseId": "fdf731ba-bcc1-64f4-914f-2efcf7325304",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp1959",
+      "selectionId": "bump-direct-frbmpebmp1959",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP734872P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP1959"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "start": "10:00",
+            "end": "17:00",
+            "pricePerKwh": 0.25
+          },
+          {
+            "start": "17:00",
+            "end": "10:00",
+            "pricePerKwh": 0.395
+          }
+        ],
+        "minimumTotalEur": 0.5,
+        "requiresSegmentationOnTariffBoundary": true
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffGroupId": "742ec1b2-56e0-4569-ba48-9e1c7cb8b2b7",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "appEvseId": "dc29f7b9-6565-840f-010b-f29a8173ae0c",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp1960",
+      "selectionId": "bump-direct-frbmpebmp1960",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP734872P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP1960"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "start": "10:00",
+            "end": "17:00",
+            "pricePerKwh": 0.25
+          },
+          {
+            "start": "17:00",
+            "end": "10:00",
+            "pricePerKwh": 0.395
+          }
+        ],
+        "minimumTotalEur": 0.5,
+        "requiresSegmentationOnTariffBoundary": true
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffGroupId": "742ec1b2-56e0-4569-ba48-9e1c7cb8b2b7",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "appEvseId": "35606714-c9bd-71ce-3b38-c2e3efaec4b6",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpebmp1958",
+      "selectionId": "bump-direct-frbmpebmp1958",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP734872P"
+      ],
+      "evseIds": [
+        "FRBMPEBMP1958"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "start": "10:00",
+            "end": "17:00",
+            "pricePerKwh": 0.25
+          },
+          {
+            "start": "17:00",
+            "end": "10:00",
+            "pricePerKwh": 0.395
+          }
+        ],
+        "minimumTotalEur": 0.5,
+        "requiresSegmentationOnTariffBoundary": true
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffGroupId": "742ec1b2-56e0-4569-ba48-9e1c7cb8b2b7",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "appEvseId": "c05ff5dd-b1d5-1826-1d8b-57d925c192b0",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_time_bands",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
         "timeZone": "Europe/Paris"
       }
     },
@@ -79045,130 +79444,6 @@
       "reason": "source_not_rankable"
     },
     {
-      "idPdcItinerance": "FRBMPE8022",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        },
-        {
-          "kind": "post_charge_occupancy_time_bands",
-          "bands": [
-            {
-              "start": "23:00",
-              "end": "09:00",
-              "eurPerMinute": 0.0,
-              "graceMinutes": 0
-            },
-            {
-              "start": "09:00",
-              "end": "23:00",
-              "eurPerMinute": 0.2,
-              "graceMinutes": 15
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE3493",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        },
-        {
-          "kind": "post_charge_occupancy_time_bands",
-          "bands": [
-            {
-              "start": "23:00",
-              "end": "09:00",
-              "eurPerMinute": 0.0,
-              "graceMinutes": 0
-            },
-            {
-              "start": "09:00",
-              "end": "23:00",
-              "eurPerMinute": 0.2,
-              "graceMinutes": 15
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE9492",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        },
-        {
-          "kind": "post_charge_occupancy_time_bands",
-          "bands": [
-            {
-              "start": "23:00",
-              "end": "09:00",
-              "eurPerMinute": 0.0,
-              "graceMinutes": 0
-            },
-            {
-              "start": "09:00",
-              "end": "23:00",
-              "eurPerMinute": 0.2,
-              "graceMinutes": 15
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE8140",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.45
-        },
-        {
-          "kind": "post_charge_occupancy_time_bands",
-          "bands": [
-            {
-              "start": "23:00",
-              "end": "09:00",
-              "eurPerMinute": 0.0,
-              "graceMinutes": 0
-            },
-            {
-              "start": "09:00",
-              "end": "23:00",
-              "eurPerMinute": 0.2,
-              "graceMinutes": 15
-            }
-          ]
-        }
-      ]
-    },
-    {
       "idPdcItinerance": "FRBMPEBMP3939",
       "reason": "no_exact_bump_crosswalk"
     },
@@ -79651,106 +79926,6 @@
     {
       "idPdcItinerance": "FRBMPEBMP7479",
       "reason": "no_exact_bump_crosswalk"
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP1957",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy_time_bands",
-          "bands": [
-            {
-              "start": "10:00",
-              "end": "17:00",
-              "eurPerKwh": 0.25
-            },
-            {
-              "start": "17:00",
-              "end": "10:00",
-              "eurPerKwh": 0.395
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP1959",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy_time_bands",
-          "bands": [
-            {
-              "start": "10:00",
-              "end": "17:00",
-              "eurPerKwh": 0.25
-            },
-            {
-              "start": "17:00",
-              "end": "10:00",
-              "eurPerKwh": 0.395
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP1960",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy_time_bands",
-          "bands": [
-            {
-              "start": "10:00",
-              "end": "17:00",
-              "eurPerKwh": 0.25
-            },
-            {
-              "start": "17:00",
-              "end": "10:00",
-              "eurPerKwh": 0.395
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPEBMP1958",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy_time_bands",
-          "bands": [
-            {
-              "start": "10:00",
-              "end": "17:00",
-              "eurPerKwh": 0.25
-            },
-            {
-              "start": "17:00",
-              "end": "10:00",
-              "eurPerKwh": 0.395
-            }
-          ]
-        }
-      ]
     },
     {
       "idPdcItinerance": "FRBMPE7111",
@@ -81107,21 +81282,25 @@
   ],
   "summary": {
     "exactBumpAliases": 1886,
-    "offers": 1742,
+    "offers": 1750,
     "staticOffers": 1091,
     "timeChangingSeen": 659,
-    "temporalOffers": 651,
+    "temporalOffers": 659,
     "temporalOffersByFamily": {
       "minimum_energy_post_charge_occupancy": 7,
+      "minimum_energy_post_charge_occupancy_time_bands": 4,
       "minimum_energy_duration_conditional_flat_fee": 16,
       "minimum_energy_conditional_flat_fee": 622,
+      "minimum_energy_time_bands": 4,
       "minimum_energy_session_duration_surcharge": 6
     },
     "conditionalEnergyOffers": 622,
     "combinedEnergyDurationOffers": 16,
     "postChargeOccupancyOffers": 7,
     "sessionDurationSurchargeOffers": 6,
-    "timeChangingDeferred": 8,
-    "deferred": 510
+    "energyTimeBandOffers": 4,
+    "postChargeOccupancyTimeBandOffers": 4,
+    "timeChangingDeferred": 0,
+    "deferred": 502
   }
 }
