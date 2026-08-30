@@ -85,16 +85,20 @@
 
   function applySelectedSubscriptions(station,selectedSubscriptions=[],crossBorderConfig={},query={}){
     if(!CrossBorder||!crossBorderConfig?.policy||!(selectedSubscriptions||[]).length)return station;
-    let out={...station,offers:[...(station?.offers||[])]};
+    let out={...station,offers:[...(station?.offers||[])]},advisories=[];
     const policyById=new Map((crossBorderConfig.policy.subscriptions||[]).map(s=>[text(s.id),s]));
     for(const id of selectedSubscriptions||[]){
       const subscription=policyById.get(text(id));if(!subscription)continue;
       const override=exactStationOverride(query,station,id);
       const resolved=CrossBorder.resolve({subscriptionId:id,countryCode:station.countryCode||query.countryCode,physicalOperator:station.physicalOperator,exactStationPrice:override?.pricePerKwh,exactStationCurrency:override?.currency},crossBorderConfig);
-      const offer=CrossBorder.toOffer(resolved,subscription,station);if(offer)out=OfferEngine.mergeStationOffers(out,[offer],{countryCode:station.countryCode||query.countryCode});
+      const offer=CrossBorder.toOffer(resolved,subscription,station);
+      if(!offer)continue;
+      if(resolved.rankable===true)out=OfferEngine.mergeStationOffers(out,[offer],{countryCode:station.countryCode||query.countryCode});
+      else advisories.push(offer);
     }
     out.eligibleOffers=OfferEngine.eligibleOffers(out,selectedSubscriptions,{countryCode:out.countryCode||query.countryCode});
-    out.rankableOffers=(out.eligibleOffers||[]).filter(o=>o?.metadata?.rankable!==false);
+    out.rankableOffers=[...(out.eligibleOffers||[])];
+    out.subscriptionAdvisories=OfferEngine.dedupeOffers(advisories,{countryCode:out.countryCode||query.countryCode});
     return out;
   }
 
