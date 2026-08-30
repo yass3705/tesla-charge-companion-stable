@@ -4,7 +4,17 @@ on:
   pull_request:
     paths:
       - 'assets/v9/**'
+      - 'v9-shadow/**'
       - 'tests/v9-shadow-parity.test.cjs'
+      - 'tests/v9-shadow-session-parity.test.cjs'
+      - '.github/workflows/v9-shadow-parity.yml'
+  push:
+    branches: [main, 'refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/**'
+      - 'v9-shadow/**'
+      - 'tests/v9-shadow-parity.test.cjs'
+      - 'tests/v9-shadow-session-parity.test.cjs'
       - '.github/workflows/v9-shadow-parity.yml'
   workflow_dispatch:
 
@@ -19,5 +29,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Run V8 to V9 shadow parity contract
+      - name: Syntax checks
+        run: |
+          node --check assets/v9/parity-engine.js
+          node --check assets/v9/v8-shadow-adapter.js
+          node --check tests/v9-shadow-parity.test.cjs
+          node --check tests/v9-shadow-session-parity.test.cjs
+          node --check v9-shadow/app.js
+      - name: Run station identity parity contract
         run: node tests/v9-shadow-parity.test.cjs
+      - name: Run full session parity contract
+        run: node tests/v9-shadow-session-parity.test.cjs
