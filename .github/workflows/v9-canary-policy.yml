@@ -1,0 +1,48 @@
+name: V9 canary policy safety
+
+on:
+  pull_request:
+    paths:
+      - 'assets/v9/canary-policy-engine.js'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'tests/v9-canary-policy-engine.test.cjs'
+      - '.github/workflows/v9-canary-policy.yml'
+  push:
+    branches: [main, 'refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/canary-policy-engine.js'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'tests/v9-canary-policy-engine.test.cjs'
+      - '.github/workflows/v9-canary-policy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canary-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check assets/v9/canary-policy-engine.js
+          node --check tests/v9-canary-policy-engine.test.cjs
+      - name: Canary policy contract
+        run: node tests/v9-canary-policy-engine.test.cjs
+      - name: Canary remains inactive
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const policy=JSON.parse(fs.readFileSync('data/v9/canary-policy.json','utf8'));
+          const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
+          if(policy.active!==false)throw new Error('canary policy must remain inactive');
+          if(rollout.canaryPercent!==0||rollout.stage!=='preview')throw new Error('real canary traffic must remain disabled');
+          if(rollout.productionPath==='v9-preview/')throw new Error('production target must remain distinct from preview');
+          console.log('V9 canary policy safe: inactive, zero traffic, dedicated candidate target');
+          NODE
