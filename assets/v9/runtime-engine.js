@@ -1,10 +1,10 @@
 (function(root,factory){
   if(typeof module==='object'&&module.exports){
-    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'),require('./session-engine.js'),require('./station-score-engine.js'),require('./routing-engine.js'));
+    module.exports=factory(require('./data-engine.js'),require('./offer-engine.js'),require('./session-engine.js'),require('./station-score-engine.js'),require('./routing-engine.js'),require('./vehicle-profile-engine.js'));
   }else{
-    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine,root.TCCV9SessionEngine,root.TCCV9StationScoreEngine,root.TCCV9RoutingEngine);
+    root.TCCV9RuntimeEngine=factory(root.TCCV9DataEngine,root.TCCV9OfferEngine,root.TCCV9SessionEngine,root.TCCV9StationScoreEngine,root.TCCV9RoutingEngine,root.TCCV9VehicleProfileEngine);
   }
-})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine,SessionEngine,StationScoreEngine,RoutingEngine){
+})(typeof globalThis!=='undefined'?globalThis:this,function(DataEngine,OfferEngine,SessionEngine,StationScoreEngine,RoutingEngine,VehicleProfileEngine){
   'use strict';
 
   if(!DataEngine)throw new Error('TCC V9 data engine is required');
@@ -12,6 +12,7 @@
   if(!SessionEngine)throw new Error('TCC V9 session engine is required');
   if(!StationScoreEngine)throw new Error('TCC V9 station score engine is required');
   if(!RoutingEngine)throw new Error('TCC V9 routing engine is required');
+  if(!VehicleProfileEngine)throw new Error('TCC V9 vehicle profile engine is required');
 
   const text=v=>String(v==null?'':v).trim();
   const country=v=>text(v).toUpperCase();
@@ -36,6 +37,7 @@
 
   function createEngine(config={}){
     const base=DataEngine.createEngine(config),coverage=coverageIndex(config.registry||{}),routeProvider=config.routeProvider||null;
+    const vehicleCatalog=VehicleProfileEngine.createCatalog(config.vehicleProfiles||[]);
     function deriveSubscriptionOptions(stations,filters={}){return filterSubscriptions(applyCoverage(OfferEngine.deriveSubscriptionOptions(stations,{}),coverage),filters);}
 
     async function queryArea(query={}){
@@ -44,22 +46,24 @@
       const stationById=new Map(stations.map(st=>[st.id,st]));
       const routingCandidates=(area.routingCandidates||[]).map(st=>stationById.get(st.id)||st);
       const subscriptions=deriveSubscriptionOptions(stations,query.subscriptionFilters||{});
+      const resolvedVehicle=VehicleProfileEngine.resolve({catalog:vehicleCatalog,profileId:query.vehicleProfileId||query.session?.vehicleProfileId,profile:query.vehicleProfile,session:query.session||{}});
+      const session=resolvedVehicle.session;
       let routeResult={byStationId:{},errors:[],routedCount:0,requestedCount:0};
       const provider=query.routeProvider||routeProvider;
-      if(query.session&&provider&&query.origin){routeResult=await RoutingEngine.routeCandidates(routingCandidates,{origin:query.origin,provider,session:query.session,concurrency:query.routingConcurrency||6});}
+      if(query.session&&provider&&query.origin){routeResult=await RoutingEngine.routeCandidates(routingCandidates,{origin:query.origin,provider,session,concurrency:query.routingConcurrency||6});}
       const routeMap={...(area.routes?.byStationId||area.routes||{}),...(query.route?.byStationId||query.route||{}),...(routeResult.byStationId||{})};
       const approachEnergyKwhByStationId=RoutingEngine.energyByStationId({byStationId:routeMap});
       let sessionEvaluations=null,stationScores=null,rankedStations=null;
       if(query.session){
-        const rows=SessionEngine.evaluateArea(stations,query.session,{selectedSubscriptions:query.selectedSubscriptions||query.session.selectedSubscriptions||[],targetCurrency:query.targetCurrency||query.session.targetCurrency||'EUR',fxRates:query.fxRates||query.session.fxRates||{},sortBy:'total',approachEnergyKwhByStationId});
+        const rows=SessionEngine.evaluateArea(stations,session,{selectedSubscriptions:query.selectedSubscriptions||session.selectedSubscriptions||[],targetCurrency:query.targetCurrency||session.targetCurrency||'EUR',fxRates:query.fxRates||session.fxRates||{},sortBy:'total',approachEnergyKwhByStationId});
         sessionEvaluations=Object.fromEntries(rows.map(row=>[row.evaluation.stationId,row.evaluation]));
-        const scored=StationScoreEngine.scoreArea(stations,sessionEvaluations,query.session,{route:{byStationId:routeMap},sortBy:query.sortBy||query.session.sortBy||'finalCost'});
+        const scored=StationScoreEngine.scoreArea(stations,sessionEvaluations,session,{route:{byStationId:routeMap},sortBy:query.sortBy||session.sortBy||'finalCost'});
         stationScores=Object.fromEntries(scored.map(row=>[row.score.stationId,row.score]));rankedStations=scored.map(row=>row.station);
       }
-      return{...area,stations,routingCandidates,subscriptions,routes:{byStationId:routeMap},routeResult,sessionEvaluations,stationScores,rankedStations,diagnostics:{...(area.diagnostics||{}),subscriptionOptionCount:subscriptions.length,routingRequestedCount:routeResult.requestedCount,routedStationCount:routeResult.routedCount,routingErrorCount:routeResult.errors.length,sessionEvaluatedStationCount:sessionEvaluations?Object.keys(sessionEvaluations).length:0,sessionComparableStationCount:sessionEvaluations?Object.values(sessionEvaluations).filter(x=>x?.best).length:0,scoredStationCount:stationScores?Object.keys(stationScores).length:0,fullyScoredStationCount:stationScores?Object.values(stationScores).filter(x=>x?.complete?.pricing&&x?.complete?.route&&x?.complete?.charging).length:0}};
+      return{...area,stations,routingCandidates,subscriptions,vehicleProfile:resolvedVehicle.profile,effectiveSession:session,routes:{byStationId:routeMap},routeResult,sessionEvaluations,stationScores,rankedStations,diagnostics:{...(area.diagnostics||{}),subscriptionOptionCount:subscriptions.length,vehicleProfileId:resolvedVehicle.profile?.id||null,vehicleProfileResolved:!!resolvedVehicle.profile,routingRequestedCount:routeResult.requestedCount,routedStationCount:routeResult.routedCount,routingErrorCount:routeResult.errors.length,sessionEvaluatedStationCount:sessionEvaluations?Object.keys(sessionEvaluations).length:0,sessionComparableStationCount:sessionEvaluations?Object.values(sessionEvaluations).filter(x=>x?.best).length:0,scoredStationCount:stationScores?Object.keys(stationScores).length:0,fullyScoredStationCount:stationScores?Object.values(stationScores).filter(x=>x?.complete?.pricing&&x?.complete?.route&&x?.complete?.charging).length:0}};
     }
 
-    return{...base,queryArea,eligibleOffers:OfferEngine.eligibleOffers,deriveSubscriptionOptions,dedupeOffers:OfferEngine.dedupeOffers,mergeStationOffers:OfferEngine.mergeStationOffers,evaluateStation:SessionEngine.evaluateStation,evaluateArea:SessionEngine.evaluateArea,scoreStation:StationScoreEngine.scoreStation,scoreArea:StationScoreEngine.scoreArea,routeCandidates:RoutingEngine.routeCandidates};
+    return{...base,queryArea,vehicleProfiles:vehicleCatalog.list,vehicleProfile:id=>vehicleCatalog.get(id),eligibleOffers:OfferEngine.eligibleOffers,deriveSubscriptionOptions,dedupeOffers:OfferEngine.dedupeOffers,mergeStationOffers:OfferEngine.mergeStationOffers,evaluateStation:SessionEngine.evaluateStation,evaluateArea:SessionEngine.evaluateArea,scoreStation:StationScoreEngine.scoreStation,scoreArea:StationScoreEngine.scoreArea,routeCandidates:RoutingEngine.routeCandidates};
   }
   return{createEngine,applyCoverage,filterSubscriptions};
 });
