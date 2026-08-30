@@ -34,4 +34,34 @@ const p=require('../assets/v9/pricing-engine.js');
   assert.equal(r.components.minimumTotal.preMinimumTotalEur,0.1);
   assert.equal(r.components.minimumTotal.topUpEur,0.4);
 }
+const conditionalOffer={id:'bump-energy-threshold',currency:'EUR',pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.55}],conditionalSessionFees:[{amountEur:1.2,conditions:[{kind:'energy_above_kwh',value:0.5}]}],minimumTotalEur:0.5}};
+{
+  const r=p.evaluateOffer(conditionalOffer,{energyKwh:0.49,durationMinutes:10});
+  assert.equal(r.complete,true);
+  assert.equal(r.totalEur,0.5);
+  assert.equal(r.components.conditionalSessionFees.costEur,0);
+  assert.equal(r.components.conditionalSessionFees.fees[0].applied,false);
+}
+{
+  const r=p.evaluateOffer(conditionalOffer,{energyKwh:0.5,durationMinutes:10});
+  assert.equal(r.complete,true);
+  assert.equal(r.totalEur,0.5);
+  assert.equal(r.components.conditionalSessionFees.costEur,0);
+  assert.equal(r.components.conditionalSessionFees.fees[0].conditions[0].matched,false);
+}
+{
+  const r=p.evaluateOffer(conditionalOffer,{energyKwh:0.5001,durationMinutes:10});
+  assert.equal(r.complete,true);
+  assert.equal(r.totalEur,1.475055);
+  assert.equal(r.components.conditionalSessionFees.costEur,1.2);
+  assert.equal(r.components.conditionalSessionFees.fees[0].conditions[0].matched,true);
+  assert.equal(r.components.minimumTotal,undefined);
+}
+{
+  const invalid={id:'bump-unsupported-condition',currency:'EUR',pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.55}],conditionalSessionFees:[{amountEur:1.2,conditions:[{kind:'session_duration_after_minutes',value:1}]}]}};
+  const r=p.evaluateOffer(invalid,{energyKwh:10,durationMinutes:10});
+  assert.equal(r.complete,false);
+  assert.equal(r.reason,'unsupported_conditional_fee_condition');
+  assert.equal(r.conditionKind,'session_duration_after_minutes');
+}
 console.log('v9 Bump pricing component regressions: ok');
