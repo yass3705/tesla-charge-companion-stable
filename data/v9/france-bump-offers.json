@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "country": "FR",
-  "generatedAt": "2026-08-30T11:46:08.072858Z",
+  "generatedAt": "2026-08-30T11:49:58.877811Z",
   "mode": "exact_pdc_direct_tariffs",
   "policy": {
     "exactPdcRequired": true,
@@ -12,6 +12,7 @@
     "conditionalFeeConditionsSupported": [
       "energy_above_kwh"
     ],
+    "sessionDurationSurchargeSupported": true,
     "minimumTotalAppliedAfterAllSessionComponents": true,
     "subscriptionsOptIn": true
   },
@@ -25160,6 +25161,92 @@
         "semanticFamily": "static_components",
         "sourceStatus": "rankable_static",
         "powerKw": "150",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe3876",
+      "selectionId": "bump-direct-frbmpe3876",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230791P"
+      ],
+      "evseIds": [
+        "FRBMPE3876"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.336,
+            "connectedTimeFreeMinutes": 240.0,
+            "connectedTimePerMinuteAfterFreeEur": 0.048
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "7e69dd91-daf8-5290-672a-2e16dfa733b0",
+        "tariffGroupId": "5088200e-c155-4b50-867f-60a047dfcca2",
+        "tariffName": "Duval Energies - Chapelle des Fougeretz - Base Tarif",
+        "appEvseId": "ab791f20-4b61-be4e-4ab7-6104c4d909ed",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_session_duration_surcharge",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe1046",
+      "selectionId": "bump-direct-frbmpe1046",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP230791P"
+      ],
+      "evseIds": [
+        "FRBMPE1046"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.336,
+            "connectedTimeFreeMinutes": 240.0,
+            "connectedTimePerMinuteAfterFreeEur": 0.048
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "7e69dd91-daf8-5290-672a-2e16dfa733b0",
+        "tariffGroupId": "5088200e-c155-4b50-867f-60a047dfcca2",
+        "tariffName": "Duval Energies - Chapelle des Fougeretz - Base Tarif",
+        "appEvseId": "442c5e13-b7e4-fb38-0926-98f00323c282",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_session_duration_surcharge",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "22",
         "timeZone": "Europe/Paris"
       }
     },
@@ -72260,6 +72347,178 @@
       }
     },
     {
+      "id": "bump-direct-frbmpe2911",
+      "selectionId": "bump-direct-frbmpe2911",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP523752P50058828836397"
+      ],
+      "evseIds": [
+        "FRBMPE2911"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.69,
+            "connectedTimeFreeMinutes": 120.0,
+            "connectedTimePerMinuteAfterFreeEur": 0.29
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "704cb006-a4aa-693f-5c6e-f2a717540826",
+        "tariffGroupId": "97f0a076-e1d3-417e-978c-1a6b8dbc017a",
+        "tariffName": "Bump - Certas Retail  - CERGY  - Payter Tarif",
+        "appEvseId": "65a7a2cc-3c84-b8a8-b8a5-5d95df36c3e1",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_session_duration_surcharge",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "240",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe2014",
+      "selectionId": "bump-direct-frbmpe2014",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP523752P50058828836397"
+      ],
+      "evseIds": [
+        "FRBMPE2014"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.69,
+            "connectedTimeFreeMinutes": 120.0,
+            "connectedTimePerMinuteAfterFreeEur": 0.29
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "704cb006-a4aa-693f-5c6e-f2a717540826",
+        "tariffGroupId": "97f0a076-e1d3-417e-978c-1a6b8dbc017a",
+        "tariffName": "Bump - Certas Retail  - CERGY  - Payter Tarif",
+        "appEvseId": "dd5f9f55-3c97-5653-d9f6-574dea7526eb",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_session_duration_surcharge",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "240",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe2480",
+      "selectionId": "bump-direct-frbmpe2480",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP523752P50058828836397"
+      ],
+      "evseIds": [
+        "FRBMPE2480"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.69,
+            "connectedTimeFreeMinutes": 120.0,
+            "connectedTimePerMinuteAfterFreeEur": 0.29
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "704cb006-a4aa-693f-5c6e-f2a717540826",
+        "tariffGroupId": "97f0a076-e1d3-417e-978c-1a6b8dbc017a",
+        "tariffName": "Bump - Certas Retail  - CERGY  - Payter Tarif",
+        "appEvseId": "973b9d28-4acf-4b5c-4364-0b2125730d3d",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_session_duration_surcharge",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "240",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "id": "bump-direct-frbmpe8063",
+      "selectionId": "bump-direct-frbmpe8063",
+      "provider": "Bump direct",
+      "countries": [
+        "FR"
+      ],
+      "canonicalStationIds": [
+        "FR:national:FRBMPP523752P50058828836397"
+      ],
+      "evseIds": [
+        "FRBMPE8063"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "pricePerKwh": 0.69,
+            "connectedTimeFreeMinutes": 120.0,
+            "connectedTimePerMinuteAfterFreeEur": 0.29
+          }
+        ],
+        "minimumTotalEur": 0.5
+      },
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "tariffId": "704cb006-a4aa-693f-5c6e-f2a717540826",
+        "tariffGroupId": "97f0a076-e1d3-417e-978c-1a6b8dbc017a",
+        "tariffName": "Bump - Certas Retail  - CERGY  - Payter Tarif",
+        "appEvseId": "54e9815b-69fd-47c0-91ef-31f364121578",
+        "timeChanging": true,
+        "semanticFamily": "minimum_energy_session_duration_surcharge",
+        "sourceStatus": "rankable_rule_based",
+        "powerKw": "240",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
       "id": "bump-direct-frbmpe8298",
       "selectionId": "bump-direct-frbmpe8298",
       "provider": "Bump direct",
@@ -78980,44 +79239,6 @@
       "reason": "no_exact_bump_crosswalk"
     },
     {
-      "idPdcItinerance": "FRBMPE3876",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.336
-        },
-        {
-          "kind": "session_duration_surcharge",
-          "eurPerMinute": 0.048,
-          "afterMinutes": 240
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE1046",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.336
-        },
-        {
-          "kind": "session_duration_surcharge",
-          "eurPerMinute": 0.048,
-          "afterMinutes": 240
-        }
-      ]
-    },
-    {
       "idPdcItinerance": "FRBMPEBMP7144",
       "reason": "no_exact_bump_crosswalk"
     },
@@ -80354,82 +80575,6 @@
       "reason": "no_exact_bump_crosswalk"
     },
     {
-      "idPdcItinerance": "FRBMPE2911",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.69
-        },
-        {
-          "kind": "session_duration_surcharge",
-          "eurPerMinute": 0.29,
-          "afterMinutes": 120
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE2014",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.69
-        },
-        {
-          "kind": "session_duration_surcharge",
-          "eurPerMinute": 0.29,
-          "afterMinutes": 120
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE2480",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.69
-        },
-        {
-          "kind": "session_duration_surcharge",
-          "eurPerMinute": 0.29,
-          "afterMinutes": 120
-        }
-      ]
-    },
-    {
-      "idPdcItinerance": "FRBMPE8063",
-      "reason": "unsupported_time_changing_rule_family",
-      "sourceRules": [
-        {
-          "kind": "minimum_total",
-          "amountEur": 0.5
-        },
-        {
-          "kind": "energy",
-          "eurPerKwh": 0.69
-        },
-        {
-          "kind": "session_duration_surcharge",
-          "eurPerMinute": 0.29,
-          "afterMinutes": 120
-        }
-      ]
-    },
-    {
       "idPdcItinerance": "FRBMPE2073",
       "reason": "no_exact_bump_crosswalk"
     },
@@ -80512,17 +80657,19 @@
   ],
   "summary": {
     "exactBumpAliases": 1886,
-    "offers": 1720,
+    "offers": 1726,
     "staticOffers": 1091,
     "timeChangingSeen": 659,
-    "temporalOffers": 629,
+    "temporalOffers": 635,
     "temporalOffersByFamily": {
       "minimum_energy_post_charge_occupancy": 7,
-      "minimum_energy_conditional_flat_fee": 622
+      "minimum_energy_conditional_flat_fee": 622,
+      "minimum_energy_session_duration_surcharge": 6
     },
     "conditionalEnergyOffers": 622,
     "postChargeOccupancyOffers": 7,
-    "timeChangingDeferred": 30,
-    "deferred": 532
+    "sessionDurationSurchargeOffers": 6,
+    "timeChangingDeferred": 24,
+    "deferred": 526
   }
 }
