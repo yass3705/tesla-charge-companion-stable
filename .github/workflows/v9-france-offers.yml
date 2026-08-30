@@ -94,16 +94,27 @@ jobs:
           assert high['pricing']['postChargeFee']['graceMinutes']==60 and high['pricing']['postChargeFee']['rounding']=='started_block'
           card_low=[z for z in q['subscriptionOffers'] if z['maxPowerKw']==50][0];card_high=[z for z in q['subscriptionOffers'] if z.get('minPowerKw',0)>50][0]
           assert card_low['pricing']['rules'][0]['pricePerKwh']==0.25 and card_high['pricing']['rules'][0]['pricePerKwh']==0.40 and card_low['metadata']['oneTimeCardPurchaseEur']==7.2
-          assert u['schemaVersion']==2
+          assert u['schemaVersion']==3
           assert u['policy']['exactPdcRequired'] is True and u['policy']['geographicFallbackAllowed'] is False and u['policy']['unsupportedTimeChangingTariffsFailClosed'] is True and u['policy']['minimumTotalAppliedAfterAllSessionComponents'] is True
+          assert u['policy']['conditionalFeeConditionsSupported']==['energy_above_kwh']
           assert u['summary']['exactBumpAliases']==1886 and len(u['directOffers'])>0
           assert all(z['verifiedScope']=='exact_evse' and len(z['evseIds'])==1 for z in u['directOffers'])
           assert all(z['pricing']['rules'][0].get('scope')=='allDay' for z in u['directOffers'])
           exact_offer_ids={z['evseIds'][0] for z in u['directOffers']};assert len(exact_offer_ids)==len(u['directOffers']) and len(exact_offer_ids)<=u['summary']['exactBumpAliases']
           temporal=[z for z in u['directOffers'] if z.get('metadata',{}).get('timeChanging') is True]
           assert len(temporal)==u['summary']['temporalOffers'] and len(temporal)>0
-          assert all(z['metadata'].get('semanticFamily')=='minimum_energy_post_charge_occupancy' for z in temporal)
-          assert all(z['pricing'].get('minimumTotalEur') is not None and z['pricing'].get('postChargeFee',{}).get('eurPerMinute') is not None and z['pricing'].get('postChargeFee',{}).get('graceMinutes') is not None for z in temporal)
+          supported={'minimum_energy_post_charge_occupancy','minimum_energy_conditional_flat_fee'}
+          assert all(z['metadata'].get('semanticFamily') in supported for z in temporal)
+          occupancy=[z for z in temporal if z['metadata'].get('semanticFamily')=='minimum_energy_post_charge_occupancy']
+          conditional=[z for z in temporal if z['metadata'].get('semanticFamily')=='minimum_energy_conditional_flat_fee']
+          assert len(occupancy)==u['summary']['postChargeOccupancyOffers'] and len(occupancy)>0
+          assert len(conditional)==u['summary']['conditionalEnergyOffers'] and len(conditional)>0
+          assert all(z['pricing'].get('minimumTotalEur') is not None and z['pricing'].get('postChargeFee',{}).get('eurPerMinute') is not None and z['pricing'].get('postChargeFee',{}).get('graceMinutes') is not None for z in occupancy)
+          for z in conditional:
+            fees=z['pricing'].get('conditionalSessionFees') or []
+            assert len(fees)==1 and fees[0].get('amountEur') is not None
+            conditions=fees[0].get('conditions') or []
+            assert conditions and all(c.get('kind')=='energy_above_kwh' and isinstance(c.get('value'),(int,float)) for c in conditions)
           assert u['summary']['timeChangingSeen']==u['summary']['temporalOffers']+u['summary']['timeChangingDeferred']
           assert sum(1 for z in u['deferred'] if z.get('reason')=='unsupported_time_changing_rule_family')==u['summary']['timeChangingDeferred']
           deferred={z.get('id') for z in r.get('deferred',[])}
