@@ -44,6 +44,21 @@ assert.deepEqual(nl.access.parkingRestrictions,['EV_ONLY']);
 assert.equal(nl.offers[0].pricing.rules[0].ocpiDurationBands[0][0],'TIME');
 assert.equal(nl.offers[0].pricing.rules[0].ocpiDurationBands[0][1],18000);
 
+const deRow=[
+  'SITE-DE-1','Test Deutschland','Teststrasse 1',50.11,8.68,'EnBW mobility+',4,1,
+  [['cfg-dc','EnBW mobility+ · Public','DC',150,4,[],['DE*E123*1','DE*E123*2']]],
+  '2021-12-05','EnBW mobility+'
+];
+const de=National.normalizeRow(deRow,{countryCode:'DE',sourceId:'germany-bnetza',schemaVersion:5,queryDate:'2026-08-30'});
+assert.equal(de.countryCode,'DE');
+assert.equal(de.physicalOperator.name,'EnBW mobility+');
+assert.equal(de.networkBrand,'EnBW mobility+');
+assert.equal(de.commissioningDate,'2021-12-05');
+assert.equal(de.legacy.commissioningDate,'2021-12-05');
+assert.equal(de.updatedAt,null,'commissioning date must not masquerade as catalogue freshness');
+assert.equal(de.status.state,'unknown','static BNetzA in-service state is not realtime availability');
+assert.equal(de.status.updatedAt,null);
+
 const overlay=Direct.normalizePayload({
   schemaVersion:'1.4.2',country:'FR',operatorOffers:[
     {id:'fastned-standard',provider:'Fastned direct',offerType:'operator_direct',operatorAliases:['Fastned'],kind:'DC',pricing:{type:'rules',rules:[{billing:'kwh',currency:'EUR',pricePerKwh:0.61}]},source:'data-lab/fastned_official_france.json'}
@@ -76,7 +91,8 @@ for(const id of ['ionity-direct-france','atlante-direct-france','powerdot-direct
 
 console.log(JSON.stringify({
   ok:true,
-  adapters:{tesla:true,franceCompactV1:true,netherlandsCompactV3:true,directOfferOverlay:true},
+  adapters:{tesla:true,franceCompactV1:true,netherlandsCompactV3:true,germanyCompactV5:true,directOfferOverlay:true},
   franceInventoryContract:{nonTeslaPhysicalBaseline:'france-national',legacyDirectSourcesTariffOnly:true},
-  retainedFeatures:['Tesla global identity','national fallback offers','OCPI duration bands','NL access/parking restrictions','V8 direct tariff rule migration','subscription opt-in metadata']
+  germanyInventoryContract:{commissioningDateNotFreshness:true,staticStatusUnknown:true},
+  retainedFeatures:['Tesla global identity','national fallback offers','OCPI duration bands','NL access/parking restrictions','DE commissioning date semantics','V8 direct tariff rule migration','subscription opt-in metadata']
 },null,2));
