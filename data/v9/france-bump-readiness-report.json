@@ -1,13 +1,14 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "country": "FR",
   "provider": "bump",
-  "generatedAt": "2026-08-29T23:58:51.562688Z",
+  "generatedAt": "2026-08-30T11:27:58.346989Z",
   "policy": {
     "runtimeExactOnly": true,
     "geographicFallbackAllowed": false,
     "tariffDataCannotCreatePhysicalStations": true,
-    "tariffActivationRequiresExactCanonicalIdentity": true
+    "tariffActivationRequiresExactCanonicalIdentity": true,
+    "timeChangingTariffsRequireExactSemanticCompilation": true
   },
   "summary": {
     "currentExactCrosswalkAliasCount": 1886,
@@ -23,7 +24,9 @@
       "tariffsTcc": 30
     },
     "identityGapLikelyParserRelated": false,
-    "runtimeTariffEligible": true
+    "runtimeTariffEligible": true,
+    "timeChangingTariffPointCount": 665,
+    "timeChangingRuleShapeCount": 1
   },
   "currentExactAliasesSample": [
     {
@@ -427,6 +430,86 @@
       "id": "FRBMPE3184"
     }
   ],
+  "timeChangingSemantics": {
+    "count": 665,
+    "componentKeys": {
+      "currency": 665,
+      "energyEurPerKwh": 665,
+      "timeEurPerHour": 665,
+      "flatFeeEur": 665,
+      "minPriceEur": 665,
+      "parkingText": 665,
+      "isTariffChangingInTime": 665
+    },
+    "ruleKeys": {
+      "kind": 1991,
+      "amountEur": 1303,
+      "eurPerKwh": 661,
+      "conditions": 638,
+      "eurPerMinute": 19,
+      "graceMinutes": 13,
+      "bands": 8,
+      "afterMinutes": 6
+    },
+    "nestedRuleKeys": {
+      "kind": 2645,
+      "amountEur": 1303,
+      "eurPerKwh": 669,
+      "value": 654,
+      "conditions": 638,
+      "eurPerMinute": 27,
+      "graceMinutes": 21,
+      "start": 16,
+      "end": 16,
+      "bands": 8,
+      "afterMinutes": 6
+    },
+    "ruleShapeCount": 1,
+    "topRuleShapes": [
+      {
+        "count": 665,
+        "shape": [
+          {
+            "amountEur": "float",
+            "kind": "str"
+          }
+        ],
+        "example": {
+          "idPdcItinerance": "FRBMPEBMP4107",
+          "tariffName": "Mairie d'Hérépian - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.3999996,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": "Duration: 0,12 €/minute after 3h of usage",
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.4
+            },
+            {
+              "kind": "post_charge_occupancy",
+              "eurPerMinute": 0.12,
+              "graceMinutes": 180
+            }
+          ],
+          "sourceText": {
+            "quick": "0,40 €/kWh",
+            "short": "0,40 €/kWh. Minimum 0,50 €",
+            "long": "While charging:\nEnergy consumption: 0,40 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,12 €/minute after 3h of usage\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      }
+    ]
+  },
   "sources": {
     "inventory": {
       "source": "data-lab/data/national/bump_direct_inventory_france.json.gz",
@@ -747,11 +830,6 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE6186",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
           "value": "FRBMPE8688",
           "field": "idPdcItinerance"
         },
@@ -762,7 +840,12 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE5555",
+          "value": "FRBMPE6186",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4454",
           "field": "idPdcItinerance"
         },
         {
@@ -772,12 +855,12 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE8939",
+          "value": "FRBMPE5555",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE4454",
+          "value": "FRBMPE8939",
           "field": "idPdcItinerance"
         },
         {
@@ -837,17 +920,17 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4792",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
           "value": "FRBMPEBMP4791",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
           "value": "FRBMPEBMP4790",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4792",
           "field": "idPdcItinerance"
         },
         {
@@ -862,27 +945,17 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP0281",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
           "value": "FRBMPEBMP0282",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
+          "value": "FRBMPEBMP0281",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
           "value": "FRBMPEBMP0280",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPE6319",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPE1600",
           "field": "idPdcItinerance"
         },
         {
@@ -893,6 +966,16 @@
         {
           "kind": "pdc",
           "value": "FRBMPE3496",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6319",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1600",
           "field": "idPdcItinerance"
         },
         {
@@ -917,7 +1000,7 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP0948",
+          "value": "FRBMPEBMP0946",
           "field": "idPdcItinerance"
         },
         {
@@ -927,7 +1010,17 @@
         },
         {
           "kind": "pdc",
+          "value": "FRBMPEBMP0943",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
           "value": "FRBMPEBMP0947",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0948",
           "field": "idPdcItinerance"
         },
         {
@@ -937,32 +1030,7 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP0946",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPEBMP0943",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
           "value": "FRBMPEBMP4735",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPEBMP4821",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPEBMP4831",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPEBMP4877",
           "field": "idPdcItinerance"
         },
         {
@@ -972,17 +1040,17 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4817",
+          "value": "FRBMPEBMP4821",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4818",
+          "value": "FRBMPEBMP4877",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4824",
+          "value": "FRBMPEBMP4831",
           "field": "idPdcItinerance"
         },
         {
@@ -992,7 +1060,12 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4823",
+          "value": "FRBMPEBMP4818",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4817",
           "field": "idPdcItinerance"
         },
         {
@@ -1002,22 +1075,12 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4872",
+          "value": "FRBMPEBMP4823",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4825",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPEBMP4867",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPEBMP4826",
+          "value": "FRBMPEBMP4824",
           "field": "idPdcItinerance"
         },
         {
@@ -1027,12 +1090,27 @@
         },
         {
           "kind": "pdc",
+          "value": "FRBMPEBMP4826",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4825",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
           "value": "FRBMPEBMP8466",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPEBMP4775",
+          "value": "FRBMPEBMP4872",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4867",
           "field": "idPdcItinerance"
         },
         {
@@ -1047,12 +1125,7 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE1629",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPE4543",
+          "value": "FRBMPEBMP4775",
           "field": "idPdcItinerance"
         },
         {
@@ -1062,7 +1135,12 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE1151",
+          "value": "FRBMPE1629",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4543",
           "field": "idPdcItinerance"
         },
         {
@@ -1077,22 +1155,12 @@
         },
         {
           "kind": "pdc",
+          "value": "FRBMPE1151",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
           "value": "FRBMPE3845",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPE7146",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPE5591",
-          "field": "idPdcItinerance"
-        },
-        {
-          "kind": "pdc",
-          "value": "FRBMPE7849",
           "field": "idPdcItinerance"
         },
         {
@@ -1102,12 +1170,17 @@
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE2682",
+          "value": "FRBMPE5591",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE3966",
+          "value": "FRBMPE7146",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7849",
           "field": "idPdcItinerance"
         },
         {
@@ -1117,17 +1190,27 @@
         },
         {
           "kind": "pdc",
+          "value": "FRBMPE3966",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2682",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
           "value": "FRBMPE6119",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE3011",
+          "value": "FRBMPE9086",
           "field": "idPdcItinerance"
         },
         {
           "kind": "pdc",
-          "value": "FRBMPE9086",
+          "value": "FRBMPE3011",
           "field": "idPdcItinerance"
         },
         {
@@ -3369,5 +3452,5 @@
       ]
     }
   },
-  "next": "Semantically validate the TCC tariff representation and compile offers only onto exact Bump canonical aliases."
+  "next": "Compile only time-changing Bump rule shapes that map exactly to supported V9 temporal pricing semantics; keep all other shapes fail-closed."
 }

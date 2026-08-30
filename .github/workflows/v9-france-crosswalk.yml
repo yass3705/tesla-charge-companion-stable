@@ -88,16 +88,24 @@ jobs:
             assert focus['bump']['status'] in ('review_only_no_exact_runtime_alias','no_evidence')
           assert focus['avia-picoty']['exactRuntimeAliasCount']>0 or focus['avia-volt']['exactRuntimeAliasCount']>0
           assert bump.get('provider')=='bump'
+          assert bump.get('schemaVersion')==2,bump.get('schemaVersion')
           bp=bump.get('policy',{})
           assert bp.get('runtimeExactOnly') is True
           assert bp.get('geographicFallbackAllowed') is False
           assert bp.get('tariffDataCannotCreatePhysicalStations') is True
+          assert bp.get('timeChangingTariffsRequireExactSemanticCompilation') is True
           bs=bump.get('summary',{})
           assert bs.get('directTariffSourcesPresent') is True,bs
+          assert bs.get('timeChangingTariffPointCount',0)>0,bs
+          assert bs.get('timeChangingRuleShapeCount',0)>0,bs
+          temporal=bump.get('timeChangingSemantics',{})
+          assert temporal.get('count')==bs.get('timeChangingTariffPointCount'),temporal
+          assert temporal.get('ruleShapeCount')==bs.get('timeChangingRuleShapeCount'),temporal
+          assert temporal.get('topRuleShapes'),temporal
           if bs.get('currentExactCrosswalkAliasCount',0)==0:
             assert bs.get('runtimeTariffEligible') is False,bs
           powerdot_exact=provider_counts.get('powerdot',0)
-          print(json.dumps({**meta,'providerExactAliases':provider_counts,'powerdotExactAliases':powerdot_exact,'powerdotResolution':'exact' if powerdot_exact else 'unresolved_no_exact_identifier_no_fuzzy_fallback','coverageSummary':summary,'coverageFocus':focus,'bumpReadiness':bs,'bumpNext':bump.get('next')},indent=2))
+          print(json.dumps({**meta,'providerExactAliases':provider_counts,'powerdotExactAliases':powerdot_exact,'powerdotResolution':'exact' if powerdot_exact else 'unresolved_no_exact_identifier_no_fuzzy_fallback','coverageSummary':summary,'coverageFocus':focus,'bumpReadiness':bs,'bumpTemporalTopShapes':temporal.get('topRuleShapes',[])[:5],'bumpNext':bump.get('next')},indent=2))
           PY
 
       - name: Publish provider overlay and review candidates
