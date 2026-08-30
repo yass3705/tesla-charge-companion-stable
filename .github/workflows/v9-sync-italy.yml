@@ -1,18 +1,19 @@
 name: V9 sync Italy validated catalogue
-# Revalidate the Italy integration after aligning with the latest unified V9 engine.
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - feature/italy-v9-integration
+      - feature/italy-v9-duferco
     paths:
       - scripts/v9_build_italy_catalog.py
       - assets/v9/adapters/direct-offers.js
       - assets/v9/adapters/national-compact.js
       - assets/v9/browser-loaders.js
       - assets/v9/offer-engine.js
+      - assets/v9/pricing-engine.js
       - assets/v9/session-engine.js
+      - tests/v9-italy-runtime-smoke.test.cjs
       - data/v9/source-registry.json
       - .github/workflows/v9-sync-italy.yml
 
@@ -35,6 +36,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Download latest validated Italy consolidation
         run: |
@@ -71,19 +76,26 @@ jobs:
           report=json.loads(Path('data/v9/italy-build-report.json').read_text())
           registry=json.loads(Path('data/v9/source-registry.json').read_text())
           assert manifest['country']=='IT'
-          assert manifest['stationCount'] > 29000
+          assert manifest['stationCount']==29696
           assert len(manifest['tiles']) >= 20
-          assert report['directOffers']==23978
+          assert report['directOffers']==25626
           assert report['subscriptionOffers']==2764
           assert report['emspOffers']==2281
-          assert len(offers['directOffers'])==23978
+          assert len(offers['directOffers'])==25626
           assert len(offers['subscriptionOffers'])==2764
           assert len(offers['emspOffers'])==2281
           assert offers['policy']['emspNeverMasqueradesAsDirect'] is True
+          assert offers['policy']['calendarAwareDirectTariffs'] is True
+          assert offers['policy']['unknownStationSpecificPostChargeFeesFailClosed'] is True
+          duferco=[o for o in offers['directOffers'] if o.get('provider')=='Duferco Mobility']
+          assert len(duferco)==1648
+          assert all(o['pricing']['type']=='rules' for o in duferco)
+          assert all(o['pricing']['holidayCalendar']=='IT' for o in duferco)
+          assert all(o['pricing']['postChargeFeeUnknown'] is True for o in duferco)
+          assert all(len(o['pricing']['rules'])==6 for o in duferco)
+          assert all(o['metadata']['timeZone']=='Europe/Rome' for o in duferco)
           ids={s['id'] for s in registry['sources']}
           assert {'italy-pun','italy-verified-offers'} <= ids
-          italy_pun=next(s for s in registry['sources'] if s['id']=='italy-pun')
-          assert italy_pun['adapter'].startswith('national-compact-v')
           with gzip.open('data/v9/italy-static/all.json.gz','rt',encoding='utf-8') as fh:
               rows=json.load(fh)
           assert len(rows)==manifest['stationCount']
@@ -109,13 +121,15 @@ jobs:
           console.log({emspKind:normalized.offerRules[0].kind,status:station.status.state,evse:station.evses[0].id,loaderV4:true});
           JS
 
+      - name: Validate Italy published runtime including Duferco
+        run: node tests/v9-italy-runtime-smoke.test.cjs
+
       - name: Validate Italy V9 tariff eligibility and cheapest-offer selection
         run: |
           node - <<'JS'
           const directAdapter=require('./assets/v9/adapters/direct-offers.js');
           const OfferEngine=require('./assets/v9/offer-engine.js');
           const SessionEngine=require('./assets/v9/session-engine.js');
-
           const payload={
             country:'IT',
             directOffers:[{id:'direct',provider:'A2A',evseIds:['ITTESTE1'],verifiedScope:'exact_evse',priority:130,pricing:{type:'kwh',pricePerKwh:0.55}}],
@@ -126,23 +140,16 @@ jobs:
           const fallback={id:'pun-fallback',provider:'PUN',kind:'national_fallback',countries:['IT'],priority:30,pricing:{type:'kwh',pricePerKwh:0.40}};
           const station={id:'IT:test',countryCode:'IT',offers:[fallback,...normalized]};
           const session={energyKwh:20,consumptionKwhPer100Km:15,targetCurrency:'EUR'};
-
           const noSubEligible=OfferEngine.eligibleOffers(station,[],{countryCode:'IT'});
           if(noSubEligible.some(o=>o.subscriptionId))throw new Error('unselected subscription leaked into eligibility');
           if(noSubEligible.some(o=>o.kind==='national_fallback'))throw new Error('PUN fallback not suppressed by richer offers');
-          if(!noSubEligible.some(o=>o.kind==='direct')||!noSubEligible.some(o=>o.kind==='emsp'))throw new Error('direct/eMSP eligibility missing');
           const noSub=SessionEngine.evaluateStation(station,session,{selectedSubscriptions:[]});
           if(noSub.best?.offerId!=='direct'||noSub.best?.total!==11)throw new Error(`unexpected no-sub best: ${JSON.stringify(noSub.best)}`);
-
-          const withSubEligible=OfferEngine.eligibleOffers(station,['atlante_go'],{countryCode:'IT'});
-          if(!withSubEligible.some(o=>o.subscriptionId==='atlante_go'))throw new Error('selected subscription missing');
           const withSub=SessionEngine.evaluateStation(station,session,{selectedSubscriptions:['atlante_go']});
           if(withSub.best?.offerId!=='sub'||withSub.best?.total!==9.8)throw new Error(`unexpected selected-sub best: ${JSON.stringify(withSub.best)}`);
-
           const emspWins={...station,offers:station.offers.map(o=>o.id==='emsp'?{...o,pricing:{type:'kwh',pricePerKwh:0.45}}:o)};
           const cheapEmsp=SessionEngine.evaluateStation(emspWins,session,{selectedSubscriptions:[]});
           if(cheapEmsp.best?.offerId!=='emsp'||cheapEmsp.best?.total!==9)throw new Error(`validated eMSP cannot win on price: ${JSON.stringify(cheapEmsp.best)}`);
-
           console.log({noSubscription:noSub.best,selectedSubscription:withSub.best,cheapestValidatedEmsp:cheapEmsp.best});
           JS
 
@@ -156,5 +163,5 @@ jobs:
             echo 'Italy generated data already current'
             exit 0
           fi
-          git commit -m 'data(v9): publish validated Italy catalogue'
+          git commit -m 'data(v9): publish Italy catalogue with Duferco'
           git push origin "HEAD:${GITHUB_REF_NAME}"

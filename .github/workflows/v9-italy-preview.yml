@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - feature/italy-v9-preview
+      - feature/italy-v9-duferco
     paths:
       - v9-preview/app.js
       - v9-preview/index.html
@@ -36,7 +37,8 @@ jobs:
       - name: Verify Italy is exposed in preview
         run: |
           grep -q '<option value="IT">Italie</option>' v9-preview/index.html
-          grep -q "country==='IT'" v9-preview/app.js
+          grep -Eq "==='IT'" v9-preview/app.js
+          grep -q "'subCountries').value='IT'" v9-preview/app.js
           grep -q "atlante_go" v9-preview/app.js
       - name: Run published Italy runtime smoke test
         run: node tests/v9-italy-runtime-smoke.test.cjs
