@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "requireReadiness": true,
+  "identities": [],
+  "candidatePath": "v9-app/",
+  "fallbackPath": "./",
+  "notes": "Pre-canary whitelist is disabled by default. Add only explicit anonymous device identities after manual review; random canary remains at 0%."
+}
