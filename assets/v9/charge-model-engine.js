@@ -63,6 +63,11 @@
     return{capacity,startSoc:s,targetSoc:t};
   }
 
+  function flatTimeline(energy,minutes,startSoc,targetSoc,powerKw){
+    if(energy==null||energy<=0||minutes==null||minutes<=0)return[];
+    return[{offsetMinutes:0,durationMinutes:round(minutes),energyKwh:round(energy),startSoc:startSoc??null,endSoc:targetSoc??null,powerKw:round(powerKw)}];
+  }
+
   function estimate(station,session={}){
     const capability=stationCapability(station),stationPower=capability.powerKw,chargingKind=capability.kind;
     const legacyMax=num(session.vehicleMaxChargeKw),kindMax=chargingKind==='AC'?num(session.vehicleMaxAcKw):num(session.vehicleMaxDcKw),vehicleMax=kindMax??legacyMax;
@@ -73,25 +78,26 @@
     const soc=resolveSoc(session,energy);
     if(soc.capacity&&soc.targetSoc!=null)energy=soc.capacity*(soc.targetSoc-soc.startSoc)/100;
     const base={chargingKind,stationPowerKw:stationPower,vehicleLimitKw:vehicleMax,availablePowerKw:availablePower,startSoc:soc.startSoc,targetSoc:soc.targetSoc};
-    if(energy==null||energy<=0||!availablePower||availablePower<=0)return{...base,minutes:null,energyKwh:energy,profile:'unavailable',averagePowerKw:null};
+    if(energy==null||energy<=0||!availablePower||availablePower<=0)return{...base,minutes:null,energyKwh:energy,profile:'unavailable',averagePowerKw:null,timeline:[]};
 
     const resolved=resolveCurve(session,availablePower,chargingKind);
     if(!resolved.curve||!soc.capacity||soc.targetSoc==null){
       const minutes=(energy/(availablePower*efficiency))*60;
-      return{...base,minutes:round(minutes),energyKwh:round(energy),profile:resolved.profile,averagePowerKw:round(energy/(minutes/60))};
+      return{...base,minutes:round(minutes),energyKwh:round(energy),profile:resolved.profile,averagePowerKw:round(energy/(minutes/60)),timeline:flatTimeline(energy,minutes,soc.startSoc,soc.targetSoc,availablePower*efficiency)};
     }
 
     const stepSoc=clamp(num(session.socStepPercent)??0.25,0.05,2),capacity=soc.capacity;
-    let minutes=0,delivered=0,s=soc.startSoc;
+    let minutes=0,delivered=0,s=soc.startSoc;const timeline=[];
     while(s<soc.targetSoc-1e-9){
       const next=Math.min(soc.targetSoc,s+stepSoc),mid=(s+next)/2;
       const batteryEnergy=capacity*(next-s)/100;
       const curvePower=Math.max(0.1,interpolate(resolved.curve,mid,availablePower));
-      const power=Math.min(availablePower,curvePower);
-      minutes+=(batteryEnergy/(power*efficiency))*60;delivered+=batteryEnergy;s=next;
+      const power=Math.min(availablePower,curvePower),stepMinutes=(batteryEnergy/(power*efficiency))*60;
+      timeline.push({offsetMinutes:round(minutes),durationMinutes:round(stepMinutes),energyKwh:round(batteryEnergy),startSoc:round(s),endSoc:round(next),powerKw:round(power*efficiency)});
+      minutes+=stepMinutes;delivered+=batteryEnergy;s=next;
     }
-    return{...base,minutes:round(minutes),energyKwh:round(delivered),profile:resolved.profile,averagePowerKw:round(delivered/(minutes/60))};
+    return{...base,minutes:round(minutes),energyKwh:round(delivered),profile:resolved.profile,averagePowerKw:round(delivered/(minutes/60)),timeline};
   }
 
-  return{estimate,stationPowerKw,stationCapability,connectorKind,normalizeCurve,interpolate,GENERIC_DC_CURVE};
+  return{estimate,stationPowerKw,stationCapability,connectorKind,normalizeCurve,interpolate,flatTimeline,GENERIC_DC_CURVE};
 });
