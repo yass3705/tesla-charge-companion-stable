@@ -8,7 +8,10 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
       - 'data/v9/source-registry.json'
+      - 'v9-preview/app.js'
+      - 'v9-preview/index.html'
       - 'tests/v9-morocco-consolidation.test.cjs'
       - '.github/workflows/v9-morocco-consolidation.yml'
   pull_request:
@@ -16,7 +19,10 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
       - 'data/v9/source-registry.json'
+      - 'v9-preview/app.js'
+      - 'v9-preview/index.html'
       - 'tests/v9-morocco-consolidation.test.cjs'
       - '.github/workflows/v9-morocco-consolidation.yml'
 
@@ -32,11 +38,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Check Morocco adapter syntax
+      - name: Check Morocco and preview syntax
         run: |
           node --check assets/v9/adapters/morocco-public.js
           node --check assets/v9/adapters/morocco-nonproduction.js
           node --check assets/v9/browser-loaders.js
+          node --check assets/v9/pricing-engine.js
+          node --check v9-preview/app.js
           node --check tests/v9-morocco-consolidation.test.cjs
       - name: Validate registry safety
         run: |
@@ -48,5 +56,5 @@ jobs:
           if(ma.some(s=>/evone|evplug|shell|vivo/i.test(s.id)))throw new Error('eMSP/diagnostic source leaked into physical registry');
           if(!ma.every(s=>s.adapter==='morocco-public-v1'))throw new Error('unexpected Morocco physical adapter');
           NODE
-      - name: Validate live sanitized public datasets and cross-source merge
+      - name: Validate live sanitized public datasets, pricing and cross-source merge
         run: node tests/v9-morocco-consolidation.test.cjs
