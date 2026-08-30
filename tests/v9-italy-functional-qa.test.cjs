@@ -18,7 +18,29 @@ const rules=Direct.normalizePayload(offersPayload).offerRules;
 const source={id:'italy-verified-offers',priority:{tariff:130}};
 
 const stations=rows.map(row=>National.normalizeRow(row,{countryCode:'IT',sourceId:'italy-pun'})).filter(Boolean);
-const enriched=Data.applyOfferRules(stations,rules.map(rule=>({rule,source})));
+
+// Italy commercial overlays are exact-EVSE scoped. Index them once so the
+// functional QA exercises the production matcher without an O(stations*rules)
+// national cross-product.
+const rulesByEvse=new Map();
+for(const rule of rules){
+  for(const eid of rule.evseIds||[]){
+    const list=rulesByEvse.get(eid)||[];
+    list.push({rule,source});
+    rulesByEvse.set(eid,list);
+  }
+}
+const enriched=stations.map(st=>{
+  const relevant=[];
+  const seen=new Set();
+  for(const evse of st.evses||[]){
+    for(const item of rulesByEvse.get(evse.id)||[]){
+      const key=`${item.rule.id}|${item.rule.kind}|${item.rule.subscriptionId||''}|${evse.id}`;
+      if(!seen.has(key)){seen.add(key);relevant.push(item);}
+    }
+  }
+  return relevant.length?Data.applyOfferRules([st],relevant)[0]:st;
+});
 
 assert.equal(stations.length,29696);
 assert.ok(enriched.some(s=>s.offers.some(o=>o.kind==='direct')),'no direct offers attached');
@@ -68,7 +90,6 @@ assert.ok(directWins>0,'direct tariff never wins');
 assert.ok(emspWins>0,'NextCharge eMSP never wins');
 assert.ok(subWins>0,'Atlante Go never wins when selected');
 
-// Validate cost/km arithmetic on a real winning offer.
 const firstResult=enriched.map(st=>({st,res:Session.evaluateStation(st,session,{selectedSubscriptions:['atlante_go']})})).find(x=>x.res.best);
 assert.ok(firstResult);
 const b=firstResult.res.best;
@@ -87,6 +108,7 @@ const topOperators=[...operators.entries()].sort((a,b)=>b[1].stations-a[1].stati
 console.log(JSON.stringify({
   ok:true,
   stations:stations.length,
+  indexedEvseRules:rulesByEvse.size,
   zones:zoneResults,
   publicEvaluated,
   selectedSubscriptionEvaluated:subEvaluated,
