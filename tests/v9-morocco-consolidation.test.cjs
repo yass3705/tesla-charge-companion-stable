@@ -4,6 +4,7 @@ const fs=require('node:fs');
 const DataEngine=require('../assets/v9/data-engine.js');
 const BrowserLoaders=require('../assets/v9/browser-loaders.js');
 const PricingEngine=require('../assets/v9/pricing-engine.js');
+const SessionEngine=require('../assets/v9/session-engine.js');
 const Morocco=require('../assets/v9/adapters/morocco-public.js');
 const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
 
@@ -13,6 +14,7 @@ const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
   assert.deepEqual(sources.map(s=>s.id).sort(),[
     'morocco-evgo-native','morocco-fastvolt-public','morocco-kilowatt-public','morocco-totalenergies-hosts'
   ]);
+  assert.ok(fullRegistry.sources.some(s=>s.id==='france-bump-offers'),'latest V9 registry additions must survive Morocco consolidation');
   assert.ok(!fullRegistry.sources.some(s=>/evone|evplug|shell|vivo/i.test(s.id)&&s.countries?.includes('MA')),'eMSP/diagnostic sources must not become physical Morocco sources');
 
   const registry={...fullRegistry,sources};
@@ -47,13 +49,21 @@ const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
   assert.equal(alBoustane.evses[0].connectors.filter(c=>c.kind==='DC'&&c.powerKw===360).length,4);
   assert.equal(alBoustane.evses[0].connectors.filter(c=>c.kind==='AC'&&c.powerKw===22).length,2);
   const fastVoltDc=alBoustane.offers.find(o=>o.connectorKinds?.includes('DC'));
-  assert.ok(fastVoltDc);
+  const fastVoltAc=alBoustane.offers.find(o=>o.connectorKinds?.includes('AC'));
+  assert.ok(fastVoltDc&&fastVoltAc);
   assert.equal(fastVoltDc.currency,'MAD');
   assert.equal(fastVoltDc.pricing.rules[0].pricePerMinute,2.5);
+  assert.equal(fastVoltAc.pricing.rules[0].pricePerMinute,0.5);
   const tenMinuteDc=PricingEngine.evaluateOffer(fastVoltDc,{durationMinutes:10,energyKwh:20});
   assert.equal(tenMinuteDc.complete,true);
   assert.equal(tenMinuteDc.currency,'MAD');
   assert.equal(tenMinuteDc.totalEur,25,'10 minutes FastVolt DC must evaluate to 25 MAD native amount');
+
+  const mixedStationSession=SessionEngine.evaluateStation(alBoustane,{durationMinutes:10,energyKwh:20,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+  assert.equal(mixedStationSession.chargingKind,'DC','mixed FastVolt station must price the same highest-power kind used by the charge model');
+  assert.equal(mixedStationSession.eligibleOfferCount,1,'AC offer must not compete with a DC charging session');
+  assert.equal(mixedStationSession.best.offerId,fastVoltDc.id,'DC session must select the DC-specific FastVolt offer');
+  assert.equal(mixedStationSession.best.total,25,'mixed-station session must remain 25 MAD for 10 minutes DC, never 5 MAD AC');
 
   const evgo=area.stations.filter(s=>s.networkBrand==='EVGO');
   assert.equal(evgo.length,17);
@@ -90,5 +100,5 @@ const Policies=require('../assets/v9/adapters/morocco-nonproduction.js');
   assert.match(previewApp,/moroccoPublic:window\.TCCV9Adapters\.moroccoPublic/);
   assert.match(previewApp,/countryCode==='MA'\?'MAD':'EUR'/);
 
-  console.log(JSON.stringify({ok:true,physicalSources:sources.map(s=>s.id),mergedStations:area.stations.length,evgo:evgo.length,fastVolt:fastVolt.length,kilowatt:kilowatt.length,totalEnergiesUnknownHosts:unknownTotalHosts.length,fastVoltDcTenMinutesMad:tenMinuteDc.totalEur,alWaha:{id:alWaha.id,cpo:alWaha.physicalOperator.name,siteBrand:alWaha.access.siteBrand,provenance:alWaha.provenance.map(p=>p.sourceId)},evoneProductionPolicy:Policies.allowedStatuses,shellVivo:'diagnostic_only',previewCountry:'MA',previewCurrency:'MAD'},null,2));
+  console.log(JSON.stringify({ok:true,physicalSources:sources.map(s=>s.id),mergedStations:area.stations.length,evgo:evgo.length,fastVolt:fastVolt.length,kilowatt:kilowatt.length,totalEnergiesUnknownHosts:unknownTotalHosts.length,fastVoltDcTenMinutesMad:tenMinuteDc.totalEur,mixedStationSession:{chargingKind:mixedStationSession.chargingKind,eligibleOfferCount:mixedStationSession.eligibleOfferCount,bestOfferId:mixedStationSession.best.offerId,totalMad:mixedStationSession.best.total},alWaha:{id:alWaha.id,cpo:alWaha.physicalOperator.name,siteBrand:alWaha.access.siteBrand,provenance:alWaha.provenance.map(p=>p.sourceId)},evoneProductionPolicy:Policies.allowedStatuses,shellVivo:'diagnostic_only',previewCountry:'MA',previewCurrency:'MAD'},null,2));
 })().catch(err=>{console.error(err);process.exit(1);});
