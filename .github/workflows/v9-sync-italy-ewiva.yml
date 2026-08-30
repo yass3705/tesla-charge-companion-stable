@@ -8,6 +8,7 @@ on:
     paths:
       - scripts/v9_add_ewiva_enel_emsp.py
       - scripts/v9_register_ewiva_enel.py
+      - assets/v9/session-engine.js
       - data/v9/source-registry.json
       - .github/workflows/v9-sync-italy-ewiva.yml
 
