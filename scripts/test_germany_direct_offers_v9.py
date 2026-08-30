@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import json,sys
 from pathlib import Path
-FILES=['data/v9/germany-direct-offers.json','data/v9/germany-direct-offers-aral-extension.json']
+
+files=sys.argv[1:] or ['data/v9/germany-direct-offers.json','data/v9/germany-direct-offers-aral-extension.json']
 all_offers=[]
-for p in FILES:
+for p in files:
  d=json.loads(Path(p).read_text())
  assert d.get('country')=='DE'
  assert d.get('preIntegrationOnly') is True
@@ -26,6 +27,11 @@ for o in all_offers:
   s=o['subscription']
   assert isinstance(s.get('monthlyFee'),(int,float)) and s['monthlyFee']>=0, o['id']
   assert s.get('currency')=='EUR', o['id']
+ promo=o.get('temporaryDiscount')
+ if promo:
+  assert isinstance(promo.get('discountPerKwh'),(int,float)) and promo['discountPerKwh']>=0,o['id']
+  assert isinstance(promo.get('effectivePricePerKwh'),(int,float)) and promo['effectivePricePerKwh']>=0,o['id']
+  assert promo.get('validFrom') and promo.get('validUntil'),o['id']
 # power-band overlap check by selection + connector
 by={}
 for o in all_offers:
@@ -35,4 +41,4 @@ for key,bands in by.items():
  bands.sort(key=lambda x:x[0])
  for a,b in zip(bands,bands[1:]):
   assert a[1] < b[0], f'overlap {key}: {a} {b}'
-print(json.dumps({'offers':len(all_offers),'selections':len(set(o['selectionId'] for o in all_offers)),'status':'ok'}))
+print(json.dumps({'files':files,'offers':len(all_offers),'selections':len(set(o['selectionId'] for o in all_offers)),'status':'ok'}))
