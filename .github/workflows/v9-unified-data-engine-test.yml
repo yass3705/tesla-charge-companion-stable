@@ -37,6 +37,7 @@ jobs:
           node --check assets/v9/offer-engine.js
           node --check assets/v9/pricing-engine.js
           node --check assets/v9/session-engine.js
+          node --check assets/v9/charge-model-engine.js
           node --check assets/v9/station-score-engine.js
           node --check assets/v9/routing-engine.js
           node --check assets/v9/browser-routing.js
@@ -53,7 +54,9 @@ jobs:
           node --check tests/v9-france-coverage-audit.cjs
           node --check tests/v9-france-direct-identity-audit.cjs
           node --check tests/v9-ionity-crosswalk-audit.cjs
+          node --check tests/v9-charge-model-engine.test.cjs
           node --check tests/v9-station-score-engine.test.cjs
+          node --check tests/v9-charge-score-integration.test.cjs
           node --check tests/v9-routing-engine.test.cjs
           node --check scripts/v9/build-france-ionity-crosswalk.cjs
           node --check v9-preview/app.js
@@ -128,8 +131,12 @@ jobs:
           retention-days: 7
       - name: Unified offers and subscriptions
         run: node tests/v9-offer-engine.test.cjs
+      - name: SOC-aware charge model
+        run: node tests/v9-charge-model-engine.test.cjs
       - name: Station scoring
         run: node tests/v9-station-score-engine.test.cjs
+      - name: Routed SOC charge integration
+        run: node tests/v9-charge-score-integration.test.cjs
       - name: Routing and approach energy
         run: node tests/v9-routing-engine.test.cjs
       - name: Unified runtime integration
