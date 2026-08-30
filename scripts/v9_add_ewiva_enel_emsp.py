@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+PENALTY_EUR_PER_MIN = {"AC": 0.10, "DC": 0.20, "HPC": 0.30}
+
 
 def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -17,9 +19,25 @@ def load_gz(path: Path) -> dict[str, Any]:
         return json.load(fh)
 
 
-def normalize_pricing(src: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+def validated_post_charge_fee(tariff_class: str) -> dict[str, Any]:
+    if tariff_class not in PENALTY_EUR_PER_MIN:
+        raise ValueError(f"unsupported Ewiva tariff class {tariff_class!r}")
+    fee: dict[str, Any] = {
+        "eurPerMinute": PENALTY_EUR_PER_MIN[tariff_class],
+        "graceMinutes": 0,
+    }
+    if tariff_class == "AC":
+        fee["exemptLocalWindows"] = [{"start": "23:00", "end": "07:00"}]
+    return fee
+
+
+def normalize_pricing(src: dict[str, Any], tariff_class: str) -> tuple[dict[str, Any], dict[str, Any]]:
     pricing = dict(src)
     tz = pricing.pop("timeZone", None)
+    # The current Enel tariff PDF independently validates these post-charge fees.
+    # Re-assert them at the stable publication boundary so an upstream omission
+    # can never silently remove an applicable final-cost component.
+    pricing["postChargeFee"] = validated_post_charge_fee(tariff_class)
     metadata = {"timeZone": tz or "Europe/Rome"}
     return pricing, metadata
 
@@ -37,11 +55,9 @@ def main() -> None:
     report_path = Path(args.report)
     report = load_json(report_path)
 
-    direct = offers.get("directOffers") or []
     subscriptions = offers.get("subscriptionOffers") or []
     emsp = offers.get("emspOffers") or []
 
-    # Idempotent replacement of this exact Ewiva layer.
     subscriptions = [o for o in subscriptions if not str(o.get("id") or "").startswith("it:subscription:enel_plug_and_go_super:ewiva:")]
     emsp = [o for o in emsp if not str(o.get("id") or "").startswith("it:emsp:enel-on-your-way:ewiva:")]
 
@@ -54,7 +70,7 @@ def main() -> None:
         basic = entry.get("enelOnYourWayBasic") if isinstance(entry.get("enelOnYourWayBasic"), dict) else None
         if not eid or not basic or basic.get("rankable") is not True:
             continue
-        pricing, meta = normalize_pricing(basic.get("pricing") or {})
+        pricing, meta = normalize_pricing(basic.get("pricing") or {}, cls)
         emsp.append({
             "id": f"it:emsp:enel-on-your-way:ewiva:{eid}",
             "provider": "Enel On Your Way",
@@ -81,7 +97,7 @@ def main() -> None:
         for sub in entry.get("subscriptions") or []:
             if sub.get("subscriptionId") != "enel_plug_and_go_super" or sub.get("rankableWhenSelected") is not True:
                 continue
-            spricing, smeta = normalize_pricing(sub.get("pricing") or {})
+            spricing, smeta = normalize_pricing(sub.get("pricing") or {}, cls)
             subscriptions.append({
                 "id": f"it:subscription:enel_plug_and_go_super:ewiva:{eid}",
                 "selectionId": "enel_plug_and_go_super",
@@ -111,6 +127,12 @@ def main() -> None:
     if added_emsp != expected or added_super != expected:
         raise SystemExit(f"Ewiva count mismatch: expected={expected} emsp={added_emsp} super={added_super}")
 
+    for offer in [o for o in emsp if str(o.get("id") or "").startswith("it:emsp:enel-on-your-way:ewiva:")]:
+        cls = str((offer.get("metadata") or {}).get("tariffClass") or "")
+        fee = (offer.get("pricing") or {}).get("postChargeFee") or {}
+        if float(fee.get("eurPerMinute") or 0) != PENALTY_EUR_PER_MIN.get(cls):
+            raise SystemExit(f"missing/invalid Ewiva post-charge fee for {offer.get('id')}")
+
     offers["subscriptionOffers"] = subscriptions
     offers["emspOffers"] = emsp
     policy = offers.setdefault("policy", {})
@@ -126,6 +148,7 @@ def main() -> None:
         "basicEmspOffers": added_emsp,
         "plugAndGoSuperOffers": added_super,
         "byTariffClass": classes,
+        "postChargeEurPerMin": PENALTY_EUR_PER_MIN,
         "explorerRankable": False,
     }
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
