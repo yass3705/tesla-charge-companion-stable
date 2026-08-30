@@ -20,7 +20,12 @@
     engine=window.TCCV9RuntimeEngine.createEngine({registry,loaders,routeProvider});
     setStatus(`Moteur V9 prêt · ${Object.keys(loaders).length} sources · routage OSRM actif · courbe SOC active.`,'ok');
   }catch(err){setStatus(`Initialisation impossible : ${err.message}`,'err');return;}
-  $('country').addEventListener('change',()=>{if($('country').value==='NL'){$('lat').value='51.4416';$('lon').value='5.4697';}else{$('lat').value='48.798';$('lon').value='2.061';}});
+  $('country').addEventListener('change',()=>{
+    const country=$('country').value;
+    if(country==='NL'){$('lat').value='51.4416';$('lon').value='5.4697';$('subCountries').value='NL';$('selectedSubscriptions').value='';}
+    else if(country==='IT'){$('lat').value='41.9028';$('lon').value='12.4964';$('subCountries').value='IT';$('selectedSubscriptions').value='atlante_go';}
+    else{$('lat').value='48.798';$('lon').value='2.061';$('subCountries').value='FR';$('selectedSubscriptions').value='';}
+  });
   $('load').addEventListener('click',async()=>{
     try{
       setStatus('Chargement, fusion, routage, simulation SOC et scoring V9…');stationsEl.innerHTML='';
