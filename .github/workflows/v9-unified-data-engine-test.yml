@@ -77,10 +77,13 @@ jobs:
           for(const source of r.sources){
             if(!source.id||!source.adapter||!Array.isArray(source.countries)||!source.capabilities?.length)throw new Error(`invalid source ${source.id||'unknown'}`);
           }
-          const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-freshmile-offers','france-bump-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
+          const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-qovoltis-offers','france-freshmile-offers','france-bump-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
           for(const id of required)if(!unique.has(id))throw new Error(`missing source ${id}`);
           const franceDirect=r.sources.find(x=>x.id==='france-canonical-direct-offers');
           if(franceDirect.path!=='data/v9/france-direct-offers.json'||franceDirect.active!==true)throw new Error('France direct migration source not bound to embedded snapshot');
+          const qovoltis=r.sources.find(x=>x.id==='france-qovoltis-offers');
+          if(qovoltis.path!=='data/v9/france-qovoltis-offers.json'||qovoltis.active!==true||qovoltis.adapter!=='direct-offer-json'||qovoltis.priority?.tariff!==125)throw new Error('Qovoltis verified V9 source not bound to embedded snapshot');
+          if(JSON.stringify(qovoltis.capabilities)!==JSON.stringify(['tariff','subscription']))throw new Error('Qovoltis source must remain tariff/subscription-only and may not create inventory');
           const freshmile=r.sources.find(x=>x.id==='france-freshmile-offers');
           if(freshmile.path!=='data/v9/france-freshmile-offers.json'||freshmile.active!==true)throw new Error('Freshmile exact V9 source not bound to embedded snapshot');
           const bump=r.sources.find(x=>x.id==='france-bump-offers');
