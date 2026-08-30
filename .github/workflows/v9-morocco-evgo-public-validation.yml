@@ -8,6 +8,12 @@ on:
       - 'assets/v9/adapters/morocco-evgo.js'
       - 'tests/v9-morocco-evgo-public.test.cjs'
       - '.github/workflows/v9-morocco-evgo-public-validation.yml'
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-evgo.js'
+      - 'tests/v9-morocco-evgo-public.test.cjs'
+      - '.github/workflows/v9-morocco-evgo-public-validation.yml'
 
 permissions:
   contents: read
