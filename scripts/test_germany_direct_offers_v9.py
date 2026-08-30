@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import json,sys
+from datetime import date
+from decimal import Decimal
 from pathlib import Path
 
 files=sys.argv[1:] or ['data/v9/germany-direct-offers.json','data/v9/germany-direct-offers-aral-extension.json']
@@ -29,9 +31,22 @@ for o in all_offers:
   assert s.get('currency')=='EUR', o['id']
  promo=o.get('temporaryDiscount')
  if promo:
-  assert isinstance(promo.get('discountPerKwh'),(int,float)) and promo['discountPerKwh']>=0,o['id']
-  assert isinstance(promo.get('effectivePricePerKwh'),(int,float)) and promo['effectivePricePerKwh']>=0,o['id']
+  discount=promo.get('discountPerKwh'); effective=promo.get('effectivePricePerKwh')
+  assert isinstance(discount,(int,float)) and discount>=0,o['id']
+  assert isinstance(effective,(int,float)) and effective>=0,o['id']
   assert promo.get('validFrom') and promo.get('validUntil'),o['id']
+  valid_from=date.fromisoformat(promo['validFrom']); valid_until=date.fromisoformat(promo['validUntil'])
+  assert valid_from <= valid_until, f"promo date order {o['id']}: {valid_from} > {valid_until}"
+  regular_prices={Decimal(str(r['pricePerKwh'])) for r in rules}
+  assert len(regular_prices)==1, f"promo requires one regular price per offer {o['id']}: {regular_prices}"
+  regular=next(iter(regular_prices))
+  assert Decimal(str(effective)) == regular-Decimal(str(discount)), f"promo arithmetic {o['id']}: {regular}-{discount}!={effective}"
+ fee=o.get('blockingFee')
+ if fee:
+  assert isinstance(fee.get('afterMinutes'),(int,float)) and fee['afterMinutes']>=0,o['id']
+  assert isinstance(fee.get('pricePerMinute'),(int,float)) and fee['pricePerMinute']>=0,o['id']
+  assert isinstance(fee.get('capPerSession'),(int,float)) and fee['capPerSession']>=0,o['id']
+  assert fee.get('currency')=='EUR',o['id']
 # power-band overlap check by selection + connector
 by={}
 for o in all_offers:
@@ -41,4 +56,4 @@ for key,bands in by.items():
  bands.sort(key=lambda x:x[0])
  for a,b in zip(bands,bands[1:]):
   assert a[1] < b[0], f'overlap {key}: {a} {b}'
-print(json.dumps({'files':files,'offers':len(all_offers),'selections':len(set(o['selectionId'] for o in all_offers)),'status':'ok'}))
+print(json.dumps({'files':files,'offers':len(all_offers),'selections':len(set(o['selectionId'] for o in all_offers)),'temporaryDiscounts':sum(bool(o.get('temporaryDiscount')) for o in all_offers),'blockingFees':sum(bool(o.get('blockingFee')) for o in all_offers),'status':'ok'}))
