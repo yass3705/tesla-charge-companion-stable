@@ -1,0 +1,23 @@
+name: Germany V9 cross-border subscription contract
+
+on:
+  pull_request:
+    paths:
+      - 'data/v9/germany-cross-border-subscriptions.json'
+      - 'scripts/test_germany_cross_border_subscriptions_v9.py'
+      - '.github/workflows/germany-cross-border-v9-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Germany cross-border subscriptions
+        run: python scripts/test_germany_cross_border_subscriptions_v9.py
