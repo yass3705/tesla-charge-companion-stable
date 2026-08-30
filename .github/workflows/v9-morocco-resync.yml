@@ -8,6 +8,7 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/session-engine.js'
       - 'data/v9/source-registry.json'
       - 'tests/v9-morocco-resync-smoke.test.cjs'
       - '.github/workflows/v9-morocco-resync.yml'
@@ -16,6 +17,7 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/session-engine.js'
       - 'data/v9/source-registry.json'
       - 'tests/v9-morocco-resync-smoke.test.cjs'
       - '.github/workflows/v9-morocco-resync.yml'
@@ -37,6 +39,7 @@ jobs:
           node --check assets/v9/adapters/morocco-public.js
           node --check assets/v9/adapters/morocco-nonproduction.js
           node --check assets/v9/browser-loaders.js
+          node --check assets/v9/session-engine.js
           node --check tests/v9-morocco-resync-smoke.test.cjs
           node -e "JSON.parse(require('fs').readFileSync('data/v9/source-registry.json','utf8'))"
       - name: Validate sanitized public Morocco datasets and source semantics
