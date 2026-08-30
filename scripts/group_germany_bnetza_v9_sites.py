@@ -18,7 +18,8 @@ def writegz(p,obj):
 
 def main():
  a=argparse.ArgumentParser();a.add_argument('--input-root',required=True);a.add_argument('--input-crosswalk',required=True);a.add_argument('--out',required=True);a.add_argument('--crosswalk',required=True);x=a.parse_args()
- inp=Path(x.input_root);rows=loadgz(inp/'all.json.gz');cw=json.loads(Path(x.input_crosswalk).read_text());entry_by_id={str(e['bnetzaId']):e for e in cw.get('entries',[])}
+ inp=Path(x.input_root);all_rows=loadgz(inp/'all.json.gz');cw=json.loads(Path(x.input_crosswalk).read_text());entry_by_id={str(e['bnetzaId']):e for e in cw.get('entries',[])}
+ excluded_tesla=[r for r in all_rows if n(r[5])=='tesla'];rows=[r for r in all_rows if n(r[5])!='tesla']
  groups=defaultdict(list)
  for r in rows: groups[site_key(r)].append(r)
  outrows=[];outcw=[];multi=0;maxfac=0;facility_count=0;evse_total=0
@@ -54,7 +55,7 @@ def main():
  for q,items in sorted(tiles.items()):
   gz=writegz(out/(q+'.json.gz'),items);aa=math.floor(items[0][3]/TILE)*TILE;bb=math.floor(items[0][4]/TILE)*TILE;mt.append({'id':q,'file':q+'.json.gz','minLat':aa,'maxLat':aa+TILE,'minLon':bb,'maxLon':bb+TILE,'count':len(items),'bytes':len(gz),'sha256':hashlib.sha256(gz).hexdigest()})
  allgz=writegz(out/'all.json.gz',outrows);now=datetime.now(timezone.utc).isoformat().replace('+00:00','Z');srcm=json.loads((inp/'manifest.json').read_text())
- m={'schemaVersion':3,'dataset':'germany-bnetza-sites-v9','country':'DE','generatedAt':now,'sourceDataset':srcm.get('dataset'),'sourceUrl':srcm.get('sourceUrl'),'sourceAttribution':srcm.get('sourceAttribution'),'sourceRows':srcm.get('sourceRows'),'facilityCount':facility_count,'siteCount':len(outrows),'stationCount':len(outrows),'evseCount':evse_total,'multiFacilitySiteCount':multi,'maxFacilitiesPerSite':maxfac,'skippedRows':srcm.get('skippedRows',0),'syntheticIdCount':srcm.get('syntheticIdCount',0),'tileSizeDegrees':TILE,'tileCount':len(mt),'allFile':'all.json.gz','allBytes':len(allgz),'allSha256':hashlib.sha256(allgz).hexdigest(),'preIntegrationOnly':True,'groupingKey':'canonical operator + normalized address + coordinates rounded to 6 decimals','tiles':mt}
- (out/'manifest.json').write_text(json.dumps(m,separators=(',',':'),ensure_ascii=False)+'\n');Path(x.crosswalk).write_text(json.dumps({'schemaVersion':2,'country':'DE','generatedAt':now,'preIntegrationOnly':True,'entries':outcw},separators=(',',':'),ensure_ascii=False)+'\n')
- print(json.dumps({k:m[k] for k in ('facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},indent=2))
+ m={'schemaVersion':4,'dataset':'germany-bnetza-sites-v9','country':'DE','generatedAt':now,'sourceDataset':srcm.get('dataset'),'sourceUrl':srcm.get('sourceUrl'),'sourceAttribution':srcm.get('sourceAttribution'),'sourceRows':srcm.get('sourceRows'),'sourceFacilityCount':len(all_rows),'excludedTeslaFacilityCount':len(excluded_tesla),'facilityCount':facility_count,'siteCount':len(outrows),'stationCount':len(outrows),'evseCount':evse_total,'multiFacilitySiteCount':multi,'maxFacilitiesPerSite':maxfac,'skippedRows':srcm.get('skippedRows',0),'syntheticIdCount':srcm.get('syntheticIdCount',0),'tileSizeDegrees':TILE,'tileCount':len(mt),'allFile':'all.json.gz','allBytes':len(allgz),'allSha256':hashlib.sha256(allgz).hexdigest(),'preIntegrationOnly':True,'teslaExcludedFromRuntimeBaseline':True,'groupingKey':'canonical operator + normalized address + coordinates rounded to 6 decimals','tiles':mt}
+ (out/'manifest.json').write_text(json.dumps(m,separators=(',',':'),ensure_ascii=False)+'\n');Path(x.crosswalk).write_text(json.dumps({'schemaVersion':3,'country':'DE','generatedAt':now,'preIntegrationOnly':True,'teslaExcludedFromRuntimeBaseline':True,'entries':outcw},separators=(',',':'),ensure_ascii=False)+'\n')
+ print(json.dumps({k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},indent=2))
 if __name__=='__main__': main()
