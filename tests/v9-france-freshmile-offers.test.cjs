@@ -18,7 +18,7 @@ assert.equal(applied[0].offers.length,1);assert.equal(applied[1].offers.length,0
 let quote=Pricing.evaluateOffer(applied[0].offers[0],{energyKwh:10.01,durationMinutes:200,startAt:'2026-08-29T10:00:00Z'});
 assert.equal(quote.complete,true);assert.equal(quote.totalEur,5.85);assert.equal(quote.components.energyBilling.billedKwh,11);assert.equal(quote.components.connectedTimeAfterFree.costEur,0.9);
 quote=Pricing.evaluateOffer(applied[0].offers[0],{energyKwh:2,durationMinutes:30,startAt:'2026-08-29T19:45:00Z'});
-assert.equal(quote.complete,false);assert.equal(quote.reason,'tariff_window_crossing_requires_segmentation');
+assert.equal(quote.complete,false);assert.equal(quote.reason,'tariff_window_crossing_unsupported_components');
 
 assert.ok(saintFlour,'Saint-Flour exact offer must exist');
 assert.equal(saintFlour.stationIds,undefined,'conflicting copied station IDs must not be used');
