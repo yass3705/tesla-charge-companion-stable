@@ -51,6 +51,9 @@ const energyBands={id:'bump-energy-bands',currency:'EUR',metadata:{timeZone:'Eur
 {
   const r=p.evaluateOffer(energyBands,{energyKwh:10,durationMinutes:30,chargingMinutes:30,startAt:'2026-08-30T16:45:00+02:00'});assert.equal(r.complete,true);assert.equal(r.segmented,true);assert.equal(r.totalEur,3.225);assert.equal(r.components.segmentedPricing.segments.length,2);assert.equal(r.components.segmentedPricing.segments[0].energyKwh,5);assert.equal(r.components.segmentedPricing.segments[0].rule.pricePerKwh,0.25);assert.equal(r.components.segmentedPricing.segments[1].energyKwh,5);assert.equal(r.components.segmentedPricing.segments[1].rule.pricePerKwh,0.395);
 }
+{
+  const r=p.evaluateOffer(energyBands,{energyKwh:10,durationMinutes:30,chargingMinutes:15,startAt:'2026-08-30T16:45:00+02:00'});assert.equal(r.complete,true);assert.equal(r.segmented,true);assert.equal(r.totalEur,2.5);assert.equal(r.components.segmentedPricing.segments[0].energyKwh,10);assert.equal(r.components.segmentedPricing.segments[1].energyKwh,0);
+}
 const occupancyBands={id:'bump-occupancy-bands',currency:'EUR',metadata:{timeZone:'Europe/Paris'},pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.45}],postChargeFee:{graceMinutes:15,eurPerMinute:0.2,exemptLocalWindows:[{start:'23:00',end:'09:00'}]},minimumTotalEur:0.5}};
 {
   const r=p.evaluateOffer(occupancyBands,{energyKwh:1,durationMinutes:10,postChargeMinutes:30,postChargeStartAt:'2026-08-30T10:00:00+02:00'});assert.equal(r.complete,true);assert.equal(r.components.postCharge.billableMinutes,15);assert.equal(r.components.postCharge.costEur,3);assert.equal(r.totalEur,3.45);
