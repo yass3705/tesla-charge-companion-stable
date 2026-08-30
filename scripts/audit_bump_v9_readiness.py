@@ -57,6 +57,75 @@ def profile(obj):
     }
 
 
+def walk_tariff_points(obj):
+    if isinstance(obj,dict):
+        if isinstance(obj.get('idPdcItinerance'),str) and ('rankable' in obj or 'components' in obj or 'rules' in obj):
+            yield obj
+        for v in obj.values():
+            if isinstance(v,(dict,list)):yield from walk_tariff_points(v)
+    elif isinstance(obj,list):
+        for v in obj:
+            if isinstance(v,(dict,list)):yield from walk_tariff_points(v)
+
+
+def shape(value):
+    if isinstance(value,dict):return {k:shape(v) for k,v in sorted(value.items())}
+    if isinstance(value,list):return [shape(value[0])] if value else []
+    return type(value).__name__
+
+
+def sanitize(value,depth=0):
+    if depth>5:return '…'
+    if isinstance(value,dict):
+        out={}
+        for k,v in list(value.items())[:30]:
+            out[str(k)]=sanitize(v,depth+1)
+        return out
+    if isinstance(value,list):return [sanitize(v,depth+1) for v in value[:8]]
+    if isinstance(value,str):return value[:160]
+    return value
+
+
+def time_changing_semantics(obj):
+    points=[];seen=set()
+    for point in walk_tariff_points(obj):
+        pid=str(point.get('idPdcItinerance') or '').strip()
+        if not pid or pid in seen:continue
+        seen.add(pid)
+        comp=point.get('components') or {}
+        if comp.get('isTariffChangingInTime') is True:points.append(point)
+    rule_keys=Counter(); component_keys=Counter(); nested_keys=Counter(); shape_counts=Counter(); examples={}
+    for point in points:
+        comp=point.get('components') or {}
+        rules=point.get('rules') or []
+        for k in comp:component_keys[str(k)]+=1
+        if isinstance(rules,list):
+            for rule in rules:
+                if isinstance(rule,dict):
+                    for k in rule:rule_keys[str(k)]+=1
+                    for path,record in walk(rule):
+                        if isinstance(record,dict):
+                            for k in record:nested_keys[str(k)]+=1
+        signature=json.dumps(shape(rules),sort_keys=True,separators=(',',':'))
+        shape_counts[signature]+=1
+        if signature not in examples and len(examples)<12:
+            examples[signature]={
+              'idPdcItinerance':point.get('idPdcItinerance'),
+              'tariffName':point.get('tariffName'),
+              'components':sanitize(comp),
+              'rules':sanitize(rules),
+              'sourceText':sanitize(point.get('sourceText')),
+            }
+    return {
+      'count':len(points),
+      'componentKeys':dict(component_keys.most_common(50)),
+      'ruleKeys':dict(rule_keys.most_common(50)),
+      'nestedRuleKeys':dict(nested_keys.most_common(80)),
+      'ruleShapeCount':len(shape_counts),
+      'topRuleShapes':[{'count':count,'shape':json.loads(sig),'example':examples.get(sig)} for sig,count in shape_counts.most_common(12)],
+    }
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--crosswalk',default='data/v9/france-crosswalk.json')
@@ -88,13 +157,15 @@ def main():
       'tariffsGraphql':args.tariffs_graphql,
       'tariffsTcc':args.tariffs_tcc,
     }
-    reports={}; exact_values={}; exact_fields=Counter()
+    reports={}; exact_values={}; exact_fields=Counter();tcc_obj=None
     all_exact=set()
     for name,path in source_paths.items():
         p=Path(path)
         if not p.exists():
             reports[name]={'source':path,'exists':False};continue
-        obj=load(p); pr=profile(obj); matches=[];seen=set()
+        obj=load(p)
+        if name=='tariffsTcc':tcc_obj=obj
+        pr=profile(obj); matches=[];seen=set()
         for key,value in scalars(obj):
             kind=None
             if value in station_ids:kind='station'
@@ -113,13 +184,15 @@ def main():
 
     tariff_sources_present=all(reports.get(k,{}).get('exists') for k in ('tariffsGraphql','tariffsTcc'))
     pricing_signals={k:len((reports.get(k,{}).get('profile') or {}).get('pricingSamples',[])) for k in ('tariffsGraphql','tariffsTcc')}
+    temporal=time_changing_semantics(tcc_obj) if tcc_obj is not None else {'count':0,'ruleShapeCount':0,'topRuleShapes':[]}
     output={
-      'schemaVersion':1,'country':'FR','provider':'bump',
+      'schemaVersion':2,'country':'FR','provider':'bump',
       'generatedAt':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
       'policy':{
         'runtimeExactOnly':True,'geographicFallbackAllowed':False,
         'tariffDataCannotCreatePhysicalStations':True,
         'tariffActivationRequiresExactCanonicalIdentity':True,
+        'timeChangingTariffsRequireExactSemanticCompilation':True,
       },
       'summary':{
         'currentExactCrosswalkAliasCount':len(exact_aliases),
@@ -129,16 +202,21 @@ def main():
         'pricingSignalSamples':pricing_signals,
         'identityGapLikelyParserRelated':len(exact_aliases)==0 and len(all_exact)>0,
         'runtimeTariffEligible':len(exact_aliases)>0 and tariff_sources_present and all(v>0 for v in pricing_signals.values()),
+        'timeChangingTariffPointCount':temporal.get('count',0),
+        'timeChangingRuleShapeCount':temporal.get('ruleShapeCount',0),
       },
       'currentExactAliasesSample':exact_aliases[:100],
+      'timeChangingSemantics':temporal,
       'sources':reports,
     }
     if output['summary']['identityGapLikelyParserRelated']:
         output['next']='Extend the provider crosswalk parser only for deterministic Bump fields proven to equal PAN station/PDC identifiers, then rebuild and re-audit.'
     elif len(exact_aliases)==0:
         output['next']='Keep Bump tariffs blocked from runtime; direct datasets expose no deterministic PAN identifier under current evidence.'
+    elif temporal.get('count',0):
+        output['next']='Compile only time-changing Bump rule shapes that map exactly to supported V9 temporal pricing semantics; keep all other shapes fail-closed.'
     else:
-        output['next']='Semantically validate the TCC tariff representation and compile offers only onto exact Bump canonical aliases.'
+        output['next']='Bump exact tariff semantics are ready for runtime compilation.'
     op=Path(args.output);op.parent.mkdir(parents=True,exist_ok=True);op.write_text(json.dumps(output,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'summary':output['summary'],'next':output['next']},ensure_ascii=False,indent=2))
 
