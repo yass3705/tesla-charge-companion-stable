@@ -39,6 +39,20 @@
     return{...session,requestedEnergyKwh:requested,approachEnergyKwh:approach,energyKwh:money(Math.max(0,requested+(include?approach:0)))};
   }
 
+  function evaluateSessionStartLockedOffer(offer,session={}){
+    const pricing=offer?.pricing||{},timeZone=session.timeZone||offer?.metadata?.timeZone||null;
+    if(pricing.type!=='rules'||pricing.priceSelectionBasis!=='session_start_local_time')return null;
+    const rule=PricingEngine.matchingRule(pricing,session.startAt,timeZone);
+    if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:text(offer?.id||offer?.offerId),timeZone};
+    const base=PricingEngine.evaluateRule(rule,session);
+    const finalized=PricingEngine.applyMinimumTotal(pricing,base.totalEur,base.components);
+    return{
+      complete:true,totalEur:finalized.totalEur,components:finalized.components,
+      offerId:text(offer?.id||offer?.offerId),currency:offer?.currency||'EUR',matchedRule:rule,
+      segmented:false,timeZone,priceSelectionBasis:'session_start_local_time'
+    };
+  }
+
   function evaluateStation(station,session={},options={}){
     const selectedSubscriptions=options.selectedSubscriptions||session.selectedSubscriptions||[];
     const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode});
@@ -49,15 +63,16 @@
     for(const offer of offers){
       const postChargeMinutes=Math.max(0,num(effectiveSession.postChargeMinutes)??0);
       const unknownPostCharge=offer?.pricing?.postChargeFeeUnknown===true||offer?.metadata?.postChargeFeeUnknown===true;
+      const locked=evaluateSessionStartLockedOffer(offer,effectiveSession);
       const result=unknownPostCharge&&postChargeMinutes>0
         ?{complete:false,reason:'post_charge_fee_unknown_for_station',offerId:text(offer.id||offer.offerId),postChargeMinutes}
-        :PricingEngine.evaluateOffer(offer,effectiveSession);
+        :(locked||PricingEngine.evaluateOffer(offer,effectiveSession));
       const currency=text(result.currency||offer.currency||'EUR').toUpperCase();
       const rate=result.complete?fxRate(currency,targetCurrency,fxRates):null;
       const comparable=result.complete&&rate!=null;
       const normalizedTotal=comparable?money(result.totalEur*rate):null;
       evaluations.push({
-        offerId:text(offer.id||offer.offerId),provider:text(offer.provider),kind:text(offer.kind),subscriptionId:text(offer.subscriptionId)||null,
+        offerId:text(offer.id||offer.offerId),provider:text(offer.provider),kind:text(offer.kind),subscriptionId:text(offer.subscriptionId),selectionId:text(offer.selectionId)||null,
         priority:num(offer.priority)??0,currency,result,comparable,targetCurrency,
         total:normalizedTotal,costPerRecoveredKm:normalizedTotal!=null&&km?money(normalizedTotal/km):null
       });
@@ -91,5 +106,5 @@
     return rows;
   }
 
-  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession};
+  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateSessionStartLockedOffer};
 });
