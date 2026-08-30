@@ -16,6 +16,8 @@ let r=Cross.resolve({subscriptionId:'fastned-gold',countryCode:'FR',physicalOper
 assert.equal(r.rankable,true);assert.equal(r.pricePerKwh,0.43);assert.equal(r.currency,'EUR');assert.equal(r.usedFallback,false);
 r=Cross.resolve({subscriptionId:'fastned-gold',countryCode:'FR',physicalOperator:{name:'IONITY'}},config);
 assert.equal(r.status,'unavailable');assert.equal(r.rankable,false);
+r=Cross.resolve({subscriptionId:'fastned-gold',countryCode:'FR',physicalOperator:{name:'IONITY'},exactStationPrice:0.20,exactStationCurrency:'EUR'},config);
+assert.equal(r.status,'unavailable');assert.equal(r.rankable,false,'exact price cannot bypass Fastned physical-operator scope');
 r=Cross.resolve({subscriptionId:'fastned-gold',countryCode:'PT',physicalOperator:{name:'Fastned'}},config);
 assert.equal(r.status,'unavailable');assert.equal(r.usedFallback,false,'German/home tariff must never be propagated to unsupported countries');
 
@@ -23,6 +25,8 @@ r=Cross.resolve({subscriptionId:'ionity-power',countryCode:'FR',physicalOperator
 assert.equal(r.status,'minimum');assert.equal(r.pricePerKwh,0.33);assert.equal(r.rankable,false,'IONITY country minimum must not rank as exact');
 r=Cross.resolve({subscriptionId:'ionity-power',countryCode:'FR',physicalOperator:{name:'IONITY'},exactStationPrice:0.35,exactStationCurrency:'EUR'},config);
 assert.equal(r.status,'exact');assert.equal(r.pricePerKwh,0.35);assert.equal(r.rankable,true);
+r=Cross.resolve({subscriptionId:'ionity-power',countryCode:'FR',physicalOperator:{name:'Fastned'},exactStationPrice:0.35,exactStationCurrency:'EUR'},config);
+assert.equal(r.status,'unavailable');assert.equal(r.rankable,false,'exact price cannot bypass IONITY physical-operator scope');
 
 r=Cross.resolve({subscriptionId:'enbw-mobility-plus-m',countryCode:'FR',physicalOperator:{name:'Powerdot'}},config);
 assert.equal(r.status,'station-specific-required');assert.equal(r.rankable,false);assert.equal(r.pricePerKwh,undefined);
@@ -60,4 +64,4 @@ assert.deepEqual(options.find(x=>x.id==='fastned-gold').countries.sort(),['BE','
 assert.equal(options.find(x=>x.id==='ionity-power').countryCount,23);
 assert.equal(options.find(x=>x.id==='enbw-mobility-plus-m').countryCount,17);
 
-console.log(JSON.stringify({ok:true,module:'tcc-v9-cross-border-runtime',invariants:['single-global-selection','country-local-price','no-home-price-fallback','preserve-physical-cpo','advisory-never-hides-fallback','ionity-minimum-not-rankable','exact-station-override-rankable','enbw-station-specific-only']},null,2));
+console.log(JSON.stringify({ok:true,module:'tcc-v9-cross-border-runtime',invariants:['single-global-selection','country-local-price','no-home-price-fallback','preserve-physical-cpo','operator-scope-before-override','advisory-never-hides-fallback','ionity-minimum-not-rankable','exact-station-override-rankable','enbw-station-specific-only']},null,2));
