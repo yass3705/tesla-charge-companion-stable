@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "country": "FR",
   "provider": "bump",
-  "generatedAt": "2026-08-30T11:27:58.346989Z",
+  "generatedAt": "2026-08-30T11:30:49.972496Z",
   "policy": {
     "runtimeExactOnly": true,
     "geographicFallbackAllowed": false,
@@ -26,7 +26,9 @@
     "identityGapLikelyParserRelated": false,
     "runtimeTariffEligible": true,
     "timeChangingTariffPointCount": 665,
-    "timeChangingRuleShapeCount": 1
+    "timeChangingRuleFamilyCount": 6,
+    "simpleExactTemporalCandidateCount": 13,
+    "complexTemporalDeferredCandidateCount": 652
   },
   "currentExactAliasesSample": [
     {
@@ -441,6 +443,15 @@
       "parkingText": 665,
       "isTariffChangingInTime": 665
     },
+    "ruleKinds": {
+      "minimum_total": 665,
+      "energy": 661,
+      "flat_fee": 638,
+      "post_charge_occupancy": 13,
+      "session_duration_surcharge": 6,
+      "post_charge_occupancy_time_bands": 4,
+      "energy_time_bands": 4
+    },
     "ruleKeys": {
       "kind": 1991,
       "amountEur": 1303,
@@ -464,16 +475,101 @@
       "bands": 8,
       "afterMinutes": 6
     },
-    "ruleShapeCount": 1,
-    "topRuleShapes": [
+    "ruleFamilyCount": 6,
+    "simpleExactCandidateCount": 13,
+    "complexConditionalCount": 652,
+    "ruleFamilies": [
       {
-        "count": 665,
-        "shape": [
-          {
-            "amountEur": "float",
-            "kind": "str"
+        "count": 622,
+        "signature": "minimum_total(amountEur)|flat_fee(amountEur,conditions):conditions[kind,value]|energy(eurPerKwh)",
+        "example": {
+          "idPdcItinerance": "FRBMPE6747",
+          "tariffName": "Bump - SAGS - Annemasse - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.5499996,
+            "timeEurPerHour": null,
+            "flatFeeEur": 1.2,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "flat_fee",
+              "amountEur": 1.2,
+              "conditions": [
+                {
+                  "kind": "energy_above_kwh",
+                  "value": 0.5
+                }
+              ]
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.55
+            }
+          ],
+          "sourceText": {
+            "quick": "0,55 €/kWh",
+            "short": "0,55 €/kWh + 1,20 € fixe. Minimum 0,50 €",
+            "long": "Fixed price: 1,20 € above 0.5kWh consumed\n\nEnergy consumption: 0,55 €/kWh\n\nMinimum 0,50 € Inc. VAT"
           }
-        ],
+        }
+      },
+      {
+        "count": 16,
+        "signature": "minimum_total(amountEur)|flat_fee(amountEur,conditions):conditions[kind,value;kind,value]|energy(eurPerKwh)",
+        "example": {
+          "idPdcItinerance": "FRBMPE8460",
+          "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.45,
+            "timeEurPerHour": null,
+            "flatFeeEur": 0.9999996,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "flat_fee",
+              "amountEur": 1.0,
+              "conditions": [
+                {
+                  "kind": "energy_above_kwh",
+                  "value": 1.0
+                },
+                {
+                  "kind": "session_duration_after_minutes",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.45
+            }
+          ],
+          "sourceText": {
+            "quick": "0,45 €/kWh",
+            "short": "0,45 €/kWh + 1,00 € fixe. Minimum 0,50 €",
+            "long": "Fixed price: 1,00 € above 1kWh consumed and after 1 minutes of usage\n\nEnergy consumption: 0,45 €/kWh\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 13,
+        "signature": "minimum_total(amountEur)|energy(eurPerKwh)|post_charge_occupancy(eurPerMinute,graceMinutes)",
         "example": {
           "idPdcItinerance": "FRBMPEBMP4107",
           "tariffName": "Mairie d'Hérépian - Base Tarif",
@@ -505,6 +601,135 @@
             "quick": "0,40 €/kWh",
             "short": "0,40 €/kWh. Minimum 0,50 €",
             "long": "While charging:\nEnergy consumption: 0,40 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,12 €/minute after 3h of usage\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 6,
+        "signature": "minimum_total(amountEur)|energy(eurPerKwh)|session_duration_surcharge(afterMinutes,eurPerMinute)",
+        "example": {
+          "idPdcItinerance": "FRBMPE3876",
+          "tariffName": "Duval Energies - Chapelle des Fougeretz - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.336,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.336
+            },
+            {
+              "kind": "session_duration_surcharge",
+              "eurPerMinute": 0.048,
+              "afterMinutes": 240
+            }
+          ],
+          "sourceText": {
+            "quick": "0,336 €/kWh",
+            "short": "0,336 €/kWh. Minimum 0,50 €",
+            "long": "Energy consumption: 0,336 €/kWh\n\nDuration: 0,048 €/minute after 4h of usage\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 4,
+        "signature": "minimum_total(amountEur)|energy(eurPerKwh)|post_charge_occupancy_time_bands(bands):bands[end,eurPerMinute,graceMinutes,start;end,eurPerMinute,graceMinutes,start]",
+        "example": {
+          "idPdcItinerance": "FRBMPE8022",
+          "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.45,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": "Duration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM",
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.45
+            },
+            {
+              "kind": "post_charge_occupancy_time_bands",
+              "bands": [
+                {
+                  "start": "23:00",
+                  "end": "09:00",
+                  "eurPerMinute": 0.0,
+                  "graceMinutes": 0
+                },
+                {
+                  "start": "09:00",
+                  "end": "23:00",
+                  "eurPerMinute": 0.2,
+                  "graceMinutes": 15
+                }
+              ]
+            }
+          ],
+          "sourceText": {
+            "quick": "0,45 €/kWh",
+            "short": "0,45 €/kWh. Minimum 0,50 €",
+            "long": "While charging:\nEnergy consumption: 0,45 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 "
+          }
+        }
+      },
+      {
+        "count": 4,
+        "signature": "minimum_total(amountEur)|energy_time_bands(bands):bands[end,eurPerKwh,start;end,eurPerKwh,start]",
+        "example": {
+          "idPdcItinerance": "FRBMPEBMP1957",
+          "tariffName": "SCI Beauval - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.2499996,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy_time_bands",
+              "bands": [
+                {
+                  "start": "10:00",
+                  "end": "17:00",
+                  "eurPerKwh": 0.25
+                },
+                {
+                  "start": "17:00",
+                  "end": "10:00",
+                  "eurPerKwh": 0.395
+                }
+              ]
+            }
+          ],
+          "sourceText": {
+            "quick": "0,25 €/kWh",
+            "short": "0,25 €/kWh. Minimum 0,50 €",
+            "long": "Energy consumption: 0,25 €/kWh between 10:00 AM and 5:00 PM\nThen 0,395 €/kWh between 5:00 PM and 10:00 AM\n\nMinimum 0,50 € Inc. VAT"
           }
         }
       }
@@ -3452,5 +3677,5 @@
       ]
     }
   },
-  "next": "Compile only time-changing Bump rule shapes that map exactly to supported V9 temporal pricing semantics; keep all other shapes fail-closed."
+  "next": "Compile simple exact Bump temporal families that map one-to-one to V9 pricing semantics; keep conditional/banded families fail-closed."
 }
