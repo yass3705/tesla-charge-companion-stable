@@ -8,6 +8,7 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
       - 'data/v9/source-registry.json'
       - 'tests/v9-morocco-resync2-smoke.test.cjs'
       - '.github/workflows/v9-morocco-resync2.yml'
@@ -16,6 +17,7 @@ on:
       - 'assets/v9/adapters/morocco-public.js'
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
       - 'data/v9/source-registry.json'
       - 'tests/v9-morocco-resync2-smoke.test.cjs'
       - '.github/workflows/v9-morocco-resync2.yml'
@@ -37,7 +39,8 @@ jobs:
           node --check assets/v9/adapters/morocco-public.js
           node --check assets/v9/adapters/morocco-nonproduction.js
           node --check assets/v9/browser-loaders.js
+          node --check assets/v9/pricing-engine.js
           node --check tests/v9-morocco-resync2-smoke.test.cjs
           node -e "JSON.parse(require('fs').readFileSync('data/v9/source-registry.json','utf8'))"
-      - name: Validate sanitized public Morocco datasets and registry wiring
+      - name: Validate sanitized public Morocco datasets, registry wiring and MAD pricing
         run: node tests/v9-morocco-resync2-smoke.test.cjs
