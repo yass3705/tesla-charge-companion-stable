@@ -9,6 +9,7 @@ on:
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
       - 'assets/v9/pricing-engine.js'
+      - 'assets/v9/session-engine.js'
       - 'data/v9/source-registry.json'
       - 'v9-preview/app.js'
       - 'v9-preview/index.html'
@@ -20,6 +21,7 @@ on:
       - 'assets/v9/adapters/morocco-nonproduction.js'
       - 'assets/v9/browser-loaders.js'
       - 'assets/v9/pricing-engine.js'
+      - 'assets/v9/session-engine.js'
       - 'data/v9/source-registry.json'
       - 'v9-preview/app.js'
       - 'v9-preview/index.html'
@@ -44,6 +46,7 @@ jobs:
           node --check assets/v9/adapters/morocco-nonproduction.js
           node --check assets/v9/browser-loaders.js
           node --check assets/v9/pricing-engine.js
+          node --check assets/v9/session-engine.js
           node --check v9-preview/app.js
           node --check tests/v9-morocco-consolidation.test.cjs
       - name: Validate registry safety
@@ -55,6 +58,7 @@ jobs:
           if(ma.length!==4)throw new Error(`expected four physical Morocco sources, got ${ma.length}`);
           if(ma.some(s=>/evone|evplug|shell|vivo/i.test(s.id)))throw new Error('eMSP/diagnostic source leaked into physical registry');
           if(!ma.every(s=>s.adapter==='morocco-public-v1'))throw new Error('unexpected Morocco physical adapter');
+          if(!r.sources.some(s=>s.id==='france-bump-offers'))throw new Error('latest V9 registry source lost during Morocco consolidation');
           NODE
       - name: Validate live sanitized public datasets, pricing and cross-source merge
         run: node tests/v9-morocco-consolidation.test.cjs
