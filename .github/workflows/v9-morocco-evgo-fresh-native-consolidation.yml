@@ -1,0 +1,54 @@
+name: V9 Morocco EVGO fresh native compatibility (consolidation)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-consolidation-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - '.github/workflows/v9-morocco-evgo-fresh-native-consolidation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public data-lab read-only
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          persist-credentials: false
+      - name: Regenerate fresh sanitized EVGO native model
+        working-directory: data-lab
+        run: |
+          python3 scripts/morocco_evgo_pin_hydration_probe.py
+          mkdir -p reports/morocco/evgo
+          cp artifacts/morocco-evgo-pin-hydration/summary.json reports/morocco/evgo/latest-pin-hydration.json
+          python3 scripts/morocco_evgo_normalize.py
+      - name: Validate fresh dataset through V9 Morocco adapter
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const d=JSON.parse(fs.readFileSync('./data-lab/reports/morocco/evgo/latest-normalized-stations.json','utf8'));
+          const stations=adapter.normalizeEvgoDataset(d,{sourceId:'morocco-evgo-native-fresh-readonly'});
+          assert.equal(stations.length,17,'fresh EVGO station count');
+          assert.equal(stations.flatMap(s=>s.evses||[]).length,43,'fresh EVGO EVSE count');
+          assert(stations.every(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude)),'fresh EVGO GPS');
+          assert(stations.every(s=>s.physicalOperator?.name==='Nareva Services / EVGO'),'EVGO CPO');
+          assert(stations.every(s=>s.access?.appSource==='EVGO'&&s.access?.accessNetwork==='EVGO'),'EVGO app/access network');
+          assert(stations.every(s=>s.status?.statusSource==='EVGO native backend cp.evgo.ma'),'EVGO native status source');
+          for(const native of ['charging','suspendedEV','preparing','finishing'])assert.equal(adapter.evgoClassify({status:native}),'occupied_or_active_session',native);
+          assert.equal(adapter.evgoClassify({status:'available',isAvailable:true,isTemporarilyUnavailable:true}),'out_of_service');
+          assert.equal(adapter.evgoClassify({status:'available',isAvailable:true,isLongTermUnavailable:true}),'out_of_service');
+          assert.equal(adapter.evgoClassify({status:'available',isAvailable:false}),'unknown');
+          console.log(JSON.stringify({ok:true,generatedAt:d.generated_at,sourceGeneratedAt:d.source_generated_at,stations:stations.length,evses:43,nativeStatusCounts:d.summary?.native_status_counts,operationalClassCounts:d.summary?.operational_class_counts},null,2));
+          NODE
