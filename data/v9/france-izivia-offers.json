@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-08-31T09:23:07.354924Z",
+  "generatedAt": "2026-08-31T10:28:40.726528Z",
   "mode": "official_exact_mamp_evse",
   "policy": {
     "physicalInventoryCreated": false,
@@ -11,18 +11,1966 @@
     "subscriptionsOptIn": true,
     "unsupportedPowersFailClosed": true
   },
-  "directOffers": [],
+  "directOffers": [
+    {
+      "id": "izivia-mamp-24-frizmpmamp100-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp100-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10011",
+        "FRIZMEMAMP10012"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp102-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp102-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10211",
+        "FRIZMEMAMP10212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp104-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp104-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10411",
+        "FRIZMEMAMP10412",
+        "FRIZMEMAMP10421",
+        "FRIZMEMAMP10422"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp105-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp105-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10512",
+        "FRIZMEMAMP10522"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp105-1",
+      "selectionId": "izivia-mamp-24-frizmpmamp105-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10511",
+        "FRIZMEMAMP10521"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp106-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp106-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10611",
+        "FRIZMEMAMP10612"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp107-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp107-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10711",
+        "FRIZMEMAMP10712"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp108-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp108-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10812"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp108-1",
+      "selectionId": "izivia-mamp-24-frizmpmamp108-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10811"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp109-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp109-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP10911",
+        "FRIZMEMAMP10912"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp110-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp110-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11011",
+        "FRIZMEMAMP11012"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp111-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp111-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11111",
+        "FRIZMEMAMP11112"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp112-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp112-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11211",
+        "FRIZMEMAMP11212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp114-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp114-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11411",
+        "FRIZMEMAMP11412"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp115-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp115-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11512"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp115-1",
+      "selectionId": "izivia-mamp-24-frizmpmamp115-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11511"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp118-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp118-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11812"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp118-1",
+      "selectionId": "izivia-mamp-24-frizmpmamp118-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP11811"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp17-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp17-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP1711",
+        "FRIZMEMAMP1712"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp18-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp18-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP1811",
+        "FRIZMEMAMP1812"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp22-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp22-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP2211",
+        "FRIZMEMAMP2212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp3-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp3-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP321",
+        "FRIZMEMAMP322"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp30-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp30-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP3011",
+        "FRIZMEMAMP3012"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp39-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp39-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP3911",
+        "FRIZMEMAMP3912"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp4-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp4-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP411",
+        "FRIZMEMAMP412"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp43-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp43-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP4321",
+        "FRIZMEMAMP4322"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp46-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp46-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP4611",
+        "FRIZMEMAMP4612"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp47-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp47-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP4711",
+        "FRIZMEMAMP4712"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp5-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp5-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP521",
+        "FRIZMEMAMP522"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp52-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp52-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP5211",
+        "FRIZMEMAMP5212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp53-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp53-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP5311",
+        "FRIZMEMAMP5312"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp54-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp54-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP5411",
+        "FRIZMEMAMP5412"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp55-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp55-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP5511",
+        "FRIZMEMAMP5512"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp56-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp56-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP5611",
+        "FRIZMEMAMP5612"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp60-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp60-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP6021",
+        "FRIZMEMAMP6022"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp62-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp62-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP6211",
+        "FRIZMEMAMP6212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp65-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp65-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP6511",
+        "FRIZMEMAMP6512"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp66-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp66-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP6611",
+        "FRIZMEMAMP6612"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp67-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp67-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP6721",
+        "FRIZMEMAMP6722"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp71-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp71-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP7111",
+        "FRIZMEMAMP7112",
+        "FRIZMEMAMP7121",
+        "FRIZMEMAMP7122"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp72-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp72-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP7211",
+        "FRIZMEMAMP7212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp73-1",
+      "selectionId": "izivia-mamp-22-frizmpmamp73-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP7311",
+        "FRIZMEMAMP7312"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp74-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp74-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP7411",
+        "FRIZMEMAMP7412"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp79-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp79-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP7911",
+        "FRIZMEMAMP7912"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp82-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp82-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP8211",
+        "FRIZMEMAMP8212"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp83-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp83-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP8311",
+        "FRIZMEMAMP8312"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp85-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp85-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP8511",
+        "FRIZMEMAMP8512"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp88-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp88-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP8811",
+        "FRIZMEMAMP8812"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp89-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp89-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP8911",
+        "FRIZMEMAMP8912"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp90-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp90-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP9011",
+        "FRIZMEMAMP9012"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp91-1",
+      "selectionId": "izivia-mamp-22-frizmpmamp91-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP9121",
+        "FRIZMEMAMP9122"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp92-1",
+      "selectionId": "izivia-mamp-22-frizmpmamp92-1",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP9221",
+        "FRIZMEMAMP9222"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-24-frizmpmamp95-0",
+      "selectionId": "izivia-mamp-24-frizmpmamp95-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP9511",
+        "FRIZMEMAMP9512",
+        "FRIZMEMAMP9521",
+        "FRIZMEMAMP9522"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.44
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "24kW DC",
+        "officialPricePerKwhEur": 0.44,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    },
+    {
+      "id": "izivia-mamp-22-frizmpmamp96-0",
+      "selectionId": "izivia-mamp-22-frizmpmamp96-0",
+      "provider": "IZIVIA MAMP direct",
+      "operatorAliases": [
+        "IZIVIA"
+      ],
+      "networkAliases": [
+        "MAMP"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "evseIds": [
+        "FRIZMEMAMP9611",
+        "FRIZMEMAMP9612"
+      ],
+      "currency": "EUR",
+      "priority": 125,
+      "pricing": {
+        "type": "kwh",
+        "pricePerKwh": 0.38
+      },
+      "source": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "metadata": {
+        "network": "MAMP",
+        "officialTariffClass": "22kW AC",
+        "officialPricePerKwhEur": 0.38,
+        "officialScopeOnly": true,
+        "networkWideGeneralization": false,
+        "unsupportedMampPowersDeferred": true,
+        "physicalInventorySource": "france-national"
+      }
+    }
+  ],
   "subscriptionOffers": [],
   "sourceEvidence": {
-    "officialUrl": "https://www.izivia.com/reseau-izivia-aix-marseille-provence",
-    "networkExactName": "MAMP",
+    "officialUrl": "https://izivia.com/installation-bornes-de-recharge/metropole-aix-marseille-provence",
+    "officialTariffs": {
+      "22kWAcEurPerKwh": 0.38,
+      "24kWDcEurPerKwh": 0.44
+    },
+    "nationalGeneratedAt": "2026-08-29T16:59:01.416928Z",
     "stats": {
       "mampStations": 80,
       "mampPdcs": 178,
       "eligible22Pdcs": 48,
       "eligible24Pdcs": 60,
-      "coveredPdcs": 108,
-      "unsupportedPdcs": 70
+      "otherPowerPdcs": 70
     }
   }
 }
