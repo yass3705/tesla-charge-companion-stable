@@ -15,6 +15,29 @@
   const money=v=>Math.round((Number(v)+Number.EPSILON)*1000000)/1000000;
   const addMinutes=(value,minutes)=>{const d=value instanceof Date?new Date(value.getTime()):new Date(value);if(Number.isNaN(d.getTime()))return null;return new Date(d.getTime()+Number(minutes||0)*60000);};
 
+  function connectorKind(connector={}){
+    const raw=text(connector.kind||connector.currentType||connector.powerType||connector.plugName).toUpperCase();
+    if(raw.includes('DC')||raw.includes('CCS')||raw.includes('CHADEMO'))return'DC';
+    if(raw.includes('AC')||raw.includes('TYPE2')||raw.includes('TYPE 2'))return'AC';
+    const power=num(connector.powerKw);return power!=null&&power>22?'DC':'AC';
+  }
+
+  function stationChargingKind(station){
+    let selected=null;
+    for(const evse of station?.evses||[])for(const connector of evse?.connectors||[]){
+      const power=num(connector?.powerKw);if(power==null||power<=0)continue;
+      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(connector)};
+    }
+    if(selected)return selected.kind;
+    for(const evse of station?.evses||[])for(const connector of evse?.connectors||[])return connectorKind(connector);
+    return null;
+  }
+
+  function offerMatchesChargingKind(offer,chargingKind){
+    const allowed=Array.isArray(offer?.connectorKinds)?offer.connectorKinds.map(v=>text(v).toUpperCase()).filter(Boolean):[];
+    return !chargingKind||!allowed.length||allowed.includes(chargingKind);
+  }
+
   function fxRate(currency,targetCurrency,fxRates={}){
     const from=text(currency||targetCurrency||'EUR').toUpperCase(),to=text(targetCurrency||from).toUpperCase();
     if(from===to)return 1;
@@ -97,7 +120,8 @@
 
   function evaluateStation(station,session={},options={}){
     const selectedSubscriptions=options.selectedSubscriptions||session.selectedSubscriptions||[];
-    const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode});
+    const chargingKind=stationChargingKind(station);
+    const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode}).filter(offer=>offerMatchesChargingKind(offer,chargingKind));
     const targetCurrency=text(options.targetCurrency||session.targetCurrency||'EUR').toUpperCase();
     const fxRates=options.fxRates||session.fxRates||{};
     const effectiveSession=stationSession(station,session,options),km=recoveredKm(session),evaluations=[];
@@ -128,7 +152,7 @@
     });
     const best=comparable[0]||null;
     return{
-      stationId:text(station?.id||station?.canonicalId||station?.stationId),
+      stationId:text(station?.id||station?.canonicalId||station?.stationId),chargingKind,
       eligibleOfferCount:offers.length,comparableOfferCount:comparable.length,targetCurrency,recoveredKm:km,
       requestedEnergyKwh:effectiveSession.requestedEnergyKwh,approachEnergyKwh:effectiveSession.approachEnergyKwh,billedEnergyKwh:effectiveSession.energyKwh,
       best,
@@ -149,5 +173,5 @@
     return rows;
   }
 
-  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateSessionStartLockedOffer,evaluateTimelineOffer,timelineEnergy};
+  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateSessionStartLockedOffer,evaluateTimelineOffer,timelineEnergy,stationChargingKind,offerMatchesChargingKind,connectorKind};
 });
