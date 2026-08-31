@@ -41,8 +41,8 @@
     {
       "networkId": "reveo",
       "coverageStatus": "partial_ready",
-      "artifacts": ["data/reveo_direct_tariffs_france_v1.json", "scripts/materialize_france_reveo_offers.py"],
-      "notes": "Verified Hérault outside Montpellier Méditerranée Métropole is canonicalized on 184 stations / 396 PDC: all 396 verified PDC are covered, producing 792 rankable offers (396 public + 396 opt-in subscriber), with zero unresolved S34 PDC and zero physical-inventory mutation. The remaining 1,902 Révéo PDC stay unresolved until their current local direct grids are verified; Montpellier Métropole and roaming tariffs do not inherit the Hérault grid. Révéo subscription remains opt-in at 1.50 EUR/month per badge, with a 12 EUR badge purchase price."
+      "artifacts": ["data/reveo_direct_tariffs_france_v1.json", "scripts/materialize_france_reveo_offers.py", "scripts/materialize_france_reveo_offers_v2.py"],
+      "notes": "Current PAN contains 969 canonical Révéo stations / 2,298 PDC. Direct public tariffs are rankable on 1,896 PDC: 396 Hérault S34 PDC plus 1,500 general-grid PDC across currently represented verified territories. S34 also exposes 396 separate opt-in subscriber offers. Eight otherwise rankable-territory PDC remain unresolved because connector/power classification is insufficient. The remaining 394 PDC are intentionally blocked pending current special-grid verification: 133 Toulouse Métropole and 261 Pyrénées-Orientales. Subscriber prices outside S34 remain reference-only, roaming never inherits a direct tariff, and physical-inventory mutation remains zero. The current materializer emits 2,293 rankable offers in total (1,897 public connector offers + 396 subscriber offers)."
     },
     {
       "networkId": "eborn",
