@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
+  "enabled": true,
   "requireReadiness": true,
-  "readinessApproved": false,
-  "tokenSha256": "",
-  "tokenVersion": "test-20260831133840-closed",
-  "expiresAt": null,
+  "readinessApproved": true,
+  "tokenSha256": "92a67b421586771850e45c78518e8414bb73799c26f2b56e2f388f4e625926d2",
+  "tokenVersion": "device-test-20260831200928",
+  "expiresAt": "2026-08-31T21:09:28.979590Z",
   "maxGrantMinutes": 60,
-  "notes": "Closed after preflight: no isolated served test environment was available yet. Raw token was never committed."
+  "notes": "Temporary first-device V9 test window. Clear token is never stored in the repository. Random canary remains 0%."
 }
