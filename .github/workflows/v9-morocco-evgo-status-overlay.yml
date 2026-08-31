@@ -2,10 +2,17 @@ name: V9 Morocco EVGO fresh status overlay
 
 on:
   workflow_dispatch:
-  push:
-    branches: ['feat/morocco-evgo-fresh-status-overlay-20260831']
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
     paths:
       - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-evgo-status-overlay.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
       - '.github/workflows/v9-morocco-evgo-status-overlay.yml'
 
 permissions:
@@ -19,7 +26,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Validate public EVGO inventory plus fresh native status overlay
+      - name: Validate public EVGO inventory, native overlay and freshness fail-safe
         run: |
           node - <<'NODE'
           const assert=require('assert');
@@ -27,24 +34,52 @@ jobs:
           const source={
             id:'morocco-evgo-native',
             profile:'evgo',
-            url:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evgo/latest-normalized-stations.json'
+            url:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evgo/latest-normalized-stations.json',
+            statusUrl:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evgo/latest-status-overlay.json',
+            freshnessMaxMinutes:120
           };
           (async()=>{
-            const stations=await adapter.createLoader({source})();
-            assert.equal(stations.length,17,'EVGO station count');
-            assert.equal(stations.flatMap(s=>s.evses||[]).length,43,'EVGO EVSE count');
-            assert(stations.every(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude)&&s.latitude>=20&&s.latitude<=37&&s.longitude>=-18&&s.longitude<=0),'all EVGO GPS usable in Morocco');
-            assert(stations.every(s=>s.physicalOperator?.name==='Nareva Services / EVGO'),'EVGO CPO preserved');
-            assert(stations.every(s=>s.access?.appSource==='EVGO'&&s.access?.accessNetwork==='EVGO'),'EVGO app/access preserved');
-            assert(stations.every(s=>s.status?.statusSource==='EVGO native backend cp.evgo.ma'),'native status source preserved');
-            const evseCounts={};
-            for(const e of stations.flatMap(s=>s.evses||[]))evseCounts[e.status.state]=(evseCounts[e.status.state]||0)+1;
-            assert.deepEqual(evseCounts,{available:23,occupied_or_active_session:18,out_of_service:2});
-            const stationCounts={};
-            for(const s of stations)stationCounts[s.status.state]=(stationCounts[s.status.state]||0)+1;
-            assert.deepEqual(stationCounts,{available:10,occupied:6,out_of_service:1});
-            const menara=stations.find(s=>s.canonicalId==='MA:evgo:6');
-            assert.equal(menara?.status?.state,'out_of_service','Marjane Menara long-term unavailable flags override native available');
-            console.log(JSON.stringify({ok:true,stations:stations.length,evses:43,evseCounts,stationCounts,menara:menara.status},null,2));
+            const [inventoryResponse,overlayResponse]=await Promise.all([fetch(source.url,{cache:'no-cache'}),fetch(source.statusUrl,{cache:'no-cache'})]);
+            assert(inventoryResponse.ok&&overlayResponse.ok,'public EVGO resources reachable');
+            const [inventory,overlay]=await Promise.all([inventoryResponse.json(),overlayResponse.json()]);
+            const overlayGeneratedAt=Date.parse(overlay.source_generated_at||overlay.generated_at);
+            assert(Number.isFinite(overlayGeneratedAt),'overlay timestamp parseable');
+
+            const makeFetch=(inventoryData,overlayData)=>async url=>({
+              ok:true,status:200,
+              json:async()=>JSON.parse(JSON.stringify(url===source.statusUrl?overlayData:inventoryData))
+            });
+
+            const freshNow=overlayGeneratedAt+60*60*1000;
+            const staleNow=overlayGeneratedAt+121*60*1000;
+            const freshInfo=adapter.evgoOverlayFreshness(overlay,120,freshNow);
+            const staleInfo=adapter.evgoOverlayFreshness(overlay,120,staleNow);
+            assert.equal(freshInfo.fresh,true,'overlay fresh at +60 min');
+            assert.equal(staleInfo.fresh,false,'overlay stale after 120 min');
+
+            const freshStations=await adapter.createLoader({source,fetchImpl:makeFetch(inventory,overlay),nowMs:freshNow})();
+            assert.equal(freshStations.length,17,'EVGO station count');
+            assert.equal(freshStations.flatMap(s=>s.evses||[]).length,43,'EVGO EVSE count');
+            assert(freshStations.every(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude)&&s.latitude>=20&&s.latitude<=37&&s.longitude>=-18&&s.longitude<=0),'all EVGO GPS usable in Morocco');
+            assert(freshStations.every(s=>s.physicalOperator?.name==='Nareva Services / EVGO'),'EVGO CPO preserved');
+            assert(freshStations.every(s=>s.access?.appSource==='EVGO'&&s.access?.accessNetwork==='EVGO'),'EVGO app/access preserved');
+            assert(freshStations.every(s=>s.status?.statusSource==='EVGO native backend cp.evgo.ma'&&s.status?.freshness==='fresh'),'native status source and freshness preserved');
+
+            const expectedCounts={};
+            for(const st of overlay.stations||[])for(const e of st.evses||[]){const state=adapter.evgoClassify(e);expectedCounts[state]=(expectedCounts[state]||0)+1;}
+            const actualCounts={};
+            for(const e of freshStations.flatMap(s=>s.evses||[])){actualCounts[e.status.state]=(actualCounts[e.status.state]||0)+1;assert.equal(e.status.freshness,'fresh');}
+            assert.deepEqual(actualCounts,expectedCounts,'fresh EVSE classes match native overlay flags');
+            assert.equal(adapter.evgoClassify({status:'available',isAvailable:false,isLongTermUnavailable:true,isTemporarilyUnavailable:false}),'out_of_service','long-term unavailable overrides native available');
+            assert.equal(adapter.evgoClassify({status:'suspendedEV',isAvailable:false,isLongTermUnavailable:false,isTemporarilyUnavailable:false}),'occupied_or_active_session','suspendedEV remains active-session state');
+
+            const staleStations=await adapter.createLoader({source,fetchImpl:makeFetch(inventory,overlay),nowMs:staleNow})();
+            assert.equal(staleStations.length,17,'stale overlay keeps inventory');
+            assert.equal(staleStations.flatMap(s=>s.evses||[]).length,43,'stale overlay keeps EVSE inventory');
+            assert(staleStations.every(s=>s.status?.state==='unknown'&&s.status?.freshness==='stale'),'stale station status downgraded to unknown');
+            assert(staleStations.flatMap(s=>s.evses||[]).every(e=>e.status?.state==='unknown'&&e.status?.freshness==='stale'),'stale EVSE status downgraded to unknown');
+            assert(staleStations.every(s=>s.physicalOperator?.name==='Nareva Services / EVGO'&&s.access?.appSource==='EVGO'),'stale status never removes identity/access data');
+
+            console.log(JSON.stringify({ok:true,stations:17,evses:43,freshInfo,staleInfo,freshCounts:actualCounts,stalePolicy:'inventory preserved; status unknown'},null,2));
           })().catch(e=>{console.error(e);process.exit(1);});
           NODE

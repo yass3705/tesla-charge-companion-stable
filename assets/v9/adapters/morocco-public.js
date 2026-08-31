@@ -19,6 +19,12 @@
     return'unknown';
   }
   function evgoStationState(evses){const states=(evses||[]).map(evgoClassify);if(states.includes('available'))return'available';if(states.includes('occupied_or_active_session'))return'occupied';if(states.length&&states.every(s=>s==='out_of_service'))return'out_of_service';return'unknown';}
+  function evgoOverlayFreshness(overlay,maxMinutes=120,nowMs=Date.now()){
+    const raw=text(overlay?.source_generated_at||overlay?.generated_at),timestamp=Date.parse(raw),limit=number(maxMinutes);
+    if(!raw||!Number.isFinite(timestamp)||limit==null||limit<=0)return{fresh:false,generatedAt:raw||null,ageMinutes:null,maxMinutes:limit};
+    const ageMinutes=Math.max(0,(Number(nowMs)-timestamp)/60000);
+    return{fresh:ageMinutes<=limit,generatedAt:raw,ageMinutes,maxMinutes:limit};
+  }
   function applyEvgoStatusOverlay(dataset,overlay){
     const base=JSON.parse(JSON.stringify(dataset||{})),baseStations=Array.isArray(base.stations)?base.stations:[],freshStations=Array.isArray(overlay?.stations)?overlay.stations:[];
     if(baseStations.length!==17||freshStations.length!==17)throw new Error(`EVGO overlay expected 17/17 stations, got ${baseStations.length}/${freshStations.length}`);
@@ -33,15 +39,15 @@
     if(overlayEvseCount!==43)throw new Error(`EVGO overlay expected 43 EVSE, got ${overlayEvseCount}`);
     return base;
   }
-  function normalizeEvgoDataset(dataset,{sourceId='morocco-evgo-native'}={}){
+  function normalizeEvgoDataset(dataset,{sourceId='morocco-evgo-native',statusFresh=true,statusGeneratedAt=null}={}){
     const stations=Array.isArray(dataset?.stations)?dataset.stations:[],errors=[];let evseCount=0;
     if(stations.length!==17)errors.push(`expected 17 EVGO stations, got ${stations.length}`);
     for(const st of stations){if(!validMoroccoGps(number(st.latitude),number(st.longitude)))errors.push(`invalid EVGO GPS ${st.locationId}`);for(const e of st.evses||[]){evseCount++;if(text(e.operational_class)!==evgoClassify(e))errors.push(`EVGO status mismatch ${st.locationId}/${e.id}`);}}
     if(evseCount!==43)errors.push(`expected 43 EVGO EVSE, got ${evseCount}`);if(errors.length)throw new Error(errors.join('; '));
     return stations.map(st=>{
-      const evses=(st.evses||[]).map(e=>({id:`evgo:${text(e.id)}`,aliases:[`evgo-evse:${text(e.id)}`],label:text(e.identifier)||text(e.id),connectors:(e.connectors||[{id:e.id,name:text(e.currentType)}]).map((c,i)=>({id:`evgo:${text(e.id)}:connector:${text(c?.id)||i}`,kind:text(e.currentType).toUpperCase()==='DC'?'DC':'AC',powerKw:number(e.maxPower)??number(e.powerCandidateKW),powerSource:number(e.maxPower)!=null?'native':number(e.powerCandidateKW)!=null?text(e.powerCandidateSource)||'candidate':null,plugName:text(c?.name)||null})),status:{state:evgoClassify(e),nativeState:text(e.status),isAvailable:e.isAvailable===true,isLongTermUnavailable:e.isLongTermUnavailable===true,isTemporarilyUnavailable:e.isTemporarilyUnavailable===true},model:text(e.chargePointModel)||null}));
+      const evses=(st.evses||[]).map(e=>({id:`evgo:${text(e.id)}`,aliases:[`evgo-evse:${text(e.id)}`],label:text(e.identifier)||text(e.id),connectors:(e.connectors||[{id:e.id,name:text(e.currentType)}]).map((c,i)=>({id:`evgo:${text(e.id)}:connector:${text(c?.id)||i}`,kind:text(e.currentType).toUpperCase()==='DC'?'DC':'AC',powerKw:number(e.maxPower)??number(e.powerCandidateKW),powerSource:number(e.maxPower)!=null?'native':number(e.powerCandidateKW)!=null?text(e.powerCandidateSource)||'candidate':null,plugName:text(c?.name)||null})),status:{state:statusFresh?evgoClassify(e):'unknown',nativeState:text(e.status),isAvailable:e.isAvailable===true,isLongTermUnavailable:e.isLongTermUnavailable===true,isTemporarilyUnavailable:e.isTemporarilyUnavailable===true,freshness:statusFresh?'fresh':'stale'},model:text(e.chargePointModel)||null}));
       const free=(st.evses||[]).length>0&&(st.evses||[]).every(e=>e?.isFree===true&&number(e?.priceMAD)===0);
-      return{canonicalId:`MA:evgo:${st.locationId}`,aliases:[`evgo-location:${st.locationId}`],sourceStationId:text(st.locationId),countryCode:'MA',name:text(st.name),address:text(st.address),latitude:number(st.latitude),longitude:number(st.longitude),physicalOperator:{name:text(st.operator_cpo_candidate)||'Nareva Services / EVGO'},networkBrand:'EVGO',evses,access:{kind:'public',limited:false,siteBrand:st.site_brand==null?null:text(st.site_brand),appSource:text(st.app_source)||'EVGO',accessNetwork:'EVGO'},status:{state:evgoStationState(st.evses),sourceId,updatedAt:st.updatedAt||null,statusSource:text(st.status_source)||'EVGO native backend cp.evgo.ma'},offers:free?[{id:`evgo-free:${st.locationId}`,provider:'EVGO direct',kind:'direct',countries:['MA'],currency:'MAD',pricing:{type:'rules',rules:[{scope:'allDay',billing:'kwh',currency:'MAD',pricePerKwh:0}]},metadata:{tariffChannel:text(st.tariff_channel)||'EVGO native',interpretation:'EVGO-only explicit normalized free rule; never generalize to another operator.'}}]:[],updatedAt:st.updatedAt||null};
+      return{canonicalId:`MA:evgo:${st.locationId}`,aliases:[`evgo-location:${st.locationId}`],sourceStationId:text(st.locationId),countryCode:'MA',name:text(st.name),address:text(st.address),latitude:number(st.latitude),longitude:number(st.longitude),physicalOperator:{name:text(st.operator_cpo_candidate)||'Nareva Services / EVGO'},networkBrand:'EVGO',evses,access:{kind:'public',limited:false,siteBrand:st.site_brand==null?null:text(st.site_brand),appSource:text(st.app_source)||'EVGO',accessNetwork:'EVGO'},status:{state:statusFresh?evgoStationState(st.evses):'unknown',sourceId,updatedAt:statusGeneratedAt||st.updatedAt||null,statusSource:text(st.status_source)||'EVGO native backend cp.evgo.ma',freshness:statusFresh?'fresh':'stale'},offers:free?[{id:`evgo-free:${st.locationId}`,provider:'EVGO direct',kind:'direct',countries:['MA'],currency:'MAD',pricing:{type:'rules',rules:[{scope:'allDay',billing:'kwh',currency:'MAD',pricePerKwh:0}]},metadata:{tariffChannel:text(st.tariff_channel)||'EVGO native',interpretation:'EVGO-only explicit normalized free rule; never generalize to another operator.'}}]:[],updatedAt:st.updatedAt||null};
     });
   }
 
@@ -65,14 +71,15 @@
     return{stations,diagnostics,summary:{officialRows:official.rows.length,reconciledHosts:grouped.size,geolocatedHosts:stations.length,excludedWithoutGeo:diagnostics.length,alWahaExactMerged:stations.some(s=>s.canonicalId===`MA:kilowatt:${exactId}`)}};
   }
 
-  function createLoader({source,fetchImpl}={}){
+  function createLoader({source,fetchImpl,nowMs}={}){
     if(!source?.profile)throw new Error('Morocco source profile missing');
     return async function(){
       if(source.profile==='evgo'){
         const statusUrl=text(source.statusUrl)||String(source.url||'').replace(/latest-normalized-stations\.json(?:\?.*)?$/,'latest-status-overlay.json');
         if(!statusUrl||statusUrl===source.url)throw new Error('EVGO status overlay URL unresolved');
         const [inventory,overlay]=await Promise.all([fetchJson(source.url,fetchImpl),fetchJson(statusUrl,fetchImpl)]);
-        return normalizeEvgoDataset(applyEvgoStatusOverlay(inventory,overlay),{sourceId:source.id});
+        const freshness=evgoOverlayFreshness(overlay,number(source.freshnessMaxMinutes)??120,nowMs==null?Date.now():Number(nowMs));
+        return normalizeEvgoDataset(applyEvgoStatusOverlay(inventory,overlay),{sourceId:source.id,statusFresh:freshness.fresh,statusGeneratedAt:freshness.generatedAt});
       }
       if(source.profile==='fastvolt')return normalizeFastVoltDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
       if(source.profile==='kilowatt')return normalizeKilowattDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
@@ -81,5 +88,5 @@
     };
   }
 
-  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalEnergies,evgoClassify,kilowattState};
+  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalEnergies,evgoClassify,kilowattState};
 });
