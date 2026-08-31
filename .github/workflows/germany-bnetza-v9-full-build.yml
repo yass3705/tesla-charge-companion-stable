@@ -16,7 +16,14 @@ on:
       - 'scripts/test_germany_eam_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_luebeck_direct_offers_v9.py'
       - 'scripts/test_germany_swlb_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_bochum_direct_offers_v9.py'
+      - 'scripts/test_germany_mark_e_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_wuerzburg_direct_offers_v9.py'
       - 'scripts/test_germany_q1_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_goettingen_direct_offers_v9.py'
+      - 'scripts/test_germany_ovag_direct_offers_v9.py'
+      - 'scripts/test_germany_wemag_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py'
       - 'scripts/probe_totalenergies_charge_europe_public_endpoints.py'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'data/v9/germany-operator-aliases.json'
@@ -28,7 +35,14 @@ on:
       - 'data/v9/germany-direct-offers-eam-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-luebeck-extension.json'
       - 'data/v9/germany-direct-offers-swlb-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-bochum-extension.json'
+      - 'data/v9/germany-direct-offers-mark-e-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-wuerzburg-extension.json'
       - 'data/v9/germany-direct-offers-q1-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-goettingen-extension.json'
+      - 'data/v9/germany-direct-offers-ovag-extension.json'
+      - 'data/v9/germany-direct-offers-wemag-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-neuss-extension.json'
       - 'data/v9/germany-totalenergies-station-pricing.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -131,8 +145,22 @@ jobs:
         run: python scripts/test_germany_stadtwerke_luebeck_direct_offers_v9.py
       - name: Validate SWLB direct offers
         run: python scripts/test_germany_swlb_direct_offers_v9.py
+      - name: Validate Stadtwerke Bochum direct offers
+        run: python scripts/test_germany_stadtwerke_bochum_direct_offers_v9.py
+      - name: Validate Mark-E direct offers
+        run: python scripts/test_germany_mark_e_direct_offers_v9.py
+      - name: Validate Stadtwerke Würzburg direct offers
+        run: python scripts/test_germany_stadtwerke_wuerzburg_direct_offers_v9.py
       - name: Validate Q1 direct offers
         run: python scripts/test_germany_q1_direct_offers_v9.py
+      - name: Validate Stadtwerke Göttingen direct offers
+        run: python scripts/test_germany_stadtwerke_goettingen_direct_offers_v9.py
+      - name: Validate OVAG direct offers
+        run: python scripts/test_germany_ovag_direct_offers_v9.py
+      - name: Validate WEMAG direct offers
+        run: python scripts/test_germany_wemag_direct_offers_v9.py
+      - name: Validate Stadtwerke Neuss direct offers
+        run: python scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py
       - name: Audit real site-to-direct-offer linkage
         run: python scripts/audit_germany_direct_offer_site_linkage_v9.py --sites build/germany-sites/all.json.gz --offers build/germany-direct-offers.json
       - name: Validate TotalEnergies station-specific pricing
@@ -172,5 +200,12 @@ jobs:
             data/v9/germany-direct-offers-eam-extension.json
             data/v9/germany-direct-offers-stadtwerke-luebeck-extension.json
             data/v9/germany-direct-offers-swlb-extension.json
+            data/v9/germany-direct-offers-stadtwerke-bochum-extension.json
+            data/v9/germany-direct-offers-mark-e-extension.json
+            data/v9/germany-direct-offers-stadtwerke-wuerzburg-extension.json
             data/v9/germany-direct-offers-q1-extension.json
+            data/v9/germany-direct-offers-stadtwerke-goettingen-extension.json
+            data/v9/germany-direct-offers-ovag-extension.json
+            data/v9/germany-direct-offers-wemag-extension.json
+            data/v9/germany-direct-offers-stadtwerke-neuss-extension.json
           retention-days: 7
