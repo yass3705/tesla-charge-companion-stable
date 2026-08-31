@@ -5,9 +5,12 @@ on:
   push:
     branches:
       - feature/v9-ewiva-italy
+      - feature/v9-ewiva-postcharge
     paths:
       - scripts/v9_enrich_italy_ewiva_offers.py
+      - assets/v9/session-engine.js
       - tests/v9-ewiva-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
       - .github/workflows/v9-sync-italy-ewiva.yml
 
 permissions:
@@ -81,16 +84,20 @@ jobs:
           assert report['ewivaPlugAndGoSuperOffers']==1678
           assert report['ewivaExplorerOffers']==0
           assert report['ewivaTariffClasses']=={'AC':7,'DC':31,'HPC':1640}
+          assert report['ewivaPostChargeFeesPublished']==3356
           ewiva=[o for o in offers['emspOffers'] if str(o.get('id','')).startswith('it:emsp:enel-on-your-way-ewiva:')]
           assert len(ewiva)==1678
           assert all(o['provider']=='Enel On Your Way' for o in ewiva)
           assert all(o['metadata']['network']=='Ewiva' for o in ewiva)
           assert all(o['metadata']['rankableAsCpoDirect'] is False for o in ewiva)
           assert all(o['pricing']['priceSelectionBasis']=='session_start_local_time' for o in ewiva)
-          assert all(o['pricing']['postChargeFeeUnknown'] is True for o in ewiva)
+          assert all('postChargeFee' in o['pricing'] for o in ewiva)
+          assert all(o['pricing'].get('postChargeFeeUnknown') is not True for o in ewiva)
           sup=[o for o in offers['subscriptionOffers'] if o.get('selectionId')=='enel_plug_and_go_super' and o.get('metadata',{}).get('network')=='Ewiva']
           exp=[o for o in offers['subscriptionOffers'] if o.get('selectionId')=='enel_plug_and_go_explorer' and o.get('metadata',{}).get('network')=='Ewiva']
           assert len(sup)==1678 and len(exp)==0
+          assert all('postChargeFee' in o['pricing'] for o in sup)
+          assert offers['policy']['sessionStartLockedPostChargeFeesSupported'] is True
           assert not any(o.get('provider')=='Ewiva' for o in offers['directOffers'])
           print(json.dumps(report,ensure_ascii=False,indent=2))
           PY
@@ -111,5 +118,5 @@ jobs:
             echo 'Italy Ewiva generated data already current'
             exit 0
           fi
-          git commit -m 'data(v9): publish Italy catalogue with Ewiva'
+          git commit -m 'data(v9): publish Italy Ewiva post-charge fees'
           git push origin "HEAD:${GITHUB_REF_NAME}"
