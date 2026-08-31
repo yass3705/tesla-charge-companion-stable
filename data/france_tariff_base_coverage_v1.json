@@ -39,6 +39,12 @@
       "notes": "Official IZIVIA FAST McDonald's France direct tariff is canonicalized on all 620 current FAST stations / 2,335 PDC: 2,335 rankable offers, zero unresolved PDC and zero physical-inventory mutation. Direct energy price is 0.30 EUR/kWh before 11:30 and from 15:00 to 18:00, otherwise 0.35 EUR/kWh. Generic IZIVIA, IZIVIA Express, SIGEIF/IZIVIA, roaming and subscription tariffs remain strictly separate."
     },
     {
+      "networkId": "reveo",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/reveo_direct_tariffs_france_v1.json", "scripts/materialize_france_reveo_offers.py"],
+      "notes": "Verified Hérault outside Montpellier Méditerranée Métropole is canonicalized on 184 stations / 396 PDC: all 396 verified PDC are covered, producing 792 rankable offers (396 public + 396 opt-in subscriber), with zero unresolved S34 PDC and zero physical-inventory mutation. The remaining 1,902 Révéo PDC stay unresolved until their current local direct grids are verified; Montpellier Métropole and roaming tariffs do not inherit the Hérault grid. Révéo subscription remains opt-in at 1.50 EUR/month per badge, with a 12 EUR badge purchase price."
+    },
+    {
       "networkId": "eborn",
       "coverageStatus": "ready",
       "artifacts": ["data/eborn_direct_tariffs_v1.json"],
