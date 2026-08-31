@@ -9,6 +9,7 @@ on:
       - 'tests/v9-france-izivia-network-audit.cjs'
       - '.github/workflows/v9-france-izivia-offers.yml'
       - 'data/v9/france-static/**'
+      - 'data/v9/france-izivia-offers.json'
   push:
     branches: ['refactor/unified-data-engine-v9']
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/v9-france-izivia-network-audit.cjs'
       - '.github/workflows/v9-france-izivia-offers.yml'
       - 'data/v9/france-static/**'
+      - 'data/v9/france-izivia-offers.json'
 
 permissions:
   contents: write
