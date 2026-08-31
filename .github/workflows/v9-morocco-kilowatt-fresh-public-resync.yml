@@ -1,0 +1,57 @@
+name: V9 Morocco Kilowatt fresh public compatibility (resync)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - '.github/workflows/v9-morocco-kilowatt-fresh-public-resync.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public data-lab Kilowatt probe read-only
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          ref: diag/morocco-kilowatt-readonly-refresh-20260831
+          path: data-lab
+          persist-credentials: false
+      - name: Regenerate fresh sanitized Kilowatt public inventory
+        working-directory: data-lab
+        run: python3 scripts/morocco/kilowatt_public_station_inventory.py
+      - name: Validate fresh inventory through V9 Morocco adapter
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const d=JSON.parse(fs.readFileSync('./data-lab/reports/morocco/kilowatt/latest-public-station-inventory.json','utf8'));
+          assert.equal(d.summary.raw_station_records,47,'fresh Kilowatt raw station records');
+          assert.equal(d.summary.production_candidates,43,'fresh Kilowatt production candidates');
+          assert.equal(d.modeling.cpo_operator,'Kilowatt');
+          assert.equal(d.modeling.app_source_access_network,'Kilowatt public web map');
+          assert.equal(d.modeling.status_source,'Kilowatt public web map');
+          const stations=adapter.normalizeKilowattDataset(d,{sourceId:'morocco-kilowatt-public-fresh-readonly'});
+          assert.equal(stations.length,43,'V9 Kilowatt station count');
+          assert(stations.every(s=>s.physicalOperator?.name==='Kilowatt'),'Kilowatt CPO');
+          assert(stations.every(s=>s.access?.appSource==='Kilowatt public web map'&&s.access?.accessNetwork==='Kilowatt'),'Kilowatt app/access network');
+          assert(stations.every(s=>s.status?.statusSource==='Kilowatt public web map'),'Kilowatt native public status source');
+          assert(stations.every(s=>Array.isArray(s.offers)&&s.offers.length===0),'Kilowatt tariff unresolved');
+          assert(stations.every(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude)),'Kilowatt usable GPS');
+          const alRaw=d.stations.filter(s=>s.production_candidate===true&&(/waha/i.test(String(s.name||''))||/waha/i.test(String(s.address||''))));
+          assert(alRaw.length>=1,'AL WAHA present in fresh Kilowatt inventory');
+          assert(alRaw.every(s=>s.cpo_operator==='Kilowatt'),'AL WAHA Kilowatt CPO');
+          assert(alRaw.every(s=>s.tariff_channel==null),'AL WAHA tariff unresolved');
+          assert(alRaw.every(s=>s.status_source==='Kilowatt public web map'),'AL WAHA Kilowatt status source');
+          console.log(JSON.stringify({ok:true,generatedAt:d.generated_at,raw:d.summary.raw_station_records,production:d.summary.production_candidates,officialConnectorCount:d.summary.official_public_connector_count,statusCounts:d.summary.status_counts_production,connectorTypes:d.summary.connector_type_counts_production,powerKw:d.summary.power_kw_counts_production,alWaha:alRaw},null,2));
+          NODE
