@@ -14,6 +14,7 @@ TARGETS={
  'SWLB Mobilität':{'minSites':140,'requireFullCoverage':True},
  'Stadtwerke Bochum':{'minSites':120,'requireFullCoverage':True},
  'Mark-E':{'minSites':100,'requireFullCoverage':True},
+ 'Stadtwerke Würzburg':{'minSites':80,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
