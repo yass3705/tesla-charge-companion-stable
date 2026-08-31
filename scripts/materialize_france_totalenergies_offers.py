@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Materialize official TotalEnergies France tariff families on canonical PDCs.
+"""Materialize current TotalEnergies France tariff families conservatively.
 
-Conservative V9 rules:
+Safety invariants:
 - PAN IRVE remains the only physical inventory.
-- Only canonical PDCs with tariffNetworkId ``totalenergies`` are considered.
-- The published 0.52/0.62 EUR/kWh tariff is a *station-service* tariff family,
-  not a guarantee for every TotalEnergies concession/public network. It is
-  therefore reference-only until station-service scope is proven.
-- Charge+ Zen is a 15% subscription discount, not a flat 0.49 EUR/kWh tariff.
-  It remains reference-only until official eligible-station/PDC identity and
-  the underlying public price are both resolved.
+- Only canonical PDCs whose tariffNetworkId is exactly ``totalenergies`` qualify.
+- Current station-service pricing is published as power-band *ranges*, with six
+  explicit 0.59 EUR/kWh local exceptions. No exact price is ranked until a
+  canonical station is matched to the applicable official station tariff.
+- Charge+ Zen is a 15% eMSP subscription discount, never a fixed 0.49 EUR/kWh
+  offer. Official station eligibility and the underlying public price must both
+  be resolved before ranking; FRHXW/Hexawatt is explicitly excluded.
 """
 from __future__ import annotations
 
@@ -51,51 +51,62 @@ def dump_json(path, value):
 
 
 def validate_source(data):
-    if data.get("dataset") != "totalenergies-official-france" or data.get("country") != "FR":
-        raise ValueError("unexpected TotalEnergies source")
+    if data.get("dataset") != "totalenergies-france-v9-official-review" or data.get("country") != "FR":
+        raise ValueError("unexpected TotalEnergies V9 review source")
     classification = data.get("classification") or {}
-    if classification.get("singleNationalOperatorTariff") is not False:
-        raise ValueError("TotalEnergies source no longer distinguishes tariff families")
+    if classification.get("singleNationalExactCpoTariff") is not False:
+        raise ValueError("TotalEnergies source unexpectedly declares a single exact CPO tariff")
+    if classification.get("stationLevelPriceRequiredForExactSimulation") is not True:
+        raise ValueError("TotalEnergies source no longer requires station-level exact price")
+    if classification.get("chargePlusIsEmspNotCpoDirect") is not True:
+        raise ValueError("Charge+ must remain separate from CPO-direct pricing")
 
-    station_service = (data.get("operatorDirect") or {}).get("stationServiceFrance") or {}
-    if number(station_service.get("upToAndIncluding50KwEurPerKwh")) != 0.52:
-        raise ValueError("TotalEnergies <=50 kW station-service tariff changed")
-    if number(station_service.get("over50KwEurPerKwh")) != 0.62:
-        raise ValueError("TotalEnergies >50 kW station-service tariff changed")
+    station_service = data.get("stationServiceFrance") or {}
+    low = station_service.get("upToAndIncluding50Kw") or {}
+    high = station_service.get("over50Kw") or {}
+    if (number(low.get("minEurPerKwh")), number(low.get("maxEurPerKwh"))) != (0.52, 0.55):
+        raise ValueError("TotalEnergies <=50 kW published range changed")
+    if (number(high.get("minEurPerKwh")), number(high.get("maxEurPerKwh"))) != (0.62, 0.65):
+        raise ValueError("TotalEnergies >50 kW published range changed")
     occupation = station_service.get("occupationFee") or {}
     if number(occupation.get("eurPerMin")) != 0.5 or number(occupation.get("startsAfterConsecutiveConnectedMinutes")) != 45:
-        raise ValueError("TotalEnergies station-service occupation fee changed")
+        raise ValueError("TotalEnergies station-service occupation rule changed")
+    exceptions = station_service.get("local059Exceptions") or []
+    if len(exceptions) != 6 or any(number(row.get("eurPerKwh")) != 0.59 for row in exceptions):
+        raise ValueError("TotalEnergies 0.59 local exception set changed")
 
-    charge_plus = (data.get("mobilityProvider") or {}).get("chargePlus") or {}
-    if charge_plus.get("classification") != "eMSP_roaming" or charge_plus.get("operatorDirect") is not False:
-        raise ValueError("Charge+ must remain separate from CPO-direct pricing")
-    zen = charge_plus.get("zen") or {}
+    zen = data.get("chargePlusZen") or {}
+    if zen.get("classification") != "subscription_emsp_discount":
+        raise ValueError("Charge+ Zen source classification invalid")
     if number(zen.get("monthlyFeeEur")) != 3.9 or number(zen.get("discountPercent")) != 15.0:
         raise ValueError("Charge+ Zen current terms changed")
     if number(zen.get("minimumPowerKw")) != 50:
         raise ValueError("Charge+ Zen power threshold changed")
-    eligible = data.get("zenEligibleInventory") or {}
-    if eligible.get("stationLevelEligibilityListAvailable") is not True:
-        raise ValueError("Charge+ Zen official eligible-station list no longer declared")
+    if "FRHXW" not in (zen.get("excludedOperatorCodes") or []):
+        raise ValueError("Charge+ Zen Hexawatt exclusion missing")
+    if zen.get("exactEligibleStationIdentityRequired") is not True or zen.get("underlyingPublicPriceRequired") is not True:
+        raise ValueError("Charge+ Zen safety requirements missing")
     return station_service, zen
+
+
+def power_band(power, station_service):
+    low = station_service["upToAndIncluding50Kw"]
+    high = station_service["over50Kw"]
+    if power is None:
+        return "power_unresolved", 0.52, 0.65
+    if power <= 50:
+        return "up_to_and_including_50kw", number(low["minEurPerKwh"]), number(low["maxEurPerKwh"])
+    return "over_50kw", number(high["minEurPerKwh"]), number(high["maxEurPerKwh"])
 
 
 def station_service_reference(pdc, station, source, station_service, normalized_at):
     pid = clean(pdc.get("pdcId"))
     sid = clean(pdc.get("stationId"))
     power = number(pdc.get("powerKw"))
-    price = None
-    band = "power_unresolved"
-    if power is not None:
-        if power <= 50:
-            price = number(station_service.get("upToAndIncluding50KwEurPerKwh"))
-            band = "up_to_and_including_50kw"
-        else:
-            price = number(station_service.get("over50KwEurPerKwh"))
-            band = "over_50kw"
+    band, price_min, price_max = power_band(power, station_service)
     occ = station_service.get("occupationFee") or {}
-    reasons = ["station_service_scope_unresolved"]
-    if price is None:
+    reasons = ["station_service_scope_unresolved", "exact_kwh_price_station_specific"]
+    if power is None:
         reasons.append("pdc_power_unresolved")
     return {
         "offerId": f"totalenergies-station-service-reference:{pid}",
@@ -103,14 +114,20 @@ def station_service_reference(pdc, station, source, station_service, normalized_
         "tariffNetworkId": "totalenergies",
         "provider": "TotalEnergies station-service direct",
         "channel": "direct",
-        "sourceMode": "network_family_reference",
+        "sourceMode": "network_family_price_range_reference",
         "sourceStationId": None,
         "sourceEvseId": None,
         "canonicalStationId": sid,
         "canonicalPdcId": pid,
         "matchMethod": "tariff_network_scope_reference_only",
         "matchDistanceMeters": None,
-        "selectors": {"tariffFamily": "station_service_france", "powerBand": band},
+        "selectors": {
+            "tariffFamily": "station_service_france",
+            "powerBand": band,
+            "publishedPriceMinEurPerKwh": price_min,
+            "publishedPriceMaxEurPerKwh": price_max,
+            "local059ExceptionCount": len(station_service.get("local059Exceptions") or []),
+        },
         "kind": None,
         "minPowerKw": None,
         "maxPowerKw": None,
@@ -120,7 +137,7 @@ def station_service_reference(pdc, station, source, station_service, normalized_
             "end": "24:00",
             "days": None,
             "currency": "EUR",
-            "pricePerKwh": price,
+            "pricePerKwh": None,
             "chargePerMinute": 0,
             "connectionFee": number(station_service.get("sessionFeeEur")) or 0,
             "durationPerMinute": 0,
@@ -129,15 +146,15 @@ def station_service_reference(pdc, station, source, station_service, normalized_
             "occupancyThresholdMinutes": number(occ.get("startsAfterConsecutiveConnectedMinutes")),
             "occupancyCap": None,
             "parkingPerMinute": 0,
-            "notes": "Official station-service tariff family only; do not apply to concessions/public networks without explicit station-service identity.",
+            "notes": f"Official station-service published range {price_min:.2f}-{price_max:.2f} EUR/kWh for this power band; exact station price unresolved. Six named local stations are published at 0.59 EUR/kWh.",
         }],
         "subscriptionId": None,
-        "validFrom": station_service.get("effectiveSince"),
+        "validFrom": None,
         "validTo": None,
         "rankable": False,
         "blockedReasons": reasons,
-        "sourceUrl": "https://chargeplus.totalenergies.com/fr/conseils-recharge-electrique/cout-recharge-voiture-electrique/",
-        "sourceUpdatedAt": source.get("generatedAt"),
+        "sourceUrl": station_service.get("source"),
+        "sourceUpdatedAt": source.get("reviewedAt"),
         "normalizedAt": normalized_at,
     }
 
@@ -163,8 +180,10 @@ def zen_reference(pdc, station, source, zen, normalized_at):
         "matchDistanceMeters": None,
         "selectors": {
             "minimumPowerKw": number(zen.get("minimumPowerKw")),
-            "eligibleOperatorBrand": zen.get("eligibleOperatorBrand"),
+            "brandScope": zen.get("brandScope"),
             "geography": zen.get("geography"),
+            "excludedOperatorCodes": zen.get("excludedOperatorCodes") or [],
+            "excludedOperatorLabel": zen.get("excludedOperatorLabel"),
             "discountPercent": number(zen.get("discountPercent")),
         },
         "kind": None,
@@ -181,9 +200,10 @@ def zen_reference(pdc, station, source, zen, normalized_at):
         "blockedReasons": [
             "zen_official_station_eligibility_unresolved",
             "underlying_public_kwh_price_unresolved",
+            "hexawatt_frhxw_exclusion_must_be_enforced",
         ],
-        "sourceUrl": "https://chargeplus.totalenergies.com/fr/rechargez-votre-vehicule-electrique-partout-en-france-avec-charge-de-totalenergies/",
-        "sourceUpdatedAt": source.get("generatedAt"),
+        "sourceUrl": zen.get("source"),
+        "sourceUpdatedAt": source.get("reviewedAt"),
         "normalizedAt": normalized_at,
     }
 
@@ -227,6 +247,8 @@ def main():
         raise AssertionError("TotalEnergies conservative scope/rankability invariant failed")
     if any(row.get("provider") == "Charge+ Zen" and row.get("subscriptionDiscountPercent") != 15.0 for row in offers):
         raise AssertionError("Charge+ Zen must be modeled as 15% discount, not a fixed price")
+    if any(row.get("channel") == "direct" and row.get("pricingRules", [{}])[0].get("pricePerKwh") is not None for row in offers):
+        raise AssertionError("Station-specific TotalEnergies kWh price must remain unresolved until exact match")
 
     report = {
         "schemaVersion": "1.1.1",
@@ -240,18 +262,22 @@ def main():
             "materializedReferenceOfferCount": len(offers),
             "rankableOfferCount": 0,
             "physicalInventoryMutationCount": 0,
-            "stationServiceUpTo50PriceEurPerKwh": 0.52,
-            "stationServiceOver50PriceEurPerKwh": 0.62,
+            "stationServiceUpTo50PublishedRangeEurPerKwh": [0.52, 0.55],
+            "stationServiceOver50PublishedRangeEurPerKwh": [0.62, 0.65],
+            "stationService059ExceptionCount": 6,
             "stationServiceOccupationEurPerMin": 0.5,
             "stationServiceOccupationStartsAfterMinutes": 45,
             "zenMonthlyFeeEur": 3.9,
             "zenDiscountPercent": 15.0,
+            "zenMinimumPowerKw": 50,
+            "zenExcludedOperatorCodes": zen.get("excludedOperatorCodes") or [],
             "zenFlatPricePerKwh": None,
             "counters": dict(counters),
         },
+        "stationService059Exceptions": station_service.get("local059Exceptions") or [],
         "nextSteps": [
-            "match explicit TotalEnergies station-service identity before promoting the direct tariff family",
-            "match the official Charge+ Zen eligible-station list to canonical PDCs",
+            "match explicit TotalEnergies station-service identity and exact local station price before ranking direct offers",
+            "match the official Charge+ Zen eligible-station identity to canonical PDCs and enforce FRHXW exclusion",
             "resolve each eligible point's underlying public kWh price before applying the 15% Zen discount",
             "keep local concessions such as Aix-Marseille Option City separate from station-service pricing",
         ],
