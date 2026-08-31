@@ -16,6 +16,7 @@ TARGETS={
  'Mark-E':{'minSites':100,'requireFullCoverage':True},
  'Stadtwerke Würzburg':{'minSites':80,'requireFullCoverage':True},
  'Q1 Energie AG':{'minSites':100,'requireFullCoverage':True},
+ 'Stadtwerke Göttingen AG':{'minSites':100,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
