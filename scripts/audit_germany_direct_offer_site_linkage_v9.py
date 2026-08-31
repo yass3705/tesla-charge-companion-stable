@@ -10,6 +10,7 @@ TARGETS={
  'SWU Energie':{'minSites':140,'requireFullCoverage':True},
  'Westfalen':{'minSites':120,'requireFullCoverage':True},
  'EAM Natur Energie':{'minSites':140,'requireFullCoverage':True},
+ 'Stadtwerke Lübeck Energie':{'minSites':140,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
