@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
+  "enabled": true,
   "requireReadiness": true,
-  "readinessApproved": false,
-  "tokenSha256": "",
-  "tokenVersion": "v1",
-  "expiresAt": null,
+  "readinessApproved": true,
+  "tokenSha256": "627c87a9662540fdea853e47f24f0fd8cc85065eca0755a386ed1bd853e92647",
+  "tokenVersion": "test-20260831133840",
+  "expiresAt": "2026-08-31T14:38:40Z",
   "maxGrantMinutes": 60,
-  "notes": "Disabled by default. Store only a SHA-256 token hash here, never the token itself. A temporary local grant cannot be issued unless enabled and readinessApproved are both true."
+  "notes": "Temporary first-device test window. Raw token is not stored in the repository. Close after PASS/ROLLBACK or expiry."
 }
