@@ -1,0 +1,38 @@
+name: Germany TotalEnergies public endpoint probe
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/probe_totalenergies_charge_europe_public_endpoints.py'
+      - '.github/workflows/germany-totalenergies-public-endpoint-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect public Find a Charger resources
+        run: python scripts/probe_totalenergies_charge_europe_public_endpoints.py
+      - name: Validate probe policy
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/totalenergies-public-endpoint-probe.json'))
+          assert p['policy']['publicResourcesOnly'] is True
+          assert p['policy']['candidateEndpointsNotInvoked'] is True
+          assert p['policy']['noCredentialsOrSecrets'] is True
+          assert p['policy']['noMobileAppReverseEngineering'] is True
+          print(json.dumps({'scriptCount':p['scriptCount'],'candidateCount':p['candidateCount'],'candidates':p['candidates'][:30]},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: germany-totalenergies-public-endpoint-probe
+          path: build/totalenergies-public-endpoint-probe.json
+          retention-days: 7
