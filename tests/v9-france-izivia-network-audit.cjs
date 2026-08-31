@@ -9,12 +9,24 @@ const norm=v=>text(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCas
 const uniq=a=>[...new Set((a||[]).filter(Boolean))];
 const isIzivia=v=>{const n=norm(v);return n==='izivia'||n.startsWith('izivia-');};
 
-const targetMatchers={
-  grandLyon:/grand-lyon|metropole-de-lyon|lyon/,
-  aixMarseille:/aix|marseille/,
-  parisSaclay:/paris-saclay|saclay/,
+// Runtime-safe exact network identities only. These expressions MUST NOT infer a
+// tariff territory from a city/address substring.
+const exactTargetMatchers={
+  grandLyon:/^grand-lyon$/,
+  aixMarseille:/^mamp$/,
+  parisSaclay:/^paris-saclay$/,
+  garenneColombes:/^garenne-colombes$/,
+  express:/^izivia-express$/
+};
+
+// Review-only hints. They may use station names/addresses and can never make a
+// station runtime tariff eligible.
+const candidateTargetMatchers={
+  grandLyon:/grand-lyon|metropole-de-lyon|\blyon\b/,
+  aixMarseille:/mamp|aix-en-provence|marseille|metropole-aix-marseille/,
+  parisSaclay:/paris-saclay|\bsaclay\b|campus-saclay/,
   garenneColombes:/garenne-colombes/,
-  express:/express/
+  express:/izivia-express|\bexpress\b/
 };
 
 const manifest=readJson('data/v9/france-static/manifest.json');
@@ -32,13 +44,13 @@ for(const row of rows){
   const key=network||operator||'Unknown',r=byNetwork.get(key)||{network:key,networkNorm:norm(key),stations:0,pdcs:0,powers:new Set(),kinds:new Set(),operators:new Set(),samples:[]};
   r.stations++;r.pdcs+=pdcs;for(const x of powers)r.powers.add(x);for(const x of kinds)r.kinds.add(x);r.operators.add(operator);if(r.samples.length<8)r.samples.push({stationId,name,address,operator,network,pdcs,powers:[...powers].sort((a,b)=>a-b),pdcIds:pdcIds.slice(0,8)});byNetwork.set(key,r);
   const hay=norm(`${name} ${address} ${network}`);
-  const targetNames=Object.entries(targetMatchers).filter(([,rx])=>rx.test(hay)).map(([key])=>key);
+  const targetNames=Object.entries(candidateTargetMatchers).filter(([,rx])=>rx.test(hay)).map(([key])=>key);
   if(targetNames.length&&candidateStations.length<500)candidateStations.push({stationId,name,address,operator,network,networkNorm:norm(network),targetNames,pdcs,powers:[...powers].sort((a,b)=>a-b),kinds:[...kinds].sort(),pdcIds:pdcIds.slice(0,12)});
 }
 
 const networks=[...byNetwork.values()].map(r=>({network:r.network,networkNorm:r.networkNorm,stations:r.stations,pdcs:r.pdcs,powers:[...r.powers].sort((a,b)=>a-b),kinds:[...r.kinds].sort(),operators:[...r.operators].sort(),samples:r.samples})).sort((a,b)=>b.pdcs-a.pdcs||a.network.localeCompare(b.network));
-const knownTargets=Object.fromEntries(Object.entries(targetMatchers).map(([key,rx])=>[key,networks.filter(r=>rx.test(r.networkNorm))]));
-const targetSummary=Object.fromEntries(Object.keys(targetMatchers).map(key=>{
+const knownTargets=Object.fromEntries(Object.entries(exactTargetMatchers).map(([key,rx])=>[key,networks.filter(r=>rx.test(r.networkNorm))]));
+const targetSummary=Object.fromEntries(Object.keys(exactTargetMatchers).map(key=>{
   const exact=knownTargets[key];
   const candidates=candidateStations.filter(r=>r.targetNames.includes(key));
   return [key,{
@@ -67,3 +79,7 @@ for(const [key,target] of Object.entries(targetSummary)){
   assert(target.exactNetworkCount===target.exactNetworks.length,`${key}: exact network count mismatch`);
   if(target.exactNetworkCount===0) assert(target.exactPdcs===0,`${key}: non-zero PDCs without exact network identity`);
 }
+assert.deepEqual(targetSummary.aixMarseille.exactNetworks,['MAMP'],'Aix-Marseille must resolve only through exact MAMP network identity');
+assert.deepEqual(targetSummary.grandLyon.exactNetworks,['Grand Lyon'],'Grand Lyon must not absorb unrelated Lyon-labelled networks');
+assert.deepEqual(targetSummary.express.exactNetworks,['Izivia Express'],'Express must resolve only through exact IZIVIA Express identity');
+assert(!targetSummary.aixMarseille.exactNetworks.some(x=>/gresy|morlaix/i.test(x)),'substring false positives must never become exact tariff scope');
