@@ -29,7 +29,12 @@ jobs:
           assert p['policy']['candidateEndpointsNotInvoked'] is True
           assert p['policy']['noCredentialsOrSecrets'] is True
           assert p['policy']['noMobileAppReverseEngineering'] is True
-          print(json.dumps({'scriptCount':p['scriptCount'],'candidateCount':p['candidateCount'],'candidates':p['candidates'][:30]},indent=2))
+          assert p['policy']['noOriginBlockBypassAttempted'] is True
+          assert p['automationAssessment'] in ('server_probe_blocked','public_candidates_found','no_public_candidates_found')
+          if p['automationAssessment']=='server_probe_blocked':
+            assert p['blockedByOrigin'] in (401,403,429)
+            assert p['candidateCount']==0
+          print(json.dumps({'httpStatus':p['publicPageHttpStatus'],'assessment':p['automationAssessment'],'blockedByOrigin':p['blockedByOrigin'],'scriptCount':p['scriptCount'],'candidateCount':p['candidateCount'],'candidates':p['candidates'][:30]},indent=2))
           PY
       - uses: actions/upload-artifact@v4
         with:
