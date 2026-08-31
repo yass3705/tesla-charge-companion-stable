@@ -77,3 +77,5 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+# Closed-state republish retry after the previous Pages concurrency cancellation.
