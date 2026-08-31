@@ -3,7 +3,7 @@ name: V9 Morocco non-Tesla consolidation
 on:
   workflow_dispatch:
   push:
-    branches: ['feat/morocco-v9-consolidation-20260831']
+    branches: ['feat/morocco-v9-consolidation-20260831-resync2']
     paths:
       - 'assets/v9/adapters/morocco-*.js'
       - 'assets/v9/browser-loaders.js'
