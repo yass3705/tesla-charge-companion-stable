@@ -39,21 +39,29 @@ jobs:
           assert d.get('dataset')=='reveo-direct-tariffs-france'
           assert d.get('country')=='FR'
           s=d.get('scope') or {}
+          expected={'S34','D09','D11','S12','D30','D46','S48','D65'}
           assert s.get('operatorDirectOnly') is True
           assert s.get('roamingIncluded') is False
           assert s.get('roamingTariffsPromotedToDirect') is False
           assert s.get('unverifiedTerritoriesAreRankable') is False
           assert s.get('subscriberOffersRequireSelection') is True
-          assert s.get('rankableTerritories')==['S34']
+          assert set(s.get('rankableTerritories') or [])==expected
+          assert set(s.get('rankablePublicTerritories') or [])==expected
+          assert set(s.get('rankableSubscriberTerritories') or [])=={'S34'}
           sub=d.get('subscription') or {}
           assert float(sub.get('monthlyFeeEur'))==1.5
           assert float(sub.get('badgePurchaseEur'))==12.0
           assert sub.get('defaultSelected') is False
-          t=(d.get('territories') or {}).get('S34') or {}
-          assert t.get('partyId')=='FR*S34'
-          assert t.get('status')=='rankable_public_and_subscriber'
-          assert t.get('effectiveFrom')=='2025-04-01'
-          print(json.dumps({'rankableTerritories':s['rankableTerritories'],'subscription':sub,'S34':t},ensure_ascii=False,indent=2))
+          assert set(sub.get('verifiedRankableTerritories') or [])=={'S34'}
+          fam=d.get('tariffFamilies') or {}
+          assert (fam.get('S34_CURRENT') or {}).get('status')=='rankable_public_and_subscriber'
+          assert (fam.get('GENERAL_PUBLIC_CURRENT') or {}).get('status')=='rankable_public_subscriber_reference_only'
+          assert (fam.get('GENERAL_PUBLIC_CURRENT') or {}).get('public')
+          assert (fam.get('GENERAL_PUBLIC_CURRENT') or {}).get('subscriberReference')
+          terr=d.get('territories') or {}
+          assert (terr.get('D66') or {}).get('status')=='unresolved_special_grid_not_verified'
+          assert (terr.get('M31') or {}).get('status')=='unresolved_special_grid_not_verified'
+          print(json.dumps({'rankableTerritories':s['rankableTerritories'],'subscriberRankable':s['rankableSubscriberTerritories']},ensure_ascii=False,indent=2))
           PY
 
       - name: Build effective tariff-network registry
@@ -89,7 +97,7 @@ jobs:
             --network-registry build/france_irve/effective_tariff_network_registry.json \
             --out-dir build/france_irve_identity
 
-      - name: Materialize Révéo S34 canonical offers
+      - name: Materialize Révéo canonical offers
         run: |
           mkdir -p build/france_irve_offers
           python scripts/materialize_france_reveo_offers.py \
@@ -101,13 +109,14 @@ jobs:
         run: |
           python - <<'PY'
           import gzip,json
+          expected={'S34','D09','D11','S12','D30','D46','S48','D65'}
+          dept={'D09':'09','D11':'11','S12':'12','D30':'30','D46':'46','S48':'48','D65':'65'}
           metro={
             '34022','34027','34057','34058','34077','34087','34088','34090',
             '34095','34116','34120','34123','34129','34134','34164','34169',
             '34172','34179','34198','34202','34217','34227','34244','34249',
             '34256','34259','34270','34295','34307','34327','34337',
           }
-          allowed_methods={'exact_ocpi_party_id_FR*S34','insee_department_34_excluding_montpellier_metro'}
           stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
           pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
           offers=json.load(gzip.open('build/france_irve_offers/reveo_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
@@ -118,6 +127,11 @@ jobs:
           assert s['canonicalS34StationCount'] > 0
           assert s['canonicalS34PdcCount'] > 100
           assert s['rankableCoveredS34PdcCount'] > 0
+          assert s['canonicalGeneralPdcCount'] > 0
+          assert s['rankableCoveredGeneralPdcCount'] > 0
+          assert s['rankableCoveredPdcCount'] > s['rankableCoveredS34PdcCount']
+          assert s['publicRankableCoveredPdcCount'] >= s['rankableCoveredPdcCount']
+          assert s['subscriberRankableCoveredPdcCount'] == s['rankableCoveredS34PdcCount']
           assert s['physicalInventoryMutationCount']==0
           assert s['subscriptionMonthlyFeeEur']==1.5
           assert s['badgePurchaseEur']==12.0
@@ -129,22 +143,25 @@ jobs:
               assert stations[sid].get('tariffNetworkId')=='reveo'
               assert pdcs[pid].get('tariffNetworkId')=='reveo'
               assert row.get('tariffNetworkId')=='reveo'
-              method=row.get('matchMethod')
-              assert method in allowed_methods
-              code=str((row.get('selectors') or {}).get('codeInsee') or '')
+              sel=row.get('selectors') or {}
+              territory=sel.get('territory')
+              code=str(sel.get('codeInsee') or '')
+              assert territory in expected
               assert code not in metro
-              if method=='exact_ocpi_party_id_FR*S34':
-                  raw=str(pdcs[pid].get('idPdcItinerance') or '').upper().replace(' ','')
-                  assert raw.startswith('FR*S34')
-              else:
+              if territory in dept:
+                  assert len(code)==5 and code.startswith(dept[territory])
+              if territory=='S34' and not str(row.get('matchMethod') or '').startswith('exact_ocpi_party_id_FR*S34'):
                   assert len(code)==5 and code.startswith('34') and code not in metro
               assert row.get('rankable') is True
               if row.get('channel')=='subscription':
+                  assert territory=='S34'
                   assert row.get('subscriptionId')=='reveo-subscription'
               else:
                   assert row.get('channel')=='direct'
                   assert row.get('subscriptionId') is None
+          assert all((r.get('selectors') or {}).get('territory') not in {'D66','M31','M34'} for r in offers)
           print(json.dumps(s,ensure_ascii=False,indent=2))
+          print(json.dumps(report.get('territoryCoverage') or {},ensure_ascii=False,indent=2))
           PY
 
       - name: Upload Révéo audit
