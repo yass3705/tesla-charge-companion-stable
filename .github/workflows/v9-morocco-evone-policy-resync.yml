@@ -1,0 +1,44 @@
+name: V9 Morocco EVOne fail-closed production policy (resync)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-evone-policy.js'
+      - '.github/workflows/v9-morocco-evone-policy-resync.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate EVOne production/diagnostic separation
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const policy=require('./assets/v9/adapters/morocco-evone-policy.js');
+          const rows=['Available','Occupied','Charging','Faulted','Offline','Unknown','Unavailable','unexpected',''].map((status,i)=>({id:`x${i}`,status,cpo_operator:i===0?'Example CPO':null,site_brand:i===0?'Example Host':null,tariff_channel:i===0?'EVOne roaming tariff':null}));
+          const out=policy.splitProductionAndDiagnostics(rows,{sourceId:'morocco-evone-policy-test'});
+          assert.deepEqual(out.production.map(x=>x.status.nativeState),['Available','Occupied','Charging']);
+          assert.equal(out.diagnostics.length,9);
+          assert.equal(out.excluded.length,6);
+          for(const s of ['Faulted','Offline','Unknown','Unavailable','unexpected','']){
+            const x=out.diagnostics.find(y=>(y.status.nativeState||'')===s);
+            assert(x&&!x.productionEligible&&x.diagnosticOnly,`fail-closed ${s}`);
+          }
+          const first=out.diagnostics[0];
+          assert.equal(first.physicalOperator.name,'Example CPO');
+          assert.equal(first.access.siteBrand,'Example Host');
+          assert.equal(first.access.appSource,'EVPlug / EvOne');
+          assert.equal(first.access.accessNetwork,'EVPlug / EvOne');
+          assert.equal(first.tariffChannel,'EVOne roaming tariff');
+          assert.equal(first.status.statusSource,'EVPlug / EvOne');
+          console.log(JSON.stringify({ok:true,production:out.production.map(x=>x.status.nativeState),excluded:out.excluded.map(x=>x.status.nativeState),modeling:{cpo:first.physicalOperator.name,siteBrand:first.access.siteBrand,appSource:first.access.appSource,accessNetwork:first.access.accessNetwork,tariffChannel:first.tariffChannel,statusSource:first.status.statusSource}},null,2));
+          NODE
