@@ -48,13 +48,21 @@ SOURCE = {
 }
 
 territory, subscription = mod.validate_source(SOURCE)
+assert len(mod.MONTPELLIER_METRO_INSEE) == 31
 assert mod.party_id_from_pdc({"idPdcItinerance": "FR*S34*E123*1"}) == "FR*S34"
 assert mod.party_id_from_pdc({"idPdcItinerance": "FR*M31*E123*1"}) == "FR*M31"
+assert mod.insee_code({"codeInsee":"34172"}) == "34172"
+assert mod.insee_code({"codeInsee":"34-172"}) == "34172"
+assert mod.insee_code({"codeInsee":""}) == ""
+assert mod.territory_match({"idPdcItinerance":"FR*S34*E1*1"},{"codeInsee":"34172"}) == ("S34", "exact_ocpi_party_id_FR*S34")
+assert mod.territory_match({"idPdcItinerance":"FR*RVE*E1*1"},{"codeInsee":"34172"}) == ("M34", "insee_montpellier_metro_exclusion")
+assert mod.territory_match({"idPdcItinerance":"FR*RVE*E2*1"},{"codeInsee":"34300"}) == ("S34", "insee_department_34_excluding_montpellier_metro")
+assert mod.territory_match({"idPdcItinerance":"FR*RVE*E3*1"},{"codeInsee":"31000"}) == ("", "")
 assert mod.explicit_long_duration({"name": "Révéo - Longue utilisation", "address": ""}) is True
 assert mod.explicit_long_duration({"name": "Révéo centre-ville", "address": ""}) is False
 
 pdc_ac = {"pdcId":"p1","stationId":"s1","idPdcItinerance":"FR*S34*E1*1","powerKw":22,"connectors":{"type2":"true"},"tariffNetworkId":"reveo"}
-pdc_dc50 = {"pdcId":"p2","stationId":"s2","idPdcItinerance":"FR*S34*E2*1","powerKw":50,"connectors":{"comboCcs":"true"},"tariffNetworkId":"reveo"}
+pdc_dc50 = {"pdcId":"p2","stationId":"s2","idPdcItinerance":"FR*RVE*E2*1","powerKw":50,"connectors":{"comboCcs":"true"},"tariffNetworkId":"reveo"}
 pdc_ultra_both = {"pdcId":"p3","stationId":"s3","idPdcItinerance":"FR*S34*E3*1","powerKw":150,"connectors":{"type2":"true","comboCcs":"true"},"tariffNetworkId":"reveo"}
 
 assert mod.connector_kinds(pdc_ac) == ["AC"]
@@ -73,13 +81,17 @@ assert normal[1]["durationPerMinute"] == 0.10
 assert normal[1]["durationThresholdMinutes"] == 180
 assert normal[0]["durationPerMinute"] == 0
 
-station = {"stationId":"s2","name":"Révéo","address":"","tariffNetworkId":"reveo"}
+station = {"stationId":"s2","name":"Révéo","address":"","codeInsee":"34300","tariffNetworkId":"reveo"}
 band = mod.band_for(territory["subscriber"], "DC", 50, False)
-offer = mod.make_offer(pdc_dc50, station, territory, subscription, "subscriber", "DC", band, "now")
+offer = mod.make_offer(
+    pdc_dc50, station, territory, subscription, "subscriber", "DC", band, "now",
+    "insee_department_34_excluding_montpellier_metro"
+)
 assert offer["channel"] == "subscription"
 assert offer["subscriptionId"] == "reveo-subscription"
 assert offer["pricingRules"][1]["pricePerKwh"] == 0.40
 assert offer["pricingRules"][1]["durationPerMinute"] == 0.075
-assert offer["matchMethod"] == "exact_ocpi_party_id_FR*S34"
+assert offer["matchMethod"] == "insee_department_34_excluding_montpellier_metro"
+assert offer["selectors"]["codeInsee"] == "34300"
 
 print("Révéo canonical materializer tests OK")
