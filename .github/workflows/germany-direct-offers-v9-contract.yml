@@ -15,6 +15,7 @@ on:
       - 'data/v9/germany-direct-offers-mark-e-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-wuerzburg-extension.json'
       - 'data/v9/germany-direct-offers-q1-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-goettingen-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
@@ -27,6 +28,7 @@ on:
       - 'scripts/test_germany_mark_e_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_wuerzburg_direct_offers_v9.py'
       - 'scripts/test_germany_q1_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_goettingen_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -65,3 +67,5 @@ jobs:
         run: python scripts/test_germany_stadtwerke_wuerzburg_direct_offers_v9.py
       - name: Validate Q1 direct offers
         run: python scripts/test_germany_q1_direct_offers_v9.py
+      - name: Validate Stadtwerke Göttingen direct offers
+        run: python scripts/test_germany_stadtwerke_goettingen_direct_offers_v9.py
