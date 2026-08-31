@@ -31,7 +31,7 @@ jobs:
       - name: Checkout validated V9 source
         uses: actions/checkout@v4
         with:
-          ref: b1127c08aa119b416b8def97b582f1420de728ce
+          ref: ccc24878f12e9d8bce7a068dcf630f38b018f6b8
           path: v9src
 
       - name: Build isolated V9 test subtree
@@ -78,4 +78,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-# Closed-state republish retry after the previous Pages concurrency cancellation.
+# Optimized first-device test window snapshot. Canary remains 0%.
