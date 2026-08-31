@@ -1,0 +1,64 @@
+name: V9 access gateway safety
+
+on:
+  push:
+    branches: [main, refactor/unified-data-engine-v9]
+    paths:
+      - 'assets/v9/access-router-engine.js'
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'assets/v9/whitelist-engine.js'
+      - 'assets/v9/rollout-engine.js'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/whitelist-config.json'
+      - 'v9-gate/**'
+      - 'tests/v9-access-router-engine.test.cjs'
+      - 'tests/v9-access-gateway.test.cjs'
+      - '.github/workflows/v9-access-gateway.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/access-router-engine.js'
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'assets/v9/whitelist-engine.js'
+      - 'assets/v9/rollout-engine.js'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/whitelist-config.json'
+      - 'v9-gate/**'
+      - 'tests/v9-access-router-engine.test.cjs'
+      - 'tests/v9-access-gateway.test.cjs'
+      - '.github/workflows/v9-access-gateway.yml'
+  workflow_dispatch:
+
+jobs:
+  gateway-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check assets/v9/access-router-engine.js
+          node --check assets/v9/rollout-engine.js
+          node --check v9-gate/gate.js
+      - name: Access router contract
+        run: node tests/v9-access-router-engine.test.cjs
+      - name: Gateway contract
+        run: node tests/v9-access-gateway.test.cjs
+      - name: Closed-by-default configuration
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json'));
+          const readiness=JSON.parse(fs.readFileSync('data/v9/access-readiness.json'));
+          const self=JSON.parse(fs.readFileSync('data/v9/self-enrollment-config.json'));
+          if(rollout.canaryPercent!==0) throw new Error('random canary must remain 0%');
+          if(rollout.stage!=='preview') throw new Error('rollout must remain preview');
+          if(rollout.canaryPath!=='v9-app/'||rollout.productionPath!=='v9-app/') throw new Error('candidate routes must target v9-app');
+          if(readiness.ready!==false||readiness.verdict!=='BLOCKED') throw new Error('gateway readiness must remain BLOCKED before explicit promotion');
+          if(self.enabled!==false) throw new Error('self-enroll must remain disabled by default');
+          NODE
