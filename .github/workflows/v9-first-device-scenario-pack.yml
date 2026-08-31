@@ -1,0 +1,42 @@
+name: V9 first device scenario pack safety
+on:
+  push:
+    paths:
+      - 'assets/v9/device-scenario-engine.js'
+      - 'data/v9/first-device-scenarios.json'
+      - 'v9-app/**'
+      - 'tests/v9-first-device-scenario-pack.test.cjs'
+      - '.github/workflows/v9-first-device-scenario-pack.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/device-scenario-engine.js'
+      - 'data/v9/first-device-scenarios.json'
+      - 'v9-app/**'
+      - 'tests/v9-first-device-scenario-pack.test.cjs'
+      - '.github/workflows/v9-first-device-scenario-pack.yml'
+  workflow_dispatch:
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: |
+          node --check assets/v9/device-scenario-engine.js
+          node --check v9-app/scenario-runner.js
+          node --check v9-app/app.js
+      - name: Scenario pack contract
+        run: node tests/v9-first-device-scenario-pack.test.cjs
+      - name: Candidate integration contract
+        run: |
+          grep -q 'device-scenario-engine.js' v9-app/index.html
+          grep -q 'scenario-runner.js' v9-app/index.html
+          grep -q 'runScenarioPack' v9-app/index.html
+          node - <<'NODE'
+          const fs=require('fs');
+          const pack=JSON.parse(fs.readFileSync('data/v9/first-device-scenarios.json','utf8'));
+          if(pack.minimumRequired!==10||pack.scenarios.length!==10) throw new Error('scenario pack must remain exactly 10 for first-device gate');
+          NODE
