@@ -13,7 +13,7 @@
   function evgoClassify(evse){
     if(evse?.isLongTermUnavailable===true||evse?.isTemporarilyUnavailable===true)return'out_of_service';
     const native=text(evse?.status);
-    if(native==='charging'||native==='suspendedEV')return'occupied_or_active_session';
+    if(['charging','suspendedEV','finishing','preparing'].includes(native))return'occupied_or_active_session';
     if(native==='available'&&evse?.isAvailable===true)return'available';
     if(['unavailable','faulted','offline','unknown'].includes(native))return'out_of_service';
     return'unknown';
