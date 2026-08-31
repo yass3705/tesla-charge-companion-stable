@@ -1,0 +1,64 @@
+name: V9 Morocco FastVolt fresh public compatibility (resync)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - '.github/workflows/v9-morocco-fastvolt-fresh-public-resync.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public data-lab read-only
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          persist-credentials: false
+      - name: Regenerate fresh sanitized FastVolt public inventory
+        working-directory: data-lab
+        run: |
+          python3 scripts/morocco/extract_fastvolt_public_map_chargers.py > /tmp/fastvolt-public.json
+      - name: Validate fresh inventory through V9 Morocco adapter
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const d=JSON.parse(fs.readFileSync('/tmp/fastvolt-public.json','utf8'));
+          assert.equal(d.summary?.charger_count,100,'fresh FastVolt raw count');
+          assert.equal(d.summary?.valid_coordinate_count,100,'fresh FastVolt GPS count');
+          assert.equal(d.summary?.production_candidate_count,97,'fresh FastVolt production count');
+          assert.equal(d.modeling?.cpo_operator,'FastVolt / Afrimobility','FastVolt CPO modeling');
+          assert.equal(d.modeling?.site_brand,null,'FastVolt site brand must not be inferred');
+          assert.equal(d.modeling?.status_source,null,'public /api/pages state must not become live status');
+          const stations=adapter.normalizeFastVoltDataset(d,{sourceId:'morocco-fastvolt-public-fresh-readonly'});
+          assert.equal(stations.length,97,'V9 FastVolt station count');
+          assert(stations.every(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude)),'V9 FastVolt GPS');
+          assert(stations.every(s=>s.physicalOperator?.name==='FastVolt / Afrimobility'),'V9 FastVolt CPO');
+          assert(stations.every(s=>s.access?.appSource==='FastVolt public web map'&&s.access?.accessNetwork==='FastVolt'),'V9 FastVolt app/access');
+          assert(stations.every(s=>s.status?.state==='unknown'&&s.status?.statusSource===null),'V9 FastVolt no false live status');
+          const w=stations.find(s=>s.sourceStationId==='W00057');
+          assert(w,'W00057 present');
+          assert.equal(w.access?.siteBrand,'Afriquia','W00057 site brand');
+          const connectors=w.evses?.flatMap(e=>e.connectors||[])||[];
+          assert.equal(connectors.filter(c=>c.kind==='DC'&&c.powerKw===360).length,4,'W00057 four 360 kW CCS2');
+          assert.equal(connectors.filter(c=>c.kind==='AC'&&c.powerKw===22).length,2,'W00057 two 22 kW Type2');
+          const dc=w.offers.find(o=>o.connectorKinds?.includes('DC'));
+          const ac=w.offers.find(o=>o.connectorKinds?.includes('AC'));
+          assert.equal(dc?.pricing?.rules?.[0]?.pricePerMinute,2.5,'FastVolt DC tariff MAD/min');
+          assert.equal(ac?.pricing?.rules?.[0]?.pricePerMinute,0.5,'FastVolt AC tariff MAD/min');
+          assert.equal(dc?.metadata?.tariffChannel,'FastVolt direct','FastVolt tariff channel');
+          assert.equal(ac?.metadata?.tariffChannel,'FastVolt direct','FastVolt tariff channel');
+          console.log(JSON.stringify({ok:true,generatedAt:d.generated_at,raw:d.summary.charger_count,production:stations.length,validGps:d.summary.valid_coordinate_count,w00057:{siteBrand:w.access.siteBrand,dc360:connectors.filter(c=>c.kind==='DC'&&c.powerKw===360).length,ac22:connectors.filter(c=>c.kind==='AC'&&c.powerKw===22).length,dcMadPerMin:dc.pricing.rules[0].pricePerMinute,acMadPerMin:ac.pricing.rules[0].pricePerMinute},statusSource:'none from public /api/pages'},null,2));
+          NODE
