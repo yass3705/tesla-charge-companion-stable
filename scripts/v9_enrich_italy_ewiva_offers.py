@@ -17,16 +17,15 @@ def normalize_pricing(raw: dict[str, Any]) -> dict[str, Any]:
     rules = raw.get("rules")
     if raw.get("type") != "rules" or not isinstance(rules, list) or not rules:
         raise RuntimeError("invalid Ewiva rule pricing")
-    pricing = {
+    post_charge = raw.get("postChargeFee")
+    if not isinstance(post_charge, dict):
+        raise RuntimeError("validated Ewiva post-charge fee missing")
+    return {
         "type": "rules",
         "rules": rules,
         "priceSelectionBasis": "session_start_local_time",
-        # Session-start locked offers currently bypass the generic post-charge
-        # evaluator. Fail closed for positive dwell until that engine path is
-        # explicitly wired, while retaining the validated fee in metadata.
-        "postChargeFeeUnknown": True,
+        "postChargeFee": post_charge,
     }
-    return pricing
 
 
 def main() -> None:
@@ -88,7 +87,7 @@ def main() -> None:
                     "priceSelectionBasis": "session_start_local_time",
                     "tariffClass": cls,
                     "validatedPostChargeFee": raw_pricing.get("postChargeFee"),
-                    "postChargeFeeTemporarilyFailClosed": True,
+                    "postChargeFeeTemporarilyFailClosed": False,
                 },
             })
             existing_emsp.add(oid)
@@ -100,6 +99,7 @@ def main() -> None:
         sub = subs[0]
         sid = f"it:subscription:enel_plug_and_go_super:ewiva:{eid}"
         if sid not in existing_sub:
+            sub_pricing = sub.get("pricing") or {}
             offers.setdefault("subscriptionOffers", []).append({
                 "id": sid,
                 "selectionId": "enel_plug_and_go_super",
@@ -112,7 +112,7 @@ def main() -> None:
                 "source": str(sub.get("source") or "validated Enel Ewiva source"),
                 "sourceId": "italy-verified-offers",
                 "operatorIds": ["Ewiva"],
-                "pricing": normalize_pricing(sub.get("pricing") or {}),
+                "pricing": normalize_pricing(sub_pricing),
                 "monthlyFeeEur": sub.get("monthlyFeeEur"),
                 "validThrough": sub.get("validThrough"),
                 "metadata": {
@@ -121,8 +121,8 @@ def main() -> None:
                     "timeZone": "Europe/Rome",
                     "priceSelectionBasis": "session_start_local_time",
                     "tariffClass": cls,
-                    "validatedPostChargeFee": (sub.get("pricing") or {}).get("postChargeFee"),
-                    "postChargeFeeTemporarilyFailClosed": True,
+                    "validatedPostChargeFee": sub_pricing.get("postChargeFee"),
+                    "postChargeFeeTemporarilyFailClosed": False,
                     "explorerFailClosed": True,
                 },
             })
@@ -141,6 +141,7 @@ def main() -> None:
 
     offers.setdefault("policy", {})["ewivaEnelEmspCommercialSeparation"] = True
     offers["policy"]["ewivaExplorerFailClosed"] = True
+    offers["policy"]["sessionStartLockedPostChargeFeesSupported"] = True
     offers_path.write_text(json.dumps(offers, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
 
     report["directOffers"] = len(offers.get("directOffers", []))
@@ -150,6 +151,7 @@ def main() -> None:
     report["ewivaPlugAndGoSuperOffers"] = super_added
     report["ewivaExplorerOffers"] = 0
     report["ewivaTariffClasses"] = classes
+    report["ewivaPostChargeFeesPublished"] = expected * 2
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(json.dumps({
@@ -160,6 +162,7 @@ def main() -> None:
         "ewivaPlugAndGoSuperOffers": super_added,
         "ewivaExplorerOffers": 0,
         "ewivaTariffClasses": classes,
+        "ewivaPostChargeFeesPublished": report["ewivaPostChargeFeesPublished"],
     }, ensure_ascii=False, indent=2))
 
 
