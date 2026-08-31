@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "reveo-d66-direct-tariffs-france",
+  "operator": "Révéo",
+  "country": "FR",
+  "territory": "D66",
+  "department": "66",
+  "label": "Pyrénées-Orientales — Révéo 2025",
+  "generatedAt": "2026-08-31T23:43:00+01:00",
+  "policy": {
+    "operatorDirectOnly": true,
+    "publicOnlyRankable": true,
+    "subscriberRankable": false,
+    "roamingIncluded": false,
+    "physicalInventoryMutationAllowed": false,
+    "requiresExactTerritoryResolution": true
+  },
+  "verification": {
+    "status": "rankable_public_only",
+    "currentCheckedAt": "2026-08-31",
+    "documentedGridEdition": "2024-11",
+    "currentSpotChecksDate": "2026-08-26",
+    "notes": "The official Révéo tariff page still identifies Pyrénées-Orientales as a special tariff territory. The published Alizé public-tariff grid documents the complete D66 power bands and duration fees. Current August 2026 station observations independently confirm the 0.40 EUR/kWh normal AC band and 0.55 EUR/kWh rapid DC band. Subscriber pricing is not promoted because its current D66 amount has not been reverified."
+  },
+  "sources": {
+    "officialTariffPage": "https://reveocharge.com/tarifs/",
+    "alizePublicTariffPdf": "https://alizecharge.com/app/uploads/2024/12/Tarif_Reseaux-partenaires_alize_2024-11.pdf",
+    "currentAcSampleSaintEsteve": "https://www.meilleurecharge.fr/ville/saint-esteve-66240",
+    "currentAcDcSampleCollioure": "https://www.meilleurecharge.fr/ville/collioure-66190",
+    "currentAcDcSampleBanyuls": "https://www.meilleurecharge.fr/ville/banyuls-sur-mer-66650"
+  },
+  "tariffFamily": {
+    "id": "D66_SPECIAL_PUBLIC_CURRENT",
+    "status": "rankable_public_only",
+    "effectiveFrom": "2024-11-01",
+    "currentCheckedAt": "2026-08-31",
+    "sourceUrl": "https://alizecharge.com/app/uploads/2024/12/Tarif_Reseaux-partenaires_alize_2024-11.pdf",
+    "public": [
+      {
+        "key": "ac-slow",
+        "kind": "AC",
+        "maxPowerKw": 7.4,
+        "pricePerKwh": 0.30,
+        "durationFee": {"ratePerMinute": 0.12, "thresholdMinutes": 600}
+      },
+      {
+        "key": "ac-normal",
+        "kind": "AC",
+        "minPowerKwExclusive": 7.4,
+        "maxPowerKw": 22,
+        "pricePerKwh": 0.40,
+        "durationFee": {
+          "ratePerMinute": 0.12,
+          "thresholdMinutes": 120,
+          "activeWindow": {"start": "07:00", "end": "23:00"}
+        }
+      },
+      {
+        "key": "dc-50",
+        "kind": "DC",
+        "minPowerKwExclusive": 22,
+        "maxPowerKw": 50,
+        "pricePerKwh": 0.55,
+        "durationFee": {"ratePerMinute": 0.12, "thresholdMinutes": 60}
+      },
+      {
+        "key": "dc-ultra",
+        "kind": "DC",
+        "minPowerKwExclusive": 50,
+        "pricePerKwh": 0.67,
+        "durationFee": {"ratePerMinute": 0.12, "thresholdMinutes": 30}
+      }
+    ]
+  },
+  "territoryOverride": {
+    "department": "66",
+    "label": "Pyrénées-Orientales — Révéo 2025",
+    "status": "rankable_public_only",
+    "tariffFamily": "D66_SPECIAL_PUBLIC_CURRENT",
+    "rankableProfiles": ["public"]
+  },
+  "exclusions": [
+    "No Révéo subscriber offer is rankable in D66 until current subscriber pricing is reverified",
+    "No roaming/eMSP tariff is promoted to a direct Révéo tariff",
+    "Only canonical PDCs already resolved to Révéo D66 are eligible",
+    "PAN IRVE remains the sole physical inventory"
+  ]
+}
