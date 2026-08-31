@@ -1,0 +1,103 @@
+name: V9 Morocco TotalEnergies Club EV-Charge blocker policy (resync)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - '.github/workflows/v9-morocco-totalenergies-club-blocker-resync.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public data-lab read-only
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          persist-credentials: false
+      - name: Validate Club EV-Charge blocker and TotalEnergies V9 modeling
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const read=p=>JSON.parse(fs.readFileSync(`./data-lab/reports/morocco/totalenergies/${p}`,'utf8'));
+
+          const auth=read('club-ev-charge-public-auth-blocker-2026-08-31.json');
+          const shape=read('numocity-request-shape-resolution-2026-08-30.json');
+          const official=read('official-network-inventory-2026-08-23.json');
+          const links=read('official-link-reconciliation-2026-08-30.json');
+          const alWaha=read('al-waha-cpo-attribution.json');
+
+          assert.equal(auth.policy.read_only,true);
+          assert.equal(auth.policy.no_login_attempted,true);
+          assert.equal(auth.policy.no_credentials,true);
+          assert.equal(auth.production_effect.promote_new_station_data,false);
+          assert.equal(auth.production_effect.promote_new_tariff_data,false);
+          assert.equal(auth.production_effect.promote_new_status_data,false);
+          assert.equal(auth.interpretation.app_source_access_network,'Club EV-Charge / Numocity');
+          assert.match(auth.interpretation.status_source,/only after anonymous\/read-only endpoint validation/i);
+
+          assert.equal(shape.policy.read_only,true);
+          assert.equal(shape.policy.no_login,true);
+          assert.equal(shape.policy.no_credentials,true);
+          assert.equal(shape.evidence.exact_route_fragment,'/api/get-connector-status');
+          assert.equal(shape.evidence.nearby_http_verb_signal,'GET');
+          assert.equal(shape.evidence.nearby_identifier_signal,'connectorid');
+          assert(shape.resolution.not_validated.some(x=>/working public endpoint URL/i.test(x)));
+          assert.match(shape.production_impact,/status_source unresolved/i);
+
+          assert.equal(official.modeling.site_brand,'TotalEnergies');
+          assert.equal(official.modeling.cpo_operator,null);
+          assert.equal(official.modeling.tariff_channel,null);
+          assert.equal(official.modeling.status_source,null);
+          assert.equal(links.reconciliation.corrected_unique_host_sites,18);
+          assert.equal(links.summary.coordinates_resolved_from_official_links,13);
+
+          const normalized=adapter.normalizeTotalEnergies(official,alWaha,links,{sourceId:'morocco-totalenergies-hosts-readonly-guard'});
+          assert.equal(normalized.summary.reconciledHosts,18);
+          assert.equal(normalized.summary.geolocatedHosts,13);
+          assert.equal(normalized.summary.excludedWithoutGeo,5);
+          assert.equal(normalized.summary.alWahaExactMerged,true);
+
+          const al=normalized.stations.find(s=>s.canonicalId===`MA:kilowatt:${alWaha.station.kilowatt_station_id}`);
+          assert(al,'AL WAHA exact merge');
+          assert.equal(al.physicalOperator?.name,'Kilowatt');
+          assert.equal(al.access?.siteBrand,'TotalEnergies');
+          assert.equal(al.access?.appSource,'Kilowatt public web map');
+          assert.equal(al.access?.accessNetwork,'Kilowatt');
+          assert.equal(al.status?.statusSource,'Kilowatt public web map');
+          assert.deepEqual(al.offers,[]);
+
+          const unresolved=normalized.stations.filter(s=>s!==al);
+          assert(unresolved.length>0);
+          assert(unresolved.every(s=>s.physicalOperator===null),'unresolved TotalEnergies hosts must not infer CPO');
+          assert(unresolved.every(s=>s.access?.siteBrand==='TotalEnergies'),'TotalEnergies host brand preserved');
+          assert(unresolved.every(s=>s.status?.state==='unknown'&&s.status?.statusSource===null),'no Numocity live status promotion');
+          assert(unresolved.every(s=>Array.isArray(s.offers)&&s.offers.length===0),'no Club EV-Charge tariff promotion');
+          assert(normalized.stations.every(s=>s.access?.appSource!=='Club EV-Charge / Numocity'),'Club EV-Charge stays non-production until endpoint validation');
+
+          console.log(JSON.stringify({
+            ok:true,
+            blocker:'authentication/login plus unresolved anonymous Numocity request shape',
+            route:shape.evidence.exact_route_fragment,
+            methodSignal:shape.evidence.nearby_http_verb_signal,
+            identifierSignal:shape.evidence.nearby_identifier_signal,
+            reconciledHosts:normalized.summary.reconciledHosts,
+            geolocatedHosts:normalized.summary.geolocatedHosts,
+            alWaha:{cpo:al.physicalOperator.name,siteBrand:al.access.siteBrand,statusSource:al.status.statusSource,tariffOffers:al.offers.length},
+            unresolvedHosts:unresolved.length,
+            promotedClubEvChargeStatus:false,
+            promotedClubEvChargeTariff:false
+          },null,2));
+          NODE
