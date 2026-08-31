@@ -27,6 +27,18 @@
       "notes": "Vianeo Max is normalized on all 625 current canonical Vianeo stations / 4,171 PDC as reference-only: 9.99 EUR/month and 0.33 EUR/kWh. No offer is rankable yet because station-specific minute fees may apply and dedicated heavy-goods points are excluded by the official scope. Physical inventory remains unchanged."
     },
     {
+      "networkId": "totalenergies",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/totalenergies_france_v9_official_review_20260831.json", "scripts/materialize_france_totalenergies_offers.py"],
+      "notes": "All 366 current canonical TotalEnergies Charge Rapide stations / 3,457 PDC are covered by conservative official-reference materialization: 3,457 station-service-family references plus 2,365 Charge+ Zen references (5,822 total), with zero physical-inventory mutation. Nothing is rankable yet because exact station-service price identity and Zen station eligibility/underlying public price remain unresolved. Current official station-service ranges and local exceptions are preserved; Charge+ Zen is modeled as 3.90 EUR/month and a 15% discount, never as a flat 0.49 EUR/kWh tariff."
+    },
+    {
+      "networkId": "izivia-fast",
+      "coverageStatus": "ready",
+      "artifacts": ["data/izivia_fast_direct_tariff_v1.json", "scripts/materialize_france_izivia_fast_offers.py"],
+      "notes": "Official IZIVIA FAST McDonald's France direct tariff is canonicalized on all 620 current FAST stations / 2,335 PDC: 2,335 rankable offers, zero unresolved PDC and zero physical-inventory mutation. Direct energy price is 0.30 EUR/kWh before 11:30 and from 15:00 to 18:00, otherwise 0.35 EUR/kWh. Generic IZIVIA, IZIVIA Express, SIGEIF/IZIVIA, roaming and subscription tariffs remain strictly separate."
+    },
+    {
       "networkId": "eborn",
       "coverageStatus": "ready",
       "artifacts": ["data/eborn_direct_tariffs_v1.json"],
