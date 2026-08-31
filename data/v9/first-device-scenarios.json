@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "minimumRequired": 10,
+  "scenarios": [
+    {"id":"fr-cost-baseline","label":"FR · coût baseline","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":15,"startSoc":50,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":[]},
+    {"id":"fr-cost-low-soc","label":"FR · coût SOC bas","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":20,"startSoc":15,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":[]},
+    {"id":"fr-time","label":"FR · temps total","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":25,"startSoc":35,"targetSoc":80,"sortBy":"totalTime","selectedSubscriptions":[]},
+    {"id":"fr-distance","label":"FR · distance","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":15,"startSoc":50,"targetSoc":80,"sortBy":"distance","selectedSubscriptions":[]},
+    {"id":"fr-deadline","label":"FR · deadline courte","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":15,"startSoc":20,"targetSoc":90,"sortBy":"finalCost","selectedSubscriptions":[],"disconnectOffsetMinutes":35},
+    {"id":"fr-subscription","label":"FR · abonnement sélectionné","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":20,"startSoc":40,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":["atlante"]},
+    {"id":"nl-cost","label":"NL · coût baseline","countryCode":"NL","origin":{"lat":51.4416,"lon":5.4697},"radiusKm":20,"startSoc":40,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":[]},
+    {"id":"nl-time","label":"NL · temps total","countryCode":"NL","origin":{"lat":51.4416,"lon":5.4697},"radiusKm":25,"startSoc":25,"targetSoc":85,"sortBy":"totalTime","selectedSubscriptions":[]},
+    {"id":"it-cost","label":"IT · coût baseline","countryCode":"IT","origin":{"lat":41.9028,"lon":12.4964},"radiusKm":20,"startSoc":40,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":[]},
+    {"id":"it-high-soc","label":"IT · recharge haut SOC","countryCode":"IT","origin":{"lat":41.9028,"lon":12.4964},"radiusKm":25,"startSoc":70,"targetSoc":95,"sortBy":"totalTime","selectedSubscriptions":[]}
+  ]
+}
