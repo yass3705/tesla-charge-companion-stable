@@ -11,6 +11,7 @@ on:
       - 'scripts/audit_germany_operator_normalization_v9.py'
       - 'scripts/audit_germany_direct_offer_site_linkage_v9.py'
       - 'scripts/test_germany_totalenergies_station_pricing_v9.py'
+      - 'scripts/probe_totalenergies_charge_europe_public_endpoints.py'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'data/v9/germany-operator-aliases.json'
       - 'data/v9/germany-direct-offers.json'
@@ -86,7 +87,6 @@ jobs:
           assert len(ids)==len(set(ids)), 'duplicate site IDs detected'
           assert sum(e['facilityCount'] for e in cw['entries'])==m['facilityCount']
           assert all(46 <= r[3] <= 56 and 4 <= r[4] <= 16 for r in rows)
-          # Tesla stays in the raw traceability layer but must never enter the non-Tesla runtime baseline.
           assert m.get('teslaExcludedFromRuntimeBaseline') is True, m
           assert m.get('excludedTeslaFacilityCount',0) > 0, m
           assert m['sourceFacilityCount'] == m['facilityCount'] + m['excludedTeslaFacilityCount'], m
@@ -94,8 +94,6 @@ jobs:
           assert not any(norm(r[5])=='tesla' for r in rows), 'Tesla site leaked into grouped runtime rows'
           assert not any(norm(e.get('operator'))=='tesla' for e in cw['entries']), 'Tesla site leaked into grouped crosswalk'
           assert not any(any(norm(raw)=='tesla' or norm(raw).startswith('tesla_') for raw in e.get('rawOperators',[])) for e in cw['entries']), 'Tesla raw operator leaked into grouped crosswalk'
-          # Audit very large groups against their raw facilities. Address, coordinates and canonical operator
-          # must remain identical; station display names may legitimately differ (e.g. numbered wallboxes).
           mega=[]
           for e in sorted(cw['entries'],key=lambda x:x['facilityCount'],reverse=True):
             if e['facilityCount'] < 50: break
@@ -115,6 +113,19 @@ jobs:
         run: python scripts/audit_germany_direct_offer_site_linkage_v9.py --sites build/germany-sites/all.json.gz --offers build/germany-direct-offers.json
       - name: Validate TotalEnergies station-specific pricing
         run: python scripts/test_germany_totalenergies_station_pricing_v9.py
+      - name: Probe TotalEnergies public Find a Charger resources
+        run: python scripts/probe_totalenergies_charge_europe_public_endpoints.py
+      - name: Validate public endpoint probe policy
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/totalenergies-public-endpoint-probe.json'))
+          assert p['policy']['publicResourcesOnly'] is True
+          assert p['policy']['candidateEndpointsNotInvoked'] is True
+          assert p['policy']['noCredentialsOrSecrets'] is True
+          assert p['policy']['noMobileAppReverseEngineering'] is True
+          print(json.dumps({'scriptCount':p['scriptCount'],'candidateCount':p['candidateCount'],'candidates':p['candidates'][:30]},indent=2))
+          PY
       - name: Upload Germany V9 pre-integration dataset
         uses: actions/upload-artifact@v4
         with:
@@ -125,5 +136,6 @@ jobs:
             build/germany-sites/
             build/germany-site-crosswalk.json
             build/germany-direct-offers.json
+            build/totalenergies-public-endpoint-probe.json
             data/v9/germany-totalenergies-station-pricing.json
           retention-days: 7
