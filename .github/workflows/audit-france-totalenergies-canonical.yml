@@ -8,6 +8,7 @@ on:
     paths:
       - 'scripts/materialize_france_totalenergies_offers.py'
       - 'scripts/test_totalenergies_materializer.py'
+      - 'data/totalenergies_france_v9_official_review_20260831.json'
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
       - 'data/france_tariff_base_coverage_v1.json'
@@ -29,6 +30,32 @@ jobs:
         run: |
           python -m py_compile scripts/materialize_france_totalenergies_offers.py scripts/test_totalenergies_materializer.py
           python scripts/test_totalenergies_materializer.py
+
+      - name: Validate reviewed official TotalEnergies scope
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('data/totalenergies_france_v9_official_review_20260831.json',encoding='utf-8'))
+          assert d.get('dataset')=='totalenergies-france-v9-official-review'
+          assert d.get('reviewedAt')=='2026-08-31'
+          assert d.get('country')=='FR'
+          c=d.get('classification') or {}
+          assert c.get('singleNationalExactCpoTariff') is False
+          assert c.get('stationLevelPriceRequiredForExactSimulation') is True
+          assert c.get('chargePlusIsEmspNotCpoDirect') is True
+          s=d.get('stationServiceFrance') or {}
+          assert s.get('upToAndIncluding50Kw')=={'minEurPerKwh':0.52,'maxEurPerKwh':0.55}
+          assert s.get('over50Kw')=={'minEurPerKwh':0.62,'maxEurPerKwh':0.65}
+          assert len(s.get('local059Exceptions') or [])==6
+          o=s.get('occupationFee') or {}
+          assert float(o.get('eurPerMin'))==0.5 and float(o.get('startsAfterConsecutiveConnectedMinutes'))==45
+          z=d.get('chargePlusZen') or {}
+          assert float(z.get('monthlyFeeEur'))==3.9
+          assert float(z.get('discountPercent'))==15.0
+          assert float(z.get('minimumPowerKw'))==50
+          assert 'FRHXW' in (z.get('excludedOperatorCodes') or [])
+          print(json.dumps({'stationService':s,'zen':z},ensure_ascii=False,indent=2))
+          PY
 
       - name: Build effective tariff-network registry
         run: |
@@ -63,36 +90,11 @@ jobs:
             --network-registry build/france_irve/effective_tariff_network_registry.json \
             --out-dir build/france_irve_identity
 
-      - name: Fetch official TotalEnergies source
-        run: |
-          mkdir -p .tmp/totalenergies
-          curl --fail --location --retry 3 --retry-delay 3 \
-            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/operator_direct/totalenergies_official_france.json' \
-            --output .tmp/totalenergies/totalenergies_official_france.json
-          python - <<'PY'
-          import json
-          d=json.load(open('.tmp/totalenergies/totalenergies_official_france.json',encoding='utf-8'))
-          assert d.get('dataset')=='totalenergies-official-france'
-          assert d.get('country')=='FR'
-          assert (d.get('classification') or {}).get('singleNationalOperatorTariff') is False
-          s=(d.get('operatorDirect') or {}).get('stationServiceFrance') or {}
-          assert float(s.get('upToAndIncluding50KwEurPerKwh'))==0.52
-          assert float(s.get('over50KwEurPerKwh'))==0.62
-          o=s.get('occupationFee') or {}
-          assert float(o.get('eurPerMin'))==0.5
-          assert float(o.get('startsAfterConsecutiveConnectedMinutes'))==45
-          z=(((d.get('mobilityProvider') or {}).get('chargePlus') or {}).get('zen') or {})
-          assert float(z.get('monthlyFeeEur'))==3.9
-          assert float(z.get('discountPercent'))==15.0
-          assert float(z.get('minimumPowerKw'))==50
-          print(json.dumps({'generatedAt':d.get('generatedAt'),'stationService':s,'zen':z},ensure_ascii=False,indent=2))
-          PY
-
       - name: Materialize TotalEnergies canonical references
         run: |
           mkdir -p build/france_irve_offers
           python scripts/materialize_france_totalenergies_offers.py \
-            --source .tmp/totalenergies/totalenergies_official_france.json \
+            --source data/totalenergies_france_v9_official_review_20260831.json \
             --canonical-dir build/france_irve_identity \
             --out-dir build/france_irve_offers
 
@@ -111,9 +113,12 @@ jobs:
           assert s['materializedReferenceOfferCount']==len(offers)
           assert s['rankableOfferCount']==0
           assert s['physicalInventoryMutationCount']==0
-          assert s['stationServiceUpTo50PriceEurPerKwh']==0.52
-          assert s['stationServiceOver50PriceEurPerKwh']==0.62
+          assert s['stationServiceUpTo50PublishedRangeEurPerKwh']==[0.52,0.55]
+          assert s['stationServiceOver50PublishedRangeEurPerKwh']==[0.62,0.65]
+          assert s['stationService059ExceptionCount']==6
           assert s['zenDiscountPercent']==15.0
+          assert s['zenMinimumPowerKw']==50
+          assert 'FRHXW' in s['zenExcludedOperatorCodes']
           assert s['zenFlatPricePerKwh'] is None
           assert len({r['offerId'] for r in offers})==len(offers)
           for row in offers:
@@ -126,9 +131,12 @@ jobs:
               if row.get('subscriptionId')=='totalenergies-charge-plus-zen':
                   assert row.get('subscriptionDiscountPercent')==15.0
                   assert row.get('pricingRules')==[]
+                  assert 'FRHXW' in row.get('selectors',{}).get('excludedOperatorCodes',[])
                   assert 'zen_official_station_eligibility_unresolved' in row.get('blockedReasons',[])
               else:
+                  assert row.get('pricingRules',[{}])[0].get('pricePerKwh') is None
                   assert 'station_service_scope_unresolved' in row.get('blockedReasons',[])
+                  assert 'exact_kwh_price_station_specific' in row.get('blockedReasons',[])
           print(json.dumps(s,ensure_ascii=False,indent=2))
           PY
 
