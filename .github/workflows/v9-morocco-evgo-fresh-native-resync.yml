@@ -17,6 +17,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Checkout public data-lab read-only
         uses: actions/checkout@v4
         with:
@@ -44,7 +46,7 @@ jobs:
           assert(stations.every(s=>s.physicalOperator?.name==='Nareva Services / EVGO'),'EVGO CPO');
           assert(stations.every(s=>s.access?.appSource==='EVGO'&&s.access?.accessNetwork==='EVGO'),'EVGO app/access network');
           assert(stations.every(s=>s.status?.statusSource==='EVGO native backend cp.evgo.ma'),'EVGO native status source');
-          assert.equal(adapter.evgoClassify({status:'suspendedEV'}),'occupied_or_active_session');
+          for(const native of ['charging','suspendedEV','preparing','finishing'])assert.equal(adapter.evgoClassify({status:native}),'occupied_or_active_session',native);
           assert.equal(adapter.evgoClassify({status:'available',isAvailable:true,isTemporarilyUnavailable:true}),'out_of_service');
           assert.equal(adapter.evgoClassify({status:'available',isAvailable:true,isLongTermUnavailable:true}),'out_of_service');
           assert.equal(adapter.evgoClassify({status:'available',isAvailable:false}),'unknown');
