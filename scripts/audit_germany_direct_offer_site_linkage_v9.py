@@ -7,8 +7,8 @@ TARGETS={
  'IONITY':{'minSites':200,'requireFullCoverage':True},
  'Aral pulse':{'minSites':500,'requireFullCoverage':True},
  'EnBW mobility+':{'minSites':2000,'requireFullCoverage':True},
- 'SWU Energie GmbH':{'minSites':140,'requireFullCoverage':True},
- 'Westfalen AG & Co. KG':{'minSites':120,'requireFullCoverage':True},
+ 'SWU Energie':{'minSites':140,'requireFullCoverage':True},
+ 'Westfalen':{'minSites':120,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
