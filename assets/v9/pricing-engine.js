@@ -100,7 +100,8 @@
       const blocks=rule?.connectedTimeBlockRounding==='started_block'?Math.ceil(duration/blockMinutes):duration/blockMinutes;
       components.connectedTimeBlocks={blocks,blockMinutes,unitPriceEur:blockEur,costEur:money(blocks*blockEur)};total+=components.connectedTimeBlocks.costEur;
     }
-    const perMinute=num(rule?.connectedTimePerMinuteEur);if(perMinute!=null){components.connectedTimePerMinute=money(duration*perMinute);total+=components.connectedTimePerMinute;}
+    const genericPerMinute=num(rule?.pricePerMinute),legacyPerMinute=num(rule?.connectedTimePerMinuteEur),perMinute=genericPerMinute??legacyPerMinute;
+    if(perMinute!=null){components.connectedTimePerMinute=money(duration*perMinute);total+=components.connectedTimePerMinute;}
     const freeMinutes=num(rule?.connectedTimeFreeMinutes),afterFree=num(rule?.connectedTimePerMinuteAfterFreeEur);
     if(freeMinutes!=null&&freeMinutes>=0&&afterFree!=null){
       const billableMinutes=Math.max(0,duration-freeMinutes),costEur=money(billableMinutes*afterFree);
