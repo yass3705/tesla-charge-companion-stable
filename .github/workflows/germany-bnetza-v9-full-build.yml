@@ -24,6 +24,8 @@ on:
       - 'scripts/test_germany_ovag_direct_offers_v9.py'
       - 'scripts/test_germany_wemag_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py'
+      - 'scripts/test_germany_infra_fuerth_direct_offers_v9.py'
+      - 'scripts/test_germany_evo_direct_offers_v9.py'
       - 'scripts/probe_totalenergies_charge_europe_public_endpoints.py'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'data/v9/germany-operator-aliases.json'
@@ -43,6 +45,8 @@ on:
       - 'data/v9/germany-direct-offers-ovag-extension.json'
       - 'data/v9/germany-direct-offers-wemag-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-neuss-extension.json'
+      - 'data/v9/germany-direct-offers-infra-fuerth-extension.json'
+      - 'data/v9/germany-direct-offers-evo-extension.json'
       - 'data/v9/germany-totalenergies-station-pricing.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -161,6 +165,10 @@ jobs:
         run: python scripts/test_germany_wemag_direct_offers_v9.py
       - name: Validate Stadtwerke Neuss direct offers
         run: python scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py
+      - name: Validate infra fürth direct offers
+        run: python scripts/test_germany_infra_fuerth_direct_offers_v9.py
+      - name: Validate evo Oberhausen direct offers
+        run: python scripts/test_germany_evo_direct_offers_v9.py
       - name: Audit real site-to-direct-offer linkage
         run: python scripts/audit_germany_direct_offer_site_linkage_v9.py --sites build/germany-sites/all.json.gz --offers build/germany-direct-offers.json
       - name: Validate TotalEnergies station-specific pricing
@@ -208,4 +216,6 @@ jobs:
             data/v9/germany-direct-offers-ovag-extension.json
             data/v9/germany-direct-offers-wemag-extension.json
             data/v9/germany-direct-offers-stadtwerke-neuss-extension.json
+            data/v9/germany-direct-offers-infra-fuerth-extension.json
+            data/v9/germany-direct-offers-evo-extension.json
           retention-days: 7
