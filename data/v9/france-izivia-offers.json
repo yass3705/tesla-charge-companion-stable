@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-31T09:23:07.354924Z",
+  "mode": "official_exact_mamp_evse",
+  "policy": {
+    "physicalInventoryCreated": false,
+    "exactNetworkRequired": "MAMP",
+    "exactEvseRequired": true,
+    "geographicFallback": false,
+    "subscriptionsOptIn": true,
+    "unsupportedPowersFailClosed": true
+  },
+  "directOffers": [],
+  "subscriptionOffers": [],
+  "sourceEvidence": {
+    "officialUrl": "https://www.izivia.com/reseau-izivia-aix-marseille-provence",
+    "networkExactName": "MAMP",
+    "stats": {
+      "mampStations": 80,
+      "mampPdcs": 178,
+      "eligible22Pdcs": 48,
+      "eligible24Pdcs": 60,
+      "coveredPdcs": 108,
+      "unsupportedPdcs": 70
+    }
+  }
+}
