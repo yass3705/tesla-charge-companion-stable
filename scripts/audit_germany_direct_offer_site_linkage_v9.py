@@ -12,6 +12,7 @@ TARGETS={
  'EAM Natur Energie':{'minSites':140,'requireFullCoverage':True},
  'Stadtwerke Lübeck Energie':{'minSites':140,'requireFullCoverage':True},
  'SWLB Mobilität':{'minSites':140,'requireFullCoverage':True},
+ 'Stadtwerke Bochum':{'minSites':120,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
