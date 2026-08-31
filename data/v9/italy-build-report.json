@@ -3,8 +3,8 @@
   "stations": 29696,
   "tiles": 72,
   "directOffers": 48409,
-  "subscriptionOffers": 50008,
-  "emspOffers": 3959,
+  "subscriptionOffers": 51836,
+  "emspOffers": 4034,
   "sourceCounts": {
     "punEvseCount": 75025,
     "punStationCount": 29696,
@@ -16,18 +16,21 @@
       "Enel X Way": 22783,
       "Plenitude On The Road": 18360
     },
-    "rankableSelectedSubscriptionEvseCount": 25547,
-    "rankableSelectedSubscriptionCoveragePct": 34.05,
+    "rankableSelectedSubscriptionEvseCount": 27300,
+    "rankableSelectedSubscriptionCoveragePct": 36.39,
     "rankableSelectedSubscriptionByOffer": {
       "atlante_go:Atlante": 1937,
       "atlante_go:ChargeLeague": 827,
       "enel_plug_and_go_explorer:Enel X Way": 22783,
-      "enel_plug_and_go_super:Enel X Way": 22783
+      "enel_plug_and_go_explorer:Ewiva": 1753,
+      "enel_plug_and_go_super:Enel X Way": 22783,
+      "enel_plug_and_go_super:Ewiva": 1753
     },
-    "rankableEmspEvseCount": 2281,
-    "rankableEmspCoveragePct": 3.04,
+    "rankableEmspEvseCount": 4034,
+    "rankableEmspCoveragePct": 5.38,
     "rankableEmspByProvider": {
-      "NextCharge": 2281
+      "Enel On Your Way:Ewiva": 1753,
+      "NextCharge:": 2281
     },
     "blockedReasons": {
       "ges_nextcharge:not_rankable_emsp": 35,
@@ -39,12 +42,12 @@
     "enel_plug_and_go_super": 22783,
     "enel_plug_and_go_explorer": 22783
   },
-  "ewivaEnelEmspOffers": 1678,
-  "ewivaPlugAndGoSuperOffers": 1678,
-  "ewivaExplorerOffers": 0,
+  "ewivaEnelEmspOffers": 1753,
+  "ewivaPlugAndGoSuperOffers": 1753,
+  "ewivaPlugAndGoExplorerOffers": 1753,
   "ewivaTariffClasses": {
-    "HPC": 1640,
-    "DC": 31,
+    "HPC": 1711,
+    "DC": 35,
     "AC": 7
   }
 }
