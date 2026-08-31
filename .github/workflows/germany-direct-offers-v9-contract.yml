@@ -12,6 +12,7 @@ on:
       - 'data/v9/germany-direct-offers-stadtwerke-luebeck-extension.json'
       - 'data/v9/germany-direct-offers-swlb-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-bochum-extension.json'
+      - 'data/v9/germany-direct-offers-mark-e-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
@@ -21,6 +22,7 @@ on:
       - 'scripts/test_germany_stadtwerke_luebeck_direct_offers_v9.py'
       - 'scripts/test_germany_swlb_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_bochum_direct_offers_v9.py'
+      - 'scripts/test_germany_mark_e_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -53,3 +55,5 @@ jobs:
         run: python scripts/test_germany_swlb_direct_offers_v9.py
       - name: Validate Stadtwerke Bochum direct offers
         run: python scripts/test_germany_stadtwerke_bochum_direct_offers_v9.py
+      - name: Validate Mark-E direct offers
+        run: python scripts/test_germany_mark_e_direct_offers_v9.py
