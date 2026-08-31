@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "verdict": "READY",
-  "ready": true,
-  "updatedAt": "2026-08-31T13:38:40Z",
-  "reason": "Temporary first-device controlled test window after green production readiness, gateway, rollout, scenario-pack, and enrollment safety checks. Random canary remains 0%."
+  "verdict": "BLOCKED",
+  "ready": false,
+  "updatedAt": "2026-08-31T13:43:00Z",
+  "reason": "First-device window closed after preflight because no isolated served V9 test environment was available yet."
 }
