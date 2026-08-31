@@ -94,4 +94,5 @@ assert offer["pricingRules"][1]["durationPerMinute"] == 0.075
 assert offer["matchMethod"] == "insee_department_34_excluding_montpellier_metro"
 assert offer["selectors"]["codeInsee"] == "34300"
 
+# Keep this test file in the Révéo workflow path so CI always exercises the latest guard.
 print("Révéo canonical materializer tests OK")
