@@ -1,0 +1,139 @@
+name: Audit France Révéo M31 reference
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_reveo_m31_reference.py'
+      - 'scripts/materialize_france_reveo_offers.py'
+      - 'scripts/materialize_france_reveo_offers_v2.py'
+      - 'data/reveo_m31_tariff_review_20260831.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-reveo-m31-reference.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  m31-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate M31 reference policy
+        run: |
+          python -m py_compile scripts/materialize_france_reveo_m31_reference.py
+          python - <<'PY'
+          import json
+          d=json.load(open('data/reveo_m31_tariff_review_20260831.json',encoding='utf-8'))
+          assert d.get('dataset')=='reveo-m31-tariff-review-france'
+          assert d.get('territory')=='M31' and d.get('department')=='31'
+          p=d.get('policy') or {}
+          assert p.get('operatorDirectOnly') is True
+          assert p.get('rankable') is False
+          assert p.get('physicalInventoryMutationAllowed') is False
+          assert p.get('roamingOrEmspPromotedToDirect') is False
+          assert p.get('alizeToulibeoMergedIntoReveo') is False
+          dec=d.get('decision') or {}
+          assert dec.get('status')=='reference_only_price_conflict'
+          assert dec.get('rankable') is False
+          hist=d.get('lastDetailedPublishedM31Grid') or {}
+          bands={r['key']:r for r in hist.get('bands') or []}
+          assert set(bands)=={'ac-slow','ac-normal','dc-50','dc-ultra'}
+          assert float(bands['ac-normal']['pricePerKwh'])==0.30
+          obs=(d.get('recent2026Observations') or {}).get('normalAc') or {}
+          assert float(obs.get('pricePerKwh'))==0.36
+          assert float(obs.get('additionalPerMinute'))==0.04
+          assert obs.get('channel')=='unknown'
+          assert float(bands['ac-normal']['pricePerKwh']) != float(obs.get('pricePerKwh'))
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize M31 reference-only offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_reveo_m31_reference.py \
+            --review data/reveo_m31_tariff_review_20260831.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate M31 canonical safety
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          refs=json.load(gzip.open('build/france_irve_offers/reveo_m31_reference_offers_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/reveo_m31_reference_report.json',encoding='utf-8'))
+          s=report['summary']
+          assert s['canonicalM31StationCount'] >= 50
+          assert s['canonicalM31PdcCount'] >= 120
+          assert s['coveredReferencePdcCount'] > 0
+          assert s['rankableOfferCount']==0
+          assert s['physicalInventoryMutationCount']==0
+          assert len(refs)==s['referenceOfferCount']
+          assert len({r['offerId'] for r in refs})==len(refs)
+          for row in refs:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']
+              assert sid in stations and pid in pdcs
+              assert stations[sid].get('tariffNetworkId')=='reveo'
+              assert pdcs[pid].get('tariffNetworkId')=='reveo'
+              assert row.get('tariffNetworkId')=='reveo'
+              assert row.get('rankable') is False
+              assert row.get('channel')=='reference'
+              assert row.get('sourceMode')=='reference_only'
+              assert row.get('subscriptionId') is None
+              assert (row.get('selectors') or {}).get('territory')=='M31'
+              assert str((row.get('selectors') or {}).get('codeInsee') or '').startswith('31')
+              assert 'current_direct_price_conflict' in (row.get('blockedReasons') or [])
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload M31 reference audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-reveo-m31-reference-audit
+          path: |
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/reveo_m31_reference_offers_v1_1.json.gz
+            build/france_irve_offers/reveo_m31_reference_report.json
+          retention-days: 14
