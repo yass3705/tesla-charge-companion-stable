@@ -1,0 +1,34 @@
+name: V9 Morocco EVOne cross-repo policy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260830b']
+    paths:
+      - 'assets/v9/adapters/morocco-nonproduction.js'
+      - 'tests/v9-morocco-evone-policy-crossrepo.test.cjs'
+      - '.github/workflows/v9-morocco-evone-policy-crossrepo.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/adapters/morocco-nonproduction.js'
+      - 'tests/v9-morocco-evone-policy-crossrepo.test.cjs'
+      - '.github/workflows/v9-morocco-evone-policy-crossrepo.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check
+        run: |
+          node --check assets/v9/adapters/morocco-nonproduction.js
+          node --check tests/v9-morocco-evone-policy-crossrepo.test.cjs
+      - name: Validate EVOne production policy and semantic separation
+        run: node tests/v9-morocco-evone-policy-crossrepo.test.cjs
