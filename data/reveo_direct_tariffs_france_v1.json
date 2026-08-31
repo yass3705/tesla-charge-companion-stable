@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.1.1",
   "dataset": "reveo-direct-tariffs-france",
   "operator": "Révéo",
   "country": "FR",
-  "generatedAt": "2026-08-31T22:41:00+01:00",
+  "generatedAt": "2026-08-31T22:54:00+01:00",
   "scope": {
     "operatorDirectOnly": true,
     "roamingIncluded": false,
@@ -11,8 +11,8 @@
     "unverifiedTerritoriesAreRankable": false,
     "subscriberOffersRequireSelection": true,
     "longDurationRequiresExplicitStationTag": true,
-    "rankableTerritories": ["S34", "D09", "D11", "S12", "D30", "D46", "S48", "D65"],
-    "rankablePublicTerritories": ["S34", "D09", "D11", "S12", "D30", "D46", "S48", "D65"],
+    "rankableTerritories": ["S34", "D09", "D11", "S12", "D30", "D46", "S48", "D65", "D81"],
+    "rankablePublicTerritories": ["S34", "D09", "D11", "S12", "D30", "D46", "S48", "D65", "D81"],
     "rankableSubscriberTerritories": ["S34"]
   },
   "subscription": {
@@ -21,10 +21,11 @@
     "badgePurchaseEur": 12,
     "defaultSelected": false,
     "verifiedRankableTerritories": ["S34"],
-    "referenceOnlyTerritories": ["D09", "D11", "S12", "D30", "D46", "S48", "D65"]
+    "referenceOnlyTerritories": ["D09", "D11", "S12", "D30", "D46", "S48", "D65", "D81"]
   },
   "sources": {
     "officialTariffPage": "https://reveocharge.com/tarifs/",
+    "officialNetworkPage": "https://reveocharge.com/qui-sommes-nous/",
     "heraultOfficialPdf": "https://www.herault-energies.fr/sites/default/files/2025-04/tarifs_reveo_au_1_avril_2025_4.pdf",
     "generalOfficialDeliberation": "https://sdee-lozere.fr/wp-content/uploads/2023/03/Synthese-BS-du-24.02.2023.pdf",
     "generalCurrentAriegeSample": "https://www.pyrenees-ariegeoises.com/offres/bornes-de-recharges-pour-voitures-electriques-bonascre-ax-les-thermes-fr-4248770/",
@@ -59,7 +60,7 @@
       "status": "rankable_public_subscriber_reference_only",
       "effectiveFrom": "2023-04-14",
       "currentCheckedAt": "2026-08-31",
-      "evidence": ["officialTariffPage", "generalOfficialDeliberation", "generalCurrentAriegeSample", "generalCurrentAriegeSample2"],
+      "evidence": ["officialTariffPage", "officialNetworkPage", "generalOfficialDeliberation", "generalCurrentAriegeSample", "generalCurrentAriegeSample2"],
       "sourceUrl": "https://sdee-lozere.fr/wp-content/uploads/2023/03/Synthese-BS-du-24.02.2023.pdf",
       "public": [
         {"key":"ac-slow","kind":"AC","maxPowerKw":7,"pricePerKwh":0.32,"durationFee":{"ratePerMinute":0.12,"thresholdMinutes":600}},
@@ -86,7 +87,8 @@
     "D46": {"department":"46","label":"Lot — Révéo 2025","status":"rankable_public_subscriber_reference_only","tariffFamily":"GENERAL_PUBLIC_CURRENT","rankableProfiles":["public"]},
     "S48": {"partyId":"FR*S48","department":"48","label":"Lozère","status":"rankable_public_subscriber_reference_only","tariffFamily":"GENERAL_PUBLIC_CURRENT","rankableProfiles":["public"]},
     "D65": {"department":"65","label":"Hautes-Pyrénées — Révéo 2025","status":"rankable_public_subscriber_reference_only","tariffFamily":"GENERAL_PUBLIC_CURRENT","rankableProfiles":["public"]},
-    "D66": {"department":"66","label":"Pyrénées-Orientales — Révéo 2025","status":"unresolved_special_grid_not_verified","public":null,"subscriber":null}
+    "D66": {"department":"66","label":"Pyrénées-Orientales — Révéo 2025","status":"unresolved_special_grid_not_verified","public":null,"subscriber":null},
+    "D81": {"department":"81","label":"Tarn","status":"rankable_public_subscriber_reference_only","tariffFamily":"GENERAL_PUBLIC_CURRENT","rankableProfiles":["public"]}
   },
   "exclusions": [
     "Montpellier Méditerranée Métropole is always excluded from the Hérault S34 grid",
