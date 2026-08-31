@@ -1,6 +1,12 @@
 {
   "schemaVersion": 1,
   "minimumRequired": 10,
+  "execution": {
+    "stationLimit": 24,
+    "routingConcurrency": 4,
+    "maxDurationMs": 30000,
+    "uiYieldMs": 50
+  },
   "scenarios": [
     {"id":"fr-cost-baseline","label":"FR · coût baseline","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":15,"startSoc":50,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":[]},
     {"id":"fr-cost-low-soc","label":"FR · coût SOC bas","countryCode":"FR","origin":{"lat":48.798,"lon":2.061},"radiusKm":20,"startSoc":15,"targetSoc":80,"sortBy":"finalCost","selectedSubscriptions":[]},
