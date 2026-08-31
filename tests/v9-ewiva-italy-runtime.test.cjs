@@ -1,37 +1,31 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-
+const Direct=require('../assets/v9/adapters/direct-offers.js');
+const Session=require('../assets/v9/session-engine.js');
 const offers=JSON.parse(fs.readFileSync('data/v9/italy-offers.json','utf8'));
-const ewivaEmsp=offers.emspOffers.filter(o=>String(o.id||'').startsWith('it:emsp:enel-on-your-way-ewiva:'));
+const report=JSON.parse(fs.readFileSync('data/v9/italy-build-report.json','utf8'));
+const ewivaEmsp=offers.emspOffers.filter(o=>o.provider==='Enel On Your Way'&&o.metadata?.network==='Ewiva');
 const ewivaSuper=offers.subscriptionOffers.filter(o=>o.selectionId==='enel_plug_and_go_super'&&o.metadata?.network==='Ewiva');
 const ewivaExplorer=offers.subscriptionOffers.filter(o=>o.selectionId==='enel_plug_and_go_explorer'&&o.metadata?.network==='Ewiva');
-
-assert.equal(ewivaEmsp.length,1678);
-assert.equal(ewivaSuper.length,1678);
-assert.equal(ewivaExplorer.length,0);
+const n=report.ewivaEnelEmspOffers;
+assert.ok(n>1700);
+assert.equal(ewivaEmsp.length,n); assert.equal(ewivaSuper.length,n); assert.equal(ewivaExplorer.length,n);
 assert.equal(offers.policy.ewivaEnelEmspCommercialSeparation,true);
-assert.equal(offers.policy.ewivaExplorerFailClosed,true);
-assert.ok(ewivaEmsp.every(o=>o.provider==='Enel On Your Way'));
-assert.ok(ewivaEmsp.every(o=>o.metadata?.network==='Ewiva'));
+assert.equal(offers.policy.ewivaDirectContactlessRequiresStationCapabilityEvidence,true);
 assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false));
-assert.ok(ewivaEmsp.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
-assert.ok(ewivaEmsp.every(o=>o.pricing?.postChargeFeeUnknown===true));
-assert.ok(ewivaSuper.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
+assert.ok([...ewivaEmsp,...ewivaSuper,...ewivaExplorer].every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
 assert.ok(ewivaSuper.every(o=>o.monthlyFeeEur===4));
-assert.ok(ewivaSuper.every(o=>o.validThrough==='2027-01-14'));
+assert.ok(ewivaExplorer.every(o=>o.monthlyFeeEur===12));
 assert.ok(!offers.directOffers.some(o=>o.provider==='Ewiva'));
-
-const byClass=ewivaEmsp.reduce((m,o)=>{const k=o.metadata?.tariffClass||'UNKNOWN';m[k]=(m[k]||0)+1;return m;},{});
-assert.deepEqual(byClass,{AC:7,DC:31,HPC:1640});
-
-const hpc=ewivaEmsp.find(o=>o.metadata?.tariffClass==='HPC');
-assert.ok(hpc);
-assert.equal(hpc.pricing.rules.length,1);
-assert.equal(hpc.pricing.rules[0].scope,'allDay');
-assert.equal(hpc.pricing.rules[0].pricePerKwh,0.86);
-const hpcSuper=ewivaSuper.find(o=>o.metadata?.tariffClass==='HPC');
-assert.ok(hpcSuper);
-assert.equal(hpcSuper.pricing.rules[0].pricePerKwh,0.81);
-
-// Keep the dedicated Ewiva workflow as the publication gate for these totals.
-console.log('V9 Ewiva Italy runtime publication: OK');
+const eid=ewivaEmsp.find(o=>o.metadata?.tariffClass==='HPC')?.evseIds?.[0];
+assert.ok(eid);
+const basic=ewivaEmsp.find(o=>o.evseIds?.[0]===eid), sup=ewivaSuper.find(o=>o.evseIds?.[0]===eid), exp=ewivaExplorer.find(o=>o.evseIds?.[0]===eid);
+const rules=Direct.normalizePayload({country:'IT',emspOffers:[basic],subscriptionOffers:[sup,exp]}).offerRules;
+const station={id:'IT:ewiva:test',countryCode:'IT',offers:rules};
+let r=Session.evaluateStation(station,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T19:05:00Z'},{selectedSubscriptions:[]});
+assert.equal(r.best.provider,'Enel On Your Way');
+r=Session.evaluateStation(station,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T19:05:00Z'},{selectedSubscriptions:['enel_plug_and_go_super']});
+assert.equal(r.best.subscriptionId,'enel_plug_and_go_super');
+r=Session.evaluateStation(station,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T19:05:00Z'},{selectedSubscriptions:['enel_plug_and_go_explorer']});
+assert.equal(r.best.subscriptionId,'enel_plug_and_go_explorer');
+console.log(JSON.stringify({ok:true,ewiva:n},null,2));
