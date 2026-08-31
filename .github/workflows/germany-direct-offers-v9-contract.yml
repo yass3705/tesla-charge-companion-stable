@@ -20,6 +20,7 @@ on:
       - 'data/v9/germany-direct-offers-wemag-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-neuss-extension.json'
       - 'data/v9/germany-direct-offers-infra-fuerth-extension.json'
+      - 'data/v9/germany-direct-offers-evf-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
@@ -37,6 +38,7 @@ on:
       - 'scripts/test_germany_wemag_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py'
       - 'scripts/test_germany_infra_fuerth_direct_offers_v9.py'
+      - 'scripts/test_germany_evf_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -85,3 +87,5 @@ jobs:
         run: python scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py
       - name: Validate infra fürth direct offers
         run: python scripts/test_germany_infra_fuerth_direct_offers_v9.py
+      - name: Validate EVF direct offers
+        run: python scripts/test_germany_evf_direct_offers_v9.py
