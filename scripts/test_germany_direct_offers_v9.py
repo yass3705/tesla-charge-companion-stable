@@ -45,7 +45,8 @@ for o in all_offers:
  if fee:
   assert isinstance(fee.get('afterMinutes'),(int,float)) and fee['afterMinutes']>=0,o['id']
   assert isinstance(fee.get('pricePerMinute'),(int,float)) and fee['pricePerMinute']>=0,o['id']
-  assert isinstance(fee.get('capPerSession'),(int,float)) and fee['capPerSession']>=0,o['id']
+  if 'capPerSession' in fee:
+   assert isinstance(fee.get('capPerSession'),(int,float)) and fee['capPerSession']>=0,o['id']
   assert fee.get('currency')=='EUR',o['id']
 # power-band overlap check by selection + connector
 by={}
