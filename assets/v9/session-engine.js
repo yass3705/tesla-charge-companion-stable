@@ -46,7 +46,14 @@
     const rule=PricingEngine.matchingRule(pricing,session.startAt,timeZone);
     if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:text(offer?.id||offer?.offerId),timeZone};
     const base=PricingEngine.evaluateRule(rule,session);
-    const finalized=PricingEngine.applyMinimumTotal(pricing,base.totalEur,base.components);
+    if(base.complete===false)return{...base,offerId:text(offer?.id||offer?.offerId),timeZone};
+    const conditional=PricingEngine.evaluateConditionalSessionFees(pricing.conditionalSessionFees,session);
+    if(conditional.complete===false)return{complete:false,reason:conditional.reason,offerId:text(offer?.id||offer?.offerId),timeZone};
+    const post=PricingEngine.evaluatePostChargeFee(pricing.postChargeFee,session,timeZone);
+    if(post.complete===false)return{complete:false,reason:post.reason,offerId:text(offer?.id||offer?.offerId),timeZone};
+    const total=base.totalEur+conditional.totalEur+post.totalEur;
+    const components={...base.components,...(conditional.component?{conditionalSessionFees:conditional.component}:{}),...(post.component?{postCharge:post.component}:{})};
+    const finalized=PricingEngine.applyMinimumTotal(pricing,total,components);
     return{
       complete:true,totalEur:finalized.totalEur,components:finalized.components,
       offerId:text(offer?.id||offer?.offerId),currency:offer?.currency||'EUR',matchedRule:rule,
