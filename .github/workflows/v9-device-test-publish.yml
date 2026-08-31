@@ -31,7 +31,7 @@ jobs:
       - name: Checkout validated V9 source
         uses: actions/checkout@v4
         with:
-          ref: baf0304a4110a23a96be28a87e05aac8ab5e9d29
+          ref: 85d2a8dc477ce41d698ac39e0ec2fc01c2fb4bcc
           path: v9src
 
       - name: Build isolated V9 test subtree
