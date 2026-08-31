@@ -3,7 +3,7 @@ name: V9 Morocco EVGO fresh native compatibility (consolidation)
 on:
   workflow_dispatch:
   push:
-    branches: ['feat/morocco-v9-consolidation-20260831']
+    branches: ['feat/morocco-v9-consolidation-20260831-resync2']
     paths:
       - 'assets/v9/adapters/morocco-public.js'
       - '.github/workflows/v9-morocco-evgo-fresh-native-consolidation.yml'
