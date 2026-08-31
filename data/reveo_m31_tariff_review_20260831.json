@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "reveo-m31-tariff-review-france",
+  "operator": "Révéo",
+  "country": "FR",
+  "territory": "M31",
+  "department": "31",
+  "label": "Toulouse Métropole — Révéo",
+  "checkedAt": "2026-08-31",
+  "policy": {
+    "operatorDirectOnly": true,
+    "rankable": false,
+    "physicalInventoryMutationAllowed": false,
+    "roamingOrEmspPromotedToDirect": false,
+    "alizeToulibeoMergedIntoReveo": false,
+    "requiresCurrentDirectPriceConfirmation": true
+  },
+  "currentOfficialEvidence": {
+    "tariffPage": "https://reveocharge.com/tarifs/",
+    "networkSeparationPage": "https://metropole.toulouse.fr/mon-quotidien/deplacements-stationnement/se-deplacer/se-deplacer-en-voiture",
+    "supportFolder": "https://support.reveocharge.com/support/solutions/folders/103000614366",
+    "roamingTariffIndex": "https://reveocharge.com/tarif-roaming/",
+    "facts": [
+      "Révéo currently states that Toulouse Métropole has a tariff different from the rest of the Révéo network.",
+      "Toulouse Métropole currently documents Révéo and Alizé/Toulibéo as separate charging networks.",
+      "Révéo directs users to the application for the exact current station tariff when in doubt."
+    ]
+  },
+  "lastDetailedPublishedM31Grid": {
+    "status": "historical_reference_not_rankable",
+    "edition": "2024-11",
+    "sourceUrl": "https://alizecharge.com/app/uploads/2024/12/Tarif_Reseaux-partenaires_alize_2024-11.pdf",
+    "warning": "This document is an Alizé partner-network tariff publication and must not by itself be promoted to the current direct Révéo price.",
+    "bands": [
+      {"key":"ac-slow","kind":"AC","maxPowerKw":7.4,"pricePerKwh":0.23,"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":600}},
+      {"key":"ac-normal","kind":"AC","minPowerKwExclusive":7.4,"maxPowerKw":22,"pricePerKwh":0.30,"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":120}},
+      {"key":"dc-50","kind":"DC","minPowerKwExclusive":22,"maxPowerKw":50,"pricePerKwh":0.40,"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":60}},
+      {"key":"dc-ultra","kind":"DC","minPowerKwExclusive":50,"pricePerKwh":0.52,"durationFee":{"ratePerMinute":0.04,"thresholdMinutes":30}}
+    ]
+  },
+  "recent2026Observations": {
+    "status": "conflicting_external_observation_not_direct_proof",
+    "source": "Seety",
+    "observedAt": "2026-08",
+    "stationExamples": [
+      "Révéo Jean Jaures, Toulouse",
+      "Révéo Place des Carmes, Toulouse",
+      "Révéo Place Anatole France, Toulouse",
+      "Révéo Boulevard Lazare Carnot, Toulouse"
+    ],
+    "normalAc": {
+      "pricePerKwh": 0.36,
+      "additionalPerMinute": 0.04,
+      "thresholdMinutes": null,
+      "channel": "unknown",
+      "notes": "Recent external station pages repeatedly show 0.36 EUR/kWh + 0.04 EUR/min for Révéo 22 kW in Toulouse. The payment channel and exact threshold are not proven as the direct public Révéo tariff."
+    }
+  },
+  "decision": {
+    "status": "reference_only_price_conflict",
+    "rankable": false,
+    "blockedReasons": [
+      "current_direct_price_conflict",
+      "current_direct_duration_threshold_unverified",
+      "external_observation_channel_unverified"
+    ],
+    "nextVerification": "Confirm one or more FR*M31 stations in the current Révéo app/direct payment flow, or obtain a current official direct M31 tariff grid."
+  }
+}
