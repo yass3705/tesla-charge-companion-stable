@@ -7,7 +7,8 @@ TARGETS={
  'IONITY':{'minSites':200,'requireFullCoverage':True},
  'Aral pulse':{'minSites':500,'requireFullCoverage':True},
  'EnBW mobility+':{'minSites':2000,'requireFullCoverage':True},
- 'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'direct Germany tariff dataset not yet modeled'},
+ 'SWU Energie GmbH':{'minSites':140,'requireFullCoverage':True},
+ 'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
 def load_json(path):
@@ -27,6 +28,7 @@ def offer_matches_connector(offer,connector):
 
 def offer_matches_site(offer,row):
  if 'DE' not in (offer.get('countries') or []): return False
+ if str(row[0]) in {str(x) for x in (offer.get('excludedSiteIds') or [])}: return False
  op=row[5]
  aliases=set(offer.get('operatorAliases') or []) | set(offer.get('networkAliases') or [])
  if op not in aliases: return False
