@@ -1,0 +1,54 @@
+name: V9 France IZIVIA offers
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/compile_izivia_v9_offers.py'
+      - 'tests/v9-france-izivia-network-audit.cjs'
+      - '.github/workflows/v9-france-izivia-offers.yml'
+      - 'data/v9/france-static/**'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/compile_izivia_v9_offers.py'
+      - 'tests/v9-france-izivia-network-audit.cjs'
+      - '.github/workflows/v9-france-izivia-offers.yml'
+      - 'data/v9/france-static/**'
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate compiler syntax
+        run: python -m py_compile scripts/compile_izivia_v9_offers.py
+      - name: Compile exact MAMP IZIVIA offers
+        run: python scripts/compile_izivia_v9_offers.py
+      - name: Verify output policy
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('data/v9/france-izivia-offers.json'))
+          assert p['policy']['physicalInventoryCreated'] is False
+          assert p['policy']['exactNetworkRequired']=='MAMP'
+          assert p['policy']['exactEvseRequired'] is True
+          assert p['policy']['geographicFallback'] is False
+          assert p['sourceEvidence']['stats']['eligible22Pdcs']>0
+          assert p['sourceEvidence']['stats']['eligible24Pdcs']>0
+          assert all(o.get('evseIds') for o in p['directOffers'])
+          assert all(o['pricing']['pricePerKwh'] in (0.38,0.44) for o in p['directOffers'])
+          print(json.dumps(p['sourceEvidence']['stats']))
+          PY
+      - name: Upload compiled IZIVIA offers
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-izivia-offers
+          path: data/v9/france-izivia-offers.json
+          if-no-files-found: error
+          retention-days: 7
