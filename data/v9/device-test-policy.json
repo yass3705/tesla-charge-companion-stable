@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
+  "enabled": true,
   "maxWindowMinutes": 60,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "First-device test policy. Disabled by default. A real test must be explicitly opened for one temporary self-enrolled device and must keep random canary at 0%."
+  "notes": "First-device controlled test window active. Must close after PASS/ROLLBACK or expiry; random canary remains 0%."
 }
