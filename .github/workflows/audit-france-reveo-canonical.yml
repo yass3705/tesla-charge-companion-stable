@@ -7,6 +7,7 @@ on:
       - refactor/france-irve-canonical
     paths:
       - 'scripts/materialize_france_reveo_offers.py'
+      - 'scripts/materialize_france_reveo_offers_v2.py'
       - 'scripts/test_reveo_materializer.py'
       - 'data/reveo_direct_tariffs_france_v1.json'
       - 'data/france_irve_operator_registry_v1.json'
@@ -28,8 +29,20 @@ jobs:
 
       - name: Validate Révéo materializer
         run: |
-          python -m py_compile scripts/materialize_france_reveo_offers.py scripts/test_reveo_materializer.py
+          python -m py_compile scripts/materialize_france_reveo_offers.py scripts/materialize_france_reveo_offers_v2.py scripts/test_reveo_materializer.py
           python scripts/test_reveo_materializer.py
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          p=Path('scripts/materialize_france_reveo_offers_v2.py')
+          s=importlib.util.spec_from_file_location('reveo_v2',p)
+          m=importlib.util.module_from_spec(s); s.loader.exec_module(m)
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E1*1'},{'codeInsee':'','address':'1 rue test 09000 Foix'}) == ('D09','postal_department_09')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E2*1'},{'codeInsee':'','address':'1 rue test 81000 Albi'}) == ('D81','postal_department_81')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E3*1'},{'codeInsee':'','address':'1 rue test 31000 Toulouse'}) == ('M31','postal_department_31_blocked_special_grid')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E4*1'},{'codeInsee':'','address':'1 rue test 66000 Perpignan'}) == ('D66','postal_department_66_blocked_special_grid')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E5*1'},{'codeInsee':'','address':'1 rue test 34000 Montpellier'}) == ('','')
+          PY
 
       - name: Validate verified Révéo source scope
         run: |
@@ -39,7 +52,7 @@ jobs:
           assert d.get('dataset')=='reveo-direct-tariffs-france'
           assert d.get('country')=='FR'
           s=d.get('scope') or {}
-          expected={'S34','D09','D11','S12','D30','D46','S48','D65'}
+          expected={'S34','D09','D11','S12','D30','D46','S48','D65','D81'}
           assert s.get('operatorDirectOnly') is True
           assert s.get('roamingIncluded') is False
           assert s.get('roamingTariffsPromotedToDirect') is False
@@ -61,6 +74,7 @@ jobs:
           terr=d.get('territories') or {}
           assert (terr.get('D66') or {}).get('status')=='unresolved_special_grid_not_verified'
           assert (terr.get('M31') or {}).get('status')=='unresolved_special_grid_not_verified'
+          assert (terr.get('D81') or {}).get('tariffFamily')=='GENERAL_PUBLIC_CURRENT'
           print(json.dumps({'rankableTerritories':s['rankableTerritories'],'subscriberRankable':s['rankableSubscriberTerritories']},ensure_ascii=False,indent=2))
           PY
 
@@ -100,7 +114,7 @@ jobs:
       - name: Materialize Révéo canonical offers
         run: |
           mkdir -p build/france_irve_offers
-          python scripts/materialize_france_reveo_offers.py \
+          python scripts/materialize_france_reveo_offers_v2.py \
             --source data/reveo_direct_tariffs_france_v1.json \
             --canonical-dir build/france_irve_identity \
             --out-dir build/france_irve_offers
@@ -108,9 +122,9 @@ jobs:
       - name: Validate Révéo canonical scope
         run: |
           python - <<'PY'
-          import gzip,json
-          expected={'S34','D09','D11','S12','D30','D46','S48','D65'}
-          dept={'D09':'09','D11':'11','S12':'12','D30':'30','D46':'46','S48':'48','D65':'65'}
+          import gzip,json,re
+          expected={'S34','D09','D11','S12','D30','D46','S48','D65','D81'}
+          dept={'D09':'09','D11':'11','S12':'12','D30':'30','D46':'46','S48':'48','D65':'65','D81':'81'}
           metro={
             '34022','34027','34057','34058','34077','34087','34088','34090',
             '34095','34116','34120','34123','34129','34134','34164','34169',
@@ -146,11 +160,18 @@ jobs:
               sel=row.get('selectors') or {}
               territory=sel.get('territory')
               code=str(sel.get('codeInsee') or '')
+              method=str(row.get('matchMethod') or '')
               assert territory in expected
               assert code not in metro
               if territory in dept:
-                  assert len(code)==5 and code.startswith(dept[territory])
-              if territory=='S34' and not str(row.get('matchMethod') or '').startswith('exact_ocpi_party_id_FR*S34'):
+                  d=dept[territory]
+                  if code:
+                      assert len(code)==5 and code.startswith(d)
+                  else:
+                      assert method==f'postal_department_{d}'
+                      postal=set(re.findall(r'(?<!\d)(\d{5})(?!\d)',str(stations[sid].get('address') or '')))
+                      assert len(postal)==1 and next(iter(postal)).startswith(d)
+              if territory=='S34' and not method.startswith('exact_ocpi_party_id_FR*S34'):
                   assert len(code)==5 and code.startswith('34') and code not in metro
               assert row.get('rankable') is True
               if row.get('channel')=='subscription':
