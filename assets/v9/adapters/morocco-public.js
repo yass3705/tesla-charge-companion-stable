@@ -19,6 +19,20 @@
     return'unknown';
   }
   function evgoStationState(evses){const states=(evses||[]).map(evgoClassify);if(states.includes('available'))return'available';if(states.includes('occupied_or_active_session'))return'occupied';if(states.length&&states.every(s=>s==='out_of_service'))return'out_of_service';return'unknown';}
+  function applyEvgoStatusOverlay(dataset,overlay){
+    const base=JSON.parse(JSON.stringify(dataset||{})),baseStations=Array.isArray(base.stations)?base.stations:[],freshStations=Array.isArray(overlay?.stations)?overlay.stations:[];
+    if(baseStations.length!==17||freshStations.length!==17)throw new Error(`EVGO overlay expected 17/17 stations, got ${baseStations.length}/${freshStations.length}`);
+    const byLocation=new Map(freshStations.map(st=>[text(st.locationId),st]));let overlayEvseCount=0;
+    for(const st of baseStations){
+      const fresh=byLocation.get(text(st.locationId));if(!fresh)throw new Error(`EVGO overlay missing station ${st.locationId}`);
+      const freshEvses=Array.isArray(fresh.evses)?fresh.evses:[];overlayEvseCount+=freshEvses.length;
+      const byEvse=new Map(freshEvses.map(e=>[text(e.id),e]));
+      st.evses=(st.evses||[]).map(e=>{const next=byEvse.get(text(e.id));if(!next)throw new Error(`EVGO overlay missing EVSE ${st.locationId}/${e.id}`);const merged={...e,status:next.status,isAvailable:next.isAvailable,isLongTermUnavailable:next.isLongTermUnavailable,isTemporarilyUnavailable:next.isTemporarilyUnavailable};merged.operational_class=evgoClassify(merged);return merged;});
+      st.updatedAt=fresh.updatedAt||st.updatedAt||overlay?.source_generated_at||null;
+    }
+    if(overlayEvseCount!==43)throw new Error(`EVGO overlay expected 43 EVSE, got ${overlayEvseCount}`);
+    return base;
+  }
   function normalizeEvgoDataset(dataset,{sourceId='morocco-evgo-native'}={}){
     const stations=Array.isArray(dataset?.stations)?dataset.stations:[],errors=[];let evseCount=0;
     if(stations.length!==17)errors.push(`expected 17 EVGO stations, got ${stations.length}`);
@@ -54,7 +68,12 @@
   function createLoader({source,fetchImpl}={}){
     if(!source?.profile)throw new Error('Morocco source profile missing');
     return async function(){
-      if(source.profile==='evgo')return normalizeEvgoDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
+      if(source.profile==='evgo'){
+        const statusUrl=text(source.statusUrl)||String(source.url||'').replace(/latest-normalized-stations\.json(?:\?.*)?$/,'latest-status-overlay.json');
+        if(!statusUrl||statusUrl===source.url)throw new Error('EVGO status overlay URL unresolved');
+        const [inventory,overlay]=await Promise.all([fetchJson(source.url,fetchImpl),fetchJson(statusUrl,fetchImpl)]);
+        return normalizeEvgoDataset(applyEvgoStatusOverlay(inventory,overlay),{sourceId:source.id});
+      }
       if(source.profile==='fastvolt')return normalizeFastVoltDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
       if(source.profile==='kilowatt')return normalizeKilowattDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
       if(source.profile==='totalenergies'){const [official,alWaha,links]=await Promise.all([fetchJson(source.urls.official,fetchImpl),fetchJson(source.urls.alWaha,fetchImpl),fetchJson(source.urls.links,fetchImpl)]);return normalizeTotalEnergies(official,alWaha,links,{sourceId:source.id}).stations;}
@@ -62,5 +81,5 @@
     };
   }
 
-  return{createLoader,normalizeEvgoDataset,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalEnergies,evgoClassify,kilowattState};
+  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalEnergies,evgoClassify,kilowattState};
 });
