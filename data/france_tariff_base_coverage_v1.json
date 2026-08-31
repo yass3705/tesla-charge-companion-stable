@@ -1,7 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "updatedAt": "2026-08-28",
+  "updatedAt": "2026-08-31",
   "overrides": [
+    {
+      "networkId": "freshmile",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/freshmile_direct_canonical_coverage_v1.json"],
+      "notes": "Strict direct Freshmile tariffs were canonicalized with exact EVSE matches: 1,183/4,674 stations and 3,892/15,049 PDC covered. Uncovered stations remain without an invented Freshmile price; regional networks, roaming and preferential tariffs remain excluded."
+    },
     {
       "networkId": "indigo",
       "coverageStatus": "partial_ready",
