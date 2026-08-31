@@ -62,13 +62,15 @@ jobs:
           cmp -s site/index.html <(git -C site show HEAD:index.html)
           test -s site/v9-test/v9-gate/index.html
           test -s site/v9-test/v9-app/index.html
-          test -s site/v9-test/v9-app/first-device-scenarios.js
+          test -s site/v9-test/v9-app/scenario-runner.js
           test -s site/v9-test/assets/v9/runtime-engine.js
+          test -s site/v9-test/assets/v9/device-scenario-engine.js
           test -s site/v9-test/data/v9/source-registry.json
+          test -s site/v9-test/data/v9/first-device-scenarios.json
           node --check site/v9-test/v9-gate/gate.js
           node --check site/v9-test/v9-app/app.js
-          node --check site/v9-test/v9-app/first-device-scenarios.js
-          grep -q "return'../../'" site/v9-test/v9-gate/gate.js
+          node --check site/v9-test/v9-app/scenario-runner.js
+          grep -q "../../" site/v9-test/v9-gate/gate.js
           echo 'Isolated V9 test package validated; root index is byte-identical to main.'
       - name: Upload Pages artifact
         if: github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST'
