@@ -100,7 +100,14 @@ jobs:
       - name: Validate Révéo canonical scope
         run: |
           python - <<'PY'
-          import gzip,json,re
+          import gzip,json
+          metro={
+            '34022','34027','34057','34058','34077','34087','34088','34090',
+            '34095','34116','34120','34123','34129','34134','34164','34169',
+            '34172','34179','34198','34202','34217','34227','34244','34249',
+            '34256','34259','34270','34295','34307','34327','34337',
+          }
+          allowed_methods={'exact_ocpi_party_id_FR*S34','insee_department_34_excluding_montpellier_metro'}
           stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
           pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
           offers=json.load(gzip.open('build/france_irve_offers/reveo_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
@@ -122,9 +129,15 @@ jobs:
               assert stations[sid].get('tariffNetworkId')=='reveo'
               assert pdcs[pid].get('tariffNetworkId')=='reveo'
               assert row.get('tariffNetworkId')=='reveo'
-              assert row.get('matchMethod')=='exact_ocpi_party_id_FR*S34'
-              raw=str(pdcs[pid].get('idPdcItinerance') or '').upper().replace(' ','')
-              assert raw.startswith('FR*S34')
+              method=row.get('matchMethod')
+              assert method in allowed_methods
+              code=str((row.get('selectors') or {}).get('codeInsee') or '')
+              assert code not in metro
+              if method=='exact_ocpi_party_id_FR*S34':
+                  raw=str(pdcs[pid].get('idPdcItinerance') or '').upper().replace(' ','')
+                  assert raw.startswith('FR*S34')
+              else:
+                  assert len(code)==5 and code.startswith('34') and code not in metro
               assert row.get('rankable') is True
               if row.get('channel')=='subscription':
                   assert row.get('subscriptionId')=='reveo-subscription'
