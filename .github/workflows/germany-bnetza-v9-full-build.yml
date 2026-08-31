@@ -110,7 +110,7 @@ jobs:
           print(json.dumps({'grouped':{k:m[k] for k in ('sourceFacilityCount','excludedTeslaFacilityCount','facilityCount','siteCount','evseCount','multiFacilitySiteCount','maxFacilitiesPerSite','tileCount','allBytes')},'megaSiteAudit':mega[:10]},indent=2,ensure_ascii=False))
           PY
       - name: Audit operator canonicalization coverage
-        run: python scripts/audit_germany_operator_normalization_v9.py --min-coverage 0.47
+        run: python scripts/audit_germany_operator_normalization_v9.py --min-coverage 0.51
       - name: Build effective Germany direct offers
         run: python scripts/build_germany_direct_offers_v9.py --out build/germany-direct-offers.json
       - name: Validate SWU direct offers
