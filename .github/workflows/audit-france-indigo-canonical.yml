@@ -1,0 +1,127 @@
+name: Audit France Indigo canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_indigo_offers.py'
+      - 'scripts/test_indigo_materializer.py'
+      - 'data/indigo_recharge_direct_tariffs_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-indigo-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  indigo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate Indigo materializer
+        run: |
+          python -m py_compile scripts/materialize_france_indigo_offers.py scripts/test_indigo_materializer.py
+          python scripts/test_indigo_materializer.py
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize Indigo canonical offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_indigo_offers.py \
+            --tariffs data/indigo_recharge_direct_tariffs_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate Indigo canonical scope
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/indigo_station_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/indigo_materialization_report.json',encoding='utf-8'))
+          subscriptions=json.load(open('build/france_irve_offers/indigo_subscriptions_contract_v1_1.json',encoding='utf-8'))['subscriptions']
+          summary=report['summary']
+          assert 250 <= summary['canonicalIndigoStationCount'] <= 500
+          assert summary['canonicalIndigoPdcCount'] >= 6000
+          assert summary['materializedOfferCount']==len(offers)>0
+          assert summary['rankableOfferCount']>0
+          assert summary['rankableCoveredStationCount']==summary['canonicalIndigoStationCount']
+          assert summary['physicalInventoryMutationCount']==0
+          assert len({r['offerId'] for r in offers})==len(offers)
+          assert any(s.get('id')=='indigo-recharge-a-la-carte' and s.get('rankableWhenSelected') for s in subscriptions)
+          assert all(not s.get('rankableWhenSelected') for s in subscriptions if s.get('quotaBased'))
+          legacy_codes={'64122','58194','78551','37261'}
+          by_station={}
+          for row in offers:
+              sid=row['canonicalStationId']
+              assert sid in stations and stations[sid].get('tariffNetworkId')=='indigo'
+              assert row.get('tariffNetworkId')=='indigo'
+              assert row.get('matchMethod')=='network_scope'
+              if row.get('rankable') and row.get('channel')=='subscription':
+                  assert row.get('subscriptionId')=='indigo-recharge-a-la-carte'
+              by_station.setdefault(sid,[]).append(row)
+          for sid,rows in by_station.items():
+              code=str(stations[sid].get('codeInsee') or '')
+              ids={r['offerId'].split(':')[0]:r for r in rows}
+              if code in legacy_codes:
+                  assert ids['indigo-a-la-carte-legacy-city']['rankable'] is True
+                  assert ids['indigo-public-legacy-city-unresolved']['rankable'] is False
+                  assert 'indigo-public-standard' not in ids
+              else:
+                  assert ids['indigo-public-standard']['rankable'] is True
+                  assert ids['indigo-a-la-carte-standard']['rankable'] is True
+                  assert ids['indigo-monthly-quota-reference']['rankable'] is False
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload Indigo audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-indigo-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/indigo_station_offers_contract_v1_1.json.gz
+            build/france_irve_offers/indigo_subscriptions_contract_v1_1.json
+            build/france_irve_offers/indigo_materialization_report.json
+          retention-days: 14
