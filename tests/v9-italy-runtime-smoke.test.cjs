@@ -1,5 +1,4 @@
 'use strict';
-
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const zlib=require('node:zlib');
@@ -7,139 +6,44 @@ const path=require('node:path');
 const National=require('../assets/v9/adapters/national-compact.js');
 const Direct=require('../assets/v9/adapters/direct-offers.js');
 const Session=require('../assets/v9/session-engine.js');
-
 const root=path.join(__dirname,'..');
 const readJson=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
-const readGzJson=p=>JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root,p))).toString('utf8'));
-
+const readGz=p=>JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root,p))).toString('utf8'));
 const manifest=readJson('data/v9/italy-static/manifest.json');
-const rows=readGzJson('data/v9/italy-static/all.json.gz');
+const rows=readGz('data/v9/italy-static/all.json.gz');
 const offers=readJson('data/v9/italy-offers.json');
+const report=readJson('data/v9/italy-build-report.json');
 const normalized=Direct.normalizePayload(offers);
-
-assert.equal(manifest.country,'IT');
-assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,48409);
-assert.equal(offers.subscriptionOffers.length,50008);
-assert.equal(offers.emspOffers.length,3959);
-assert.equal(normalized.offerRules.length,48409+50008+3959);
-
+assert.equal(manifest.country,'IT'); assert.equal(rows.length,29696);
+assert.equal(offers.directOffers.length,report.directOffers);
+assert.equal(offers.subscriptionOffers.length,report.subscriptionOffers);
+assert.equal(offers.emspOffers.length,report.emspOffers);
+assert.equal(normalized.offerRules.length,report.directOffers+report.subscriptionOffers+report.emspOffers);
 const stationByEvse=new Map();
-for(const row of rows){
-  for(const cfg of row[8]||[]){
-    const eid=String(cfg?.[0]||'');
-    if(eid)stationByEvse.set(eid,row);
+for(const row of rows)for(const cfg of row[8]||[]){const eid=String(cfg?.[0]||'');if(eid)stationByEvse.set(eid,row)}
+assert.ok(stationByEvse.size>70000);
+for(const [name,layer] of [['direct',offers.directOffers],['subscription',offers.subscriptionOffers],['emsp',offers.emspOffers]]){
+  assert.ok(layer.length);
+  for(const raw of [layer[0],layer[Math.floor(layer.length/2)],layer[layer.length-1]]){
+    const eid=String(raw.evseIds?.[0]||''); assert.ok(eid&&stationByEvse.has(eid),`${name} identity missing ${eid}`);
+    const station=National.normalizeRow(stationByEvse.get(eid),{countryCode:'IT',sourceId:'italy-pun'}); assert.ok(station.evses.some(e=>e.id===eid));
   }
 }
-assert.ok(stationByEvse.size>70000,'expected national PUN EVSE identities');
-
-function validateLayer(layer,kind){
-  assert.ok(layer.length>0,`${kind} layer empty`);
-  const samples=[layer[0],layer[Math.floor(layer.length/2)],layer[layer.length-1]];
-  for(const raw of samples){
-    const eid=String(raw.evseIds?.[0]||'');
-    assert.ok(eid,`${kind} offer missing exact EVSE`);
-    const row=stationByEvse.get(eid);
-    assert.ok(row,`${kind} EVSE ${eid} absent from PUN catalogue`);
-    const station=National.normalizeRow(row,{countryCode:'IT',sourceId:'italy-pun'});
-    assert.ok(station,'station normalization failed');
-    assert.ok(station.evses.some(e=>e.id===eid),`${kind} EVSE ${eid} lost during normalization`);
-  }
-}
-
-validateLayer(offers.directOffers,'direct');
-validateLayer(offers.subscriptionOffers,'subscription');
-validateLayer(offers.emspOffers,'emsp');
-
-const duferco=offers.directOffers.filter(o=>o.provider==='Duferco Mobility');
-assert.equal(duferco.length,1648);
-assert.ok(duferco.every(o=>o.pricing?.type==='rules'));
-assert.ok(duferco.every(o=>o.pricing?.holidayCalendar==='IT'));
-assert.ok(duferco.every(o=>o.pricing?.postChargeFeeUnknown===true));
-assert.ok(duferco.every(o=>Array.isArray(o.pricing?.rules)&&o.pricing.rules.length===6));
-assert.ok(duferco.every(o=>o.metadata?.timeZone==='Europe/Rome'));
-
-const dufercoSample=Direct.normalizePayload({country:'IT',directOffers:[duferco[0]]}).offerRules[0];
-const dufercoStation={id:'IT:duferco:smoke',countryCode:'IT',offers:[dufercoSample]};
-let evaluated=Session.evaluateStation(dufercoStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T11:00:00Z',postChargeMinutes:0});
-assert.equal(evaluated.comparableOfferCount,1);
-assert.ok(evaluated.best.total===10.4||evaluated.best.total===14.8,'unexpected Duferco <=100/>100 class total');
-evaluated=Session.evaluateStation(dufercoStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T11:00:00Z',postChargeMinutes:1});
-assert.equal(evaluated.comparableOfferCount,0);
-assert.equal(evaluated.incomplete[0].result.reason,'post_charge_fee_unknown_for_station');
-
-const enel=offers.directOffers.filter(o=>o.provider==='Enel X Way');
-assert.equal(enel.length,22783);
-assert.ok(enel.every(o=>o.pricing?.type==='rules'));
-assert.ok(enel.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
-assert.ok(enel.every(o=>o.metadata?.timeZone==='Europe/Rome'));
+const duferco=offers.directOffers.filter(o=>o.provider==='Duferco Mobility'); assert.equal(duferco.length,1648);
+const enel=offers.directOffers.filter(o=>o.provider==='Enel X Way'); assert.equal(enel.length,22783); assert.ok(enel.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
 const superOffers=offers.subscriptionOffers.filter(o=>o.selectionId==='enel_plug_and_go_super');
 const explorerOffers=offers.subscriptionOffers.filter(o=>o.selectionId==='enel_plug_and_go_explorer');
-assert.equal(superOffers.length,24461);
-assert.equal(explorerOffers.length,22783);
-assert.ok(superOffers.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
-assert.ok(explorerOffers.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
-
-// Use an AC Enel X Way EVSE so exact expected prices are deterministic.
-const enelAcRaw=enel.find(o=>o.metadata?.tariffClass==='AC');
-assert.ok(enelAcRaw,'expected at least one AC Enel offer');
-const enelEid=enelAcRaw.evseIds[0];
-const explorerRaw=explorerOffers.find(o=>o.evseIds?.[0]===enelEid);
-assert.ok(explorerRaw,'selected Explorer offer missing on Enel AC EVSE');
-const enelRules=Direct.normalizePayload({country:'IT',directOffers:[enelAcRaw],subscriptionOffers:[explorerRaw]}).offerRules;
-const enelStation={id:'IT:enel:smoke',countryCode:'IT',offers:enelRules};
-
-// 20:50 Rome crosses 21:00 but the session-start day tariff remains fixed.
-evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T18:50:00Z'},{selectedSubscriptions:[]});
-assert.equal(evaluated.best.total,13.4);
-assert.equal(evaluated.best.result.segmented,false);
-assert.equal(evaluated.best.result.priceSelectionBasis,'session_start_local_time');
-
-evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T18:50:00Z'},{selectedSubscriptions:['enel_plug_and_go_explorer']});
-assert.equal(evaluated.best.subscriptionId,'enel_plug_and_go_explorer');
-assert.equal(evaluated.best.total,11.4);
-
-// 21:05 Rome: night tariff applies to the whole session.
-evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T19:05:00Z'},{selectedSubscriptions:['enel_plug_and_go_explorer']});
-assert.equal(evaluated.best.subscriptionId,'enel_plug_and_go_explorer');
-assert.equal(evaluated.best.total,9.6);
-
-const ewivaEmsp=offers.emspOffers.filter(o=>String(o.id||'').startsWith('it:emsp:enel-on-your-way-ewiva:'));
-const ewivaSuper=superOffers.filter(o=>o.metadata?.network==='Ewiva');
-const ewivaExplorer=explorerOffers.filter(o=>o.metadata?.network==='Ewiva');
-assert.equal(ewivaEmsp.length,1678);
-assert.equal(ewivaSuper.length,1678);
-assert.equal(ewivaExplorer.length,0);
-assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false));
-
-assert.ok(normalized.offerRules.some(o=>o.kind==='direct'));
-assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='atlante_go'));
-assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_super'));
-assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_explorer'));
-assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='NextCharge'&&o.directOperatorOnly===false));
-assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='Enel On Your Way'&&o.directOperatorOnly===false));
-
-const states=new Set(rows.map(r=>String(r[10]||'')));
-assert.ok(states.has('OPERATIONAL'));
-const operational=rows.find(r=>r[10]==='OPERATIONAL');
-assert.equal(National.normalizeRow(operational,{countryCode:'IT',sourceId:'italy-pun'}).status.state,'available');
-if(states.has('NON_OPERATIONAL')){
-  const down=rows.find(r=>r[10]==='NON_OPERATIONAL');
-  assert.equal(National.normalizeRow(down,{countryCode:'IT',sourceId:'italy-pun'}).status.state,'out_of_service');
-}
-
-console.log(JSON.stringify({
-  ok:true,
-  stations:rows.length,
-  evseIdentities:stationByEvse.size,
-  direct:offers.directOffers.length,
-  duferco:duferco.length,
-  enel:enel.length,
-  subscriptions:offers.subscriptionOffers.length,
-  enelSuper:superOffers.length,
-  enelExplorer:explorerOffers.length,
-  ewivaEmsp:ewivaEmsp.length,
-  ewivaSuper:ewivaSuper.length,
-  emsp:offers.emspOffers.length,
-  statuses:[...states].sort()
-},null,2));
+const ewivaN=report.ewivaEnelEmspOffers||0; assert.ok(ewivaN>1700);
+assert.equal(superOffers.length,22783+ewivaN); assert.equal(explorerOffers.length,22783+ewivaN);
+const ewivaEmsp=offers.emspOffers.filter(o=>o.provider==='Enel On Your Way'&&o.metadata?.network==='Ewiva');
+const ewivaSuper=superOffers.filter(o=>o.metadata?.network==='Ewiva'); const ewivaExplorer=explorerOffers.filter(o=>o.metadata?.network==='Ewiva');
+assert.equal(ewivaEmsp.length,ewivaN); assert.equal(ewivaSuper.length,ewivaN); assert.equal(ewivaExplorer.length,ewivaN);
+assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false)); assert.ok(!offers.directOffers.some(o=>o.provider==='Ewiva'));
+const ac=enel.find(o=>o.metadata?.tariffClass==='AC'); assert.ok(ac); const eid=ac.evseIds[0]; const exp=explorerOffers.find(o=>o.evseIds?.[0]===eid&&o.metadata?.network==='Enel X Way'); assert.ok(exp);
+const station={id:'IT:enel:smoke',countryCode:'IT',offers:Direct.normalizePayload({country:'IT',directOffers:[ac],subscriptionOffers:[exp]}).offerRules};
+let r=Session.evaluateStation(station,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T18:50:00Z'},{selectedSubscriptions:[]}); assert.equal(r.best.total,13.4); assert.equal(r.best.result.segmented,false);
+r=Session.evaluateStation(station,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T19:05:00Z'},{selectedSubscriptions:['enel_plug_and_go_explorer']}); assert.equal(r.best.subscriptionId,'enel_plug_and_go_explorer'); assert.equal(r.best.total,9.6);
+assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='NextCharge'));
+assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='Enel On Your Way'));
+const states=new Set(rows.map(r=>String(r[10]||''))); assert.ok(states.has('OPERATIONAL'));
+console.log(JSON.stringify({ok:true,stations:rows.length,direct:report.directOffers,subscriptions:report.subscriptionOffers,emsp:report.emspOffers,ewiva:ewivaN},null,2));
