@@ -1,0 +1,103 @@
+name: V9 Morocco TotalEnergies host policy
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-totalenergies-host-policy.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-totalenergies-host-policy.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate TotalEnergies host inventory, attribution and unresolved channels
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const registry=require('./data/v9/source-registry.json');
+          const urls={
+            official:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/official-network-inventory-2026-08-23.json',
+            alWaha:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/al-waha-cpo-attribution.json',
+            links:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/official-link-reconciliation-2026-08-30.json',
+            tariff:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/tariff-policy.json',
+            blocker:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/numocity-request-shape-resolution-2026-08-30.json'
+          };
+          (async()=>{
+            const entries=await Promise.all(Object.entries(urls).map(async([k,u])=>{const r=await fetch(u,{cache:'no-cache'});assert(r.ok,`${k} report reachable (${r.status})`);return[k,await r.json()];}));
+            const data=Object.fromEntries(entries);
+            const {official,alWaha,links,tariff,blocker}=data;
+
+            assert.equal(official?.policy?.read_only,true);
+            assert.equal(official?.policy?.no_inferred_cpo,true);
+            assert.equal(official?.policy?.no_inferred_tariff,true);
+            assert.equal(official?.policy?.no_inferred_live_status,true);
+            assert.equal(official?.summary?.source_rows,20);
+            assert.equal(official?.summary?.official_page_station_count_claim,18);
+
+            assert.equal(links?.reconciliation?.corrected_unique_host_sites,18);
+            assert.equal(links?.reconciliation?.corrected_host_count_matches_official_headline,true);
+            assert.equal(links?.summary?.coordinates_resolved_from_official_links,13);
+            assert.equal(links?.summary?.remaining_hosts_without_official_link_coordinates_in_this_report,5);
+            assert.equal(links?.reconciliation?.corrected_second_tamesna_label,'RELAIS MAZAGAN');
+
+            assert.equal(tariff?.policy?.missing_or_null_tariff_means_free,false,'missing tariff must remain unresolved');
+            assert.equal(tariff?.policy?.missing_or_null_tariff_price_mad,null,'no implicit 0 MAD fallback');
+            assert.equal(blocker?.production_impact,'None yet. Keep TotalEnergies Club EV-Charge status_source unresolved until a working read-only native request is validated.');
+
+            assert.equal(alWaha?.station?.site_brand,'TotalEnergies');
+            assert.equal(alWaha?.station?.operator_cpo,'Kilowatt');
+            assert.equal(alWaha?.station?.app_source_access_network,'Kilowatt public web map');
+            assert.equal(alWaha?.station?.tariff_channel,null);
+            assert.equal(alWaha?.station?.status_source,'Kilowatt public web map');
+
+            const out=adapter.normalizeTotalEnergies(official,alWaha,links,{sourceId:'morocco-totalenergies-hosts'});
+            assert.equal(out?.summary?.reconciledHosts,18);
+            assert.equal(out?.summary?.geolocatedHosts,13);
+            assert.equal(out?.summary?.excludedWithoutGeo,5);
+            assert.equal(out?.summary?.alWahaExactMerged,true);
+            assert.equal(out.stations.length,13);
+            assert.equal(out.diagnostics.length,5);
+
+            const exactId='62e29ef59ad98566676cf824';
+            const al=out.stations.find(s=>s.canonicalId===`MA:kilowatt:${exactId}`);
+            assert(al,'AL WAHA exact Kilowatt merge present');
+            assert.equal(al.physicalOperator?.name,'Kilowatt');
+            assert.equal(al.access?.siteBrand,'TotalEnergies');
+            assert.equal(al.access?.appSource,'Kilowatt public web map');
+            assert.equal(al.access?.accessNetwork,'Kilowatt');
+            assert.equal(al.status?.statusSource,'Kilowatt public web map');
+            assert.deepEqual(al.offers,[],'AL WAHA direct tariff remains unresolved');
+
+            const generic=out.stations.filter(s=>s.canonicalId!==`MA:kilowatt:${exactId}`);
+            assert.equal(generic.length,12);
+            assert(generic.every(s=>s.physicalOperator==null),'generic TotalEnergies hosts must not infer CPO');
+            assert(generic.every(s=>s.access?.siteBrand==='TotalEnergies'),'site brand preserved');
+            assert(generic.every(s=>s.access?.appSource==='TotalEnergies official public website'),'official host source preserved');
+            assert(generic.every(s=>s.access?.accessNetwork==null),'host inventory is not an access network attribution');
+            assert(generic.every(s=>s.status?.state==='unknown'&&s.status?.statusSource==null),'no live status inferred');
+            assert(generic.every(s=>Array.isArray(s.offers)&&s.offers.length===0),'no tariff inferred');
+
+            const src=(registry.sources||[]).find(s=>s.id==='morocco-totalenergies-hosts');
+            assert(src,'TotalEnergies host source registered');
+            assert.deepEqual(src.capabilities,['inventory','connectors','access'],'registry must not claim TotalEnergies status/tariff capability');
+
+            console.log(JSON.stringify({ok:true,reconciledHosts:18,geolocatedHosts:13,diagnostics:5,alWahaCpo:'Kilowatt',genericHosts:12,tariff:'unresolved',clubEvChargeStatus:'blocked pending validated read-only endpoint'},null,2));
+          })().catch(e=>{console.error(e);process.exit(1);});
+          NODE
