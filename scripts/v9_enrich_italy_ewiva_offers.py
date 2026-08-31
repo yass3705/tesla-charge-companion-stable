@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+# Ewiva is intentionally enriched in a dedicated commercial layer so Enel X Way
+# direct/subscription counts remain deterministic and EWI never masquerades as ENX.
 import argparse,gzip,json
 from pathlib import Path
 
