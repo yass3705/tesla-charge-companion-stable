@@ -4,12 +4,16 @@
 Safety invariants:
 - PAN IRVE remains the sole physical inventory.
 - Only canonical rows whose tariffNetworkId is exactly ``reveo`` qualify.
-- Only the explicitly verified FR*S34 party (Hérault, outside Montpellier
-  Méditerranée Métropole) is rankable in this revision.
+- Only the verified Hérault scope outside Montpellier Méditerranée Métropole is
+  rankable in this revision.
+- Prefer an explicit historical FR*S34 party id when available; current PAN
+  rows may use newer Révéo identifiers, so an exact five-digit INSEE commune
+  code in department 34 is also accepted after excluding all 31 communes of
+  Montpellier Méditerranée Métropole.
 - Public and subscriber offers stay separate; the subscriber price is emitted
   only with subscriptionId ``reveo-subscription``.
 - Roaming tariffs never become direct CPO tariffs.
-- Other Révéo territories stay unresolved rather than inheriting S34 prices.
+- Other Révéo territories stay unresolved rather than inheriting Hérault prices.
 """
 from __future__ import annotations
 
@@ -20,6 +24,15 @@ import json
 import re
 from collections import Counter
 from pathlib import Path
+
+
+# INSEE 2026 list for EPCI 243400017 Montpellier Méditerranée Métropole.
+MONTPELLIER_METRO_INSEE = {
+    "34022", "34027", "34057", "34058", "34077", "34087", "34088", "34090",
+    "34095", "34116", "34120", "34123", "34129", "34134", "34164", "34169",
+    "34172", "34179", "34198", "34202", "34217", "34227", "34244", "34249",
+    "34256", "34259", "34270", "34295", "34307", "34327", "34337",
+}
 
 
 def clean(value):
@@ -92,6 +105,26 @@ def party_id_from_pdc(pdc):
     raw = clean(pdc.get("idPdcItinerance") or pdc.get("pdcId")).upper().replace(" ", "")
     match = re.match(r"^(FR\*[A-Z0-9]{3})", raw)
     return match.group(1) if match else ""
+
+
+def insee_code(station):
+    raw = clean(station.get("codeInsee"))
+    digits = "".join(ch for ch in raw if ch.isdigit())
+    return digits if len(digits) == 5 else ""
+
+
+def territory_match(pdc, station):
+    """Return (territory, safe_match_method)."""
+    party = party_id_from_pdc(pdc)
+    if party == "FR*S34":
+        return "S34", "exact_ocpi_party_id_FR*S34"
+
+    code = insee_code(station)
+    if code in MONTPELLIER_METRO_INSEE:
+        return "M34", "insee_montpellier_metro_exclusion"
+    if code.startswith("34"):
+        return "S34", "insee_department_34_excluding_montpellier_metro"
+    return "", ""
 
 
 def explicit_long_duration(station):
@@ -169,7 +202,7 @@ def pricing_rules(band):
     return [rule("00:00", "24:00", rate, threshold)]
 
 
-def make_offer(pdc, station, territory, subscription, profile_name, kind, band, normalized_at):
+def make_offer(pdc, station, territory, subscription, profile_name, kind, band, normalized_at, match_method):
     pid = clean(pdc.get("pdcId"))
     sid = clean(pdc.get("stationId"))
     is_sub = profile_name == "subscriber"
@@ -181,16 +214,17 @@ def make_offer(pdc, station, territory, subscription, profile_name, kind, band, 
         "tariffNetworkId": "reveo",
         "provider": provider,
         "channel": channel,
-        "sourceMode": "official_party_grid",
+        "sourceMode": "official_territory_grid",
         "sourceStationId": None,
         "sourceEvseId": pdc.get("idPdcItinerance"),
         "canonicalStationId": sid,
         "canonicalPdcId": pid,
-        "matchMethod": "exact_ocpi_party_id_FR*S34",
+        "matchMethod": match_method,
         "matchDistanceMeters": None,
         "selectors": {
             "territory": "S34",
             "partyId": territory.get("partyId"),
+            "codeInsee": insee_code(station),
             "tariffKey": band.get("key"),
             "connectorKind": kind,
             "explicitLongDuration": explicit_long_duration(station),
@@ -228,15 +262,31 @@ def main():
 
     reveo_stations = {clean(r.get("stationId")) for r in stations if r.get("tariffNetworkId") == "reveo"}
     reveo_pdcs = [r for r in pdcs if r.get("tariffNetworkId") == "reveo"]
-    s34_pdcs = [r for r in reveo_pdcs if party_id_from_pdc(r) == "FR*S34"]
-    s34_station_ids = {clean(r.get("stationId")) for r in s34_pdcs}
+
+    s34_candidates = []
+    excluded_metro_pdc = 0
+    classification_counters = Counter()
+    for pdc in reveo_pdcs:
+        station = stations_by_id.get(clean(pdc.get("stationId")))
+        if not station or station.get("tariffNetworkId") != "reveo":
+            continue
+        territory_id, method = territory_match(pdc, station)
+        if territory_id == "M34":
+            excluded_metro_pdc += 1
+            classification_counters[method] += 1
+            continue
+        if territory_id == "S34":
+            s34_candidates.append((pdc, method))
+            classification_counters[method] += 1
+
+    s34_station_ids = {clean(pdc.get("stationId")) for pdc, _ in s34_candidates}
 
     now = dt.datetime.now(dt.timezone.utc).isoformat()
     offers = []
     unresolved_s34 = []
     counters = Counter()
 
-    for pdc in s34_pdcs:
+    for pdc, match_method in s34_candidates:
         sid = clean(pdc.get("stationId"))
         station = stations_by_id.get(sid)
         if not station or station.get("tariffNetworkId") != "reveo":
@@ -249,6 +299,8 @@ def main():
                 "canonicalStationId": sid,
                 "reason": "connector_or_power_unresolved",
                 "partyId": party_id_from_pdc(pdc),
+                "codeInsee": insee_code(station),
+                "matchMethod": match_method,
             })
             continue
         long_duration = explicit_long_duration(station)
@@ -260,21 +312,27 @@ def main():
                 if band is None:
                     counters[f"unmatched_{profile_name}_{kind.lower()}_band"] += 1
                     continue
-                offers.append(make_offer(pdc, station, territory, subscription, profile_name, kind, band, now))
+                offers.append(make_offer(
+                    pdc, station, territory, subscription, profile_name, kind, band, now, match_method
+                ))
                 counters[f"materialized_{profile_name}_{kind.lower()}"] += 1
 
     offers.sort(key=lambda r: (r["canonicalStationId"], r["canonicalPdcId"], r["channel"], r["kind"]))
     if len({r["offerId"] for r in offers}) != len(offers):
         raise AssertionError("duplicate Révéo canonical offerId")
-    if any(r.get("tariffNetworkId") != "reveo" or r.get("matchMethod") != "exact_ocpi_party_id_FR*S34" for r in offers):
-        raise AssertionError("Révéo offer escaped exact S34 scope")
+    allowed_methods = {"exact_ocpi_party_id_FR*S34", "insee_department_34_excluding_montpellier_metro"}
+    if any(r.get("tariffNetworkId") != "reveo" or r.get("matchMethod") not in allowed_methods for r in offers):
+        raise AssertionError("Révéo offer escaped safe Hérault scope")
+    if any(r.get("selectors", {}).get("codeInsee") in MONTPELLIER_METRO_INSEE for r in offers):
+        raise AssertionError("Montpellier Métropole incorrectly inherited Hérault S34 tariff")
     if any(r.get("channel") == "subscription" and r.get("subscriptionId") != "reveo-subscription" for r in offers):
         raise AssertionError("Révéo subscription offer escaped opt-in selection")
     if any(r.get("channel") == "direct" and r.get("subscriptionId") is not None for r in offers):
         raise AssertionError("Révéo public direct offer incorrectly requires subscription")
 
     covered_pdc_ids = {r["canonicalPdcId"] for r in offers}
-    unresolved_other_territories = len(reveo_pdcs) - len(s34_pdcs)
+    s34_pdc_count = len(s34_candidates)
+    unresolved_other_territories = len(reveo_pdcs) - s34_pdc_count - excluded_metro_pdc
     report = {
         "schemaVersion": "1.1.1",
         "dataset": "france-reveo-canonical-direct-audit",
@@ -283,15 +341,17 @@ def main():
             "canonicalReveoStationCount": len(reveo_stations),
             "canonicalReveoPdcCount": len(reveo_pdcs),
             "canonicalS34StationCount": len(s34_station_ids),
-            "canonicalS34PdcCount": len(s34_pdcs),
+            "canonicalS34PdcCount": s34_pdc_count,
             "materializedOfferCount": len(offers),
             "rankableOfferCount": len(offers),
             "rankableCoveredS34PdcCount": len(covered_pdc_ids),
-            "unresolvedS34PdcCount": len(s34_pdcs) - len(covered_pdc_ids),
+            "unresolvedS34PdcCount": s34_pdc_count - len(covered_pdc_ids),
+            "excludedMontpellierMetroPdcCount": excluded_metro_pdc,
             "unresolvedOtherTerritoryPdcCount": unresolved_other_territories,
             "physicalInventoryMutationCount": 0,
             "subscriptionMonthlyFeeEur": number(subscription.get("monthlyFeeEur")),
             "badgePurchaseEur": number(subscription.get("badgePurchaseEur")),
+            "classificationCounters": dict(classification_counters),
             "counters": dict(counters),
         },
         "unresolvedS34Examples": unresolved_s34[:100],
@@ -303,7 +363,7 @@ def main():
         "nextSteps": [
             "verify and canonicalize current direct grids for Révéo 2025 departments 09/11/46/65/66",
             "verify current direct grids for FR*S12 (Aveyron), FR*M31 (Toulouse) and FR*S48 (Lozère)",
-            "keep Montpellier Métropole outside the S34 tariff family",
+            "keep Montpellier Méditerranée Métropole outside the S34 tariff family",
             "keep roaming/OCPI eMSP tariffs separate from Révéo direct CPO tariffs",
         ],
     }
