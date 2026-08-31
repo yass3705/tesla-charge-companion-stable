@@ -1,5 +1,7 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
+const Direct=require('../assets/v9/adapters/direct-offers.js');
+const Session=require('../assets/v9/session-engine.js');
 
 const offers=JSON.parse(fs.readFileSync('data/v9/italy-offers.json','utf8'));
 const ewivaEmsp=offers.emspOffers.filter(o=>String(o.id||'').startsWith('it:emsp:enel-on-your-way-ewiva:'));
@@ -11,12 +13,15 @@ assert.equal(ewivaSuper.length,1678);
 assert.equal(ewivaExplorer.length,0);
 assert.equal(offers.policy.ewivaEnelEmspCommercialSeparation,true);
 assert.equal(offers.policy.ewivaExplorerFailClosed,true);
+assert.equal(offers.policy.sessionStartLockedPostChargeFeesSupported,true);
 assert.ok(ewivaEmsp.every(o=>o.provider==='Enel On Your Way'));
 assert.ok(ewivaEmsp.every(o=>o.metadata?.network==='Ewiva'));
 assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false));
 assert.ok(ewivaEmsp.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
-assert.ok(ewivaEmsp.every(o=>o.pricing?.postChargeFeeUnknown===true));
+assert.ok(ewivaEmsp.every(o=>o.pricing?.postChargeFee&&o.pricing?.postChargeFeeUnknown!==true));
+assert.ok(ewivaEmsp.every(o=>o.metadata?.postChargeFeeTemporarilyFailClosed===false));
 assert.ok(ewivaSuper.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
+assert.ok(ewivaSuper.every(o=>o.pricing?.postChargeFee&&o.pricing?.postChargeFeeUnknown!==true));
 assert.ok(ewivaSuper.every(o=>o.monthlyFeeEur===4));
 assert.ok(ewivaSuper.every(o=>o.validThrough==='2027-01-14'));
 assert.ok(!offers.directOffers.some(o=>o.provider==='Ewiva'));
@@ -29,9 +34,37 @@ assert.ok(hpc);
 assert.equal(hpc.pricing.rules.length,1);
 assert.equal(hpc.pricing.rules[0].scope,'allDay');
 assert.equal(hpc.pricing.rules[0].pricePerKwh,0.86);
+assert.equal(hpc.pricing.postChargeFee.eurPerMinute,0.30);
 const hpcSuper=ewivaSuper.find(o=>o.metadata?.tariffClass==='HPC');
 assert.ok(hpcSuper);
 assert.equal(hpcSuper.pricing.rules[0].pricePerKwh,0.81);
+assert.equal(hpcSuper.pricing.postChargeFee.eurPerMinute,0.30);
 
-// Keep the dedicated Ewiva workflow as the publication gate for these totals.
+// Session-start locked pricing must now include the validated post-charge fee.
+const normalizedHpc=Direct.normalizePayload({country:'IT',emspOffers:[hpc]}).offerRules[0];
+const station={id:'IT:ewiva:postcharge',countryCode:'IT',offers:[normalizedHpc]};
+let evaluated=Session.evaluateStation(station,{
+  energyKwh:20,
+  durationMinutes:20,
+  consumptionKwhPer100Km:15,
+  targetCurrency:'EUR',
+  startAt:'2026-08-31T10:00:00Z',
+  postChargeMinutes:0
+});
+assert.equal(evaluated.comparableOfferCount,1);
+assert.equal(evaluated.best.total,17.2);
+
+evaluated=Session.evaluateStation(station,{
+  energyKwh:20,
+  durationMinutes:20,
+  consumptionKwhPer100Km:15,
+  targetCurrency:'EUR',
+  startAt:'2026-08-31T10:00:00Z',
+  postChargeMinutes:5,
+  postChargeStartAt:'2026-08-31T10:20:00Z'
+});
+assert.equal(evaluated.comparableOfferCount,1);
+assert.equal(evaluated.best.total,18.7);
+assert.equal(evaluated.best.result.components.postCharge.costEur,1.5);
+
 console.log('V9 Ewiva Italy runtime publication: OK');
