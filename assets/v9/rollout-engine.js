@@ -16,7 +16,7 @@
   }
   function readinessState(readiness){if(readiness?.ready===true||readiness?.verdict==='READY')return'READY';if(readiness?.ready===false||readiness?.verdict==='BLOCKED')return'BLOCKED';return'UNKNOWN';}
   function decide({config={},identity='',readiness=null,requestedStage=null}={}){
-    const c=normalizeConfig(config),requested=STAGES.includes(requestedStage)?requested:c.stage,ready=readinessState(readiness),b=bucket(identity,c.salt);
+    const c=normalizeConfig(config),requested=STAGES.includes(requestedStage)?requestedStage:c.stage,ready=readinessState(readiness),b=bucket(identity,c.salt);
     if(c.killSwitch)return{engine:'v8',stage:'fallback',reason:'kill_switch',bucket:b,readiness:ready,path:c.v8Path};
     if(requested==='preview')return{engine:'v9',stage:'preview',reason:'preview_isolated',bucket:b,readiness:ready,path:c.previewPath};
     if(c.requireReadiness&&ready!=='READY')return{engine:'v8',stage:'fallback',reason:ready==='BLOCKED'?'readiness_blocked':'readiness_missing',bucket:b,readiness:ready,path:c.v8Path};
