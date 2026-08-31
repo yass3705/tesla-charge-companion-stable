@@ -20,6 +20,7 @@ TARGETS={
  'Oberhessische Versorgungsbetriebe AG':{'minSites':120,'requireFullCoverage':True},
  'WEMAG AG':{'minSites':90,'requireFullCoverage':True},
  'Stadtwerke Neuss Energie und Wasser GmbH':{'minSites':90,'requireFullCoverage':True},
+ 'infra fürth service gmbh':{'minSites':100,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
