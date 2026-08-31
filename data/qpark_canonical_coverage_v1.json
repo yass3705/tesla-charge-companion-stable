@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "qpark-canonical-coverage-france",
+  "networkId": "qpark",
+  "verifiedAt": "2026-09-01",
+  "coverageStatus": "partial_ready",
+  "sourceAudit": {
+    "workflowRunId": 33450424952,
+    "artifactId": 9780101817,
+    "conclusion": "success"
+  },
+  "summary": {
+    "canonicalStationCount": 283,
+    "canonicalPdcCount": 1937,
+    "eligibleIziviaPdcCount": 1925,
+    "blockedOtherCpoPdcCount": 12,
+    "rankableCoveredStationCount": 282,
+    "rankableCoveredPdcCount": 1925,
+    "rankableOfferCount": 1925,
+    "referenceOfferCount": 1925,
+    "materializedOfferCount": 3850,
+    "unresolvedEligiblePdcCount": 0,
+    "physicalInventoryMutationCount": 0
+  },
+  "pricing": {
+    "rankableOffer": "Pass IZIVIA Access",
+    "connectionFeeEur": 1.20,
+    "pricePerKwhEur": 0.55,
+    "cardFeeEurOneTime": 15.0,
+    "monthlyFeeEur": 0.0,
+    "defaultSelected": false,
+    "payNow": "reference_only_tariff_unpublished"
+  },
+  "safety": {
+    "requireTariffNetworkId": "qpark",
+    "requirePhysicalOperatorId": "izivia",
+    "blockedPhysicalOperator": {
+      "electraPdcCount": 12
+    },
+    "parkingExcludedFromChargingTariff": true,
+    "otherMspTariffsRemainSeparate": true
+  },
+  "notes": [
+    "All IZIVIA-operated canonical Q-Park PDCs are covered by the opt-in Pass IZIVIA Access offer.",
+    "The 12 Q-Park-branded PDCs operated by Electra are deliberately excluded and must use the Electra tariff layer.",
+    "PayNow remains reference-only because Q-Park does not publish the PayNow charging price on the verified source."
+  ]
+}
