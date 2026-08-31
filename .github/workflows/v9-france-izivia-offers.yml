@@ -18,7 +18,7 @@ on:
       - 'data/v9/france-static/**'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   compile:
@@ -45,6 +45,18 @@ jobs:
           assert all(o['pricing']['pricePerKwh'] in (0.38,0.44) for o in p['directOffers'])
           print(json.dumps(p['sourceEvidence']['stats']))
           PY
+      - name: Publish compiled IZIVIA offers on V9 branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/refactor/unified-data-engine-v9'
+        run: |
+          if git diff --quiet -- data/v9/france-izivia-offers.json; then
+            echo 'IZIVIA offers already current'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-izivia-offers.json
+          git commit -m 'data(v9): publish exact IZIVIA MAMP offers'
+          git push
       - name: Upload compiled IZIVIA offers
         uses: actions/upload-artifact@v4
         with:
