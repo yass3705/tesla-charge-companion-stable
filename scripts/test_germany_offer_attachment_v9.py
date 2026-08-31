@@ -9,18 +9,23 @@ def matches(operator):
  return [x for x in offers if any(a.casefold()==o for a in x.get('operatorAliases',[])) or any(a.casefold()==o for a in x.get('networkAliases',[]))]
 
 def providers(operator): return {x['provider'] for x in matches(operator)}
-fast=providers('Fastned');ion=providers('IONITY');aral=providers('Aral pulse');enbw=providers('EnBW mobility+');swu=providers('SWU Energie GmbH')
+fast=providers('Fastned');ion=providers('IONITY');aral=providers('Aral pulse');enbw=providers('EnBW mobility+');swu=providers('SWU Energie GmbH');west=providers('Westfalen AG & Co. KG')
 assert fast and all('Fastned' in x for x in fast),fast
 assert ion and all('IONITY' in x for x in ion),ion
 assert aral and all('Aral pulse' in x for x in aral),aral
 assert enbw and all('EnBW mobility+' in x for x in enbw),enbw
 assert swu and all('SWU' in x for x in swu),swu
+assert west and all('Westfalen' in x for x in west),west
 assert not providers('Tesla'), 'Tesla must never attach Germany non-Tesla direct offers'
 assert {'fastned-de-standard','fastned-de-app-promo','fastned-gold'} <= {x['selectionId'] for x in matches('Fastned')}
 assert {'ionity-de-direct','ionity-de-go','ionity-motion','ionity-power'} <= {x['selectionId'] for x in matches('IONITY')}
 assert {'aral-pulse-de-ad-hoc','aral-pulse-klassik','aral-pulse-extra','aral-pulse-adac-e-charge'} <= {x['selectionId'] for x in matches('Aral pulse')}
 assert {'enbw-mobility-plus-s','enbw-mobility-plus-m','enbw-mobility-plus-l'} == {x['selectionId'] for x in matches('EnBW mobility+')}
 assert {'swu-de-ad-hoc','swu-ladestrom-classic'} == {x['selectionId'] for x in matches('SWU Energie GmbH')}
+assert {'westfalen-service-card-echarge'} == {x['selectionId'] for x in matches('Westfalen AG & Co. KG')}
 assert all(x.get('directOperatorOnly') is True for x in matches('EnBW mobility+'))
 assert all(x.get('directOperatorOnly') is True for x in matches('SWU Energie GmbH'))
-print(json.dumps({'Fastned':len(matches('Fastned')),'IONITY':len(matches('IONITY')),'Aral pulse':len(matches('Aral pulse')),'EnBW':len(matches('EnBW mobility+')),'SWU':len(matches('SWU Energie GmbH'))},indent=2))
+assert all(x.get('directOperatorOnly') is True for x in matches('Westfalen AG & Co. KG'))
+assert all(x.get('eligibility',{}).get('businessOnly') is True for x in matches('Westfalen AG & Co. KG'))
+assert not matches('MER Germany GmbH'), 'Westfalen roaming tariffs must not attach as direct MER offers'
+print(json.dumps({'Fastned':len(matches('Fastned')),'IONITY':len(matches('IONITY')),'Aral pulse':len(matches('Aral pulse')),'EnBW':len(matches('EnBW mobility+')),'SWU':len(matches('SWU Energie GmbH')),'Westfalen':len(matches('Westfalen AG & Co. KG'))},indent=2))
