@@ -1,0 +1,59 @@
+name: V9 manual enrollment safety
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/v9/enrollment-engine.js'
+      - 'assets/v9/whitelist-engine.js'
+      - 'assets/v9/canary-identity.js'
+      - 'assets/v9/canary-telemetry.js'
+      - 'data/v9/whitelist-config.json'
+      - 'v9-app/**'
+      - 'tests/v9-manual-enrollment-flow.test.cjs'
+      - '.github/workflows/v9-manual-enrollment-test.yml'
+  push:
+    branches: [main, 'refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/enrollment-engine.js'
+      - 'assets/v9/whitelist-engine.js'
+      - 'assets/v9/canary-identity.js'
+      - 'assets/v9/canary-telemetry.js'
+      - 'data/v9/whitelist-config.json'
+      - 'v9-app/**'
+      - 'tests/v9-manual-enrollment-flow.test.cjs'
+      - '.github/workflows/v9-manual-enrollment-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  enrollment-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: |
+          node --check assets/v9/enrollment-engine.js
+          node --check v9-app/app.js
+          node --check tests/v9-manual-enrollment-flow.test.cjs
+      - name: Manual enrollment flow
+        run: node tests/v9-manual-enrollment-flow.test.cjs
+      - name: Whitelist remains inactive by default
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const w=JSON.parse(fs.readFileSync('data/v9/whitelist-config.json','utf8'));
+          if(w.enabled!==false)throw new Error('whitelist must remain disabled by default');
+          if(!Array.isArray(w.identities)||w.identities.length!==0)throw new Error('versioned whitelist must remain empty');
+          console.log('Manual enrollment defaults remain safe');
+          NODE
+      - name: Candidate enrollment UI present
+        run: |
+          grep -q 'copyIdentity' v9-app/index.html
+          grep -q 'copyEnrollment' v9-app/index.html
+          grep -q 'enrollment-engine.js' v9-app/index.html

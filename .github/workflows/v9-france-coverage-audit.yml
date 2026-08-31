@@ -1,0 +1,49 @@
+name: V9 France coverage audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'data/v9/source-registry.json'
+      - 'data/v9/france-*-offers.json'
+      - 'data/v9/france-static/**'
+      - 'tests/v9-france-coverage-audit.cjs'
+      - '.github/workflows/v9-france-coverage-audit.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'data/v9/source-registry.json'
+      - 'data/v9/france-*-offers.json'
+      - 'data/v9/france-static/**'
+      - 'tests/v9-france-coverage-audit.cjs'
+      - '.github/workflows/v9-france-coverage-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run France national tariff coverage audit
+        run: node tests/v9-france-coverage-audit.cjs | tee france-coverage-audit.json
+      - name: Verify IZIVIA exact source contribution
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const p=JSON.parse(fs.readFileSync('data/v9/france-izivia-offers.json','utf8'));
+          const pdcs=new Set(p.directOffers.flatMap(o=>o.evseIds||[]));
+          if(pdcs.size!==108) throw new Error(`Expected 108 exact IZIVIA MAMP PDCs, got ${pdcs.size}`);
+          if(p.sourceEvidence.stats.eligible22Pdcs!==48||p.sourceEvidence.stats.eligible24Pdcs!==60) throw new Error('Unexpected MAMP class coverage');
+          console.log(`IZIVIA_EXACT_PDC_COUNT=${pdcs.size}`);
+          NODE
+      - name: Upload France coverage audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-france-coverage-audit
+          path: france-coverage-audit.json
+          if-no-files-found: error
+          retention-days: 7

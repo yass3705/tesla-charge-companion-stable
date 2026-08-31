@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict');
+const Window=require('../assets/v9/device-test-window-engine.js');
+const baseSelf={schemaVersion:1,enabled:false,requireReadiness:true,readinessApproved:false,tokenSha256:'',tokenVersion:'v1',expiresAt:null,maxGrantMinutes:60};
+const baseReady={schemaVersion:1,verdict:'BLOCKED',ready:false,updatedAt:'2026-08-31T09:25:00Z',reason:'closed'};
+const basePolicy={schemaVersion:1,enabled:false,maxWindowMinutes:60,minimumRuns:10,minimumSuccessfulRuns:10,maxFailureRate:.05,maxRoutingErrors:0,maxSourceErrors:0,maxAverageDurationMs:12000,requireReadiness:true,requireCanaryPercentZero:true,autoCloseOnRollback:true};
+const rollout={stage:'preview',canaryPercent:0,killSwitch:false,productionPath:'v9-app/',canaryPath:'v9-app/'};
+const hash='a'.repeat(64),now=new Date('2026-08-31T12:00:00Z');
+const open=Window.openPlan({tokenSha256:hash,tokenVersion:'test-1',now,windowMinutes:30,selfEnrollment:baseSelf,readiness:baseReady,devicePolicy:basePolicy,rollout});
+assert.equal(open.action,'OPEN');assert.equal(open.windowMinutes,30);assert.equal(open.invariants.canaryPercent,0);assert.equal(open.invariants.tokenPlaintextStored,false);
+assert.equal(open.files['data/v9/self-enrollment-config.json'].enabled,true);assert.equal(open.files['data/v9/self-enrollment-config.json'].tokenSha256,hash);assert.equal(open.files['data/v9/self-enrollment-config.json'].readinessApproved,true);
+assert.equal(open.files['data/v9/access-readiness.json'].verdict,'READY');assert.equal(open.files['data/v9/access-readiness.json'].ready,true);assert.equal(open.files['data/v9/device-test-policy.json'].enabled,true);
+assert.throws(()=>Window.openPlan({tokenSha256:hash,tokenVersion:'x',rollout:{stage:'preview',canaryPercent:1}}),/canary/);
+assert.throws(()=>Window.openPlan({tokenSha256:'bad',tokenVersion:'x',rollout}),/SHA-256/);
+const close=Window.closePlan({now:new Date(open.expiresAt),selfEnrollment:open.files['data/v9/self-enrollment-config.json'],readiness:open.files['data/v9/access-readiness.json'],devicePolicy:open.files['data/v9/device-test-policy.json'],rollout});
+assert.equal(close.action,'CLOSE');assert.equal(close.files['data/v9/self-enrollment-config.json'].enabled,false);assert.equal(close.files['data/v9/self-enrollment-config.json'].tokenSha256,'');assert.equal(close.files['data/v9/self-enrollment-config.json'].expiresAt,null);assert.equal(close.files['data/v9/access-readiness.json'].verdict,'BLOCKED');assert.equal(close.files['data/v9/access-readiness.json'].ready,false);assert.equal(close.files['data/v9/device-test-policy.json'].enabled,false);assert.equal(close.invariants.tokenHashCleared,true);assert.equal(close.invariants.readinessBlocked,true);
+console.log(JSON.stringify({ok:true,module:'tcc-v9-device-test-window-engine',checks:['open-plan','zero-canary','no-plaintext','ready-window','close-plan','hash-cleared','readiness-blocked']},null,2));

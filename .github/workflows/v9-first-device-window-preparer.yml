@@ -1,0 +1,35 @@
+name: V9 first device window preparer safety
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/v9-prepare-first-device-window.cjs'
+      - 'tests/v9-first-device-window-preparer.test.cjs'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+  push:
+    branches: [main, refactor/unified-data-engine-v9]
+    paths:
+      - 'scripts/v9-prepare-first-device-window.cjs'
+      - 'tests/v9-first-device-window-preparer.test.cjs'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+  workflow_dispatch:
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: node --check scripts/v9-prepare-first-device-window.cjs && node --check tests/v9-first-device-window-preparer.test.cjs
+      - name: Preparer contract
+        run: node tests/v9-first-device-window-preparer.test.cjs
+      - name: Closed state invariant
+        run: node scripts/v9-first-device-test-runbook.cjs

@@ -1,0 +1,115 @@
+name: V9 sync Italy with Ewiva
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-ewiva-italy
+    paths:
+      - scripts/v9_enrich_italy_ewiva_offers.py
+      - tests/v9-ewiva-italy-runtime.test.cjs
+      - .github/workflows/v9-sync-italy-ewiva.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DATA_REPO: yass3705/tesla-charge-companion-data-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical Italy V9 Enel candidate
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list --repo "$DATA_REPO" --workflow italy-v9-enel-overlay.yml --branch research/italy-consolidation-v9-a2a --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/italy
+          gh run download "$RUN_ID" --repo "$DATA_REPO" -n italy-v9-enel-overlay-candidate -D /tmp/italy
+          INPUT="$(find /tmp/italy -type f -name italy_v9_candidate.json.gz | head -n1)"
+          test -n "$INPUT" && test -s "$INPUT"
+          cp "$INPUT" /tmp/italy_v9_candidate.json.gz
+          echo "Using canonical Enel run $RUN_ID"
+
+      - name: Download canonical Ewiva Enel eMSP candidate
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list --repo "$DATA_REPO" --workflow ewiva-enel-emsp-italy-v9.yml --branch research/ewiva-v9-enel-emsp --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/ewiva
+          gh run download "$RUN_ID" --repo "$DATA_REPO" -n ewiva-enel-emsp-italy-v9-candidate -D /tmp/ewiva
+          INPUT="$(find /tmp/ewiva -type f -name ewiva_enel_emsp_italy_candidate.json.gz | head -n1)"
+          test -n "$INPUT" && test -s "$INPUT"
+          cp "$INPUT" /tmp/ewiva_enel_emsp_italy_candidate.json.gz
+          echo "Using canonical Ewiva run $RUN_ID"
+
+      - name: Build baseline Italy catalogue and offers
+        run: python scripts/v9_build_italy_catalog.py --input /tmp/italy_v9_candidate.json.gz
+
+      - name: Enrich Enel X Way offers
+        run: python scripts/v9_enrich_italy_enel_offers.py --input /tmp/italy_v9_candidate.json.gz
+
+      - name: Enrich Ewiva Enel eMSP offers
+        run: python scripts/v9_enrich_italy_ewiva_offers.py --ewiva /tmp/ewiva_enel_emsp_italy_candidate.json.gz
+
+      - name: Validate Ewiva publication counts and semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          offers=json.loads(Path('data/v9/italy-offers.json').read_text())
+          report=json.loads(Path('data/v9/italy-build-report.json').read_text())
+          manifest=json.loads(Path('data/v9/italy-static/manifest.json').read_text())
+          assert manifest['stationCount']==29696
+          assert report['directOffers']==48409
+          assert report['subscriptionOffers']==50008
+          assert report['emspOffers']==3959
+          assert report['ewivaEnelEmspOffers']==1678
+          assert report['ewivaPlugAndGoSuperOffers']==1678
+          assert report['ewivaExplorerOffers']==0
+          assert report['ewivaTariffClasses']=={'AC':7,'DC':31,'HPC':1640}
+          ewiva=[o for o in offers['emspOffers'] if str(o.get('id','')).startswith('it:emsp:enel-on-your-way-ewiva:')]
+          assert len(ewiva)==1678
+          assert all(o['provider']=='Enel On Your Way' for o in ewiva)
+          assert all(o['metadata']['network']=='Ewiva' for o in ewiva)
+          assert all(o['metadata']['rankableAsCpoDirect'] is False for o in ewiva)
+          assert all(o['pricing']['priceSelectionBasis']=='session_start_local_time' for o in ewiva)
+          assert all(o['pricing']['postChargeFeeUnknown'] is True for o in ewiva)
+          sup=[o for o in offers['subscriptionOffers'] if o.get('selectionId')=='enel_plug_and_go_super' and o.get('metadata',{}).get('network')=='Ewiva']
+          exp=[o for o in offers['subscriptionOffers'] if o.get('selectionId')=='enel_plug_and_go_explorer' and o.get('metadata',{}).get('network')=='Ewiva']
+          assert len(sup)==1678 and len(exp)==0
+          assert not any(o.get('provider')=='Ewiva' for o in offers['directOffers'])
+          print(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Test complete Italy runtime
+        run: node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Test Ewiva runtime semantics
+        run: node tests/v9-ewiva-italy-runtime.test.cjs
+
+      - name: Publish generated Italy V9 data on Ewiva branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-static data/v9/italy-offers.json data/v9/italy-build-report.json
+          if git diff --cached --quiet; then
+            echo 'Italy Ewiva generated data already current'
+            exit 0
+          fi
+          git commit -m 'data(v9): publish Italy catalogue with Ewiva'
+          git push origin "HEAD:${GITHUB_REF_NAME}"

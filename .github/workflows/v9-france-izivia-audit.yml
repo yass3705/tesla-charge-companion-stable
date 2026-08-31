@@ -2,6 +2,12 @@ name: V9 France IZIVIA network audit
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tests/v9-france-izivia-network-audit.cjs'
+      - '.github/workflows/v9-france-izivia-audit.yml'
+      - 'data/v9/france-static/**'
   push:
     branches: ['refactor/unified-data-engine-v9']
     paths:
@@ -21,4 +27,14 @@ jobs:
       - name: Validate audit syntax
         run: node --check tests/v9-france-izivia-network-audit.cjs
       - name: Audit exact PAN IZIVIA network identities
+        env:
+          IZIVIA_AUDIT_REPORT: artifacts/izivia-network-audit.json
         run: node tests/v9-france-izivia-network-audit.cjs
+      - name: Upload IZIVIA network audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: izivia-network-audit
+          path: artifacts/izivia-network-audit.json
+          if-no-files-found: error
+          retention-days: 7

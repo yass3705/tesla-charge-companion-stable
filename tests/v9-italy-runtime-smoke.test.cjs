@@ -20,9 +20,9 @@ const normalized=Direct.normalizePayload(offers);
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
 assert.equal(offers.directOffers.length,48409);
-assert.equal(offers.subscriptionOffers.length,48330);
-assert.equal(offers.emspOffers.length,2281);
-assert.equal(normalized.offerRules.length,48409+48330+2281);
+assert.equal(offers.subscriptionOffers.length,50008);
+assert.equal(offers.emspOffers.length,3959);
+assert.equal(normalized.offerRules.length,48409+50008+3959);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -75,12 +75,12 @@ assert.ok(enel.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_ti
 assert.ok(enel.every(o=>o.metadata?.timeZone==='Europe/Rome'));
 const superOffers=offers.subscriptionOffers.filter(o=>o.selectionId==='enel_plug_and_go_super');
 const explorerOffers=offers.subscriptionOffers.filter(o=>o.selectionId==='enel_plug_and_go_explorer');
-assert.equal(superOffers.length,22783);
+assert.equal(superOffers.length,24461);
 assert.equal(explorerOffers.length,22783);
 assert.ok(superOffers.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
 assert.ok(explorerOffers.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
 
-// Use an AC Enel EVSE so exact expected prices are deterministic.
+// Use an AC Enel X Way EVSE so exact expected prices are deterministic.
 const enelAcRaw=enel.find(o=>o.metadata?.tariffClass==='AC');
 assert.ok(enelAcRaw,'expected at least one AC Enel offer');
 const enelEid=enelAcRaw.evseIds[0];
@@ -104,11 +104,20 @@ evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,c
 assert.equal(evaluated.best.subscriptionId,'enel_plug_and_go_explorer');
 assert.equal(evaluated.best.total,9.6);
 
+const ewivaEmsp=offers.emspOffers.filter(o=>String(o.id||'').startsWith('it:emsp:enel-on-your-way-ewiva:'));
+const ewivaSuper=superOffers.filter(o=>o.metadata?.network==='Ewiva');
+const ewivaExplorer=explorerOffers.filter(o=>o.metadata?.network==='Ewiva');
+assert.equal(ewivaEmsp.length,1678);
+assert.equal(ewivaSuper.length,1678);
+assert.equal(ewivaExplorer.length,0);
+assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false));
+
 assert.ok(normalized.offerRules.some(o=>o.kind==='direct'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='atlante_go'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_super'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_explorer'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='NextCharge'&&o.directOperatorOnly===false));
+assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='Enel On Your Way'&&o.directOperatorOnly===false));
 
 const states=new Set(rows.map(r=>String(r[10]||'')));
 assert.ok(states.has('OPERATIONAL'));
@@ -129,6 +138,8 @@ console.log(JSON.stringify({
   subscriptions:offers.subscriptionOffers.length,
   enelSuper:superOffers.length,
   enelExplorer:explorerOffers.length,
+  ewivaEmsp:ewivaEmsp.length,
+  ewivaSuper:ewivaSuper.length,
   emsp:offers.emspOffers.length,
   statuses:[...states].sort()
 },null,2));

@@ -1,0 +1,41 @@
+name: V9 self enrollment safety
+
+on:
+  pull_request:
+    paths:
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'data/v9/self-enrollment-config.json'
+      - 'tests/v9-self-enrollment.test.cjs'
+      - '.github/workflows/v9-self-enrollment.yml'
+  push:
+    branches: [main, refactor/unified-data-engine-v9]
+    paths:
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'data/v9/self-enrollment-config.json'
+      - 'tests/v9-self-enrollment.test.cjs'
+      - '.github/workflows/v9-self-enrollment.yml'
+  workflow_dispatch:
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax
+        run: node --check assets/v9/self-enrollment-engine.js
+      - name: Self enrollment contract
+        run: node tests/v9-self-enrollment.test.cjs
+      - name: Default config remains closed
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const c=JSON.parse(fs.readFileSync('data/v9/self-enrollment-config.json','utf8'));
+          if(c.enabled!==false) throw new Error('self enrollment must remain disabled by default');
+          if(c.readinessApproved!==false) throw new Error('readiness approval must remain false by default');
+          if(c.tokenSha256) throw new Error('no activation token hash may be committed in the default closed config');
+          if(c.expiresAt!==null) throw new Error('default token expiry must be null');
+          console.log('closed-by-default config OK');
+          NODE
