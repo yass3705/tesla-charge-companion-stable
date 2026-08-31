@@ -7,10 +7,12 @@ on:
       - 'data/v9/germany-direct-offers-aral-extension.json'
       - 'data/v9/germany-direct-offers-enbw-extension.json'
       - 'data/v9/germany-direct-offers-swu-extension.json'
+      - 'data/v9/germany-direct-offers-westfalen-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
       - 'scripts/test_germany_swu_direct_offers_v9.py'
+      - 'scripts/test_germany_westfalen_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -33,3 +35,5 @@ jobs:
         run: python scripts/test_germany_offer_attachment_v9.py build/germany-direct-offers.json
       - name: Validate SWU direct offers
         run: python scripts/test_germany_swu_direct_offers_v9.py
+      - name: Validate Westfalen direct offers
+        run: python scripts/test_germany_westfalen_direct_offers_v9.py
