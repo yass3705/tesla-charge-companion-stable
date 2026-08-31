@@ -17,6 +17,7 @@ TARGETS={
  'Stadtwerke Würzburg':{'minSites':80,'requireFullCoverage':True},
  'Q1 Energie AG':{'minSites':100,'requireFullCoverage':True},
  'Stadtwerke Göttingen AG':{'minSites':100,'requireFullCoverage':True},
+ 'Oberhessische Versorgungsbetriebe AG':{'minSites':120,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
