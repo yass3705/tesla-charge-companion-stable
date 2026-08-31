@@ -5,6 +5,7 @@ on:
   push:
     branches: [feature/v9-ewiva-italy]
     paths:
+      - scripts/v9_enrich_italy_enel_offers.py
       - scripts/v9_enrich_italy_ewiva_offers.py
       - tests/v9-ewiva-italy-runtime.test.cjs
       - tests/v9-italy-runtime-smoke.test.cjs
