@@ -18,6 +18,7 @@ on:
       - 'data/v9/germany-direct-offers-stadtwerke-goettingen-extension.json'
       - 'data/v9/germany-direct-offers-ovag-extension.json'
       - 'data/v9/germany-direct-offers-wemag-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-neuss-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
@@ -33,6 +34,7 @@ on:
       - 'scripts/test_germany_stadtwerke_goettingen_direct_offers_v9.py'
       - 'scripts/test_germany_ovag_direct_offers_v9.py'
       - 'scripts/test_germany_wemag_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -77,3 +79,5 @@ jobs:
         run: python scripts/test_germany_ovag_direct_offers_v9.py
       - name: Validate WEMAG direct offers
         run: python scripts/test_germany_wemag_direct_offers_v9.py
+      - name: Validate Stadtwerke Neuss direct offers
+        run: python scripts/test_germany_stadtwerke_neuss_direct_offers_v9.py
