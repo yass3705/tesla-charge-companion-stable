@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import gzip,json
-from datetime import datetime,timezone
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -52,7 +51,7 @@ def main():
     assert stats['eligible22Pdcs']>0 and stats['eligible24Pdcs']>0,'Expected both official MAMP tariff classes'
     assert all(o['evseIds'] for o in offers),'Every IZIVIA rule must be exact-EVSE scoped'
     payload={
-        'schemaVersion':1,'country':'FR','generatedAt':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+        'schemaVersion':1,'country':'FR','generatedAt':manifest.get('generatedAt'),
         'mode':'official_exact_mamp_evse','policy':{
             'physicalInventoryCreated':False,'exactNetworkRequired':'MAMP','exactEvseRequired':True,
             'geographicFallback':False,'subscriptionsOptIn':True,'unsupportedPowersFailClosed':True
