@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "enabled": true,
+  "enabled": false,
   "maxWindowMinutes": 60,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "Temporary first-device V9 test policy window. Close after PASS or ROLLBACK. Random canary remains 0%."
+  "notes": "First-device V9 test policy closed after mobile performance observation. Random canary remains 0%."
 }
