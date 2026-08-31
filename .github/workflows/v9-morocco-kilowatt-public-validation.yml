@@ -1,0 +1,78 @@
+name: V9 Morocco Kilowatt public validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-kilowatt-public-validation.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-kilowatt-public-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate Kilowatt public endpoint, snapshot policy and V9 adapter
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const snapshotUrl='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json';
+          const endpoint='https://kilowatt.ma/api/charging-stations';
+          const source={id:'morocco-kilowatt-public',profile:'kilowatt',url:snapshotUrl};
+          const validGps=(lat,lon)=>Number.isFinite(Number(lat))&&Number.isFinite(Number(lon))&&Number(lat)>=20&&Number(lat)<=37&&Number(lon)>=-18&&Number(lon)<=0;
+          (async()=>{
+            const [snapshotRes,liveRes]=await Promise.all([
+              fetch(snapshotUrl,{cache:'no-cache'}),
+              fetch(endpoint,{cache:'no-cache',headers:{accept:'application/json'}})
+            ]);
+            assert(snapshotRes.ok,'committed Kilowatt snapshot reachable');
+            assert(liveRes.ok,`Kilowatt public endpoint reachable (${liveRes.status})`);
+            const [snapshot,live]=await Promise.all([snapshotRes.json(),liveRes.json()]);
+            assert.equal(snapshot?.policy?.read_only,true,'snapshot declares read-only collection');
+            assert.equal(snapshot?.policy?.public_get_only,true,'snapshot declares public GET-only collection');
+            assert.equal(snapshot?.modeling?.cpo_operator,'Kilowatt','CPO preserved');
+            assert.equal(snapshot?.modeling?.app_source_access_network,'Kilowatt public web map','app/access source preserved');
+            assert.equal(snapshot?.modeling?.status_source,'Kilowatt public web map','status source preserved');
+            assert.equal(snapshot?.summary?.raw_station_records,47,'snapshot raw station invariant');
+            assert.equal(snapshot?.summary?.production_candidates,43,'snapshot production invariant');
+            assert.equal(snapshot?.summary?.excluded_records,4,'snapshot exclusion invariant');
+            assert(Array.isArray(snapshot?.stations)&&snapshot.stations.length===47,'snapshot has 47 records');
+            const prod=snapshot.stations.filter(x=>x.production_candidate===true);
+            assert.equal(prod.length,43,'snapshot has 43 production candidates');
+            assert(prod.every(x=>validGps(x.latitude,x.longitude)),'all Kilowatt production GPS usable in Morocco');
+            assert(prod.every(x=>x.cpo_operator==='Kilowatt'),'production CPO remains Kilowatt');
+            assert(prod.every(x=>x.app_source_access_network==='Kilowatt public web map'),'production app/access remains Kilowatt public web map');
+            assert(prod.every(x=>x.status_source==='Kilowatt public web map'),'production status source remains Kilowatt public web map');
+            assert(prod.every(x=>x.tariff_channel==null),'no unverified Kilowatt tariff channel promoted');
+
+            const normalized=adapter.normalizeKilowattDataset(snapshot,{sourceId:'morocco-kilowatt-public'});
+            assert.equal(normalized.length,43,'V9 adapter emits 43 Kilowatt stations');
+            assert(normalized.every(x=>x.physicalOperator?.name==='Kilowatt'),'V9 CPO preserved');
+            assert(normalized.every(x=>x.access?.appSource==='Kilowatt public web map'&&x.access?.accessNetwork==='Kilowatt'),'V9 app/access separation preserved');
+            assert(normalized.every(x=>Array.isArray(x.offers)&&x.offers.length===0),'V9 does not invent Kilowatt tariffs');
+
+            const liveRows=Array.isArray(live)?live:(Array.isArray(live?.stations)?live.stations:(Array.isArray(live?.data)?live.data:null));
+            assert(Array.isArray(liveRows),'live Kilowatt endpoint exposes station array');
+            const liveIds=new Set(liveRows.map(x=>String(x._id??x.id??x.stationId??'')).filter(Boolean));
+            const snapshotIds=new Set(snapshot.stations.map(x=>String(x.id)));
+            const overlap=[...snapshotIds].filter(id=>liveIds.has(id));
+            assert(overlap.length>=Math.min(38,snapshotIds.size),'live endpoint still substantially matches committed station identities');
+
+            console.log(JSON.stringify({ok:true,endpoint,liveRecords:liveRows.length,snapshotRecords:47,productionCandidates:43,idOverlap:overlap.length,v9Stations:normalized.length,tariffPolicy:'unresolved; no tariff offers emitted'},null,2));
+          })().catch(e=>{console.error(e);process.exit(1);});
+          NODE
