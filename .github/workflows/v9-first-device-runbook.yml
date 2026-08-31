@@ -1,0 +1,42 @@
+name: V9 first device runbook safety
+
+on:
+  pull_request:
+    paths:
+      - 'assets/v9/rollout-engine.js'
+      - 'assets/v9/access-router-engine.js'
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'assets/v9/device-test-engine.js'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'docs/v9-first-device-test-runbook.md'
+      - '.github/workflows/v9-first-device-runbook.yml'
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: |
+          node --check assets/v9/rollout-engine.js
+          node --check assets/v9/access-router-engine.js
+          node --check scripts/v9-first-device-test-runbook.cjs
+      - name: Closed-state runbook precheck
+        run: node scripts/v9-first-device-test-runbook.cjs
+      - name: No clear token committed
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const c=JSON.parse(fs.readFileSync('data/v9/self-enrollment-config.json','utf8'));
+          if(c.enabled!==false) throw new Error('self-enroll must remain disabled in repository preparation state');
+          if(String(c.tokenSha256||'').trim()) throw new Error('token hash must remain empty before explicit test opening');
+          const r=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
+          if(Number(r.canaryPercent)!==0) throw new Error('random canary must remain at 0%');
+          NODE
