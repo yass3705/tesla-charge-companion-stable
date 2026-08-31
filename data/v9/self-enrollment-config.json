@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "enabled": true,
+  "enabled": false,
   "requireReadiness": true,
-  "readinessApproved": true,
-  "tokenSha256": "627c87a9662540fdea853e47f24f0fd8cc85065eca0755a386ed1bd853e92647",
-  "tokenVersion": "test-20260831133840",
-  "expiresAt": "2026-08-31T14:38:40Z",
+  "readinessApproved": false,
+  "tokenSha256": "",
+  "tokenVersion": "test-20260831133840-closed",
+  "expiresAt": null,
   "maxGrantMinutes": 60,
-  "notes": "Temporary first-device test window. Raw token is not stored in the repository. Close after PASS/ROLLBACK or expiry."
+  "notes": "Closed after preflight: no isolated served test environment was available yet. Raw token was never committed."
 }
