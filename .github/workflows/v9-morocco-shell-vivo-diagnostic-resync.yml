@@ -1,0 +1,87 @@
+name: V9 Morocco Shell Vivo diagnostic policy (resync)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-resync-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-shell-vivo-diagnostic.js'
+      - '.github/workflows/v9-morocco-shell-vivo-diagnostic-resync.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public data-lab read-only
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          persist-credentials: false
+      - name: Validate Shell Recharge / Vivo Energy diagnostic-only semantics
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const adapter=require('./assets/v9/adapters/morocco-shell-vivo-diagnostic.js');
+          const read=p=>JSON.parse(fs.readFileSync(`./data-lab/reports/morocco/shell-vivo/${p}`,'utf8'));
+
+          const alReport=read('al-jazira-evidence-2026-08-30.json');
+          assert.equal(alReport.country,'MA');
+          assert.equal(alReport.station.site_brand,'Shell');
+          assert.equal(alReport.station.network_brand,'Shell Recharge');
+          assert.equal(alReport.station.operator_cpo,null);
+          assert.equal(alReport.station.tariff_channel,null);
+          assert.equal(alReport.station.status_source,null);
+          assert.equal(alReport.production_recommendation.production_ready_as_cpo_station,false);
+          assert.equal(alReport.policy.read_only_research,true);
+          assert.equal(alReport.policy.no_login,true);
+          assert.equal(alReport.policy.no_credentials,true);
+          assert.equal(alReport.policy.no_mutations,true);
+
+          const al=adapter.normalizeShellVivoDiagnostic(alReport,{sourceId:'morocco-shell-vivo-al-jazira-readonly'});
+          assert.equal(al.name,'Shell Al Jazira');
+          assert.equal(al.latitude,33.779558);
+          assert.equal(al.longitude,-7.232679);
+          assert.equal(al.physicalOperator,null,'Vivo Energy project/site context must not be promoted to technical CPO');
+          assert.equal(al.access.siteBrand,'Shell');
+          assert.equal(al.access.appSource,null,'no Morocco-specific Shell app payload was validated');
+          assert.equal(al.access.accessNetwork,'Shell Recharge');
+          assert.deepEqual(al.offers,[],'secondary free evidence must not become a production tariff');
+          assert.equal(al.status.state,'unknown');
+          assert.equal(al.status.statusSource,null);
+          assert.equal(al.productionEligible,false);
+          assert.equal(al.diagnosticOnly,true);
+          assert.equal(al.diagnosticEvidence.secondaryFreeEvidence,true);
+          assert.equal(al.diagnosticEvidence.connectorPowerCandidate.rapid_power_kw,120);
+
+          const melReport=read('melloussa-ev-charging-conflict-2026-08-29.json');
+          assert.equal(melReport.assessment.meaningful_conflict,true);
+          assert.equal(melReport.assessment.production_ready,false);
+          assert.equal(melReport.modeling.site_brand,'Shell');
+          assert.equal(melReport.modeling.operator_cpo,'unresolved');
+          assert.equal(melReport.modeling.tariff_channel,'unresolved');
+          assert.equal(melReport.modeling.status_source,'unresolved');
+          const mel=adapter.normalizeShellVivoDiagnostic(melReport,{sourceId:'morocco-shell-vivo-melloussa-readonly'});
+          assert.equal(mel.physicalOperator,null);
+          assert.equal(mel.access.siteBrand,'Shell');
+          assert.equal(mel.access.accessNetwork,null,'Melloussa must not be promoted to Shell Recharge from conflicting evidence');
+          assert.deepEqual(mel.offers,[]);
+          assert.equal(mel.status.state,'unknown');
+          assert.equal(mel.status.statusSource,null);
+          assert.equal(mel.productionEligible,false);
+          assert.equal(mel.diagnosticOnly,true);
+
+          console.log(JSON.stringify({
+            ok:true,
+            alJazira:{name:al.name,siteBrand:al.access.siteBrand,accessNetwork:al.access.accessNetwork,physicalOperator:al.physicalOperator,offers:al.offers.length,status:al.status.state,productionEligible:al.productionEligible,diagnosticOnly:al.diagnosticOnly,secondaryPowerCandidateKw:al.diagnosticEvidence.connectorPowerCandidate.rapid_power_kw},
+            melloussa:{name:mel.name,siteBrand:mel.access.siteBrand,accessNetwork:mel.access.accessNetwork,physicalOperator:mel.physicalOperator,offers:mel.offers.length,status:mel.status.state,productionEligible:mel.productionEligible,diagnosticOnly:mel.diagnosticOnly}
+          },null,2));
+          NODE
