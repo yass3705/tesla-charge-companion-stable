@@ -21,6 +21,12 @@
       "notes": "Official Lidl Plus France network tariff is canonicalized on all current Lidl PDCs: 1,073 stations / 5,866 PDC, with zero unresolved PDC and no physical-inventory mutation. AC and current promotional DC pricing are both 0.29 EUR/kWh; Intercharge/ad-hoc payment remains separate."
     },
     {
+      "networkId": "engie-vianeo",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["scripts/materialize_france_vianeo_offers.py"],
+      "notes": "Vianeo Max is normalized on all 625 current canonical Vianeo stations / 4,171 PDC as reference-only: 9.99 EUR/month and 0.33 EUR/kWh. No offer is rankable yet because station-specific minute fees may apply and dedicated heavy-goods points are excluded by the official scope. Physical inventory remains unchanged."
+    },
+    {
       "networkId": "eborn",
       "coverageStatus": "ready",
       "artifacts": ["data/eborn_direct_tariffs_v1.json"],
