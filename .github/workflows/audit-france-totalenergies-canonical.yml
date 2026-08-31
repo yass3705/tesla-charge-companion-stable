@@ -1,0 +1,144 @@
+name: Audit France TotalEnergies canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_totalenergies_offers.py'
+      - 'scripts/test_totalenergies_materializer.py'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-totalenergies-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  totalenergies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate TotalEnergies materializer
+        run: |
+          python -m py_compile scripts/materialize_france_totalenergies_offers.py scripts/test_totalenergies_materializer.py
+          python scripts/test_totalenergies_materializer.py
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Fetch official TotalEnergies source
+        run: |
+          mkdir -p .tmp/totalenergies
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/operator_direct/totalenergies_official_france.json' \
+            --output .tmp/totalenergies/totalenergies_official_france.json
+          python - <<'PY'
+          import json
+          d=json.load(open('.tmp/totalenergies/totalenergies_official_france.json',encoding='utf-8'))
+          assert d.get('dataset')=='totalenergies-official-france'
+          assert d.get('country')=='FR'
+          assert (d.get('classification') or {}).get('singleNationalOperatorTariff') is False
+          s=(d.get('operatorDirect') or {}).get('stationServiceFrance') or {}
+          assert float(s.get('upToAndIncluding50KwEurPerKwh'))==0.52
+          assert float(s.get('over50KwEurPerKwh'))==0.62
+          o=s.get('occupationFee') or {}
+          assert float(o.get('eurPerMin'))==0.5
+          assert float(o.get('startsAfterConsecutiveConnectedMinutes'))==45
+          z=(((d.get('mobilityProvider') or {}).get('chargePlus') or {}).get('zen') or {})
+          assert float(z.get('monthlyFeeEur'))==3.9
+          assert float(z.get('discountPercent'))==15.0
+          assert float(z.get('minimumPowerKw'))==50
+          print(json.dumps({'generatedAt':d.get('generatedAt'),'stationService':s,'zen':z},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Materialize TotalEnergies canonical references
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_totalenergies_offers.py \
+            --source .tmp/totalenergies/totalenergies_official_france.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate TotalEnergies canonical scope
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/totalenergies_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/totalenergies_materialization_report.json',encoding='utf-8'))
+          s=report['summary']
+          assert s['canonicalTotalEnergiesStationCount'] >= 300
+          assert s['canonicalTotalEnergiesPdcCount'] >= 3000
+          assert s['stationServiceReferenceOfferCount']==s['canonicalTotalEnergiesPdcCount']
+          assert s['materializedReferenceOfferCount']==len(offers)
+          assert s['rankableOfferCount']==0
+          assert s['physicalInventoryMutationCount']==0
+          assert s['stationServiceUpTo50PriceEurPerKwh']==0.52
+          assert s['stationServiceOver50PriceEurPerKwh']==0.62
+          assert s['zenDiscountPercent']==15.0
+          assert s['zenFlatPricePerKwh'] is None
+          assert len({r['offerId'] for r in offers})==len(offers)
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']
+              assert sid in stations and pid in pdcs
+              assert stations[sid].get('tariffNetworkId')=='totalenergies'
+              assert pdcs[pid].get('tariffNetworkId')=='totalenergies'
+              assert row.get('tariffNetworkId')=='totalenergies'
+              assert row.get('rankable') is False
+              if row.get('subscriptionId')=='totalenergies-charge-plus-zen':
+                  assert row.get('subscriptionDiscountPercent')==15.0
+                  assert row.get('pricingRules')==[]
+                  assert 'zen_official_station_eligibility_unresolved' in row.get('blockedReasons',[])
+              else:
+                  assert 'station_service_scope_unresolved' in row.get('blockedReasons',[])
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload TotalEnergies audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-totalenergies-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/totalenergies_pdc_offers_contract_v1_1.json.gz
+            build/france_irve_offers/totalenergies_materialization_report.json
+          retention-days: 14
