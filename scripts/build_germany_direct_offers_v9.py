@@ -5,7 +5,7 @@ from pathlib import Path
 def load(p): return json.loads(Path(p).read_text())
 
 def main():
- a=argparse.ArgumentParser();a.add_argument('--base',default='data/v9/germany-direct-offers.json');a.add_argument('--extensions',nargs='*',default=['data/v9/germany-direct-offers-aral-extension.json','data/v9/germany-direct-offers-enbw-extension.json','data/v9/germany-direct-offers-swu-extension.json','data/v9/germany-direct-offers-westfalen-extension.json','data/v9/germany-direct-offers-eam-extension.json']);a.add_argument('--out',default='build/germany-direct-offers.json');x=a.parse_args()
+ a=argparse.ArgumentParser();a.add_argument('--base',default='data/v9/germany-direct-offers.json');a.add_argument('--extensions',nargs='*',default=['data/v9/germany-direct-offers-aral-extension.json','data/v9/germany-direct-offers-enbw-extension.json','data/v9/germany-direct-offers-swu-extension.json','data/v9/germany-direct-offers-westfalen-extension.json','data/v9/germany-direct-offers-eam-extension.json','data/v9/germany-direct-offers-stadtwerke-luebeck-extension.json']);a.add_argument('--out',default='build/germany-direct-offers.json');x=a.parse_args()
  base=load(x.base);offers=list(base.get('directOffers',[]));seen={o['id'] for o in offers}
  for p in x.extensions:
   d=load(p)
