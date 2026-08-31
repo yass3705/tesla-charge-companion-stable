@@ -1,167 +1,63 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse
-import gzip
-import json
+import argparse,gzip,json
 from pathlib import Path
-from typing import Any
 
 
-def load_gz(path: Path) -> dict[str, Any]:
-    with gzip.open(path, "rt", encoding="utf-8") as fh:
-        return json.load(fh)
+def load_gz(path):
+    with gzip.open(path,'rt',encoding='utf-8') as fh:return json.load(fh)
 
 
-def normalize_pricing(raw: dict[str, Any]) -> dict[str, Any]:
-    rules = raw.get("rules")
-    if raw.get("type") != "rules" or not isinstance(rules, list) or not rules:
-        raise RuntimeError("invalid Ewiva rule pricing")
-    pricing = {
-        "type": "rules",
-        "rules": rules,
-        "priceSelectionBasis": "session_start_local_time",
-        # Session-start locked offers currently bypass the generic post-charge
-        # evaluator. Fail closed for positive dwell until that engine path is
-        # explicitly wired, while retaining the validated fee in metadata.
-        "postChargeFeeUnknown": True,
-    }
-    return pricing
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument('--input',required=True)
+    ap.add_argument('--offers',default='data/v9/italy-offers.json')
+    ap.add_argument('--report',default='data/v9/italy-build-report.json')
+    args=ap.parse_args()
+    src=load_gz(Path(args.input))
+    offers_path=Path(args.offers); report_path=Path(args.report)
+    offers=json.loads(offers_path.read_text()); report=json.loads(report_path.read_text())
+    emsp_ids={str(x.get('id')) for x in offers.get('emspOffers',[])}
+    sub_ids={str(x.get('id')) for x in offers.get('subscriptionOffers',[])}
+    counts={'basic':0,'super':0,'explorer':0}; classes={}
 
+    for evse in src.get('evses',[]):
+        if str(evse.get('partyId') or '').upper()!='EWI': continue
+        eid=str(evse.get('evseId') or '').strip()
+        if not eid: continue
+        for raw in evse.get('tccV9EmspTariffs') or []:
+            if raw.get('provider')!='Enel On Your Way' or raw.get('network')!='Ewiva' or raw.get('rankable') is not True: continue
+            rules=raw.get('pricingRules') or []
+            if raw.get('pricingType')!='rules' or len(rules)!=2: raise RuntimeError(f'invalid Ewiva Basic rules {eid}')
+            cls=str(raw.get('tariffClass') or '')
+            classes[cls]=classes.get(cls,0)+1
+            oid=f'it:emsp:enel-on-your-way-ewiva:{eid}'
+            if oid not in emsp_ids:
+                offers.setdefault('emspOffers',[]).append({'id':oid,'provider':'Enel On Your Way','evseIds':[eid],'verifiedScope':'exact_evse','countries':['IT'],'currency':'EUR','priority':100,'source':raw.get('source'),'sourceId':'italy-verified-offers','pricing':{'type':'rules','rules':rules,'priceSelectionBasis':'session_start_local_time','postChargeFeeUnknown':True},'metadata':{'channel':'emsp','network':'Ewiva','operator':'Ewiva','rankableAsCpoDirect':False,'timeZone':raw.get('timeZone') or 'Europe/Rome','priceSelectionBasis':'session_start_local_time','tariffClass':cls}})
+                emsp_ids.add(oid); counts['basic']+=1
+        for raw in evse.get('tccV9SubscriptionTariffs') or []:
+            sid=str(raw.get('subscriptionId') or '')
+            if sid not in {'enel_plug_and_go_super','enel_plug_and_go_explorer'} or raw.get('network')!='Ewiva' or raw.get('rankableWhenSelected') is not True: continue
+            rules=raw.get('pricingRules') or []
+            if raw.get('pricingType')!='rules' or len(rules)!=2: raise RuntimeError(f'invalid Ewiva subscription rules {eid} {sid}')
+            oid=f'it:subscription:{sid}:ewiva:{eid}'
+            if oid not in sub_ids:
+                offers.setdefault('subscriptionOffers',[]).append({'id':oid,'selectionId':sid,'provider':'Enel On Your Way','evseIds':[eid],'verifiedScope':'exact_evse','countries':['IT'],'currency':'EUR','priority':120,'source':raw.get('source'),'sourceId':'italy-verified-offers','operatorIds':['Ewiva'],'pricing':{'type':'rules','rules':rules,'priceSelectionBasis':'session_start_local_time','postChargeFeeUnknown':True},'monthlyFeeEur':raw.get('monthlyFeeEur'),'metadata':{'network':'Ewiva','channel':'subscription','timeZone':raw.get('timeZone') or 'Europe/Rome','priceSelectionBasis':'session_start_local_time','tariffClass':raw.get('tariffClass'),'mustNotOverwriteDirectTariff':True}})
+                sub_ids.add(oid); counts['super' if sid.endswith('super') else 'explorer']+=1
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--ewiva", required=True)
-    ap.add_argument("--offers", default="data/v9/italy-offers.json")
-    ap.add_argument("--report", default="data/v9/italy-build-report.json")
-    args = ap.parse_args()
+    expected=int((src.get('counts') or {}).get('rankableSelectedSubscriptionByOffer',{}).get('enel_plug_and_go_super:Ewiva',0))
+    expected_exp=int((src.get('counts') or {}).get('rankableSelectedSubscriptionByOffer',{}).get('enel_plug_and_go_explorer:Ewiva',0))
+    expected_basic=int((src.get('counts') or {}).get('rankableEmspByProvider',{}).get('Enel On Your Way:Ewiva',0))
+    if min(expected,expected_exp,expected_basic)<=1700: raise RuntimeError(f'unexpected Ewiva canonical coverage basic={expected_basic} super={expected} explorer={expected_exp}')
+    if counts!={'basic':expected_basic,'super':expected,'explorer':expected_exp}: raise RuntimeError(f'unexpected Ewiva additions {counts}')
+    if any(o.get('provider')=='Ewiva' for o in offers.get('directOffers',[])): raise RuntimeError('Ewiva direct must remain fail-closed without exact contactless capability')
 
-    ewiva = load_gz(Path(args.ewiva))
-    offers_path = Path(args.offers)
-    report_path = Path(args.report)
-    offers = json.loads(offers_path.read_text(encoding="utf-8"))
-    report = json.loads(report_path.read_text(encoding="utf-8"))
+    offers.setdefault('policy',{})['ewivaEnelEmspCommercialSeparation']=True
+    offers['policy']['ewivaDirectContactlessRequiresStationCapabilityEvidence']=True
+    offers_path.write_text(json.dumps(offers,ensure_ascii=False,separators=(',',':'))+'\n')
+    report.update({'directOffers':len(offers.get('directOffers',[])),'subscriptionOffers':len(offers.get('subscriptionOffers',[])),'emspOffers':len(offers.get('emspOffers',[])),'ewivaEnelEmspOffers':counts['basic'],'ewivaPlugAndGoSuperOffers':counts['super'],'ewivaPlugAndGoExplorerOffers':counts['explorer'],'ewivaTariffClasses':classes})
+    report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps(report,ensure_ascii=False,indent=2))
 
-    counts = ewiva.get("counts") or {}
-    expected = int(counts.get("ewivaEvse") or 0)
-    if expected != 1678:
-        raise RuntimeError(f"unexpected canonical Ewiva EVSE count {expected}")
-    if (ewiva.get("rules") or {}).get("explorerFailClosed") is not True:
-        raise RuntimeError("Ewiva Explorer must remain fail-closed")
-
-    existing_emsp = {str(x.get("id")) for x in offers.get("emspOffers", [])}
-    existing_sub = {str(x.get("id")) for x in offers.get("subscriptionOffers", [])}
-    emsp_added = 0
-    super_added = 0
-    classes: dict[str, int] = {}
-
-    for entry in ewiva.get("entries", []):
-        eid = str(entry.get("evseId") or "").strip()
-        cls = str(entry.get("tariffClass") or "").strip()
-        if not eid or cls not in {"AC", "DC", "HPC"}:
-            raise RuntimeError(f"invalid Ewiva entry {eid} class={cls}")
-        classes[cls] = classes.get(cls, 0) + 1
-
-        basic = entry.get("enelOnYourWayBasic") or {}
-        if basic.get("channel") != "emsp" or basic.get("notCpoDirect") is not True or basic.get("rankable") is not True:
-            raise RuntimeError(f"invalid Ewiva Basic commercial semantics for {eid}")
-        raw_pricing = basic.get("pricing") or {}
-        oid = f"it:emsp:enel-on-your-way-ewiva:{eid}"
-        if oid not in existing_emsp:
-            offers.setdefault("emspOffers", []).append({
-                "id": oid,
-                "provider": "Enel On Your Way",
-                "evseIds": [eid],
-                "verifiedScope": "exact_evse",
-                "countries": ["IT"],
-                "currency": "EUR",
-                "priority": 100,
-                "source": str(basic.get("source") or "validated Enel Ewiva source"),
-                "sourceId": "italy-verified-offers",
-                "pricing": normalize_pricing(raw_pricing),
-                "metadata": {
-                    "channel": "emsp",
-                    "network": "Ewiva",
-                    "operator": "Ewiva",
-                    "rankableAsCpoDirect": False,
-                    "timeZone": "Europe/Rome",
-                    "priceSelectionBasis": "session_start_local_time",
-                    "tariffClass": cls,
-                    "validatedPostChargeFee": raw_pricing.get("postChargeFee"),
-                    "postChargeFeeTemporarilyFailClosed": True,
-                },
-            })
-            existing_emsp.add(oid)
-            emsp_added += 1
-
-        subs = entry.get("subscriptions") or []
-        if len(subs) != 1 or subs[0].get("subscriptionId") != "enel_plug_and_go_super":
-            raise RuntimeError(f"unexpected Ewiva subscriptions for {eid}")
-        sub = subs[0]
-        sid = f"it:subscription:enel_plug_and_go_super:ewiva:{eid}"
-        if sid not in existing_sub:
-            offers.setdefault("subscriptionOffers", []).append({
-                "id": sid,
-                "selectionId": "enel_plug_and_go_super",
-                "provider": "Enel On Your Way",
-                "evseIds": [eid],
-                "verifiedScope": "exact_evse",
-                "countries": ["IT"],
-                "currency": "EUR",
-                "priority": 120,
-                "source": str(sub.get("source") or "validated Enel Ewiva source"),
-                "sourceId": "italy-verified-offers",
-                "operatorIds": ["Ewiva"],
-                "pricing": normalize_pricing(sub.get("pricing") or {}),
-                "monthlyFeeEur": sub.get("monthlyFeeEur"),
-                "validThrough": sub.get("validThrough"),
-                "metadata": {
-                    "network": "Ewiva",
-                    "channel": "subscription",
-                    "timeZone": "Europe/Rome",
-                    "priceSelectionBasis": "session_start_local_time",
-                    "tariffClass": cls,
-                    "validatedPostChargeFee": (sub.get("pricing") or {}).get("postChargeFee"),
-                    "postChargeFeeTemporarilyFailClosed": True,
-                    "explorerFailClosed": True,
-                },
-            })
-            existing_sub.add(sid)
-            super_added += 1
-
-    if emsp_added != expected or super_added != expected:
-        raise RuntimeError(f"unexpected Ewiva additions emsp={emsp_added} super={super_added} expected={expected}")
-    if classes != {"AC": 7, "DC": 31, "HPC": 1640}:
-        raise RuntimeError(f"unexpected Ewiva tariff classes {classes}")
-
-    if any("ewiva" in str(o.get("id", "")).lower() and o.get("selectionId") == "enel_plug_and_go_explorer" for o in offers.get("subscriptionOffers", [])):
-        raise RuntimeError("Explorer must not be published on Ewiva")
-    if any(str(o.get("provider")) == "Ewiva" for o in offers.get("directOffers", [])):
-        raise RuntimeError("No Ewiva CPO-direct tariff is validated by this layer")
-
-    offers.setdefault("policy", {})["ewivaEnelEmspCommercialSeparation"] = True
-    offers["policy"]["ewivaExplorerFailClosed"] = True
-    offers_path.write_text(json.dumps(offers, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-
-    report["directOffers"] = len(offers.get("directOffers", []))
-    report["subscriptionOffers"] = len(offers.get("subscriptionOffers", []))
-    report["emspOffers"] = len(offers.get("emspOffers", []))
-    report["ewivaEnelEmspOffers"] = emsp_added
-    report["ewivaPlugAndGoSuperOffers"] = super_added
-    report["ewivaExplorerOffers"] = 0
-    report["ewivaTariffClasses"] = classes
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
-    print(json.dumps({
-        "directOffers": report["directOffers"],
-        "subscriptionOffers": report["subscriptionOffers"],
-        "emspOffers": report["emspOffers"],
-        "ewivaEnelEmspOffers": emsp_added,
-        "ewivaPlugAndGoSuperOffers": super_added,
-        "ewivaExplorerOffers": 0,
-        "ewivaTariffClasses": classes,
-    }, ensure_ascii=False, indent=2))
-
-
-if __name__ == "__main__":
-    main()
+if __name__=='__main__': main()
