@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "enabled": true,
+  "enabled": false,
   "maxWindowMinutes": 60,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "First-device controlled test window active. Must close after PASS/ROLLBACK or expiry; random canary remains 0%."
+  "notes": "First-device test policy closed after preflight. Re-open only when an isolated served V9 test environment is available."
 }
