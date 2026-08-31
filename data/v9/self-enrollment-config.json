@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "requireReadiness": true,
+  "readinessApproved": false,
+  "tokenSha256": "",
+  "tokenVersion": "v1",
+  "expiresAt": null,
+  "maxGrantMinutes": 60,
+  "notes": "Disabled by default. Store only a SHA-256 token hash here, never the token itself. A temporary local grant cannot be issued unless enabled and readinessApproved are both true."
+}
