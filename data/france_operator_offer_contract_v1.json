@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.1",
+  "schemaVersion": "1.1.2",
   "country": "FR",
   "purpose": "Canonical tariff/enrichment contract attached to PAN IRVE physical stations and PDCs",
   "invariants": {
@@ -66,6 +66,7 @@
     "currency": "ISO currency",
     "pricePerKwh": "energy charge",
     "chargePerMinute": "time fee while charging",
+    "chargeThresholdMinutes": "elapsed charging time before chargePerMinute starts",
     "durationPerMinute": "connection/session-duration fee distinct from post-charge occupancy",
     "durationThresholdMinutes": "elapsed connection time before duration fee starts",
     "durationStart": "optional clock-window start during which the duration surcharge is applied",
