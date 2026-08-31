@@ -49,6 +49,10 @@ def main() -> None:
             selection=str(sub.get('subscriptionId') or '').strip()
             if selection not in {'enel_plug_and_go_super','enel_plug_and_go_explorer'}:
                 continue
+            # Ewiva is a separate physical CPO/commercial layer. It is enriched by
+            # v9_enrich_italy_ewiva_offers.py so ENX counts and IDs stay deterministic.
+            if str(sub.get('network') or '').strip()!='Enel X Way':
+                continue
             if sub.get('rankableWhenSelected') is not True:
                 continue
             rules=sub.get('pricingRules')
@@ -68,7 +72,7 @@ def main() -> None:
                 'priority':120,
                 'source':'Enel live rendered tariff cards',
                 'sourceId':'italy-verified-offers',
-                'operatorIds':[str(sub.get('network') or 'Enel X Way')],
+                'operatorIds':['Enel X Way'],
                 'pricing':{
                     'type':'rules',
                     'rules':rules,
@@ -76,7 +80,7 @@ def main() -> None:
                 },
                 'monthlyFeeEur':sub.get('monthlyFeeEur') or (src.get('subscriptions') or {}).get(selection,{}).get('monthlyFeeEur'),
                 'metadata':{
-                    'network':sub.get('network') or 'Enel X Way',
+                    'network':'Enel X Way',
                     'channel':'subscription',
                     'mustNotOverwriteDirectTariff':bool(sub.get('mustNotOverwriteDirectTariff',True)),
                     'timeZone':sub.get('timeZone') or 'Europe/Rome',
@@ -91,7 +95,7 @@ def main() -> None:
     if enx_direct!=22783:
         raise RuntimeError(f'unexpected Enel direct count {enx_direct}')
     if by_plan.get('enel_plug_and_go_super')!=22783 or by_plan.get('enel_plug_and_go_explorer')!=22783:
-        raise RuntimeError(f'unexpected Plug&Go counts {by_plan}')
+        raise RuntimeError(f'unexpected Plug&Go ENX counts {by_plan}')
 
     offers.setdefault('policy',{})['sessionStartLockedTariffsSupported']=True
     offers_path.write_text(json.dumps(offers,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
