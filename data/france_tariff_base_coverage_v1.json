@@ -15,6 +15,12 @@
       "notes": "Public and A-la-Carte standard tariffs are structured. Four legacy-price cities have an official A-la-Carte rule; their public ad-hoc price remains non-rankable. Monthly quota plans remain non-rankable until remaining quota is tracked."
     },
     {
+      "networkId": "lidl",
+      "coverageStatus": "ready",
+      "artifacts": ["data/tariff_overlay_v1.json", "scripts/materialize_france_lidl_offers.py"],
+      "notes": "Official Lidl Plus France network tariff is canonicalized on all current Lidl PDCs: 1,073 stations / 5,866 PDC, with zero unresolved PDC and no physical-inventory mutation. AC and current promotional DC pricing are both 0.29 EUR/kWh; Intercharge/ad-hoc payment remains separate."
+    },
+    {
       "networkId": "eborn",
       "coverageStatus": "ready",
       "artifacts": ["data/eborn_direct_tariffs_v1.json"],
