@@ -1,0 +1,94 @@
+name: Audit France Allego canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [refactor/france-irve-canonical]
+    paths:
+      - 'data/allego_direct_tariffs_france_v1.json'
+      - 'scripts/materialize_france_allego_offers.py'
+      - 'scripts/test_allego_materializer.py'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-allego-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  allego:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Validate Allego materializer
+        run: |
+          python -m py_compile scripts/materialize_france_allego_offers.py scripts/test_allego_materializer.py
+          python scripts/test_allego_materializer.py
+      - name: Validate Allego official source
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('data/allego_direct_tariffs_france_v1.json',encoding='utf-8'))
+          assert d['dataset']=='allego-direct-tariffs-france' and d['networkId']=='allego' and d['country']=='FR'
+          by={o['selectors']['siteClass']:o for o in d['offers']}
+          assert by['regular']['pricingRules'][0]['pricePerKwh']==0.39 and by['regular']['rankable'] is False
+          assert by['fast']['pricingRules'][0]['pricePerKwh']==0.49 and by['fast']['rankable'] is True
+          u=by['ultra']; r=u['pricingRules'][0]
+          assert r['pricePerKwh']==0.59 and r['occupancyPerMinute']==0.248 and r['occupancyThresholdMinutes']==45 and r['occupancyTrigger']=='after_charging_stops'
+          sub=d['subscriptions'][0]; assert sub['id']=='allego-plus' and sub['monthlyFeeEur']==9.99 and sub['rankableWhenSelected'] is False
+          assert {(x['country'],x['discountPercent']) for x in sub['partnerBenefits']}=={('FR',30),('ES',38),('IT',28)}
+          PY
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py --registry data/france_irve_tariff_network_registry_v1.json --coverage data/france_tariff_base_coverage_v1.json --out build/france_irve/effective_tariff_network_registry.json
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84013/download' --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84098/download' --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv && test -s .tmp/irve/dynamic.csv
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py --static-csv .tmp/irve/static.csv --dynamic-csv .tmp/irve/dynamic.csv --registry data/france_irve_operator_registry_v1.json --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py --canonical-dir build/france_irve --operator-registry data/france_irve_operator_registry_v1.json --network-registry build/france_irve/effective_tariff_network_registry.json --out-dir build/france_irve_identity
+      - name: Materialize Allego canonical offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_allego_offers.py --source data/allego_direct_tariffs_france_v1.json --canonical-dir build/france_irve_identity --out-dir build/france_irve_offers
+      - name: Validate Allego canonical safety
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/allego_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          s=json.load(open('build/france_irve_offers/allego_materialization_report.json',encoding='utf-8'))['summary']
+          assert 150 <= s['canonicalAllegoStationCount'] <= 350
+          assert 1200 <= s['canonicalAllegoPdcCount'] <= 2200
+          assert s['materializedOfferCount']==len(offers)>0 and s['physicalInventoryMutationCount']==0
+          assert s['rankableOfferCount']>0 and s['coveredPdcCount']<=s['canonicalAllegoPdcCount']
+          assert len({r['offerId'] for r in offers})==len(offers)
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']; assert sid in stations and pid in pdcs
+              assert stations[sid].get('tariffNetworkId')=='allego' and pdcs[pid].get('tariffNetworkId')=='allego' and pdcs[pid].get('stationId')==sid
+              cls=row['selectors']['siteClass']; assert cls in {'regular','fast','ultra'}
+              if cls=='regular': assert row['rankable'] is False
+              else: assert row['rankable'] is True
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          PY
+      - name: Upload Allego audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-allego-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/allego_pdc_offers_contract_v1_1.json.gz
+            build/france_irve_offers/allego_subscriptions_contract_v1_1.json
+            build/france_irve_offers/allego_materialization_report.json
+          retention-days: 14
