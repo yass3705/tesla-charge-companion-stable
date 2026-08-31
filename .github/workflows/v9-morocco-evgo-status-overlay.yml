@@ -1,0 +1,50 @@
+name: V9 Morocco EVGO fresh status overlay
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-evgo-fresh-status-overlay-20260831']
+    paths:
+      - 'assets/v9/adapters/morocco-public.js'
+      - '.github/workflows/v9-morocco-evgo-status-overlay.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate public EVGO inventory plus fresh native status overlay
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const adapter=require('./assets/v9/adapters/morocco-public.js');
+          const source={
+            id:'morocco-evgo-native',
+            profile:'evgo',
+            url:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evgo/latest-normalized-stations.json'
+          };
+          (async()=>{
+            const stations=await adapter.createLoader({source})();
+            assert.equal(stations.length,17,'EVGO station count');
+            assert.equal(stations.flatMap(s=>s.evses||[]).length,43,'EVGO EVSE count');
+            assert(stations.every(s=>Number.isFinite(s.latitude)&&Number.isFinite(s.longitude)&&s.latitude>=20&&s.latitude<=37&&s.longitude>=-18&&s.longitude<=0),'all EVGO GPS usable in Morocco');
+            assert(stations.every(s=>s.physicalOperator?.name==='Nareva Services / EVGO'),'EVGO CPO preserved');
+            assert(stations.every(s=>s.access?.appSource==='EVGO'&&s.access?.accessNetwork==='EVGO'),'EVGO app/access preserved');
+            assert(stations.every(s=>s.status?.statusSource==='EVGO native backend cp.evgo.ma'),'native status source preserved');
+            const evseCounts={};
+            for(const e of stations.flatMap(s=>s.evses||[]))evseCounts[e.status.state]=(evseCounts[e.status.state]||0)+1;
+            assert.deepEqual(evseCounts,{available:23,occupied_or_active_session:18,out_of_service:2});
+            const stationCounts={};
+            for(const s of stations)stationCounts[s.status.state]=(stationCounts[s.status.state]||0)+1;
+            assert.deepEqual(stationCounts,{available:10,occupied:6,out_of_service:1});
+            const menara=stations.find(s=>s.canonicalId==='MA:evgo:6');
+            assert.equal(menara?.status?.state,'out_of_service','Marjane Menara long-term unavailable flags override native available');
+            console.log(JSON.stringify({ok:true,stations:stations.length,evses:43,evseCounts,stationCounts,menara:menara.status},null,2));
+          })().catch(e=>{console.error(e);process.exit(1);});
+          NODE
