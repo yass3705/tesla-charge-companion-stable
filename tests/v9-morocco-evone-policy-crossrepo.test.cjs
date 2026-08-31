@@ -1,0 +1,30 @@
+const assert=require('assert');
+const https=require('https');
+const adapter=require('../assets/v9/adapters/morocco-nonproduction.js');
+
+const POLICY='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evone/production-status-policy.json';
+function getJson(url){return new Promise((resolve,reject)=>https.get(url,{headers:{'User-Agent':'TCC-V9-public-readonly-policy-guard'}},r=>{let b='';r.setEncoding('utf8');r.on('data',c=>{b+=c;if(b.length>200000)r.destroy(new Error('response too large'));});r.on('end',()=>{if(r.statusCode!==200)return reject(new Error(`HTTP ${r.statusCode}`));try{resolve(JSON.parse(b));}catch(e){reject(e);}});}).on('error',reject));}
+
+(async()=>{
+  const policy=await getJson(POLICY);
+  const p=policy.production_status_policy||{};
+  assert.deepEqual([...adapter.allowedStatuses].sort(),[...(p.allowed||[])].sort(),'V9 allowed EVOne statuses must match data-lab policy');
+  assert.deepEqual([...adapter.excludedStatuses].sort(),[...(p.excluded||[])].sort(),'V9 excluded EVOne statuses must match data-lab policy');
+  assert.equal(p.unknown_or_unmapped_status_default,'exclude_from_production');
+  for(const s of p.allowed||[])assert.equal(adapter.evoneStatusClass(s),'production',`${s} production`);
+  for(const s of p.excluded||[])assert.equal(adapter.evoneStatusClass(s),'diagnostic_only',`${s} diagnostic only`);
+  assert.equal(adapter.evoneStatusClass('FutureUnexpectedStatus'),'excluded_unmapped');
+
+  const base={physicalOperator:{name:'Nareva Services / EVGO'},access:{siteBrand:'Marjane'},status:{state:'available',nativeState:'available',statusSource:'EVGO native backend cp.evgo.ma'},offers:[]};
+  const overlay=adapter.applyEvoneOverlay(base,{status:'Occupied',site_brand:'Different Host',offers:[{id:'emsp-test',provider:'EVPlug'}]});
+  assert(overlay,'allowed EVOne status should produce overlay');
+  assert.equal(overlay.physicalOperator.name,'Nareva Services / EVGO','EVOne must not overwrite CPO');
+  assert.equal(overlay.access.siteBrand,'Marjane','EVOne must not overwrite established site_brand');
+  assert.equal(overlay.access.appSource,'EVOne');
+  assert.equal(overlay.access.accessNetwork,'EVPlug');
+  assert.equal(overlay.status.statusSource,'EVGO native backend cp.evgo.ma','native CPO status source wins');
+  assert.equal(overlay.offers[0].metadata.tariffChannel,'EVOne / EVPlug eMSP','eMSP tariff channel stays separate');
+  for(const s of p.excluded||[])assert.equal(adapter.applyEvoneOverlay(base,{status:s}),null,`${s} excluded from production overlay`);
+  assert.equal(adapter.applyEvoneOverlay(base,{status:'FutureUnexpectedStatus'}),null,'unmapped status excluded from production overlay');
+  console.log(JSON.stringify({ok:true,allowed:p.allowed,excluded:p.excluded,unknownDefault:p.unknown_or_unmapped_status_default,cpoPreserved:true,siteBrandPreserved:true,nativeStatusSourcePreserved:true,emspTariffChannelSeparated:true},null,2));
+})().catch(e=>{console.error(e);process.exit(1);});
