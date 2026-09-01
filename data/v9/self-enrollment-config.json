@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
+  "enabled": true,
   "requireReadiness": true,
-  "readinessApproved": false,
-  "tokenSha256": "",
-  "tokenVersion": "closed-1788260382000",
-  "expiresAt": null,
+  "readinessApproved": true,
+  "tokenSha256": "62439aa8f92c9047cea21beb5a0bcff213a4828436ded3d299d3d6dd176f5dc8",
+  "tokenVersion": "device-test-20260901110556",
+  "expiresAt": "2026-09-01T12:05:56.000Z",
   "maxGrantMinutes": 60,
-  "notes": "Controlled device test closed. No reusable token hash remains configured."
+  "notes": "Temporary controlled single-device test window. Token plaintext is never committed."
 }
