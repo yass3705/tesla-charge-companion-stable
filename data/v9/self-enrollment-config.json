@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "enabled": true,
+  "enabled": false,
   "requireReadiness": true,
-  "readinessApproved": true,
-  "tokenSha256": "eb7cb06d0d5eafbad3b21f2f1f5f58607aab73574eae6a50a858e12991bcb8e0",
-  "tokenVersion": "device-test-20260901112255-rotated",
-  "expiresAt": "2026-09-01T12:33:00.000Z",
+  "readinessApproved": false,
+  "tokenSha256": "",
+  "tokenVersion": "device-test-20260901T114212Z-rollback-closed",
+  "expiresAt": null,
   "maxGrantMinutes": 60,
-  "notes": "Temporary controlled single-device test window renewed after Pages bridge deployment. Token plaintext is never committed."
+  "notes": "Fail-closed immediately after the first iPhone scenario exceeded the 30 s duration budget (97,976 ms). A new token is required before any later device test."
 }
