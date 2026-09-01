@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "cpark-rennes-direct-tariffs-france",
+  "networkId": "cpark-rennes",
+  "label": "C-Park Rennes",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "sources": {
+    "officialChargingPage": "https://www.c-park.fr/recharge-vehicule-electrique/",
+    "officialCguIrve": "https://www.c-park.fr/wp-content/uploads/2026/01/C-Park_CGU-IRVE-v2.pdf",
+    "officialAlizeTariffPolicy": "https://alizecharge.com/tarifs-alize/",
+    "officialAlizeLiberteOffer": "https://alizecharge.com/partenaires/alize-liberte/"
+  },
+  "scope": {
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthorityAliases": [
+      "CITEDIA METROPOLE",
+      "CITÉDIA MÉTROPOLE",
+      "Citedia Metropole",
+      "Citédia Métropole"
+    ],
+    "requiresExactPanContractingAuthority": true,
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "genericAlizeLiberteNeverInheritsCparkTariff": true
+  },
+  "access": {
+    "referenceTariffAvailableThroughCompatiblePartnerCardOrApp": true,
+    "alizeLibertePublicTariffNoRoamingSurchargeOnBouyguesOperatedPartnerNetworks": true,
+    "alizeLiberteBadgePurchaseEur": 12.0,
+    "alizeLiberteMonthlyFeeEur": 0.0,
+    "alizeAppFree": true,
+    "rankableProfile": "alize-liberte"
+  },
+  "tariffFamily": {
+    "id": "cpark-rennes-public-reference",
+    "kind": "AC",
+    "rankableWithAlizeLiberte": true,
+    "pricingRules": [
+      {
+        "scope": "allDay",
+        "currency": "EUR",
+        "pricePerKwh": 0.40,
+        "chargePerMinute": 0,
+        "chargeThresholdMinutes": 0,
+        "durationPerMinute": 0,
+        "durationThresholdMinutes": 0,
+        "connectionFee": 1.0,
+        "parkingPerMinute": 0,
+        "notes": "CITEDIA reference charging tariff. Parking is billed separately by the car park."
+      }
+    ]
+  },
+  "thirdPartyOperatorReference": {
+    "rankable": false,
+    "reason": "third_party_operator_service_fee_may_apply",
+    "baseConnectionFeeEur": 1.0,
+    "basePricePerKwhEur": 0.40
+  },
+  "officialEquippedParks": [
+    {"name":"Arsenal","publishedChargePointCount":33,"publishedPowerKw":7.4},
+    {"name":"Chézy-Dinan","publishedChargePointCount":19,"publishedPowerKw":7.4},
+    {"name":"De Gaulle-Gare","publishedChargePointCount":40,"publishedPowerKw":11.0},
+    {"name":"Gare Sud","publishedChargePointCount":53,"publishedPowerKw":7.4},
+    {"name":"Hoche","publishedChargePointCount":20,"publishedPowerKw":7.4},
+    {"name":"Hôtel Dieu","publishedChargePointCount":16,"publishedPowerKw":11.0},
+    {"name":"Kléber","publishedChargePointCount":19,"publishedPowerKw":7.4},
+    {"name":"Les Lices","publishedChargePointCount":20,"publishedPowerKw":11.0}
+  ],
+  "exclusions": [
+    "Only PAN IRVE PDCs under the exact CITEDIA Metropole contracting authority and Bouygues Energies & Services physical operator are eligible.",
+    "Other Alize Liberte / Bouygues-operated local networks never inherit the C-Park tariff.",
+    "The rankable offer is limited to the Alize Liberte direct profile because other mobility operators may add their own service fees.",
+    "Parking tariffs are independent from charging and are never included in the charging offer.",
+    "PAN IRVE remains the sole physical inventory."
+  ]
+}
