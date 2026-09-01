@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.5",
+  "schemaVersion": "1.0.6",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -46,6 +46,28 @@
       "priority": 1,
       "artifacts": ["data/griffon_branche_direct_tariffs_v1.json", "scripts/materialize_france_griffon_branche_offers.py"],
       "notes": "Exact Saint-Brieuc scope inside R-Mob / Alize Liberte. Corrected canonical audit run 33495031487 validates 16 official sites, 48 official user-facing charge points represented by 74 PAN connector/PDC rows; all 74 PAN rows covered, 74 public plus 74 opt-in subscriber offers, family split 22 AC / 12 DC 30 kW / 40 Express rows, zero unresolved and zero physical-inventory mutation. The 74 PAN rows must never be presented as 74 official physical charge points."
+    },
+    {
+      "id": "dreux",
+      "label": "Ville de Dreux",
+      "aliases": ["Ville de Dreux", "Dreux"],
+      "operatorAliases": [],
+      "operatorFallback": false,
+      "coverageStatus": "staged",
+      "priority": 1,
+      "artifacts": ["data/dreux_direct_tariffs_v1.json", "scripts/materialize_france_dreux_offers.py"],
+      "notes": "Exact R-Mob / Alize Liberte local scope in INSEE 28134. Official topology lists 12 sites / 24 user-facing charge points, while the current PAN exposes 11 sites / 45 connector-PDC rows. Never synthesize the missing official site; keep staged until the corrected audit is green."
+    },
+    {
+      "id": "arcachon",
+      "label": "Ville d'Arcachon",
+      "aliases": ["Ville d'Arcachon", "Arcachon"],
+      "operatorAliases": [],
+      "operatorFallback": false,
+      "coverageStatus": "staged",
+      "priority": 1,
+      "artifacts": ["data/arcachon_direct_tariffs_v1.json", "scripts/materialize_france_arcachon_offers.py"],
+      "notes": "Exact R-Mob / Alize Liberte local scope in INSEE 33009. Official topology is 19 sites / 68 user-facing charge points; current PAN is expected to represent the same sites with connector-level PDC granularity. Resident subscription remains opt-in and residency-gated."
     }
   ]
 }
