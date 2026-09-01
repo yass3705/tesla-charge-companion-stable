@@ -36,6 +36,8 @@ for o in all_offers:
   assert isinstance(s,dict), o['id']
   assert isinstance(s.get('monthlyFee'),(int,float)) and s['monthlyFee']>=0, o['id']
   assert s.get('currency')=='EUR', o['id']
+  if 'minimumTermMonths' in s:
+   assert isinstance(s['minimumTermMonths'],int) and s['minimumTermMonths']>0,o['id']
  promo=o.get('temporaryDiscount')
  if promo:
   discount=promo.get('discountPerKwh'); effective=promo.get('effectivePricePerKwh')

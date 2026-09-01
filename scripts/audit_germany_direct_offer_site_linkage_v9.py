@@ -32,6 +32,7 @@ TARGETS={
  'MAINGAU Energie GmbH':{'minSites':80,'requireFullCoverage':True},
  'JET Tankstellen Deutschland GmbH':{'minSites':80,'requireFullCoverage':True,'connectorKinds':['DC'],'knownGap':'One grouped legacy AC-only JET site is intentionally outside the JET Strom CCS ad-hoc tariff scope.'},
  'Stadtwerke Heidelberg':{'minSites':100,'requireFullCoverage':True},
+ 'Stadtwerke Rüsselsheim':{'minSites':90,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
