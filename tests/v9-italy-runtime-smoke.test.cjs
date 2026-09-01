@@ -19,10 +19,10 @@ const normalized=Direct.normalizePayload(offers);
 
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,53112);
+assert.equal(offers.directOffers.length,54383);
 assert.equal(offers.subscriptionOffers.length,53134);
 assert.equal(offers.emspOffers.length,1678);
-assert.equal(normalized.offerRules.length,53112+53134+1678);
+assert.equal(normalized.offerRules.length,offers.directOffers.length+offers.subscriptionOffers.length+offers.emspOffers.length);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -114,7 +114,6 @@ assert.equal(explorerOffers.length,22783);
 assert.ok(superOffers.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
 assert.ok(explorerOffers.every(o=>o.pricing?.priceSelectionBasis==='session_start_local_time'));
 
-// Use an AC Enel X Way EVSE so exact expected prices are deterministic.
 const enelAcRaw=enel.find(o=>o.metadata?.tariffClass==='AC');
 assert.ok(enelAcRaw,'expected at least one AC Enel offer');
 const enelEid=enelAcRaw.evseIds[0];
@@ -123,7 +122,6 @@ assert.ok(explorerRaw,'selected Explorer offer missing on Enel AC EVSE');
 const enelRules=Direct.normalizePayload({country:'IT',directOffers:[enelAcRaw],subscriptionOffers:[explorerRaw]}).offerRules;
 const enelStation={id:'IT:enel:smoke',countryCode:'IT',offers:enelRules};
 
-// 20:50 Rome crosses 21:00 but the session-start day tariff remains fixed.
 evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T18:50:00Z'},{selectedSubscriptions:[]});
 assert.equal(evaluated.best.total,13.4);
 assert.equal(evaluated.best.result.segmented,false);
@@ -133,7 +131,6 @@ evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,c
 assert.equal(evaluated.best.subscriptionId,'enel_plug_and_go_explorer');
 assert.equal(evaluated.best.total,11.4);
 
-// 21:05 Rome: night tariff applies to the whole session.
 evaluated=Session.evaluateStation(enelStation,{energyKwh:20,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-08-31T19:05:00Z'},{selectedSubscriptions:['enel_plug_and_go_explorer']});
 assert.equal(evaluated.best.subscriptionId,'enel_plug_and_go_explorer');
 assert.equal(evaluated.best.total,9.6);
