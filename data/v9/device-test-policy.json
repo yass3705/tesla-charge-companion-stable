@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
+  "enabled": true,
   "maxWindowMinutes": 60,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "Device testing closed after automatic rollback on duration_budget_exceeded. Diagnose and validate the global deadline before opening a new token window."
+  "notes": "Controlled single-device retest active until 2026-09-01T12:59:46.074Z. Close immediately after PASS, ROLLBACK or expiry."
 }
