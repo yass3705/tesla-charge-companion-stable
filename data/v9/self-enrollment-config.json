@@ -3,9 +3,9 @@
   "enabled": true,
   "requireReadiness": true,
   "readinessApproved": true,
-  "tokenSha256": "9d87fb7baa61235a093e9cbaa348e2190d5eaecb673d012bbaf5b462451e29a1",
-  "tokenVersion": "device-test-20260901004300-optimized-r2",
-  "expiresAt": "2026-09-01T00:43:00Z",
-  "maxGrantMinutes": 60,
-  "notes": "Optimized first-device V9 test window. Clear token is never stored in the repository. Random canary remains 0%."
+  "tokenSha256": "266d47fcadb9723f5bb58cf2451c5997a92e9b2262da731d2df85e8444f1a16d",
+  "tokenVersion": "device-test-20260901014800-optimized-r3",
+  "expiresAt": "2026-09-01T02:48:00Z",
+  "maxGrantMinutes": 120,
+  "notes": "Optimized first-device V9 test window extended to 120 minutes. Clear token is never stored in the repository. Random canary remains 0%."
 }
