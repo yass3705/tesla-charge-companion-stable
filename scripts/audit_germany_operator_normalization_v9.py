@@ -13,18 +13,22 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--sites',default='build/germany-sites/all.json.gz')
     p.add_argument('--aliases',default='data/v9/germany-operator-aliases.json')
+    p.add_argument('--aliases-extension',default='data/v9/germany-operator-aliases-extension.json')
     p.add_argument('--min-coverage',type=float,default=0.35)
     p.add_argument('--top',type=int,default=25)
     a=p.parse_args()
 
     rows=load_gzip_json(a.sites)
-    cfg=load_json(a.aliases)
-    assert cfg.get('country')=='DE'
+    configs=[load_json(a.aliases)]
+    ext=Path(a.aliases_extension)
+    if ext.exists(): configs.append(load_json(ext))
+    assert all(cfg.get('country')=='DE' for cfg in configs)
     assert rows, 'Germany grouped site dataset is empty'
 
     alias_owner={}
     canonicals=set()
-    for item in cfg.get('operators',[]):
+    for cfg in configs:
+      for item in cfg.get('operators',[]):
         canonical=str(item.get('canonical','')).strip()
         assert canonical, 'blank canonical operator'
         canonicals.add(canonical)
@@ -37,12 +41,13 @@ def main():
 
     counts=Counter(str(r[5] or '').strip() for r in rows)
     total=len(rows)
-    canonical_sites=sum(n for op,n in counts.items() if op in canonicals and op!='Tesla')
+    recognized=set(canonicals)|set(alias_owner)
+    canonical_sites=sum(n for op,n in counts.items() if op in recognized and op!='Tesla')
     coverage=canonical_sites/total
     assert coverage>=a.min_coverage, f'operator canonical coverage {coverage:.2%} below {a.min_coverage:.2%}'
     assert 'Tesla' not in counts, 'Tesla leaked into non-Tesla grouped runtime baseline'
 
-    unmatched=[(op,n) for op,n in counts.most_common() if op not in canonicals]
+    unmatched=[(op,n) for op,n in counts.most_common() if op not in recognized]
     report={
         'siteCount':total,
         'canonicalSiteCount':canonical_sites,
