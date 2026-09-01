@@ -44,6 +44,16 @@
     const kilowattOverlaySource=kilowattOverlayConfig?.source||null;
     if(kilowattOverlaySource&&!registry.sources.some(s=>s.id===kilowattOverlaySource.id))registry.sources.push(kilowattOverlaySource);
 
+    const ionityExactSource={
+      id:'france-ionity-exact-offers',label:'IONITY France exact public adhoc EVSE tariffs',adapter:'direct-offer-json',
+      url:'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/operator_direct/ionity_exact_france.json',
+      countries:['FR'],operatorIds:['ionity'],capabilities:['tariff'],priority:{tariff:130},
+      refresh:'published-data-lab-snapshot-on-demand-or-monthly',active:true,optional:true
+    };
+    const legacyIonity=registry.sources.find(s=>s.id==='ionity-direct-france');
+    if(legacyIonity){legacyIonity.active=false;legacyIonity.disabledReason='Replaced at runtime by exact EVSE-scoped IONITY data-lab snapshot.';}
+    if(!registry.sources.some(s=>s.id===ionityExactSource.id))registry.sources.push(ionityExactSource);
+
     const adapters={
       teslaJson:window.TCCV9Adapters.teslaJson,
       nationalCompact:window.TCCV9Adapters.nationalCompact,
