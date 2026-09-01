@@ -9,6 +9,7 @@ on:
       - 'assets/v9/whitelist-engine.js'
       - 'assets/v9/rollout-engine.js'
       - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
       - 'data/v9/rollout-config.json'
       - 'data/v9/self-enrollment-config.json'
       - 'data/v9/whitelist-config.json'
@@ -23,6 +24,7 @@ on:
       - 'assets/v9/whitelist-engine.js'
       - 'assets/v9/rollout-engine.js'
       - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
       - 'data/v9/rollout-config.json'
       - 'data/v9/self-enrollment-config.json'
       - 'data/v9/whitelist-config.json'
@@ -49,16 +51,44 @@ jobs:
         run: node tests/v9-access-router-engine.test.cjs
       - name: Gateway contract
         run: node tests/v9-access-gateway.test.cjs
-      - name: Closed-by-default configuration
+      - name: Fail-closed or controlled-window configuration
         run: |
           node - <<'NODE'
           const fs=require('fs');
           const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json'));
           const readiness=JSON.parse(fs.readFileSync('data/v9/access-readiness.json'));
           const self=JSON.parse(fs.readFileSync('data/v9/self-enrollment-config.json'));
+          const policy=JSON.parse(fs.readFileSync('data/v9/device-test-policy.json'));
+
           if(rollout.canaryPercent!==0) throw new Error('random canary must remain 0%');
           if(rollout.stage!=='preview') throw new Error('rollout must remain preview');
           if(rollout.canaryPath!=='v9-app/'||rollout.productionPath!=='v9-app/') throw new Error('candidate routes must target v9-app');
-          if(readiness.ready!==false||readiness.verdict!=='BLOCKED') throw new Error('gateway readiness must remain BLOCKED before explicit promotion');
-          if(self.enabled!==false) throw new Error('self-enroll must remain disabled by default');
+
+          const closed =
+            readiness.ready===false && readiness.verdict==='BLOCKED' &&
+            self.enabled===false && self.readinessApproved===false &&
+            !String(self.tokenSha256||'').trim() && policy.enabled===false;
+          if(closed){
+            console.log('access gateway configuration: strict closed baseline');
+            process.exit(0);
+          }
+
+          const hash=String(self.tokenSha256||'').trim().toLowerCase();
+          const expiresAt=Date.parse(self.expiresAt);
+          const updatedAt=Date.parse(readiness.updatedAt);
+          const maxWindowMs=60*60*1000;
+          const controlled =
+            rollout.killSwitch===false &&
+            readiness.ready===true && readiness.verdict==='READY' &&
+            self.enabled===true && self.requireReadiness!==false && self.readinessApproved===true &&
+            /^[a-f0-9]{64}$/.test(hash) && String(self.tokenVersion||'').trim().length>0 &&
+            Number.isFinite(expiresAt) && expiresAt>Date.now() &&
+            Number.isFinite(updatedAt) && expiresAt>updatedAt && expiresAt-updatedAt<=maxWindowMs &&
+            Number(self.maxGrantMinutes)>=1 && Number(self.maxGrantMinutes)<=60 &&
+            policy.enabled===true && policy.requireReadiness===true &&
+            policy.requireCanaryPercentZero===true && policy.autoCloseOnRollback===true &&
+            Number(policy.maxWindowMinutes)>=1 && Number(policy.maxWindowMinutes)<=60 &&
+            Number(policy.minimumRuns)>=10 && Number(policy.minimumSuccessfulRuns)>=10;
+          if(!controlled) throw new Error('gateway configuration is neither strict closed baseline nor valid controlled single-device window');
+          console.log('access gateway configuration: controlled single-device window');
           NODE
