@@ -7,6 +7,9 @@ from typing import Any
 import v9_build_italy_catalog as base
 
 
+original_direct_pricing = base.direct_pricing
+
+
 def _component_map(tariff: dict[str, Any]) -> dict[str, dict[str, Any]] | None:
     comps = tariff.get("priceComponents")
     if not isinstance(comps, list) or not comps:
@@ -86,7 +89,7 @@ def direct_pricing_fail_closed(tariff: dict[str, Any]) -> dict[str, Any] | None:
             return None
         return runtime
 
-    return base.direct_pricing(tariff)
+    return original_direct_pricing(tariff)
 
 
 base.direct_pricing = direct_pricing_fail_closed
