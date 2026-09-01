@@ -98,7 +98,9 @@
     wrapped.__tccOverlayExpansionGuard=true;wrapped.__tccOriginal=current;window.expandConfigurations=wrapped;try{expandConfigurations=wrapped}catch(e){}return true;
   }
 
-  function markRevision(){const banner=document.getElementById('tccPreviewBanner');if(banner&&/RC4\.8/.test(String(banner.textContent||''))){const label=`V8 Preview · RC4.8 · rc48bo · métadonnées offres préservées · abonnements visibles · overlays déterministes · données canoniques France · auto-mise à jour désactivée`;banner.textContent=label;banner.dataset.stableLabel=label;banner.setAttribute('aria-label',label)}}
+  // Le bandeau Preview appartient exclusivement à preview-storage.js généré par Pages.
+  // Cette couche conserve son numéro de révision dans l'API/console sans modifier l'UI globale.
+  function markRevision(){return false;}
 
   function stopCompatibilityRetry(){if(compatibilityTimer){clearInterval(compatibilityTimer);compatibilityTimer=null;}}
   function primeRuntime(){
