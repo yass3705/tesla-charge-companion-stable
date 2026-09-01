@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.2",
+  "schemaVersion": "1.0.3",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -35,6 +35,17 @@
       "priority": 1,
       "artifacts": ["data/cpark_rennes_direct_tariffs_v1.json"],
       "notes": "Local CITEDIA Metropole tariff scope carved out of the generic Alize Liberte brand by exact PAN contracting-authority matching. Keep staged until the current PAN audit confirms full scope and zero leakage."
+    },
+    {
+      "id": "griffon-branche",
+      "label": "Griffon Branché",
+      "aliases": ["Griffon Branché", "Griffon Branche", "GRIFFON BRANCHÉ", "GRIFFON BRANCHE"],
+      "operatorAliases": [],
+      "operatorFallback": false,
+      "coverageStatus": "staged",
+      "priority": 1,
+      "artifacts": ["data/griffon_branche_direct_tariffs_v1.json"],
+      "notes": "Saint-Brieuc local network carved out of R-Mob / Alize Liberte only by exact local scope. Other R-Mob territories must never inherit Griffon Branche tariffs."
     }
   ]
 }
