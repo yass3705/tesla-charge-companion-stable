@@ -9,6 +9,8 @@ on:
       - 'data/v9/device-test-policy.json'
       - 'data/v9/rollout-config.json'
       - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - 'tests/v9-self-enrollment.test.cjs'
       - '.github/workflows/v9-self-enrollment.yml'
   push:
@@ -20,6 +22,8 @@ on:
       - 'data/v9/device-test-policy.json'
       - 'data/v9/rollout-config.json'
       - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - 'tests/v9-self-enrollment.test.cjs'
       - '.github/workflows/v9-self-enrollment.yml'
   workflow_dispatch:
@@ -36,7 +40,12 @@ jobs:
         run: |
           node --check assets/v9/self-enrollment-engine.js
           node --check scripts/v9-first-device-test-runbook.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
       - name: Self enrollment contract
         run: node tests/v9-self-enrollment.test.cjs
       - name: Repository access state invariant
         run: node scripts/v9-first-device-test-runbook.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs

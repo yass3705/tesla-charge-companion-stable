@@ -12,7 +12,9 @@ on:
       - 'data/v9/access-readiness.json'
       - 'data/v9/device-test-policy.json'
       - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
       - 'docs/v9-first-device-test-runbook.md'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - '.github/workflows/v9-first-device-runbook.yml'
   push:
     branches: [main, refactor/unified-data-engine-v9]
@@ -22,6 +24,8 @@ on:
       - 'data/v9/access-readiness.json'
       - 'data/v9/device-test-policy.json'
       - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - '.github/workflows/v9-first-device-runbook.yml'
   workflow_dispatch:
 
@@ -38,5 +42,10 @@ jobs:
           node --check assets/v9/rollout-engine.js
           node --check assets/v9/access-router-engine.js
           node --check scripts/v9-first-device-test-runbook.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
       - name: Repository state runbook precheck
         run: node scripts/v9-first-device-test-runbook.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs
