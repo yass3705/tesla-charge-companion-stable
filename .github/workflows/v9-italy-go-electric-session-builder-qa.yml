@@ -1,5 +1,6 @@
 name: V9 Italy Go Electric session builder QA
 # QA-only workflow. Production builder/data remain unchanged until this gate passes.
+# Authoritative rerun branch after QA infrastructure was merged into the V9 base.
 
 on:
   workflow_dispatch:
