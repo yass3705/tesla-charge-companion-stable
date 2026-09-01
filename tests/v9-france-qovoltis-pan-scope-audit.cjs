@@ -25,19 +25,24 @@ for(const row of qovoltisRows){
   networkCounts.set(network,(networkCounts.get(network)||0)+pdcs.length);
   if(postal)postalCounts.set(postal.slice(0,2),(postalCounts.get(postal.slice(0,2))||0)+pdcs.length);
   for(const pdc of pdcs)pdcAll.add(pdc);
-  stationSummaries.push({stationId,name,address,operator,network,postal,pdcCount:pdcs.length,pdcs:pdcs.slice(0,8),powers});
+  stationSummaries.push({stationId,name,address,operator,network,postal,pdcCount:pdcs.length,pdcs,powers});
 }
 
 const rhone=stationSummaries.filter(x=>x.postal?.startsWith('69'));
+const syderStationId=stationSummaries.filter(x=>/^FRS69SYD/i.test(x.stationId));
 const syderNamed=stationSummaries.filter(x=>/syder/i.test(`${x.name} ${x.address} ${x.network} ${x.operator}`));
+const uniquePdcCount=items=>new Set(items.flatMap(x=>x.pdcs)).size;
+const sample=items=>items.slice(0,40).map(x=>({...x,pdcs:x.pdcs.slice(0,8)}));
 const toSortedObject=map=>Object.fromEntries([...map.entries()].sort((a,b)=>b[1]-a[1]||String(a[0]).localeCompare(String(b[0]))));
 const result={
   generatedFrom:{nationalGeneratedAt:manifest.generatedAt,nationalStations:manifest.stationCount,nationalPdcCount:manifest.pdcCount},
   qovoltis:{stationCount:qovoltisRows.length,uniquePdcCount:pdcAll.size,networkPdcCounts:toSortedObject(networkCounts),departmentPrefixPdcCounts:toSortedObject(postalCounts)},
-  rhonePostal69:{stationCount:rhone.length,pdcCount:new Set(rhone.flatMap(x=>x.pdcs)).size,samples:rhone.slice(0,40)},
-  syderNamed:{stationCount:syderNamed.length,pdcCount:new Set(syderNamed.flatMap(x=>x.pdcs)).size,samples:syderNamed.slice(0,40)},
-  qovoltisSamples:stationSummaries.slice(0,40)
+  syderStationId:{stationCount:syderStationId.length,pdcCount:uniquePdcCount(syderStationId),stationIdPrefix:'FRS69SYD',samples:sample(syderStationId)},
+  rhonePostal69:{stationCount:rhone.length,pdcCount:uniquePdcCount(rhone),samples:sample(rhone)},
+  syderNamed:{stationCount:syderNamed.length,pdcCount:uniquePdcCount(syderNamed),samples:sample(syderNamed)},
+  qovoltisSamples:sample(stationSummaries)
 };
 console.log(JSON.stringify(result,null,2));
 if(!qovoltisRows.length)throw new Error('Expected Qovoltis stations in France PAN baseline');
 if(!pdcAll.size)throw new Error('Expected Qovoltis PDC identities in France PAN baseline');
+if(!syderStationId.length)throw new Error('Expected exact SYDER station IDs in France PAN baseline');
