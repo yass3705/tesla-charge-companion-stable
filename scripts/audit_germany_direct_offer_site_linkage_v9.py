@@ -22,6 +22,7 @@ TARGETS={
  'Stadtwerke Neuss Energie und Wasser GmbH':{'minSites':90,'requireFullCoverage':True},
  'infra fürth service gmbh':{'minSites':100,'requireFullCoverage':True},
  'Energieversorgung Oberhausen':{'minSites':130,'requireFullCoverage':True},
+ 'EWV Energie- und Wasser-Versorgung GmbH':{'minSites':100,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
