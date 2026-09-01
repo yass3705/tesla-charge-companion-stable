@@ -1,0 +1,93 @@
+name: V9 publish Go Electric full current
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - publish/v9-go-electric-full-current
+    paths:
+      - .github/workflows/v9-publish-go-electric-full-current.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish/v9-go-electric-full-current
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download validated Go Electric candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list --repo yass3705/tesla-charge-companion-data-lab --workflow go-electric-italy-v9-full-components-qa.yml --branch integration/go-electric-full-components-v9 --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/ge
+          gh run download "$RUN_ID" --repo yass3705/tesla-charge-companion-data-lab --name go-electric-italy-v9-full-components-qa --dir /tmp/ge
+          CANDIDATE="$(find /tmp/ge -name 'italy_v9_candidate_go_electric_engine_compatible_qa.json.gz' -print -quit)"
+          test -n "$CANDIDATE"
+          cp "$CANDIDATE" /tmp/italy-go-electric-full.json.gz
+          echo "Using data-lab run $RUN_ID"
+      - name: Generate overlay on current Italy runtime
+        run: |
+          set -euo pipefail
+          cp data/v9/italy-offers.json /tmp/italy-before.json
+          python scripts/v9_overlay_go_electric_full_current.py \
+            --candidate /tmp/italy-go-electric-full.json.gz \
+            --current /tmp/italy-before.json \
+            --out data/v9/italy-offers.json \
+            --report /tmp/overlay-report.json
+      - name: Validate preservation and exact delta
+        run: |
+          node - <<'JS'
+          const fs=require('fs');
+          const Pricing=require('./assets/v9/pricing-engine.js');
+          const before=JSON.parse(fs.readFileSync('/tmp/italy-before.json','utf8'));
+          const after=JSON.parse(fs.readFileSync('data/v9/italy-offers.json','utf8'));
+          const rep=JSON.parse(fs.readFileSync('/tmp/overlay-report.json','utf8'));
+          if(rep.addedGoElectricDirect!==1271) throw new Error(`added ${rep.addedGoElectricDirect}`);
+          if(after.directOffers.length!==before.directOffers.length+1271) throw new Error('direct delta mismatch');
+          if(JSON.stringify(after.subscriptionOffers)!==JSON.stringify(before.subscriptionOffers)) throw new Error('subscription drift');
+          if(JSON.stringify(after.emspOffers)!==JSON.stringify(before.emspOffers)) throw new Error('eMSP drift');
+          const beforeNon=before.directOffers.filter(o=>o.provider!=='Go Electric Stations SRLS');
+          const afterNon=after.directOffers.filter(o=>o.provider!=='Go Electric Stations SRLS');
+          if(JSON.stringify(beforeNon)!==JSON.stringify(afterNon)) throw new Error('non-Go-Electric direct drift');
+          const ge=after.directOffers.filter(o=>o.provider==='Go Electric Stations SRLS');
+          if(ge.length!==2214) throw new Error(`Go Electric ${ge.length}`);
+          if(ge.filter(o=>o.pricing?.postChargeFee).length!==626) throw new Error('post-charge count drift');
+          if(ge.filter(o=>(o.pricing?.rules||[]).some(r=>r.connectedTimePerMinuteAfterFreeEur!=null)).length!==74) throw new Error('after-time count drift');
+          const p=ge.find(o=>o.evseIds?.[0]==='ITGESE131365937');
+          let r=Pricing.evaluateOffer(p,{energyKwh:10,durationMinutes:60,postChargeMinutes:10,postChargeStartAt:'2026-09-01T06:00:00Z',startAt:'2026-09-01T05:00:00Z',timeZone:'Europe/Rome'});
+          if(!r.complete||Math.abs(r.totalEur-8.1)>1e-9) throw new Error(JSON.stringify(r));
+          const a=ge.find(o=>o.evseIds?.[0]==='ITGESE800678718');
+          r=Pricing.evaluateOffer(a,{energyKwh:10,durationMinutes:300,startAt:'2026-09-01T06:00:00Z',timeZone:'Europe/Rome'});
+          if(!r.complete||Math.abs(r.totalEur-14.62)>1e-9) throw new Error(JSON.stringify(r));
+          console.log(JSON.stringify({before:before.directOffers.length,after:after.directOffers.length,added:1271,goElectric:ge.length},null,2));
+          JS
+      - name: Commit generated runtime data
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/v9/italy-offers.json; then
+            echo 'No data change to publish'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json
+          git commit -m 'data(v9): publish full Go Electric Italy tariffs'
+          git push origin HEAD:publish/v9-go-electric-full-current
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v9-go-electric-full-current-publication
+          path: /tmp/overlay-report.json
+          if-no-files-found: warn
+          retention-days: 14
