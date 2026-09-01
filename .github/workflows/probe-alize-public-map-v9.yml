@@ -21,6 +21,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          echo 'probe-version=2'
           mkdir -p /tmp/alize
           curl -fLsS --retry 3 https://alize-map.azurewebsites.net/ -o /tmp/alize/index.html
           echo '=== INDEX ASSETS ==='
