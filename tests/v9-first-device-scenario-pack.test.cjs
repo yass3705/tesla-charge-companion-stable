@@ -43,6 +43,12 @@ const rollback=Engine.summary([...Array.from({length:9},(_,i)=>({...ok,scenarioI
 assert.equal(rollback.decision,'ROLLBACK');
 
 (async()=>{
+  const deadlineStarted=Date.now();
+  await assert.rejects(
+    Engine.withDeadline(()=>new Promise(()=>{}),35),
+    err=>err?.code==='TCC_V9_DURATION_BUDGET_EXCEEDED'
+  );
+  assert(Date.now()-deadlineStarted<150,'scenario deadline must return control promptly');
   const stations=Array.from({length:6},(_,i)=>({id:`r${i}`,latitude:48.8+i/1000,longitude:2.06+i/1000}));
   const never=()=>new Promise(()=>{});
   const started=Date.now();
