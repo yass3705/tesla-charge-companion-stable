@@ -4,6 +4,8 @@
 The browser catalogue is the physical source of truth. Direct commercial coverage
 comes only from exact-EVSE direct offers already published by the V9 builder.
 No eMSP or selected-subscription offer is counted as a CPO-direct tariff.
+
+This audit is intentionally rerun after the full Go Electric publication.
 """
 from __future__ import annotations
 
