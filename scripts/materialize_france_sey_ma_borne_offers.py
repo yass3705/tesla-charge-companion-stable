@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, csv, datetime as dt, gzip, json, re, unicodedata
+import argparse, datetime as dt, gzip, json, re, unicodedata
 from pathlib import Path
 
 
@@ -18,24 +18,12 @@ def dump_json(path,value):
     if p.suffix=='.gz':
         with gzip.open(p,'wt',encoding='utf-8',compresslevel=9) as f: json.dump(value,f,ensure_ascii=False,separators=(',',':'))
     else: p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-def detect_dialect(path):
-    with open(path,'r',encoding='utf-8-sig',newline='') as f: sample=f.read(65536)
-    try: return csv.Sniffer().sniff(sample,delimiters=',;\t|')
-    except csv.Error: return csv.excel
-def first(row,*keys):
-    for k in keys:
-        x=clean(row.get(k))
-        if x: return x
-    return ''
 def truthy(v): return norm(v) in {'true','vrai','1','oui','yes'}
-def station_id(row):
-    sid=first(row,'id_station_itinerance')
-    return sid or first(row,'id_station_local')
 
 def validate_source(d):
-    if d.get('dataset')!='sey-ma-borne-direct-tariffs-france' or d.get('networkId')!='sey-ma-borne' or d.get('country')!='FR': raise ValueError('unexpected SEY source')
+    if d.get('dataset')!='sey-ma-borne-direct-tariffs-france' or d.get('networkId')!='seymaborne' or d.get('country')!='FR': raise ValueError('unexpected SEY source')
     s=d.get('scope') or {}
-    required={'canonicalUmbrellaTariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','requiresPanContractingAuthorityMatch':True,'directNetworkOnly':True,'physicalInventoryFromIrveOnly':True,'roamingMspTariffsRemainSeparate':True,'parkingExcludedFromChargingTariff':True,'genericAlizeLiberteNeverInheritsSeyTariff':True}
+    required={'canonicalTariffNetworkId':'seymaborne','explicitPanBrandRequired':True,'requiresPanContractingAuthorityMatch':False,'directNetworkOnly':True,'physicalInventoryFromIrveOnly':True,'roamingMspTariffsRemainSeparate':True,'parkingExcludedFromChargingTariff':True,'genericAlizeLiberteNeverInheritsSeyTariff':True}
     for k,v in required.items():
         if s.get(k)!=v: raise ValueError(f'invalid SEY scope: {k}')
     a=d.get('access') or {}
@@ -51,18 +39,6 @@ def validate_source(d):
     if card.get('rankable') is not False or float(card.get('durationRateEurPerHour'))!=4.0: raise ValueError('invalid SEY card reference')
     return s,fam,card
 
-def read_authorities(static_csv,aliases):
-    aliases={norm(x) for x in aliases}; exact={}; raw={}
-    dialect=detect_dialect(static_csv)
-    with open(static_csv,'r',encoding='utf-8-sig',newline='') as f:
-        for row in csv.DictReader(f,dialect=dialect):
-            sid=station_id(row)
-            if not sid: continue
-            auth=first(row,'nom_amenageur')
-            raw[sid]=auth
-            if norm(auth) in aliases: exact[sid]=auth
-    return exact,raw
-
 def normalized_rules(rows):
     out=[]
     for r in rows:
@@ -71,15 +47,14 @@ def normalized_rules(rows):
     return out
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--source',required=True); ap.add_argument('--canonical-dir',required=True); ap.add_argument('--static-csv',required=True); ap.add_argument('--out-dir',required=True); a=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument('--source',required=True); ap.add_argument('--canonical-dir',required=True); ap.add_argument('--static-csv'); ap.add_argument('--out-dir',required=True); a=ap.parse_args()
     source=load_json(a.source); scope,families,card=validate_source(source)
     stations=load_json(Path(a.canonical_dir)/'stations.json.gz'); pdcs=load_json(Path(a.canonical_dir)/'charge_points.json.gz')
     station_by={clean(s.get('stationId')):s for s in stations}
-    eligible_auth,raw_auth=read_authorities(a.static_csv,scope.get('contractingAuthorityAliases') or [])
-    offers=[]; unresolved=[]; eligible=[]; now=dt.datetime.now(dt.timezone.utc).isoformat()
+    offers=[]; unresolved=[]; eligible=[]; now=dt.datetime.now(dt.timezone.utc).isoformat(); target=scope['canonicalTariffNetworkId']
     for p in pdcs:
         sid=clean(p.get('stationId')); st=station_by.get(sid) or {}
-        if p.get('tariffNetworkId')!='alize-liberte' or (p.get('physicalOperatorId') or st.get('physicalOperatorId'))!='bouygues-energies-services' or sid not in eligible_auth: continue
+        if p.get('tariffNetworkId')!=target: continue
         eligible.append(p); pid=clean(p.get('pdcId')); power=p.get('powerKw'); con=p.get('connectors') or {}
         try: pw=float(power)
         except (TypeError,ValueError): pw=None
@@ -88,14 +63,16 @@ def main():
         if not dc and pw is not None and pw<=22.5: family=families['sey-22-ac-standard']
         elif dc and pw is not None and pw>=30: family=families['sey-dc-30plus-standard']
         if family is None:
-            unresolved.append({'canonicalStationId':sid,'canonicalPdcId':pid,'powerKw':power,'connectors':con,'contractingAuthorityRaw':raw_auth.get(sid),'reason':'unproved_sey_tariff_class'}); continue
-        kind=family['kind']; standard={
-            'offerId':f"sey-ma-borne:{family['id']}:{pid}",'physicalOperatorId':'bouygues-energies-services','tariffNetworkId':'sey-ma-borne','provider':'SEY ma Borne via Alizé','channel':'direct','sourceMode':'network_rule','sourceStationId':None,'sourceEvseId':None,'canonicalStationId':sid,'canonicalPdcId':pid,'matchMethod':'network_scope','matchDistanceMeters':None,'selectors':{'umbrellaTariffNetworkId':'alize-liberte','contractingAuthority':eligible_auth[sid],'paymentProfile':'alize_app_or_sey_badge','badgeRequired':False,'parkingExcluded':True,'roamingSeparate':True},'kind':kind,'minPowerKw':family.get('minPowerKw'),'maxPowerKw':family.get('maxPowerKw'),'pricingRules':normalized_rules(family['pricingRules']),'subscriptionId':None,'validFrom':source.get('effectiveFrom'),'validTo':None,'rankable':True,'blockedReasons':[],'sourceUrl':(source.get('sources') or {}).get('officialCommitteeMinutes'),'sourceUpdatedAt':source.get('verifiedAt'),'normalizedAt':now
-        }
+            unresolved.append({'canonicalStationId':sid,'canonicalPdcId':pid,'powerKw':power,'connectors':con,'physicalOperatorId':p.get('physicalOperatorId') or st.get('physicalOperatorId'),'reason':'unproved_sey_tariff_class'}); continue
+        physical=p.get('physicalOperatorId') or st.get('physicalOperatorId'); kind=family['kind']
+        standard={'offerId':f"seymaborne:{family['id']}:{pid}",'physicalOperatorId':physical,'tariffNetworkId':'seymaborne','provider':'SEY ma Borne via Alizé','channel':'direct','sourceMode':'network_rule','sourceStationId':None,'sourceEvseId':None,'canonicalStationId':sid,'canonicalPdcId':pid,'matchMethod':'network_scope','matchDistanceMeters':None,'selectors':{'explicitPanTariffNetworkId':'seymaborne','paymentProfile':'alize_app_or_sey_badge','badgeRequired':False,'parkingExcluded':True,'roamingSeparate':True},'kind':kind,'minPowerKw':family.get('minPowerKw'),'maxPowerKw':family.get('maxPowerKw'),'pricingRules':normalized_rules(family['pricingRules']),'subscriptionId':None,'validFrom':source.get('effectiveFrom'),'validTo':None,'rankable':True,'blockedReasons':[],'sourceUrl':(source.get('sources') or {}).get('officialCommitteeMinutes'),'sourceUpdatedAt':source.get('verifiedAt'),'normalizedAt':now}
         offers.append(standard)
         energy=0.36 if kind=='AC' else 0.46; threshold=int(card['acDurationThresholdMinutes'] if kind=='AC' else card['dcDurationThresholdMinutes'])
-        offers.append({**standard,'offerId':f'sey-ma-borne:card-reference:{pid}','provider':'SEY ma Borne — carte bancaire','channel':'reference','sourceMode':'reference_only','selectors':{**standard['selectors'],'paymentProfile':'bank_card','nightReduction':False},'pricingRules':normalized_rules([{'scope':'allDay','currency':'EUR','pricePerKwh':energy,'chargePerMinute':0,'durationPerMinute':4/60,'durationThresholdMinutes':threshold,'connectionFee':0,'parkingPerMinute':0,'notes':'Bank-card payment keeps the 4 EUR/hour duration rate without night reduction.'}]),'rankable':False,'blockedReasons':['payment_method_selector_not_yet_modeled']})
+        offers.append({**standard,'offerId':f'seymaborne:card-reference:{pid}','provider':'SEY ma Borne — carte bancaire','channel':'reference','sourceMode':'reference_only','selectors':{**standard['selectors'],'paymentProfile':'bank_card','nightReduction':False},'pricingRules':normalized_rules([{'scope':'allDay','currency':'EUR','pricePerKwh':energy,'chargePerMinute':0,'durationPerMinute':4/60,'durationThresholdMinutes':threshold,'connectionFee':0,'parkingPerMinute':0,'notes':'Bank-card payment keeps the 4 EUR/hour duration rate without night reduction.'}]),'rankable':False,'blockedReasons':['payment_method_selector_not_yet_modeled']})
     covered={o['canonicalPdcId'] for o in offers if o['rankable']}; station_ids={clean(p.get('stationId')) for p in eligible}
-    report={'schemaVersion':'1.0.0','dataset':'france-sey-ma-borne-canonical-audit','productionReady':False,'summary':{'eligibleStationCount':len(station_ids),'eligiblePdcCount':len(eligible),'rankableCoveredPdcCount':len(covered),'rankableOfferCount':sum(1 for o in offers if o['rankable']),'referenceOfferCount':sum(1 for o in offers if not o['rankable']),'unresolvedPdcCount':len(unresolved),'physicalInventoryMutationCount':0},'contractingAuthorities':sorted(set(eligible_auth[s] for s in station_ids if s in eligible_auth)),'unresolved':unresolved[:500]}
+    physical_counts={}
+    for p in eligible:
+        st=station_by.get(clean(p.get('stationId'))) or {}; key=str(p.get('physicalOperatorId') or st.get('physicalOperatorId') or 'unknown'); physical_counts[key]=physical_counts.get(key,0)+1
+    report={'schemaVersion':'1.0.1','dataset':'france-sey-ma-borne-canonical-audit','productionReady':False,'summary':{'eligibleStationCount':len(station_ids),'eligiblePdcCount':len(eligible),'rankableCoveredPdcCount':len(covered),'rankableOfferCount':sum(1 for o in offers if o['rankable']),'referenceOfferCount':sum(1 for o in offers if not o['rankable']),'unresolvedPdcCount':len(unresolved),'physicalInventoryMutationCount':0},'physicalOperatorPdcCounts':physical_counts,'unresolved':unresolved[:500]}
     out=Path(a.out_dir); dump_json(out/'sey_ma_borne_pdc_offers_contract_v1_1.json.gz',offers); dump_json(out/'sey_ma_borne_materialization_report.json',report); print(json.dumps(report,ensure_ascii=False,indent=2))
 if __name__=='__main__': main()
