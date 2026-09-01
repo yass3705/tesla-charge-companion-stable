@@ -43,14 +43,10 @@ def exact_evse_ids(row: dict[str, Any]) -> set[str]:
     return {str(x).strip() for x in (row.get("evseIds") or []) if str(x).strip()}
 
 
-def compact_evse_id(value: Any) -> str:
-    return "".join(ch for ch in str(value or "").upper() if ch.isalnum())
-
-
 def is_go_electric_physical_evse(evse: dict[str, Any]) -> bool:
-    # PUN identity is authoritative for Go Electric: ITGES... / ITGESE...
-    # This deliberately avoids relying on mutable operator display labels.
-    return compact_evse_id(evse.get("evseId")).startswith("ITGES")
+    # Mirror the already-audited data-lab integration rule exactly.
+    # Deliberately DO NOT compact/remove separators: IT*GE*S... is not ITGES....
+    return str(evse.get("evseId") or "").upper().startswith("ITGES")
 
 
 def is_legacy_go_electric_nextcharge_emsp(row: dict[str, Any], ge_evse_ids: set[str]) -> bool:
