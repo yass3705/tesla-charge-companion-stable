@@ -26,6 +26,7 @@ on:
       - 'data/v9/germany-direct-offers-ecowerk-extension.json'
       - 'data/v9/germany-direct-offers-autostrom-plus-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-konstanz-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-bruchsal-extension.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
       - 'scripts/test_germany_offer_attachment_v9.py'
@@ -49,6 +50,7 @@ on:
       - 'scripts/test_germany_ecowerk_direct_offers_v9.py'
       - 'scripts/test_germany_autostrom_plus_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_konstanz_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_bruchsal_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -109,3 +111,5 @@ jobs:
         run: python scripts/test_germany_autostrom_plus_direct_offers_v9.py
       - name: Validate Stadtwerke Konstanz direct offers
         run: python scripts/test_germany_stadtwerke_konstanz_direct_offers_v9.py
+      - name: Validate Stadtwerke Bruchsal direct offers
+        run: python scripts/test_germany_stadtwerke_bruchsal_direct_offers_v9.py
