@@ -1,147 +1,149 @@
-name: V9 Italy Go Electric session builder QA
-# QA-only workflow. Production builder/data remain unchanged until this gate passes.
+name: V9 Italy Go Electric overlay staging publish
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'qa/v9-italy-go-electric-session-builder*'
+      - publish/italy-go-electric-v9-overlay
     paths:
-      - scripts/v9_build_italy_catalog_runtime_pricing_qa.py
       - .github/workflows/v9-italy-go-electric-session-builder-qa.yml
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 concurrency:
-  group: v9-italy-go-electric-session-builder-${{ github.ref }}
+  group: v9-italy-go-electric-overlay-staging-publish
   cancel-in-progress: true
 
 jobs:
-  build-and-engine-test:
+  stage-overlay-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Download validated Italy session-ready candidate
+      - name: Download validated session-ready Italy candidate
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          mkdir -p /tmp/italy-input
+          mkdir -p /tmp/italy-publish
           gh run download 33495379759 \
             --repo yass3705/tesla-charge-companion-data-lab \
             --name go-electric-italy-v9-session-activation-qa \
-            --dir /tmp/italy-input
-          find /tmp/italy-input -type f -print
-          test -n "$(find /tmp/italy-input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
+            --dir /tmp/italy-publish/input
+          test -n "$(find /tmp/italy-publish/input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
+          cp data/v9/italy-offers.json /tmp/italy-publish/baseline-offers.json
 
-      - name: Compile Italy V9 with fail-closed runtime pricing
+      - name: Build validated Go Electric candidate
         run: |
           set -euo pipefail
-          INPUT="$(find /tmp/italy-input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
-          mkdir -p /tmp/italy-build/static
-          python scripts/v9_build_italy_catalog_runtime_pricing_qa.py \
+          INPUT="$(find /tmp/italy-publish/input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
+          mkdir -p /tmp/italy-publish/static
+          python scripts/v9_build_italy_catalog.py \
             --input "$INPUT" \
-            --out-root /tmp/italy-build/static \
-            --offers /tmp/italy-build/italy-offers.json \
-            --report /tmp/italy-build/italy-build-report.json
+            --out-root /tmp/italy-publish/static \
+            --offers /tmp/italy-publish/candidate-offers.json \
+            --report /tmp/italy-publish/candidate-build-report.json
 
-      - name: Validate compiled offer accounting and fail-closed behavior
+      - name: Build fail-closed overlay
+        run: |
+          set -euo pipefail
+          INPUT="$(find /tmp/italy-publish/input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
+          python scripts/v9_overlay_go_electric_italy.py \
+            --baseline /tmp/italy-publish/baseline-offers.json \
+            --candidate-offers /tmp/italy-publish/candidate-offers.json \
+            --candidate-source "$INPUT" \
+            --out /tmp/italy-publish/italy-offers-overlay.json \
+            --report /tmp/italy-publish/overlay-readiness.json
+
+      - name: Re-test final overlay pricing engine
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const engine=require('./assets/v9/pricing-engine.js');
+          const p=JSON.parse(fs.readFileSync('/tmp/italy-publish/italy-offers-overlay.json','utf8'));
+          const offers=p.directOffers.filter(o=>o.provider==='Go Electric Stations SRLS' && o.pricing?.type==='rules');
+          const failures=[];
+          for(const offer of offers){
+            const rules=offer.pricing?.rules||[];
+            if(rules.length!==1){failures.push({id:offer.id,reason:'rule_count'});continue;}
+            const rule=rules[0];
+            const session={energyKwh:10,durationMinutes:30,chargingMinutes:30,startAt:'2026-09-01T10:00:00+02:00',timeZone:'Europe/Rome'};
+            const got=engine.evaluateOffer(offer,session);
+            const expected=Math.round((10*Number(rule.pricePerKwh)+Number(rule.sessionFeeEur)+Number.EPSILON)*1e6)/1e6;
+            if(got.complete!==true || Math.abs(Number(got.totalEur)-expected)>1e-6 || Math.abs(Number(got.components?.sessionFee)-Number(rule.sessionFeeEur))>1e-6){
+              failures.push({id:offer.id,got,expected});
+            }
+          }
+          const report={tested:offers.length,passed:offers.length-failures.length,failed:failures.length};
+          fs.writeFileSync('/tmp/italy-publish/overlay-engine-qa.json',JSON.stringify(report,null,2)+'\n');
+          console.log(JSON.stringify(report,null,2));
+          if(offers.length!==127 || failures.length) process.exit(1);
+          NODE
+
+      - name: Convert QA overlay to production payload and validate exact delta
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          report = json.loads(Path('/tmp/italy-build/italy-build-report.json').read_text())
-          offers = json.loads(Path('/tmp/italy-build/italy-offers.json').read_text())
-          assert report['directOffers'] == 26569, report
-          assert report['subscriptionOffers'] == 2764, report
-          assert report['emspOffers'] == 0, report
-          assert report['sourceCounts']['rankableDirectEvseCount'] == 26569
-          assert report['sourceCounts']['rankableDirectCoveragePct'] == 35.41
+          baseline=json.loads(Path('/tmp/italy-publish/baseline-offers.json').read_text())
+          overlay=json.loads(Path('/tmp/italy-publish/italy-offers-overlay.json').read_text())
+          report=json.loads(Path('/tmp/italy-publish/overlay-readiness.json').read_text())
+          GE='Go Electric Stations SRLS'
 
-          ge = [o for o in offers['directOffers'] if o.get('provider') == 'Go Electric Stations SRLS']
-          ge_kwh = [o for o in ge if (o.get('pricing') or {}).get('type') == 'kwh']
-          ge_rules = [o for o in ge if (o.get('pricing') or {}).get('type') == 'rules']
-          assert len(ge) == 943
-          assert len(ge_kwh) == 816
-          assert len(ge_rules) == 127
+          assert all(report['gates'].values()), report
+          assert len(overlay.get('directOffers',[])) == 49352
+          assert len(overlay.get('subscriptionOffers',[])) == 50008
+          assert len(overlay.get('emspOffers',[])) == 1678
+          assert len([x for x in overlay.get('directOffers',[]) if x.get('provider') == GE]) == 943
+          assert [x for x in overlay.get('directOffers',[]) if x.get('provider') != GE] == [x for x in baseline.get('directOffers',[]) if x.get('provider') != GE]
+          assert overlay.get('subscriptionOffers',[]) == baseline.get('subscriptionOffers',[])
 
-          session_ids = []
-          for offer in ge_rules:
-              pricing = offer['pricing']
-              rules = pricing.get('rules') or []
-              assert len(rules) == 1
-              rule = rules[0]
-              assert set(rule) >= {'scope', 'start', 'end', 'currency', 'pricePerKwh', 'sessionFeeEur'}
-              assert 'connectedTimePerMinuteEur' not in rule
-              assert 'postChargeFee' not in pricing
-              session_ids.extend(offer.get('evseIds') or [])
-          assert len(session_ids) == 127 and len(set(session_ids)) == 127
+          # QA-only publication marker must not alter the served schema.
+          if 'publicationAllowed' in baseline:
+              overlay['publicationAllowed'] = baseline['publicationAllowed']
+          else:
+              overlay.pop('publicationAllowed', None)
 
-          qa = {
-              'schemaVersion': 1,
-              'publicationAllowed': False,
-              'builderMergeAllowed': False,
-              'directOffers': report['directOffers'],
-              'subscriptionOffers': report['subscriptionOffers'],
-              'emspOffers': report['emspOffers'],
-              'goElectric': {
-                  'total': len(ge),
-                  'energyOnly': len(ge_kwh),
-                  'energyPlusSession': len(ge_rules),
-              },
-              'gates': {
-                  'directAccounting26569': report['directOffers'] == 26569,
-                  'goElectric943': len(ge) == 943,
-                  'energyOnly816': len(ge_kwh) == 816,
-                  'energyPlusSession127': len(ge_rules) == 127,
-                  'subscriptionsPreserved2764': report['subscriptionOffers'] == 2764,
-                  'legacyEmspStillZero': report['emspOffers'] == 0,
-                  'publicationDisabled': True,
-              },
-          }
-          Path('/tmp/italy-build/go-electric-session-builder-qa.json').write_text(json.dumps(qa, indent=2) + '\n')
-          print(json.dumps(qa, indent=2))
+          Path('data/v9/italy-offers.json').write_text(json.dumps(overlay,ensure_ascii=False,separators=(',',':'))+'\n')
+          production=json.loads(Path('data/v9/italy-offers.json').read_text())
+          assert set(production) == set(baseline), (set(production)-set(baseline), set(baseline)-set(production))
+          assert len(production['directOffers']) == 49352
+          assert len(production['subscriptionOffers']) == 50008
+          assert len(production['emspOffers']) == 1678
+          summary={'direct':49352,'subscriptions':50008,'emsp':1678,'goElectricDirect':943,'legacyEmspRemoved':2281,'schemaKeysUnchanged':True}
+          Path('/tmp/italy-publish/production-delta-qa.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
           PY
 
-      - name: Test the 127 compiled session offers with the V9 pricing engine
+      - name: Commit staged Italy runtime data to publication branch
         run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const engine = require('./assets/v9/pricing-engine.js');
-          const payload = JSON.parse(fs.readFileSync('/tmp/italy-build/italy-offers.json','utf8'));
-          const offers = payload.directOffers.filter(o => o.provider === 'Go Electric Stations SRLS' && o.pricing?.type === 'rules');
-          if (offers.length !== 127) throw new Error(`expected 127 session offers, got ${offers.length}`);
-          const failures = [];
-          for (const offer of offers) {
-            const rule = offer.pricing.rules[0];
-            const session = {energyKwh: 10, durationMinutes: 30, chargingMinutes: 30, startAt: '2026-09-01T10:00:00+02:00', timeZone: 'Europe/Rome'};
-            const got = engine.evaluateOffer(offer, session);
-            const expected = Math.round((10 * Number(rule.pricePerKwh) + Number(rule.sessionFeeEur) + Number.EPSILON) * 1e6) / 1e6;
-            if (got.complete !== true || Math.abs(Number(got.totalEur) - expected) > 1e-6 || Math.abs(Number(got.components?.sessionFee) - Number(rule.sessionFeeEur)) > 1e-6) {
-              failures.push({id: offer.id, got, expected});
-            }
-          }
-          const report = {publicationAllowed:false,tested:offers.length,passed:offers.length-failures.length,failed:failures.length,gates:{all127Complete:offers.length===127&&failures.length===0,sessionFeeIncluded:failures.length===0,publicationDisabled:true}};
-          fs.writeFileSync('/tmp/italy-build/go-electric-session-builder-engine-qa.json', JSON.stringify(report,null,2)+'\n');
-          console.log(JSON.stringify(report,null,2));
-          if (!Object.values(report.gates).every(Boolean)) process.exit(1);
-          NODE
+          set -euo pipefail
+          git diff --quiet -- data/v9/italy-offers.json && { echo 'expected Italy runtime data diff'; exit 1; }
+          git diff --stat -- data/v9/italy-offers.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json
+          git commit -m 'data(v9): stage validated Go Electric Italy overlay'
+          git push origin HEAD:publish/italy-go-electric-v9-overlay
 
-      - name: Upload builder QA reports
+      - name: Upload staging reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: v9-italy-go-electric-session-builder-qa
+          name: v9-italy-go-electric-overlay-staging-publish
           path: |
-            /tmp/italy-build/italy-build-report.json
-            /tmp/italy-build/go-electric-session-builder-qa.json
-            /tmp/italy-build/go-electric-session-builder-engine-qa.json
+            /tmp/italy-publish/candidate-build-report.json
+            /tmp/italy-publish/overlay-readiness.json
+            /tmp/italy-publish/overlay-engine-qa.json
+            /tmp/italy-publish/production-delta-qa.json
           retention-days: 14
