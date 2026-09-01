@@ -85,6 +85,7 @@ jobs:
           python scripts/audit_france_alize_liberte_scope.py \
             --canonical-dir build/france_irve_identity \
             --review data/alize_liberte_scope_review_20260901.json \
+            --static-csv .tmp/irve/static.csv \
             --out build/france_irve_scope/alize_liberte_scope_report.json
 
       - name: Validate fail-closed Alize scope
@@ -98,12 +99,15 @@ jobs:
           assert s['rankableOfferCount']==0
           assert s['physicalInventoryMutationCount']==0
           assert s['requiresLocalTariffMapping'] is True
+          assert s['staticPanPdcMatchedForAmenageur']==s['canonicalAlizeLibertePdcCount']
           assert len(r['departmentInventory']) >= 2
           assert sum(x['pdcCount'] for x in r['departmentInventory'])==s['canonicalAlizeLibertePdcCount']
+          assert sum(x['pdcCount'] for x in r['amenageurInventory'])==s['canonicalAlizeLibertePdcCount']
           assert r['physicalOperatorPdcCounts']=={'bouygues-energies-services': s['canonicalAlizeLibertePdcCount']}, r['physicalOperatorPdcCounts']
           assert 'le-plein-tarnais' not in r['physicalOperatorPdcCounts']
           print(json.dumps(s,ensure_ascii=False,indent=2))
           print(json.dumps(r['departmentInventory'][:20],ensure_ascii=False,indent=2))
+          print(json.dumps(r['amenageurInventory'][:20],ensure_ascii=False,indent=2))
           print(json.dumps(r['physicalOperatorPdcCounts'],ensure_ascii=False,indent=2))
           PY
 
