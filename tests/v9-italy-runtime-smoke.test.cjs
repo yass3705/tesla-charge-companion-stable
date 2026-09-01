@@ -19,10 +19,10 @@ const normalized=Direct.normalizePayload(offers);
 
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,52451);
+assert.equal(offers.directOffers.length,53112);
 assert.equal(offers.subscriptionOffers.length,53134);
 assert.equal(offers.emspOffers.length,1678);
-assert.equal(normalized.offerRules.length,52451+53134+1678);
+assert.equal(normalized.offerRules.length,53112+53134+1678);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -69,6 +69,14 @@ assert.equal(freeToX.filter(o=>o.metadata?.tariffClass==='AC').length,105);
 assert.equal(freeToX.filter(o=>o.metadata?.tariffClass==='DC_PROMO_LE64').length,186);
 assert.ok(freeToX.every(o=>o.pricing?.pricePerKwh===0.5&&o.pricing?.postChargeFeeUnknown===true));
 assert.ok(freeToX.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
+
+const repower=offers.directOffers.filter(o=>o.sourceId==='repower-italy-recharge-around-direct');
+assert.equal(repower.length,661);
+assert.equal(repower.filter(o=>o.pricing?.pricePerKwh===0.5856).length,657);
+assert.equal(repower.filter(o=>o.pricing?.pricePerKwh===0.48).length,3);
+assert.equal(repower.filter(o=>o.pricing?.pricePerKwh===0).length,1);
+assert.equal(repower.filter(o=>o.metadata?.matchMethod==='station_address_connector').length,10);
+assert.ok(repower.every(o=>o.provider==='Repower'&&o.pricing?.postChargeFeeUnknown===true));
 
 const geSessionSample=Direct.normalizePayload({country:'IT',directOffers:[goElectricSession[0]]}).offerRules[0];
 const geSessionStation={id:'IT:go-electric:smoke',countryCode:'IT',offers:[geSessionSample]};
@@ -170,6 +178,7 @@ console.log(JSON.stringify({
   goElectricEnergy:goElectricEnergy.length,
   goElectricSession:goElectricSession.length,
   freeToX:freeToX.length,
+  repower:repower.length,
   duferco:duferco.length,
   enel:enel.length,
   subscriptions:offers.subscriptionOffers.length,

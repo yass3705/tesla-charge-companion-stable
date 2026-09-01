@@ -92,9 +92,9 @@ jobs:
           summary=json.loads(Path('/tmp/neogy-gap/italy-direct-gap-report.json').read_text())['summary']
           assert summary['stations']==29696
           assert summary['physicalEvse']==75025
-          assert summary['matchedDirectEvse']==52451
-          assert summary['uncoveredEvse']==22574
-          assert summary['directCoveragePct']==69.91
+          assert summary['matchedDirectEvse']==53112
+          assert summary['uncoveredEvse']==21913
+          assert summary['directCoveragePct']==70.79
           assert summary['orphanDirectOfferEvseIds']==0
           print(json.dumps(summary,indent=2))
           PY
