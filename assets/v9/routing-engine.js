@@ -18,7 +18,7 @@
   async function routeCandidates(stations,{origin,provider,session={},concurrency=6,requestTimeoutMs=6000,budgetMs=25000}={}){
     if(typeof provider!=='function')return{byStationId:{},errors:[],routedCount:0,requestedCount:0,timedOut:false,aborted:false};
     const rows=(stations||[]).map(station=>({station,id:stationId(station),destination:endpoint(station)})).filter(x=>x.id&&x.destination),byStationId={},errors=[];
-    const totalBudget=Math.max(500,Number(budgetMs)||25000),perRequest=Math.max(250,Math.min(Number(requestTimeoutMs)||6000,totalBudget));
+    const totalBudget=Math.max(1,Number(budgetMs)||25000),perRequest=Math.max(1,Math.min(Number(requestTimeoutMs)||6000,totalBudget));
     const controller=typeof AbortController==='function'?new AbortController():null,started=Date.now();let cursor=0,timedOut=false;
     const deadline=setTimeout(()=>{timedOut=true;if(controller&&!controller.signal.aborted)controller.abort(new Error('routing_budget_exceeded'));},totalBudget);
     async function worker(){
