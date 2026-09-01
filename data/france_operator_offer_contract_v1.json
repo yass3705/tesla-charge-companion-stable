@@ -88,7 +88,7 @@
     "missingUnplugTimePolicy": "explicit behavior when unplug/connection-end time is missing, such as zero_post_charge",
     "parkingPerMinute": "parking fee only when explicitly part of charging transaction",
     "totalTransactionCap": "optional cap applied to the complete charging transaction",
-    "timeWindowSelection": "event selecting a time-window tariff, such as connection_start_local_time",
+    "timeWindowSelection": "application basis for time-window rules: connection_start_local_time selects one rule for the whole session; elapsed_local_clock applies each component only to quantities accrued inside its local-clock window",
     "rounding": "optional billing rounding rule such as started_kwh_and_started_minute",
     "roundingEpsilon": "numeric tolerance applied before started-unit ceiling",
     "formulaFamily": "stable formula family identifier for lossless runtime conversion",

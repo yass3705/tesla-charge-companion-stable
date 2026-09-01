@@ -53,7 +53,7 @@
     {"id":"nice-rp","label":"NICE RP","aliases":["NICE RP","Nice RP"],"operatorAliases":[],"operatorFallback":false,"coverageStatus":"missing_base","priority":2,"artifacts":[]},
     {"id":"citeos-region-bfc","label":"CITEOS Région BFC","aliases":["CPO CITEOS Region-Bfc","CPO CITEOS Région-BFC"],"operatorAliases":[],"operatorFallback":false,"coverageStatus":"missing_base","priority":2,"artifacts":[]},
     {"id":"ecocharge77","label":"Ecocharge77","aliases":["Ecocharge77","Ecocharge 77","Ecocharge77 SDESM","SDESM Ecocharge77"],"operatorAliases":[],"operatorFallback":false,"coverageStatus":"extract_runtime","priority":1,"artifacts":["assets/v8-ecocharge77-overlay.js"]},
-    {"id":"grand-lyon","label":"Grand Lyon","aliases":["Grand Lyon"],"operatorAliases":[],"operatorFallback":false,"coverageStatus":"missing_base","priority":2,"artifacts":[]},
+    {"id":"grand-lyon","label":"Grand Lyon","aliases":["Grand Lyon","IZIVIA Grand Lyon","Izivia Grand Lyon"],"operatorAliases":[],"operatorFallback":false,"coverageStatus":"missing_base","priority":2,"artifacts":[]},
     {"id":"seolis","label":"SÉOLIS","aliases":["Seolis","SÉOLIS","SEOLIS"],"operatorAliases":["SEOLIS"],"operatorFallback":true,"coverageStatus":"missing_base","priority":2,"artifacts":[]},
     {"id":"road","label":"Road","aliases":["Road","E-Flux by Road"],"operatorAliases":["Road | FR*EFL"],"operatorFallback":true,"coverageStatus":"missing_base","priority":3,"artifacts":[],"notes":"Peut porter plusieurs réseaux clients; privilégier le nom d'enseigne quand il est spécifique."},
     {"id":"sowatt","label":"Sowatt Solutions","aliases":["Sowatt Solutions","Sowatt"],"operatorAliases":["Sowatt Solutions"],"operatorFallback":true,"coverageStatus":"missing_base","priority":2,"artifacts":[]},
