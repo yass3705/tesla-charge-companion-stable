@@ -25,8 +25,9 @@ for o in all_offers:
   assert r.get('billing')=='kwh', o['id']
   assert r.get('currency')=='EUR', o['id']
   assert isinstance(r.get('pricePerKwh'),(int,float)) and r['pricePerKwh']>=0, o['id']
- if 'subscription' in o:
-  s=o['subscription']
+ s=o.get('subscription')
+ if s is not None:
+  assert isinstance(s,dict), o['id']
   assert isinstance(s.get('monthlyFee'),(int,float)) and s['monthlyFee']>=0, o['id']
   assert s.get('currency')=='EUR', o['id']
  promo=o.get('temporaryDiscount')
