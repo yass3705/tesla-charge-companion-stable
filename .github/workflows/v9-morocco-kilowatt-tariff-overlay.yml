@@ -1,0 +1,64 @@
+name: V9 Morocco Kilowatt tariff overlay
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-kilowatt-overlay-20260901']
+    paths:
+      - 'assets/v9/adapters/morocco-kilowatt-tariff.js'
+      - 'data/v9/morocco-kilowatt-overlay-source.json'
+      - 'tests/v9-morocco-kilowatt-tariff-overlay.test.cjs'
+      - '.github/workflows/v9-morocco-kilowatt-tariff-overlay.yml'
+      - 'v9-app/app.js'
+      - 'v9-app/index.html'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Test Kilowatt overlay invariants
+        run: node tests/v9-morocco-kilowatt-tariff-overlay.test.cjs
+
+      - name: Validate published candidate manifest from data-lab PR branch
+        run: |
+          curl --fail --silent --show-error --location \
+            --max-time 20 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/integration/morocco-kilowatt-v9-tariffs-refresh/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json \
+            -o /tmp/kilowatt-manifest.json
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const A=require('./assets/v9/adapters/morocco-kilowatt-tariff.js');
+          const m=JSON.parse(fs.readFileSync('/tmp/kilowatt-manifest.json','utf8'));
+          const rules=A.offerRulesFromManifest(m);
+          if(rules.length!==26)throw new Error(`expected 26 Kilowatt free rules, got ${rules.length}`);
+          if((m.unresolvedStationIds||[]).length!==17)throw new Error('expected 17 unresolved Kilowatt stations');
+          console.log(JSON.stringify({candidateManifest:true,freeRules:rules.length,unresolved:m.unresolvedStationIds.length}));
+          NODE
+
+      - name: Verify production URL is fail-closed before publication and valid after publication
+        run: |
+          URL=https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json
+          CODE=$(curl --silent --show-error --location --max-time 20 -o /tmp/kilowatt-main.json -w '%{http_code}' "$URL")
+          if [ "$CODE" = "404" ]; then
+            echo 'Kilowatt production manifest not published yet: optional V9 source will fail closed.'
+            exit 0
+          fi
+          if [ "$CODE" != "200" ]; then
+            echo "Unexpected production manifest HTTP $CODE" >&2
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const A=require('./assets/v9/adapters/morocco-kilowatt-tariff.js');
+          const m=JSON.parse(fs.readFileSync('/tmp/kilowatt-main.json','utf8'));
+          if(A.offerRulesFromManifest(m).length!==26)throw new Error('published Kilowatt manifest invalid');
+          console.log('Published Kilowatt manifest valid.');
+          NODE
