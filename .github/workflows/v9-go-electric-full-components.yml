@@ -1,0 +1,79 @@
+name: V9 Go Electric full components
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/v9-go-electric-full-components
+    paths:
+      - scripts/v9_build_italy_catalog_go_electric_full.py
+      - .github/workflows/v9-go-electric-full-components.yml
+      - assets/v9/pricing-engine.js
+      - assets/v9/session-engine.js
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download latest validated data-lab candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list --repo yass3705/tesla-charge-companion-data-lab --workflow go-electric-italy-v9-full-components-qa.yml --branch integration/go-electric-full-components-v9 --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/ge
+          gh run download "$RUN_ID" --repo yass3705/tesla-charge-companion-data-lab --name go-electric-italy-v9-full-components-qa --dir /tmp/ge
+          CANDIDATE="$(find /tmp/ge -name 'italy_v9_candidate_go_electric_engine_compatible_qa.json.gz' -print -quit)"
+          test -n "$CANDIDATE"
+          cp "$CANDIDATE" /tmp/italy-go-electric-full.json.gz
+          echo "Using data-lab run $RUN_ID"
+      - name: Build Italy catalogue with validated Go Electric runtime pricing
+        run: |
+          python -m py_compile scripts/v9_build_italy_catalog_go_electric_full.py
+          rm -rf /tmp/italy-static
+          python scripts/v9_build_italy_catalog_go_electric_full.py --input /tmp/italy-go-electric-full.json.gz --out-root /tmp/italy-static --offers /tmp/italy-offers.json --report /tmp/italy-build-report.json
+      - name: Validate exact offer counts and V9 session semantics
+        run: |
+          node - <<'JS'
+          const fs=require('fs');
+          const Pricing=require('./assets/v9/pricing-engine.js');
+          const offers=JSON.parse(fs.readFileSync('/tmp/italy-offers.json','utf8'));
+          const ge=offers.directOffers.filter(o=>o.provider==='Go Electric Stations SRLS');
+          if(ge.length!==2214) throw new Error(`Go Electric direct count ${ge.length}`);
+          if(offers.directOffers.length!==27840) throw new Error(`Italy direct count ${offers.directOffers.length}`);
+          const post=ge.filter(o=>o.pricing&&o.pricing.postChargeFee);
+          const after=ge.filter(o=>(o.pricing?.rules||[]).some(r=>r.connectedTimePerMinuteAfterFreeEur!=null));
+          if(post.length!==626) throw new Error(`post-charge count ${post.length}`);
+          if(after.length!==74) throw new Error(`onAfterTime count ${after.length}`);
+          const p=ge.find(o=>o.evseIds?.[0]==='ITGESE131365937');
+          if(!p) throw new Error('missing post-charge sample');
+          let r=Pricing.evaluateOffer(p,{energyKwh:10,durationMinutes:60,postChargeMinutes:10,postChargeStartAt:'2026-09-01T06:00:00Z',startAt:'2026-09-01T05:00:00Z',timeZone:'Europe/Rome'});
+          if(!r.complete||Math.abs(r.totalEur-8.1)>1e-9) throw new Error(`post-charge active sample ${JSON.stringify(r)}`);
+          r=Pricing.evaluateOffer(p,{energyKwh:10,durationMinutes:60,postChargeMinutes:10,postChargeStartAt:'2026-09-01T21:30:00Z',startAt:'2026-09-01T20:30:00Z',timeZone:'Europe/Rome'});
+          if(!r.complete||Math.abs(r.totalEur-7.1)>1e-9) throw new Error(`post-charge exempt sample ${JSON.stringify(r)}`);
+          const a=ge.find(o=>o.evseIds?.[0]==='ITGESE800678718');
+          if(!a) throw new Error('missing onAfterTime sample');
+          r=Pricing.evaluateOffer(a,{energyKwh:10,durationMinutes:300,startAt:'2026-09-01T06:00:00Z',timeZone:'Europe/Rome'});
+          if(!r.complete||Math.abs(r.totalEur-14.62)>1e-9) throw new Error(`onAfterTime sample ${JSON.stringify(r)}`);
+          r=Pricing.evaluateOffer(a,{energyKwh:10,durationMinutes:180,startAt:'2026-09-01T19:00:00Z',timeZone:'Europe/Rome'});
+          if(r.complete||r.reason!=='tariff_window_crossing_unsupported_components') throw new Error(`cross-window must fail closed ${JSON.stringify(r)}`);
+          console.log(JSON.stringify({direct:offers.directOffers.length,goElectric:ge.length,postCharge:post.length,onAfterTime:after.length},null,2));
+          JS
+      - name: Upload validation outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-go-electric-full-components
+          path: |
+            /tmp/italy-offers.json
+            /tmp/italy-build-report.json
+          retention-days: 14
