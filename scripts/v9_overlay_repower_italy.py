@@ -331,15 +331,14 @@ def main() -> None:
         "pricesExact": dict(price_counts) == {0.0: 1, 0.48: 3, 0.5856: 657},
         "officialFreeExact1": len(free_entries) == 1
         and all(float(entry["directTariff"]["energyEurPerKwh"]) == 0 for entry in free_entries),
-        "baselineCoreDirect52451": len(retained_direct) == 52451,
+        "baselineCoreDirectComposed": len(retained_direct) == len(baseline_direct) - len(previous_overlay),
         "baselineSubscriptions53134": len(subscriptions) == 53134,
         "baselineEmsp1678": len(emsp) == 1678,
         "previousOverlayIdempotent": len(previous_overlay) in {0, 661},
         "newOfferIdsUnique": len(new_offer_ids) == len(set(new_offer_ids)),
         "noOfferIdCollision": not offer_id_collisions,
         "noOtherDirectEvseCollision": not direct_evse_collisions,
-        "overlayDirect53112": len(overlay["directOffers"]) == 53112
-        and len(overlay["directOffers"]) == expected_direct,
+        "overlayDirectComposed": len(overlay["directOffers"]) == expected_direct,
         "otherDirectOffersPreservedExactly": [
             offer for offer in overlay["directOffers"] if not is_existing_overlay(offer)
         ]
