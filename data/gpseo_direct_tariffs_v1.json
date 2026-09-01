@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "gpseo-direct-tariffs-france",
+  "networkId": "gpseo",
+  "label": "Grand Paris Seine & Oise",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "officialPageUpdatedAt": "2025-09-16",
+  "sources": {
+    "officialGpseoPage": "https://gpseo.fr/article/bornes-recharges-electriques",
+    "officialGpseoMobilityDocument": "https://gpseo.fr/sites/gpseo/files/document/2025-06/gp-so-a4_web-planches.pdf",
+    "current2026MunicipalConfirmation": "https://www.nezel.fr/post/une-borne-de-recharge-%C3%A9lectrique-d%C3%A9sormais-disponible-%C3%A0-n%C3%A9zel"
+  },
+  "scope": {
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthorityAliases": [
+      "Communauté urbaine Grand Paris Seine & Oise",
+      "COMMUNAUTE URBAINE GRAND PARIS SEINE & OISE",
+      "Grand Paris Seine & Oise",
+      "Grand Paris Seine et Oise"
+    ],
+    "requiresExactPanContractingAuthority": true,
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "genericAlizeLiberteNeverInheritsGpseoTariff": true
+  },
+  "access": {
+    "qrSmartphoneAvailable": true,
+    "alizeAppOrBadgeAvailable": true,
+    "partnerMobilityBadgesAvailable": true,
+    "contactlessBankCardAvailable": true,
+    "monthlySubscriptionRequiredForDirectQr": false
+  },
+  "tariffFamilies": [
+    {
+      "id": "gpseo-slow-7kw-direct",
+      "kind": "AC",
+      "maxPowerKw": 7.4,
+      "rankable": true,
+      "paymentProfile": "qr_app_or_partner_badge",
+      "pricingRules": [
+        {"scope":"allDay","currency":"EUR","pricePerKwh":0.35,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0,"durationThresholdMinutes":0,"connectionFee":0,"parkingPerMinute":0,"notes":"Energy component."},
+        {"scope":"timeWindow","currency":"EUR","pricePerKwh":0,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0.05,"durationThresholdMinutes":720,"durationStart":"08:00","durationEnd":"22:00","connectionFee":0,"parkingPerMinute":0,"notes":"3 EUR/hour after the first 12 connection hours, only from 08:00 to 22:00."}
+      ]
+    },
+    {
+      "id": "gpseo-normal-22kw-direct",
+      "kind": "AC",
+      "minPowerKwExclusive": 7.4,
+      "maxPowerKw": 22.5,
+      "rankable": true,
+      "paymentProfile": "qr_app_or_partner_badge",
+      "pricingRules": [
+        {"scope":"allDay","currency":"EUR","pricePerKwh":0.35,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0,"durationThresholdMinutes":0,"connectionFee":0,"parkingPerMinute":0,"notes":"Energy component."},
+        {"scope":"timeWindow","currency":"EUR","pricePerKwh":0,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0.05,"durationThresholdMinutes":180,"durationStart":"08:00","durationEnd":"22:00","connectionFee":0,"parkingPerMinute":0,"notes":"3 EUR/hour after the first 3 connection hours, only from 08:00 to 22:00."}
+      ]
+    }
+  ],
+  "contactlessBankCardReference": {
+    "rankable": false,
+    "reason": "payment_method_selector_not_yet_modeled",
+    "pricePerKwh": 0.50,
+    "durationPerMinute": 0,
+    "notes": "Official GPSEO page states contactless bank-card payment is calculated only from energy delivered at 0.50 EUR/kWh. Kept separate so TCC does not mix payment profiles."
+  },
+  "exclusions": [
+    "Only PAN IRVE PDCs under the exact Grand Paris Seine & Oise contracting authority are eligible.",
+    "Other Alize Liberte / Bouygues-operated local networks never inherit this tariff.",
+    "Roaming commissions charged by mobility providers are not GPSEO direct prices.",
+    "Parking fees remain separate from the charging tariff.",
+    "PAN IRVE remains the sole physical inventory."
+  ]
+}
