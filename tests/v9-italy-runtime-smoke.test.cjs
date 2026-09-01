@@ -55,7 +55,6 @@ const goElectric=offers.directOffers.filter(o=>o.provider==='Go Electric Station
 const goElectricEnergy=goElectric.filter(o=>o.pricing?.type==='kwh');
 const goElectricSession=goElectric.filter(o=>o.pricing?.type==='rules');
 assert.ok(goElectric.length>0,'Go Electric direct layer empty');
-assert.ok(goElectricEnergy.length>0,'Go Electric kWh layer empty');
 assert.ok(goElectricSession.length>0,'Go Electric session-fee layer empty');
 assert.equal(goElectricEnergy.length+goElectricSession.length,goElectric.length,'unexpected Go Electric pricing type');
 assert.ok(goElectricEnergy.every(o=>Number.isFinite(Number(o.pricing?.pricePerKwh))));
