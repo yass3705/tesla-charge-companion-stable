@@ -31,7 +31,7 @@ jobs:
       - name: Checkout validated V9 source
         uses: actions/checkout@v4
         with:
-          ref: 83e74cbc06b47da4045e65f4264a4a627fff1bc3
+          ref: 01a540c3400f37783a1eadf1e103f87fa4364001
           path: v9src
 
       - name: Build isolated V9 test subtree
@@ -78,4 +78,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-# Rotated optimized first-device test window snapshot. Canary remains 0%.
+# Extended optimized first-device test window snapshot. Canary remains 0%.
