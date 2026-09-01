@@ -1,0 +1,62 @@
+name: Repair stale Italy composition counters
+
+on:
+  push:
+    branches:
+      - fix/italy-runtime-smoke-count-20260901
+    paths:
+      - '.github/workflows/fix-italy-stale-composition-counts.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/italy-runtime-smoke-count-20260901
+      - name: Replace historical composition totals by structural invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          changed=[]
+          for p in Path('scripts').glob('v9_overlay_*_italy.py'):
+              s=p.read_text()
+              old=s
+              s=re.sub(
+                  r'"baselineCoreDirect\d+": len\(retained_direct\) == \d+,',
+                  '"baselineCoreDirectComposed": len(retained_direct) == len(baseline_direct) - len(previous_overlay),',
+                  s,
+              )
+              s=re.sub(
+                  r'"overlayDirect\d+": len\(overlay\["directOffers"\]\) == \d+\s+and len\(overlay\["directOffers"\]\) == expected_direct,',
+                  '"overlayDirectComposed": len(overlay["directOffers"]) == expected_direct,',
+                  s,
+              )
+              if s!=old:
+                  p.write_text(s)
+                  changed.append(str(p))
+          print('changed:', changed)
+          if not changed:
+              raise SystemExit('No stale composition counters found')
+          for p in changed:
+              txt=Path(p).read_text()
+              leftovers=re.findall(r'(?:baselineCoreDirect|overlayDirect)\d+',txt)
+              if leftovers:
+                  raise SystemExit(f'{p}: stale counter names remain: {leftovers}')
+          PY
+          git diff --check
+      - name: Commit repairs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/v9_overlay_*_italy.py
+          git commit -m 'V9 Italy: make overlay composition gates data-driven'
+          git push origin HEAD:fix/italy-runtime-smoke-count-20260901
