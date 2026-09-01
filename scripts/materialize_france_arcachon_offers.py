@@ -51,6 +51,7 @@ def validate_source(d):
     for k,e in checks.items():
         f=fam[k]
         if (float(f['subscriberPricePerKwh']),float(f['publicPricePerKwh']),float(f['durationPerMinute']),int(f['durationThresholdMinutes']))!=e:raise ValueError(f'bad Arcachon family {k}')
+    if float(fam['arcachon-citadine-dc']['stationMaxPowerKw'])!=40.5 or float(fam['arcachon-express-240']['stationMinPowerKwExclusive'])!=40.5:raise ValueError('Arcachon PAN reconciliation threshold missing')
     return s,fam,a
 
 def rule(price=0,rate=0,threshold=0,start=None,end=None,notes=None):
@@ -71,27 +72,33 @@ def main():
     for p in candidate:
         try:station_max[clean(p.get('stationId'))]=max(station_max[clean(p.get('stationId'))],float(p.get('powerKw') or 0))
         except (TypeError,ValueError):pass
-    offers=[];unresolved=[];counts=defaultdict(int);now=dt.datetime.now(dt.timezone.utc).isoformat()
+    proximity_max=float(fam['arcachon-proximity-ac']['stationMaxPowerKw']);citadine_max=float(fam['arcachon-citadine-dc']['stationMaxPowerKw']);express_max=float(fam['arcachon-express-240']['stationMaxPowerKw'])
+    offers=[];unresolved=[];counts=defaultdict(int);station_classes={};now=dt.datetime.now(dt.timezone.utc).isoformat()
+    for sid,mx in station_max.items():
+        if 0<mx<=proximity_max:station_classes[sid]='proximity'
+        elif proximity_max<mx<=citadine_max:station_classes[sid]='citadine'
+        elif citadine_max<mx<=express_max:station_classes[sid]='express'
+        else:station_classes[sid]='unresolved'
     for p in candidate:
-        sid=clean(p.get('stationId'));pid=clean(p.get('pdcId'));mx=station_max[sid];con=p.get('connectors') or {};dc=truthy(con.get('comboCcs')) or truthy(con.get('chademo'))
-        try:pw=float(p.get('powerKw'))
-        except (TypeError,ValueError):pw=None
+        sid=clean(p.get('stationId'));pid=clean(p.get('pdcId'));mx=station_max[sid];cls=station_classes[sid];con=p.get('connectors') or {};dc=truthy(con.get('comboCcs')) or truthy(con.get('chademo'))
         family=None
-        if mx<=22.5 and not dc:family=fam['arcachon-proximity-ac']
-        elif 22.5<mx<=30.5 and dc:family=fam['arcachon-citadine-dc']
-        elif 22.5<mx<=30.5 and not dc:family=fam['arcachon-citadine-ac']
-        elif 30.5<mx<=240.5 and dc:family=fam['arcachon-express-240']
+        if cls=='proximity' and not dc:family=fam['arcachon-proximity-ac']
+        elif cls=='citadine' and dc:family=fam['arcachon-citadine-dc']
+        elif cls=='citadine' and not dc:family=fam['arcachon-citadine-ac']
+        elif cls=='express':family=fam['arcachon-express-240']
         if family is None:
-            unresolved.append({'canonicalStationId':sid,'canonicalPdcId':pid,'powerKw':p.get('powerKw'),'stationMaxPowerKw':mx,'connectors':con,'reason':'unproved_arcachon_tariff_class'});continue
+            unresolved.append({'canonicalStationId':sid,'canonicalPdcId':pid,'powerKw':p.get('powerKw'),'stationMaxPowerKw':mx,'stationClass':cls,'connectors':con,'reason':'unproved_arcachon_tariff_class'});continue
         counts[family['id']]+=1
         selectors={'umbrellaTariffNetworkId':'alize-liberte','contractingAuthority':(meta.get(sid) or {}).get('authority'),'codeInsee':'33009','stationClass':family['stationClass'],'parkingExcluded':True,'roamingSeparate':True}
-        base={'physicalOperatorId':'bouygues-energies-services','tariffNetworkId':'arcachon','sourceStationId':None,'sourceEvseId':None,'canonicalStationId':sid,'canonicalPdcId':pid,'matchMethod':'exact_local_scope','matchDistanceMeters':None,'selectors':selectors,'kind':family['kind'],'minPowerKw':family.get('stationMinPowerKwExclusive'),'maxPowerKw':family.get('stationMaxPowerKw'),'validFrom':None,'validTo':None,'sourceUrl':src['sources']['officialAlizeNetworkPage'],'sourceUpdatedAt':src['verifiedAt'],'normalizedAt':now}
+        base={'physicalOperatorId':'bouygues-energies-services','tariffNetworkId':'arcachon','sourceStationId':None,'sourceEvseId':None,'canonicalStationId':sid,'canonicalPdcId':pid,'matchMethod':'exact_local_scope_station_topology','matchDistanceMeters':None,'selectors':selectors,'kind':family['kind'],'minPowerKw':family.get('stationMinPowerKwExclusive'),'maxPowerKw':family.get('stationMaxPowerKw'),'validFrom':None,'validTo':None,'sourceUrl':src['sources']['officialAlizeNetworkPage'],'sourceUpdatedAt':src['verifiedAt'],'normalizedAt':now}
         def rules(price):
             rows=[rule(price=price,notes='Energy component.')]
             rows.append(rule(rate=family['durationPerMinute'],threshold=family['durationThresholdMinutes'],start=family.get('durationStart'),end=family.get('durationEnd'),notes='Connection-duration component; AC minute fee is disabled overnight when a time window is present.'))
             return rows
         offers.append({**base,'offerId':f"arcachon:public:{family['id']}:{pid}",'provider':"Ville d'Arcachon",'channel':'direct','sourceMode':'network_rule','selectors':{**selectors,'paymentProfile':'public_alize'},'pricingRules':rules(family['publicPricePerKwh']),'subscriptionId':None,'rankable':True,'blockedReasons':[]})
         offers.append({**base,'offerId':f"arcachon:resident:{family['id']}:{pid}",'provider':"Ville d'Arcachon — résident abonné",'channel':'subscription','sourceMode':'network_rule','selectors':{**selectors,'paymentProfile':'arcachon_resident_subscription','monthlyFeeEur':10.0,'badgePurchaseEur':12.0,'residencyRequired':True},'pricingRules':rules(family['subscriberPricePerKwh']),'subscriptionId':'arcachon-resident','rankable':True,'blockedReasons':[]})
-    station_ids={clean(p.get('stationId')) for p in candidate};covered={o['canonicalPdcId'] for o in offers};report={'schemaVersion':'1.0.0','dataset':'france-arcachon-canonical-audit','productionReady':False,'summary':{'eligibleStationCount':len(station_ids),'eligiblePdcCount':len(candidate),'coveredPdcCount':len(covered),'publicOfferCount':sum(1 for o in offers if o['subscriptionId'] is None),'subscriberOfferCount':sum(1 for o in offers if o['subscriptionId']=='arcachon-resident'),'unresolvedPdcCount':len(unresolved),'physicalInventoryMutationCount':0},'officialTopology':src['topology'],'familyPdcCounts':dict(sorted(counts.items())),'stations':sorted([{'stationId':s,'name':(station_by.get(s) or {}).get('name'),'stationMaxPowerKw':station_max[s]} for s in station_ids],key=lambda x:clean(x.get('name'))),'unresolved':unresolved[:100]}
+    station_ids={clean(p.get('stationId')) for p in candidate};covered={o['canonicalPdcId'] for o in offers};class_counts=defaultdict(int)
+    for sid in station_ids:class_counts[station_classes[sid]]+=1
+    report={'schemaVersion':'1.0.0','dataset':'france-arcachon-canonical-audit','productionReady':False,'summary':{'eligibleStationCount':len(station_ids),'eligiblePdcCount':len(candidate),'coveredPdcCount':len(covered),'publicOfferCount':sum(1 for o in offers if o['subscriptionId'] is None),'subscriberOfferCount':sum(1 for o in offers if o['subscriptionId']=='arcachon-resident'),'unresolvedPdcCount':len(unresolved),'physicalInventoryMutationCount':0},'officialTopology':src['topology'],'stationClassCounts':dict(sorted(class_counts.items())),'familyPdcCounts':dict(sorted(counts.items())),'stations':sorted([{'stationId':s,'name':(station_by.get(s) or {}).get('name'),'stationMaxPowerKw':station_max[s],'stationClass':station_classes[s]} for s in station_ids],key=lambda x:clean(x.get('name'))),'unresolved':unresolved[:100]}
     out=Path(a.out_dir);dump_json(out/'arcachon_pdc_offers_contract_v1_1.json.gz',offers);dump_json(out/'arcachon_materialization_report.json',report);print(json.dumps(report,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()
