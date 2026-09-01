@@ -34,6 +34,7 @@ TARGETS={
  'Stadtwerke Heidelberg':{'minSites':100,'requireFullCoverage':True},
  'Stadtwerke Rüsselsheim':{'minSites':90,'requireFullCoverage':True},
  'Stadtwerke Witten':{'minSites':90,'requireFullCoverage':True},
+ 'Albwerk':{'minSites':90,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
