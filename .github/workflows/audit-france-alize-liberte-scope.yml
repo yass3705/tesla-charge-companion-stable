@@ -8,8 +8,11 @@ on:
       - 'data/alize_liberte_scope_review_20260901.json'
       - 'scripts/audit_france_alize_liberte_scope.py'
       - 'data/france_tariff_base_coverage_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
       - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/test_france_irve_network_identity.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - '.github/workflows/audit-france-alize-liberte-scope.yml'
@@ -26,9 +29,10 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Validate Alize scope review
+      - name: Validate Alize scope review and identity rules
         run: |
-          python -m py_compile scripts/audit_france_alize_liberte_scope.py
+          python -m py_compile scripts/audit_france_alize_liberte_scope.py scripts/test_france_irve_network_identity.py
+          python scripts/test_france_irve_network_identity.py
           python - <<'PY'
           import json
           d=json.load(open('data/alize_liberte_scope_review_20260901.json',encoding='utf-8'))
@@ -96,6 +100,8 @@ jobs:
           assert s['requiresLocalTariffMapping'] is True
           assert len(r['departmentInventory']) >= 2
           assert sum(x['pdcCount'] for x in r['departmentInventory'])==s['canonicalAlizeLibertePdcCount']
+          assert r['physicalOperatorPdcCounts']=={'bouygues-energies-services': s['canonicalAlizeLibertePdcCount']}, r['physicalOperatorPdcCounts']
+          assert 'le-plein-tarnais' not in r['physicalOperatorPdcCounts']
           print(json.dumps(s,ensure_ascii=False,indent=2))
           print(json.dumps(r['departmentInventory'][:20],ensure_ascii=False,indent=2))
           print(json.dumps(r['physicalOperatorPdcCounts'],ensure_ascii=False,indent=2))
