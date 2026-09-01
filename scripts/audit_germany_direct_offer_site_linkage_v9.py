@@ -36,6 +36,7 @@ TARGETS={
  'Stadtwerke Witten':{'minSites':90,'requireFullCoverage':True},
  'Albwerk':{'minSites':90,'requireFullCoverage':True},
  'Stadtwerke Bielefeld':{'minSites':90,'requireFullCoverage':True},
+ 'E-Werk Mittelbaden':{'minSites':80,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
