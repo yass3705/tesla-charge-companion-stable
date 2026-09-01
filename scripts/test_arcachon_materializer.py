@@ -10,30 +10,35 @@ def main():
         t=Path(td);c=t/'canonical';o=t/'out';c.mkdir();o.mkdir()
         stations=[
           {'stationId':'A1','name':"Ville d'Arcachon - Proximité",'codeInsee':'33009','physicalOperatorId':'bouygues-energies-services'},
-          {'stationId':'A2','name':"Ville d'Arcachon - Citadine",'codeInsee':'33009','physicalOperatorId':'bouygues-energies-services'},
+          {'stationId':'A2','name':"Ville d'Arcachon - Citadine 30",'codeInsee':'33009','physicalOperatorId':'bouygues-energies-services'},
+          {'stationId':'A4','name':"Ville d'Arcachon - Citadine PAN 40",'codeInsee':'33009','physicalOperatorId':'bouygues-energies-services'},
           {'stationId':'A3','name':"Ville d'Arcachon - Express",'codeInsee':'33009','physicalOperatorId':'bouygues-energies-services'},
           {'stationId':'X','name':'Ville de Bordeaux','codeInsee':'33063','physicalOperatorId':'bouygues-energies-services'}]
         pdcs=[
           {'stationId':'A1','pdcId':'P','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':22.08,'connectors':{'type2':True,'comboCcs':False}},
           {'stationId':'A2','pdcId':'CA','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':22.08,'connectors':{'type2':True,'comboCcs':False}},
           {'stationId':'A2','pdcId':'CD','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':30.4,'connectors':{'type2':False,'comboCcs':True}},
+          {'stationId':'A4','pdcId':'C40A','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':22.08,'connectors':{'type2':True,'comboCcs':False}},
+          {'stationId':'A4','pdcId':'C40D','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':40.0,'connectors':{'type2':False,'comboCcs':True}},
           {'stationId':'A3','pdcId':'E','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':240.4,'connectors':{'type2':False,'comboCcs':True}},
           {'stationId':'X','pdcId':'NO','tariffNetworkId':'alize-liberte','physicalOperatorId':'bouygues-energies-services','powerKw':22.08,'connectors':{'type2':True}}]
         write_gz(c/'stations.json.gz',stations);write_gz(c/'charge_points.json.gz',pdcs)
         static=t/'static.csv'
         with static.open('w',encoding='utf-8',newline='') as f:
             w=csv.DictWriter(f,fieldnames=['id_station_itinerance','nom_amenageur','code_insee_commune','nom_enseigne']);w.writeheader()
-            for sid,ci in [('A1','33009'),('A2','33009'),('A3','33009'),('X','33063')]:w.writerow({'id_station_itinerance':sid,'nom_amenageur':'R-Mob','code_insee_commune':ci,'nom_enseigne':'Alizé Liberté 2'})
+            for sid,ci in [('A1','33009'),('A2','33009'),('A4','33009'),('A3','33009'),('X','33063')]:w.writerow({'id_station_itinerance':sid,'nom_amenageur':'R-Mob','code_insee_commune':ci,'nom_enseigne':'Alizé Liberté 2'})
         subprocess.check_call([sys.executable,str(SCRIPT),'--source',str(SOURCE),'--canonical-dir',str(c),'--static-csv',str(static),'--out-dir',str(o)])
-        r=json.load(open(o/'arcachon_materialization_report.json',encoding='utf-8'));assert r['summary']['eligibleStationCount']==3;assert r['summary']['eligiblePdcCount']==4;assert r['summary']['coveredPdcCount']==4;assert r['summary']['unresolvedPdcCount']==0
-        assert r['familyPdcCounts']=={'arcachon-citadine-ac':1,'arcachon-citadine-dc':1,'arcachon-express-240':1,'arcachon-proximity-ac':1}
+        r=json.load(open(o/'arcachon_materialization_report.json',encoding='utf-8'));assert r['summary']['eligibleStationCount']==4;assert r['summary']['eligiblePdcCount']==6;assert r['summary']['coveredPdcCount']==6;assert r['summary']['unresolvedPdcCount']==0
+        assert r['stationClassCounts']=={'citadine':2,'express':1,'proximity':1}
+        assert r['familyPdcCounts']=={'arcachon-citadine-ac':2,'arcachon-citadine-dc':2,'arcachon-express-240':1,'arcachon-proximity-ac':1}
         with gzip.open(o/'arcachon_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f:offers=json.load(f)
-        assert len(offers)==8;by={(x['canonicalPdcId'],x['subscriptionId']):x for x in offers}
+        assert len(offers)==12;by={(x['canonicalPdcId'],x['subscriptionId']):x for x in offers}
         assert by[('P',None)]['pricingRules'][0]['pricePerKwh']==0.49 and by[('P','arcachon-resident')]['pricingRules'][0]['pricePerKwh']==0.25
-        assert by[('P',None)]['pricingRules'][1]['durationStart']=='07:00' and by[('P',None)]['pricingRules'][1]['durationEnd']=='23:00'
         assert by[('CA',None)]['pricingRules'][0]['pricePerKwh']==0.55 and by[('CA','arcachon-resident')]['pricingRules'][0]['pricePerKwh']==0.25
-        assert by[('CD',None)]['pricingRules'][0]['pricePerKwh']==0.55 and by[('CD','arcachon-resident')]['pricingRules'][0]['pricePerKwh']==0.55
-        assert by[('E',None)]['pricingRules'][0]['pricePerKwh']==0.65 and by[('E','arcachon-resident')]['pricingRules'][1]['durationThresholdMinutes']==40
+        assert by[('CD',None)]['pricingRules'][0]['pricePerKwh']==0.55
+        assert by[('C40A',None)]['pricingRules'][0]['pricePerKwh']==0.55 and by[('C40A','arcachon-resident')]['pricingRules'][0]['pricePerKwh']==0.25
+        assert by[('C40D',None)]['pricingRules'][0]['pricePerKwh']==0.55, 'PAN 40 kW Citadine must not inherit Express price'
+        assert by[('E',None)]['pricingRules'][0]['pricePerKwh']==0.65
         assert all(x['canonicalPdcId']!='NO' for x in offers);assert all(x['selectors'].get('residencyRequired') is True for x in offers if x['subscriptionId']=='arcachon-resident')
         print('Arcachon materializer regression tests OK')
 if __name__=='__main__':main()
