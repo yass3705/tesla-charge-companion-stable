@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "grenoble-alpes-metropole-tariff-review-france",
+  "networkId": "grenoble-alpes-metropole",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "sources": {
+    "officialAlizeNetworkPage": "https://alizecharge.com/partenaires/grenoble-alpes-metropole/",
+    "officialMetropoleSeptember2026News": "https://www.grenoblealpesmetropole.fr/actualite/673/45-bornes-de-recharge-une-offre-renforcee-des-tarifs-en-baisse.htm",
+    "officialMetropoleRechargePage": "https://www.grenoblealpesmetropole.fr/130-recharger-sa-voiture.htm",
+    "effiaElectricPage": "https://www.effia.com/electrique"
+  },
+  "policy": {
+    "physicalInventoryFromIrveOnly": true,
+    "directNetworkOnly": true,
+    "parkingSeparatedFromCharging": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "genericAlizeLiberteNeverInheritsGrenobleTariff": true,
+    "streetZoneRequiredForTimeTariff": true,
+    "publicParkingSubscriberSlowChargeMayBeRankedOnlyWithExactAmenageurAndPower": true,
+    "failClosed": true
+  },
+  "currentPublicNetwork": {
+    "subscription": {
+      "id": "grenoble-oura",
+      "monthlyFeeEur": 6.0,
+      "cardPriceEur": 6.81,
+      "optIn": true
+    },
+    "nonSubscriberAccess": {
+      "freeAlizeApp": true,
+      "optInSubscriptionRequired": false
+    },
+    "street": {
+      "acEnergyEurPerKwh": {"subscriber": 0.29, "nonSubscriber": 0.49},
+      "dcEnergyEurPerKwh": {"subscriber": 0.39, "nonSubscriber": 0.59},
+      "dayWindow": {"start": "09:00", "end": "20:00"},
+      "dayTimeFeePerStarted30MinEur": {
+        "hypercentre": 1.50,
+        "centre": 1.00,
+        "peripherieDc": 1.00,
+        "peripherieAc": 0.50
+      },
+      "peripherieAcFreeMinutes": 120,
+      "nightWindow": {"start": "20:00", "end": "09:00"},
+      "nightTimeFeePerStarted30MinEur": {"subscriber": 0.0, "nonSubscriber": 0.50},
+      "rankableWithoutZoneMapping": false
+    },
+    "candelabraAndParkRide": {
+      "acEnergyPublishedEurPerKwh": 0.29,
+      "rankable": false,
+      "blockedReason": "current_page_does_not_unambiguously_separate_subscriber_and_non_subscriber_columns_for_this_row"
+    }
+  },
+  "publicParkingPGam": {
+    "panAmenageurAliases": [
+      "SOCIETE PUBLIQUE LOCALE DU STATIONNEMENT DE LA REGION GRENOBLOISE"
+    ],
+    "officialSeptember2026Evidence": {
+      "effectiveFrom": "2026-09-01",
+      "slowChargePowerKw": 7.0,
+      "subscriberEnergyEurPerKwh": 0.29,
+      "previousSubscriberEnergyEurPerKwh": 0.39,
+      "equippedPublicParkingCount": 15
+    },
+    "safeRankableProfile": {
+      "subscriptionId": "grenoble-oura",
+      "channel": "subscription",
+      "maxPowerKw": 7.4,
+      "kind": "AC",
+      "pricePerKwh": 0.29,
+      "requiresExactAmenageur": true,
+      "requiresCanonicalUmbrellaNetworkId": "alize-liberte",
+      "requiresPhysicalOperatorId": "bouygues-energies-services"
+    },
+    "nonSubscriber": {
+      "rankable": false,
+      "reason": "Grenoble official page points public-structure parking pricing to EFFIA; EFFIA's 0.40 EUR/kWh + 1.50 EUR/session tariff applies only to a selected parking list not yet matched to these PAN stations"
+    },
+    "higherPower": {
+      "rankable": false,
+      "reason": "September 2026 public-parking announcement explicitly documents the slow 7 kW subscriber reduction only"
+    }
+  },
+  "expectedCanonicalAudit": {
+    "explicitBrandPdcApprox": 236,
+    "explicitBrandStationApprox": 105,
+    "alizeUmbrellaDepartment38Pdc": 279,
+    "pgamAmenageurPdc": 248,
+    "pgamAmenageurStationCount": 14,
+    "pgamSlowPdcApprox": 234
+  }
+}
