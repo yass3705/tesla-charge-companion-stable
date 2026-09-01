@@ -65,8 +65,8 @@
     {
       "networkId": "passpass",
       "coverageStatus": "partial_ready",
-      "artifacts": ["data/passpass_electrique_direct_tariffs_v1.json"],
-      "notes": "Official subscribed/non-subscribed normal, rapid, ultra and long-stay tariffs are structured. Normal power classification is safe; newer rapid/ultra sites and long-stay P+R sites still require station-class mapping before production ranking."
+      "artifacts": ["data/passpass_electrique_direct_tariffs_v1.json", "scripts/materialize_france_passpass_offers.py"],
+      "notes": "Canonical audit #1 validates 748 stations / 1,800 PDC. 1,738 PDC are safely rankable, producing 3,476 direct+opt-in subscriber offers; one ultra PDC is reference-only and 61 PDC remain unresolved because current PAN power values around 24.8/25.2/30 kW do not prove a published tariff class. Long-stay classification is only applied from explicit site text, the ultra provisional case remains non-rankable, and physical-inventory mutation is zero."
     },
     {
       "networkId": "effia",
@@ -83,8 +83,14 @@
     {
       "networkId": "qpark",
       "coverageStatus": "partial_ready",
-      "artifacts": ["data/qpark_izivia_tariffs_v1.json"],
-      "notes": "Q-Park is modeled as host/commercial scope. The published Pass IZIVIA tariff (1.20 EUR/session + 0.55 EUR/kWh) is structured and only eligible when Pass IZIVIA Access is selected. PayNow and other MSP prices remain unresolved/separate."
+      "artifacts": ["data/qpark_izivia_tariffs_v1.json", "scripts/materialize_france_qpark_offers.py"],
+      "notes": "Canonical audit #2 validates 283 Q-Park stations / 1,937 PDC. 1,925 PDC across 282 stations are physically operated by IZIVIA and receive the opt-in Pass IZIVIA Access offer (1.20 EUR/session + 0.55 EUR/kWh); all 1,925 are rankable when that pass is selected and also receive a PayNow reference-only record because its price is not published. The remaining 12 PDC are physically operated by Electra and are deliberately blocked from inheriting the IZIVIA tariff. Zero eligible PDC are unresolved and physical-inventory mutation is zero."
+    },
+    {
+      "networkId": "allego",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/allego_direct_tariffs_france_v1.json", "scripts/materialize_france_allego_offers.py"],
+      "notes": "Canonical audit #1 validates 241 Allego stations / 1,686 PDC. 1,660 PDC are covered: 1,252 fast/ultra PDC are rankable under the verified France direct grid, while 408 regular PDC are reference-only because the long-duration charging rule is not sufficiently resolved. 26 nominal fast PDC remain unresolved because PAN lacks DC-connector evidence. Allego Plus is retained as opt-in/non-rankable for Allego direct pricing until its exact France class grid is explicit; temporary Atlante partner discounts are stored separately. Physical-inventory mutation is zero."
     },
     {
       "networkId": "r3",
