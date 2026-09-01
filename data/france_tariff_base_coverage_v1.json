@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "1.0.2",
+  "updatedAt": "2026-09-01",
+  "overrides": [
+    {
+      "networkId": "freshmile",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/freshmile_direct_canonical_coverage_v1.json"],
+      "notes": "Strict direct Freshmile tariffs were canonicalized with exact EVSE matches: 1,183/4,674 stations and 3,892/15,049 PDC covered. Uncovered stations remain without an invented Freshmile price; regional networks, roaming and preferential tariffs remain excluded."
+    },
+    {
+      "networkId": "indigo",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/indigo_recharge_direct_tariffs_v1.json"],
+      "notes": "Public and A-la-Carte standard tariffs are structured. Four legacy-price cities have an official A-la-Carte rule; their public ad-hoc price remains non-rankable. Monthly quota plans remain non-rankable until remaining quota is tracked."
+    },
+    {
+      "networkId": "lidl",
+      "coverageStatus": "ready",
+      "artifacts": ["data/tariff_overlay_v1.json", "scripts/materialize_france_lidl_offers.py"],
+      "notes": "Official Lidl Plus France network tariff is canonicalized on all current Lidl PDCs: 1,073 stations / 5,866 PDC, with zero unresolved PDC and no physical-inventory mutation. AC and current promotional DC pricing are both 0.29 EUR/kWh; Intercharge/ad-hoc payment remains separate."
+    },
+    {
+      "networkId": "engie-vianeo",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["scripts/materialize_france_vianeo_offers.py"],
+      "notes": "Vianeo Max is normalized on all 625 current canonical Vianeo stations / 4,171 PDC as reference-only: 9.99 EUR/month and 0.33 EUR/kWh. No offer is rankable yet because station-specific minute fees may apply and dedicated heavy-goods points are excluded by the official scope. Physical inventory remains unchanged."
+    },
+    {
+      "networkId": "totalenergies",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/totalenergies_france_v9_official_review_20260831.json", "scripts/materialize_france_totalenergies_offers.py"],
+      "notes": "All 366 current canonical TotalEnergies Charge Rapide stations / 3,457 PDC are covered by conservative official-reference materialization: 3,457 station-service-family references plus 2,365 Charge+ Zen references (5,822 total), with zero physical-inventory mutation. Nothing is rankable yet because exact station-service price identity and Zen station eligibility/underlying public price remain unresolved. Current official station-service ranges and local exceptions are preserved; Charge+ Zen is modeled as 3.90 EUR/month and a 15% discount, never as a flat 0.49 EUR/kWh tariff."
+    },
+    {
+      "networkId": "izivia-fast",
+      "coverageStatus": "ready",
+      "artifacts": ["data/izivia_fast_direct_tariff_v1.json", "scripts/materialize_france_izivia_fast_offers.py"],
+      "notes": "Official IZIVIA FAST McDonald's France direct tariff is canonicalized on all 620 current FAST stations / 2,335 PDC: 2,335 rankable offers, zero unresolved PDC and zero physical-inventory mutation. Direct energy price is 0.30 EUR/kWh before 11:30 and from 15:00 to 18:00, otherwise 0.35 EUR/kWh. Generic IZIVIA, IZIVIA Express, SIGEIF/IZIVIA, roaming and subscription tariffs remain strictly separate."
+    },
+    {
+      "networkId": "izivia-express",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["assets/v8-izivia-express-direct-overlay.js", "data/izivia_express_direct_v8_source_lock_v1.json", "scripts/materialize_france_izivia_express_offers.py"],
+      "notes": "Locked V8 formulas are converted losslessly into the V9 offer contract on exact current PAN PDC identities. Canonical audit validates 150 IZIVIA Express stations / 499 PDC: 446 direct offers across 140 stations are rankable; 53 PDC fail closed (50 on nine stations with no published direct price, two on a station absent from the locked V8 snapshot, and one new PDC absent from the locked source inventory). The split is 248 session-cap, 192 day/night-with-included-energy and 6 simple-post-charge PDC. Rounding, total caps, included energy, local connection-start time selection and post-charge blocks/minutes are preserved; roaming, subscriptions and generic IZIVIA pricing remain separate, with zero physical-inventory mutation."
+    },
+    {
+      "networkId": "izivia-max",
+      "coverageStatus": "ready",
+      "artifacts": ["data/izivia_max_direct_tariffs_v1.json", "scripts/materialize_france_izivia_max_offers.py"],
+      "notes": "Official live-map direct tariffs are locked on all 24 current FRIMX stations / 92 PAN PDC: 92 rankable direct offers, zero unresolved PDC and zero physical-inventory mutation. Exact per-unit exceptions are retained at Chambly, Orgelet and Oberhausbergen. Energy and connected-without-charging minutes are billed by started unit. FRIGF, FRILF, generic IZIVIA, roaming and subscriptions remain separate."
+    },
+    {
+      "networkId": "izivia-impact",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/izivia_impact_direct_tariffs_v1.json", "scripts/materialize_france_izivia_impact_offers.py"],
+      "notes": "Canonical audit covers all 141 current civic IZIVIA Impact stations / 401 PAN PDC with one exact-PDC record each: 54 direct rapid offers across 18 stations are rankable and 347 PDC remain reference/fail-closed where the published direct formula, station-class binding or day/night contractual semantics are insufficient. Territory split is m2A 112 stations / 309 PDC (42 rapid PDC rankable across 14 stations, 267 reference), Angoulême 21 / 60 (12 rapid PDC rankable, 48 AC/mixed reference) and Saint-Nazaire 8 / 32 (all reference). The result is audit-only (productionReady false), keeps two incomplete day/night formula families as non-rankable source references, separates FRIGF, FRILF/Buffalo Grill, IZIVIA MAX, generic IZIVIA, roaming and subscriptions, and performs zero physical-inventory mutation."
+    },
+    {
+      "networkId": "grand-lyon",
+      "coverageStatus": "ready",
+      "artifacts": ["data/grand_lyon_izivia_direct_tariffs_v1.json", "scripts/materialize_france_grand_lyon_offers.py"],
+      "notes": "The official IZIVIA Grand Lyon grid is canonicalized on all 226 current PAN stations / 789 PDC. Each PDC receives one rankable visitor/PayNow offer plus two separate opt-in Standard and Fréquence offers: 2,367 rankable offers, zero unresolved PDC and zero physical-inventory mutation. The exact <=7, <=24, <=50 and >=100 kW classes preserve daytime connected-minute billing, night packages including 20 kWh, extra night energy, and the fast 0.20 EUR/min connection-duration component after 45 minutes. Monthly and Pass registration fees are never allocated to sessions; other IZIVIA networks and roaming never inherit this grid."
+    },
+    {
+      "networkId": "reveo",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/reveo_direct_tariffs_france_v1.json", "data/reveo_d66_direct_tariffs_v1.json", "data/reveo_m31_tariff_review_20260831.json", "scripts/materialize_france_reveo_offers_v3.py", "scripts/materialize_france_reveo_m31_reference.py"],
+      "notes": "Current PAN contains 969 canonical Révéo stations / 2,298 PDC. Direct public tariffs are rankable on 2,157 PDC, including all 261 Pyrénées-Orientales D66 PDC under the verified special public grid. S34 also exposes 396 separate opt-in subscriber offers. Eight otherwise rankable-territory PDC remain unresolved because connector/power classification is insufficient. Toulouse Métropole M31 is fully covered as 133 reference-only offers across 61 stations with zero rankable offers because current direct price evidence conflicts (0.30 vs 0.36 EUR/kWh observations). Roaming never inherits a direct tariff and physical-inventory mutation remains zero."
+    },
+    {
+      "networkId": "eborn",
+      "coverageStatus": "ready",
+      "artifacts": ["data/eborn_direct_tariffs_v1.json"],
+      "notes": "Public and annual A-la-carte power-band tariffs are structured, including post-charge penalties. Monthly 250 kWh quota plan is retained but non-rankable without quota state. Partner roaming +15% is retained as a dependent partner rule."
+    },
+    {
+      "networkId": "mobive",
+      "coverageStatus": "ready",
+      "artifacts": ["data/mobive_direct_tariffs_v1.json"],
+      "notes": "Department-specific direct and Pass Mobive grids are structured, including duration windows and total transaction caps."
+    },
+    {
+      "networkId": "carrefour-energies",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/carrefour_energies_22kw_offer_v1.json", "data/carrefour_energies_eligible_sites_v1.json", "data/carrefour_energies_benefits_v1.json"],
+      "notes": "Official 0.23 EUR/kWh offer from 1 August 2026 is materialized only on explicitly listed participating hypermarket 22 kW PDCs. Carrefour loyalty cashback stays separate from billed price. Other powers and non-listed Carrefour stores remain unresolved."
+    },
+    {
+      "networkId": "passpass",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/passpass_electrique_direct_tariffs_v1.json", "scripts/materialize_france_passpass_offers.py"],
+      "notes": "Canonical audit #1 validates 748 stations / 1,800 PDC. 1,738 PDC are safely rankable, producing 3,476 direct+opt-in subscriber offers; one ultra PDC is reference-only and 61 PDC remain unresolved because current PAN power values around 24.8/25.2/30 kW do not prove a published tariff class. Long-stay classification is only applied from explicit site text, the ultra provisional case remains non-rankable, and physical-inventory mutation is zero."
+    },
+    {
+      "networkId": "effia",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/effia_direct_tariffs_v1.json"],
+      "notes": "EFFIA publishes 0.40 EUR/kWh + 1.50 EUR/session only for a selected parking list, so the standard offer remains non-rankable until that official list is matched. Paris Gare du Nord Park & Charge is preserved separately as a quota-based local subscription."
+    },
+    {
+      "networkId": "saemes",
+      "coverageStatus": "ready",
+      "artifacts": ["data/saemes_direct_tariffs_v1.json", "scripts/materialize_france_saemes_offers.py"],
+      "notes": "Official SAEMES QR/CB tariff is canonicalized on all 37 current SAEMES stations / 2,062 PDC: 2,062 rankable direct offers, zero unresolved PDC and zero physical-inventory mutation. Charging is 0.50 EUR service + 0.50 EUR/kWh with a 10 EUR/hour connection-duration surcharge after 15 hours. Car-park parking remains separate, roaming-card tariffs remain separate, and Electra rapid stations never inherit the SAEMES tariff."
+    },
+    {
+      "networkId": "qpark",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/qpark_izivia_tariffs_v1.json", "scripts/materialize_france_qpark_offers.py"],
+      "notes": "Canonical audit #2 validates 283 Q-Park stations / 1,937 PDC. 1,925 PDC across 282 stations are physically operated by IZIVIA and receive the opt-in Pass IZIVIA Access offer (1.20 EUR/session + 0.55 EUR/kWh); all 1,925 are rankable when that pass is selected and also receive a PayNow reference-only record because its price is not published. The remaining 12 PDC are physically operated by Electra and are deliberately blocked from inheriting the IZIVIA tariff. Zero eligible PDC are unresolved and physical-inventory mutation is zero."
+    },
+    {
+      "networkId": "allego",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/allego_direct_tariffs_france_v1.json", "scripts/materialize_france_allego_offers.py"],
+      "notes": "Canonical audit #1 validates 241 Allego stations / 1,686 PDC. 1,660 PDC are covered: 1,252 fast/ultra PDC are rankable under the verified France direct grid, while 408 regular PDC are reference-only because the long-duration charging rule is not sufficiently resolved. 26 nominal fast PDC remain unresolved because PAN lacks DC-connector evidence. Allego Plus is retained as opt-in/non-rankable for Allego direct pricing until its exact France class grid is explicit; temporary Atlante partner discounts are stored separately. Physical-inventory mutation is zero."
+    },
+    {
+      "networkId": "sigeif",
+      "coverageStatus": "ready",
+      "artifacts": ["data/sigeif_direct_tariffs_v1.json", "scripts/materialize_france_sigeif_offers.py"],
+      "notes": "Canonical audit run 33498088245 validates all 502 SIGEIF stations / 1,249 PDC: 1,249 rankable direct offers, zero unresolved and zero physical-inventory mutation. Current class split is 934 douce <=22 kW, 293 semi-rapid 24 kW and 22 rapid 50/100 kW PDC. All 1,249 PDC are physically operated by IZIVIA but remain a distinct SIGEIF customer-facing tariff network; generic IZIVIA pricing never inherits this grid."
+    },
+    {
+      "networkId": "labornebleue",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/la_borne_bleue_direct_tariffs_v1.json", "scripts/materialize_france_la_borne_bleue_offers.py"],
+      "notes": "Canonical audit run 33499103955 validates 407 La Borne Bleue stations / 1,206 PDC. 1,202 PDC are safely covered by 1,202 public plus 1,202 opt-in annual-subscriber rankable offers; only four DC connector rows at 24/30 kW remain unresolved because the current official grid publishes the separate DC tariff only for power strictly above 50 kW. Covered split is 814 AC <=7.4 kVA, 382 AC <=22 kVA and 6 DC >50 kW. The 10 EUR/year subscription, subscriber-only 12 EUR night caps, partner roaming separation and zero physical-inventory mutation are preserved."
+    },
+    {
+      "networkId": "metropolis",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/metropolis_direct_tariffs_v1.json", "scripts/materialize_france_metropolis_offers.py"],
+      "notes": "Canonical audit run 33499541420 validates 209 Métropolis stations / 1,095 PDC. The exact current power/site classification yields 990 rankable public direct offers, 105 fail-closed PDC and 1,980 separate subscription references that remain non-rankable while monthly post-charge allowance state is not tracked. The legacy Métropolis 100 grid is never inherited, parking remains separate and physical-inventory mutation is zero."
+    },
+    {
+      "networkId": "seymaborne",
+      "coverageStatus": "ready",
+      "artifacts": ["data/sey_ma_borne_direct_tariffs_v1.json", "scripts/materialize_france_sey_ma_borne_offers.py"],
+      "notes": "Canonical audit #5 validates the explicit PAN SeyMaBorne identity on 309 stations / 677 PDC. All 677 PDC receive a rankable direct Alizé-app/SEY-badge offer plus a separate non-rankable bank-card reference; zero PDC are unresolved and physical-inventory mutation is zero. Generic Alizé Liberté rows never inherit the SEY tariff."
+    },
+    {
+      "networkId": "gpseo",
+      "coverageStatus": "ready",
+      "artifacts": ["data/gpseo_direct_tariffs_v1.json", "scripts/materialize_france_gpseo_offers.py"],
+      "notes": "Exact PAN contracting-authority matching isolates Grand Paris Seine & Oise inside Alizé Liberté: 160 stations / 327 PDC. All 327 PDC are rankable on the official QR/app/partner-badge tariff; a separate contactless-bank-card reference is retained, with zero unresolved PDC and zero physical-inventory mutation."
+    },
+    {
+      "networkId": "alize-liberte",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["scripts/materialize_france_gpseo_offers.py", "scripts/materialize_france_grenoble_offers.py", "scripts/audit_france_alize_authorities.py", "data/griffon_branche_direct_tariffs_v1.json", "data/dreux_direct_tariffs_v1.json", "data/arcachon_direct_tariffs_v1.json"],
+      "notes": "Alizé Liberté remains an umbrella identity and never receives a national flat tariff. Verified carved-out scopes include GPSEO 327 PDC, Griffon Branché 74 PAN PDC, Dreux 45 PAN PDC and Arcachon 100 PAN PDC, all with their own local tariff rules. Grenoble P-GAM has 234 safely rankable subscriber PDC and 14 local reference-only PDC, while the explicit Grenoble-Alpes Métropole network stays separate. R-Mob Évreux remains fail-closed on 6 PDC because a current direct price grid is not published, and START SQY remains unpriced because current direct prices are not sufficiently verified. Other remaining Alizé authorities stay unpriced until their own official grids are verified."
+    },
+    {
+      "networkId": "r3",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing verified runtime AC/DC rules are materialized into contract v1.1 templates."
+    },
+    {
+      "networkId": "stations-e",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing direct, Badge, Express-e and Access-e runtime rules are materialized into contract v1.1 templates."
+    },
+    {
+      "networkId": "ouest-charge",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing 22/29/35/44/49 departmental runtime grids are materialized into contract v1.1 templates."
+    },
+    {
+      "networkId": "ecocharge77",
+      "coverageStatus": "ready_migrated",
+      "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
+      "notes": "Existing normal/rapid runtime rules are materialized into contract v1.1 templates."
+    }
+  ]
+}

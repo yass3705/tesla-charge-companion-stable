@@ -1,0 +1,199 @@
+name: Audit France IZIVIA MAX canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/izivia_max_direct_tariffs_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_irve_tariff_network_additions_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/materialize_france_izivia_max_offers.py'
+      - 'scripts/test_izivia_max_materializer.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/test_france_irve_network_identity.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-izivia-max-canonical.yml'
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - 'data/izivia_max_direct_tariffs_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_irve_tariff_network_additions_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/materialize_france_izivia_max_offers.py'
+      - 'scripts/test_izivia_max_materializer.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/test_france_irve_network_identity.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-izivia-max-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  izivia-max:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate exact-PDC materializer and identity boundary
+        run: |
+          python -m py_compile \
+            scripts/materialize_france_izivia_max_offers.py \
+            scripts/test_izivia_max_materializer.py \
+            scripts/enrich_france_irve_network_identity.py \
+            scripts/test_france_irve_network_identity.py
+          python scripts/test_france_irve_network_identity.py
+          python scripts/test_izivia_max_materializer.py
+
+      - name: Validate official source contract
+        run: |
+          python - <<'PY'
+          import json
+          source=json.load(open('data/izivia_max_direct_tariffs_v1.json',encoding='utf-8'))
+          assert source.get('schemaVersion')=='1.0.0'
+          assert source.get('dataset')=='izivia-max-direct-pan-bindings-france'
+          assert source.get('networkId')=='izivia-max' and source.get('country')=='FR'
+          scope=source.get('scope') or {}
+          assert scope.get('physicalOperatorRequired')=='izivia'
+          assert scope.get('tariffNetworkRequired')=='izivia-max'
+          assert scope.get('stationPrefixRequired')=='FRIMXPIMAX'
+          assert scope.get('exactLockedPdcIdentityRequired') is True
+          assert scope.get('physicalInventoryFromPanOnly') is True
+          assert scope.get('unknownOrChangedPdcFailsClosed') is True
+          assert scope.get('roamingIncluded') is False
+          assert scope.get('subscriptionsIncluded') is False
+          assert scope.get('grandFraisFrigfIncluded') is False
+          assert scope.get('impactLfFrilfIncluded') is False
+          assert scope.get('genericIziviaIncluded') is False
+          assert source['counts']['officialMapLocationCount']==45
+          assert source['counts']['boundPanStationCount']==24
+          assert source['counts']['boundPanPdcCount']==92
+          contract=json.load(open('data/france_operator_offer_contract_v1.json',encoding='utf-8'))
+          fields=contract.get('pricingRuleFields') or {}
+          assert {'energyBilling','occupancyBilling','occupancyTrigger','occupancyDurationBasis','missingUnplugTimePolicy','rounding'} <= set(fields)
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --additions data/france_irve_tariff_network_additions_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize IZIVIA MAX exact PDC offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_izivia_max_offers.py \
+            --source data/izivia_max_direct_tariffs_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate canonical coverage and fail-closed scope
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/izivia_max_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/izivia_max_materialization_report.json',encoding='utf-8'))
+          network=json.load(open('build/france_irve_identity/network_gap_report.json',encoding='utf-8'))
+          network_by_id={r['networkId']:r for r in network['networks']}
+          assert network_by_id['izivia-max']['stationCount']==24
+          assert network_by_id['izivia-max']['pdcCount']==92
+          assert network_by_id['izivia-max']['coverageStatus']=='ready'
+          assert network_by_id['izivia-grand-frais']['stationCount']==45
+          assert network_by_id['izivia-grand-frais']['pdcCount']==302
+          assert network_by_id['izivia-grand-frais']['coverageStatus']=='reference_only'
+          assert network_by_id['izivia-impact-lf']['stationCount']==23
+          assert network_by_id['izivia-impact-lf']['pdcCount']==70
+          assert network_by_id['izivia-impact-lf']['coverageStatus']=='reference_only'
+          summary=report['summary']; counters=summary['counters']
+          assert summary['canonicalIziviaMaxStationCount']==24
+          assert summary['canonicalIziviaMaxPdcCount']==92
+          assert summary['sourceBoundStationCount']==24
+          assert summary['sourceBoundPdcCount']==92
+          assert summary['sourceBoundPdcAbsentFromCanonicalCount']==0
+          assert summary['rankableCoveredPdcCount']==92
+          assert summary['unresolvedPdcCount']==0
+          assert summary['materializedOfferCount']==summary['rankableOfferCount']==len(offers)==92
+          assert summary['directRankableOfferCount']==92
+          assert summary['subscriptionOfferCount']==0
+          assert summary['physicalInventoryMutationCount']==0
+          assert counters=={
+              'rankable_formula_energy-035-idle-008333':6,
+              'rankable_formula_energy-045-idle-040':8,
+              'rankable_formula_energy-049-idle-040':78,
+          }
+          assert len({r['offerId'] for r in offers})==len(offers)
+          assert len({r['canonicalPdcId'] for r in offers})==len(offers)
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']; rule=row['pricingRules'][0]
+              assert sid in stations and pid in pdcs
+              assert stations[sid]['tariffNetworkId']=='izivia-max'
+              assert pdcs[pid]['tariffNetworkId']=='izivia-max'
+              assert sid.startswith('FRIMXPIMAX') and not sid.startswith(('FRIGF','FRILF'))
+              assert row['tariffNetworkId']=='izivia-max' and row['physicalOperatorId']=='izivia'
+              assert row['channel']=='direct' and row['subscriptionId'] is None
+              assert row['sourceMode']=='station_power' and row['matchMethod']=='exact_pdc_itinerance'
+              assert row['rankable'] is True and row['blockedReasons']==[]
+              assert rule['energyBilling']=='started_kwh'
+              assert rule['occupancyBilling']=='started_minute'
+              assert rule['occupancyTrigger']=='while_connected_without_charging'
+              assert rule['occupancyDurationBasis']=='connected_minutes_minus_charging_minutes'
+              assert rule['missingUnplugTimePolicy']=='zero_post_charge'
+              assert rule['parkingPerMinute']==0 and rule['roundingEpsilon']==1e-9
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload IZIVIA MAX audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-izivia-max-canonical-audit
+          path: |
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/izivia_max_materialization_report.json
+            build/france_irve_offers/izivia_max_pdc_offers_contract_v1_1.json.gz
+          retention-days: 14

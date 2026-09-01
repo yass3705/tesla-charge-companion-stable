@@ -1,0 +1,183 @@
+name: Audit France IZIVIA Grand Lyon canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_grand_lyon_offers.py'
+      - 'scripts/test_grand_lyon_materializer.py'
+      - 'data/grand_lyon_izivia_direct_tariffs_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-grand-lyon-canonical.yml'
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - 'scripts/materialize_france_grand_lyon_offers.py'
+      - 'scripts/test_grand_lyon_materializer.py'
+      - 'data/grand_lyon_izivia_direct_tariffs_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-grand-lyon-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  grand-lyon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate Grand Lyon materializer
+        run: |
+          python -m py_compile scripts/materialize_france_grand_lyon_offers.py scripts/test_grand_lyon_materializer.py
+          python scripts/test_grand_lyon_materializer.py
+
+      - name: Validate official Grand Lyon source
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('data/grand_lyon_izivia_direct_tariffs_v1.json',encoding='utf-8'))
+          assert d.get('schemaVersion')=='1.1.1'
+          assert d.get('dataset')=='grand-lyon-izivia-direct-tariffs-france'
+          assert d.get('networkId')=='grand-lyon' and d.get('country')=='FR'
+          s=d.get('scope') or {}
+          assert s.get('directNetworkOnly') is True
+          assert s.get('physicalOperatorRequired')=='izivia'
+          assert s.get('physicalInventoryFromIrveOnly') is True
+          assert s.get('roamingIncluded') is False
+          assert s.get('roamingTariffsPromotedToDirect') is False
+          assert s.get('subscriberOffersRequireSelection') is True
+          assert s.get('monthlyFeesAllocatedToSession') is False
+          assert s.get('failClosed') is True
+          b=d.get('billingSemantics') or {}
+          assert b.get('dayWindow')=='08:00-20:00'
+          assert b.get('nightWindow')=='20:00-08:00'
+          assert b.get('timeWindowSelection')=='elapsed_local_clock'
+          assert b.get('crossWindowPolicy')=='apply_each_component_to_its_local_clock_window'
+          assert b.get('separateParkingFee') is False
+          contract=json.load(open('data/france_operator_offer_contract_v1.json',encoding='utf-8'))
+          assert 'elapsed_local_clock' in (contract.get('pricingRuleFields') or {}).get('timeWindowSelection','')
+          subs={r['id']:r for r in d.get('subscriptions') or []}
+          assert set(subs)=={'izivia-grand-lyon-standard','izivia-grand-lyon-frequency'}
+          assert float(subs['izivia-grand-lyon-standard']['monthlyFeeEur'])==5
+          assert float(subs['izivia-grand-lyon-frequency']['monthlyFeeEur'])==20
+          assert all(float(r['initialPassRegistrationEur'])==15 and r['defaultSelected'] is False for r in subs.values())
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize Grand Lyon canonical offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_grand_lyon_offers.py \
+            --source data/grand_lyon_izivia_direct_tariffs_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate Grand Lyon canonical scope
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/grand_lyon_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          subs=json.load(open('build/france_irve_offers/grand_lyon_subscriptions_contract_v1_1.json',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/grand_lyon_materialization_report.json',encoding='utf-8'))
+          s=report['summary']; c=s['counters']
+          assert s['canonicalGrandLyonStationCount'] >= 220
+          assert s['canonicalGrandLyonPdcCount'] >= 760
+          assert s['rankableCoveredPdcCount']==s['canonicalGrandLyonPdcCount']
+          assert s['unresolvedPdcCount']==0
+          assert s['materializedOfferCount']==s['rankableOfferCount']==len(offers)==3*s['canonicalGrandLyonPdcCount']
+          assert s['directRankableOfferCount']==s['canonicalGrandLyonPdcCount']
+          assert s['subscriptionRankableOfferCount']==2*s['canonicalGrandLyonPdcCount']
+          assert s['physicalInventoryMutationCount']==0
+          assert sum(c[f'pdc_band_{band}'] for band in ('le7','le24','le50','ge100'))==s['canonicalGrandLyonPdcCount']
+          assert all(c[f'pdc_band_{band}']>0 for band in ('le7','le24','le50','ge100'))
+          assert subs.get('networkId')=='grand-lyon'
+          assert {r['id'] for r in subs.get('subscriptions') or []}=={'izivia-grand-lyon-standard','izivia-grand-lyon-frequency'}
+          assert len({r['offerId'] for r in offers})==len(offers)
+          by_profile={p:0 for p in ('visitor','standard','frequency')}
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']
+              assert sid in stations and pid in pdcs
+              assert stations[sid].get('tariffNetworkId')=='grand-lyon'
+              assert pdcs[pid].get('tariffNetworkId')=='grand-lyon'
+              assert row.get('tariffNetworkId')=='grand-lyon'
+              assert row.get('physicalOperatorId')=='izivia'
+              assert row.get('matchMethod')=='network_scope' and row.get('rankable') is True
+              sel=row.get('selectors') or {}; profile=sel.get('customerProfile'); band=sel.get('powerBand')
+              by_profile[profile]+=1
+              power=float(pdcs[pid]['powerKw'])
+              assert (band=='le7' and 0<power<=7) or (band=='le24' and 7<power<=24) or (band=='le50' and 24<power<=50) or (band=='ge100' and power>=100)
+              rules=row.get('pricingRules') or []
+              if band in {'le7','le24'}:
+                  assert len(rules)==2 and [(r['start'],r['end']) for r in rules]==[('08:00','20:00'),('20:00','08:00')]
+                  assert all(r.get('timeWindowSelection')=='elapsed_local_clock' for r in rules)
+                  assert rules[0]['pricePerKwh']==0 and rules[0]['durationPerMinute']>0
+                  assert rules[1]['includedEnergyKwh']==20 and rules[1]['pricePerKwh']==0.38
+              else:
+                  assert len(rules)==1 and rules[0]['scope']=='allDay' and rules[0]['timeWindowSelection'] is None
+                  assert rules[0]['pricePerKwh']>0 and rules[0]['durationPerMinute']==0.2 and rules[0]['durationThresholdMinutes']==45
+              if profile=='visitor':
+                  assert row.get('channel')=='direct' and row.get('subscriptionId') is None
+              else:
+                  assert row.get('channel')=='subscription' and row.get('subscriptionId')
+          assert set(by_profile.values())=={s['canonicalGrandLyonPdcCount']}
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload Grand Lyon audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-grand-lyon-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/grand_lyon_pdc_offers_contract_v1_1.json.gz
+            build/france_irve_offers/grand_lyon_subscriptions_contract_v1_1.json
+            build/france_irve_offers/grand_lyon_materialization_report.json
+          retention-days: 14

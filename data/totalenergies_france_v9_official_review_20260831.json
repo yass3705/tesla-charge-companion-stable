@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "totalenergies-france-v9-official-review",
+  "reviewedAt": "2026-08-31",
+  "country": "FR",
+  "classification": {
+    "singleNationalExactCpoTariff": false,
+    "stationLevelPriceRequiredForExactSimulation": true,
+    "chargePlusIsEmspNotCpoDirect": true
+  },
+  "stationServiceFrance": {
+    "scope": "TotalEnergies station-service charging points in France",
+    "upToAndIncluding50Kw": {
+      "minEurPerKwh": 0.52,
+      "maxEurPerKwh": 0.55
+    },
+    "over50Kw": {
+      "minEurPerKwh": 0.62,
+      "maxEurPerKwh": 0.65
+    },
+    "occupationFee": {
+      "eurPerMin": 0.5,
+      "startsAfterConsecutiveConnectedMinutes": 45,
+      "continuesWhileVehicleConnected": true
+    },
+    "sessionFeeEur": 0,
+    "local059Exceptions": [
+      {"department": "31", "name": "Relais Toulouse Espagne", "eurPerKwh": 0.59},
+      {"department": "31", "name": "Relais Toulouse Grande Bretagne", "eurPerKwh": 0.59},
+      {"department": "31", "name": "Relais Blagnac Rocade", "eurPerKwh": 0.59},
+      {"department": "31", "name": "Relais de Portet Ouest", "eurPerKwh": 0.59},
+      {"department": "21", "name": "Relais Chartreux", "eurPerKwh": 0.59},
+      {"department": "21", "name": "Relais Marsannay la Côte", "eurPerKwh": 0.59}
+    ],
+    "source": "https://services.totalenergies.fr/particuliers/energies-vehicules/electrique-rechargeable/pourquoi-choisir-electrique-totalenergies"
+  },
+  "chargePlusZen": {
+    "classification": "subscription_emsp_discount",
+    "monthlyFeeEur": 3.9,
+    "discountPercent": 15,
+    "discountAppliesTo": "public kWh price",
+    "minimumPowerKw": 50,
+    "brandScope": "TotalEnergies",
+    "geography": "France metropolitan excluding Corsica",
+    "excludedOperatorCodes": ["FRHXW"],
+    "excludedOperatorLabel": "Hexawatt",
+    "exactEligibleStationIdentityRequired": true,
+    "underlyingPublicPriceRequired": true,
+    "source": "https://chargingservices.totalenergies.com/fr/home/france"
+  },
+  "notes": [
+    "The current detailed station-service page publishes price ranges rather than one exact national kWh price.",
+    "Six Dijon/Toulouse-area station-service locations are explicitly maintained at 0.59 EUR/kWh.",
+    "Charge+ Zen is a 15% discount and must never be represented as a fixed 0.49 EUR/kWh tariff.",
+    "TotalEnergies concessions and local public networks must not inherit the station-service tariff family without explicit scope evidence."
+  ]
+}

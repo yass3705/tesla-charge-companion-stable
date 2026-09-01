@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "alize-liberte-scope-review-france",
+  "verifiedAt": "2026-09-01",
+  "country": "FR",
+  "networkId": "alize-liberte",
+  "classification": "umbrella_mobility_offer_not_single_national_tariff",
+  "officialEvidence": [
+    {
+      "url": "https://alizecharge.com/tarifs-alize/",
+      "finding": "Partner networks operated by Bouygues Energies & Services define their own charging tariffs. Alize subscribers receive the public charging tariff on those partner networks without an additional roaming fee, except the stated Reveo 2025 exception. Other-network prices are station-specific and exposed through the Alize app/map."
+    },
+    {
+      "url": "https://alizecharge.com/partenaires/alize-liberte/",
+      "finding": "Alize Liberte is the access/mobility offer. The badge costs 12 EUR once and 0 EUR/month, and provides access to many distinct public, parking and national-operator networks."
+    },
+    {
+      "url": "https://toulouse.alizecharge.com/offres-et-tarifs/",
+      "finding": "Alize Toulouse publishes its own local public and preferential tariff grids, demonstrating that a local Alize-operated network cannot be used as the national Alize Liberte price."
+    }
+  ],
+  "policy": {
+    "rankGenericAlizeLibertePdc": false,
+    "inheritLocalPartnerTariffNationally": false,
+    "treatBadgeAsSubscriptionFilter": true,
+    "badgePurchaseEur": 12.0,
+    "monthlyFeeEur": 0.0,
+    "physicalInventoryFromPanOnly": true,
+    "parkingFeesSeparate": true,
+    "roamingTariffsSeparate": true,
+    "failClosed": true
+  },
+  "nextStep": "Inventory every canonical alize-liberte PDC by territory, physical operator, station identifier family and power class, then map only territories with an explicit current local tariff source."
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "carrefour-energies-loyalty-benefits-france",
+  "tariffNetworkId": "carrefour-energies",
+  "country": "FR",
+  "verifiedAt": "2026-08-28",
+  "validFrom": "2026-08-01",
+  "source": "https://energies.carrefour.fr/bornes-de-recharge",
+  "productionReady": false,
+  "benefits": [
+    {
+      "id": "carrefour-club-10pct-cashback",
+      "label": "Club Carrefour — 10% cagnotté",
+      "type": "loyalty_cashback",
+      "requiredUserSelection": "carrefour-club",
+      "cashbackPercent": 10,
+      "scope": {"allCarrefourEnergiesChargingPowers": true},
+      "rankableAsChargingPrice": false,
+      "reason": "cashback_is_not_billed_price"
+    },
+    {
+      "id": "carrefour-pass-15pct-cashback",
+      "label": "Carte PASS — 15% cagnotté",
+      "type": "loyalty_cashback",
+      "requiredUserSelection": "carrefour-pass",
+      "cashbackPercent": 15,
+      "scope": {"allCarrefourEnergiesChargingPowers": true},
+      "rankableAsChargingPrice": false,
+      "reason": "cashback_is_not_billed_price"
+    },
+    {
+      "id": "carrefour-pass-first-hour-22kw-full-cashback",
+      "label": "Carte PASS — 1ère heure 22 kW 100% cagnottée",
+      "type": "loyalty_cashback",
+      "requiredUserSelection": "carrefour-pass",
+      "cashbackPercent": 100,
+      "scope": {
+        "targetPowerKw": 22,
+        "firstMinutes": 60,
+        "maxUsesPerDay": 1
+      },
+      "rankableAsChargingPrice": false,
+      "reason": "cashback_requires_daily_usage_state_and_is_not_billed_price"
+    }
+  ],
+  "notes": [
+    "Benefits are stored separately from tariff offers and must not silently reduce the billed charging cost.",
+    "A future TCC net-economic-cost view may value cashback only after explicit user opt-in and daily eligibility state are available."
+  ]
+}

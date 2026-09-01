@@ -1,0 +1,244 @@
+name: Audit France Révéo canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_reveo_offers.py'
+      - 'scripts/materialize_france_reveo_offers_v2.py'
+      - 'scripts/materialize_france_reveo_offers_v3.py'
+      - 'scripts/test_reveo_materializer.py'
+      - 'data/reveo_direct_tariffs_france_v1.json'
+      - 'data/reveo_d66_direct_tariffs_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-reveo-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  reveo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate Révéo materializer
+        run: |
+          python -m py_compile scripts/materialize_france_reveo_offers.py scripts/materialize_france_reveo_offers_v2.py scripts/materialize_france_reveo_offers_v3.py scripts/test_reveo_materializer.py
+          python scripts/test_reveo_materializer.py
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          p=Path('scripts/materialize_france_reveo_offers_v2.py')
+          s=importlib.util.spec_from_file_location('reveo_v2',p)
+          m=importlib.util.module_from_spec(s); s.loader.exec_module(m)
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E1*1'},{'codeInsee':'','address':'1 rue test 09000 Foix'}) == ('D09','postal_department_09')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E2*1'},{'codeInsee':'','address':'1 rue test 81000 Albi'}) == ('D81','postal_department_81')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E3*1'},{'codeInsee':'','address':'1 rue test 31000 Toulouse'}) == ('M31','postal_department_31_blocked_special_grid')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E4*1'},{'codeInsee':'','address':'1 rue test 66000 Perpignan'}) == ('D66','postal_department_66_blocked_special_grid')
+          assert m.territory_match({'idPdcItinerance':'FR*RVE*E5*1'},{'codeInsee':'','address':'1 rue test 34000 Montpellier'}) == ('','')
+
+          p3=Path('scripts/materialize_france_reveo_offers_v3.py')
+          s3=importlib.util.spec_from_file_location('reveo_v3',p3)
+          m3=importlib.util.module_from_spec(s3); s3.loader.exec_module(m3)
+          merged=m3.load_json('data/reveo_direct_tariffs_france_v1.json')
+          assert 'D66' in m3.engine.EXPECTED_RANKABLE
+          assert (merged['territories']['D66'] or {}).get('status')=='rankable_public_only'
+          assert (merged['territories']['D66'] or {}).get('rankableProfiles')==['public']
+          assert (merged['territories']['D66'] or {}).get('tariffFamily')=='D66_SPECIAL_PUBLIC_CURRENT'
+          assert 'D66' not in (merged['scope'].get('rankableSubscriberTerritories') or [])
+          m3.validate_source(merged)
+          PY
+
+      - name: Validate verified Révéo source scope
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('data/reveo_direct_tariffs_france_v1.json',encoding='utf-8'))
+          assert d.get('dataset')=='reveo-direct-tariffs-france'
+          assert d.get('country')=='FR'
+          s=d.get('scope') or {}
+          expected={'S34','D09','D11','S12','D30','D46','S48','D65','D81'}
+          assert s.get('operatorDirectOnly') is True
+          assert s.get('roamingIncluded') is False
+          assert s.get('roamingTariffsPromotedToDirect') is False
+          assert s.get('unverifiedTerritoriesAreRankable') is False
+          assert s.get('subscriberOffersRequireSelection') is True
+          assert set(s.get('rankableTerritories') or [])==expected
+          assert set(s.get('rankablePublicTerritories') or [])==expected
+          assert set(s.get('rankableSubscriberTerritories') or [])=={'S34'}
+          sub=d.get('subscription') or {}
+          assert float(sub.get('monthlyFeeEur'))==1.5
+          assert float(sub.get('badgePurchaseEur'))==12.0
+          assert sub.get('defaultSelected') is False
+          assert set(sub.get('verifiedRankableTerritories') or [])=={'S34'}
+          fam=d.get('tariffFamilies') or {}
+          assert (fam.get('S34_CURRENT') or {}).get('status')=='rankable_public_and_subscriber'
+          assert (fam.get('GENERAL_PUBLIC_CURRENT') or {}).get('status')=='rankable_public_subscriber_reference_only'
+          assert (fam.get('GENERAL_PUBLIC_CURRENT') or {}).get('public')
+          assert (fam.get('GENERAL_PUBLIC_CURRENT') or {}).get('subscriberReference')
+          terr=d.get('territories') or {}
+          assert (terr.get('D66') or {}).get('status')=='unresolved_special_grid_not_verified'
+          assert (terr.get('M31') or {}).get('status')=='unresolved_special_grid_not_verified'
+          assert (terr.get('D81') or {}).get('tariffFamily')=='GENERAL_PUBLIC_CURRENT'
+
+          d66=json.load(open('data/reveo_d66_direct_tariffs_v1.json',encoding='utf-8'))
+          assert d66.get('dataset')=='reveo-d66-direct-tariffs-france'
+          assert d66.get('territory')=='D66' and d66.get('department')=='66'
+          p=d66.get('policy') or {}
+          assert p.get('operatorDirectOnly') is True
+          assert p.get('publicOnlyRankable') is True
+          assert p.get('subscriberRankable') is False
+          assert p.get('roamingIncluded') is False
+          assert p.get('physicalInventoryMutationAllowed') is False
+          f=d66.get('tariffFamily') or {}
+          assert f.get('id')=='D66_SPECIAL_PUBLIC_CURRENT'
+          assert f.get('status')=='rankable_public_only'
+          bands={r['key']:r for r in (f.get('public') or [])}
+          assert set(bands)=={'ac-slow','ac-normal','dc-50','dc-ultra'}
+          assert float(bands['ac-slow']['pricePerKwh'])==0.30
+          assert float(bands['ac-normal']['pricePerKwh'])==0.40
+          assert float(bands['dc-50']['pricePerKwh'])==0.55
+          assert float(bands['dc-ultra']['pricePerKwh'])==0.67
+          assert all(float((r.get('durationFee') or {}).get('ratePerMinute'))==0.12 for r in bands.values())
+          print(json.dumps({'baseRankable':sorted(expected),'D66Family':f},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize Révéo canonical offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_reveo_offers_v3.py \
+            --source data/reveo_direct_tariffs_france_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate Révéo canonical scope
+        run: |
+          python - <<'PY'
+          import gzip,json,re
+          expected={'S34','D09','D11','S12','D30','D46','S48','D65','D66','D81'}
+          dept={'D09':'09','D11':'11','S12':'12','D30':'30','D46':'46','S48':'48','D65':'65','D66':'66','D81':'81'}
+          metro={
+            '34022','34027','34057','34058','34077','34087','34088','34090',
+            '34095','34116','34120','34123','34129','34134','34164','34169',
+            '34172','34179','34198','34202','34217','34227','34244','34249',
+            '34256','34259','34270','34295','34307','34327','34337',
+          }
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/reveo_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/reveo_materialization_report.json',encoding='utf-8'))
+          s=report['summary']
+          tc=report.get('territoryCoverage') or {}
+          assert s['canonicalReveoStationCount'] >= 800
+          assert s['canonicalReveoPdcCount'] >= 2000
+          assert s['canonicalS34StationCount'] > 0
+          assert s['canonicalS34PdcCount'] > 100
+          assert s['rankableCoveredS34PdcCount'] > 0
+          assert s['canonicalGeneralPdcCount'] > 0
+          assert s['rankableCoveredGeneralPdcCount'] > 0
+          assert s['rankableCoveredPdcCount'] > s['rankableCoveredS34PdcCount']
+          assert s['publicRankableCoveredPdcCount'] >= s['rankableCoveredPdcCount']
+          assert s['subscriberRankableCoveredPdcCount'] == s['rankableCoveredS34PdcCount']
+          assert (tc.get('D66') or {}).get('pdcCount',0) > 200
+          assert (tc.get('D66') or {}).get('coveredPdcCount',0) > 0
+          assert (tc.get('D66') or {}).get('rankableProfiles') == ['public']
+          assert (tc.get('D66') or {}).get('tariffFamily') == 'D66_SPECIAL_PUBLIC_CURRENT'
+          assert s['physicalInventoryMutationCount']==0
+          assert s['subscriptionMonthlyFeeEur']==1.5
+          assert s['badgePurchaseEur']==12.0
+          assert s['materializedOfferCount']==len(offers)==s['rankableOfferCount']
+          assert len({r['offerId'] for r in offers})==len(offers)
+          d66_offers=0
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']
+              assert sid in stations and pid in pdcs
+              assert stations[sid].get('tariffNetworkId')=='reveo'
+              assert pdcs[pid].get('tariffNetworkId')=='reveo'
+              assert row.get('tariffNetworkId')=='reveo'
+              sel=row.get('selectors') or {}
+              territory=sel.get('territory')
+              code=str(sel.get('codeInsee') or '')
+              method=str(row.get('matchMethod') or '')
+              assert territory in expected
+              assert code not in metro
+              if territory in dept:
+                  d=dept[territory]
+                  if code:
+                      assert len(code)==5 and code.startswith(d)
+                  else:
+                      allowed={f'postal_department_{d}',f'postal_department_{d}_blocked_special_grid'}
+                      assert method in allowed
+                      postal=set(re.findall(r'(?<!\d)(\d{5})(?!\d)',str(stations[sid].get('address') or '')))
+                      assert len(postal)==1 and next(iter(postal)).startswith(d)
+              if territory=='S34' and not method.startswith('exact_ocpi_party_id_FR*S34'):
+                  assert len(code)==5 and code.startswith('34') and code not in metro
+              assert row.get('rankable') is True
+              if row.get('channel')=='subscription':
+                  assert territory=='S34'
+                  assert row.get('subscriptionId')=='reveo-subscription'
+              else:
+                  assert row.get('channel')=='direct'
+                  assert row.get('subscriptionId') is None
+              if territory=='D66':
+                  d66_offers+=1
+                  assert row.get('channel')=='direct'
+                  assert row.get('subscriptionId') is None
+                  assert sel.get('tariffFamily')=='D66_SPECIAL_PUBLIC_CURRENT'
+                  assert row.get('sourceUrl')=='https://alizecharge.com/app/uploads/2024/12/Tarif_Reseaux-partenaires_alize_2024-11.pdf'
+          assert d66_offers > 0
+          assert all((r.get('selectors') or {}).get('territory') not in {'M31','M34'} for r in offers)
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          print(json.dumps(tc,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload Révéo audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-reveo-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/reveo_pdc_offers_contract_v1_1.json.gz
+            build/france_irve_offers/reveo_materialization_report.json
+          retention-days: 14

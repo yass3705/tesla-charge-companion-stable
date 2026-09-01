@@ -1,0 +1,132 @@
+name: Audit France Freshmile canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_freshmile_offers.py'
+      - 'scripts/test_freshmile_materializer.py'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-freshmile-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  freshmile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate Freshmile materializer
+        run: |
+          python -m py_compile scripts/materialize_france_freshmile_offers.py scripts/test_freshmile_materializer.py
+          python scripts/test_freshmile_materializer.py
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Fetch strict Freshmile direct source
+        run: |
+          mkdir -p .tmp/freshmile
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/freshmile_direct_tcc_v8.json.gz' \
+            --output .tmp/freshmile/freshmile_direct_tcc_v8.json.gz
+          python - <<'PY'
+          import gzip,json
+          with gzip.open('.tmp/freshmile/freshmile_direct_tcc_v8.json.gz','rt',encoding='utf-8') as f:data=json.load(f)
+          assert data.get('dataset')=='freshmile-direct-tcc-v8-france'
+          assert data.get('schemaVersion')=='1.0.0'
+          scope=data.get('scope') or {}
+          assert scope.get('countryCode')=='FR'
+          assert scope.get('onlyDirectCpo') is True
+          assert scope.get('onlyStrictTccExact') is True
+          assert scope.get('roamingIncluded') is False
+          assert scope.get('configuredRegionalNetworksIncluded') is False
+          assert scope.get('preferentialTariffsIncluded') is False
+          stations=data.get('stations') or []
+          assert 900 <= len(stations) <= 1500
+          print(json.dumps({'stations':len(stations),'counts':data.get('counts'),'generatedAt':data.get('generatedAt')},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Materialize Freshmile canonical direct offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_freshmile_offers.py \
+            --freshmile-gzip .tmp/freshmile/freshmile_direct_tcc_v8.json.gz \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate Freshmile canonical scope
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/freshmile_station_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/freshmile_materialization_report.json',encoding='utf-8'))
+          summary=report['summary']
+          assert summary['materializedOfferCount']==len(offers)>0
+          assert summary['rankableOfferCount']==len(offers)
+          assert summary['physicalInventoryMutationCount']==0
+          assert len({r['offerId'] for r in offers})==len(offers)
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row.get('canonicalPdcId')
+              assert sid in stations
+              assert stations[sid].get('tariffNetworkId')=='freshmile'
+              assert row.get('tariffNetworkId')=='freshmile'
+              assert row.get('provider')=='Freshmile' and row.get('channel')=='direct'
+              assert row.get('matchMethod') in {'exact_source_evse','exact_source_station','unique_geo_operator_100m'}
+              if pid:
+                  assert pid in pdcs and pdcs[pid].get('stationId')==sid
+                  assert pdcs[pid].get('tariffNetworkId')=='freshmile'
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload Freshmile audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-freshmile-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/freshmile_station_offers_contract_v1_1.json.gz
+            build/france_irve_offers/freshmile_materialization_report.json
+          retention-days: 14

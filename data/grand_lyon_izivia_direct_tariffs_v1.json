@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.1.1",
+  "dataset": "grand-lyon-izivia-direct-tariffs-france",
+  "networkId": "grand-lyon",
+  "network": "IZIVIA Grand Lyon",
+  "operator": "IZIVIA",
+  "authority": "Métropole de Lyon",
+  "country": "FR",
+  "tariffMatrixExtractedAt": "2026-09-01",
+  "officialPageRecheckedAt": "2026-09-01",
+  "productionReady": false,
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalOperatorRequired": "izivia",
+    "physicalInventoryFromIrveOnly": true,
+    "stationLevelPriceLookupRequired": false,
+    "roamingIncluded": false,
+    "roamingTariffsPromotedToDirect": false,
+    "subscriberOffersRequireSelection": true,
+    "monthlyFeesAllocatedToSession": false,
+    "adHocUsesVisitorTariff": true,
+    "failClosed": true
+  },
+  "billingSemantics": {
+    "dayWindow": "08:00-20:00",
+    "nightWindow": "20:00-08:00",
+    "timeWindowSelection": "elapsed_local_clock",
+    "crossWindowPolicy": "apply_each_component_to_its_local_clock_window",
+    "daySlowBilling": "linear_connected_minute_within_day_window",
+    "nightSlowBilling": "night_connection_package_includes_20_kwh_consumed_within_night_window_then_linear_extra_kwh",
+    "fastBilling": "linear_kwh_plus_linear_connected_minute_after_45",
+    "separateParkingFee": false,
+    "parkingNote": "Dedicated charging-space parking is not separately billed; the daytime slow tariff is calculated per connected minute."
+  },
+  "powerBands": [
+    {"id": "le7", "label": "jusqu'à 7 kW", "minPowerKwExclusive": 0, "maxPowerKw": 7, "kind": "AC"},
+    {"id": "le24", "label": "plus de 7 à 24 kW", "minPowerKwExclusive": 7, "maxPowerKw": 24, "kind": "AC"},
+    {"id": "le50", "label": "plus de 24 à 50 kW", "minPowerKwExclusive": 24, "maxPowerKw": 50, "kind": "DC"},
+    {"id": "ge100", "label": "100 kW et plus", "minPowerKw": 100, "maxPowerKw": null, "kind": "DC"}
+  ],
+  "subscriptions": [
+    {
+      "id": "izivia-grand-lyon-standard",
+      "label": "IZIVIA Grand Lyon — Standard",
+      "monthlyFeeEur": 5,
+      "initialPassRegistrationEur": 15,
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true
+    },
+    {
+      "id": "izivia-grand-lyon-frequency",
+      "label": "IZIVIA Grand Lyon — Fréquence",
+      "monthlyFeeEur": 20,
+      "initialPassRegistrationEur": 15,
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true
+    }
+  ],
+  "profiles": [
+    {"id": "visitor", "label": "Visiteur / PayNow", "channel": "direct", "subscriptionId": null},
+    {"id": "standard", "label": "Abonnement Standard", "channel": "subscription", "subscriptionId": "izivia-grand-lyon-standard"},
+    {"id": "frequency", "label": "Abonnement Fréquence", "channel": "subscription", "subscriptionId": "izivia-grand-lyon-frequency"}
+  ],
+  "tariffs": {
+    "day": {
+      "start": "08:00",
+      "end": "20:00",
+      "le7": {"visitorEurPerHour": 3.5, "standardEurPerHour": 2.5, "frequencyEurPerHour": 1.5},
+      "le24": {"visitorEurPerHour": 6, "standardEurPerHour": 5, "frequencyEurPerHour": 4},
+      "le50": {"visitorEurPerKwh": 0.45, "standardEurPerKwh": 0.4, "frequencyEurPerKwh": 0.3, "durationEurPerMinute": 0.2, "durationThresholdMinutes": 45},
+      "ge100": {"visitorEurPerKwh": 0.55, "standardEurPerKwh": 0.5, "frequencyEurPerKwh": 0.4, "durationEurPerMinute": 0.2, "durationThresholdMinutes": 45}
+    },
+    "night": {
+      "start": "20:00",
+      "end": "08:00",
+      "le7": {"visitorConnectionFeeEur": 6, "standardConnectionFeeEur": 5, "frequencyConnectionFeeEur": 4, "includedEnergyKwh": 20, "extraEnergyEurPerKwh": 0.38},
+      "le24": {"visitorConnectionFeeEur": 6, "standardConnectionFeeEur": 5, "frequencyConnectionFeeEur": 4, "includedEnergyKwh": 20, "extraEnergyEurPerKwh": 0.38},
+      "le50": {"visitorEurPerKwh": 0.45, "standardEurPerKwh": 0.4, "frequencyEurPerKwh": 0.3, "durationEurPerMinute": 0.2, "durationThresholdMinutes": 45},
+      "ge100": {"visitorEurPerKwh": 0.55, "standardEurPerKwh": 0.5, "frequencyEurPerKwh": 0.4, "durationEurPerMinute": 0.2, "durationThresholdMinutes": 45}
+    }
+  },
+  "sourceEvidence": {
+    "officialNetworkPage": "https://grandlyon.izivia.com/",
+    "officialOffersPage": "https://grandlyon.izivia.com/nos-offres/",
+    "officialTariffTableSvg": "https://grandlyon.izivia.com/wp-content/uploads/2024/01/Tarifs-GrandLyon-01-03-2024.svg",
+    "officialExtractDataset": "data-lab/operator_direct/izivia_official_france.json",
+    "officialExtractFingerprintSha256": "23a65232f7c51c0462321e83e3d10260c4ac8353bd65d50cf40f4df51d3511d4"
+  },
+  "notes": [
+    "Generic IZIVIA, IZIVIA FAST, IZIVIA Express, IZIVIA Impact, SIGEIF and Pass IZIVIA roaming stations never inherit this grid.",
+    "Power values strictly above 50 kW and below 100 kW remain fail-closed because the official table has no matching class.",
+    "Standard and Fréquence offers are opt-in; their monthly and one-time fees are never silently allocated to a charging session.",
+    "A session crossing 08:00 or 20:00 must apply each day/night component to its own local-clock interval; the whole session must not inherit only the connection-start window."
+  ]
+}

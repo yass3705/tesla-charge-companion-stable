@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "pau-alize-tariff-review",
+  "country": "FR",
+  "networkCandidateId": "pau-parking-alize",
+  "label": "Ville de Pau — parkings Alizé",
+  "verifiedAt": "2026-09-01",
+  "sources": {
+    "officialCityParkingPage": "https://www.pau.fr/actualites/tout-sur-les-parkings-et-le-stationnement-dans-pau",
+    "alizeCgu": "https://alizecharge.com/conditions-generales-dutilisations/"
+  },
+  "scope": {
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthority": "Ville de Pau",
+    "requiredDepartment": "64",
+    "physicalInventoryFromIrveOnly": true,
+    "requiresExactPanContractingAuthority": true,
+    "genericAlizeLiberteNeverInheritsPauTariff": true,
+    "parkingSeparateFromCharging": true,
+    "roamingMspTariffsRemainSeparate": true
+  },
+  "currentEvidence": {
+    "cityConfirmsAlizeOrPartnerCardAccess": true,
+    "cityConfirmsQrCardPayment": true,
+    "cityReportedEvChargingParkingSpaces": 45,
+    "previousPanAuthorityAuditStationCount": 11,
+    "previousPanAuthorityAuditPdcCount": 46,
+    "currentDirectChargeTariffFound": false,
+    "currentDirectSubscriptionTariffFound": false
+  },
+  "decision": {
+    "status": "reference_only_missing_current_direct_tariff",
+    "rankable": false,
+    "physicalMutationAllowed": false,
+    "blockedReasons": [
+      "current_direct_charge_tariff_not_published_in_verified_sources",
+      "current_direct_subscription_tariff_not_published_in_verified_sources"
+    ],
+    "nextProofNeeded": "Current supplier tariff page, station-level Alize direct tariff, or current official municipal tariff decision covering the exact Pau parking charging service."
+  },
+  "notes": [
+    "The official Pau parking page confirms that drivers can use an Alize or partner card and can scan a charger QR code for direct card payment.",
+    "Alize CGU states that charge prices are set by each charge supplier and are supplier-specific; therefore no tariff from another Alize-operated local network may be inherited.",
+    "Parking tariffs and charging tariffs remain distinct in TCC."
+  ]
+}

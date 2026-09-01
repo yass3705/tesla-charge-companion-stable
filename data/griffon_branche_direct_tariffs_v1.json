@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.1",
+  "dataset": "griffon-branche-direct-tariffs-france",
+  "networkId": "griffon-branche",
+  "label": "Griffon Branché",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "sources": {
+    "officialCityPage": "https://www.saint-brieuc.bzh/au-quotidien/circuler-en-ville/recharger-sa-voiture-electrique",
+    "officialAlizeNetworkPage": "https://alizecharge.com/partenaires/saint-brieuc-griffon-branche/",
+    "officialBouyguesProjectPage": "https://www.bouygues-es.fr/nous-decouvrir/nos-projets/projets-mobilite/le-reseau-de-recharge-griffon-branche-est-entierement"
+  },
+  "topology": {
+    "officialStationCount": 16,
+    "officialLogicalChargePointCount": 48,
+    "canonicalInventorySource": "PAN IRVE",
+    "currentPanStationCountObserved": 16,
+    "currentPanPdcRowCountObserved": 74,
+    "granularityNote": "Official Saint-Brieuc and Bouygues sources describe 48 user-facing charge points on 16 sites. The current PAN IRVE snapshot represents the same 16 sites with 74 canonical PDC rows, including connector-level rows on multi-standard DC equipment. TCC keeps PAN rows as the canonical inventory and must not describe 74 as 74 physical public charge points."
+  },
+  "scope": {
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthorityAliases": ["R-Mob", "R MOB", "RMOB"],
+    "requiredCodeInsee": "22278",
+    "requiredStationNameTokens": ["griffon branche", "ville de saint brieuc"],
+    "requiresExactLocalScope": true,
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "genericAlizeLiberteNeverInheritsGriffonTariff": true,
+    "otherRMobNetworksNeverInheritGriffonTariff": true
+  },
+  "access": {
+    "alizeLiberteAvailable": true,
+    "griffonSubscriptionId": "griffon-branche",
+    "griffonSubscriptionMonthlyFeeEur": 8.0,
+    "badgePurchaseEur": 12.0,
+    "subscriptionOptIn": true
+  },
+  "tariffFamilies": [
+    {
+      "id": "griffon-ac-22",
+      "kind": "AC",
+      "maxPowerKw": 22.5,
+      "subscriberPricePerKwh": 0.39,
+      "publicPricePerKwh": 0.45,
+      "durationPerMinute": 0.10,
+      "durationThresholdMinutes": 180,
+      "durationStart": "07:00",
+      "durationEnd": "23:00",
+      "notes": "No connection-duration fee on AC between 23:00 and 07:00. EF uses the same tariff."
+    },
+    {
+      "id": "griffon-dc-30",
+      "kind": "DC",
+      "minPowerKwExclusive": 22.5,
+      "maxPowerKw": 30.5,
+      "subscriberPricePerKwh": 0.49,
+      "publicPricePerKwh": 0.55,
+      "durationPerMinute": 0.15,
+      "durationThresholdMinutes": 60,
+      "durationStart": null,
+      "durationEnd": null
+    },
+    {
+      "id": "griffon-dc-180",
+      "kind": "DC",
+      "minPowerKwExclusive": 30.5,
+      "maxPowerKw": 180.5,
+      "subscriberPricePerKwh": 0.54,
+      "publicPricePerKwh": 0.59,
+      "durationPerMinute": 0.20,
+      "durationThresholdMinutes": 40,
+      "durationStart": null,
+      "durationEnd": null,
+      "notes": "Official page states the Type 2 outlet on these express units uses the same tariff."
+    }
+  ],
+  "exclusions": [
+    "Only Saint-Brieuc Griffon Branche PAN stations matching R-Mob, INSEE 22278 and the explicit station-name tokens are eligible.",
+    "Other R-Mob stations in departments 22, 27, 28 or 33 never inherit this tariff.",
+    "The 8 EUR/month Griffon Branche subscription is opt-in and affects ranking only when selected.",
+    "Third-party roaming/eMSP prices remain separate.",
+    "Parking fees remain separate from charging.",
+    "PAN IRVE remains the sole physical inventory.",
+    "Do not equate PAN connector/PDC rows with the official count of 48 user-facing charge points."
+  ]
+}

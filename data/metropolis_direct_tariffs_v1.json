@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "metropolis-direct-tariffs-france",
+  "networkId": "metropolis",
+  "label": "Métropolis Recharge",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "validFrom": "2026-01-01",
+  "sources": {
+    "officialHome": "https://www.metropolis-recharge.fr/",
+    "officialFaq": "https://www.metropolis-recharge.fr/faq/"
+  },
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "requiresExplicitTariffNetworkId": true,
+    "roamingSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "postChargeSeparatedFromParking": true,
+    "unknownPowerClassNeverRankable": true,
+    "legacyMetropolis100NeverUsed": true
+  },
+  "publicFamilies": [
+    {
+      "id": "metropolis-proximity-3_7",
+      "maxPowerKw": 4.0,
+      "pricePerKwh": 0.44,
+      "postChargeGraceMinutes": 10,
+      "postChargePerMinute": 0.10,
+      "neuillyDayPostChargePerMinute": 0.20,
+      "neuillyNightPostChargePerMinute": 0.10,
+      "neuillyDayStart": "08:00",
+      "neuillyDayEnd": "20:00",
+      "neuillyNightStart": "20:00",
+      "neuillyNightEnd": "08:00"
+    },
+    {
+      "id": "metropolis-city-22_25",
+      "minPowerKwExclusive": 4.0,
+      "maxPowerKw": 25.5,
+      "pricePerKwh": 0.53,
+      "postChargeGraceMinutes": 10,
+      "postChargePerMinute": 0.10,
+      "neuillyDayPostChargePerMinute": 0.20,
+      "neuillyNightPostChargePerMinute": 0.10,
+      "expressSitePostChargePerMinute": 0.20,
+      "neuillyDayStart": "08:00",
+      "neuillyDayEnd": "20:00",
+      "neuillyNightStart": "20:00",
+      "neuillyNightEnd": "08:00"
+    },
+    {
+      "id": "metropolis-express-150_180",
+      "kind": "DC",
+      "minPowerKw": 149.0,
+      "maxPowerKw": 181.0,
+      "pricePerKwh": 0.63,
+      "postChargeGraceMinutes": 10,
+      "postChargePerMinute": 0.20
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "metropolis-liberte",
+      "label": "Métropolis Liberté",
+      "annualFeeEur": 10.0,
+      "energyPricing": "public",
+      "rankableWhenSelected": false,
+      "blockedReasons": ["monthly_post_charge_allowance_state_not_tracked"],
+      "benefits": {
+        "postChargeFreeMinutesPerMonth": 120,
+        "nightPostChargeCapEur": 2.0,
+        "nightStart": "20:00",
+        "nightEnd": "08:00",
+        "nightCapExcludesExpress": true
+      }
+    },
+    {
+      "id": "metropolis-mensuel",
+      "label": "Métropolis Mensuel",
+      "monthlyFeeEur": 9.90,
+      "expressPricePerKwh": 0.53,
+      "otherEnergyPricing": "public",
+      "rankableWhenSelected": false,
+      "blockedReasons": ["monthly_post_charge_allowance_state_not_tracked"],
+      "benefits": {
+        "postChargeFreeMinutesPerMonth": 120,
+        "nightPostChargeCapEur": 2.0,
+        "nightStart": "20:00",
+        "nightEnd": "08:00",
+        "nightCapExcludesExpress": true
+      }
+    }
+  ],
+  "classificationPolicy": {
+    "expressSitePowerThresholdKw": 149.0,
+    "cityConnectorOnExpressSiteKeepsCityEnergyPrice": true,
+    "cityConnectorOnExpressSitePostChargePerMinute": 0.20,
+    "dcBetween25_5And149KwUnresolved": true,
+    "expressDcBelow149KwUnresolved": true,
+    "neuillyNameTokens": ["neuilly-sur-seine", "neuilly sur seine"]
+  },
+  "exclusions": [
+    "Only PAN PDCs explicitly resolved to tariffNetworkId metropolis are eligible.",
+    "Public pricing is rankable only for the current official 3.7 kW, 3.7-22/25 kW and 150-180 kW Express classes.",
+    "Current PAN 50/100 kW DC connectors remain unresolved unless a current official class mapping proves their direct tariff.",
+    "A 22 kW connector on an Express station keeps the 0.53 EUR/kWh city energy price but uses the official 0.20 EUR/min post-charge rate.",
+    "In Neuilly-sur-Seine, public post-charge is 0.20 EUR/min from 08:00 to 20:00 and 0.10 EUR/min from 20:00 to 08:00.",
+    "Métropolis Liberté and Mensuel remain reference-only because their two free post-charge hours per month require remaining-quota state.",
+    "Legacy Métropolis 100 must never be reintroduced after its replacement by Métropolis Mensuel.",
+    "External parking fees remain separate from post-charge occupancy fees.",
+    "PAN IRVE remains the sole physical inventory."
+  ]
+}

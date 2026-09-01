@@ -132,7 +132,7 @@
   function loadReveoDirect(){
     if(window.TCCReveoDirectV8||document.querySelector('script[data-tcc-reveo-direct]'))return true;
     const s=document.createElement('script');
-    s.src='assets/v8-reveo-direct.js?v=reveo-direct-v1-20260826';s.defer=true;s.dataset.tccReveoDirect='1';document.head.appendChild(s);return true;
+    s.src='assets/v8-reveo-direct.js?v=reveo-direct-v2-20260901';s.defer=true;s.dataset.tccReveoDirect='1';document.head.appendChild(s);return true;
   }
   function loadYawayConnectDirect(){
     if(window.TCCYawayConnectDirectV8||document.querySelector('script[data-tcc-yaway-connect-direct]'))return true;

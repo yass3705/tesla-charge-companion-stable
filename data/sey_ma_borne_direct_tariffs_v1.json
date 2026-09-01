@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.1",
+  "dataset": "sey-ma-borne-direct-tariffs-france",
+  "networkId": "seymaborne",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "effectiveFrom": "2026-03-01",
+  "sources": {
+    "officialTariffPage": "https://www.sey78.fr/actualites/683-une-nouvelle-tarification-pour-les-bornes-de-recharge-sey-au-1er-mars-2026",
+    "officialCommitteeMinutes": "https://www.sey78.fr/images/4_BIBLIOTHEQUE_OU_DOCUMENTATION/2_Statuts-et-assembl%C3%A9es-Generales/2026-Recueil/COMITE/COMITE_DU_20.01.2026/PV_COMITE_2026_01_20_-_Pour_le_site.pdf",
+    "officialNetworkPage": "https://www.sey78.fr/activites-du-sey/les-bornes-de-recharge",
+    "alizePartnerPortal": "https://alizecharge.com/partenaires/sey/"
+  },
+  "scope": {
+    "canonicalTariffNetworkId": "seymaborne",
+    "explicitPanBrandRequired": true,
+    "requiresPanContractingAuthorityMatch": false,
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "genericAlizeLiberteNeverInheritsSeyTariff": true,
+    "notes": "Current PAN exposes SeyMaBorne as its own customer-facing tariff network (677 PDC / 309 stations in the 2026-09-01 audit). The direct grid therefore attaches to that explicit brand, not to generic Alize Liberte rows."
+  },
+  "access": {
+    "monthlySubscriptionFeeEur": 0.0,
+    "badgePurchaseEur": 9.60,
+    "badgeRequired": false,
+    "freeAlizeAppAccess": true,
+    "rankableDefaultChannel": "alize_app_or_sey_badge"
+  },
+  "tariffFamilies": [
+    {
+      "id": "sey-22-ac-standard",
+      "kind": "AC",
+      "maxPowerKw": 22.5,
+      "rankable": true,
+      "paymentProfile": "alize_app_or_sey_badge",
+      "pricingRules": [
+        {"scope":"allDay","currency":"EUR","pricePerKwh":0.36,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0,"durationThresholdMinutes":0,"connectionFee":0,"parkingPerMinute":0,"notes":"Energy component."},
+        {"scope":"timeWindow","currency":"EUR","pricePerKwh":0,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0.06666666666666667,"durationThresholdMinutes":120,"durationStart":"08:00","durationEnd":"20:00","connectionFee":0,"parkingPerMinute":0,"notes":"After two free connection hours, 4 EUR/hour from 08:00 to 20:00."},
+        {"scope":"timeWindow","currency":"EUR","pricePerKwh":0,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0.005,"durationThresholdMinutes":120,"durationStart":"20:00","durationEnd":"08:00","connectionFee":0,"parkingPerMinute":0,"notes":"After two free connection hours, 0.30 EUR/hour from 20:00 to 08:00."}
+      ]
+    },
+    {
+      "id": "sey-dc-30plus-standard",
+      "kind": "DC",
+      "minPowerKw": 30,
+      "rankable": true,
+      "paymentProfile": "alize_app_or_sey_badge",
+      "pricingRules": [
+        {"scope":"allDay","currency":"EUR","pricePerKwh":0.46,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0,"durationThresholdMinutes":0,"connectionFee":0,"parkingPerMinute":0,"notes":"Energy component."},
+        {"scope":"timeWindow","currency":"EUR","pricePerKwh":0,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0.06666666666666667,"durationThresholdMinutes":0,"durationStart":"08:00","durationEnd":"20:00","connectionFee":0,"parkingPerMinute":0,"notes":"4 EUR/hour from the start of the session, 08:00 to 20:00."},
+        {"scope":"timeWindow","currency":"EUR","pricePerKwh":0,"chargePerMinute":0,"chargeThresholdMinutes":0,"durationPerMinute":0.016666666666666666,"durationThresholdMinutes":0,"durationStart":"20:00","durationEnd":"08:00","connectionFee":0,"parkingPerMinute":0,"notes":"1 EUR/hour from the start of the session, 20:00 to 08:00."}
+      ]
+    }
+  ],
+  "cardPaymentReference": {
+    "rankable": false,
+    "reason": "payment_method_selector_not_yet_modeled",
+    "energyPriceSameAsStandard": true,
+    "durationRateEurPerHour": 4.0,
+    "acDurationThresholdMinutes": 120,
+    "dcDurationThresholdMinutes": 0,
+    "nightReductionApplies": false
+  },
+  "exclusions": [
+    "Generic Alize Liberte / Bouygues-operated local networks never inherit this tariff.",
+    "Roaming/eMSP prices are not direct SEY ma Borne prices.",
+    "Bank-card duration pricing is retained as reference-only until TCC exposes a payment-method selector.",
+    "PAN IRVE remains the sole physical inventory."
+  ]
+}

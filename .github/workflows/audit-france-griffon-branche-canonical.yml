@@ -1,0 +1,97 @@
+name: Audit France Griffon Branche canonical
+
+on:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/griffon_branche_direct_tariffs_v1.json'
+      - 'scripts/materialize_france_griffon_branche_offers.py'
+      - 'scripts/test_griffon_branche_materializer.py'
+      - 'data/france_irve_tariff_network_additions_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-griffon-branche-canonical.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  griffon-branche:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Validate Griffon source and materializer
+        run: |
+          python -m py_compile scripts/materialize_france_griffon_branche_offers.py scripts/test_griffon_branche_materializer.py
+          python scripts/test_griffon_branche_materializer.py
+          python - <<'PY'
+          import json
+          d=json.load(open('data/griffon_branche_direct_tariffs_v1.json',encoding='utf-8'))
+          assert d['verifiedAt']=='2026-09-01'
+          assert d['access']['griffonSubscriptionMonthlyFeeEur']==8.0
+          assert d['access']['subscriptionOptIn'] is True
+          assert d['scope']['requiredCodeInsee']=='22278'
+          t=d['topology']
+          assert t['officialStationCount']==16 and t['officialLogicalChargePointCount']==48
+          assert t['canonicalInventorySource']=='PAN IRVE'
+          PY
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --additions data/france_irve_tariff_network_additions_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84013/download' --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84098/download' --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py --static-csv .tmp/irve/static.csv --dynamic-csv .tmp/irve/dynamic.csv --registry data/france_irve_operator_registry_v1.json --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py --canonical-dir build/france_irve --operator-registry data/france_irve_operator_registry_v1.json --network-registry build/france_irve/effective_tariff_network_registry.json --out-dir build/france_irve_identity
+      - name: Materialize Griffon Branche direct scope
+        run: |
+          python scripts/materialize_france_griffon_branche_offers.py --source data/griffon_branche_direct_tariffs_v1.json --canonical-dir build/france_irve_identity --static-csv .tmp/irve/static.csv --out-dir build/france_irve_offers
+      - name: Validate Griffon Branche canonical coverage
+        run: |
+          python - <<'PY'
+          import gzip,json
+          source=json.load(open('data/griffon_branche_direct_tariffs_v1.json',encoding='utf-8'))
+          r=json.load(open('build/france_irve_offers/griffon_branche_materialization_report.json',encoding='utf-8'));s=r['summary']
+          assert s['eligibleStationCount']==source['topology']['officialStationCount']==16,s
+          assert 48 <= s['eligiblePdcCount'] <= 90,s
+          assert s['eligiblePdcCount'] >= source['topology']['officialLogicalChargePointCount'],s
+          assert s['coveredPdcCount']==s['eligiblePdcCount'],s
+          assert s['publicOfferCount']==s['eligiblePdcCount'] and s['subscriberOfferCount']==s['eligiblePdcCount'],s
+          assert s['unresolvedPdcCount']==0 and s['physicalInventoryMutationCount']==0,s
+          f=r['familyPdcCounts']
+          assert sum(f.values())==s['eligiblePdcCount'],f
+          assert f.get('griffon-ac-22',0)>0 and f.get('griffon-dc-30',0)>0 and f.get('griffon-dc-180',0)>0,f
+          with gzip.open('build/france_irve_offers/griffon_branche_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as fh:offers=json.load(fh)
+          assert all(x['tariffNetworkId']=='griffon-branche' and x['physicalOperatorId']=='bouygues-energies-services' for x in offers)
+          assert all(x['selectors']['codeInsee']=='22278' for x in offers)
+          sub=[x for x in offers if x['subscriptionId']=='griffon-branche'];pub=[x for x in offers if x['subscriptionId'] is None]
+          assert len(sub)==len(pub)==s['eligiblePdcCount']
+          print(json.dumps(r,ensure_ascii=False,indent=2))
+          PY
+      - name: Upload Griffon Branche audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-griffon-branche-canonical-audit
+          path: |
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/griffon_branche_materialization_report.json
+            build/france_irve_offers/griffon_branche_pdc_offers_contract_v1_1.json.gz
+          retention-days: 14

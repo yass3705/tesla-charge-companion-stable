@@ -1,0 +1,150 @@
+name: Audit France SAEMES canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'scripts/materialize_france_saemes_offers.py'
+      - 'scripts/test_saemes_materializer.py'
+      - 'data/saemes_direct_tariffs_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - '.github/workflows/audit-france-saemes-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  saemes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate SAEMES materializer
+        run: |
+          python -m py_compile scripts/materialize_france_saemes_offers.py scripts/test_saemes_materializer.py
+          python scripts/test_saemes_materializer.py
+
+      - name: Validate SAEMES official tariff source
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('data/saemes_direct_tariffs_v1.json',encoding='utf-8'))
+          assert d.get('dataset')=='saemes-direct-tariffs-france'
+          assert d.get('networkId')=='saemes' and d.get('country')=='FR'
+          s=d.get('scope') or {}
+          assert s.get('directNetworkOnly') is True
+          assert s.get('physicalInventoryFromIrveOnly') is True
+          assert s.get('parkingExcludedFromChargingTariff') is True
+          assert s.get('roamingMspTariffsRemainSeparate') is True
+          assert s.get('electraRapidStationsRemainSeparateNetwork') is True
+          offers=d.get('offers') or []
+          assert len(offers)==1
+          o=offers[0]; assert o.get('id')=='saemes-public-qr-standard'
+          assert o.get('channel')=='direct' and o.get('rankable') is True
+          rules=o.get('pricingRules') or []; assert len(rules)==1
+          r=rules[0]
+          assert float(r.get('pricePerKwh'))==0.50
+          assert float(r.get('connectionFee'))==0.50
+          assert float(r.get('durationThresholdMinutes'))==900
+          assert abs(float(r.get('durationPerMinute'))-(10/60))<1e-8
+          assert float(r.get('parkingPerMinute'))==0
+          print(json.dumps({'verifiedAt':d.get('verifiedAt'),'pricingRule':r},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize SAEMES canonical offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_saemes_offers.py \
+            --source data/saemes_direct_tariffs_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate SAEMES canonical scope
+        run: |
+          python - <<'PY'
+          import gzip,json
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/saemes_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/saemes_materialization_report.json',encoding='utf-8'))
+          s=report['summary']
+          assert 20 <= s['canonicalSaemesStationCount'] <= 60
+          assert 1800 <= s['canonicalSaemesPdcCount'] <= 2400
+          assert s['materializedOfferCount']==len(offers)==s['canonicalSaemesPdcCount']
+          assert s['rankableOfferCount']==len(offers)
+          assert s['rankableCoveredPdcCount']==s['canonicalSaemesPdcCount']
+          assert s['unresolvedPdcCount']==0
+          assert s['physicalInventoryMutationCount']==0
+          assert len({r['offerId'] for r in offers})==len(offers)
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']
+              assert sid in stations and pid in pdcs
+              assert pdcs[pid].get('stationId')==sid
+              assert stations[sid].get('tariffNetworkId')=='saemes'
+              assert pdcs[pid].get('tariffNetworkId')=='saemes'
+              assert row.get('tariffNetworkId')=='saemes'
+              assert row.get('provider')=='SAEMES direct QR/CB'
+              assert row.get('channel')=='direct' and row.get('subscriptionId') is None
+              assert row.get('matchMethod')=='network_scope' and row.get('sourceMode')=='network_rule'
+              assert row.get('rankable') is True
+              rule=(row.get('pricingRules') or [])[0]
+              assert float(rule.get('pricePerKwh'))==0.5
+              assert float(rule.get('connectionFee'))==0.5
+              assert float(rule.get('durationThresholdMinutes'))==900
+              assert abs(float(rule.get('durationPerMinute'))-(10/60))<1e-8
+              assert float(rule.get('parkingPerMinute'))==0
+          electra={pid for pid,r in pdcs.items() if r.get('tariffNetworkId')=='electra'}
+          assert not any(r['canonicalPdcId'] in electra for r in offers)
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload SAEMES audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-saemes-canonical-audit
+          path: |
+            build/france_irve/operator_gap_report.json
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/saemes_pdc_offers_contract_v1_1.json.gz
+            build/france_irve_offers/saemes_materialization_report.json
+          retention-days: 14

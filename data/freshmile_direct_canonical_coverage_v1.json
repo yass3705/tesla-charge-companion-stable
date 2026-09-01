@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "networkId": "freshmile",
+  "country": "FR",
+  "auditedAt": "2026-08-31",
+  "coverageStatus": "partial_ready",
+  "upstream": {
+    "dataset": "freshmile-direct-tcc-v8-france",
+    "artifact": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/freshmile_direct_tcc_v8.json.gz",
+    "generatedAt": "2026-08-26T23:54:47.821515+00:00"
+  },
+  "canonicalAudit": {
+    "workflowRunId": 33406003494,
+    "sourceStationCount": 1183,
+    "sourceConfigCount": 2067,
+    "strictConfigCount": 2067,
+    "canonicalFreshmileTariffNetworkStationCount": 4674,
+    "canonicalFreshmileTariffNetworkPdcCount": 15049,
+    "materializedOfferCount": 5779,
+    "rankableOfferCount": 5779,
+    "coveredCanonicalStationCount": 1183,
+    "coveredCanonicalStationPct": 25.31,
+    "coveredCanonicalPdcCount": 3892,
+    "coveredCanonicalPdcPct": 25.86,
+    "physicalInventoryMutationCount": 0,
+    "nonFreshmilePdcHits": 0,
+    "unresolvedCount": 0
+  },
+  "policy": {
+    "strictExactOnly": true,
+    "regionalNetworksExcluded": true,
+    "roamingExcluded": true,
+    "preferentialTariffsExcluded": true,
+    "uncoveredFreshmileStationsRemainWithoutInventedDirectPrice": true
+  }
+}

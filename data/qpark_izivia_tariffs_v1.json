@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.1.1",
+  "dataset": "qpark-izivia-tariffs-france",
+  "networkId": "qpark",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "source": "https://www.q-park.fr/fr-fr/produits/bornes-de-recharge/",
+  "secondarySources": [
+    "https://izivia.com/pass-de-recharge-voitures-electriques"
+  ],
+  "productionReady": false,
+  "scope": {
+    "physicalInventoryFromIrveOnly": true,
+    "qparkIsCommercialHost": true,
+    "chargingProvider": "IZIVIA",
+    "requirePhysicalOperatorId": "izivia",
+    "excludeOtherTechnicalCpos": true,
+    "parkingExcludedFromChargingTariff": true,
+    "otherMspTariffsRemainSeparate": true,
+    "payNowTariffUnresolved": true
+  },
+  "subscriptions": [
+    {
+      "id": "izivia-pass-access",
+      "provider": "Pass IZIVIA Access",
+      "offerType": "access_product",
+      "feeEur": 15,
+      "feePeriod": "one_time",
+      "monthlyFeeEur": 0,
+      "defaultSelected": false,
+      "quotaBased": false,
+      "rankableWhenSelected": true,
+      "note": "Pass IZIVIA Access: 15 EUR TTC one-time card price, no subscription. The acquisition fee must not be added to each charging session."
+    }
+  ],
+  "offers": [
+    {
+      "id": "qpark-izivia-pass-access",
+      "channel": "subscription",
+      "provider": "IZIVIA Pass · Q-Park",
+      "subscriptionId": "izivia-pass-access",
+      "selectors": {
+        "physicalOperatorIds": ["izivia"]
+      },
+      "pricingRules": [
+        {
+          "scope": "allDay",
+          "start": "00:00",
+          "end": "24:00",
+          "currency": "EUR",
+          "pricePerKwh": 0.55,
+          "chargePerMinute": 0,
+          "connectionFee": 1.20,
+          "durationPerMinute": 0,
+          "occupancyPerMinute": 0,
+          "parkingPerMinute": 0
+        }
+      ],
+      "rankable": true,
+      "note": "Q-Park still publishes this tariff on 2026-09-01 specifically for holders of the Pass IZIVIA. Q-Park parking cost remains separate."
+    },
+    {
+      "id": "qpark-izivia-paynow-unresolved",
+      "channel": "reference",
+      "provider": "IZIVIA PayNow · Q-Park",
+      "selectors": {
+        "physicalOperatorIds": ["izivia"]
+      },
+      "pricingRules": [],
+      "rankable": false,
+      "blockedReasons": ["adhoc_paynow_tariff_not_published_on_qpark_source"],
+      "note": "Q-Park lists PayNow as an accepted payment method but does not publish the PayNow price on the referenced page."
+    }
+  ],
+  "notes": [
+    "Do not expose the Pass IZIVIA tariff to users who have not selected/declared the Pass Access product.",
+    "Chargemap Pass, NewMotion, Total Fleet and Digital Charging Solutions remain independent roaming offers.",
+    "Do not treat Q-Park as the charging CPO solely because it is the parking operator/host.",
+    "The Q-Park-branded IRVE station resolved to Electra must not inherit this Q-Park/IZIVIA tariff."
+  ]
+}

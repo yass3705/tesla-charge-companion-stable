@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "start-sqy-tariff-review",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "networkId": "start-sqy",
+  "label": "START SQY",
+  "sources": {
+    "currentMobilityGuide": "https://www.saint-quentin-en-yvelines.fr/wp-content/uploads/2026/01/FINAL-BD-GUIDE-DES-MOBILITES-2026.pdf",
+    "currentSustainableDevelopmentReport": "https://www.saint-quentin-en-yvelines.fr/wp-content/uploads/2025/03/RA-DEV-DURABLE-2024-BD-1-page.pdf",
+    "historicalTariffDecision": "https://www.saint-quentin-en-yvelines.fr/wp-content/uploads/2024/02/PV-C-2023-12-14-avec-annexes.pdf"
+  },
+  "currentVerifiedServiceRules": {
+    "standardMaxPowerKw": 22,
+    "standardDayDurationLimitMinutes": 180,
+    "expressMaxPowerKw": 50,
+    "expressDayDurationLimitMinutes": 90,
+    "boostMaxPowerKw": 150,
+    "boostDayDurationLimitMinutes": 90,
+    "reducedTariffStart": "22:00",
+    "reducedTariffEnd": "08:00",
+    "nightDurationLimit": null,
+    "contactlessBankCardAvailable": true,
+    "mobilityBadgeAvailable": true
+  },
+  "decision": "reference_only_current_amounts_unverified",
+  "rankable": false,
+  "blockedReasons": [
+    "current_exact_energy_prices_not_published_in_verified_current_service_page",
+    "historical_tariff_documents_conflict_with_other_published_examples",
+    "do_not_inherit_sey_ma_borne_or_generic_alize_prices"
+  ],
+  "policy": {
+    "genericAlizeTariffForbidden": true,
+    "seyMaBorneTariffForbidden": true,
+    "historicalPricesNotRankable": true,
+    "physicalInventoryFromPanOnly": true
+  },
+  "notes": "Current SQY publications verify the Standard/Express/Boost service classes and a reduced unrestricted night period from 22:00 to 08:00, but do not provide a sufficiently current exact price grid. Historical documents contain amounts that must not be promoted as current without direct confirmation."
+}

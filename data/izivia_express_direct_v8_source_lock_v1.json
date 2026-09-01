@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "izivia-express-direct-v8-source-lock",
+  "lockedAt": "2026-09-01",
+  "sourceRepository": "yass3705/tesla-charge-companion-data-lab",
+  "sourceCommit": "a875f84b2f8ef7960ade932deb694c44b36a8412",
+  "files": {
+    "v8Tariffs": {
+      "path": "data/national/izivia_express_direct_tcc_v8.json",
+      "sha256": "f6da4e52b9403b90a0cef18168638bd3b8cd31b902a212f67d68b0daee78ddef"
+    },
+    "officialInventory": {
+      "path": "izivia/izivia_express_station_tariffs_v1.json",
+      "sha256": "4b34349e97adca2267714e3cbfb752508382ea99abd73cfba7484de55f6da1a3"
+    }
+  },
+  "expected": {
+    "sourceGeneratedAt": "2026-08-26T09:07:22.870465+00:00",
+    "officialStationRows": 155,
+    "officialPdcRows": 520,
+    "tccLocations": 153,
+    "directPricePublishedRows": 146,
+    "directPriceNotPublishedRows": 9,
+    "pricedTccLocations": 144,
+    "exactConfigurations": 313,
+    "excludedAmbiguousConfigurations": 0,
+    "distinctRawTariffs": 18,
+    "formulaRows": 146,
+    "familyFormulaRows": {
+      "session_cap": 75,
+      "day_night_included_energy": 68,
+      "simple_postcharge": 3
+    }
+  },
+  "policy": {
+    "directCpoOnly": true,
+    "roamingExcluded": true,
+    "subscriptionsExcluded": true,
+    "exactPdcIdentityRequired": true,
+    "panRemainsPhysicalInventory": true,
+    "unknownOrChangedPdcFailsClosed": true,
+    "productionReady": false
+  }
+}
