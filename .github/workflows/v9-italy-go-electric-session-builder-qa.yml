@@ -1,4 +1,5 @@
 name: V9 Italy Go Electric session builder QA
+# QA rerun after fixing the wrapper fallback recursion; validation gates unchanged.
 
 on:
   workflow_dispatch:
