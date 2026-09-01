@@ -51,6 +51,9 @@ assert.equal(rollback.decision,'ROLLBACK');
   assert.equal(result.requestedCount,6);
   assert.equal(result.routedCount,0);
   assert(result.errors.length>=2);
-  assert(elapsed<500,`hard routing budget exceeded wall clock: ${elapsed}ms`);
+  assert.equal(result.timedOut,true);
+  // routing-engine intentionally enforces a 500 ms minimum hard budget. Allow
+  // modest CI/event-loop scheduling overhead while still proving hard abort.
+  assert(elapsed<650,`hard routing budget exceeded wall clock tolerance: ${elapsed}ms`);
   console.log('first-device scenario pack mobile guardrails OK');
 })().catch(err=>{console.error(err);process.exitCode=1;});
