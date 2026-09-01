@@ -1,13 +1,13 @@
 name: V9 Italy Go Electric session builder QA
-# Production-builder QA mode on the dedicated recognized branch; publication remains disabled.
+# QA-only workflow. Production builder/data remain unchanged until this gate passes.
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - qa/v9-italy-go-electric-session-builder-production
+      - 'qa/v9-italy-go-electric-session-builder*'
     paths:
-      - scripts/v9_build_italy_catalog.py
+      - scripts/v9_build_italy_catalog_runtime_pricing_qa.py
       - .github/workflows/v9-italy-go-electric-session-builder-qa.yml
 
 permissions:
@@ -42,12 +42,12 @@ jobs:
           find /tmp/italy-input -type f -print
           test -n "$(find /tmp/italy-input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
 
-      - name: Compile Italy V9 with production builder
+      - name: Compile Italy V9 with fail-closed runtime pricing
         run: |
           set -euo pipefail
           INPUT="$(find /tmp/italy-input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
           mkdir -p /tmp/italy-build/static
-          python scripts/v9_build_italy_catalog.py \
+          python scripts/v9_build_italy_catalog_runtime_pricing_qa.py \
             --input "$INPUT" \
             --out-root /tmp/italy-build/static \
             --offers /tmp/italy-build/italy-offers.json \
@@ -89,7 +89,7 @@ jobs:
           qa = {
               'schemaVersion': 1,
               'publicationAllowed': False,
-              'productionBuilderUnderTest': True,
+              'builderMergeAllowed': False,
               'directOffers': report['directOffers'],
               'subscriptionOffers': report['subscriptionOffers'],
               'emspOffers': report['emspOffers'],
@@ -139,7 +139,7 @@ jobs:
       - name: Upload builder QA reports
         uses: actions/upload-artifact@v4
         with:
-          name: v9-italy-go-electric-session-production-builder-qa
+          name: v9-italy-go-electric-session-builder-qa
           path: |
             /tmp/italy-build/italy-build-report.json
             /tmp/italy-build/go-electric-session-builder-qa.json
