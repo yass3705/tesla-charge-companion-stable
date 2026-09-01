@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.1",
+  "schemaVersion": "1.0.2",
   "updatedAt": "2026-09-01",
   "overrides": [
     {
@@ -37,6 +37,12 @@
       "coverageStatus": "ready",
       "artifacts": ["data/izivia_fast_direct_tariff_v1.json", "scripts/materialize_france_izivia_fast_offers.py"],
       "notes": "Official IZIVIA FAST McDonald's France direct tariff is canonicalized on all 620 current FAST stations / 2,335 PDC: 2,335 rankable offers, zero unresolved PDC and zero physical-inventory mutation. Direct energy price is 0.30 EUR/kWh before 11:30 and from 15:00 to 18:00, otherwise 0.35 EUR/kWh. Generic IZIVIA, IZIVIA Express, SIGEIF/IZIVIA, roaming and subscription tariffs remain strictly separate."
+    },
+    {
+      "networkId": "izivia-express",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["assets/v8-izivia-express-direct-overlay.js", "data/izivia_express_direct_v8_source_lock_v1.json", "scripts/materialize_france_izivia_express_offers.py"],
+      "notes": "Locked V8 formulas are converted losslessly into the V9 offer contract on exact current PAN PDC identities. Canonical audit validates 150 IZIVIA Express stations / 499 PDC: 446 direct offers across 140 stations are rankable; 53 PDC fail closed (50 on nine stations with no published direct price, two on a station absent from the locked V8 snapshot, and one new PDC absent from the locked source inventory). The split is 248 session-cap, 192 day/night-with-included-energy and 6 simple-post-charge PDC. Rounding, total caps, included energy, local connection-start time selection and post-charge blocks/minutes are preserved; roaming, subscriptions and generic IZIVIA pricing remain separate, with zero physical-inventory mutation."
     },
     {
       "networkId": "reveo",
@@ -103,6 +109,12 @@
       "coverageStatus": "partial_ready",
       "artifacts": ["data/la_borne_bleue_direct_tariffs_v1.json", "scripts/materialize_france_la_borne_bleue_offers.py"],
       "notes": "Canonical audit run 33499103955 validates 407 La Borne Bleue stations / 1,206 PDC. 1,202 PDC are safely covered by 1,202 public plus 1,202 opt-in annual-subscriber rankable offers; only four DC connector rows at 24/30 kW remain unresolved because the current official grid publishes the separate DC tariff only for power strictly above 50 kW. Covered split is 814 AC <=7.4 kVA, 382 AC <=22 kVA and 6 DC >50 kW. The 10 EUR/year subscription, subscriber-only 12 EUR night caps, partner roaming separation and zero physical-inventory mutation are preserved."
+    },
+    {
+      "networkId": "metropolis",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/metropolis_direct_tariffs_v1.json", "scripts/materialize_france_metropolis_offers.py"],
+      "notes": "Canonical audit run 33499541420 validates 209 Métropolis stations / 1,095 PDC. The exact current power/site classification yields 990 rankable public direct offers, 105 fail-closed PDC and 1,980 separate subscription references that remain non-rankable while monthly post-charge allowance state is not tracked. The legacy Métropolis 100 grid is never inherited, parking remains separate and physical-inventory mutation is zero."
     },
     {
       "networkId": "seymaborne",
