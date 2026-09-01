@@ -31,7 +31,7 @@ jobs:
       - name: Checkout validated V9 source
         uses: actions/checkout@v4
         with:
-          ref: 76891223d71632eb141990c0bda50d5bf72cebf7
+          ref: bb55b3a47503011c4e3af025802ed85d58d00ed0
           path: v9src
 
       - name: Build isolated V9 test subtree
@@ -78,4 +78,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-# Fresh 120-minute optimized device-test token snapshot. Canary remains 0%.
+# Fresh 60-minute securely rotated device-test token snapshot through 2026-09-01T12:22:55.175Z. Canary remains 0%.
