@@ -49,6 +49,18 @@
           "pricePerKwh": 0.36,
           "chargePerMinute": 0,
           "chargeThresholdMinutes": 0,
+          "durationPerMinute": 0,
+          "durationThresholdMinutes": 0,
+          "connectionFee": 0,
+          "parkingPerMinute": 0,
+          "notes": "Energy component."
+        },
+        {
+          "scope": "timeWindow",
+          "currency": "EUR",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "chargeThresholdMinutes": 0,
           "durationPerMinute": 0.06666666666666667,
           "durationThresholdMinutes": 120,
           "durationStart": "08:00",
@@ -58,7 +70,7 @@
           "notes": "After two free connection hours, 4 EUR/hour from 08:00 to 20:00."
         },
         {
-          "scope": "allDay",
+          "scope": "timeWindow",
           "currency": "EUR",
           "pricePerKwh": 0,
           "chargePerMinute": 0,
@@ -69,7 +81,7 @@
           "durationEnd": "08:00",
           "connectionFee": 0,
           "parkingPerMinute": 0,
-          "notes": "After two free connection hours, reduced duration component 0.30 EUR/hour from 20:00 to 08:00."
+          "notes": "After two free connection hours, 0.30 EUR/hour from 20:00 to 08:00."
         }
       ]
     },
@@ -86,16 +98,28 @@
           "pricePerKwh": 0.46,
           "chargePerMinute": 0,
           "chargeThresholdMinutes": 0,
+          "durationPerMinute": 0,
+          "durationThresholdMinutes": 0,
+          "connectionFee": 0,
+          "parkingPerMinute": 0,
+          "notes": "Energy component."
+        },
+        {
+          "scope": "timeWindow",
+          "currency": "EUR",
+          "pricePerKwh": 0,
+          "chargePerMinute": 0,
+          "chargeThresholdMinutes": 0,
           "durationPerMinute": 0.06666666666666667,
           "durationThresholdMinutes": 0,
           "durationStart": "08:00",
           "durationEnd": "20:00",
           "connectionFee": 0,
           "parkingPerMinute": 0,
-          "notes": "4 EUR/hour connection-duration component from the start of the session, 08:00 to 20:00."
+          "notes": "4 EUR/hour from the start of the session, 08:00 to 20:00."
         },
         {
-          "scope": "allDay",
+          "scope": "timeWindow",
           "currency": "EUR",
           "pricePerKwh": 0,
           "chargePerMinute": 0,
@@ -106,7 +130,7 @@
           "durationEnd": "08:00",
           "connectionFee": 0,
           "parkingPerMinute": 0,
-          "notes": "Reduced duration component 1 EUR/hour from 20:00 to 08:00."
+          "notes": "1 EUR/hour from the start of the session, 20:00 to 08:00."
         }
       ]
     }
