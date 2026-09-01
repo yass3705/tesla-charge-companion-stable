@@ -9,7 +9,7 @@ def matches(operator):
  return [x for x in offers if any(a.casefold()==o for a in x.get('operatorAliases',[])) or any(a.casefold()==o for a in x.get('networkAliases',[]))]
 
 def providers(operator): return {x['provider'] for x in matches(operator)}
-fast=providers('Fastned');ion=providers('IONITY');aral=providers('Aral pulse');enbw=providers('EnBW mobility+');swu=providers('SWU Energie');west=providers('Westfalen');eam=providers('EAM Natur Energie');bochum=providers('Stadtwerke Bochum');marke=providers('Mark-E');konstanz=providers('Stadtwerke Konstanz');bruchsal=providers('Stadtwerke Bruchsal');jolt=providers('JOLT Energy');heidelberg=providers('Stadtwerke Heidelberg');ruesselsheim=providers('Stadtwerke Rüsselsheim');witten=providers('Stadtwerke Witten');albwerk=providers('Albwerk')
+fast=providers('Fastned');ion=providers('IONITY');aral=providers('Aral pulse');enbw=providers('EnBW mobility+');swu=providers('SWU Energie');west=providers('Westfalen');eam=providers('EAM Natur Energie');bochum=providers('Stadtwerke Bochum');marke=providers('Mark-E');konstanz=providers('Stadtwerke Konstanz');bruchsal=providers('Stadtwerke Bruchsal');jolt=providers('JOLT Energy');heidelberg=providers('Stadtwerke Heidelberg');ruesselsheim=providers('Stadtwerke Rüsselsheim');witten=providers('Stadtwerke Witten');albwerk=providers('Albwerk');bielefeld=providers('Stadtwerke Bielefeld')
 assert fast and all('Fastned' in x for x in fast),fast
 assert ion and all('IONITY' in x for x in ion),ion
 assert aral and all('Aral pulse' in x for x in aral),aral
@@ -26,6 +26,7 @@ assert heidelberg == {'Stadtwerke Heidelberg Standard','Stadtwerke Heidelberg EM
 assert ruesselsheim == {'Stadtwerke Rüsselsheim ÖkoStrom Mobil Basic','Stadtwerke Rüsselsheim ÖkoStrom Mobil Smart','Stadtwerke Rüsselsheim ÖkoStrom Mobil Plus','Stadtwerke Rüsselsheim ad hoc'},ruesselsheim
 assert witten == {'Stadtwerke Witten Standardtarif','Stadtwerke Witten Vorteilstarif'},witten
 assert albwerk == {'Albwerk ENERGIE TO GO'},albwerk
+assert bielefeld == {'Stadtwerke Bielefeld meinLadestrom','Stadtwerke Bielefeld meinLadestrom Stromkunde'},bielefeld
 assert not providers('Tesla'), 'Tesla must never attach Germany non-Tesla direct offers'
 fast_selection_ids={x['selectionId'] for x in matches('Fastned')}
 assert {'fastned-de-standard','fastned-gold'} <= fast_selection_ids
@@ -45,8 +46,9 @@ assert {'stadtwerke-heidelberg-standard','stadtwerke-heidelberg-emobil-plus'} ==
 assert {'stadtwerke-ruesselsheim-basic','stadtwerke-ruesselsheim-smart','stadtwerke-ruesselsheim-plus','stadtwerke-ruesselsheim-adhoc'} == {x['selectionId'] for x in matches('Stadtwerke Rüsselsheim')}
 assert {'stadtwerke-witten-standard','stadtwerke-witten-customer'} == {x['selectionId'] for x in matches('Stadtwerke Witten')}
 assert {'albwerk-energie-to-go-card'} == {x['selectionId'] for x in matches('Albwerk')}
-for op in ('EnBW mobility+','SWU Energie','Westfalen','EAM Natur Energie','Stadtwerke Bochum','Mark-E','Stadtwerke Konstanz','Stadtwerke Bruchsal','JOLT Energy','Stadtwerke Heidelberg','Stadtwerke Rüsselsheim','Stadtwerke Witten','Albwerk'):
+assert {'stadtwerke-bielefeld-meinladestrom-standard','stadtwerke-bielefeld-meinladestrom-customer'} == {x['selectionId'] for x in matches('Stadtwerke Bielefeld')}
+for op in ('EnBW mobility+','SWU Energie','Westfalen','EAM Natur Energie','Stadtwerke Bochum','Mark-E','Stadtwerke Konstanz','Stadtwerke Bruchsal','JOLT Energy','Stadtwerke Heidelberg','Stadtwerke Rüsselsheim','Stadtwerke Witten','Albwerk','Stadtwerke Bielefeld'):
  assert all(x.get('directOperatorOnly') is True for x in matches(op)),op
 assert all(x.get('eligibility',{}).get('businessOnly') is True for x in matches('Westfalen'))
 assert not matches('MER Germany GmbH'), 'Westfalen roaming tariffs must not attach as direct MER offers'
-print(json.dumps({'Fastned':len(matches('Fastned')),'IONITY':len(matches('IONITY')),'Aral pulse':len(matches('Aral pulse')),'EnBW':len(matches('EnBW mobility+')),'SWU':len(matches('SWU Energie')),'Westfalen':len(matches('Westfalen')),'EAM':len(matches('EAM Natur Energie')),'Bochum':len(matches('Stadtwerke Bochum')),'Mark-E':len(matches('Mark-E')),'Konstanz':len(matches('Stadtwerke Konstanz')),'Bruchsal':len(matches('Stadtwerke Bruchsal')),'JOLT':len(matches('JOLT Energy')),'Heidelberg':len(matches('Stadtwerke Heidelberg')),'Rüsselsheim':len(matches('Stadtwerke Rüsselsheim')),'Witten':len(matches('Stadtwerke Witten')),'Albwerk':len(matches('Albwerk'))},indent=2,ensure_ascii=False))
+print(json.dumps({'Fastned':len(matches('Fastned')),'IONITY':len(matches('IONITY')),'Aral pulse':len(matches('Aral pulse')),'EnBW':len(matches('EnBW mobility+')),'SWU':len(matches('SWU Energie')),'Westfalen':len(matches('Westfalen')),'EAM':len(matches('EAM Natur Energie')),'Bochum':len(matches('Stadtwerke Bochum')),'Mark-E':len(matches('Mark-E')),'Konstanz':len(matches('Stadtwerke Konstanz')),'Bruchsal':len(matches('Stadtwerke Bruchsal')),'JOLT':len(matches('JOLT Energy')),'Heidelberg':len(matches('Stadtwerke Heidelberg')),'Rüsselsheim':len(matches('Stadtwerke Rüsselsheim')),'Witten':len(matches('Stadtwerke Witten')),'Albwerk':len(matches('Albwerk')),'Bielefeld':len(matches('Stadtwerke Bielefeld'))},indent=2,ensure_ascii=False))
