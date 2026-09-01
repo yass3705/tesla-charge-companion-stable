@@ -4,6 +4,12 @@ from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
+def clock_minute(value):
+ if value=='24:00': return 24*60
+ hour,minute=(int(x) for x in value.split(':'))
+ assert 0<=hour<24 and 0<=minute<60,value
+ return hour*60+minute
+
 files=sys.argv[1:] or ['data/v9/germany-direct-offers.json','data/v9/germany-direct-offers-aral-extension.json']
 all_offers=[]
 for p in files:
@@ -45,9 +51,24 @@ for o in all_offers:
  fee=o.get('blockingFee')
  if fee:
   assert isinstance(fee.get('afterMinutes'),(int,float)) and fee['afterMinutes']>=0,o['id']
-  assert isinstance(fee.get('pricePerMinute'),(int,float)) and fee['pricePerMinute']>=0,o['id']
+  time_rules=fee.get('timeRules')
+  if time_rules:
+   spans=[]
+   for rule in time_rules:
+    assert isinstance(rule.get('pricePerMinute'),(int,float)) and rule['pricePerMinute']>=0,o['id']
+    start=clock_minute(rule.get('start'));end=clock_minute(rule.get('end'))
+    assert start<end,(o['id'],rule)
+    spans.append((start,end))
+   spans.sort()
+   assert spans[0][0]==0 and spans[-1][1]==24*60,o['id']
+   assert all(left[1]==right[0] for left,right in zip(spans,spans[1:])),o['id']
+  else:
+   assert isinstance(fee.get('pricePerMinute'),(int,float)) and fee['pricePerMinute']>=0,o['id']
   if 'capPerSession' in fee:
    assert isinstance(fee.get('capPerSession'),(int,float)) and fee['capPerSession']>=0,o['id']
+  exempt_site_ids=fee.get('exemptSiteIds') or []
+  assert len(exempt_site_ids)==len(set(exempt_site_ids)),o['id']
+  assert all(str(site_id).startswith('SITE-') for site_id in exempt_site_ids),o['id']
   assert fee.get('currency')=='EUR',o['id']
 # power-band overlap check by selection + connector
 by={}
