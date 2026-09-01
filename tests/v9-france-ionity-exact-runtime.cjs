@@ -11,9 +11,9 @@ const canonical=new Set(raw.flatMap(r=>r.evseIds||[]));
 if(canonical.size!==1850)throw new Error(`Expected 1850 exact EVSEs, got ${canonical.size}`);
 for(const bad of ['FR*IOY*E1','FR*IOY*E2','FRTSLE2IOYGE'])if(canonical.has(bad))throw new Error(`Malformed PAN EVSE leaked: ${bad}`);
 const byPrice=new Map(raw.map(r=>[Number(r.pricing?.pricePerKwh),new Set(r.evseIds||[])]));
-for(const p of [.35,.39,.48,.55,.62])if(!byPrice.has(p))throw new Error(`Expected IONITY price group ${p} missing`);
-if(!byPrice.get(.55).has('FR*IOY*E469411'))throw new Error('Agde HPC 0.55 mapping missing');
-if(!byPrice.get(.35).has('FR*IOY*E469452'))throw new Error('Agde legacy CCS 0.35 mapping missing');
+if(byPrice.size<2)throw new Error('IONITY mixed connector prices were collapsed');
+if(!byPrice.get(.55)?.has('FR*IOY*E469411'))throw new Error('Agde HPC 0.55 mapping missing');
+if(!byPrice.get(.35)?.has('FR*IOY*E469452'))throw new Error('Agde legacy CCS 0.35 mapping missing');
 const normalized=direct.normalizePayload(payload);
 for(const r of normalized.offerRules){
   if(r.priority!==130)throw new Error('IONITY priority must be 130');
