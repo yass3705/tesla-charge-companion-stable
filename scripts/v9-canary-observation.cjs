@@ -102,7 +102,8 @@ function validateObservation(observation,policy,rollout,deploymentWorkflow=''){
   if(rollout?.stage!=='preview'||Number(rollout?.canaryPercent)!==0)errors.push('rollout_must_remain_preview_zero');
   if(observation?.approval?.status!=='RECORDED'||observation?.approval?.scope!=='begin_precanary_observation')errors.push('observation_approval_missing');
   const lock=observation?.candidate?.deploymentLock||{};
-  if(lock.workflowPath!=='.github/workflows/v9-device-test-pages.yml'||lock.automaticPushSha!==observation?.candidate?.sourceSha||lock.manualReplacementRequired!==true)errors.push('invalid_pages_deployment_lock');
+  if(lock.workflowPath!=='.github/workflows/v9-device-test-pages.yml'||lock.automaticEventSha!==observation?.candidate?.sourceSha||lock.manualReplacementRequired!==true)errors.push('invalid_pages_deployment_lock');
+  if(observation?.candidate?.pagesDeployment?.checkoutSha!==observation?.candidate?.sourceSha)errors.push('pages_checkout_sha_mismatch');
   if(!String(deploymentWorkflow).includes(`github.sha == '${observation?.candidate?.sourceSha}'`))errors.push('pages_deployment_lock_missing');
   let derived=null;
   try{derived=deriveEvidence(observation?.evidence);}catch(error){errors.push(error.message);}
@@ -120,14 +121,15 @@ function validateObservation(observation,policy,rollout,deploymentWorkflow=''){
   return{ok:errors.length===0,errors,derived,firstStage,start,eligible};
 }
 
-function evaluateObservation({observation,policy,rollout,readiness,deploymentWorkflow='',now=new Date(),sourceFingerprint,currentFingerprint}){
+function evaluateObservation({observation,policy,rollout,readiness,deploymentWorkflow='',now=new Date(),sourceFingerprint,deploymentFingerprint,currentFingerprint}){
   const validation=validateObservation(observation,policy,rollout,deploymentWorkflow);
   if(!validation.ok)return{decision:'INVALID',safe:false,reasons:validation.errors};
   const nowMs=new Date(now).getTime();
   if(!Number.isFinite(nowMs))return{decision:'INVALID',safe:false,reasons:['invalid_evaluation_time']};
   const observedHours=Math.max(0,(nowMs-validation.start)/3600000);
   const fingerprint=observation.candidate.runtimeFingerprint;
-  const stableBuild=sourceFingerprint===fingerprint&&currentFingerprint===fingerprint;
+  const stableBuild=sourceFingerprint===fingerprint&&deploymentFingerprint===fingerprint;
+  const promotionCompatibleBuild=stableBuild&&currentFingerprint===fingerprint;
   const metrics={...validation.derived,observedHours};
   const promotion=CanaryPolicy.evaluate({
     policy,
@@ -135,7 +137,7 @@ function evaluateObservation({observation,policy,rollout,readiness,deploymentWor
     metrics,
     readiness,
     parity:{criticalErrors:validation.derived.criticalParityErrors},
-    build:{startedSha:fingerprint,currentSha:currentFingerprint,stable:stableBuild}
+    build:{startedSha:fingerprint,currentSha:currentFingerprint,stable:promotionCompatibleBuild}
   });
   const rollbackReasons=promotion.signals.filter(signal=>signal.triggered).map(signal=>signal.id);
   let decision='WINDOW_COMPLETE';
@@ -151,7 +153,7 @@ function evaluateObservation({observation,policy,rollout,readiness,deploymentWor
     decision,
     safe:!['INVALID','RESET_REQUIRED','ROLLBACK'].includes(decision),
     reasons,
-    candidate:{sourceSha:observation.candidate.sourceSha,runtimeFingerprint:fingerprint,stableBuild},
+    candidate:{sourceSha:observation.candidate.sourceSha,runtimeFingerprint:fingerprint,stableBuild,promotionCompatibleBuild,currentFingerprint},
     window:{startedAt:observation.window.startedAt,eligibleAfter:observation.window.eligibleAfter,observedHours:Number(observedHours.toFixed(3)),trafficPercent:0},
     metrics:validation.derived,
     promotion
@@ -178,8 +180,9 @@ function main(){
   const readiness=readJson(root,'data/v9/access-readiness.json');
   const deploymentWorkflow=fs.readFileSync(path.join(root,observation.candidate.deploymentLock.workflowPath),'utf8');
   const sourceFingerprint=runtimeFingerprint(observation.candidate.sourceSha,root);
+  const deploymentFingerprint=runtimeFingerprint(observation.candidate.deploymentLock.automaticEventSha,root);
   const currentFingerprint=runtimeFingerprint(args.ref,root);
-  const result=evaluateObservation({observation,policy,rollout,readiness,deploymentWorkflow,now:args.now||new Date(),sourceFingerprint,currentFingerprint});
+  const result=evaluateObservation({observation,policy,rollout,readiness,deploymentWorkflow,now:args.now||new Date(),sourceFingerprint,deploymentFingerprint,currentFingerprint});
   console.log(JSON.stringify(result,null,2));
   if(!result.safe)process.exitCode=1;
 }

@@ -35,8 +35,9 @@ let result=Observation.evaluateObservation({
   rollout,
   readiness:blockedReadiness,
   deploymentWorkflow,
-  now:'2026-09-01T15:31:56Z',
+  now:'2026-09-01T15:41:55Z',
   sourceFingerprint:fingerprint,
+  deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint
 });
 assert.equal(result.decision,'OBSERVING');
@@ -53,6 +54,7 @@ result=Observation.evaluateObservation({
   deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
+  deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint
 });
 assert.equal(result.decision,'WINDOW_COMPLETE');
@@ -68,7 +70,8 @@ result=Observation.evaluateObservation({
   deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
-  currentFingerprint:'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  deploymentFingerprint:'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  currentFingerprint:fingerprint
 });
 assert.equal(result.decision,'RESET_REQUIRED');
 assert.equal(result.safe,false);
@@ -84,6 +87,7 @@ result=Observation.evaluateObservation({
   deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
+  deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint
 });
 assert.equal(result.decision,'INVALID');
@@ -98,6 +102,7 @@ result=Observation.evaluateObservation({
   deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
+  deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint
 });
 assert.equal(result.decision,'INVALID');
@@ -111,10 +116,27 @@ result=Observation.evaluateObservation({
   deploymentWorkflow:'name: unlocked',
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
+  deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint
 });
 assert.equal(result.decision,'INVALID');
 assert(result.reasons.includes('pages_deployment_lock_missing'));
+
+result=Observation.evaluateObservation({
+  observation,
+  policy,
+  rollout,
+  readiness:readyReadiness,
+  deploymentWorkflow,
+  now:observation.window.eligibleAfter,
+  sourceFingerprint:fingerprint,
+  deploymentFingerprint:fingerprint,
+  currentFingerprint:'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+});
+assert.equal(result.decision,'WINDOW_COMPLETE');
+assert.equal(result.safe,true);
+assert.equal(result.promotion.decision,'HOLD');
+assert(result.promotion.reasons.includes('build_changed'));
 
 console.log(JSON.stringify({
   ok:true,

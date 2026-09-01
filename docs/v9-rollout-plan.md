@@ -43,17 +43,18 @@ yields `RESET_REQUIRED`. The promotion control files are excluded from this
 build fingerprint but remain guarded by CI; observation, tests, CI and
 documentation also do not alter the pinned runtime.
 
-During an active window, `v9-device-test-pages.yml` keeps pull-request checks
-available but skips automatic push builds for every SHA except the pinned
-candidate. Replacing the public candidate therefore requires an explicit
-manual deployment and a restarted observation record.
+During an active window, `v9-device-test-pages.yml` skips automatic push and
+pull-request builds for every SHA except the pinned candidate. The remaining
+V9 CI continues to validate development changes. Replacing the public
+candidate requires a versioned lock update, an explicit deployment and a
+restarted observation record.
 
 ## Current state
 
 The versioned configuration remains `preview`, `canaryPercent: 0`. V8 is still
-production. Observation started at `2026-09-01T14:31:56Z` against deployed
-candidate `bb185ded1cfffe3a4f4d864427a7fb0c1e30157a`. The initial public
+production. Observation started at `2026-09-01T14:41:55Z` against deployed
+candidate `5b841a47ceac07abba6e2bc913582c02e0aa99a9`. The initial public
 evidence contains 30/30 PASS runs, zero source or routing errors, 7,043 ms
 average latency and 18,372 ms maximum latency. The earliest possible 1%
-eligibility time is `2026-09-02T14:31:56Z`, provided the runtime fingerprint
+eligibility time is `2026-09-02T14:41:55Z`, provided the runtime fingerprint
 remains unchanged and the explicit readiness promotion gate is opened.
