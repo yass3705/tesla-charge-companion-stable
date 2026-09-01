@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-09-01",
+  "country": "FR",
+  "networks": [
+    {
+      "id": "grenoble-alpes-metropole",
+      "label": "Grenoble-Alpes Métropole",
+      "aliases": [
+        "Grenoble-Alpes Métropole",
+        "Grenoble Alpes Métropole",
+        "GRENOBLE-ALPES METROPOLE",
+        "GRENOBLE ALPES METROPOLE"
+      ],
+      "operatorAliases": [],
+      "operatorFallback": false,
+      "coverageStatus": "partial_ready",
+      "priority": 1,
+      "artifacts": [
+        "data/grenoble_alpes_metropole_tariff_review_20260901.json"
+      ],
+      "notes": "Explicit PAN brand for Grenoble-Alpes Métropole. Generic Alizé Liberté parking stock remains separate and requires exact contracting-authority mapping before inheriting any Grenoble tariff."
+    }
+  ]
+}
