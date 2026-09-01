@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.0.1",
   "updatedAt": "2026-09-01",
   "overrides": [
     {
@@ -93,6 +93,18 @@
       "notes": "Canonical audit #1 validates 241 Allego stations / 1,686 PDC. 1,660 PDC are covered: 1,252 fast/ultra PDC are rankable under the verified France direct grid, while 408 regular PDC are reference-only because the long-duration charging rule is not sufficiently resolved. 26 nominal fast PDC remain unresolved because PAN lacks DC-connector evidence. Allego Plus is retained as opt-in/non-rankable for Allego direct pricing until its exact France class grid is explicit; temporary Atlante partner discounts are stored separately. Physical-inventory mutation is zero."
     },
     {
+      "networkId": "sigeif",
+      "coverageStatus": "ready",
+      "artifacts": ["data/sigeif_direct_tariffs_v1.json", "scripts/materialize_france_sigeif_offers.py"],
+      "notes": "Canonical audit run 33498088245 validates all 502 SIGEIF stations / 1,249 PDC: 1,249 rankable direct offers, zero unresolved and zero physical-inventory mutation. Current class split is 934 douce <=22 kW, 293 semi-rapid 24 kW and 22 rapid 50/100 kW PDC. All 1,249 PDC are physically operated by IZIVIA but remain a distinct SIGEIF customer-facing tariff network; generic IZIVIA pricing never inherits this grid."
+    },
+    {
+      "networkId": "labornebleue",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/la_borne_bleue_direct_tariffs_v1.json", "scripts/materialize_france_la_borne_bleue_offers.py"],
+      "notes": "Canonical audit run 33499103955 validates 407 La Borne Bleue stations / 1,206 PDC. 1,202 PDC are safely covered by 1,202 public plus 1,202 opt-in annual-subscriber rankable offers; only four DC connector rows at 24/30 kW remain unresolved because the current official grid publishes the separate DC tariff only for power strictly above 50 kW. Covered split is 814 AC <=7.4 kVA, 382 AC <=22 kVA and 6 DC >50 kW. The 10 EUR/year subscription, subscriber-only 12 EUR night caps, partner roaming separation and zero physical-inventory mutation are preserved."
+    },
+    {
       "networkId": "seymaborne",
       "coverageStatus": "ready",
       "artifacts": ["data/sey_ma_borne_direct_tariffs_v1.json", "scripts/materialize_france_sey_ma_borne_offers.py"],
@@ -107,8 +119,8 @@
     {
       "networkId": "alize-liberte",
       "coverageStatus": "partial_ready",
-      "artifacts": ["scripts/materialize_france_gpseo_offers.py", "scripts/materialize_france_grenoble_offers.py", "scripts/audit_france_alize_authorities.py"],
-      "notes": "Alizé Liberté is treated as an umbrella identity, never as a national flat tariff. Exact local scopes are being carved out by PAN contracting authority. GPSEO is fully canonicalized on 327 PDC; Grenoble P-GAM has 234 safely rankable subscriber PDC and 14 local reference-only PDC, while the explicit Grenoble-Alpes Métropole network remains separate. Remaining Alizé authorities stay unpriced until their own official grids are verified."
+      "artifacts": ["scripts/materialize_france_gpseo_offers.py", "scripts/materialize_france_grenoble_offers.py", "scripts/audit_france_alize_authorities.py", "data/griffon_branche_direct_tariffs_v1.json", "data/dreux_direct_tariffs_v1.json", "data/arcachon_direct_tariffs_v1.json"],
+      "notes": "Alizé Liberté remains an umbrella identity and never receives a national flat tariff. Verified carved-out scopes include GPSEO 327 PDC, Griffon Branché 74 PAN PDC, Dreux 45 PAN PDC and Arcachon 100 PAN PDC, all with their own local tariff rules. Grenoble P-GAM has 234 safely rankable subscriber PDC and 14 local reference-only PDC, while the explicit Grenoble-Alpes Métropole network stays separate. R-Mob Évreux remains fail-closed on 6 PDC because a current direct price grid is not published, and START SQY remains unpriced because current direct prices are not sufficiently verified. Other remaining Alizé authorities stay unpriced until their own official grids are verified."
     },
     {
       "networkId": "r3",
