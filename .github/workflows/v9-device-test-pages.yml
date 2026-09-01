@@ -35,7 +35,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.sha == '5b841a47ceac07abba6e2bc913582c02e0aa99a9'
+    if: github.sha == '53077587df4fe7c06c5aaaf0c5bbde30bf313a72'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout V9 source

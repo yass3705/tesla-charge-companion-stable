@@ -3,24 +3,24 @@
   "type": "tcc-v9-precanary-observation",
   "state": "OBSERVING",
   "candidate": {
-    "sourceSha": "5b841a47ceac07abba6e2bc913582c02e0aa99a9",
+    "sourceSha": "53077587df4fe7c06c5aaaf0c5bbde30bf313a72",
     "runtimeFingerprint": "sha256:a5e85d6d57fdf6c168bf96866c824230307a7f3c0c8858330a9a8aa2c0a95a53",
     "publicUrl": "https://yass3705.github.io/tesla-charge-companion-stable/v9-test/v9-app/",
     "pagesDeployment": {
-      "runId": 33520988724,
-      "checkoutSha": "5b841a47ceac07abba6e2bc913582c02e0aa99a9",
-      "completedAt": "2026-09-01T14:41:55Z",
-      "url": "https://github.com/yass3705/tesla-charge-companion-stable/actions/runs/33520988724"
+      "runId": 33521700972,
+      "checkoutSha": "53077587df4fe7c06c5aaaf0c5bbde30bf313a72",
+      "completedAt": "2026-09-01T14:48:19Z",
+      "url": "https://github.com/yass3705/tesla-charge-companion-stable/actions/runs/33521700972"
     },
     "deploymentLock": {
       "workflowPath": ".github/workflows/v9-device-test-pages.yml",
-      "automaticEventSha": "5b841a47ceac07abba6e2bc913582c02e0aa99a9",
+      "automaticEventSha": "53077587df4fe7c06c5aaaf0c5bbde30bf313a72",
       "manualReplacementRequired": true
     }
   },
   "window": {
-    "startedAt": "2026-09-01T14:41:55Z",
-    "eligibleAfter": "2026-09-02T14:41:55Z",
+    "startedAt": "2026-09-01T14:48:19Z",
+    "eligibleAfter": "2026-09-02T14:48:19Z",
     "minimumHours": 24,
     "minimumRuns": 25,
     "trafficPercent": 0

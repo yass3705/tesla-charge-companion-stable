@@ -35,7 +35,7 @@ let result=Observation.evaluateObservation({
   rollout,
   readiness:blockedReadiness,
   deploymentWorkflow,
-  now:'2026-09-01T15:41:55Z',
+  now:'2026-09-01T15:48:19Z',
   sourceFingerprint:fingerprint,
   deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint

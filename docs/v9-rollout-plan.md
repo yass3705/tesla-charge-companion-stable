@@ -52,9 +52,9 @@ restarted observation record.
 ## Current state
 
 The versioned configuration remains `preview`, `canaryPercent: 0`. V8 is still
-production. Observation started at `2026-09-01T14:41:55Z` against deployed
-candidate `5b841a47ceac07abba6e2bc913582c02e0aa99a9`. The initial public
+production. Observation started at `2026-09-01T14:48:19Z` against deployed
+candidate `53077587df4fe7c06c5aaaf0c5bbde30bf313a72`. The initial public
 evidence contains 30/30 PASS runs, zero source or routing errors, 7,043 ms
 average latency and 18,372 ms maximum latency. The earliest possible 1%
-eligibility time is `2026-09-02T14:41:55Z`, provided the runtime fingerprint
+eligibility time is `2026-09-02T14:48:19Z`, provided the runtime fingerprint
 remains unchanged and the explicit readiness promotion gate is opened.
