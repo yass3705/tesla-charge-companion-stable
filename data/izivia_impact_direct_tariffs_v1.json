@@ -1,0 +1,3853 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "izivia-impact-direct-tariffs",
+  "generatedAt": "2026-09-01",
+  "productionReady": false,
+  "scope": {
+    "country": "FR",
+    "tariffNetworkId": "izivia-impact",
+    "physicalOperatorId": "izivia",
+    "directCpoOnly": true,
+    "physicalInventoryFromPanOnly": true,
+    "exactStationAndPdcIdentityRequired": true,
+    "stationLevelFormulaBindingRequired": true,
+    "unknownOrChangedPdcFailsClosed": true,
+    "blockedDirectBecomesReferenceOnly": true,
+    "roamingIncluded": false,
+    "accessOffersIncluded": false,
+    "subscriptionsIncluded": false,
+    "failClosed": true
+  },
+  "policy": {
+    "officialLiveChargingLocationOverridesRegionalGrid": true,
+    "m2aSlowAndMixedWithoutLiveDirectFormulaBlocked": true,
+    "m2aIm134LiveDirectGridReferenceOnlyUntilCrossWindowSelectionPublished": true,
+    "m2aRapid100And150Rankable": true,
+    "m2aRapid200Blocked": true,
+    "angoulemeRapidOfficialFormulaRankable": true,
+    "angoulemeSlowAndMixedIncompleteDirectSemanticsBlocked": true,
+    "saintNazaireLiveDirectGridReferenceOnlyUntilCrossWindowSelectionPublished": true,
+    "accessOrSubscriptionTariffsNeverPromotedToDirect": true,
+    "monthlyOrRegistrationFeesAllocatedToSession": false,
+    "postChargeDurationBasis": "connected_minutes_minus_charging_minutes",
+    "missingUnplugTimePolicy": "zero_post_charge"
+  },
+  "sources": {
+    "officialInventory": {
+      "datasetPage": "https://www.data.gouv.fr/datasets/bornes-de-recharges-izivia-impact",
+      "download": "https://www.data.gouv.fr/api/1/datasets/r/76a63524-481e-4781-876c-eb830ea59634",
+      "resolvedUrl": "https://static.data.gouv.fr/resources/bornes-de-recharges-izivia-impact/20260901-060256/datagouv-export-izivia-impact-2026-09-01t06-02-55.csv",
+      "sha256": "9f83f8a26fa0bd21bef55516a6c54c1e7cd4ffe78e83330022b563d76657681b"
+    },
+    "officialMapping": {
+      "dataset": "izivia-impact-official-mapping-summary",
+      "sha256": "13066633ea15d82773fd8bcdc4f31c0768f68668633ce9d319350a8eed55ee1f"
+    },
+    "officialLiveMap": {
+      "frontend": "https://fronts-map.izivia.com/",
+      "api": "https://fronts-map.izivia.com/api/",
+      "rawExtractionSha256": "f361d7bac5ac10809a853facda0e37d0f0f5224a2403248b785b5074fb046d00"
+    },
+    "m2a": {
+      "officialPage": "https://www.m2a.fr/mobilites/bornes-irve/",
+      "tariffImage": "https://www.m2a.fr/wp-content/uploads/2026/03/2026_grille_tarif_bornes_IRVE-.jpg",
+      "tariffImageSha256": "a122a4afc970945138941e9b7a20c97eb7003031597c35638c2c6fa46e133e99"
+    },
+    "angouleme": {
+      "officialIziviaPage": "https://izivia.com/installation-bornes-de-recharge/le-reseau-de-recharge-d-angouleme",
+      "officialCityPage": "https://www.angouleme.fr/actualites/10-nouvelles-stations-de-recharge-en-service/"
+    },
+    "saintNazaire": {
+      "officialLiveMap": "https://fronts-map.izivia.com/"
+    }
+  },
+  "expected": {
+    "stationCount": 141,
+    "pdcCount": 401,
+    "formulaCount": 1,
+    "referenceFormulaCount": 2,
+    "rankableStationCount": 18,
+    "rankablePdcCount": 54,
+    "blockedStationCount": 123,
+    "blockedPdcCount": 347,
+    "formulaPdcCounts": {
+      "direct-rapid-055-post-2-per-5": 54
+    },
+    "referenceFormulaPdcCounts": {
+      "live-mixed-040-night-6": 14,
+      "saint-nazaire-ac-night-6": 20
+    },
+    "inventoryByTerritoryAndClass": {
+      "m2a": {
+        "ac_22": {
+          "stationCount": 49,
+          "pdcCount": 142
+        },
+        "ac22_dc24": {
+          "stationCount": 44,
+          "pdcCount": 110
+        },
+        "rapid": {
+          "stationCount": 19,
+          "pdcCount": 57
+        }
+      },
+      "angouleme": {
+        "ac_22": {
+          "stationCount": 7,
+          "pdcCount": 28
+        },
+        "ac22_dc24": {
+          "stationCount": 10,
+          "pdcCount": 20
+        },
+        "rapid": {
+          "stationCount": 4,
+          "pdcCount": 12
+        }
+      },
+      "saint_nazaire": {
+        "ac_22": {
+          "stationCount": 2,
+          "pdcCount": 20
+        },
+        "ac22_dc24": {
+          "stationCount": 6,
+          "pdcCount": 12
+        },
+        "rapid": {
+          "stationCount": 0,
+          "pdcCount": 0
+        }
+      }
+    },
+    "rankableByTerritoryAndClass": {
+      "m2a": {
+        "ac_22": {
+          "stationCount": 0,
+          "pdcCount": 0
+        },
+        "ac22_dc24": {
+          "stationCount": 0,
+          "pdcCount": 0
+        },
+        "rapid": {
+          "stationCount": 14,
+          "pdcCount": 42
+        }
+      },
+      "angouleme": {
+        "ac_22": {
+          "stationCount": 0,
+          "pdcCount": 0
+        },
+        "ac22_dc24": {
+          "stationCount": 0,
+          "pdcCount": 0
+        },
+        "rapid": {
+          "stationCount": 4,
+          "pdcCount": 12
+        }
+      },
+      "saint_nazaire": {
+        "ac_22": {
+          "stationCount": 0,
+          "pdcCount": 0
+        },
+        "ac22_dc24": {
+          "stationCount": 0,
+          "pdcCount": 0
+        },
+        "rapid": {
+          "stationCount": 0,
+          "pdcCount": 0
+        }
+      }
+    },
+    "blockedByTerritoryAndClass": {
+      "m2a": {
+        "ac_22": {
+          "stationCount": 49,
+          "pdcCount": 142
+        },
+        "ac22_dc24": {
+          "stationCount": 44,
+          "pdcCount": 110
+        },
+        "rapid": {
+          "stationCount": 5,
+          "pdcCount": 15
+        }
+      },
+      "angouleme": {
+        "ac_22": {
+          "stationCount": 7,
+          "pdcCount": 28
+        },
+        "ac22_dc24": {
+          "stationCount": 10,
+          "pdcCount": 20
+        },
+        "rapid": {
+          "stationCount": 0,
+          "pdcCount": 0
+        }
+      },
+      "saint_nazaire": {
+        "ac_22": {
+          "stationCount": 2,
+          "pdcCount": 20
+        },
+        "ac22_dc24": {
+          "stationCount": 6,
+          "pdcCount": 12
+        },
+        "rapid": {
+          "stationCount": 0,
+          "pdcCount": 0
+        }
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "direct-rapid-055-post-2-per-5",
+      "family": "simple_postcharge",
+      "currency": "EUR",
+      "energy": {
+        "ratePerKwhEur": 0.55,
+        "billing": "started_kwh"
+      },
+      "postCharge": {
+        "billing": "started_block",
+        "blockMinutes": 5,
+        "blockFeeEur": 2
+      },
+      "missingUnplugTimePolicy": "zero_post_charge"
+    }
+  ],
+  "referenceFormulas": [
+    {
+      "id": "live-mixed-040-night-6",
+      "family": "day_night_included_energy",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris",
+      "tariffSelection": "unpublished",
+      "day": {
+        "start": "08:00",
+        "end": "20:00",
+        "energy": {
+          "ratePerKwhEur": 0.4,
+          "billing": "started_kwh"
+        },
+        "postCharge": {
+          "billing": "started_minute",
+          "ratePerMinuteEur": 0.06667
+        }
+      },
+      "night": {
+        "start": "20:00",
+        "end": "08:00",
+        "connectionFeeEur": 6,
+        "includedEnergyKwh": 20,
+        "extraEnergy": {
+          "ratePerKwhEur": 0.3,
+          "billing": "started_kwh"
+        }
+      },
+      "missingUnplugTimePolicy": "zero_post_charge"
+    },
+    {
+      "id": "saint-nazaire-ac-night-6",
+      "family": "day_night_included_energy",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris",
+      "tariffSelection": "unpublished",
+      "day": {
+        "start": "08:00",
+        "end": "20:00",
+        "energy": {
+          "ratePerKwhEur": 0.38,
+          "billing": "started_kwh"
+        },
+        "postCharge": {
+          "billing": "started_minute",
+          "ratePerMinuteEur": 0.05
+        }
+      },
+      "night": {
+        "start": "20:00",
+        "end": "08:00",
+        "connectionFeeEur": 6,
+        "includedEnergyKwh": 20,
+        "extraEnergy": {
+          "ratePerKwhEur": 0.3,
+          "billing": "started_kwh"
+        }
+      },
+      "missingUnplugTimePolicy": "zero_post_charge"
+    }
+  ],
+  "stations": [
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM1",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM122",
+        "FRIIMEIZIM121"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM100",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM10013",
+        "FRIIMEIZIM10011",
+        "FRIIMEIZIM10012"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM101",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM10112",
+        "FRIIMEIZIM10111"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM102",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM10211",
+        "FRIIMEIZIM10212"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM103",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM10311",
+        "FRIIMEIZIM10312"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM104",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM10412",
+        "FRIIMEIZIM10411"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM105",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM10511",
+        "FRIIMEIZIM10512"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM106",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM10613",
+        "FRIIMEIZIM10612",
+        "FRIIMEIZIM10611"
+      ],
+      "powersKw": [
+        200.0,
+        200.0,
+        200.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_grid_covers_100_150kw_not_200kw",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM107",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM10712",
+        "FRIIMEIZIM10711",
+        "FRIIMEIZIM10713"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM108",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM10812",
+        "FRIIMEIZIM10811",
+        "FRIIMEIZIM10813"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM109",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM10912",
+        "FRIIMEIZIM10911"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM110",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM11012",
+        "FRIIMEIZIM11011"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM111",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM11112",
+        "FRIIMEIZIM11111"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM112",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM11211",
+        "FRIIMEIZIM11212",
+        "FRIIMEIZIM11222",
+        "FRIIMEIZIM11221"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM113",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM11311",
+        "FRIIMEIZIM11312"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM114",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM11412",
+        "FRIIMEIZIM11411",
+        "FRIIMEIZIM11422",
+        "FRIIMEIZIM11421"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM115",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM11512",
+        "FRIIMEIZIM11511"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM116",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM11613",
+        "FRIIMEIZIM11612",
+        "FRIIMEIZIM11611"
+      ],
+      "powersKw": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_angouleme_tariff_page",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM117",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM11712",
+        "FRIIMEIZIM11711",
+        "FRIIMEIZIM11722",
+        "FRIIMEIZIM11721"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM118",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM11812",
+        "FRIIMEIZIM11811",
+        "FRIIMEIZIM11821",
+        "FRIIMEIZIM11822"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM119",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM11912",
+        "FRIIMEIZIM11911",
+        "FRIIMEIZIM11922",
+        "FRIIMEIZIM11921"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM12",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM1222",
+        "FRIIMEIZIM1221"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM120",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM12011",
+        "FRIIMEIZIM12013",
+        "FRIIMEIZIM12012"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_angouleme_tariff_page",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM121",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM12112",
+        "FRIIMEIZIM12111",
+        "FRIIMEIZIM12113"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_angouleme_tariff_page",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM122",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM12212",
+        "FRIIMEIZIM12211",
+        "FRIIMEIZIM12221",
+        "FRIIMEIZIM12222"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM123",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM12311",
+        "FRIIMEIZIM12312",
+        "FRIIMEIZIM12313"
+      ],
+      "powersKw": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_angouleme_tariff_page",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM124",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM12412",
+        "FRIIMEIZIM12411"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM125",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM12512",
+        "FRIIMEIZIM12511",
+        "FRIIMEIZIM12513"
+      ],
+      "powersKw": [
+        200.0,
+        200.0,
+        200.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_grid_covers_100_150kw_not_200kw",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM126",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM12611",
+        "FRIIMEIZIM12612"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM127",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM12713",
+        "FRIIMEIZIM12711",
+        "FRIIMEIZIM12712"
+      ],
+      "powersKw": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM128",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM12812",
+        "FRIIMEIZIM12811"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM129",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM12912",
+        "FRIIMEIZIM12911"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM13",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM1311",
+        "FRIIMEIZIM1312"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM130",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13011",
+        "FRIIMEIZIM13012"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM131",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13111",
+        "FRIIMEIZIM13112"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM132",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13212",
+        "FRIIMEIZIM13211"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM133",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13311",
+        "FRIIMEIZIM13312"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM134",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13412",
+        "FRIIMEIZIM13411"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM135",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM13511",
+        "FRIIMEIZIM13512",
+        "FRIIMEIZIM13522",
+        "FRIIMEIZIM13521"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM136",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13612",
+        "FRIIMEIZIM13611"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM137",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13711",
+        "FRIIMEIZIM13712"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM138",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13811",
+        "FRIIMEIZIM13812"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM139",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM13911",
+        "FRIIMEIZIM13912"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM14",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM1411",
+        "FRIIMEIZIM1412"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM140",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM14012",
+        "FRIIMEIZIM14011"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM141",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM14111",
+        "FRIIMEIZIM14112"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM143",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM14312",
+        "FRIIMEIZIM14311"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "angouleme",
+      "stationId": "FRIIMPIZIM144",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM14412",
+        "FRIIMEIZIM14411",
+        "FRIIMEIZIM14422",
+        "FRIIMEIZIM14421"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_angouleme_tariff_page"
+        ],
+        "blockedReasons": [
+          "direct_day_night_window_boundaries_not_published",
+          "direct_time_window_selection_not_published",
+          "direct_rounding_units_not_published_and_access_layer_diverges_at_night"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM145",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM14511",
+        "FRIIMEIZIM14513",
+        "FRIIMEIZIM14512"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM146",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM14611",
+        "FRIIMEIZIM14612"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM148",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM14812",
+        "FRIIMEIZIM14813",
+        "FRIIMEIZIM14811"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM149",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM14912",
+        "FRIIMEIZIM14911"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM15",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM1512",
+        "FRIIMEIZIM1511"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM150",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM15013",
+        "FRIIMEIZIM15012",
+        "FRIIMEIZIM15011"
+      ],
+      "powersKw": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM152",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM15212",
+        "FRIIMEIZIM15211"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM153",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM15311",
+        "FRIIMEIZIM15312",
+        "FRIIMEIZIM15321",
+        "FRIIMEIZIM15322",
+        "FRIIMEIZIM15332",
+        "FRIIMEIZIM15331",
+        "FRIIMEIZIM15341",
+        "FRIIMEIZIM15342",
+        "FRIIMEIZIM15352",
+        "FRIIMEIZIM15351",
+        "FRIIMEIZIM15362",
+        "FRIIMEIZIM15361",
+        "FRIIMEIZIM15371",
+        "FRIIMEIZIM15372",
+        "FRIIMEIZIM15382",
+        "FRIIMEIZIM15381",
+        "FRIIMEIZIM15392",
+        "FRIIMEIZIM15391"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "saint-nazaire-ac-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM1531",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM153101",
+        "FRIIMEIZIM153102"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "saint-nazaire-ac-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM16",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM1612",
+        "FRIIMEIZIM1611",
+        "FRIIMEIZIM1622",
+        "FRIIMEIZIM1621"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM18",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM1811",
+        "FRIIMEIZIM1812",
+        "FRIIMEIZIM1822",
+        "FRIIMEIZIM1821"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM187",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM18712",
+        "FRIIMEIZIM18711"
+      ],
+      "powersKw": [
+        33.0,
+        33.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM188",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM18812",
+        "FRIIMEIZIM18811"
+      ],
+      "powersKw": [
+        33.0,
+        33.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM189",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM18911",
+        "FRIIMEIZIM18912"
+      ],
+      "powersKw": [
+        33.0,
+        33.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM190",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM19011",
+        "FRIIMEIZIM19012"
+      ],
+      "powersKw": [
+        33.0,
+        33.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM192",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM19211",
+        "FRIIMEIZIM19212"
+      ],
+      "powersKw": [
+        33.0,
+        33.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "saint_nazaire",
+      "stationId": "FRIIMPIZIM198",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM19811",
+        "FRIIMEIZIM19812"
+      ],
+      "powersKw": [
+        33.0,
+        33.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "referenceFormulaId": "live-mixed-040-night-6",
+        "evidence": [
+          "official_live_map_charging_location"
+        ],
+        "blockedReasons": [
+          "cross_window_tariff_selection_unpublished"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM2",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM211",
+        "FRIIMEIZIM212"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM20",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2012",
+        "FRIIMEIZIM2011",
+        "FRIIMEIZIM2022",
+        "FRIIMEIZIM2021"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM21",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2112",
+        "FRIIMEIZIM2111",
+        "FRIIMEIZIM2121",
+        "FRIIMEIZIM2122"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM22",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2212",
+        "FRIIMEIZIM2211"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM23",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2312",
+        "FRIIMEIZIM2311"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM24",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2411",
+        "FRIIMEIZIM2412",
+        "FRIIMEIZIM2422",
+        "FRIIMEIZIM2421"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM25",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2511",
+        "FRIIMEIZIM2512"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM26",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2612",
+        "FRIIMEIZIM2611",
+        "FRIIMEIZIM2621",
+        "FRIIMEIZIM2622"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM27",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2711",
+        "FRIIMEIZIM2712"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM28",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2812",
+        "FRIIMEIZIM2811"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM29",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM2912",
+        "FRIIMEIZIM2911"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM3",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM311",
+        "FRIIMEIZIM312"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM30",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM3012",
+        "FRIIMEIZIM3011"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM31",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM3112",
+        "FRIIMEIZIM3111"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM32",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM3211",
+        "FRIIMEIZIM3212",
+        "FRIIMEIZIM3222",
+        "FRIIMEIZIM3221"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM33",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM3311",
+        "FRIIMEIZIM3312",
+        "FRIIMEIZIM3321",
+        "FRIIMEIZIM3322"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM34",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM3412",
+        "FRIIMEIZIM3411",
+        "FRIIMEIZIM3422",
+        "FRIIMEIZIM3421"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM36",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM3612",
+        "FRIIMEIZIM3611"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM37",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM3712",
+        "FRIIMEIZIM3711"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM4",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM412",
+        "FRIIMEIZIM411"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM41",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM4112",
+        "FRIIMEIZIM4111"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM42",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM4212",
+        "FRIIMEIZIM4211"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM43",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM4311",
+        "FRIIMEIZIM4312"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM44",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM4412",
+        "FRIIMEIZIM4411",
+        "FRIIMEIZIM4421",
+        "FRIIMEIZIM4422"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM45",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM4511",
+        "FRIIMEIZIM4512",
+        "FRIIMEIZIM4521",
+        "FRIIMEIZIM4522"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM46",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM4612",
+        "FRIIMEIZIM4611"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM47",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM4711",
+        "FRIIMEIZIM4712",
+        "FRIIMEIZIM4722",
+        "FRIIMEIZIM4721"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM48",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM4812",
+        "FRIIMEIZIM4811",
+        "FRIIMEIZIM4821",
+        "FRIIMEIZIM4822"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM49",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM4911",
+        "FRIIMEIZIM4912",
+        "FRIIMEIZIM4922",
+        "FRIIMEIZIM4921"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM5",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM522",
+        "FRIIMEIZIM521"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM50",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM5012",
+        "FRIIMEIZIM5011"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM51",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM5111",
+        "FRIIMEIZIM5112",
+        "FRIIMEIZIM5122",
+        "FRIIMEIZIM5121"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM52",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM5212",
+        "FRIIMEIZIM5211",
+        "FRIIMEIZIM5221",
+        "FRIIMEIZIM5222"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM53",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM5312",
+        "FRIIMEIZIM5311",
+        "FRIIMEIZIM5321",
+        "FRIIMEIZIM5322"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM54",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM5411",
+        "FRIIMEIZIM5412",
+        "FRIIMEIZIM5422",
+        "FRIIMEIZIM5421"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM55",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM5512",
+        "FRIIMEIZIM5511"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM56",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM5611",
+        "FRIIMEIZIM5612"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM59",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM5912",
+        "FRIIMEIZIM5911"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM60",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM6011",
+        "FRIIMEIZIM6012",
+        "FRIIMEIZIM6021",
+        "FRIIMEIZIM6022"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM61",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM6112",
+        "FRIIMEIZIM6111"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM62",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM6211",
+        "FRIIMEIZIM6212"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM63",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM6312",
+        "FRIIMEIZIM6311"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM64",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM6412",
+        "FRIIMEIZIM6411"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM65",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM6512",
+        "FRIIMEIZIM6511"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM66",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM6611",
+        "FRIIMEIZIM6612"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM67",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM6712",
+        "FRIIMEIZIM6711",
+        "FRIIMEIZIM6722",
+        "FRIIMEIZIM6721"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM68",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM6821",
+        "FRIIMEIZIM6822"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM7",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM711",
+        "FRIIMEIZIM712"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM71",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM7112",
+        "FRIIMEIZIM7111",
+        "FRIIMEIZIM7122",
+        "FRIIMEIZIM7121"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM72",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM7212",
+        "FRIIMEIZIM7211",
+        "FRIIMEIZIM7222",
+        "FRIIMEIZIM7221"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM75",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM7512",
+        "FRIIMEIZIM7511",
+        "FRIIMEIZIM7522",
+        "FRIIMEIZIM7521"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM76",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM7611",
+        "FRIIMEIZIM7612",
+        "FRIIMEIZIM7621",
+        "FRIIMEIZIM7622"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM77",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM7712",
+        "FRIIMEIZIM7713",
+        "FRIIMEIZIM7711"
+      ],
+      "powersKw": [
+        200.0,
+        200.0,
+        200.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_grid_covers_100_150kw_not_200kw",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM78",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM7813",
+        "FRIIMEIZIM7811",
+        "FRIIMEIZIM7812"
+      ],
+      "powersKw": [
+        200.0,
+        200.0,
+        200.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_grid_covers_100_150kw_not_200kw",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM79",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM7911",
+        "FRIIMEIZIM7912",
+        "FRIIMEIZIM7913"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM8",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM822",
+        "FRIIMEIZIM821"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM80",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM8012",
+        "FRIIMEIZIM8013",
+        "FRIIMEIZIM8011"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM82",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM8212",
+        "FRIIMEIZIM8211",
+        "FRIIMEIZIM8213"
+      ],
+      "powersKw": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM83",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM8312",
+        "FRIIMEIZIM8311",
+        "FRIIMEIZIM8321",
+        "FRIIMEIZIM8322"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM84",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM8412",
+        "FRIIMEIZIM8411",
+        "FRIIMEIZIM8422",
+        "FRIIMEIZIM8421"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM85",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM8512",
+        "FRIIMEIZIM8511",
+        "FRIIMEIZIM8522",
+        "FRIIMEIZIM8521"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM86",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM8612",
+        "FRIIMEIZIM8611",
+        "FRIIMEIZIM8622",
+        "FRIIMEIZIM8621"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM87",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM8711",
+        "FRIIMEIZIM8712"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM88",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM8811",
+        "FRIIMEIZIM8812",
+        "FRIIMEIZIM8822",
+        "FRIIMEIZIM8821"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM89",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM8911",
+        "FRIIMEIZIM8913",
+        "FRIIMEIZIM8912"
+      ],
+      "powersKw": [
+        200.0,
+        200.0,
+        200.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_grid_covers_100_150kw_not_200kw",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM9",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM922",
+        "FRIIMEIZIM921"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM90",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM9011",
+        "FRIIMEIZIM9012",
+        "FRIIMEIZIM9021",
+        "FRIIMEIZIM9022"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM91",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM9112",
+        "FRIIMEIZIM9111"
+      ],
+      "powersKw": [
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM92",
+      "tariffClass": "ac_22",
+      "pdcIds": [
+        "FRIIMEIZIM9212",
+        "FRIIMEIZIM9211",
+        "FRIIMEIZIM9222",
+        "FRIIMEIZIM9221"
+      ],
+      "powersKw": [
+        22.0,
+        22.0,
+        22.0,
+        22.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM93",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM9311",
+        "FRIIMEIZIM9312"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM94",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM9412",
+        "FRIIMEIZIM9413",
+        "FRIIMEIZIM9411"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM95",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM9512",
+        "FRIIMEIZIM9513",
+        "FRIIMEIZIM9511"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM96",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM9613",
+        "FRIIMEIZIM9611",
+        "FRIIMEIZIM9612"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM97",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM9712",
+        "FRIIMEIZIM9711",
+        "FRIIMEIZIM9722",
+        "FRIIMEIZIM9721"
+      ],
+      "powersKw": [
+        24.0,
+        24.0,
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM98",
+      "tariffClass": "ac22_dc24",
+      "pdcIds": [
+        "FRIIMEIZIM9811",
+        "FRIIMEIZIM9812"
+      ],
+      "powersKw": [
+        24.0,
+        24.0
+      ],
+      "direct": {
+        "status": "blocked",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_access_only"
+        ],
+        "blockedReasons": [
+          "m2a_direct_night_included_energy_quantity_not_explicit_in_direct_grid",
+          "access_or_subscription_tariff_not_promoted_to_direct"
+        ]
+      }
+    },
+    {
+      "territory": "m2a",
+      "stationId": "FRIIMPIZIM99",
+      "tariffClass": "rapid",
+      "pdcIds": [
+        "FRIIMEIZIM9913",
+        "FRIIMEIZIM9911",
+        "FRIIMEIZIM9912"
+      ],
+      "powersKw": [
+        150.0,
+        150.0,
+        150.0
+      ],
+      "direct": {
+        "status": "rankable",
+        "formulaId": "direct-rapid-055-post-2-per-5",
+        "evidence": [
+          "official_m2a_2026_tariff_grid",
+          "official_live_map_station_class_and_billing_units"
+        ]
+      }
+    }
+  ]
+}

@@ -51,6 +51,12 @@
       "notes": "Official live-map direct tariffs are locked on all 24 current FRIMX stations / 92 PAN PDC: 92 rankable direct offers, zero unresolved PDC and zero physical-inventory mutation. Exact per-unit exceptions are retained at Chambly, Orgelet and Oberhausbergen. Energy and connected-without-charging minutes are billed by started unit. FRIGF, FRILF, generic IZIVIA, roaming and subscriptions remain separate."
     },
     {
+      "networkId": "izivia-impact",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["data/izivia_impact_direct_tariffs_v1.json", "scripts/materialize_france_izivia_impact_offers.py"],
+      "notes": "Canonical audit covers all 141 current civic IZIVIA Impact stations / 401 PAN PDC with one exact-PDC record each: 54 direct rapid offers across 18 stations are rankable and 347 PDC remain reference/fail-closed where the published direct formula, station-class binding or day/night contractual semantics are insufficient. Territory split is m2A 112 stations / 309 PDC (42 rapid PDC rankable across 14 stations, 267 reference), Angoulême 21 / 60 (12 rapid PDC rankable, 48 AC/mixed reference) and Saint-Nazaire 8 / 32 (all reference). The result is audit-only (productionReady false), keeps two incomplete day/night formula families as non-rankable source references, separates FRIGF, FRILF/Buffalo Grill, IZIVIA MAX, generic IZIVIA, roaming and subscriptions, and performs zero physical-inventory mutation."
+    },
+    {
       "networkId": "grand-lyon",
       "coverageStatus": "ready",
       "artifacts": ["data/grand_lyon_izivia_direct_tariffs_v1.json", "scripts/materialize_france_grand_lyon_offers.py"],

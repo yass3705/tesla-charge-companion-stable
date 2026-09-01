@@ -1,0 +1,291 @@
+name: Audit France IZIVIA Impact canonical
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/izivia_impact_direct_tariffs_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_irve_tariff_network_additions_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/materialize_france_izivia_impact_offers.py'
+      - 'scripts/test_izivia_impact_materializer.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/test_france_irve_network_identity.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-izivia-impact-canonical.yml'
+  pull_request:
+    branches:
+      - release/2026-08
+    paths:
+      - 'data/izivia_impact_direct_tariffs_v1.json'
+      - 'data/france_operator_offer_contract_v1.json'
+      - 'data/france_irve_operator_registry_v1.json'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_irve_tariff_network_additions_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/materialize_france_izivia_impact_offers.py'
+      - 'scripts/test_izivia_impact_materializer.py'
+      - 'scripts/enrich_france_irve_network_identity.py'
+      - 'scripts/test_france_irve_network_identity.py'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-izivia-impact-canonical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  izivia-impact:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate exact-PDC materializer and identity boundary
+        run: |
+          python -m py_compile \
+            scripts/materialize_france_izivia_impact_offers.py \
+            scripts/test_izivia_impact_materializer.py \
+            scripts/enrich_france_irve_network_identity.py \
+            scripts/test_france_irve_network_identity.py
+          python scripts/test_france_irve_network_identity.py
+          python scripts/test_izivia_impact_materializer.py
+
+      - name: Validate official source safety contract
+        run: |
+          python - <<'PY'
+          import json
+          source=json.load(open('data/izivia_impact_direct_tariffs_v1.json',encoding='utf-8'))
+          assert source.get('schemaVersion')
+          assert source.get('dataset')=='izivia-impact-direct-tariffs'
+          assert source.get('productionReady') is False
+          scope=source.get('scope') or {}
+          assert scope.get('physicalOperatorId')=='izivia'
+          assert scope.get('tariffNetworkId')=='izivia-impact'
+          assert scope.get('directCpoOnly') is True
+          assert scope.get('physicalInventoryFromPanOnly') is True
+          assert scope.get('exactStationAndPdcIdentityRequired') is True
+          assert scope.get('stationLevelFormulaBindingRequired') is True
+          assert scope.get('unknownOrChangedPdcFailsClosed') is True
+          assert scope.get('blockedDirectBecomesReferenceOnly') is True
+          assert scope.get('roamingIncluded') is False
+          assert scope.get('subscriptionsIncluded') is False
+          assert scope.get('accessOffersIncluded') is False
+          assert scope.get('failClosed') is True
+          expected=source.get('expected') or {}
+          assert expected.get('stationCount')==141
+          assert expected.get('pdcCount')==401
+          assert expected.get('formulaCount')==len(source.get('formulas') or [])==1
+          assert expected.get('referenceFormulaCount')==len(source.get('referenceFormulas') or [])==2
+          assert expected.get('rankableStationCount')==18
+          assert expected.get('rankablePdcCount')==54
+          assert expected.get('blockedStationCount')==123
+          assert expected.get('blockedPdcCount')==347
+          assert expected.get('formulaPdcCounts')=={
+              'direct-rapid-055-post-2-per-5':54,
+          }
+          assert expected.get('referenceFormulaPdcCounts')=={
+              'live-mixed-040-night-6':14,
+              'saint-nazaire-ac-night-6':20,
+          }
+          assert all(row.get('family')=='simple_postcharge' for row in source.get('formulas') or [])
+          assert all(
+              row.get('family')=='day_night_included_energy'
+              and row.get('tariffSelection')=='unpublished'
+              and row.get('timeZone')=='Europe/Paris'
+              for row in source.get('referenceFormulas') or []
+          )
+          assert len(source.get('stations') or [])==141
+          assert len({row['stationId'] for row in source['stations']})==141
+          assert sum(len(row.get('pdcIds') or []) for row in source['stations'])==401
+          assert all(len(row.get('pdcIds') or [])==len(row.get('powersKw') or []) for row in source['stations'])
+          assert all(row['stationId'].startswith('FRIIMP') for row in source['stations'])
+          assert not any(row['stationId'].startswith(('FRIGF','FRILF','FRIMX')) for row in source['stations'])
+          assert sum(row['direct']['status']=='rankable' for row in source['stations'])==18
+          assert sum(row['direct']['status']=='blocked' for row in source['stations'])==123
+          assert sum(len(row['pdcIds']) for row in source['stations'] if row['direct']['status']=='rankable')==54
+          assert sum(len(row['pdcIds']) for row in source['stations'] if row['direct']['status']=='blocked')==347
+          PY
+
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --additions data/france_irve_tariff_network_additions_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84013/download' \
+            --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://transport.data.gouv.fr/resources/84098/download' \
+            --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py \
+            --static-csv .tmp/irve/static.csv \
+            --dynamic-csv .tmp/irve/dynamic.csv \
+            --registry data/france_irve_operator_registry_v1.json \
+            --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py \
+            --canonical-dir build/france_irve \
+            --operator-registry data/france_irve_operator_registry_v1.json \
+            --network-registry build/france_irve/effective_tariff_network_registry.json \
+            --out-dir build/france_irve_identity
+
+      - name: Materialize IZIVIA Impact exact-PDC offers
+        run: |
+          mkdir -p build/france_irve_offers
+          python scripts/materialize_france_izivia_impact_offers.py \
+            --source data/izivia_impact_direct_tariffs_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate coverage semantics and fail-closed scope
+        run: |
+          python - <<'PY'
+          import collections,gzip,json
+
+          stations={r['stationId']:r for r in json.load(gzip.open('build/france_irve_identity/stations.json.gz','rt',encoding='utf-8'))}
+          pdcs={r['pdcId']:r for r in json.load(gzip.open('build/france_irve_identity/charge_points.json.gz','rt',encoding='utf-8'))}
+          offers=json.load(gzip.open('build/france_irve_offers/izivia_impact_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8'))
+          report=json.load(open('build/france_irve_offers/izivia_impact_materialization_report.json',encoding='utf-8'))
+          network=json.load(open('build/france_irve_identity/network_gap_report.json',encoding='utf-8'))
+          network_by_id={r['networkId']:r for r in network['networks']}
+
+          assert network_by_id['izivia-impact']['stationCount']==141
+          assert network_by_id['izivia-impact']['pdcCount']==401
+          assert network_by_id['izivia-impact']['coverageStatus']=='partial_ready'
+          assert network_by_id['izivia-grand-frais']['coverageStatus']=='reference_only'
+          assert network_by_id['izivia-impact-lf']['coverageStatus']=='reference_only'
+
+          assert report['schemaVersion']=='1.1.1'
+          assert report['dataset']=='france-izivia-impact-canonical-audit'
+          assert report['productionReady'] is False
+          summary=report['summary']
+          assert summary['canonicalIziviaImpactStationCount']==141
+          assert summary['canonicalIziviaImpactPdcCount']==401
+          assert summary['sourceBoundStationCount']==141
+          assert summary['sourceBoundPdcCount']==401
+          assert summary['sourceBoundPdcAbsentFromCanonicalCount']==0
+          assert summary['materializedOfferCount']==len(offers)==401
+          assert summary['rankableOfferCount']==summary['directRankableOfferCount']==54
+          assert summary['referenceOfferCount']==summary['referenceCoveredPdcCount']==347
+          assert summary['rankableCoveredStationCount']==18
+          assert summary['rankableCoveredPdcCount']==54
+          assert summary['unresolvedPdcCount']==0
+          assert summary['physicalInventoryMutationCount']==0
+
+          assert len({r['offerId'] for r in offers})==401
+          assert len({r['canonicalPdcId'] for r in offers})==401
+          assert sum(bool(r.get('rankable')) for r in offers)==54
+          assert sum(not bool(r.get('rankable')) for r in offers)==347
+          assert sum(bool((r.get('selectors') or {}).get('referenceFormulaId')) for r in offers)==34
+
+          def territory(station):
+              name=str(station.get('name') or '')
+              if name.startswith('m2A-'):
+                  return 'm2a'
+              if name.startswith('ANG'):
+                  return 'angouleme'
+              if name.startswith('SAINT NAZAIRE'):
+                  return 'saint_nazaire'
+              raise AssertionError((station.get('stationId'),name))
+
+          impact_stations=[row for row in stations.values() if row.get('tariffNetworkId')=='izivia-impact']
+          station_counts=collections.Counter(territory(row) for row in impact_stations)
+          assert station_counts=={'m2a':112,'angouleme':21,'saint_nazaire':8}
+          all_pdc_counts=collections.Counter()
+          rankable_pdc_counts=collections.Counter()
+          reference_pdc_counts=collections.Counter()
+          rankable_station_ids=set()
+
+          for row in offers:
+              sid=row['canonicalStationId']; pid=row['canonicalPdcId']
+              assert sid in stations and pid in pdcs
+              assert stations[sid]['tariffNetworkId']=='izivia-impact'
+              assert pdcs[pid]['tariffNetworkId']=='izivia-impact'
+              assert sid.startswith('FRIIMP')
+              assert not sid.startswith(('FRIGF','FRILF','FRIMX'))
+              assert row['tariffNetworkId']=='izivia-impact'
+              assert row['physicalOperatorId']=='izivia'
+              assert row['matchMethod']=='exact_pdc_itinerance'
+              assert row['subscriptionId'] is None
+              assert row['selectors']['blocksGenericFallback'] is True
+              area=territory(stations[sid]);all_pdc_counts[area]+=1
+              if row['rankable']:
+                  rankable_pdc_counts[area]+=1;rankable_station_ids.add(sid)
+                  assert row['channel']=='direct'
+                  assert row['blockedReasons']==[]
+                  assert row['pricingRules']
+                  assert row['selectors']['formulaId']=='direct-rapid-055-post-2-per-5'
+                  assert row['selectors']['referenceFormulaId'] is None
+                  assert row['selectors']['referenceTimeZone'] is None
+                  for rule in row['pricingRules']:
+                      assert rule['energyBilling']=='started_kwh'
+                      assert 'started_kwh' in rule['rounding']
+                      assert rule['roundingEpsilon']==1e-9
+                      assert rule['timeWindowSelection'] is None
+                      assert rule['includedEnergyKwh']==0
+                      if rule['occupancyBilling'] is not None:
+                          assert rule['occupancyBilling'] in ('started_minute','started_block')
+                          assert rule['occupancyTrigger']=='after_charging_stops'
+                          assert rule['occupancyDurationBasis']=='connected_minutes_minus_charging_minutes'
+                          assert rule['missingUnplugTimePolicy']=='zero_post_charge'
+                          if rule['occupancyBilling']=='started_minute':
+                              assert rule['occupancyPerMinute']>0
+                          else:
+                              assert rule['occupancyBlockMinutes']==5
+                              assert rule['occupancyBlockFee']>0
+              else:
+                  reference_pdc_counts[area]+=1
+                  assert row['channel']=='reference'
+                  assert row['sourceMode']=='reference_only'
+                  assert row['pricingRules']==[]
+                  assert row['blockedReasons']
+                  reference_formula_id=row['selectors']['referenceFormulaId']
+                  if reference_formula_id:
+                      assert reference_formula_id in {
+                          'live-mixed-040-night-6','saint-nazaire-ac-night-6'
+                      }
+                      assert row['selectors']['referenceFormulaFamily']=='day_night_included_energy'
+                      assert row['selectors']['referenceTimeZone']=='Europe/Paris'
+                      assert 'cross_window_tariff_selection_unpublished' in row['blockedReasons']
+                  else:
+                      assert row['selectors']['referenceFormulaFamily'] is None
+                      assert row['selectors']['referenceTimeZone'] is None
+
+          assert all_pdc_counts=={'m2a':309,'angouleme':60,'saint_nazaire':32}
+          assert rankable_pdc_counts=={'m2a':42,'angouleme':12}
+          assert reference_pdc_counts=={'m2a':267,'angouleme':48,'saint_nazaire':32}
+          assert len(rankable_station_ids)==18
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload IZIVIA Impact audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-izivia-impact-canonical-audit
+          path: |
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/izivia_impact_materialization_report.json
+            build/france_irve_offers/izivia_impact_pdc_offers_contract_v1_1.json.gz
+          retention-days: 14

@@ -16,12 +16,16 @@ def text(v):return str(v or '').strip()
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--fallback',required=True);ap.add_argument('--structured-offers',action='append',default=[]);ap.add_argument('--report',required=True);a=ap.parse_args()
-    fallback=load(a.fallback); structured_ids=set(); source_counts={}
+    fallback=load(a.fallback); structured_ids=set(); structured_rankable_ids=set(); structured_reference_blocker_ids=set(); source_counts={}
     for path in a.structured_offers:
         rows=load(path);count=0
         for r in rows if isinstance(rows,list) else []:
             pid=text(r.get('canonicalPdcId') or r.get('pdcId'))
-            if pid and bool(r.get('rankable')):
+            rankable=bool(r.get('rankable'))
+            blocks_fallback=bool((r.get('selectors') or {}).get('blocksGenericFallback'))
+            if pid and rankable:structured_rankable_ids.add(pid)
+            if pid and not rankable and blocks_fallback:structured_reference_blocker_ids.add(pid)
+            if pid and (rankable or blocks_fallback):
                 structured_ids.add(pid);count+=1
         source_counts[path]=count
     suppressed=0;rankable_before=sum(1 for r in fallback if r.get('rankable'))
@@ -33,6 +37,6 @@ def main():
         if 'structured_exact_pdc_offer_precedence' not in reasons:reasons.append('structured_exact_pdc_offer_precedence')
         row['blockedReasons']=reasons;row['rankable']=False;row['channel']='reference';row['sourceMode']='reference_only';suppressed+=1
     dump(a.fallback,fallback)
-    report={'schemaVersion':'1.0.0','productionReady':False,'policy':'rankable structured exact-PDC offers suppress rankable IRVE free-text fallback for the same canonical PDC','structuredRankablePdcCount':len(structured_ids),'structuredOfferSourceCounts':source_counts,'fallbackCandidateCount':len(fallback),'fallbackRankableBefore':rankable_before,'fallbackSuppressedByStructuredExactPdc':suppressed,'fallbackRankableAfter':sum(1 for r in fallback if r.get('rankable'))}
+    report={'schemaVersion':'1.1.0','productionReady':False,'policy':'rankable structured exact-PDC offers and explicit fail-closed reference blockers suppress IRVE free-text fallback for the same canonical PDC','structuredRankablePdcCount':len(structured_rankable_ids),'structuredReferenceBlockerPdcCount':len(structured_reference_blocker_ids-structured_rankable_ids),'structuredPrecedencePdcCount':len(structured_ids),'structuredOfferSourceCounts':source_counts,'fallbackCandidateCount':len(fallback),'fallbackRankableBefore':rankable_before,'fallbackSuppressedByStructuredExactPdc':suppressed,'fallbackRankableAfter':sum(1 for r in fallback if r.get('rankable'))}
     dump(a.report,report,pretty=True);print(json.dumps(report,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()
