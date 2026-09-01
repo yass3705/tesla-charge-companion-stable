@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.3",
+  "schemaVersion": "1.0.4",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -31,10 +31,10 @@
       "aliases": ["C-Park Rennes", "C-PARK Rennes", "Citédia C-Park", "Citedia C-Park"],
       "operatorAliases": [],
       "operatorFallback": false,
-      "coverageStatus": "staged",
+      "coverageStatus": "ready",
       "priority": 1,
-      "artifacts": ["data/cpark_rennes_direct_tariffs_v1.json"],
-      "notes": "Local CITEDIA Metropole tariff scope carved out of the generic Alize Liberte brand by exact PAN contracting-authority matching. Keep staged until the current PAN audit confirms full scope and zero leakage."
+      "artifacts": ["data/cpark_rennes_direct_tariffs_v1.json", "scripts/materialize_france_cpark_rennes_offers.py"],
+      "notes": "Exact CITEDIA METROPOLE scope inside Alize Liberte. Canonical audit run 33459127114 validates 8 Rennes parking stations / 233 PAN PDC, all covered on the Alize direct tariff, with 233 separate non-rankable third-party references, zero unresolved and zero physical-inventory mutation."
     },
     {
       "id": "griffon-branche",
@@ -45,7 +45,7 @@
       "coverageStatus": "staged",
       "priority": 1,
       "artifacts": ["data/griffon_branche_direct_tariffs_v1.json"],
-      "notes": "Saint-Brieuc local network carved out of R-Mob / Alize Liberte only by exact local scope. Other R-Mob territories must never inherit Griffon Branche tariffs."
+      "notes": "Saint-Brieuc local network carved out of R-Mob / Alize Liberte only by exact local scope. Official topology is 16 sites / 48 user-facing charge points; current PAN represents those same 16 sites with 74 connector/PDC rows. Keep staged until the corrected PAN-granularity audit is green."
     }
   ]
 }
