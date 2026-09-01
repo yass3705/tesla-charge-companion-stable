@@ -58,9 +58,9 @@ assert.ok(goElectric.length>0,'Go Electric direct layer empty');
 assert.ok(goElectricSession.length>0,'Go Electric session-fee layer empty');
 assert.equal(goElectricEnergy.length+goElectricSession.length,goElectric.length,'unexpected Go Electric pricing type');
 assert.ok(goElectricEnergy.every(o=>Number.isFinite(Number(o.pricing?.pricePerKwh))));
-assert.ok(goElectricSession.every(o=>Array.isArray(o.pricing?.rules)&&o.pricing.rules.length===1));
-assert.ok(goElectricSession.every(o=>Number.isFinite(Number(o.pricing.rules[0]?.pricePerKwh))&&Number.isFinite(Number(o.pricing.rules[0]?.sessionFeeEur))));
-assert.ok(goElectricSession.every(o=>o.pricing.rules[0]?.connectedTimePerMinuteEur===undefined));
+assert.ok(goElectricSession.every(o=>Array.isArray(o.pricing?.rules)&&o.pricing.rules.length>=1));
+assert.ok(goElectricSession.every(o=>o.pricing.rules.every(r=>Number.isFinite(Number(r?.pricePerKwh))&&Number.isFinite(Number(r?.sessionFeeEur)))));
+assert.ok(goElectricSession.every(o=>o.pricing.rules.every(r=>r?.connectedTimePerMinuteEur===undefined)));
 assert.ok(goElectric.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
 
 const freeToX=offers.directOffers.filter(o=>o.provider==='Free To X');
