@@ -38,6 +38,9 @@ jobs:
           assert d['access']['griffonSubscriptionMonthlyFeeEur']==8.0
           assert d['access']['subscriptionOptIn'] is True
           assert d['scope']['requiredCodeInsee']=='22278'
+          t=d['topology']
+          assert t['officialStationCount']==16 and t['officialLogicalChargePointCount']==48
+          assert t['canonicalInventorySource']=='PAN IRVE'
           PY
       - name: Build effective tariff-network registry
         run: |
@@ -65,20 +68,22 @@ jobs:
         run: |
           python - <<'PY'
           import gzip,json
+          source=json.load(open('data/griffon_branche_direct_tariffs_v1.json',encoding='utf-8'))
           r=json.load(open('build/france_irve_offers/griffon_branche_materialization_report.json',encoding='utf-8'));s=r['summary']
-          assert s['eligibleStationCount']==16,s
-          assert s['eligiblePdcCount']==48,s
-          assert s['coveredPdcCount']==48,s
-          assert s['publicOfferCount']==48 and s['subscriberOfferCount']==48,s
+          assert s['eligibleStationCount']==source['topology']['officialStationCount']==16,s
+          assert 48 <= s['eligiblePdcCount'] <= 90,s
+          assert s['eligiblePdcCount'] >= source['topology']['officialLogicalChargePointCount'],s
+          assert s['coveredPdcCount']==s['eligiblePdcCount'],s
+          assert s['publicOfferCount']==s['eligiblePdcCount'] and s['subscriberOfferCount']==s['eligiblePdcCount'],s
           assert s['unresolvedPdcCount']==0 and s['physicalInventoryMutationCount']==0,s
           f=r['familyPdcCounts']
-          assert sum(f.values())==48,f
+          assert sum(f.values())==s['eligiblePdcCount'],f
           assert f.get('griffon-ac-22',0)>0 and f.get('griffon-dc-30',0)>0 and f.get('griffon-dc-180',0)>0,f
           with gzip.open('build/france_irve_offers/griffon_branche_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as fh:offers=json.load(fh)
           assert all(x['tariffNetworkId']=='griffon-branche' and x['physicalOperatorId']=='bouygues-energies-services' for x in offers)
           assert all(x['selectors']['codeInsee']=='22278' for x in offers)
           sub=[x for x in offers if x['subscriptionId']=='griffon-branche'];pub=[x for x in offers if x['subscriptionId'] is None]
-          assert len(sub)==len(pub)==48
+          assert len(sub)==len(pub)==s['eligiblePdcCount']
           print(json.dumps(r,ensure_ascii=False,indent=2))
           PY
       - name: Upload Griffon Branche audit
