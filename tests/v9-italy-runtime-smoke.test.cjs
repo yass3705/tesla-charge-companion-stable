@@ -19,10 +19,10 @@ const normalized=Direct.normalizePayload(offers);
 
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,49643);
+assert.equal(offers.directOffers.length,50914);
 assert.equal(offers.subscriptionOffers.length,50008);
 assert.equal(offers.emspOffers.length,1678);
-assert.equal(normalized.offerRules.length,49643+50008+1678);
+assert.equal(normalized.offerRules.length,50914+50008+1678);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -131,12 +131,16 @@ assert.equal(evaluated.best.subscriptionId,'enel_plug_and_go_explorer');
 assert.equal(evaluated.best.total,9.6);
 
 const ewivaEmsp=offers.emspOffers.filter(o=>String(o.id||'').startsWith('it:emsp:enel-on-your-way-ewiva:'));
+const ewivaDirect=offers.directOffers.filter(o=>o.sourceId==='ewiva-italy-pos-direct');
 const ewivaSuper=superOffers.filter(o=>o.metadata?.network==='Ewiva');
 const ewivaExplorer=explorerOffers.filter(o=>o.metadata?.network==='Ewiva');
+assert.equal(ewivaDirect.length,1271);
 assert.equal(ewivaEmsp.length,1678);
 assert.equal(ewivaSuper.length,1678);
 assert.equal(ewivaExplorer.length,0);
 assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false));
+assert.ok(ewivaDirect.every(o=>o.provider==='Ewiva'&&o.pricing?.pricePerKwh===0.8));
+assert.ok(ewivaDirect.every(o=>o.validFrom==='2026-08-01'&&o.pricing?.postChargeFeeUnknown===true));
 
 assert.ok(normalized.offerRules.some(o=>o.kind==='direct'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='direct'&&o.provider==='Go Electric Stations SRLS'));
@@ -169,6 +173,7 @@ console.log(JSON.stringify({
   subscriptions:offers.subscriptionOffers.length,
   enelSuper:superOffers.length,
   enelExplorer:explorerOffers.length,
+  ewivaDirect:ewivaDirect.length,
   ewivaEmsp:ewivaEmsp.length,
   ewivaSuper:ewivaSuper.length,
   emsp:offers.emspOffers.length,

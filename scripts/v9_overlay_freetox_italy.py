@@ -52,6 +52,31 @@ def is_existing_overlay(offer: dict[str, Any]) -> bool:
     return offer.get("provider") == PROVIDER and offer.get("sourceId") == SOURCE_ID
 
 
+def replace_existing_overlay_preserving_order(
+    baseline_direct: list[dict[str, Any]], new_offers: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Refresh this provider without reordering overlays from other providers."""
+    new_by_id = {str(offer["id"]): offer for offer in new_offers}
+    used: set[str] = set()
+    composed: list[dict[str, Any]] = []
+    for offer in baseline_direct:
+        if not is_existing_overlay(offer):
+            composed.append(offer)
+            continue
+        offer_id = str(offer.get("id") or "")
+        replacement = new_by_id.get(offer_id)
+        if replacement is not None:
+            composed.append(replacement)
+            used.add(offer_id)
+    composed.extend(offer for offer in new_offers if str(offer["id"]) not in used)
+    return composed
+
+
+def latest_generated_at(baseline: dict[str, Any], candidate: dict[str, Any]) -> str | None:
+    values = [str(value) for value in (baseline.get("generatedAt"), candidate.get("generatedAt")) if value]
+    return max(values) if values else None
+
+
 def validate_candidate_entry(entry: dict[str, Any]) -> None:
     evse_id = str(entry.get("evseId") or "").strip()
     if not evse_id or not evse_id.startswith("IT*F2X*E"):
@@ -165,8 +190,8 @@ def main() -> None:
     evse_collisions = sorted(retained_direct_evse_ids & rankable_ids)
 
     overlay = dict(baseline)
-    overlay["generatedAt"] = candidate.get("generatedAt") or baseline.get("generatedAt")
-    overlay["directOffers"] = retained_direct + new_offers
+    overlay["generatedAt"] = latest_generated_at(baseline, candidate)
+    overlay["directOffers"] = replace_existing_overlay_preserving_order(baseline_direct, new_offers)
     overlay["subscriptionOffers"] = baseline_subscriptions
     overlay["emspOffers"] = baseline_emsp
     overlay.setdefault("policy", {})["offerValidityDatesEnforced"] = True
@@ -192,13 +217,14 @@ def main() -> None:
         "publishedAc105": published_class_counts.get("AC") == 105,
         "publishedPromoDc186": published_class_counts.get("DC_PROMO_LE64") == 186,
         "unresolvedHighPower603Absent": len(unresolved) == 603 and not (unresolved_ids & set().union(*(exact_ids(offer) for offer in new_offers))),
-        "baselineCoreDirect49352": len(retained_direct) == 49352,
+        "baselineCoreDirect50623": len(retained_direct) == 50623,
         "baselineSubscriptions50008": len(baseline_subscriptions) == 50008,
         "baselineEmsp1678": len(baseline_emsp) == 1678,
         "previousOverlayIdempotent": len(previous_overlay) in {0, 291},
         "noOfferIdCollision": not id_collisions and len(new_ids) == len(set(new_ids)),
         "noOtherDirectEvseCollision": not evse_collisions,
-        "overlayDirect49643": len(overlay["directOffers"]) == 49643 and len(overlay["directOffers"]) == expected_direct,
+        "overlayDirect50914": len(overlay["directOffers"]) == 50914 and len(overlay["directOffers"]) == expected_direct,
+        "otherDirectOffersPreservedExactly": [offer for offer in overlay["directOffers"] if not is_existing_overlay(offer)] == retained_direct,
         "subscriptionsPreservedExactly": overlay["subscriptionOffers"] == baseline_subscriptions,
         "emspPreservedExactly": overlay["emspOffers"] == baseline_emsp,
         "energyRateExactly050": all((offer.get("pricing") or {}).get("pricePerKwh") == 0.5 for offer in new_offers),
