@@ -37,13 +37,13 @@ jobs:
         run: |
           node --check assets/v8-reveo-direct.js
           node --check assets/v8-rc48bn-runtime-hotfix.js
-          node -e "const d=JSON.parse(require('fs').readFileSync('data/reveo_direct_tariffs_france_v1.json','utf8')); if(JSON.stringify(d.scope.rankableTerritories)!=='[\"S34\"]') process.exit(1); if(d.scope.roamingTariffsPromotedToDirect!==false) process.exit(1)"
+          node -e "const d=JSON.parse(require('fs').readFileSync('data/reveo_direct_tariffs_france_v1.json','utf8')); const expected=['S34','D09','D11','S12','D30','D46','S48','D65','D81']; if(JSON.stringify(d.scope.rankableTerritories)!==JSON.stringify(expected)) process.exit(1); if(JSON.stringify(d.scope.rankableSubscriberTerritories)!=='[\"S34\"]') process.exit(1); if(d.scope.roamingTariffsPromotedToDirect!==false) process.exit(1)"
       - name: Révéo direct regression tests
         run: node scripts/test_reveo_direct_v8.mjs
       - name: Existing subscription ranking regression
         run: node scripts/test_v8_subscription_ranking.mjs
       - name: Release wiring
         run: |
-          grep -q "v8-reveo-direct.js?v=reveo-direct-v1-20260826" assets/v8-rc48bn-runtime-hotfix.js
+          grep -q "v8-reveo-direct.js?v=reveo-direct-v2-20260901" assets/v8-rc48bn-runtime-hotfix.js
           grep -q "loadReveoDirect" assets/v8-rc48bn-runtime-hotfix.js
-          grep -q "Hérault hors Montpellier Métropole calculable" assets/v8-reveo-direct.js
+          grep -q "territoires publics vérifiés calculables" assets/v8-reveo-direct.js

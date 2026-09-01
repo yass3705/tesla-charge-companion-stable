@@ -18,11 +18,13 @@ vm.runInThisContext(code,{filename:'v8-reveo-direct.js'});
 const api=globalThis.TCCReveoDirectV8;
 assert.ok(api,'Révéo API missing');
 assert.equal(api.validateMatrix(matrix),matrix);
-assert.deepEqual(matrix.scope.rankableTerritories,['S34']);
+assert.deepEqual(matrix.scope.rankableTerritories,['S34','D09','D11','S12','D30','D46','S48','D65','D81']);
+assert.deepEqual(matrix.scope.rankableSubscriberTerritories,['S34']);
 assert.equal(matrix.scope.roamingTariffsPromotedToDirect,false);
 
 const unsafe=structuredClone(matrix);
-unsafe.territories.S12.public=[{key:'unsafe',kind:'AC',pricePerKwh:.4}];
+unsafe.territories.D66.tariffFamily='GENERAL_PUBLIC_CURRENT';
+unsafe.territories.D66.rankableProfiles=['public'];
 assert.throws(()=>api.validateMatrix(unsafe),/non vérifié rendu calculable/);
 
 function base({department='34',operator='Révéo',name='Révéo Test',address='',city='',partyId='',configs=[]}={}){
@@ -78,12 +80,27 @@ for(const sample of [
   assert.equal(st.chargingConfigurations.filter(c=>c.reveoDirect).length,0);
 }
 
-// Tous les autres territoires connus restent fail-closed : aucune donnée roaming/OCPI n'est promue.
-const cases=[
-  ['12','S12','Rodez','FR*S12'],['31','M31','Toulouse','FR*M31'],['48','S48','Mende','FR*S48'],
-  ['09','D09','Foix',''],['11','D11','Carcassonne',''],['46','D46','Cahors',''],['65','D65','Tarbes',''],['66','D66','Perpignan','']
+// Les territoires de la grille publique générale sont calculables sans abonnement.
+const publicCases=[
+  ['09','D09','Foix',''],['11','D11','Carcassonne',''],['12','S12','Rodez','FR*S12'],
+  ['30','D30','Nîmes',''],['46','D46','Cahors',''],['48','S48','Mende','FR*S48'],
+  ['65','D65','Tarbes',''],['81','D81','Albi','']
 ];
-for(const [department,territory,city,partyId] of cases){
+for(const [department,territory,city,partyId] of publicCases){
+  st=api.mergeStation(base({department,city,partyId,configs:[ac22,dc100]}),matrix);
+  assert.equal(st.reveoTerritory,territory,department);
+  assert.equal(st.reveoPricingStatus,'verified',department);
+  const generalPublic=st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Direct');
+  assert.equal(generalPublic.length,2,department);
+  assert.equal(st.chargingConfigurations.filter(c=>c.offerProvider==='Révéo Abonné').length,0,department);
+  assert.equal(generalPublic.find(c=>c.kind==='AC').pricing.rules[0].pricePerKwh,.40,department);
+  assert.equal(generalPublic.find(c=>c.kind==='DC').pricing.rules[0].pricePerKwh,.70,department);
+}
+
+// Les grilles spéciales non vérifiées restent strictement fail-closed.
+for(const [department,territory,city,partyId] of [
+  ['31','M31','Toulouse','FR*M31'],['66','D66','Perpignan','']
+]){
   st=api.mergeStation(base({department,city,partyId,configs:[ac22,dc100]}),matrix);
   assert.equal(st.reveoTerritory,territory,department);
   assert.equal(st.reveoPricingStatus,'unresolved',department);
@@ -95,15 +112,15 @@ st=api.mergeStation(base({department:'34',operator:'Powerdot',city:'Béziers',co
 assert.equal(st.operator,'Powerdot');
 assert.equal(st.reveoPricingStatus,undefined);
 
-// Statistiques overlay : vérifié uniquement sur Hérault hors métropole.
+// Statistiques overlay : S34 et S12 vérifiés, Montpellier fail-closed.
 const prepared={stations:[
   base({department:'34',city:'Béziers',configs:[ac22]}),
   base({department:'34',city:'Montpellier',configs:[ac22]}),
   base({department:'12',city:'Rodez',configs:[ac22]})
 ]};
 api.overlayPrepared(prepared,matrix);
-assert.equal(prepared.reveoMergeStats.verifiedStations,1);
-assert.equal(prepared.reveoMergeStats.unresolvedStations,2);
+assert.equal(prepared.reveoMergeStats.verifiedStations,2);
+assert.equal(prepared.reveoMergeStats.unresolvedStations,1);
 
 assert.ok(registered.some(p=>p.selectionId==='reveo-subscription'),'Révéo plan not registered');
 const plan=registered.find(p=>p.selectionId==='reveo-subscription');
@@ -112,4 +129,4 @@ assert.equal(plan.monthlyFeeEur,1.5);
 assert.match(plan.monthlyFeeLabel,/12 €/);
 assert.equal(plan.directOperatorOnly,true);
 
-console.log(JSON.stringify({ok:true,rankableTerritories:matrix.scope.rankableTerritories,subscription:'reveo-subscription',unresolved:['09','11','12','31','46','48','65','66','Montpellier Métropole']},null,2));
+console.log(JSON.stringify({ok:true,rankableTerritories:matrix.scope.rankableTerritories,subscriptionTerritories:matrix.scope.rankableSubscriberTerritories,unresolved:['31','66','Montpellier Métropole']},null,2));
