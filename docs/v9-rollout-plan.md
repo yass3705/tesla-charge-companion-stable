@@ -24,6 +24,30 @@ The rollout configuration contains a global kill switch. When enabled, every rol
 - A versioned config change is required for every real promotion.
 - CI validates the rollout engine, readiness engine and safe config contract.
 
+## Pre-canary observation gate
+
+Promotion from `preview` to the initial 1% canary requires a pinned public
+candidate and a versioned observation record in
+`ops/v9/canary-observation.json`. The record is evaluated independently from
+the promotion readiness gate:
+
+- at least 24 hours must elapse on the same deployed runtime fingerprint;
+- at least 25 public candidate runs must be recorded;
+- rollback thresholds must remain clear;
+- rollout stays `preview` with `canaryPercent: 0` throughout observation;
+- readiness remains closed until the explicit promotion change.
+
+Any change to the candidate code or data payload changes the fingerprint and
+yields `RESET_REQUIRED`. The promotion control files are excluded from this
+build fingerprint but remain guarded by CI; observation, tests, CI and
+documentation also do not alter the pinned runtime.
+
 ## Current state
 
-The versioned configuration remains `preview`, `canaryPercent: 0`. V8 is still production.
+The versioned configuration remains `preview`, `canaryPercent: 0`. V8 is still
+production. Observation started at `2026-09-01T14:31:56Z` against deployed
+candidate `bb185ded1cfffe3a4f4d864427a7fb0c1e30157a`. The initial public
+evidence contains 30/30 PASS runs, zero source or routing errors, 7,043 ms
+average latency and 18,372 ms maximum latency. The earliest possible 1%
+eligibility time is `2026-09-02T14:31:56Z`, provided the runtime fingerprint
+remains unchanged and the explicit readiness promotion gate is opened.
