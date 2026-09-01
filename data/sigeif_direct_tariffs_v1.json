@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "sigeif-direct-tariffs-france",
+  "networkId": "sigeif",
+  "label": "SIGEIF",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "effectiveFrom": "2024-10-01",
+  "sources": {
+    "officialNetworkPage": "https://sigeif.fr/index.php/comment-et-ou-recharger-votre-vehicule-electrique",
+    "official2025Guide": "https://www.sigeif.fr/sites/default/files/2025-10/GUIDE%20D%27UTILISATION%20IRVE%202025%20OCTOBRE.pdf",
+    "officialMobilityPage": "https://www.sigeif.fr/mobilite-electrique"
+  },
+  "scope": {
+    "tariffNetworkId": "sigeif",
+    "physicalOperatorExpected": "izivia",
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "externalParkingExcluded": true,
+    "networkConnectedDurationFeesAreNotParking": true
+  },
+  "access": {
+    "subscriptionRequired": false,
+    "specificAccessCardRequired": false,
+    "iziviaAppAvailable": true,
+    "iziviaAccountOptional": true,
+    "paynowBankCardAvailable": true,
+    "passIziviaAvailable": true,
+    "networkTariffAppliesBeforeAnyThirdPartyMspRebilling": true
+  },
+  "tariffFamilies": [
+    {
+      "id": "sigeif-douce-22",
+      "stationMaxPowerKw": 22.5,
+      "pricePerKwh": 0.39,
+      "durationPerMinute": 0.05,
+      "durationThresholdMinutes": 180,
+      "nightCapStart": "20:00",
+      "nightCapEnd": "08:00",
+      "nightDurationFeeCapEur": 4.0,
+      "notes": "Official guide applies the same energy and connection-duration rule to up-to-7-kW and up-to-22-kW soft chargers. The 4 EUR night cap applies only to the connected-duration surcharge between 20:00 and 08:00."
+    },
+    {
+      "id": "sigeif-semi-rapid-24",
+      "stationMinPowerKwExclusive": 22.5,
+      "stationMaxPowerKw": 24.5,
+      "pricePerKwh": 0.45,
+      "durationPerMinute": 0.20,
+      "durationThresholdMinutes": 120,
+      "nightDurationFeeCapEur": null
+    },
+    {
+      "id": "sigeif-rapid-100",
+      "stationMinPowerKwExclusive": 24.5,
+      "stationMaxPowerKw": 100.5,
+      "pricePerKwh": 0.49,
+      "durationPerMinute": 0.30,
+      "durationThresholdMinutes": 60,
+      "nightDurationFeeCapEur": null,
+      "notes": "Official guide publishes the same 0.49 EUR/kWh and 0.30 EUR/min-after-1h rule for up-to-50-kW and up-to-100-kW charger classes."
+    }
+  ],
+  "exclusions": [
+    "Only canonical PAN PDC whose tariffNetworkId is sigeif are eligible.",
+    "Generic IZIVIA, IZIVIA Express and IZIVIA FAST stations never inherit the SIGEIF grid.",
+    "Third-party mobility providers may re-bill users differently and remain separate offers.",
+    "The official 'frais de stationnement' are modeled as connected-duration surcharges, not external car-park fees.",
+    "PAN IRVE remains the sole physical inventory; tariffs never create stations or PDC."
+  ]
+}
