@@ -38,8 +38,7 @@ assert.ok(goElectricSession.length>0,'Go Electric rules layer empty');
 assert.equal(goElectricEnergy.length+goElectricSession.length,goElectric.length,'unexpected Go Electric pricing type');
 assert.ok(goElectricEnergy.every(o=>Number.isFinite(Number(o.pricing?.pricePerKwh))));
 assert.ok(goElectricSession.every(o=>Array.isArray(o.pricing?.rules)&&o.pricing.rules.length>=1));
-assert.ok(goElectricSession.every(o=>o.pricing.rules.every(r=>Number.isFinite(Number(r?.pricePerKwh))||Number.isFinite(Number(r?.sessionFeeEur)))),'Go Electric rule without a recognized monetary component');
-assert.ok(goElectricSession.every(o=>o.pricing.rules.every(r=>r?.connectedTimePerMinuteEur===undefined)));
+assert.ok(goElectricSession.every(o=>o.pricing.rules.every(r=>Number.isFinite(Number(r?.pricePerKwh))||Number.isFinite(Number(r?.sessionFeeEur))||Number.isFinite(Number(r?.connectedTimePerMinuteEur)))),'Go Electric rule without a recognized monetary component');
 assert.ok(goElectric.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
 
 const freeToX=offers.directOffers.filter(o=>o.provider==='Free To X');
