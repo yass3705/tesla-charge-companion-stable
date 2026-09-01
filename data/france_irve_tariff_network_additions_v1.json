@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.4",
+  "schemaVersion": "1.0.5",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -42,10 +42,10 @@
       "aliases": ["Griffon Branché", "Griffon Branche", "GRIFFON BRANCHÉ", "GRIFFON BRANCHE"],
       "operatorAliases": [],
       "operatorFallback": false,
-      "coverageStatus": "staged",
+      "coverageStatus": "ready",
       "priority": 1,
-      "artifacts": ["data/griffon_branche_direct_tariffs_v1.json"],
-      "notes": "Saint-Brieuc local network carved out of R-Mob / Alize Liberte only by exact local scope. Official topology is 16 sites / 48 user-facing charge points; current PAN represents those same 16 sites with 74 connector/PDC rows. Keep staged until the corrected PAN-granularity audit is green."
+      "artifacts": ["data/griffon_branche_direct_tariffs_v1.json", "scripts/materialize_france_griffon_branche_offers.py"],
+      "notes": "Exact Saint-Brieuc scope inside R-Mob / Alize Liberte. Corrected canonical audit run 33495031487 validates 16 official sites, 48 official user-facing charge points represented by 74 PAN connector/PDC rows; all 74 PAN rows covered, 74 public plus 74 opt-in subscriber offers, family split 22 AC / 12 DC 30 kW / 40 Express rows, zero unresolved and zero physical-inventory mutation. The 74 PAN rows must never be presented as 74 official physical charge points."
     }
   ]
 }
