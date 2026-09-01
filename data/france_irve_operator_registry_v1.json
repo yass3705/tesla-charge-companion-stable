@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "updatedAt": "2026-08-28",
+  "updatedAt": "2026-09-01",
   "country": "FR",
   "inventoryPolicy": {
     "physicalInventory": "PAN IRVE static deduplicated",
@@ -57,6 +57,7 @@
     {"id":"driveco","label":"DRIVECO","aliases":["DRIVECO","Driveco"],"coverageStatus":"ready","artifactPaths":["data/driveco_evse_tariffs_v1.json"],"currentIntegration":"mapped-offer","priority":1,"notes":""},
     {"id":"qovoltis","label":"Qovoltis","aliases":["Qovoltis","QOVOLTIS"],"coverageStatus":"ready","artifactPaths":["data/qovoltis_direct_tariffs_v1.json"],"currentIntegration":"dataset-runtime","priority":1,"notes":""},
     {"id":"evadea","label":"e-Vadea","aliases":["e-Vadea","eVadea","E-Vadea"],"coverageStatus":"ready","artifactPaths":["data/evadea_evse_tariffs_v1.json"],"currentIntegration":"mapped-offer","priority":1,"notes":""},
+    {"id":"bouygues-energies-services","label":"Bouygues Energies & Services","aliases":["Bouygues Energies & Services","BOUYGUES ENERGIES SERVICES"],"coverageStatus":"reference_only","artifactPaths":[],"currentIntegration":null,"priority":3,"notes":"Technical PAN CPO identity only. This operator serves multiple customer-facing tariff networks, including Alize Liberte; never use it as a national tariff fallback."},
     {"id":"totalenergies","label":"TotalEnergies","aliases":["TotalEnergies","Total Energies","TotalEnergies Charging Services"],"coverageStatus":"normalize","artifactPaths":["data/totalenergies_tariff_overlay_v1.json"],"currentIntegration":"offer-overlay","priority":1,"notes":"Move operator-wide rules into canonical offer layer; keep station identity in IRVE."},
     {"id":"freshmile","label":"Freshmile","aliases":["Freshmile","Freshmile Services"],"coverageStatus":"normalize","artifactPaths":[],"currentIntegration":"runtime-overlay","priority":1,"notes":"Runtime overlay exists; create a standalone normalized operator tariff base."},
     {"id":"izivia","label":"IZIVIA","aliases":["IZIVIA","Izivia","IZIVIA Express","IZIVIA FAST"],"coverageStatus":"normalize","artifactPaths":["data/izivia_fast_direct_tariff_v1.json"],"currentIntegration":"mixed-runtime","priority":1,"notes":"Unify Express/FAST/direct tariff evidence and exact station/EVSE mapping."},
