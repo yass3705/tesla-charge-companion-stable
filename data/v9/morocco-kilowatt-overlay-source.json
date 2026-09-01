@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "morocco-kilowatt-direct-offers",
+    "label": "Morocco Kilowatt station-specific direct free tariffs",
+    "adapter": "morocco-kilowatt-tariff-manifest-v1",
+    "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json",
+    "countries": ["MA"],
+    "operatorIds": ["kilowatt"],
+    "capabilities": ["tariff"],
+    "priority": {"tariff": 115},
+    "refresh": "station-specific-evidence-change-or-monthly",
+    "active": true,
+    "optional": true,
+    "prepublicationPolicy": "404 or invalid manifest must fail closed and leave Kilowatt tariffs unresolved"
+  }
+}
