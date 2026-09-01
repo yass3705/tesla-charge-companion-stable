@@ -67,6 +67,22 @@ async function sourceOrderTest(){
   assert.deepEqual(compact(ra),compact(rb),'source registration/load order must not change the canonical result');
 }
 
+async function stationLimitBeforeOfferJoinTest(){
+  const r={sources:[
+    {id:'stations',countries:['NL'],priority:{identity:50},active:true},
+    {id:'offers',countries:['NL'],priority:{tariff:90},active:true,optional:true}
+  ]};
+  const rows=denseDotNl(200);
+  const rules=rows.map((station,i)=>({id:`rule-${i}`,provider:'Test',countries:['NL'],stationIds:[station.canonicalId],pricing:{pricePerKwh:.5},priority:90}));
+  const engine=Engine.createEngine({registry:r,loaders:{stations:async()=>rows,offers:async()=>({offerRules:rules})}});
+  const area=await engine.queryArea({countryCode:'NL',origin,radiusKm:25,stationLimit:24,routingBudget:80});
+  assert.equal(area.stations.length,24,'device station limit must be applied before the expensive offer join');
+  assert.equal(area.diagnostics.sourceStationCount,200,'pre-limit station count remains observable');
+  assert.equal(area.diagnostics.stationLimitApplied,true);
+  assert.equal(area.diagnostics.stationLimit,24);
+  assert(area.stations.every(st=>st.offers.some(o=>o.provider==='Test')),'selected stations retain their exact offers');
+}
+
 async function fieldPriorityAndOffersTest(){
   const r={sources:[
     {id:'national',countries:['NL'],priority:{identity:50,connectors:55,status:60,tariff:30},active:true},
@@ -158,6 +174,7 @@ function exactTariffScopeLeakageTest(){
 (async()=>{
   const dense=await denseAreaTest();
   await sourceOrderTest();
+  await stationLimitBeforeOfferJoinTest();
   await fieldPriorityAndOffersTest();
   await optionalSourceFailureIsolationTest();
   await requiredSourceFailureTest();

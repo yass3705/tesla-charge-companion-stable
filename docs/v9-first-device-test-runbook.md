@@ -25,6 +25,10 @@ Le dépôt doit aussi être dans l'état fermé suivant :
 
 Exécuter `node scripts/v9-first-device-test-runbook.cjs` pour contrôler cet état.
 
+Le CI valide ensuite `node scripts/v9-validate-device-test-config.cjs`. Ce contrôle accepte
+uniquement l'état fermé ci-dessus ou une fenêtre contrôlée cohérente, active et bornée à
+60 minutes. Un état partiellement ouvert ou une fenêtre expirée bloque tous les garde-fous.
+
 ## 1. Préparer la fenêtre
 
 Ouvrir `v9-device-test-console/` et générer une fenêtre de test de 30 à 60 minutes.

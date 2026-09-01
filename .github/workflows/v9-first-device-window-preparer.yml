@@ -4,7 +4,10 @@ on:
     branches: [main]
     paths:
       - 'scripts/v9-prepare-first-device-window.cjs'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
       - 'tests/v9-first-device-window-preparer.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - 'data/v9/rollout-config.json'
       - 'data/v9/self-enrollment-config.json'
       - 'data/v9/access-readiness.json'
@@ -13,7 +16,10 @@ on:
     branches: [main, refactor/unified-data-engine-v9]
     paths:
       - 'scripts/v9-prepare-first-device-window.cjs'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
       - 'tests/v9-first-device-window-preparer.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - 'data/v9/rollout-config.json'
       - 'data/v9/self-enrollment-config.json'
       - 'data/v9/access-readiness.json'
@@ -28,8 +34,16 @@ jobs:
         with:
           node-version: 22
       - name: Syntax
-        run: node --check scripts/v9-prepare-first-device-window.cjs && node --check tests/v9-first-device-window-preparer.test.cjs
+        run: |
+          node --check scripts/v9-prepare-first-device-window.cjs
+          node --check scripts/v9-first-device-test-runbook.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
+          node --check tests/v9-first-device-window-preparer.test.cjs
       - name: Preparer contract
         run: node tests/v9-first-device-window-preparer.test.cjs
-      - name: Closed state invariant
+      - name: Repository state runbook precheck
         run: node scripts/v9-first-device-test-runbook.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs

@@ -9,6 +9,14 @@ on:
       - 'assets/v9/**'
       - 'data/v9/**'
       - '.github/workflows/v9-device-test-pages.yml'
+  push:
+    branches: [refactor/unified-data-engine-v9]
+    paths:
+      - 'v9-app/**'
+      - 'v9-gate/**'
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - '.github/workflows/v9-device-test-pages.yml'
   workflow_dispatch:
     inputs:
       deploy:
@@ -72,7 +80,7 @@ jobs:
           node --check site/v9-test/v9-app/scenario-runner.js
           grep -q "../../" site/v9-test/v9-gate/gate.js
           echo 'Isolated V9 test package validated; root index is byte-identical to main.'
-      - name: Upload Pages artifact for explicit deployment only
+      - name: Upload Pages artifact for explicit manual deployment only
         if: github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST'
         uses: actions/upload-pages-artifact@v3
         with:

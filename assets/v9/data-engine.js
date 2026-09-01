@@ -128,7 +128,7 @@
     const offer=materializeOffer({
       id:rule.id,provider:rule.provider,kind:rule.offerKind||'direct',subscriptionId:rule.subscriptionId||null,countries:rule.countries||[station.countryCode],currency:rule.currency||'EUR',
       connectorKinds:clone(rule.connectorKinds)||[],operatorIds:clone(rule.operatorIds)||[],networkIds:clone(rule.networkIds)||[],networkAliases:clone(rule.networkAliases)||[],stationIds:clone(rule.stationIds)||[],evseIds:clone(rule.evseIds)||[],minPowerKw:rule.minPowerKw??null,maxPowerKw:rule.maxPowerKw??null,
-      pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
+      pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,validFrom:rule.validFrom||null,validThrough:rule.validThrough||null,validityBasis:rule.validityBasis||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
     },station.countryCode);
     if(offer){offer.sourceId=source.id;offer.priority=number(offer.priority)??priorityFor(source,'tariff',rule);}return offer;
   }
@@ -173,8 +173,10 @@
         const error=new Error(`required data source failed: ${requiredFailures.map(f=>f.sourceId).join(', ')}`);
         error.code='TCC_V9_REQUIRED_SOURCE_FAILED';error.failures=requiredFailures;error.diagnostics=diagnostics;throw error;
       }
-      const merged=applyOfferRules(resolveEntities(items),ruleItems),inRadius=merged.filter(st=>!query.origin||!Number.isFinite(Number(query.radiusKm))||distanceKm(query.origin,st)<=Number(query.radiusKm)+1e-9),filtered=inRadius.filter(st=>stationMatchesFilters(st,query.filters||{})),operators=deriveOperators(filtered),routingCandidates=selectRoutingCandidates(filtered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2});
-      return{query:clone(query),stations:filtered,operators,routingCandidates,freshness:{generatedAt:new Date().toISOString()},diagnostics:{...diagnostics,fragmentCount:items.length,offerRuleCount:ruleItems.length,mergedStationCount:merged.length,inRadiusCount:inRadius.length,filteredCount:filtered.length,routingCandidateCount:routingCandidates.length}};
+      const resolved=resolveEntities(items),inRadius=resolved.filter(st=>!query.origin||!Number.isFinite(Number(query.radiusKm))||distanceKm(query.origin,st)<=Number(query.radiusKm)+1e-9),baseFiltered=inRadius.filter(st=>stationMatchesFilters(st,query.filters||{}));
+      const stationLimit=Math.floor(number(query.stationLimit)||0),preselected=selectRoutingCandidates(baseFiltered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2}),selected=stationLimit>0&&baseFiltered.length>stationLimit?preselected.slice(0,stationLimit):baseFiltered;
+      const filtered=applyOfferRules(selected,ruleItems),operators=deriveOperators(filtered),routingCandidates=selectRoutingCandidates(filtered,{origin:query.origin,budget:query.routingBudget??80,perOperatorFloor:query.perOperatorFloor??2});
+      return{query:clone(query),stations:filtered,operators,routingCandidates,freshness:{generatedAt:new Date().toISOString()},diagnostics:{...diagnostics,fragmentCount:items.length,offerRuleCount:ruleItems.length,mergedStationCount:resolved.length,inRadiusCount:inRadius.length,filteredCount:baseFiltered.length,sourceStationCount:baseFiltered.length,stationLimitApplied:stationLimit>0&&baseFiltered.length>stationLimit,stationLimit:stationLimit>0?stationLimit:null,routingCandidateCount:routingCandidates.length}};
     }
     api={queryArea,registerLoader,deriveOperators,eligibleOffers,selectRoutingCandidates,sources:()=>clone(sources)};return api;
   }

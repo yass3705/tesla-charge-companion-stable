@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "verdict": "BLOCKED",
-  "ready": false,
-  "updatedAt": "2026-09-01T01:11:00Z",
-  "reason": "Blocked after first-device mobile routing rollback. Random canary remains 0%."
+  "verdict": "READY",
+  "ready": true,
+  "updatedAt": "2026-09-01T11:59:46.074Z",
+  "reason": "Controlled single-device retest window open until 2026-09-01T12:59:46.074Z after commit 0d41bb3 passed all V9 checks. Random canary remains 0%."
 }

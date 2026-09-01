@@ -61,6 +61,7 @@ jobs:
           node --check tests/v9-charge-model-engine.test.cjs
           node --check tests/v9-session-planner-engine.test.cjs
           node --check tests/v9-pricing-window-segmentation.test.cjs
+          node --check tests/v9-offer-validity.test.cjs
           node --check tests/v9-energy-timeline-pricing.test.cjs
           node --check tests/v9-station-score-engine.test.cjs
           node --check tests/v9-charge-score-integration.test.cjs
@@ -156,6 +157,8 @@ jobs:
         run: node tests/v9-session-planner-engine.test.cjs
       - name: Tariff-window and post-charge segmentation
         run: node tests/v9-pricing-window-segmentation.test.cjs
+      - name: Date-bounded offer validity
+        run: node tests/v9-offer-validity.test.cjs
       - name: SOC energy timeline tariff allocation
         run: node tests/v9-energy-timeline-pricing.test.cjs
       - name: Station scoring

@@ -5,6 +5,12 @@ on:
     paths:
       - 'assets/v9/self-enrollment-engine.js'
       - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - 'tests/v9-self-enrollment.test.cjs'
       - '.github/workflows/v9-self-enrollment.yml'
   push:
@@ -12,6 +18,12 @@ on:
     paths:
       - 'assets/v9/self-enrollment-engine.js'
       - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - 'tests/v9-self-enrollment.test.cjs'
       - '.github/workflows/v9-self-enrollment.yml'
   workflow_dispatch:
@@ -23,19 +35,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Syntax
-        run: node --check assets/v9/self-enrollment-engine.js
+        run: |
+          node --check assets/v9/self-enrollment-engine.js
+          node --check scripts/v9-first-device-test-runbook.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
       - name: Self enrollment contract
         run: node tests/v9-self-enrollment.test.cjs
-      - name: Default config remains closed
-        run: |
-          node - <<'NODE'
-          const fs=require('fs');
-          const c=JSON.parse(fs.readFileSync('data/v9/self-enrollment-config.json','utf8'));
-          if(c.enabled!==false) throw new Error('self enrollment must remain disabled by default');
-          if(c.readinessApproved!==false) throw new Error('readiness approval must remain false by default');
-          if(c.tokenSha256) throw new Error('no activation token hash may be committed in the default closed config');
-          if(c.expiresAt!==null) throw new Error('default token expiry must be null');
-          console.log('closed-by-default config OK');
-          NODE
+      - name: Repository access state invariant
+        run: node scripts/v9-first-device-test-runbook.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs

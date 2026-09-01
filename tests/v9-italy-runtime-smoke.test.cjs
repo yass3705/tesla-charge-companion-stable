@@ -19,10 +19,10 @@ const normalized=Direct.normalizePayload(offers);
 
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,48409);
+assert.equal(offers.directOffers.length,49643);
 assert.equal(offers.subscriptionOffers.length,50008);
-assert.equal(offers.emspOffers.length,3959);
-assert.equal(normalized.offerRules.length,48409+50008+3959);
+assert.equal(offers.emspOffers.length,1678);
+assert.equal(normalized.offerRules.length,49643+50008+1678);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -50,6 +50,32 @@ function validateLayer(layer,kind){
 validateLayer(offers.directOffers,'direct');
 validateLayer(offers.subscriptionOffers,'subscription');
 validateLayer(offers.emspOffers,'emsp');
+
+const goElectric=offers.directOffers.filter(o=>o.provider==='Go Electric Stations SRLS');
+const goElectricEnergy=goElectric.filter(o=>o.pricing?.type==='kwh');
+const goElectricSession=goElectric.filter(o=>o.pricing?.type==='rules');
+assert.equal(goElectric.length,943);
+assert.equal(goElectricEnergy.length,816);
+assert.equal(goElectricSession.length,127);
+assert.ok(goElectricEnergy.every(o=>Number.isFinite(Number(o.pricing?.pricePerKwh))));
+assert.ok(goElectricSession.every(o=>Array.isArray(o.pricing?.rules)&&o.pricing.rules.length===1));
+assert.ok(goElectricSession.every(o=>Number.isFinite(Number(o.pricing.rules[0]?.pricePerKwh))&&Number.isFinite(Number(o.pricing.rules[0]?.sessionFeeEur))));
+assert.ok(goElectricSession.every(o=>o.pricing.rules[0]?.connectedTimePerMinuteEur===undefined));
+assert.ok(goElectric.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
+
+const freeToX=offers.directOffers.filter(o=>o.provider==='Free To X');
+assert.equal(freeToX.length,291);
+assert.equal(freeToX.filter(o=>o.metadata?.tariffClass==='AC').length,105);
+assert.equal(freeToX.filter(o=>o.metadata?.tariffClass==='DC_PROMO_LE64').length,186);
+assert.ok(freeToX.every(o=>o.pricing?.pricePerKwh===0.5&&o.pricing?.postChargeFeeUnknown===true));
+assert.ok(freeToX.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
+
+const geSessionSample=Direct.normalizePayload({country:'IT',directOffers:[goElectricSession[0]]}).offerRules[0];
+const geSessionStation={id:'IT:go-electric:smoke',countryCode:'IT',offers:[geSessionSample]};
+const geRawRule=goElectricSession[0].pricing.rules[0];
+let geEvaluated=Session.evaluateStation(geSessionStation,{energyKwh:10,durationMinutes:30,consumptionKwhPer100Km:15,targetCurrency:'EUR',startAt:'2026-09-01T08:00:00Z',postChargeMinutes:0});
+assert.equal(geEvaluated.comparableOfferCount,1);
+assert.equal(geEvaluated.best.total,Math.round((10*Number(geRawRule.pricePerKwh)+Number(geRawRule.sessionFeeEur)+Number.EPSILON)*1e6)/1e6);
 
 const duferco=offers.directOffers.filter(o=>o.provider==='Duferco Mobility');
 assert.equal(duferco.length,1648);
@@ -113,10 +139,11 @@ assert.equal(ewivaExplorer.length,0);
 assert.ok(ewivaEmsp.every(o=>o.metadata?.rankableAsCpoDirect===false));
 
 assert.ok(normalized.offerRules.some(o=>o.kind==='direct'));
+assert.ok(normalized.offerRules.some(o=>o.kind==='direct'&&o.provider==='Go Electric Stations SRLS'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='atlante_go'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_super'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_explorer'));
-assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='NextCharge'&&o.directOperatorOnly===false));
+assert.ok(!normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='NextCharge'),'legacy Go Electric NextCharge eMSP must be retired');
 assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='Enel On Your Way'&&o.directOperatorOnly===false));
 
 const states=new Set(rows.map(r=>String(r[10]||'')));
@@ -133,6 +160,10 @@ console.log(JSON.stringify({
   stations:rows.length,
   evseIdentities:stationByEvse.size,
   direct:offers.directOffers.length,
+  goElectric:goElectric.length,
+  goElectricEnergy:goElectricEnergy.length,
+  goElectricSession:goElectricSession.length,
+  freeToX:freeToX.length,
   duferco:duferco.length,
   enel:enel.length,
   subscriptions:offers.subscriptionOffers.length,

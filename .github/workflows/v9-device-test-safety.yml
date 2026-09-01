@@ -9,7 +9,24 @@ on:
       - 'data/v9/access-readiness.json'
       - 'data/v9/rollout-config.json'
       - 'scripts/v9-generate-device-test-token.cjs'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
       - 'tests/v9-device-test-lifecycle.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - '.github/workflows/v9-device-test-safety.yml'
+  push:
+    branches: [main, refactor/unified-data-engine-v9]
+    paths:
+      - 'assets/v9/device-test-engine.js'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/rollout-config.json'
+      - 'scripts/v9-generate-device-test-token.cjs'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-lifecycle.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
       - '.github/workflows/v9-device-test-safety.yml'
   workflow_dispatch:
 
@@ -25,20 +42,14 @@ jobs:
         run: |
           node --check assets/v9/device-test-engine.js
           node --check scripts/v9-generate-device-test-token.cjs
+          node --check scripts/v9-first-device-test-runbook.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
           node --check tests/v9-device-test-lifecycle.test.cjs
       - name: Lifecycle contract
         run: node tests/v9-device-test-lifecycle.test.cjs
-      - name: Safe closed defaults
-        run: |
-          node - <<'NODE'
-          const fs=require('fs');
-          const policy=JSON.parse(fs.readFileSync('data/v9/device-test-policy.json'));
-          const self=JSON.parse(fs.readFileSync('data/v9/self-enrollment-config.json'));
-          const readiness=JSON.parse(fs.readFileSync('data/v9/access-readiness.json'));
-          const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json'));
-          if(policy.enabled!==false) throw new Error('device-test policy must remain disabled by default');
-          if(self.enabled!==false||self.readinessApproved!==false||self.tokenSha256!=='') throw new Error('self-enrollment must remain closed and tokenless');
-          if(readiness.ready!==false||readiness.verdict!=='BLOCKED') throw new Error('access readiness must remain BLOCKED');
-          if(Number(rollout.canaryPercent)!==0) throw new Error('random canary must remain at 0%');
-          console.log('closed defaults OK');
-          NODE
+      - name: Repository access state invariant
+        run: node scripts/v9-first-device-test-runbook.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs

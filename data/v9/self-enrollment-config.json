@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
+  "enabled": true,
   "requireReadiness": true,
-  "readinessApproved": false,
-  "tokenSha256": "",
-  "tokenVersion": "device-test-20260901021100-closed-after-rollback",
-  "expiresAt": null,
-  "maxGrantMinutes": 120,
-  "notes": "Closed after first-device mobile routing rollback. Clear token invalidated. Random canary remains 0%."
+  "readinessApproved": true,
+  "tokenSha256": "d85dfc4e8dcaef936fdbbdc03ab8dfdb7c37e536e84dc6f4c8367f3117778ab8",
+  "tokenVersion": "device-test-20260901T115946Z-post-duration-fix",
+  "expiresAt": "2026-09-01T12:59:46.074Z",
+  "maxGrantMinutes": 60,
+  "notes": "Temporary controlled single-device retest window after the mobile duration-budget fix. Token plaintext is never committed."
 }

@@ -43,6 +43,12 @@ const rollback=Engine.summary([...Array.from({length:9},(_,i)=>({...ok,scenarioI
 assert.equal(rollback.decision,'ROLLBACK');
 
 (async()=>{
+  const deadlineStarted=Date.now();
+  await assert.rejects(
+    Engine.withDeadline(()=>new Promise(()=>{}),35),
+    err=>err?.code==='TCC_V9_DURATION_BUDGET_EXCEEDED'
+  );
+  assert(Date.now()-deadlineStarted<150,'scenario deadline must return control promptly');
   const stations=Array.from({length:6},(_,i)=>({id:`r${i}`,latitude:48.8+i/1000,longitude:2.06+i/1000}));
   const never=()=>new Promise(()=>{});
   const started=Date.now();
@@ -51,6 +57,9 @@ assert.equal(rollback.decision,'ROLLBACK');
   assert.equal(result.requestedCount,6);
   assert.equal(result.routedCount,0);
   assert(result.errors.length>=2);
-  assert(elapsed<500,`hard routing budget exceeded wall clock: ${elapsed}ms`);
+  assert.equal(result.timedOut,true);
+  // routing-engine intentionally enforces a 500 ms minimum hard budget. Allow
+  // modest CI/event-loop scheduling overhead while still proving hard abort.
+  assert(elapsed<650,`hard routing budget exceeded wall clock tolerance: ${elapsed}ms`);
   console.log('first-device scenario pack mobile guardrails OK');
 })().catch(err=>{console.error(err);process.exitCode=1;});
