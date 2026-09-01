@@ -40,6 +40,7 @@
       evseIds:exactEvses,
       connectorKinds:connectorKinds(raw),countries:countries(raw,country),
       currency:text(raw.currency||raw.pricing?.currency||'EUR').toUpperCase(),pricing:pricing(raw),
+      validFrom:text(raw.validFrom)||null,validThrough:text(raw.validThrough)||null,validityBasis:text(raw.validityBasis)||null,
       minPowerKw:exactEvseScope?undefined:(raw.minPowerKw==null?undefined:raw.minPowerKw),maxPowerKw:exactEvseScope?undefined:(raw.maxPowerKw==null?undefined:raw.maxPowerKw),
       directOperatorOnly:physicalOnly,priority:Number(raw.priority??95),sourceId:text(raw.sourceId||raw.source)||'direct-offers',
       metadata:{source:raw.source||null,note:raw.note||null,monthlyFeeEur:raw.monthlyFeeEur??null,monthlyFeeLabel:raw.monthlyFeeLabel||null,annualFeeEur:raw.annualFeeEur??null,promotionEnd:raw.monthlyFeePromotionEnd||null,defaultSelected:raw.defaultSelected===true,runtime:raw.runtime||null,customerProfile:raw.customerProfile||null,parkingPolicy:clone(raw.parkingPolicy)||null,verifiedScope:raw.verifiedScope||null,exactEvsePowerConstraintSuppressed:exactEvseScope,...(clone(raw.metadata)||{})}

@@ -128,7 +128,7 @@
     const offer=materializeOffer({
       id:rule.id,provider:rule.provider,kind:rule.offerKind||'direct',subscriptionId:rule.subscriptionId||null,countries:rule.countries||[station.countryCode],currency:rule.currency||'EUR',
       connectorKinds:clone(rule.connectorKinds)||[],operatorIds:clone(rule.operatorIds)||[],networkIds:clone(rule.networkIds)||[],networkAliases:clone(rule.networkAliases)||[],stationIds:clone(rule.stationIds)||[],evseIds:clone(rule.evseIds)||[],minPowerKw:rule.minPowerKw??null,maxPowerKw:rule.maxPowerKw??null,
-      pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
+      pricing:clone(rule.pricing)||{},ratesByCountry:clone(rule.ratesByCountry)||null,validFrom:rule.validFrom||null,validThrough:rule.validThrough||null,validityBasis:rule.validityBasis||null,priority:number(rule.priority)??priorityFor(source,'tariff',rule),metadata:clone(rule.metadata)||null
     },station.countryCode);
     if(offer){offer.sourceId=source.id;offer.priority=number(offer.priority)??priorityFor(source,'tariff',rule);}return offer;
   }

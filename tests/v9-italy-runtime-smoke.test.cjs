@@ -19,10 +19,10 @@ const normalized=Direct.normalizePayload(offers);
 
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,49352);
+assert.equal(offers.directOffers.length,49643);
 assert.equal(offers.subscriptionOffers.length,50008);
 assert.equal(offers.emspOffers.length,1678);
-assert.equal(normalized.offerRules.length,49352+50008+1678);
+assert.equal(normalized.offerRules.length,49643+50008+1678);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -62,6 +62,13 @@ assert.ok(goElectricSession.every(o=>Array.isArray(o.pricing?.rules)&&o.pricing.
 assert.ok(goElectricSession.every(o=>Number.isFinite(Number(o.pricing.rules[0]?.pricePerKwh))&&Number.isFinite(Number(o.pricing.rules[0]?.sessionFeeEur))));
 assert.ok(goElectricSession.every(o=>o.pricing.rules[0]?.connectedTimePerMinuteEur===undefined));
 assert.ok(goElectric.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
+
+const freeToX=offers.directOffers.filter(o=>o.provider==='Free To X');
+assert.equal(freeToX.length,291);
+assert.equal(freeToX.filter(o=>o.metadata?.tariffClass==='AC').length,105);
+assert.equal(freeToX.filter(o=>o.metadata?.tariffClass==='DC_PROMO_LE64').length,186);
+assert.ok(freeToX.every(o=>o.pricing?.pricePerKwh===0.5&&o.pricing?.postChargeFeeUnknown===true));
+assert.ok(freeToX.every(o=>!JSON.stringify(o).toLowerCase().includes('preauth')));
 
 const geSessionSample=Direct.normalizePayload({country:'IT',directOffers:[goElectricSession[0]]}).offerRules[0];
 const geSessionStation={id:'IT:go-electric:smoke',countryCode:'IT',offers:[geSessionSample]};
@@ -156,6 +163,7 @@ console.log(JSON.stringify({
   goElectric:goElectric.length,
   goElectricEnergy:goElectricEnergy.length,
   goElectricSession:goElectricSession.length,
+  freeToX:freeToX.length,
   duferco:duferco.length,
   enel:enel.length,
   subscriptions:offers.subscriptionOffers.length,
