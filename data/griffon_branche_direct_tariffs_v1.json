@@ -1,13 +1,22 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.0.1",
   "dataset": "griffon-branche-direct-tariffs-france",
   "networkId": "griffon-branche",
   "label": "Griffon Branché",
   "country": "FR",
   "verifiedAt": "2026-09-01",
   "sources": {
+    "officialCityPage": "https://www.saint-brieuc.bzh/au-quotidien/circuler-en-ville/recharger-sa-voiture-electrique",
     "officialAlizeNetworkPage": "https://alizecharge.com/partenaires/saint-brieuc-griffon-branche/",
     "officialBouyguesProjectPage": "https://www.bouygues-es.fr/nous-decouvrir/nos-projets/projets-mobilite/le-reseau-de-recharge-griffon-branche-est-entierement"
+  },
+  "topology": {
+    "officialStationCount": 16,
+    "officialLogicalChargePointCount": 48,
+    "canonicalInventorySource": "PAN IRVE",
+    "currentPanStationCountObserved": 16,
+    "currentPanPdcRowCountObserved": 74,
+    "granularityNote": "Official Saint-Brieuc and Bouygues sources describe 48 user-facing charge points on 16 sites. The current PAN IRVE snapshot represents the same 16 sites with 74 canonical PDC rows, including connector-level rows on multi-standard DC equipment. TCC keeps PAN rows as the canonical inventory and must not describe 74 as 74 physical public charge points."
   },
   "scope": {
     "canonicalUmbrellaTariffNetworkId": "alize-liberte",
@@ -75,6 +84,7 @@
     "The 8 EUR/month Griffon Branche subscription is opt-in and affects ranking only when selected.",
     "Third-party roaming/eMSP prices remain separate.",
     "Parking fees remain separate from charging.",
-    "PAN IRVE remains the sole physical inventory."
+    "PAN IRVE remains the sole physical inventory.",
+    "Do not equate PAN connector/PDC rows with the official count of 48 user-facing charge points."
   ]
 }
