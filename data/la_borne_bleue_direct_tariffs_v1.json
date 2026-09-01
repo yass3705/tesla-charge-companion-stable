@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "la-borne-bleue-direct-tariffs-france",
+  "networkId": "labornebleue",
+  "label": "La Borne Bleue",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "validFrom": "2025-04-03",
+  "sources": {
+    "officialTariffPage": "https://labornebleue.fr/tarifs/",
+    "officialSubscriptionPage": "https://labornebleue.fr/sabonner/",
+    "officialServicePage": "https://labornebleue.fr/recharger-son-vehicule/"
+  },
+  "scope": {
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "requiresExplicitTariffNetworkId": true,
+    "partnerRoamingSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "subscriptionOptIn": true,
+    "dcAtOrBelow50KwUnresolved": true,
+    "unknownConnectorNeverInheritsDcTariff": true
+  },
+  "subscription": {
+    "id": "labornebleue-annual",
+    "label": "La Borne Bleue abonné",
+    "annualFeeEur": 10.0,
+    "rankableWhenSelected": true,
+    "notes": "Official subscription is 10 EUR/year per badge and gives the preferential own-network tariff. Partner-network roaming prices remain separate."
+  },
+  "tariffFamilies": [
+    {
+      "id": "labornebleue-ac-7_4",
+      "kind": "AC",
+      "minPowerKwExclusive": 0,
+      "maxPowerKw": 7.5,
+      "subscriberDayPerHour": 3.50,
+      "subscriberNightPerHour": 2.50,
+      "subscriberNightCapEur": 12.0,
+      "publicDayPerHour": 4.50,
+      "publicNightPerHour": 3.50,
+      "dayStart": "08:00",
+      "dayEnd": "20:00",
+      "nightStart": "20:00",
+      "nightEnd": "08:00"
+    },
+    {
+      "id": "labornebleue-ac-22",
+      "kind": "AC",
+      "minPowerKwExclusive": 7.5,
+      "maxPowerKw": 22.5,
+      "subscriberPerHour": 5.50,
+      "subscriberNightCapEur": 12.0,
+      "publicPerHour": 6.50,
+      "dayStart": "08:00",
+      "dayEnd": "20:00",
+      "nightStart": "20:00",
+      "nightEnd": "08:00"
+    },
+    {
+      "id": "labornebleue-ac-above-22",
+      "kind": "AC",
+      "minPowerKwExclusive": 22.5,
+      "subscriberPerHour": 11.00,
+      "publicPerHour": 12.00
+    },
+    {
+      "id": "labornebleue-dc-above-50",
+      "kind": "DC",
+      "minPowerKwExclusive": 50.0,
+      "subscriberPricePerKwh": 0.45,
+      "publicPricePerKwh": 0.50,
+      "additionalPerHourAfter30Minutes": 12.0,
+      "durationThresholdMinutes": 30
+    }
+  ],
+  "exclusions": [
+    "Only canonical PAN PDCs explicitly resolved to tariffNetworkId labornebleue are eligible.",
+    "Partner-network roaming tariffs visible through the La Borne Bleue badge/application never inherit the own-network direct grid.",
+    "The 10 EUR/year subscription is opt-in and affects ranking only when selected.",
+    "The 12 EUR night cap applies only to subscriber AC tariffs marked with the official footnote; it is not applied to non-subscriber pricing.",
+    "DC PDCs at or below 50 kW remain unresolved because the current official page only publishes a separate DC tariff for power strictly above 50 kW.",
+    "External parking fees remain separate from charging.",
+    "PAN IRVE remains the sole physical inventory."
+  ]
+}
