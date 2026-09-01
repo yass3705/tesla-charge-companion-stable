@@ -7,9 +7,11 @@ on:
       - feat/v9-go-electric-full-components
     paths:
       - scripts/v9_build_italy_catalog_go_electric_full.py
+      - scripts/v9_overlay_go_electric_full_current.py
       - .github/workflows/v9-go-electric-full-components.yml
       - assets/v9/pricing-engine.js
       - assets/v9/session-engine.js
+      - data/v9/italy-offers.json
 
 permissions:
   contents: read
@@ -37,37 +39,46 @@ jobs:
           test -n "$CANDIDATE"
           cp "$CANDIDATE" /tmp/italy-go-electric-full.json.gz
           echo "Using data-lab run $RUN_ID"
-      - name: Build Italy catalogue with validated Go Electric runtime pricing
+      - name: Validate isolated builder
         run: |
-          python -m py_compile scripts/v9_build_italy_catalog_go_electric_full.py
+          python -m py_compile scripts/v9_build_italy_catalog_go_electric_full.py scripts/v9_overlay_go_electric_full_current.py
           rm -rf /tmp/italy-static
-          python scripts/v9_build_italy_catalog_go_electric_full.py --input /tmp/italy-go-electric-full.json.gz --out-root /tmp/italy-static --offers /tmp/italy-offers.json --report /tmp/italy-build-report.json
-      - name: Validate exact offer counts and V9 session semantics
+          python scripts/v9_build_italy_catalog_go_electric_full.py --input /tmp/italy-go-electric-full.json.gz --out-root /tmp/italy-static --offers /tmp/isolated-italy-offers.json --report /tmp/isolated-build-report.json
+      - name: Overlay on current Italy runtime
+        run: |
+          cp data/v9/italy-offers.json /tmp/current-before.json
+          python scripts/v9_overlay_go_electric_full_current.py --candidate /tmp/italy-go-electric-full.json.gz --current /tmp/current-before.json --out /tmp/italy-offers.json --report /tmp/overlay-report.json
+      - name: Validate current overlay and V9 session semantics
         run: |
           node - <<'JS'
           const fs=require('fs');
           const Pricing=require('./assets/v9/pricing-engine.js');
+          const before=JSON.parse(fs.readFileSync('/tmp/current-before.json','utf8'));
           const offers=JSON.parse(fs.readFileSync('/tmp/italy-offers.json','utf8'));
+          const report=JSON.parse(fs.readFileSync('/tmp/overlay-report.json','utf8'));
           const ge=offers.directOffers.filter(o=>o.provider==='Go Electric Stations SRLS');
           if(ge.length!==2214) throw new Error(`Go Electric direct count ${ge.length}`);
-          if(offers.directOffers.length!==27840) throw new Error(`Italy direct count ${offers.directOffers.length}`);
+          if(report.addedGoElectricDirect!==1271) throw new Error(`Expected +1271, got ${report.addedGoElectricDirect}`);
+          if(offers.directOffers.length!==before.directOffers.length+1271) throw new Error(`direct delta mismatch ${before.directOffers.length}->${offers.directOffers.length}`);
+          if(JSON.stringify(offers.subscriptionOffers)!==JSON.stringify(before.subscriptionOffers)) throw new Error('subscriptions changed');
+          if(JSON.stringify(offers.emspOffers)!==JSON.stringify(before.emspOffers)) throw new Error('eMSP changed');
+          const beforeNonGe=before.directOffers.filter(o=>o.provider!=='Go Electric Stations SRLS');
+          const afterNonGe=offers.directOffers.filter(o=>o.provider!=='Go Electric Stations SRLS');
+          if(JSON.stringify(afterNonGe)!==JSON.stringify(beforeNonGe)) throw new Error('non-Go-Electric direct offers changed');
           const post=ge.filter(o=>o.pricing&&o.pricing.postChargeFee);
           const after=ge.filter(o=>(o.pricing?.rules||[]).some(r=>r.connectedTimePerMinuteAfterFreeEur!=null));
-          if(post.length!==626) throw new Error(`post-charge count ${post.length}`);
-          if(after.length!==74) throw new Error(`onAfterTime count ${after.length}`);
+          if(post.length!==626||after.length!==74) throw new Error(`component counts post=${post.length} after=${after.length}`);
           const p=ge.find(o=>o.evseIds?.[0]==='ITGESE131365937');
-          if(!p) throw new Error('missing post-charge sample');
           let r=Pricing.evaluateOffer(p,{energyKwh:10,durationMinutes:60,postChargeMinutes:10,postChargeStartAt:'2026-09-01T06:00:00Z',startAt:'2026-09-01T05:00:00Z',timeZone:'Europe/Rome'});
-          if(!r.complete||Math.abs(r.totalEur-8.1)>1e-9) throw new Error(`post-charge active sample ${JSON.stringify(r)}`);
+          if(!r.complete||Math.abs(r.totalEur-8.1)>1e-9) throw new Error(`post-charge active ${JSON.stringify(r)}`);
           r=Pricing.evaluateOffer(p,{energyKwh:10,durationMinutes:60,postChargeMinutes:10,postChargeStartAt:'2026-09-01T21:30:00Z',startAt:'2026-09-01T20:30:00Z',timeZone:'Europe/Rome'});
-          if(!r.complete||Math.abs(r.totalEur-7.1)>1e-9) throw new Error(`post-charge exempt sample ${JSON.stringify(r)}`);
+          if(!r.complete||Math.abs(r.totalEur-7.1)>1e-9) throw new Error(`post-charge exempt ${JSON.stringify(r)}`);
           const a=ge.find(o=>o.evseIds?.[0]==='ITGESE800678718');
-          if(!a) throw new Error('missing onAfterTime sample');
           r=Pricing.evaluateOffer(a,{energyKwh:10,durationMinutes:300,startAt:'2026-09-01T06:00:00Z',timeZone:'Europe/Rome'});
-          if(!r.complete||Math.abs(r.totalEur-14.62)>1e-9) throw new Error(`onAfterTime sample ${JSON.stringify(r)}`);
+          if(!r.complete||Math.abs(r.totalEur-14.62)>1e-9) throw new Error(`onAfterTime ${JSON.stringify(r)}`);
           r=Pricing.evaluateOffer(a,{energyKwh:10,durationMinutes:180,startAt:'2026-09-01T19:00:00Z',timeZone:'Europe/Rome'});
-          if(r.complete||r.reason!=='tariff_window_crossing_unsupported_components') throw new Error(`cross-window must fail closed ${JSON.stringify(r)}`);
-          console.log(JSON.stringify({direct:offers.directOffers.length,goElectric:ge.length,postCharge:post.length,onAfterTime:after.length},null,2));
+          if(r.complete||r.reason!=='tariff_window_crossing_unsupported_components') throw new Error(`cross-window ${JSON.stringify(r)}`);
+          console.log(JSON.stringify({beforeDirect:before.directOffers.length,resultDirect:offers.directOffers.length,added:report.addedGoElectricDirect,goElectric:ge.length,postCharge:post.length,onAfterTime:after.length},null,2));
           JS
       - name: Upload validation outputs
         uses: actions/upload-artifact@v4
@@ -75,5 +86,6 @@ jobs:
           name: v9-go-electric-full-components
           path: |
             /tmp/italy-offers.json
-            /tmp/italy-build-report.json
+            /tmp/overlay-report.json
+            /tmp/isolated-build-report.json
           retention-days: 14
