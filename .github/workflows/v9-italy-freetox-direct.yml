@@ -1,0 +1,109 @@
+name: V9 Italy Free To X direct tariffs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-freetox-italy-direct
+    paths:
+      - assets/v9/adapters/direct-offers.js
+      - assets/v9/data-engine.js
+      - assets/v9/session-engine.js
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_freetox_italy.py
+      - tests/v9-freetox-italy-runtime.test.cjs
+      - tests/v9-offer-validity.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - .github/workflows/v9-italy-freetox-direct.yml
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - assets/v9/adapters/direct-offers.js
+      - assets/v9/data-engine.js
+      - assets/v9/session-engine.js
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_freetox_italy.py
+      - tests/v9-freetox-italy-runtime.test.cjs
+      - tests/v9-offer-validity.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - .github/workflows/v9-italy-freetox-direct.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-italy-freetox-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical public data-lab candidate
+        run: |
+          curl --fail --silent --show-error --location \
+            --output /tmp/freetox_direct_stations_italy.json.gz \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/freetox_direct_stations_italy.json.gz
+          test -s /tmp/freetox_direct_stations_italy.json.gz
+
+      - name: Rebuild the fail-closed Free To X overlay
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/v9_overlay_freetox_italy.py
+          python scripts/v9_overlay_freetox_italy.py \
+            --candidate /tmp/freetox_direct_stations_italy.json.gz \
+            --out data/v9/italy-offers.json \
+            --report /tmp/freetox-italy-overlay-report.json \
+            --publish
+
+      - name: Validate validity dates and Free To X runtime semantics
+        run: |
+          node tests/v9-offer-validity.test.cjs
+          node tests/v9-freetox-italy-runtime.test.cjs
+          node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Run complete Italy functional QA
+        run: node tests/v9-italy-functional-qa.test.cjs
+
+      - name: Require deterministic data on pull requests
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- data/v9/italy-offers.json
+
+      - name: Publish generated Italy catalogue on the integration branch
+        if: github.event_name != 'pull_request' && github.ref_name == 'feature/v9-freetox-italy-direct'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json
+          if git diff --cached --quiet; then
+            echo 'Free To X Italy catalogue already current'
+            exit 0
+          fi
+          git commit -m "data(v9): publish Free To X Italy overlay [run ${GITHUB_RUN_ID}]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload overlay gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-italy-freetox-direct
+          path: /tmp/freetox-italy-overlay-report.json
+          if-no-files-found: error
+          retention-days: 14
