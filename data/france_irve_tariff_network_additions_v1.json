@@ -20,10 +20,10 @@
       "aliases": ["Grand Paris Seine & Oise","Grand Paris Seine et Oise","GPS&O","GPSEO"],
       "operatorAliases": [],
       "operatorFallback": false,
-      "coverageStatus": "partial_ready",
+      "coverageStatus": "ready",
       "priority": 1,
-      "artifacts": ["data/gpseo_direct_tariffs_v1.json"],
-      "notes": "Local tariff identity resolved from exact PAN contracting authority inside the generic Alize Liberte brand. Identity alias alone must never capture unrelated Alize rows."
+      "artifacts": ["data/gpseo_direct_tariffs_v1.json", "scripts/materialize_france_gpseo_offers.py"],
+      "notes": "Exact PAN contracting-authority scope inside the generic Alize Liberte brand. Canonical audit validates 160 stations / 327 PDC, all rankable on the direct QR/app/partner-badge tariff, with a separate non-rankable contactless-bank-card reference and zero physical-inventory mutation."
     }
   ]
 }
