@@ -2,9 +2,17 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from build_carrefour_eligible_22kw_offers import (
+    equivalent_station_alias,
+    match_participant,
+    parse_participants,
+)
 
 
 def load(name):
@@ -34,6 +42,48 @@ def main():
     assert daily["scope"]["firstMinutes"] == 60
     assert daily["scope"]["maxUsesPerDay"] == 1
     assert all(row["rankableAsChargingPrice"] is False for row in rows.values())
+
+    participants, ignored = parse_participants(
+        "Carrefour Chalon Sud HM AllegoCarrefour Chalons en Champagne HM Allego\n"
+        "Carrefour Alès (30) New Carrefour Powerdot\n",
+        offer["policy"]["eligibleTechnicalOperators"],
+    )
+    assert [row["siteLabel"] for row in participants] == [
+        "Carrefour Chalon Sud",
+        "Carrefour Chalons en Champagne",
+        "Carrefour Alès (30)",
+    ]
+    assert [row["physicalOperatorId"] for row in participants] == [
+        "allego", "allego", "powerdot",
+    ]
+    assert ignored == []
+
+    participant = {"siteLabel": "Carrefour Testville", "physicalOperatorId": "allego", "department": None}
+    primary = {
+        "stationId": "FRALLPTEST",
+        "name": "TESTVILLE",
+        "brand": "Carrefour Energies",
+        "address": "Carrefour Testville",
+        "physicalOperatorId": "allego",
+        "latitude": 48.0,
+        "longitude": 2.0,
+    }
+    alias = {
+        **primary,
+        "stationId": "FREVCPTEST",
+        "name": "Carrefour Energies - Testville",
+        "latitude": 48.0001,
+    }
+    signatures = {"FRALLPTEST": ("123456",), "FREVCPTEST": ("123456",)}
+    assert equivalent_station_alias(primary, alias, signatures, 250) is True
+    matched = match_participant(participant, [primary, alias], signatures)
+    assert matched["status"] == "matched"
+    assert matched["matchMethod"] == "unique_exact_pdc_tail_alias_cluster"
+    assert len(matched["aliasEquivalentStationIds"]) == 1
+
+    signatures["FREVCPTEST"] = ("654321",)
+    assert equivalent_station_alias(primary, alias, signatures, 250) is False
+    assert match_participant(participant, [primary, alias], signatures)["status"] == "ambiguous"
 
     print("OK: Carrefour Energies 22 kW tariff and loyalty benefits validated")
 

@@ -14,11 +14,15 @@ from __future__ import annotations
 import argparse
 import gzip
 import json
+import math
 import re
 import unicodedata
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 from pathlib import Path
+
+
+ALIAS_EQUIVALENCE_MAX_DISTANCE_M = 250.0
 
 
 def clean(value):
@@ -66,11 +70,49 @@ def department_from_insee(value):
     return value[:2] if len(value) >= 2 else ""
 
 
+def numeric_tail(value):
+    match = re.search(r"(\d{6,})$", clean(value).upper())
+    return match.group(1) if match else None
+
+
+def pdc_tail_signature(rows):
+    tails = [numeric_tail(row.get("pdcId") or row.get("idPdcItinerance")) for row in rows]
+    if not rows or any(not tail for tail in tails) or len(set(tails)) != len(tails):
+        return None
+    return tuple(sorted(tails))
+
+
+def haversine_m(a, b):
+    try:
+        lat1 = math.radians(float(a.get("latitude")))
+        lon1 = math.radians(float(a.get("longitude")))
+        lat2 = math.radians(float(b.get("latitude")))
+        lon2 = math.radians(float(b.get("longitude")))
+    except (TypeError, ValueError):
+        return None
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    value = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    return 2 * 6371000.0 * math.asin(math.sqrt(value))
+
+
+def equivalent_station_alias(a, b, pdc_tail_signatures, max_distance_m):
+    if clean(a.get("physicalOperatorId")) != clean(b.get("physicalOperatorId")):
+        return False
+    a_signature = pdc_tail_signatures.get(clean(a.get("stationId")))
+    b_signature = pdc_tail_signatures.get(clean(b.get("stationId")))
+    if not a_signature or a_signature != b_signature:
+        return False
+    distance = haversine_m(a, b)
+    return distance is not None and distance <= max_distance_m
+
+
 def parse_participants(text, operator_map):
     # Some PDF text extractors glue the last row of one page to the first row of
     # the next one. Splitting before every subsequent "Carrefour " repairs that
     # without relying on PDF page geometry.
-    text = re.sub(r"(?<!^)(?=Carrefour\s)", "\n", text, flags=re.MULTILINE)
+    # Do not split the operator label "New Carrefour Powerdot" itself.
+    text = re.sub(r"(?<=[^\n])(?<!New )(?=Carrefour\s)", "\n", text)
     rows = []
     seen = set()
     ignored = []
@@ -171,7 +213,13 @@ def station_score(participant, station):
     return score, matches
 
 
-def match_participant(participant, stations):
+def match_participant(
+    participant,
+    stations,
+    pdc_tail_signatures=None,
+    alias_max_distance_m=ALIAS_EQUIVALENCE_MAX_DISTANCE_M,
+):
+    pdc_tail_signatures = pdc_tail_signatures or {}
     candidates = []
     for station in stations:
         if clean(station.get("physicalOperatorId")) != participant["physicalOperatorId"]:
@@ -190,10 +238,36 @@ def match_participant(participant, stations):
     if not candidates:
         return {"status": "unmatched", "station": None, "candidates": []}
     best_score, best, best_matches = candidates[0]
-    second_score = candidates[1][0] if len(candidates) > 1 else 0.0
     # Safety thresholds intentionally favor false negatives over wrong tariffs.
     if best_score < 2.50:
         return {"status": "unmatched", "station": None, "candidates": candidates[:5]}
+
+    # PAN may publish the same physical station under operator and retailer
+    # prefixes. Collapse contenders only when they are close and expose the
+    # exact same full set of terminal PDC identifiers. Name similarity alone is
+    # never enough to remove an ambiguity.
+    equivalent_ids = {clean(best.get("stationId"))}
+    relevant = [row for row in candidates if row[0] >= 2.50]
+    changed = True
+    while changed:
+        changed = False
+        equivalents = [row[1] for row in relevant if clean(row[1].get("stationId")) in equivalent_ids]
+        for _, station, _ in relevant:
+            station_id = clean(station.get("stationId"))
+            if station_id in equivalent_ids:
+                continue
+            if any(
+                equivalent_station_alias(station, other, pdc_tail_signatures, alias_max_distance_m)
+                for other in equivalents
+            ):
+                equivalent_ids.add(station_id)
+                changed = True
+
+    distinct_scores = [
+        score for score, station, _ in relevant
+        if clean(station.get("stationId")) not in equivalent_ids
+    ]
+    second_score = max(distinct_scores, default=0.0)
     if second_score >= 2.50 and best_score - second_score < 0.75:
         return {"status": "ambiguous", "station": None, "candidates": candidates[:5]}
     return {
@@ -202,6 +276,12 @@ def match_participant(participant, stations):
         "score": round(best_score, 3),
         "scoreMargin": round(best_score - second_score, 3),
         "tokenMatches": best_matches,
+        "aliasEquivalentStationIds": sorted(equivalent_ids - {clean(best.get("stationId"))}),
+        "matchMethod": (
+            "unique_exact_pdc_tail_alias_cluster"
+            if len(equivalent_ids) > 1
+            else "unique_station"
+        ),
         "candidates": candidates[:5],
     }
 
@@ -236,6 +316,10 @@ def main():
     pdc_by_station = defaultdict(list)
     for pdc in charge_points:
         pdc_by_station[clean(pdc.get("stationId"))].append(pdc)
+    pdc_tail_signatures = {
+        station_id: pdc_tail_signature(rows)
+        for station_id, rows in pdc_by_station.items()
+    }
 
     text = Path(args.participants_text).read_text(encoding="utf-8", errors="replace")
     operator_map = config["policy"]["eligibleTechnicalOperators"]
@@ -252,7 +336,7 @@ def main():
 
     for participant in participants:
         operator_counts[participant["physicalOperatorId"]] += 1
-        result = match_participant(participant, stations)
+        result = match_participant(participant, stations, pdc_tail_signatures)
         counters[result["status"]] += 1
         row = {
             **participant,
@@ -273,6 +357,8 @@ def main():
             "matchScore": result["score"],
             "matchScoreMargin": result["scoreMargin"],
             "tokenMatches": result["tokenMatches"],
+            "matchMethod": result["matchMethod"],
+            "aliasEquivalentStationIds": result["aliasEquivalentStationIds"],
         })
         eligible_pdcs = []
         for pdc in pdc_by_station.get(station_id, []):
@@ -304,7 +390,10 @@ def main():
                 "canonicalPdcId": pid,
                 "canonicalStationAliases": station.get("physicalAliasStationIds", []),
                 "canonicalPdcAliases": pdc.get("physicalAliasPdcIds", []),
-                "matchMethod": "official_carrefour_site_unique_station_then_22kw_pdc",
+                "matchMethod": (
+                    "official_carrefour_site_"
+                    f"{result['matchMethod']}_then_22kw_pdc"
+                ),
                 "matchDistanceMeters": None,
                 "selectors": {
                     "targetPowerKw": target,
@@ -312,6 +401,7 @@ def main():
                     "officialParticipantOperator": participant["operatorLabel"],
                     "department": participant.get("department"),
                     "activationSurface": config["policy"].get("activationSurface"),
+                    "aliasEquivalentStationIds": result["aliasEquivalentStationIds"],
                 },
                 "kind": "AC",
                 "minPowerKw": max(0, target - tolerance),
@@ -358,6 +448,12 @@ def main():
         "matchedSiteWith22KwPdcRate": round(pdc_match_rate, 4),
         "offerPdcCount": len(offers),
         "statusCounts": dict(counters),
+        "aliasEquivalencePolicy": {
+            "maxDistanceMeters": ALIAS_EQUIVALENCE_MAX_DISTANCE_M,
+            "requiresSamePhysicalOperator": True,
+            "requiresExactFullPdcNumericTailSet": True,
+            "fuzzyNameOnlyMayResolveAmbiguity": False,
+        },
         "ignoredCarrefourTextLines": ignored[:50],
         "matches": match_rows,
     }

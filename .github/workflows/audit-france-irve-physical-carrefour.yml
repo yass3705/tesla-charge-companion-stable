@@ -58,11 +58,13 @@ jobs:
             scripts/finalize_france_normalized_offers.py \
             scripts/materialize_france_new_network_bases.py \
             scripts/test_passpass_electrique_base.py \
+            scripts/test_carrefour_energies_offer.py \
             scripts/build_carrefour_eligible_22kw_offers.py \
             scripts/build_irve_tariff_fallback_candidates.py \
             scripts/resolve_france_operational_status.py
           python scripts/test_france_new_network_bases.py
           python scripts/test_passpass_electrique_base.py
+          python scripts/test_carrefour_energies_offer.py
 
       - name: Build effective tariff-network registry
         run: |
