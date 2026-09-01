@@ -1,0 +1,85 @@
+name: V9 test Pages bridge
+
+on:
+  workflow_run:
+    workflows: ["V9 isolated device test Pages"]
+    types: [completed]
+    branches: [refactor/unified-data-engine-v9]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout production main snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+      - name: Checkout validated V9 commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          path: v9src
+      - name: Build isolated /v9-test tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site/v9-test
+          mkdir -p site/v9-test/{v9-app,v9-gate,assets/v9,data/v9,data/non_tesla_netherlands}
+          rsync -a --delete v9src/v9-app/ site/v9-test/v9-app/
+          rsync -a --delete v9src/v9-gate/ site/v9-test/v9-gate/
+          cp v9src/v9-gate/test-gate.js site/v9-test/v9-gate/gate.js
+          rsync -a --delete v9src/assets/v9/ site/v9-test/assets/v9/
+          rsync -a --delete v9src/data/v9/ site/v9-test/data/v9/
+          cp v9src/data/tesla_stations.json site/v9-test/data/tesla_stations.json
+          cp v9src/data/ionity_direct_stations_france.json.gz site/v9-test/data/ionity_direct_stations_france.json.gz
+          cp v9src/data/atlante_direct_stations_france.json.gz site/v9-test/data/atlante_direct_stations_france.json.gz
+          cp v9src/data/powerdot_direct_france.json.gz site/v9-test/data/powerdot_direct_france.json.gz
+          cp v9src/data/netherlands_direct_tariffs_v1.json site/v9-test/data/netherlands_direct_tariffs_v1.json
+          rsync -a --delete v9src/data/non_tesla_netherlands/ site/v9-test/data/non_tesla_netherlands/
+      - name: Validate deployment package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp -s site/index.html <(git -C site show HEAD:index.html)
+          test -s site/v9-test/v9-gate/index.html
+          test -s site/v9-test/v9-app/index.html
+          test -s site/v9-test/data/v9/self-enrollment-config.json
+          test -s site/v9-test/data/v9/access-readiness.json
+          test -s site/v9-test/data/v9/device-test-policy.json
+          node --check site/v9-test/v9-gate/gate.js
+          node --check site/v9-test/v9-app/app.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const self=JSON.parse(fs.readFileSync('site/v9-test/data/v9/self-enrollment-config.json','utf8'));
+          const ready=JSON.parse(fs.readFileSync('site/v9-test/data/v9/access-readiness.json','utf8'));
+          const rollout=JSON.parse(fs.readFileSync('site/v9-test/data/v9/rollout-config.json','utf8'));
+          if(Number(rollout.canaryPercent)!==0) throw new Error('random canary must remain 0%');
+          if(rollout.stage!=='preview') throw new Error('rollout must remain preview');
+          if(self.enabled===true){
+            if(!/^[a-f0-9]{64}$/.test(String(self.tokenSha256||''))) throw new Error('active test window requires SHA-256 token hash');
+            if(ready.ready!==true||ready.verdict!=='READY') throw new Error('active test window requires READY access state');
+            if(!self.expiresAt||new Date(self.expiresAt).getTime()<=Date.now()) throw new Error('refusing to deploy an already expired V9 token window');
+          }
+          console.log('V9 isolated Pages package validated from main bridge');
+          NODE
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy production main + isolated V9 test subtree
+        id: deployment
+        uses: actions/deploy-pages@v4
