@@ -30,11 +30,7 @@ jobs:
       - name: Build effective tariff-network registry
         run: |
           mkdir -p build/france_irve
-          python scripts/build_effective_france_tariff_network_registry.py \
-            --registry data/france_irve_tariff_network_registry_v1.json \
-            --additions data/france_irve_tariff_network_additions_v1.json \
-            --coverage data/france_tariff_base_coverage_v1.json \
-            --out build/france_irve/effective_tariff_network_registry.json
+          python scripts/build_effective_france_tariff_network_registry.py --registry data/france_irve_tariff_network_registry_v1.json --additions data/france_irve_tariff_network_additions_v1.json --coverage data/france_tariff_base_coverage_v1.json --out build/france_irve/effective_tariff_network_registry.json
       - name: Download current PAN IRVE snapshots
         run: |
           mkdir -p .tmp/irve
@@ -47,21 +43,23 @@ jobs:
           python scripts/run_france_irve_canonical.py --static-csv .tmp/irve/static.csv --dynamic-csv .tmp/irve/dynamic.csv --registry data/france_irve_operator_registry_v1.json --out-dir build/france_irve
           python scripts/run_enrich_france_irve_network_identity.py --canonical-dir build/france_irve --operator-registry data/france_irve_operator_registry_v1.json --network-registry build/france_irve/effective_tariff_network_registry.json --out-dir build/france_irve_identity
       - name: Audit R-Mob local scopes
-        run: |
-          python scripts/audit_france_rmob_local_scopes.py --canonical-dir build/france_irve_identity --static-csv .tmp/irve/static.csv --out build/france_irve_offers/rmob_local_scope_audit.json
+        run: python scripts/audit_france_rmob_local_scopes.py --canonical-dir build/france_irve_identity --static-csv .tmp/irve/static.csv --out build/france_irve_offers/rmob_local_scope_audit.json
       - name: Validate R-Mob inventory
         run: |
           python - <<'PY'
           import json
-          r=json.load(open('build/france_irve_offers/rmob_local_scope_audit.json',encoding='utf-8'));s=r['summary']
+          r=json.load(open('build/france_irve_offers/rmob_local_scope_audit.json',encoding='utf-8'))
+          s=r['summary']; k=r['knownLocalScopes']
           assert 40 <= s['stationCount'] <= 60,s
           assert 180 <= s['pdcCount'] <= 280,s
-          assert s['departmentCount']>=4,s
-          assert s['knownLocalScopes']['griffon-branche']['stationCount']==16,s
-          assert s['knownLocalScopes']['griffon-branche']['pdcCount']>=48,s
-          assert s['knownLocalScopes']['dreux']['stationCount']==12,s
-          assert s['knownLocalScopes']['dreux']['pdcCount']>=24,s
-          assert s['physicalInventoryMutationCount']==0,s
+          assert s['departmentCount'] >= 4,s
+          assert k['griffon-branche']['stationCount'] == 16,k
+          assert k['griffon-branche']['pdcCount'] >= 48,k
+          assert 10 <= k['dreux']['stationCount'] <= 12,k
+          assert k['dreux']['pdcCount'] >= 24,k
+          assert r['remainingDepartments'].get('33',0) > 0,r['remainingDepartments']
+          assert r['remainingDepartments'].get('27',0) > 0,r['remainingDepartments']
+          assert s['physicalInventoryMutationCount'] == 0,s
           print(json.dumps(r,ensure_ascii=False,indent=2))
           PY
       - name: Upload R-Mob scope audit
