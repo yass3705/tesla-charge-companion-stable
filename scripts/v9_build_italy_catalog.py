@@ -148,6 +148,67 @@ def post_charge_fee(tariff: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def direct_pricing(tariff: dict[str, Any]) -> dict[str, Any] | None:
+    # Component tariffs are fail-closed: never fall through to eurPerKwh and
+    # silently discard session/time/parking components.
+    if tariff.get("pricingType") == "components":
+        components = tariff.get("priceComponents")
+        if not isinstance(components, list) or not components:
+            return None
+        by_type: dict[str, dict[str, Any]] = {}
+        for component in components:
+            if not isinstance(component, dict):
+                return None
+            component_type = str(component.get("type") or "")
+            if not component_type or component_type in by_type:
+                return None
+            by_type[component_type] = component
+
+        if set(by_type) == {"energy"}:
+            energy = by_type["energy"]
+            rate = finite(energy.get("amount"))
+            if energy.get("unit") != "per_kWh" or rate is None or rate < 0:
+                return None
+            legacy_rate = finite(tariff.get("eurPerKwh"))
+            if legacy_rate is not None and abs(float(legacy_rate) - float(rate)) > 1e-9:
+                return None
+            return pricing_kwh(float(rate), post_charge_fee(tariff))
+
+        # The only multi-component translation currently proven end-to-end is
+        # exact energy + per-session fee. All time/parking shapes remain blocked.
+        if set(by_type) != {"energy", "session"}:
+            return None
+        if tariff.get("runtimeRankable") is not True or tariff.get("fullCostRankable") is not True:
+            return None
+        if tariff.get("requiresRuntimeComponentSupport") is not False:
+            return None
+        evidence = tariff.get("runtimeTranslation")
+        runtime = tariff.get("runtimePricing")
+        if not isinstance(evidence, dict) or evidence.get("exactEngineTestPassed") is not True:
+            return None
+        if not isinstance(runtime, dict) or runtime.get("type") != "rules":
+            return None
+        rules = runtime.get("rules")
+        if not isinstance(rules, list) or len(rules) != 1 or not isinstance(rules[0], dict):
+            return None
+        energy = by_type["energy"]
+        session = by_type["session"]
+        if energy.get("unit") != "per_kWh" or session.get("unit") != "per_session":
+            return None
+        energy_amount = finite(energy.get("amount"))
+        session_amount = finite(session.get("amount"))
+        if energy_amount is None or energy_amount < 0 or session_amount is None or session_amount < 0:
+            return None
+        rule = rules[0]
+        runtime_energy = finite(rule.get("pricePerKwh"))
+        runtime_session = finite(rule.get("sessionFeeEur"))
+        if runtime_energy is None or runtime_session is None:
+            return None
+        if abs(float(runtime_energy) - float(energy_amount)) > 1e-9:
+            return None
+        if abs(float(runtime_session) - float(session_amount)) > 1e-9:
+            return None
+        return runtime
+
     rate = finite(tariff.get("eurPerKwh"))
     if rate is not None:
         return pricing_kwh(float(rate), post_charge_fee(tariff))

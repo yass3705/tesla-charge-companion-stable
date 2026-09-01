@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "enabled": false,
-  "maxWindowMinutes": 60,
+  "maxWindowMinutes": 120,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
   "maxFailureRate": 0.05,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "First-device test policy. Disabled by default. A real test must be explicitly opened for one temporary self-enrolled device and must keep random canary at 0%."
+  "notes": "Closed after first-device mobile routing rollback. Reopen only after hard routing timeout validation. Random canary remains 0%."
 }

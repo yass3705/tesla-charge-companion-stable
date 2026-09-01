@@ -1,0 +1,109 @@
+name: V9 Morocco EVPlug EVOne eMSP policy
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-evone-policy.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-evone-emsp-policy.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-evone-policy.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-evone-emsp-policy.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate EVPlug EVOne eMSP role and fail-closed production status policy
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const adapter=require('./assets/v9/adapters/morocco-evone-policy.js');
+          const policyUrl='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evone/production-status-policy.json';
+          const roleUrl='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/evone/public-emsp-client-role-2026-08-31.json';
+          (async()=>{
+            const [policyRes,roleRes]=await Promise.all([
+              fetch(policyUrl,{cache:'no-cache'}),
+              fetch(roleUrl,{cache:'no-cache'})
+            ]);
+            assert(policyRes.ok,'EVOne production status policy reachable');
+            assert(roleRes.ok,'EVOne public eMSP role report reachable');
+            const [policy,role]=await Promise.all([policyRes.json(),roleRes.json()]);
+
+            assert.deepEqual(policy.production_status_policy.allowed,['Available','Occupied','Charging']);
+            assert.deepEqual(policy.production_status_policy.excluded,['Faulted','Offline','Unknown','Unavailable']);
+            assert.equal(policy.production_status_policy.unknown_or_unmapped_status_default,'exclude_from_production');
+            assert.equal(policy.production_status_policy.diagnostic_reports_may_retain_excluded_statuses,true);
+            assert.equal(policy.modeling_constraints.evone_roaming_visibility_does_not_imply_cpo_operator,true);
+            assert.equal(role.policy.no_production_status_promotion,true);
+            assert.deepEqual(role.production_status_policy.allowed_evone_statuses,['Available','Occupied','Charging']);
+            assert.deepEqual(role.production_status_policy.diagnostic_only_statuses,['Faulted','Offline','Unknown','Unavailable']);
+
+            const expected={
+              Available:{productionEligible:true,diagnosticOnly:false,state:'available'},
+              Occupied:{productionEligible:true,diagnosticOnly:false,state:'occupied'},
+              Charging:{productionEligible:true,diagnosticOnly:false,state:'occupied'},
+              Faulted:{productionEligible:false,diagnosticOnly:true,state:'out_of_service'},
+              Offline:{productionEligible:false,diagnosticOnly:true,state:'out_of_service'},
+              Unknown:{productionEligible:false,diagnosticOnly:true,state:'out_of_service'},
+              Unavailable:{productionEligible:false,diagnosticOnly:true,state:'out_of_service'},
+              FutureUnexpected:{productionEligible:false,diagnosticOnly:true,state:'unknown'}
+            };
+            for(const [native,want] of Object.entries(expected)){
+              const got=adapter.classifyEvoneStatus(native);
+              assert.equal(got.productionEligible,want.productionEligible,`${native} production eligibility`);
+              assert.equal(got.diagnosticOnly,want.diagnosticOnly,`${native} diagnostic policy`);
+              assert.equal(got.state,want.state,`${native} normalized state`);
+            }
+
+            const rows=[
+              {id:'a',status:'Available',site_brand:'Host A'},
+              {id:'b',status:'Occupied',cpo_operator:'Independent CPO'},
+              {id:'c',status:'Charging',tariff_channel:'EVOne roaming'},
+              {id:'d',status:'Faulted'},
+              {id:'e',status:'Offline'},
+              {id:'f',status:'Unknown'},
+              {id:'g',status:'Unavailable'},
+              {id:'h',status:'NewFutureStatus'}
+            ];
+            const split=adapter.splitProductionAndDiagnostics(rows,{sourceId:'morocco-evone-emsp'});
+            assert.deepEqual(split.production.map(x=>x.sourceStationId),['a','b','c']);
+            assert.equal(split.diagnostics.length,8,'all observations retained in diagnostics');
+            assert.equal(split.excluded.length,5,'excluded statuses retained diagnostics-only');
+            assert.equal(split.production[0].physicalOperator,null,'EvOne visibility never invents physical CPO');
+            assert.equal(split.production[0].access.siteBrand,'Host A','site brand remains separate');
+            assert.equal(split.production[0].access.appSource,'EVPlug / EvOne');
+            assert.equal(split.production[0].access.accessNetwork,'EVPlug / EvOne');
+            assert.equal(split.production[0].status.statusSource,'EVPlug / EvOne');
+            assert.equal(split.production[1].physicalOperator.name,'Independent CPO','independent CPO evidence preserved');
+            assert.equal(split.production[2].tariffChannel,'EVOne roaming','tariff channel remains separate');
+
+            const registry=JSON.parse(fs.readFileSync('./data/v9/source-registry.json','utf8'));
+            const physicalEvoneSources=(registry.sources||[]).filter(s=>String(s.id||'').toLowerCase().includes('evone')||String(s.id||'').toLowerCase().includes('evplug'));
+            assert.equal(physicalEvoneSources.length,0,'EVPlug/EvOne must not be registered as a physical CPO source');
+
+            console.log(JSON.stringify({
+              ok:true,
+              allowed:['Available','Occupied','Charging'],
+              excluded:['Faulted','Offline','Unknown','Unavailable'],
+              unexpected:'diagnostic-only / production excluded',
+              productionRows:split.production.length,
+              diagnosticRows:split.diagnostics.length,
+              physicalEvoneRegistrySources:physicalEvoneSources.length,
+              modeling:'CPO/site_brand/app_source-access_network/tariff_channel/status_source remain separate'
+            },null,2));
+          })().catch(e=>{console.error(e);process.exit(1);});
+          NODE

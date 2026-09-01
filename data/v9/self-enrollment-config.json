@@ -4,8 +4,8 @@
   "requireReadiness": true,
   "readinessApproved": false,
   "tokenSha256": "",
-  "tokenVersion": "v1",
+  "tokenVersion": "device-test-20260901021100-closed-after-rollback",
   "expiresAt": null,
-  "maxGrantMinutes": 60,
-  "notes": "Disabled by default. Store only a SHA-256 token hash here, never the token itself. A temporary local grant cannot be issued unless enabled and readinessApproved are both true."
+  "maxGrantMinutes": 120,
+  "notes": "Closed after first-device mobile routing rollback. Clear token invalidated. Random canary remains 0%."
 }
