@@ -54,6 +54,31 @@ def is_existing_overlay(offer: dict[str, Any]) -> bool:
     return offer.get("provider") == PROVIDER and offer.get("sourceId") == SOURCE_ID
 
 
+def replace_existing_overlay_preserving_order(
+    baseline_direct: list[dict[str, Any]], new_offers: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Refresh this provider without reordering overlays from other providers."""
+    new_by_id = {str(offer["id"]): offer for offer in new_offers}
+    used: set[str] = set()
+    composed: list[dict[str, Any]] = []
+    for offer in baseline_direct:
+        if not is_existing_overlay(offer):
+            composed.append(offer)
+            continue
+        offer_id = str(offer.get("id") or "")
+        replacement = new_by_id.get(offer_id)
+        if replacement is not None:
+            composed.append(replacement)
+            used.add(offer_id)
+    composed.extend(offer for offer in new_offers if str(offer["id"]) not in used)
+    return composed
+
+
+def latest_generated_at(baseline: dict[str, Any], candidate: dict[str, Any]) -> str | None:
+    values = [str(value) for value in (baseline.get("generatedAt"), candidate.get("generatedAt")) if value]
+    return max(values) if values else None
+
+
 def validate_candidate_entry(entry: dict[str, Any]) -> None:
     evse_id = str(entry.get("evseId") or "")
     if not evse_id.startswith("IT*EWI*E"):
@@ -176,8 +201,8 @@ def main() -> None:
     direct_evse_collisions = sorted(retained_evse_ids & current_ids)
 
     overlay = dict(baseline)
-    overlay["generatedAt"] = candidate.get("generatedAt") or baseline.get("generatedAt")
-    overlay["directOffers"] = retained_direct + new_offers
+    overlay["generatedAt"] = latest_generated_at(baseline, candidate)
+    overlay["directOffers"] = replace_existing_overlay_preserving_order(baseline_direct, new_offers)
     overlay["subscriptionOffers"] = subscriptions
     overlay["emspOffers"] = emsp
     overlay.setdefault("policy", {})["offerValidityDatesEnforced"] = True
@@ -211,6 +236,7 @@ def main() -> None:
         "noOfferIdCollision": not offer_id_collisions and len(new_offer_ids) == len(new_offers),
         "noOtherDirectEvseCollision": not direct_evse_collisions,
         "overlayDirect50914": len(overlay["directOffers"]) == 50914,
+        "otherDirectOffersPreservedExactly": [offer for offer in overlay["directOffers"] if not is_existing_overlay(offer)] == retained_direct,
         "subscriptionsPreservedExactly": overlay["subscriptionOffers"] == subscriptions,
         "emspPreservedExactly": overlay["emspOffers"] == emsp,
         "tariffExactly080": all((offer.get("pricing") or {}).get("pricePerKwh") == PRICE_EUR_PER_KWH for offer in new_offers),
