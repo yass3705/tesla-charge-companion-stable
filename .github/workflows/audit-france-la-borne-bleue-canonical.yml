@@ -1,0 +1,94 @@
+name: Audit France La Borne Bleue canonical
+
+on:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/la_borne_bleue_direct_tariffs_v1.json'
+      - 'scripts/materialize_france_la_borne_bleue_offers.py'
+      - 'scripts/test_la_borne_bleue_materializer.py'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_irve_tariff_network_additions_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-la-borne-bleue-canonical.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  la-borne-bleue:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Validate source and materializer
+        run: |
+          python -m py_compile scripts/materialize_france_la_borne_bleue_offers.py scripts/test_la_borne_bleue_materializer.py
+          python scripts/test_la_borne_bleue_materializer.py
+          python - <<'PY'
+          import json
+          d=json.load(open('data/la_borne_bleue_direct_tariffs_v1.json',encoding='utf-8'))
+          assert d['verifiedAt']=='2026-09-01'
+          assert d['validFrom']=='2025-04-03'
+          assert d['subscription']['annualFeeEur']==10.0
+          assert d['subscription']['rankableWhenSelected'] is True
+          assert d['scope']['partnerRoamingSeparate'] is True
+          assert d['scope']['dcAtOrBelow50KwUnresolved'] is True
+          PY
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --additions data/france_irve_tariff_network_additions_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84013/download' --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84098/download' --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py --static-csv .tmp/irve/static.csv --dynamic-csv .tmp/irve/dynamic.csv --registry data/france_irve_operator_registry_v1.json --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py --canonical-dir build/france_irve --operator-registry data/france_irve_operator_registry_v1.json --network-registry build/france_irve/effective_tariff_network_registry.json --out-dir build/france_irve_identity
+      - name: Materialize La Borne Bleue
+        run: |
+          python scripts/materialize_france_la_borne_bleue_offers.py --source data/la_borne_bleue_direct_tariffs_v1.json --canonical-dir build/france_irve_identity --out-dir build/france_irve_offers
+      - name: Validate canonical coverage
+        run: |
+          python - <<'PY'
+          import gzip,json
+          r=json.load(open('build/france_irve_offers/la_borne_bleue_materialization_report.json',encoding='utf-8'));s=r['summary']
+          assert 350 <= s['eligibleStationCount'] <= 500,s
+          assert 1050 <= s['eligiblePdcCount'] <= 1400,s
+          assert s['physicalInventoryMutationCount']==0,s
+          assert s['coveredPdcCount'] + s['unresolvedPdcCount'] == s['eligiblePdcCount'],s
+          assert s['publicOfferCount']==s['subscriberOfferCount']==s['coveredPdcCount'],s
+          assert s['rankableOfferCount']==2*s['coveredPdcCount'],s
+          f=r['familyPdcCounts']
+          assert f.get('labornebleue-ac-7_4',0)>0 and f.get('labornebleue-ac-22',0)>0,f
+          assert f.get('labornebleue-dc-above-50',0)>0,f
+          with gzip.open('build/france_irve_offers/la_borne_bleue_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as fh: offers=json.load(fh)
+          assert all(x['tariffNetworkId']=='labornebleue' for x in offers)
+          assert all(x['subscriptionId'] in (None,'labornebleue-annual') for x in offers)
+          assert all(all(rule.get('parkingPerMinute',0)==0 for rule in x['pricingRules']) for x in offers)
+          print(json.dumps(r,ensure_ascii=False,indent=2))
+          PY
+      - name: Upload La Borne Bleue audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-la-borne-bleue-canonical-audit
+          path: |
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/la_borne_bleue_materialization_report.json
+            build/france_irve_offers/la_borne_bleue_pdc_offers_contract_v1_1.json.gz
+          retention-days: 14
