@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.7",
+  "schemaVersion": "1.0.8",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -64,10 +64,10 @@
       "aliases": ["Ville d'Arcachon", "Arcachon"],
       "operatorAliases": [],
       "operatorFallback": false,
-      "coverageStatus": "staged",
+      "coverageStatus": "ready",
       "priority": 1,
       "artifacts": ["data/arcachon_direct_tariffs_v1.json", "scripts/materialize_france_arcachon_offers.py"],
-      "notes": "Exact R-Mob / Alize Liberte local scope in INSEE 33009. Official topology is 19 sites / 68 user-facing charge points; current PAN is expected to represent the same sites with connector-level PDC granularity. Resident subscription remains opt-in and residency-gated."
+      "notes": "Corrected canonical audit run 33498285213 validates the exact R-Mob / Alize Liberte scope in INSEE 33009: all 19 official sites are present as 100 PAN connector/PDC rows, with 100 public plus 100 opt-in residency-gated subscriber offers, zero unresolved and zero physical-inventory mutation. The official 68 user-facing charge points remain distinct from PAN connector granularity. The official topology reconciles to 4 Proximity / 11 Citadine / 4 Express sites; three Citadine sites reported at 40 kW by PAN remain Citadine, while the four Express sites reconcile to 90/240 kW."
     }
   ]
 }
