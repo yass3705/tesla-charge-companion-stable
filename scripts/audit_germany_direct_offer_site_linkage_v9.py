@@ -23,6 +23,7 @@ TARGETS={
  'infra fürth service gmbh':{'minSites':100,'requireFullCoverage':True},
  'Energieversorgung Oberhausen':{'minSites':130,'requireFullCoverage':True},
  'EWV Energie- und Wasser-Versorgung GmbH':{'minSites':100,'requireFullCoverage':True},
+ 'Gruppen-Gas- und Elektrizitätswerk Bergstraße AG':{'minSites':100,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
