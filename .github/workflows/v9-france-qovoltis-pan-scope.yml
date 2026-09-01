@@ -1,0 +1,23 @@
+name: V9 France Qovoltis PAN scope audit
+
+on:
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - 'tests/v9-france-qovoltis-pan-scope-audit.cjs'
+      - 'data/v9/france-static/**'
+      - 'data/v9/france-qovoltis-offers.json'
+      - '.github/workflows/v9-france-qovoltis-pan-scope.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect Qovoltis identity in PAN baseline
+        run: node tests/v9-france-qovoltis-pan-scope-audit.cjs
