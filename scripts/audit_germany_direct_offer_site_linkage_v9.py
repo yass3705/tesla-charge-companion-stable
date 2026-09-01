@@ -27,6 +27,7 @@ TARGETS={
  'ecowerk e-charge GmbH':{'minSites':90,'requireFullCoverage':True},
  'Autostrom plus GmbH':{'minSites':110,'requireFullCoverage':True},
  'Stadtwerke Konstanz Mobil GmbH':{'minSites':30,'requireFullCoverage':True},
+ 'Energie- und Wasserversorgung Bruchsal GmbH':{'minSites':100,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
