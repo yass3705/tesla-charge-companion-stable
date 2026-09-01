@@ -16,15 +16,21 @@ expected={
 }
 for oid,(price,start,after,monthly) in expected.items():
  x=o[oid]
- assert x['pricing']['rules'][0]['pricePerKwh']==price,oid
- assert x['startFee']=={'amount':start,'currency':'EUR'},oid
+ rule=x['pricing']['rules'][0]
+ assert rule['pricePerKwh']==price,oid
+ assert 'startFee' not in x,oid
+ if start:
+  assert rule['sessionFeeEur']==start,oid
+ else:
+  assert 'sessionFeeEur' not in rule,oid
  assert x['blockingFee']['afterMinutes']==after,oid
  assert x['blockingFee']['pricePerMinute']==0.06,oid
  assert x['blockingFee']['activeWindow']=={'start':'09:00','end':'20:00'},oid
  assert x['blockingFee']['waivedOutsideActiveWindow'] is True,oid
+ assert 'capPerSession' not in x['blockingFee'],oid
  assert x['subscription']['monthlyFee']==monthly,oid
  assert x['directOperatorOnly'] is True and x['defaultSelected'] is False,oid
  assert 'Stadtwerke Göttingen AG' in x['operatorAliases'],oid
 assert o['stadtwerke-goettingen-gostrom-ac']['eligibility']['existingCustomerOnly'] is True
 assert o['stadtwerke-goettingen-gostrom-dc']['eligibility']['qualifyingProducts']==['GöStrom']
-print(json.dumps({'country':'DE','operator':'Stadtwerke Göttingen AG','offers':6,'base':[0.46,0.52],'gostrom':[0.44,0.50],'commuter':[0.40,0.40],'blockingWindow':'09:00-20:00','status':'ok'},ensure_ascii=False))
+print(json.dumps({'country':'DE','operator':'Stadtwerke Göttingen AG','offers':6,'base':[0.46,0.52],'gostrom':[0.44,0.50],'commuter':[0.40,0.40],'startFeeRuntimeEur':0.70,'blockingWindow':'09:00-20:00','status':'ok'},ensure_ascii=False))
