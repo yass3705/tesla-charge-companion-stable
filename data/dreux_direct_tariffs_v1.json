@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "dreux-direct-tariffs-france",
+  "networkId": "dreux",
+  "label": "Ville de Dreux",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "sources": {
+    "officialAlizeNetworkPage": "https://alizecharge.com/partenaires/dreux/",
+    "officialCityPage": "https://dreux.com/le-reseau-de-recharge/"
+  },
+  "topology": {
+    "officialStationCount": 12,
+    "officialLogicalChargePointCount": 24,
+    "officialCitadineStationCount": 10,
+    "officialCitadineLogicalChargePointCount": 20,
+    "officialExpressStationCount": 2,
+    "officialExpressLogicalChargePointCount": 4,
+    "canonicalInventorySource": "PAN IRVE",
+    "granularityPolicy": "PAN PDC rows remain canonical even when multi-standard equipment produces more PAN rows than the 24 user-facing charge points stated by the official network page."
+  },
+  "scope": {
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthorityAliases": ["R-Mob", "R MOB", "RMOB"],
+    "requiredCodeInsee": "28134",
+    "requiredStationNameTokens": ["ville de dreux"],
+    "requiresExactLocalScope": true,
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "genericAlizeLiberteNeverInheritsDreuxTariff": true,
+    "otherRMobNetworksNeverInheritDreuxTariff": true
+  },
+  "access": {
+    "alizeLiberteAvailable": true,
+    "dreuxSubscriptionId": "dreux",
+    "dreuxSubscriptionMonthlyFeeEur": 10.0,
+    "badgePurchaseEur": 12.0,
+    "subscriptionOptIn": true,
+    "publicPaymentCardAvailable": true
+  },
+  "tariffFamilies": [
+    {
+      "id": "dreux-citadine-ac",
+      "kind": "AC",
+      "stationClass": "citadine",
+      "stationMaxPowerKw": 30.5,
+      "subscriberPricePerKwh": 0.39,
+      "publicPricePerKwh": 0.49,
+      "durationPerMinute": 0.08,
+      "durationThresholdMinutes": 120,
+      "subscriberDurationStart": "08:00",
+      "subscriberDurationEnd": "21:00",
+      "notes": "Official Alize table states rotation fee after 2h and free night for subscribers from 21:00 to 08:00 on AC charge points."
+    },
+    {
+      "id": "dreux-citadine-dc",
+      "kind": "DC",
+      "stationClass": "citadine",
+      "stationMaxPowerKw": 30.5,
+      "subscriberPricePerKwh": 0.49,
+      "publicPricePerKwh": 0.49,
+      "durationPerMinute": 0.08,
+      "durationThresholdMinutes": 120,
+      "notes": "The current official Alize tariff table publishes 0.49 EUR/kWh for the citadine DC charge point. No separate lower subscriber DC energy price is published."
+    },
+    {
+      "id": "dreux-express-150",
+      "kind": "MIXED",
+      "stationClass": "express",
+      "stationMinPowerKwExclusive": 30.5,
+      "stationMaxPowerKw": 160.0,
+      "subscriberPricePerKwh": 0.54,
+      "publicPricePerKwh": 0.54,
+      "durationPerMinute": 0.0,
+      "durationThresholdMinutes": 0,
+      "notes": "Official Alize table publishes 0.54 EUR/kWh for the 150 kW Express station and 0.00 EUR/min rotation component. Applied to every PAN connector row on an Express station, because pricing is station-class based."
+    }
+  ],
+  "exclusions": [
+    "Only PAN stations matching R-Mob, INSEE 28134 and explicit Ville de Dreux station naming are eligible.",
+    "Other R-Mob stations in Eure-et-Loir or other departments never inherit the Dreux tariff.",
+    "The 10 EUR/month Ville de Dreux subscription is opt-in and affects ranking only when selected.",
+    "Third-party roaming/eMSP prices remain separate.",
+    "Parking fees remain separate from charging and are not included in these offers.",
+    "PAN IRVE remains the sole physical inventory.",
+    "Do not equate PAN connector/PDC rows with the official count of 24 user-facing charge points."
+  ]
+}
