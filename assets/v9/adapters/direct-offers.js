@@ -50,43 +50,7 @@
   function directRule(raw,country){return{...common(raw,country),kind:'direct',offerKind:'direct',subscriptionId:null};}
   function subscriptionRule(raw,country){return{...common(raw,country),kind:'subscription',offerKind:'subscription',subscriptionId:text(raw.selectionId||raw.id),priority:Number(raw.priority??100)};}
   function emspRule(raw,country){return{...common(raw,country),kind:'emsp',offerKind:'emsp',subscriptionId:null,directOperatorOnly:false,priority:Number(raw.priority??80)};}
-
-  function isIonityExactSnapshot(payload){
-    return payload?.failClosed===true&&text(payload?.source).includes('adhoc-bff.ionity.cloud')&&Array.isArray(payload?.stations);
-  }
-  function normalizeIonityExactSnapshot(payload){
-    if(Number(payload?.evseCount)!==1853||Number(payload?.resolvedEvseCount)!==1850||Number(payload?.failureCount)!==3||Number(payload?.missingPriceCount)!==0)throw new Error('IONITY exact snapshot integrity guard failed');
-    const expected=new Set(['FR*IOY*E1','FR*IOY*E2','FRTSLE2IOYGE']);
-    const failures=new Set((payload?.failures||[]).filter(x=>x?.stage==='resolve').map(x=>text(x?.evseId)));
-    if(failures.size!==expected.size||[...expected].some(x=>!failures.has(x)))throw new Error('IONITY exact snapshot unresolved EVSE guard failed');
-    const groups=new Map();let mapped=0;
-    for(const station of payload.stations){
-      for(const c of station?.connectors||[]){
-        if(c?.blockingFee!=null)throw new Error(`IONITY blocking fee is not mapped for ${text(c?.sourceEvseId)||text(c?.connectorUuid)}`);
-        const evse=text(c?.sourceEvseId);if(!evse)continue;
-        const p=c?.adhocPrice||{};
-        if(text(p.unit).toLowerCase()!=='kwh'||text(p.currency).toUpperCase()!=='EUR'||!Number.isFinite(Number(p.amount)))throw new Error(`IONITY exact price invalid for ${evse}`);
-        const amount=Number(p.amount),key=String(amount);
-        if(!groups.has(key))groups.set(key,{amount,evses:[]});
-        groups.get(key).evses.push(evse);mapped++;
-      }
-    }
-    if(mapped!==1850)throw new Error(`IONITY exact snapshot mapped EVSE guard failed (${mapped}/1850)`);
-    const offerRules=[];
-    for(const {amount,evses} of [...groups.values()].sort((a,b)=>a.amount-b.amount)){
-      offerRules.push(directRule({
-        id:`ionity-direct-fr-exact-${String(amount).replace('.','-')}`,
-        selectionId:`ionity-direct-fr-exact-${String(amount).replace('.','-')}`,
-        provider:'IONITY Direct',operatorAliases:['IONITY'],countries:['FR'],evseIds:evses,
-        currency:'EUR',priority:130,pricing:{type:'kwh',pricePerKwh:amount},
-        source:'data-lab/data/operator_direct/ionity_exact_france.json',directOperatorOnly:true,verifiedScope:'exact_evse',
-        metadata:{consumerPriceSource:'IONITY public adhoc runtime',sourceEndpoint:payload.source,sourceGeneratedAt:payload.generatedAt,networkWideGeneralization:false,exactEvseRequired:true}
-      },'FR'));
-    }
-    return{offerRules,metadata:{schemaVersion:payload?.schemaVersion||1,country:'FR',generatedAt:payload?.generatedAt||null,mode:'verified_exact_evse_runtime_snapshot',policy:{networkWideGeneralization:false,exactEvseRequired:true,noNationalFallback:true,failClosed:true},sourceEvidence:{panEvseCount:1853,resolvedEvseCount:1850,physicalLocationCount:payload?.locationCount,knownUnresolvedEvseIds:[...expected]}}};
-  }
   function normalizePayload(payload){
-    if(isIonityExactSnapshot(payload))return normalizeIonityExactSnapshot(payload);
     const country=text(payload?.country).toUpperCase();if(!country)throw new Error('direct offer payload country missing');
     const direct=payload?.directOffers||payload?.operatorOffers||[],subscriptions=payload?.subscriptionOffers||payload?.subscriptions||[],emsp=payload?.emspOffers||[];
     return{offerRules:[...direct.map(x=>directRule(x,country)),...subscriptions.map(x=>subscriptionRule(x,country)),...emsp.map(x=>emspRule(x,country))],metadata:{schemaVersion:payload?.schemaVersion||1,country,generatedAt:payload?.generatedAt||null,policy:payload?.policy||{},mode:payload?.mode||null}};
@@ -95,5 +59,5 @@
     const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);if(!f)throw new Error('fetch unavailable for direct offer adapter');let promise=null;
     return async function(){if(!promise)promise=f(url,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(`direct offers unavailable (${r.status})`);return r.json();}).then(normalizePayload).catch(e=>{promise=null;throw e;});return promise;};
   }
-  return{directRule,subscriptionRule,emspRule,normalizePayload,normalizeIonityExactSnapshot,isIonityExactSnapshot,evseIdentityVariants,createLoader};
+  return{directRule,subscriptionRule,emspRule,normalizePayload,evseIdentityVariants,createLoader};
 });
