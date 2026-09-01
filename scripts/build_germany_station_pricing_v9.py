@@ -2,7 +2,7 @@
 import argparse,json,re
 from pathlib import Path
 EVSE_RE=re.compile(r'^DE\*[A-Z0-9]{3}\*E[A-Z0-9*._-]+$')
-DEFAULT_SEEDS=['data/v9/germany-station-pricing-seed.json','data/v9/germany-station-pricing-seed-extension-2.json','data/v9/germany-station-pricing-seed-extension-3.json','data/v9/germany-station-pricing-enni-extension.json']
+DEFAULT_SEEDS=['data/v9/germany-station-pricing-seed.json','data/v9/germany-station-pricing-seed-extension-2.json','data/v9/germany-station-pricing-seed-extension-3.json','data/v9/germany-station-pricing-enni-extension.json','data/v9/germany-station-pricing-seed-extension-4.json']
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('--seeds',nargs='*',default=DEFAULT_SEEDS);p.add_argument('--out',default='build/germany-station-pricing.json');a=p.parse_args()
