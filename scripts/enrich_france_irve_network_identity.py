@@ -88,9 +88,42 @@ def resolve_physical_operator(raw_operator, operator_specs, network_specs):
     return None, mode if mode == "ambiguous" else nmode
 
 
-def resolve_tariff_network(brand, raw_operator, network_specs):
+def resolve_by_station_id(station_id, physical_operator_id, network_specs):
+    """Resolve declarative PAN station-prefix scopes before brand aliases.
+
+    Some IZIVIA commercial programmes publish generic or legacy PAN brands
+    (for example ``MAX_002`` or simply ``IZIVIA``).  Their eMI3 station
+    prefixes are the stable customer-network boundary.  A prefix rule is only
+    valid when its explicitly required technical CPO also matches.
+    """
+    station_id = clean(station_id).upper()
+    if not station_id:
+        return None, "none"
+    matches = []
+    for spec in network_specs:
+        for prefix in spec.get("stationIdPrefixes") or []:
+            prefix = clean(prefix).upper()
+            if prefix and station_id.startswith(prefix):
+                matches.append((len(prefix), spec))
+    if not matches:
+        return None, "none"
+    longest = max(length for length, _ in matches)
+    candidates = {spec.get("id"): spec for length, spec in matches if length == longest}
+    if len(candidates) != 1:
+        return None, "ambiguous_station_id_prefix"
+    spec = next(iter(candidates.values()))
+    required = clean(spec.get("stationIdPhysicalOperatorRequired"))
+    if required and clean(physical_operator_id) != required:
+        return None, "station_id_physical_operator_mismatch"
+    return spec, "station_id_prefix"
+
+
+def resolve_tariff_network(brand, raw_operator, network_specs, station_id="", physical_operator_id=None):
     brand_text = clean(brand)
     operator_text = clean(raw_operator)
+    station_spec, station_mode = resolve_by_station_id(station_id, physical_operator_id, network_specs)
+    if station_spec or station_mode != "none":
+        return station_spec, station_mode
     if brand_text:
         spec, mode = resolve_by_alias(brand_text, network_specs, field="aliases")
         if spec:
@@ -143,7 +176,13 @@ def main():
         pdc_count = len(station.get("pdcIds") or [])
 
         physical_id, physical_mode = resolve_physical_operator(raw_operator, operator_specs, network_specs)
-        network_spec, network_mode = resolve_tariff_network(brand, raw_operator, network_specs)
+        network_spec, network_mode = resolve_tariff_network(
+            brand,
+            raw_operator,
+            network_specs,
+            station_id=sid,
+            physical_operator_id=physical_id,
+        )
         network_id = network_spec.get("id") if network_spec else None
         network_status = network_spec.get("coverageStatus") if network_spec else None
 

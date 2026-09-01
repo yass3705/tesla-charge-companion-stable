@@ -42,8 +42,9 @@ def main():
             if network_id in networks:
                 raise SystemExit(f"tariff-network addition duplicates existing id: {network_id}")
             aliases = row.get("aliases") or []
-            if not aliases:
-                raise SystemExit(f"tariff-network addition has no aliases: {network_id}")
+            station_prefixes = row.get("stationIdPrefixes") or []
+            if not aliases and not station_prefixes:
+                raise SystemExit(f"tariff-network addition has no identity rule: {network_id}")
             base_rows.append(row)
             networks[network_id] = row
             additions_applied.append(network_id)

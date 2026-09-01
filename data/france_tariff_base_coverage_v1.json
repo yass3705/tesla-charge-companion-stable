@@ -45,6 +45,12 @@
       "notes": "Locked V8 formulas are converted losslessly into the V9 offer contract on exact current PAN PDC identities. Canonical audit validates 150 IZIVIA Express stations / 499 PDC: 446 direct offers across 140 stations are rankable; 53 PDC fail closed (50 on nine stations with no published direct price, two on a station absent from the locked V8 snapshot, and one new PDC absent from the locked source inventory). The split is 248 session-cap, 192 day/night-with-included-energy and 6 simple-post-charge PDC. Rounding, total caps, included energy, local connection-start time selection and post-charge blocks/minutes are preserved; roaming, subscriptions and generic IZIVIA pricing remain separate, with zero physical-inventory mutation."
     },
     {
+      "networkId": "izivia-max",
+      "coverageStatus": "ready",
+      "artifacts": ["data/izivia_max_direct_tariffs_v1.json", "scripts/materialize_france_izivia_max_offers.py"],
+      "notes": "Official live-map direct tariffs are locked on all 24 current FRIMX stations / 92 PAN PDC: 92 rankable direct offers, zero unresolved PDC and zero physical-inventory mutation. Exact per-unit exceptions are retained at Chambly, Orgelet and Oberhausbergen. Energy and connected-without-charging minutes are billed by started unit. FRIGF, FRILF, generic IZIVIA, roaming and subscriptions remain separate."
+    },
+    {
       "networkId": "grand-lyon",
       "coverageStatus": "ready",
       "artifacts": ["data/grand_lyon_izivia_direct_tariffs_v1.json", "scripts/materialize_france_grand_lyon_offers.py"],

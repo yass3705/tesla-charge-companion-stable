@@ -38,14 +38,17 @@ jobs:
             scripts/build_effective_france_tariff_network_registry.py \
             scripts/enrich_france_irve_network_identity.py \
             scripts/run_enrich_france_irve_network_identity.py \
+            scripts/test_france_irve_network_identity.py \
             scripts/normalize_france_operator_offers.py \
             scripts/run_normalize_france_operator_offers.py \
             scripts/finalize_france_normalized_offers.py \
             scripts/materialize_france_runtime_rules.py \
             scripts/materialize_france_new_network_bases.py \
             scripts/materialize_france_grand_lyon_offers.py \
+            scripts/materialize_france_izivia_max_offers.py \
             scripts/test_france_new_network_bases.py \
             scripts/test_grand_lyon_materializer.py \
+            scripts/test_izivia_max_materializer.py \
             scripts/test_carrefour_energies_offer.py \
             scripts/resolve_france_operational_status.py \
             scripts/build_irve_tariff_fallback_candidates.py \
@@ -66,8 +69,10 @@ jobs:
 
       - name: Test tariff semantics
         run: |
+          python scripts/test_france_irve_network_identity.py
           python scripts/test_france_new_network_bases.py
           python scripts/test_grand_lyon_materializer.py
+          python scripts/test_izivia_max_materializer.py
           python scripts/test_carrefour_energies_offer.py
           python scripts/test_powerdot_connector_identity_v3.py
           python scripts/test_powerdot_materializer.py
@@ -186,6 +191,50 @@ jobs:
           print(json.dumps(summary,ensure_ascii=False,indent=2))
           PY
 
+      - name: Materialize IZIVIA MAX exact PDC tariffs
+        run: |
+          python scripts/materialize_france_izivia_max_offers.py \
+            --source data/izivia_max_direct_tariffs_v1.json \
+            --canonical-dir build/france_irve_identity \
+            --out-dir build/france_irve_offers
+
+      - name: Validate IZIVIA MAX canonical contract
+        run: |
+          python - <<'PY'
+          import gzip,json
+          with gzip.open('build/france_irve_offers/izivia_max_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f:
+              offers=json.load(f)
+          report=json.load(open('build/france_irve_offers/izivia_max_materialization_report.json',encoding='utf-8'))
+          summary=report['summary']; counters=summary['counters']
+          assert summary['canonicalIziviaMaxStationCount'] == 24
+          assert summary['canonicalIziviaMaxPdcCount'] == 92
+          assert summary['sourceBoundStationCount'] == 24
+          assert summary['sourceBoundPdcCount'] == 92
+          assert summary['sourceBoundPdcAbsentFromCanonicalCount'] == 0
+          assert summary['rankableCoveredPdcCount'] == summary['canonicalIziviaMaxPdcCount']
+          assert summary['unresolvedPdcCount'] == 0
+          assert summary['materializedOfferCount'] == summary['rankableOfferCount'] == len(offers) == 92
+          assert summary['directRankableOfferCount'] == 92
+          assert summary['subscriptionOfferCount'] == 0
+          assert summary['physicalInventoryMutationCount'] == 0
+          assert counters == {
+              'rankable_formula_energy-035-idle-008333': 6,
+              'rankable_formula_energy-045-idle-040': 8,
+              'rankable_formula_energy-049-idle-040': 78,
+          }
+          assert len({row['offerId'] for row in offers}) == len(offers)
+          assert len({row['canonicalPdcId'] for row in offers}) == len(offers)
+          assert all(row['tariffNetworkId']=='izivia-max' and row['physicalOperatorId']=='izivia' for row in offers)
+          assert all(row['channel']=='direct' and row['subscriptionId'] is None for row in offers)
+          assert all(row['matchMethod']=='exact_pdc_itinerance' and row['rankable'] for row in offers)
+          assert all(row['pricingRules'][0]['energyBilling']=='started_kwh' for row in offers)
+          assert all(row['pricingRules'][0]['occupancyBilling']=='started_minute' for row in offers)
+          assert all(row['pricingRules'][0]['occupancyTrigger']=='while_connected_without_charging' for row in offers)
+          assert all(row['pricingRules'][0]['occupancyDurationBasis']=='connected_minutes_minus_charging_minutes' for row in offers)
+          assert all(row['pricingRules'][0]['parkingPerMinute']==0 for row in offers)
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          PY
+
       - name: Materialize Carrefour Energies eligible 22 kW offer
         run: |
           if [ -f scripts/materialize_carrefour_energies_22kw.py ] && [ -f data/carrefour_energies_eligible_sites_v1.json ]; then
@@ -270,6 +319,7 @@ jobs:
             --structured-offers build/france_irve_offers/station_offers_v1_1.json.gz \
             --structured-offers build/france_irve_offers/powerdot_pdc_offers_contract_v1_1.json.gz \
             --structured-offers build/france_irve_offers/grand_lyon_pdc_offers_contract_v1_1.json.gz \
+            --structured-offers build/france_irve_offers/izivia_max_pdc_offers_contract_v1_1.json.gz \
             --report build/france_irve_offers/irve_tariff_fallback_precedence_report.json
           python - <<'PY'
           import gzip,json
@@ -277,7 +327,9 @@ jobs:
               powerdot={r['canonicalPdcId'] for r in json.load(f) if r.get('rankable')}
           with gzip.open('build/france_irve_offers/grand_lyon_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f:
               grand_lyon={r['canonicalPdcId'] for r in json.load(f) if r.get('rankable')}
-          structured=powerdot|grand_lyon
+          with gzip.open('build/france_irve_offers/izivia_max_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f:
+              izivia_max={r['canonicalPdcId'] for r in json.load(f) if r.get('rankable')}
+          structured=powerdot|grand_lyon|izivia_max
           with gzip.open('build/france_irve_offers/irve_tariff_fallback_candidates.json.gz','rt',encoding='utf-8') as f:
               fallback=json.load(f)
           collision=[r['canonicalPdcId'] for r in fallback if r.get('rankable') and r.get('canonicalPdcId') in structured]
@@ -305,6 +357,7 @@ jobs:
               'build/france_irve_offers/station_offers_v1_1.json.gz',
               'build/france_irve_offers/powerdot_pdc_offers_contract_v1_1.json.gz',
               'build/france_irve_offers/grand_lyon_pdc_offers_contract_v1_1.json.gz',
+              'build/france_irve_offers/izivia_max_pdc_offers_contract_v1_1.json.gz',
               'build/france_irve_offers/irve_tariff_fallback_candidates.json.gz',
               'build/france_irve_powerdot/powerdot_safe_pdc_tariff_candidates_v3.json.gz',
               'build/france_irve_status/charge_point_status.json.gz',
@@ -325,6 +378,7 @@ jobs:
               'build/france_irve_offers/new_network_materialization_report.json',
               'build/france_irve_offers/grand_lyon_subscriptions_contract_v1_1.json',
               'build/france_irve_offers/grand_lyon_materialization_report.json',
+              'build/france_irve_offers/izivia_max_materialization_report.json',
               'build/france_irve_offers/powerdot_contract_report.json',
               'build/france_irve_offers/irve_tariff_fallback_report.json',
               'build/france_irve_offers/irve_tariff_fallback_precedence_report.json',
@@ -349,6 +403,7 @@ jobs:
           runtime=json.load(open('build/france_irve_offers/runtime_rule_materialization_report.json',encoding='utf-8'))
           newbases=json.load(open('build/france_irve_offers/new_network_materialization_report.json',encoding='utf-8'))
           grand_lyon=json.load(open('build/france_irve_offers/grand_lyon_materialization_report.json',encoding='utf-8'))
+          izivia_max=json.load(open('build/france_irve_offers/izivia_max_materialization_report.json',encoding='utf-8'))
           powerdot=json.load(open('build/france_irve_powerdot/powerdot_connector_identity_report_v3.json',encoding='utf-8'))
           powerdot_contract=json.load(open('build/france_irve_offers/powerdot_contract_report.json',encoding='utf-8'))
           fallback=json.load(open('build/france_irve_offers/irve_tariff_fallback_report.json',encoding='utf-8'))
@@ -365,6 +420,7 @@ jobs:
           print('\nRuntime-rule materialization summary:');print(json.dumps(runtime,ensure_ascii=False,indent=2))
           print('\nNew official-network bases summary:');print(json.dumps(newbases,ensure_ascii=False,indent=2))
           print('\nIZIVIA Grand Lyon summary:');print(json.dumps(grand_lyon['summary'],ensure_ascii=False,indent=2))
+          print('\nIZIVIA MAX summary:');print(json.dumps(izivia_max['summary'],ensure_ascii=False,indent=2))
           if os.path.exists('build/france_irve_offers/carrefour_22kw_match_report.json'):
               print('\nCarrefour 22 kW station matching summary:');print(json.dumps(json.load(open('build/france_irve_offers/carrefour_22kw_match_report.json',encoding='utf-8')),ensure_ascii=False,indent=2))
           print('\nPowerdot exact-PDC identity summary:');print(json.dumps(powerdot['summary'],ensure_ascii=False,indent=2))
