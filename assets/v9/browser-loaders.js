@@ -7,6 +7,7 @@
   const text=v=>String(v==null?'':v).trim();
   const num=v=>{if(v===null||v===undefined||v==='')return null;const n=Number(v);return Number.isFinite(n)?n:null;};
   const join=(base,path)=>`${String(base||'').replace(/\/$/,'')}/${String(path||'').replace(/^\//,'')}`;
+  const sourceUrl=(source,basePath)=>source?.url||join(basePath,source?.path);
 
   async function fetchJson(url,fetchImpl){
     const f=fetchImpl||(typeof fetch==='function'?fetch.bind(globalThis):null);
@@ -56,9 +57,9 @@
     for(const source of registry?.sources||[]){
       if(source.active===false)continue;
       if(source.adapter==='tesla-json'&&adapters.teslaJson?.createLoader){
-        loaders[source.id]=adapters.teslaJson.createLoader({url:join(basePath,source.path),fetchImpl});
-      }else if(source.adapter==='direct-offer-json'&&adapters.directOffers?.createLoader&&source.path){
-        loaders[source.id]=adapters.directOffers.createLoader({url:join(basePath,source.path),fetchImpl});
+        loaders[source.id]=adapters.teslaJson.createLoader({url:sourceUrl(source,basePath),fetchImpl});
+      }else if(source.adapter==='direct-offer-json'&&adapters.directOffers?.createLoader&&(source.path||source.url)){
+        loaders[source.id]=adapters.directOffers.createLoader({url:sourceUrl(source,basePath),fetchImpl});
       }else if(source.adapter==='direct-tariff-gzip'&&adapters.legacyDirectTariffs?.createLoader&&source.path){
         loaders[source.id]=adapters.legacyDirectTariffs.createLoader({url:join(basePath,source.path),fetchImpl,source});
       }else if(source.adapter==='direct-station-gzip'&&adapters.legacyDirectStations?.createLoader&&source.path){
@@ -79,5 +80,5 @@
     return loaders;
   }
 
-  return{fetchJson,boundsFromQuery,tileIntersects,selectTiles,createNationalLoader,createRegistryLoaders};
+  return{fetchJson,sourceUrl,boundsFromQuery,tileIntersects,selectTiles,createNationalLoader,createRegistryLoaders};
 });
