@@ -1,11 +1,11 @@
 name: V9 Italy Go Electric session builder QA
-# QA rerun after fixing the wrapper fallback recursion; validation gates unchanged.
+# QA-only workflow. Production builder/data remain unchanged until this gate passes.
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - qa/v9-italy-go-electric-session-builder
+      - 'qa/v9-italy-go-electric-session-builder*'
     paths:
       - scripts/v9_build_italy_catalog_runtime_pricing_qa.py
       - .github/workflows/v9-italy-go-electric-session-builder-qa.yml
