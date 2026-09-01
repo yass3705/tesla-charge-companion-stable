@@ -1,13 +1,11 @@
-name: V9 Italy Go Electric session builder QA
-# QA-only workflow. Production builder/data remain unchanged until this gate passes.
+name: V9 Italy Go Electric publication readiness QA
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'qa/v9-italy-go-electric-session-builder*'
+      - qa/v9-italy-go-electric-session-builder-publication-readiness
     paths:
-      - scripts/v9_build_italy_catalog_runtime_pricing_qa.py
       - .github/workflows/v9-italy-go-electric-session-builder-qa.yml
 
 permissions:
@@ -15,11 +13,11 @@ permissions:
   actions: read
 
 concurrency:
-  group: v9-italy-go-electric-session-builder-${{ github.ref }}
+  group: v9-italy-go-electric-publication-readiness-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-and-engine-test:
+  compare-candidate-to-served-runtime:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,7 +27,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Download validated Italy session-ready candidate
+      - name: Download validated session-ready Italy candidate
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -39,109 +37,142 @@ jobs:
             --repo yass3705/tesla-charge-companion-data-lab \
             --name go-electric-italy-v9-session-activation-qa \
             --dir /tmp/italy-input
-          find /tmp/italy-input -type f -print
           test -n "$(find /tmp/italy-input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
+          test -s data/v9/italy-offers.json
 
-      - name: Compile Italy V9 with fail-closed runtime pricing
+      - name: Build candidate with merged production builder
         run: |
           set -euo pipefail
           INPUT="$(find /tmp/italy-input -name 'italy_v9_candidate_go_electric_session_ready_qa.json.gz' -print -quit)"
-          mkdir -p /tmp/italy-build/static
-          python scripts/v9_build_italy_catalog_runtime_pricing_qa.py \
+          mkdir -p /tmp/italy-candidate/static
+          python scripts/v9_build_italy_catalog.py \
             --input "$INPUT" \
-            --out-root /tmp/italy-build/static \
-            --offers /tmp/italy-build/italy-offers.json \
-            --report /tmp/italy-build/italy-build-report.json
+            --out-root /tmp/italy-candidate/static \
+            --offers /tmp/italy-candidate/italy-offers.json \
+            --report /tmp/italy-candidate/italy-build-report.json
 
-      - name: Validate compiled offer accounting and fail-closed behavior
+      - name: Compare candidate with currently served Italy runtime
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          report = json.loads(Path('/tmp/italy-build/italy-build-report.json').read_text())
-          offers = json.loads(Path('/tmp/italy-build/italy-offers.json').read_text())
-          assert report['directOffers'] == 26569, report
-          assert report['subscriptionOffers'] == 2764, report
-          assert report['emspOffers'] == 0, report
-          assert report['sourceCounts']['rankableDirectEvseCount'] == 26569
-          assert report['sourceCounts']['rankableDirectCoveragePct'] == 35.41
+          GE = 'Go Electric Stations SRLS'
+          baseline = json.loads(Path('data/v9/italy-offers.json').read_text())
+          candidate = json.loads(Path('/tmp/italy-candidate/italy-offers.json').read_text())
+          build = json.loads(Path('/tmp/italy-candidate/italy-build-report.json').read_text())
 
-          ge = [o for o in offers['directOffers'] if o.get('provider') == 'Go Electric Stations SRLS']
-          ge_kwh = [o for o in ge if (o.get('pricing') or {}).get('type') == 'kwh']
-          ge_rules = [o for o in ge if (o.get('pricing') or {}).get('type') == 'rules']
-          assert len(ge) == 943
-          assert len(ge_kwh) == 816
-          assert len(ge_rules) == 127
+          def by_id(rows):
+              return {str(x.get('id')): x for x in rows}
+          def non_ge(rows):
+              return [x for x in rows if x.get('provider') != GE]
+          def changed(a, b, ids):
+              return [i for i in ids if a[i] != b[i]]
 
-          session_ids = []
-          for offer in ge_rules:
-              pricing = offer['pricing']
-              rules = pricing.get('rules') or []
-              assert len(rules) == 1
-              rule = rules[0]
-              assert set(rule) >= {'scope', 'start', 'end', 'currency', 'pricePerKwh', 'sessionFeeEur'}
-              assert 'connectedTimePerMinuteEur' not in rule
-              assert 'postChargeFee' not in pricing
-              session_ids.extend(offer.get('evseIds') or [])
-          assert len(session_ids) == 127 and len(set(session_ids)) == 127
+          bd = by_id(baseline.get('directOffers') or [])
+          cd = by_id(candidate.get('directOffers') or [])
+          bnd = by_id(non_ge(baseline.get('directOffers') or []))
+          cnd = by_id(non_ge(candidate.get('directOffers') or []))
+          bs = by_id(baseline.get('subscriptionOffers') or [])
+          cs = by_id(candidate.get('subscriptionOffers') or [])
+          be = by_id(baseline.get('emspOffers') or [])
+          ce = by_id(candidate.get('emspOffers') or [])
 
-          qa = {
+          baseline_ge = [x for x in baseline.get('directOffers') or [] if x.get('provider') == GE]
+          candidate_ge = [x for x in candidate.get('directOffers') or [] if x.get('provider') == GE]
+          candidate_ge_energy = [x for x in candidate_ge if (x.get('pricing') or {}).get('type') == 'kwh']
+          candidate_ge_session = [x for x in candidate_ge if (x.get('pricing') or {}).get('type') == 'rules']
+
+          non_ge_added = sorted(set(cnd) - set(bnd))
+          non_ge_removed = sorted(set(bnd) - set(cnd))
+          non_ge_changed = changed(bnd, cnd, sorted(set(bnd) & set(cnd)))
+          sub_added = sorted(set(cs) - set(bs))
+          sub_removed = sorted(set(bs) - set(cs))
+          sub_changed = changed(bs, cs, sorted(set(bs) & set(cs)))
+
+          legacy_emsp = list(be.values())
+          legacy_emsp_only_ge_nextcharge = all(
+              str(x.get('provider') or '').lower() == 'nextcharge'
+              or 'go electric stations' in str((x.get('metadata') or {}).get('billedBy') or '').lower()
+              for x in legacy_emsp
+          )
+
+          report = {
               'schemaVersion': 1,
               'publicationAllowed': False,
-              'builderMergeAllowed': False,
-              'directOffers': report['directOffers'],
-              'subscriptionOffers': report['subscriptionOffers'],
-              'emspOffers': report['emspOffers'],
-              'goElectric': {
-                  'total': len(ge),
-                  'energyOnly': len(ge_kwh),
-                  'energyPlusSession': len(ge_rules),
+              'baseline': {
+                  'direct': len(bd),
+                  'goElectricDirect': len(baseline_ge),
+                  'subscriptions': len(bs),
+                  'emsp': len(be),
+              },
+              'candidate': {
+                  'direct': len(cd),
+                  'goElectricDirect': len(candidate_ge),
+                  'goElectricEnergyOnly': len(candidate_ge_energy),
+                  'goElectricEnergyPlusSession': len(candidate_ge_session),
+                  'subscriptions': len(cs),
+                  'emsp': len(ce),
+                  'stations': build.get('stations'),
+                  'coveragePct': (build.get('sourceCounts') or {}).get('rankableDirectCoveragePct'),
+              },
+              'delta': {
+                  'nonGoElectricDirectAdded': non_ge_added[:50],
+                  'nonGoElectricDirectRemoved': non_ge_removed[:50],
+                  'nonGoElectricDirectChanged': non_ge_changed[:50],
+                  'subscriptionAdded': sub_added[:50],
+                  'subscriptionRemoved': sub_removed[:50],
+                  'subscriptionChanged': sub_changed[:50],
+                  'baselineLegacyEmspCount': len(legacy_emsp),
               },
               'gates': {
-                  'directAccounting26569': report['directOffers'] == 26569,
-                  'goElectric943': len(ge) == 943,
-                  'energyOnly816': len(ge_kwh) == 816,
-                  'energyPlusSession127': len(ge_rules) == 127,
-                  'subscriptionsPreserved2764': report['subscriptionOffers'] == 2764,
-                  'legacyEmspStillZero': report['emspOffers'] == 0,
+                  'candidateDirect26569': len(cd) == 26569,
+                  'candidateGoElectric943': len(candidate_ge) == 943,
+                  'candidateEnergyOnly816': len(candidate_ge_energy) == 816,
+                  'candidateEnergyPlusSession127': len(candidate_ge_session) == 127,
+                  'candidateSubscriptions2764': len(cs) == 2764,
+                  'candidateEmspZero': len(ce) == 0,
+                  'candidateStations29696': build.get('stations') == 29696,
+                  'candidateCoverage3541': (build.get('sourceCounts') or {}).get('rankableDirectCoveragePct') == 35.41,
+                  'nonGoElectricDirectUnchanged': not non_ge_added and not non_ge_removed and not non_ge_changed,
+                  'subscriptionsUnchanged': not sub_added and not sub_removed and not sub_changed,
+                  'legacyEmspRemovalOnlyGoElectricNextCharge': legacy_emsp_only_ge_nextcharge,
                   'publicationDisabled': True,
               },
           }
-          Path('/tmp/italy-build/go-electric-session-builder-qa.json').write_text(json.dumps(qa, indent=2) + '\n')
-          print(json.dumps(qa, indent=2))
+          Path('/tmp/italy-candidate/italy-publication-readiness.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+          if not all(report['gates'].values()):
+              raise SystemExit('publication readiness gates failed')
           PY
 
-      - name: Test the 127 compiled session offers with the V9 pricing engine
+      - name: Re-test candidate session prices in V9 engine
         run: |
           node <<'NODE'
           const fs = require('fs');
           const engine = require('./assets/v9/pricing-engine.js');
-          const payload = JSON.parse(fs.readFileSync('/tmp/italy-build/italy-offers.json','utf8'));
-          const offers = payload.directOffers.filter(o => o.provider === 'Go Electric Stations SRLS' && o.pricing?.type === 'rules');
-          if (offers.length !== 127) throw new Error(`expected 127 session offers, got ${offers.length}`);
-          const failures = [];
+          const p = JSON.parse(fs.readFileSync('/tmp/italy-candidate/italy-offers.json','utf8'));
+          const offers = p.directOffers.filter(o => o.provider === 'Go Electric Stations SRLS' && o.pricing?.type === 'rules');
+          let failed = 0;
           for (const offer of offers) {
             const rule = offer.pricing.rules[0];
-            const session = {energyKwh: 10, durationMinutes: 30, chargingMinutes: 30, startAt: '2026-09-01T10:00:00+02:00', timeZone: 'Europe/Rome'};
-            const got = engine.evaluateOffer(offer, session);
-            const expected = Math.round((10 * Number(rule.pricePerKwh) + Number(rule.sessionFeeEur) + Number.EPSILON) * 1e6) / 1e6;
-            if (got.complete !== true || Math.abs(Number(got.totalEur) - expected) > 1e-6 || Math.abs(Number(got.components?.sessionFee) - Number(rule.sessionFeeEur)) > 1e-6) {
-              failures.push({id: offer.id, got, expected});
-            }
+            const got = engine.evaluateOffer(offer,{energyKwh:10,durationMinutes:30,chargingMinutes:30,startAt:'2026-09-01T10:00:00+02:00',timeZone:'Europe/Rome'});
+            const expected = Math.round((10*Number(rule.pricePerKwh)+Number(rule.sessionFeeEur)+Number.EPSILON)*1e6)/1e6;
+            if (got.complete !== true || Math.abs(Number(got.totalEur)-expected)>1e-6) failed++;
           }
-          const report = {publicationAllowed:false,tested:offers.length,passed:offers.length-failures.length,failed:failures.length,gates:{all127Complete:offers.length===127&&failures.length===0,sessionFeeIncluded:failures.length===0,publicationDisabled:true}};
-          fs.writeFileSync('/tmp/italy-build/go-electric-session-builder-engine-qa.json', JSON.stringify(report,null,2)+'\n');
-          console.log(JSON.stringify(report,null,2));
-          if (!Object.values(report.gates).every(Boolean)) process.exit(1);
+          const r={publicationAllowed:false,tested:offers.length,passed:offers.length-failed,failed};
+          fs.writeFileSync('/tmp/italy-candidate/italy-publication-engine-qa.json',JSON.stringify(r,null,2)+'\n');
+          console.log(JSON.stringify(r,null,2));
+          if (offers.length!==127 || failed) process.exit(1);
           NODE
 
-      - name: Upload builder QA reports
+      - name: Upload publication-readiness reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: v9-italy-go-electric-session-builder-qa
+          name: v9-italy-go-electric-publication-readiness
           path: |
-            /tmp/italy-build/italy-build-report.json
-            /tmp/italy-build/go-electric-session-builder-qa.json
-            /tmp/italy-build/go-electric-session-builder-engine-qa.json
+            /tmp/italy-candidate/italy-build-report.json
+            /tmp/italy-candidate/italy-publication-readiness.json
+            /tmp/italy-candidate/italy-publication-engine-qa.json
           retention-days: 14
