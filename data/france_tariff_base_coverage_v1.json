@@ -93,6 +93,24 @@
       "notes": "Canonical audit #1 validates 241 Allego stations / 1,686 PDC. 1,660 PDC are covered: 1,252 fast/ultra PDC are rankable under the verified France direct grid, while 408 regular PDC are reference-only because the long-duration charging rule is not sufficiently resolved. 26 nominal fast PDC remain unresolved because PAN lacks DC-connector evidence. Allego Plus is retained as opt-in/non-rankable for Allego direct pricing until its exact France class grid is explicit; temporary Atlante partner discounts are stored separately. Physical-inventory mutation is zero."
     },
     {
+      "networkId": "seymaborne",
+      "coverageStatus": "ready",
+      "artifacts": ["data/sey_ma_borne_direct_tariffs_v1.json", "scripts/materialize_france_sey_ma_borne_offers.py"],
+      "notes": "Canonical audit #5 validates the explicit PAN SeyMaBorne identity on 309 stations / 677 PDC. All 677 PDC receive a rankable direct Alizé-app/SEY-badge offer plus a separate non-rankable bank-card reference; zero PDC are unresolved and physical-inventory mutation is zero. Generic Alizé Liberté rows never inherit the SEY tariff."
+    },
+    {
+      "networkId": "gpseo",
+      "coverageStatus": "ready",
+      "artifacts": ["data/gpseo_direct_tariffs_v1.json", "scripts/materialize_france_gpseo_offers.py"],
+      "notes": "Exact PAN contracting-authority matching isolates Grand Paris Seine & Oise inside Alizé Liberté: 160 stations / 327 PDC. All 327 PDC are rankable on the official QR/app/partner-badge tariff; a separate contactless-bank-card reference is retained, with zero unresolved PDC and zero physical-inventory mutation."
+    },
+    {
+      "networkId": "alize-liberte",
+      "coverageStatus": "partial_ready",
+      "artifacts": ["scripts/materialize_france_gpseo_offers.py", "scripts/materialize_france_grenoble_offers.py", "scripts/audit_france_alize_authorities.py"],
+      "notes": "Alizé Liberté is treated as an umbrella identity, never as a national flat tariff. Exact local scopes are being carved out by PAN contracting authority. GPSEO is fully canonicalized on 327 PDC; Grenoble P-GAM has 234 safely rankable subscriber PDC and 14 local reference-only PDC, while the explicit Grenoble-Alpes Métropole network remains separate. Remaining Alizé authorities stay unpriced until their own official grids are verified."
+    },
+    {
       "networkId": "r3",
       "coverageStatus": "ready_migrated",
       "artifacts": ["data/france_runtime_extracted_tariff_rules_v1.json"],
