@@ -32,6 +32,7 @@ on:
       - 'scripts/test_germany_autostrom_plus_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_heidelberg_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_ruesselsheim_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_witten_direct_offers_v9.py'
       - 'scripts/probe_totalenergies_charge_europe_public_endpoints.py'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'data/v9/germany-operator-aliases.json'
@@ -59,6 +60,7 @@ on:
       - 'data/v9/germany-direct-offers-autostrom-plus-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-heidelberg-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-ruesselsheim-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-witten-extension.json'
       - 'data/v9/germany-totalenergies-station-pricing.json'
       - '.github/workflows/germany-bnetza-v9-full-build.yml'
   workflow_dispatch:
@@ -193,6 +195,8 @@ jobs:
         run: python scripts/test_germany_stadtwerke_heidelberg_direct_offers_v9.py --sites build/germany-sites/all.json.gz
       - name: Validate Stadtwerke Rüsselsheim direct offers and network scope
         run: python scripts/test_germany_stadtwerke_ruesselsheim_direct_offers_v9.py --sites build/germany-sites/all.json.gz
+      - name: Validate Stadtwerke Witten direct offers and network scope
+        run: python scripts/test_germany_stadtwerke_witten_direct_offers_v9.py --sites build/germany-sites/all.json.gz
       - name: Audit real site-to-direct-offer linkage
         run: python scripts/audit_germany_direct_offer_site_linkage_v9.py --sites build/germany-sites/all.json.gz --offers build/germany-direct-offers.json
       - name: Validate TotalEnergies station-specific pricing
@@ -248,4 +252,5 @@ jobs:
             data/v9/germany-direct-offers-autostrom-plus-extension.json
             data/v9/germany-direct-offers-stadtwerke-heidelberg-extension.json
             data/v9/germany-direct-offers-stadtwerke-ruesselsheim-extension.json
+            data/v9/germany-direct-offers-stadtwerke-witten-extension.json
           retention-days: 7

@@ -29,6 +29,7 @@ on:
       - 'data/v9/germany-direct-offers-stadtwerke-bruchsal-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-heidelberg-extension.json'
       - 'data/v9/germany-direct-offers-stadtwerke-ruesselsheim-extension.json'
+      - 'data/v9/germany-direct-offers-stadtwerke-witten-extension.json'
       - 'data/v9/germany-operator-aliases.json'
       - 'scripts/build_germany_direct_offers_v9.py'
       - 'scripts/test_germany_direct_offers_v9.py'
@@ -56,6 +57,7 @@ on:
       - 'scripts/test_germany_stadtwerke_bruchsal_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_heidelberg_direct_offers_v9.py'
       - 'scripts/test_germany_stadtwerke_ruesselsheim_direct_offers_v9.py'
+      - 'scripts/test_germany_stadtwerke_witten_direct_offers_v9.py'
       - '.github/workflows/germany-direct-offers-v9-contract.yml'
   workflow_dispatch:
 
@@ -122,3 +124,5 @@ jobs:
         run: python scripts/test_germany_stadtwerke_heidelberg_direct_offers_v9.py
       - name: Validate Stadtwerke Rüsselsheim direct offers
         run: python scripts/test_germany_stadtwerke_ruesselsheim_direct_offers_v9.py
+      - name: Validate Stadtwerke Witten direct offers
+        run: python scripts/test_germany_stadtwerke_witten_direct_offers_v9.py

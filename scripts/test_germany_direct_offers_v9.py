@@ -53,6 +53,17 @@ for o in all_offers:
  fee=o.get('blockingFee')
  if fee:
   assert isinstance(fee.get('afterMinutes'),(int,float)) and fee['afterMinutes']>=0,o['id']
+  session_start_overrides=fee.get('sessionStartOverrides') or []
+  override_spans=[]
+  for override in session_start_overrides:
+   assert isinstance(override.get('afterMinutes'),(int,float)) and override['afterMinutes']>=0,o['id']
+   start=clock_minute(override.get('start'));end=clock_minute(override.get('end'))
+   assert start<end,(o['id'],override)
+   override_spans.append((start,end))
+  override_spans.sort()
+  assert all(left[1]<=right[0] for left,right in zip(override_spans,override_spans[1:])),o['id']
+  if session_start_overrides:
+   assert fee.get('runtimeTranslationRequired') is True,o['id']
   time_rules=fee.get('timeRules')
   if time_rules:
    spans=[]
