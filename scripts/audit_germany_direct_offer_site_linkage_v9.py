@@ -30,6 +30,7 @@ TARGETS={
  'Stadtwerke Bruchsal':{'minSites':100,'requireFullCoverage':True},
  'JOLT Energy':{'minSites':90,'requireFullCoverage':True},
  'MAINGAU Energie GmbH':{'minSites':80,'requireFullCoverage':True},
+ 'JET Tankstellen Deutschland GmbH':{'minSites':80,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
