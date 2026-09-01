@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "enabled": true,
+  "enabled": false,
   "maxWindowMinutes": 60,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "Controlled single-device retest active until 2026-09-01T12:59:46.074Z. Close immediately after PASS, ROLLBACK or expiry."
+  "notes": "First-device pack completed successfully on iPhone: 10/10 PASS, 1,926 ms average, no source or routing errors. Window closed after PASS."
 }
