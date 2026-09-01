@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "enabled": false,
-  "maxWindowMinutes": 120,
+  "enabled": true,
+  "maxWindowMinutes": 60,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
   "maxFailureRate": 0.05,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "Closed after first-device mobile routing rollback. Reopen only after hard routing timeout validation. Random canary remains 0%."
+  "notes": "Controlled single-device test active until 2026-09-01T11:56:10.000Z. Close immediately after PASS, ROLLBACK or expiry."
 }
