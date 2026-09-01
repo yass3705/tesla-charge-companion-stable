@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.6",
+  "schemaVersion": "1.0.7",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -53,10 +53,10 @@
       "aliases": ["Ville de Dreux", "Dreux"],
       "operatorAliases": [],
       "operatorFallback": false,
-      "coverageStatus": "staged",
+      "coverageStatus": "ready",
       "priority": 1,
       "artifacts": ["data/dreux_direct_tariffs_v1.json", "scripts/materialize_france_dreux_offers.py"],
-      "notes": "Exact R-Mob / Alize Liberte local scope in INSEE 28134. Official topology lists 12 sites / 24 user-facing charge points, while the current PAN exposes 11 sites / 45 connector-PDC rows. Never synthesize the missing official site; keep staged until the corrected audit is green."
+      "notes": "Corrected canonical audit run 33497175035 validates the exact R-Mob / Alize Liberte local scope in INSEE 28134: 11 PAN stations / 45 connector-PDC rows, all 45 covered by public and opt-in subscriber offers, zero unresolved and zero physical-inventory mutation. The official network page lists 12 sites / 24 user-facing charge points; PAN remains the sole physical inventory and the missing twelfth site is never synthesized."
     },
     {
       "id": "arcachon",
