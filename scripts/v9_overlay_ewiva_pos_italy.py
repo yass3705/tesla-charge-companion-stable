@@ -218,6 +218,7 @@ def main() -> None:
     candidate_counts = candidate.get("counts") or {}
     policy = candidate.get("policy") or {}
     offer_text = json.dumps(new_offers, ensure_ascii=False).casefold()
+    expected_direct = len(retained_direct) + len(new_offers)
     gates = {
         "physicalStations29696": len(rows) == 29696,
         "physicalEvse75025": len(physical_ids) == 75025,
@@ -229,13 +230,13 @@ def main() -> None:
         "currentExactEwivaEntries1271": len(current_entries) == 1271 and len(current_ids) == 1271,
         "noStaleCandidateIdentity": not stale_candidate_ids,
         "noWrongOperatorIdentity": not wrong_operator_ids,
-        "baselineCoreDirect49643": len(retained_direct) == 49643,
-        "baselineSubscriptions50008": len(subscriptions) == 50008,
+        "baselineIncludesOriginalCoreDirect49643": len(retained_direct) >= 49643,
+        "baselineIncludesOriginalSubscriptions50008": len(subscriptions) >= 50008,
         "baselineEmsp1678": len(emsp) == 1678,
         "previousOverlayIdempotent": len(previous_overlay) in {0, 1271},
         "noOfferIdCollision": not offer_id_collisions and len(new_offer_ids) == len(new_offers),
         "noOtherDirectEvseCollision": not direct_evse_collisions,
-        "overlayDirect50914": len(overlay["directOffers"]) == 50914,
+        "overlayDirectComposed": len(overlay["directOffers"]) == expected_direct,
         "otherDirectOffersPreservedExactly": [offer for offer in overlay["directOffers"] if not is_existing_overlay(offer)] == retained_direct,
         "subscriptionsPreservedExactly": overlay["subscriptionOffers"] == subscriptions,
         "emspPreservedExactly": overlay["emspOffers"] == emsp,

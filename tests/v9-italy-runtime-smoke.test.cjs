@@ -19,10 +19,10 @@ const normalized=Direct.normalizePayload(offers);
 
 assert.equal(manifest.country,'IT');
 assert.equal(rows.length,29696);
-assert.equal(offers.directOffers.length,50914);
-assert.equal(offers.subscriptionOffers.length,50008);
+assert.equal(offers.directOffers.length,52451);
+assert.equal(offers.subscriptionOffers.length,53134);
 assert.equal(offers.emspOffers.length,1678);
-assert.equal(normalized.offerRules.length,50914+50008+1678);
+assert.equal(normalized.offerRules.length,52451+53134+1678);
 
 const stationByEvse=new Map();
 for(const row of rows){
@@ -147,6 +147,8 @@ assert.ok(normalized.offerRules.some(o=>o.kind==='direct'&&o.provider==='Go Elec
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='atlante_go'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_super'));
 assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='enel_plug_and_go_explorer'));
+assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='alperia_easycharge_light'));
+assert.ok(normalized.offerRules.some(o=>o.kind==='subscription'&&o.subscriptionId==='alperia_easycharge_plus'));
 assert.ok(!normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='NextCharge'),'legacy Go Electric NextCharge eMSP must be retired');
 assert.ok(normalized.offerRules.some(o=>o.kind==='emsp'&&o.provider==='Enel On Your Way'&&o.directOperatorOnly===false));
 
