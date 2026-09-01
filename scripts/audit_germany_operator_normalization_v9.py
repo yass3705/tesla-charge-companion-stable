@@ -59,4 +59,5 @@ def main():
     print(json.dumps(report,ensure_ascii=False,indent=2))
 
 if __name__=='__main__':
+    # This audit is intentionally rerun whenever Germany operator alias coverage changes.
     main()
