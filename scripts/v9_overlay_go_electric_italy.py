@@ -43,6 +43,16 @@ def exact_evse_ids(row: dict[str, Any]) -> set[str]:
     return {str(x).strip() for x in (row.get("evseIds") or []) if str(x).strip()}
 
 
+def compact_evse_id(value: Any) -> str:
+    return "".join(ch for ch in str(value or "").upper() if ch.isalnum())
+
+
+def is_go_electric_physical_evse(evse: dict[str, Any]) -> bool:
+    # PUN identity is authoritative for Go Electric: ITGES... / ITGESE...
+    # This deliberately avoids relying on mutable operator display labels.
+    return compact_evse_id(evse.get("evseId")).startswith("ITGES")
+
+
 def is_legacy_go_electric_nextcharge_emsp(row: dict[str, Any], ge_evse_ids: set[str]) -> bool:
     ids = exact_evse_ids(row)
     if not ids or not ids.issubset(ge_evse_ids):
@@ -83,10 +93,15 @@ def main() -> None:
     ge_energy = [x for x in candidate_ge if (x.get("pricing") or {}).get("type") == "kwh"]
     ge_session = [x for x in candidate_ge if (x.get("pricing") or {}).get("type") == "rules"]
 
-    ge_physical_ids = {
+    ge_label_ids = {
         str(evse.get("evseId") or "").strip()
         for evse in (source.get("evses") or [])
         if str(evse.get("operator") or "").strip() == GE and str(evse.get("evseId") or "").strip()
+    }
+    ge_physical_ids = {
+        str(evse.get("evseId") or "").strip()
+        for evse in (source.get("evses") or [])
+        if is_go_electric_physical_evse(evse) and str(evse.get("evseId") or "").strip()
     }
 
     baseline_direct_by_id = offer_ids(baseline_direct)
@@ -154,7 +169,9 @@ def main() -> None:
             "goElectricDirect": len(candidate_ge),
             "goElectricEnergyOnly": len(ge_energy),
             "goElectricEnergyPlusSession": len(ge_session),
-            "goElectricPhysicalEvse": len(ge_physical_ids),
+            "goElectricPhysicalEvseByIdentity": len(ge_physical_ids),
+            "goElectricPhysicalEvseByLegacyLabel": len(ge_label_ids),
+            "identityVsLabelDelta": len(ge_physical_ids - ge_label_ids),
         },
         "overlay": {
             "direct": len(overlay["directOffers"]),
@@ -170,6 +187,8 @@ def main() -> None:
             "baselineEmsp3959": len(baseline_emsp) == 3959,
             "baselineGoElectricDirectZero": not any(x.get("provider") == GE for x in baseline_direct),
             "goElectricPhysical2453": len(ge_physical_ids) == 2453,
+            "legacyLabel2413": len(ge_label_ids) == 2413,
+            "identityAddsExactly40CurrentEvse": len(ge_physical_ids - ge_label_ids) == 40,
             "goElectricDirect943": len(candidate_ge) == 943,
             "goElectricEnergyOnly816": len(ge_energy) == 816,
             "goElectricEnergyPlusSession127": len(ge_session) == 127,
