@@ -12,7 +12,7 @@ assert len(o)==1
 x=o[0]
 assert x['id']=='autostrom-plus-de-adhoc-hpc'
 assert x['selectionId']=='autostrom-plus-adhoc'
-assert x['operatorAliases']==['Autostrom plus GmbH']
+assert x['operatorAliases']==['Autostrom plus','Autostrom plus GmbH']
 assert x['connectorKinds']==['DC']
 assert x['minPowerKw']==150
 assert x['pricing']['rules'][0]['pricePerKwh']==0.69

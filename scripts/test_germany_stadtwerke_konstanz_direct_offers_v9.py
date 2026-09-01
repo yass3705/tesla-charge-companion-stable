@@ -6,7 +6,7 @@ o={x['id']:x for x in p['directOffers']}
 assert len(o)==4
 assert all(x.get('directOperatorOnly') is True for x in o.values())
 assert all(x.get('defaultSelected') is False for x in o.values())
-assert all('Stadtwerke Konstanz Mobil GmbH' in x.get('operatorAliases',[]) for x in o.values())
+assert all(x.get('operatorAliases')==['Stadtwerke Konstanz','Stadtwerke Konstanz Mobil GmbH'] for x in o.values())
 def price(x): return x['pricing']['rules'][0]['pricePerKwh']
 assert price(o['stadtwerke-konstanz-card-own-network'])==0.44
 assert price(o['stadtwerke-konstanz-card-green-customer'])==0.44

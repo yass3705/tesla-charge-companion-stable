@@ -11,7 +11,7 @@ assert o['stadtwerke-bruchsal-eladen-dc']['pricing']['rules'][0]['pricePerKwh']=
 assert o['stadtwerke-bruchsal-adhoc-ac']['pricing']['rules'][0]['pricePerKwh']==0.57
 assert o['stadtwerke-bruchsal-adhoc-dc']['pricing']['rules'][0]['pricePerKwh']==0.77
 for x in o.values():
- assert x['operatorAliases']==['Energie- und Wasserversorgung Bruchsal GmbH']
+ assert x['operatorAliases']==['Stadtwerke Bruchsal','Energie- und Wasserversorgung Bruchsal GmbH']
  assert x['directOperatorOnly'] is True
  assert x['defaultSelected'] is False
  assert x['currency']=='EUR'
