@@ -1,0 +1,29 @@
+name: Germany V9 JOLT direct-offer contract
+
+on:
+  pull_request:
+    paths:
+      - 'data/v9/germany-direct-offers-jolt-extension.json'
+      - 'scripts/build_germany_direct_offers_v9.py'
+      - 'scripts/test_germany_direct_offers_v9.py'
+      - 'scripts/test_germany_offer_attachment_v9.py'
+      - '.github/workflows/germany-jolt-v9-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build consolidated Germany direct offers
+        run: python scripts/build_germany_direct_offers_v9.py
+      - name: Validate consolidated direct-offer schema
+        run: python scripts/test_germany_direct_offers_v9.py build/germany-direct-offers.json
+      - name: Validate JOLT attachment contract
+        run: python scripts/test_germany_offer_attachment_v9.py build/germany-direct-offers.json
