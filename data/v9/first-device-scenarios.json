@@ -4,6 +4,8 @@
   "execution": {
     "stationLimit": 24,
     "routingConcurrency": 4,
+    "routingRequestTimeoutMs": 6000,
+    "routingBudgetMs": 25000,
     "maxDurationMs": 30000,
     "uiYieldMs": 50
   },
