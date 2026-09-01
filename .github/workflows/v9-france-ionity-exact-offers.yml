@@ -2,163 +2,45 @@ name: France V9 IONITY exact offers
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
-      - fix/france-qovoltis-ionity-runtime-v9-resync-20260901
+      - refactor/unified-data-engine-v9
     paths:
+      - "assets/v9/adapters/direct-offers.js"
+      - "assets/v9/browser-loaders.js"
+      - "v9-app/app.js"
+      - "tests/v9-france-ionity-exact-runtime.cjs"
       - ".github/workflows/v9-france-ionity-exact-offers.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  compile-and-verify:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: fix/france-qovoltis-ionity-runtime-v9-resync-20260901
-      - name: Fetch verified IONITY snapshot
+      - name: Run deterministic IONITY runtime tests
+        run: node tests/v9-france-ionity-exact-runtime.cjs
+      - name: Validate current published IONITY snapshot
         shell: bash
         run: |
           set -euo pipefail
           curl -fLsS --retry 3 \
             https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/operator_direct/ionity_exact_france.json \
             -o /tmp/ionity_exact_france.json
-      - name: Compile strict EVSE offers and update registry
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json, pathlib, collections
-          src=json.load(open('/tmp/ionity_exact_france.json'))
-          assert src.get('failClosed') is True
-          assert src.get('evseCount')==1853, src.get('evseCount')
-          assert src.get('resolvedEvseCount')==1850, src.get('resolvedEvseCount')
-          assert src.get('failureCount')==3, src.get('failureCount')
-          assert src.get('missingPriceCount')==0, src.get('missingPriceCount')
-          expected_fail={'FR*IOY*E1','FR*IOY*E2','FRTSLE2IOYGE'}
-          got_fail={x.get('evseId') for x in src.get('failures',[]) if x.get('stage')=='resolve'}
-          assert got_fail==expected_fail,(got_fail,expected_fail)
-          connectors=[]
-          nonnull_blocking=[]
-          for station in src.get('stations',[]):
-            for c in station.get('connectors',[]):
-              if c.get('blockingFee') is not None:
-                nonnull_blocking.append((station.get('name'),c.get('sourceEvseId'),c.get('blockingFee')))
-              evse=c.get('sourceEvseId')
-              p=c.get('adhocPrice') or {}
-              if not evse: continue
-              assert p.get('unit')=='kWh', (evse,p)
-              assert p.get('currency')=='EUR', (evse,p)
-              amount=float(p['amount'])
-              connectors.append((evse,amount,station.get('name'),c.get('type'),c.get('maxPowerW')))
-          # Fail closed rather than silently dropping an occupation/blocking fee.
-          assert not nonnull_blocking, f'Unmapped IONITY blocking fees present: {nonnull_blocking[:10]}'
-          assert len(connectors)==1850, len(connectors)
-          assert len({x[0] for x in connectors})==1850
-          groups=collections.defaultdict(list)
-          for evse,amount,*_ in connectors: groups[amount].append(evse)
-          offers=[]
-          for amount,evses in sorted(groups.items()):
-            slug=str(amount).replace('.','-')
-            offers.append({
-              'id':f'ionity-direct-fr-exact-{slug}',
-              'selectionId':f'ionity-direct-fr-exact-{slug}',
-              'provider':'IONITY Direct',
-              'operatorAliases':['IONITY'],
-              'countries':['FR'],
-              'evseIds':sorted(evses),
-              'currency':'EUR',
-              'priority':130,
-              'pricing':{'type':'kwh','pricePerKwh':amount},
-              'source':'data-lab/data/operator_direct/ionity_exact_france.json',
-              'directOperatorOnly':True,
-              'verifiedScope':'exact_evse',
-              'defaultSelected':False,
-              'metadata':{
-                'consumerPriceSource':'IONITY public adhoc runtime',
-                'sourceEndpoint':'https://adhoc-bff.ionity.cloud',
-                'sourceGeneratedAt':src.get('generatedAt'),
-                'networkWideGeneralization':False,
-                'exactEvseRequired':True
-              }
-            })
-          out={
-            'schemaVersion':1,'country':'FR','generatedAt':src.get('generatedAt'),
-            'mode':'verified_exact_evse_runtime_snapshot',
-            'policy':{
-              'networkWideGeneralization':False,'exactEvseRequired':True,
-              'noNationalFallback':True,'failClosed':True,'blockingFeePolicy':'reject_if_present_until_mapped'
-            },
-            'directOffers':offers,'subscriptionOffers':[],
-            'sourceEvidence':{
-              'source':'https://adhoc-bff.ionity.cloud','panEvseCount':1853,'resolvedEvseCount':1850,
-              'knownUnresolvedEvseIds':sorted(expected_fail),'physicalLocationCount':src.get('locationCount')
-            }
-          }
-          pathlib.Path('data/v9/france-ionity-offers.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
-          regp=pathlib.Path('data/v9/source-registry.json')
-          reg=json.loads(regp.read_text())
-          sources=reg['sources']
-          for s in sources:
-            if s.get('id')=='ionity-direct-france':
-              s['active']=False
-              s['refresh']='legacy-disabled'
-              s['disabledReason']='Replaced by France exact EVSE-scoped IONITY public adhoc runtime snapshot.'
-          exact={
-            'id':'france-ionity-offers','label':'IONITY France exact public adhoc EVSE tariffs',
-            'adapter':'direct-offer-json','path':'data/v9/france-ionity-offers.json','countries':['FR'],
-            'operatorIds':['ionity'],'capabilities':['tariff'],'priority':{'tariff':130},
-            'refresh':'public-adhoc-runtime-snapshot-on-demand-or-monthly','active':True,'optional':True
-          }
-          sources=[s for s in sources if s.get('id')!='france-ionity-offers']
-          legacy_idx=next((i for i,s in enumerate(sources) if s.get('id')=='ionity-direct-france'),len(sources))
-          sources.insert(legacy_idx,exact)
-          reg['sources']=sources
-          regp.write_text(json.dumps(reg,ensure_ascii=False,separators=(',',':'))+'\n')
-          print('compiled exact IONITY offers:',len(offers),'price groups,',len(connectors),'EVSEs')
-          print('price groups:',{str(k):len(v) for k,v in sorted(groups.items())})
-          PY
-      - name: Verify adapter matching and mixed-price preservation
-        shell: bash
-        run: |
-          set -euo pipefail
           node - <<'NODE'
           const fs=require('fs');
           const adapter=require('./assets/v9/adapters/direct-offers.js');
-          const payload=JSON.parse(fs.readFileSync('data/v9/france-ionity-offers.json','utf8'));
+          const payload=JSON.parse(fs.readFileSync('/tmp/ionity_exact_france.json','utf8'));
           const normalized=adapter.normalizePayload(payload);
-          if(normalized.offerRules.length<2)throw new Error('Expected multiple exact price groups');
-          const all=normalized.offerRules.flatMap(x=>x.evseIds||[]);
-          const compact=new Set(all.map(x=>String(x).toUpperCase().replace(/[^A-Z0-9]/g,'')));
-          for(const bad of ['FR*IOY*E1','FR*IOY*E2','FRTSLE2IOYGE']){
-            const n=bad.toUpperCase().replace(/[^A-Z0-9]/g,'');
-            if(compact.has(n))throw new Error(`Malformed PAN EVSE leaked into offers: ${bad}`);
-          }
-          for(const r of normalized.offerRules){
-            if(r.metadata.verifiedScope!=='exact_evse')throw new Error('Offer not exact_evse');
-            if(r.networkIds.length)throw new Error('Direct exact offer unexpectedly has network fallback');
-            if(r.stationIds.length)throw new Error('Direct exact offer unexpectedly has station fallback');
-          }
-          const reg=JSON.parse(fs.readFileSync('data/v9/source-registry.json','utf8'));
-          const exact=reg.sources.find(x=>x.id==='france-ionity-offers');
-          const legacy=reg.sources.find(x=>x.id==='ionity-direct-france');
-          if(!exact?.active||exact.priority?.tariff!==130)throw new Error('Exact IONITY source not active at 130');
-          if(legacy?.active!==false)throw new Error('Legacy IONITY source still active');
-          const byPrice=new Map(normalized.offerRules.map(r=>[Number(r.pricing.pricePerKwh),new Set(r.evseIds.map(x=>x.toUpperCase().replace(/[^A-Z0-9]/g,'')))]));
-          const e469411='FRIOYE469411';
-          if(!byPrice.get(.55)?.has(e469411))throw new Error('Agde HPC exact 0.55 mapping missing');
-          console.log('IONITY exact adapter verification OK',normalized.offerRules.length,'rules');
+          const canonical=new Set();
+          for(const r of normalized.offerRules)for(const e of r.evseIds||[])if(String(e).includes('*'))canonical.add(e);
+          if(canonical.size!==1850)throw new Error(`Expected 1850 exact canonical EVSEs, got ${canonical.size}`);
+          const prices=[...new Set(normalized.offerRules.map(r=>Number(r.pricing.pricePerKwh)))].sort((a,b)=>a-b);
+          if(prices.length<2)throw new Error('IONITY mixed connector prices were collapsed');
+          const bad=['FR*IOY*E1','FR*IOY*E2','FRTSLE2IOYGE'];
+          for(const id of bad)if(canonical.has(id))throw new Error(`Known malformed EVSE leaked into exact offers: ${id}`);
+          console.log('Published IONITY snapshot OK:',canonical.size,'EVSEs; prices',prices.join(', '));
           NODE
-      - name: Commit generated V9 layer
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/v9/france-ionity-offers.json data/v9/source-registry.json
-          if git diff --cached --quiet; then echo 'No generated changes'; exit 0; fi
-          git commit -m 'France V9: replace legacy IONITY with exact EVSE tariffs'
-          git push origin HEAD:fix/france-qovoltis-ionity-runtime-v9-resync-20260901
