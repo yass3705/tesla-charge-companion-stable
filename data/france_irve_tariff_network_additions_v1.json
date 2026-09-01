@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.1",
+  "schemaVersion": "1.0.2",
   "updatedAt": "2026-09-01",
   "country": "FR",
   "networks": [
@@ -24,6 +24,17 @@
       "priority": 1,
       "artifacts": ["data/gpseo_direct_tariffs_v1.json", "scripts/materialize_france_gpseo_offers.py"],
       "notes": "Exact PAN contracting-authority scope inside the generic Alize Liberte brand. Canonical audit validates 160 stations / 327 PDC, all rankable on the direct QR/app/partner-badge tariff, with a separate non-rankable contactless-bank-card reference and zero physical-inventory mutation."
+    },
+    {
+      "id": "cpark-rennes",
+      "label": "C-Park Rennes",
+      "aliases": ["C-Park Rennes", "C-PARK Rennes", "C-PARK"],
+      "operatorAliases": [],
+      "operatorFallback": false,
+      "coverageStatus": "staged",
+      "priority": 1,
+      "artifacts": ["data/cpark_rennes_direct_tariffs_v1.json"],
+      "notes": "Local CITEDIA Metropole tariff scope carved out of the generic Alize Liberte brand by exact PAN contracting-authority matching. Keep staged until the current PAN audit confirms full scope and zero leakage."
     }
   ]
 }
