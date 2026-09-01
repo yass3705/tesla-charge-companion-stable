@@ -28,6 +28,7 @@ TARGETS={
  'Autostrom plus':{'minSites':110,'requireFullCoverage':True},
  'Stadtwerke Konstanz':{'minSites':30,'requireFullCoverage':True},
  'Stadtwerke Bruchsal':{'minSites':100,'requireFullCoverage':True},
+ 'JOLT Energy':{'minSites':90,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
