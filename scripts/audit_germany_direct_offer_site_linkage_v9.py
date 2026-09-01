@@ -30,7 +30,7 @@ TARGETS={
  'Stadtwerke Bruchsal':{'minSites':100,'requireFullCoverage':True},
  'JOLT Energy':{'minSites':90,'requireFullCoverage':True},
  'MAINGAU Energie GmbH':{'minSites':80,'requireFullCoverage':True},
- 'JET Tankstellen Deutschland GmbH':{'minSites':80,'requireFullCoverage':True},
+ 'JET Tankstellen Deutschland GmbH':{'minSites':80,'requireFullCoverage':True,'connectorKinds':['DC'],'knownGap':'One grouped legacy AC-only JET site is intentionally outside the JET Strom CCS ad-hoc tariff scope.'},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
@@ -49,14 +49,18 @@ def offer_matches_site(offer,row):
  op=row[5]; aliases=set(offer.get('operatorAliases') or [])|set(offer.get('networkAliases') or [])
  if op not in aliases: return False
  return any(offer_matches_connector(offer,c) for c in row[8])
+def site_in_scope(row,cfg):
+ kinds=set(cfg.get('connectorKinds') or [])
+ return not kinds or any(c[2] in kinds for c in row[8])
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--sites',default='build/germany-sites/all.json.gz');ap.add_argument('--offers',default='build/germany-direct-offers.json');args=ap.parse_args()
  rows=load_rows(args.sites);offers=load_json(args.offers).get('directOffers',[]);report={}
  for op,cfg in TARGETS.items():
-  sites=[r for r in rows if r[5]==op];matched=[r for r in sites if any(offer_matches_site(o,r) for o in offers)]
-  report[op]={'siteCount':len(sites),'matchedSiteCount':len(matched),'coverage':round(len(matched)/len(sites),6) if sites else 0,'offerIds':sorted({o['id'] for o in offers if any(r[5] in (set(o.get('operatorAliases') or [])|set(o.get('networkAliases') or [])) for r in sites)})}
+  all_sites=[r for r in rows if r[5]==op];sites=[r for r in all_sites if site_in_scope(r,cfg)];matched=[r for r in sites if any(offer_matches_site(o,r) for o in offers)]
+  report[op]={'totalSiteCount':len(all_sites),'siteCount':len(sites),'matchedSiteCount':len(matched),'coverage':round(len(matched)/len(sites),6) if sites else 0,'offerIds':sorted({o['id'] for o in offers if any(r[5] in (set(o.get('operatorAliases') or [])|set(o.get('networkAliases') or [])) for r in sites)})}
+  if cfg.get('connectorKinds'): report[op]['connectorKinds']=cfg['connectorKinds']
   if cfg.get('knownGap'): report[op]['knownGap']=cfg['knownGap']
-  assert len(sites)>=cfg['minSites'],f'{op}: unexpectedly low site count {len(sites)}'
-  if cfg.get('requireFullCoverage'): assert len(matched)==len(sites),f'{op}: direct-offer linkage gap {len(matched)}/{len(sites)}'
+  assert len(sites)>=cfg['minSites'],f'{op}: unexpectedly low in-scope site count {len(sites)}'
+  if cfg.get('requireFullCoverage'): assert len(matched)==len(sites),f'{op}: direct-offer linkage gap {len(matched)}/{len(sites)} in-scope sites'
  print(json.dumps({'country':'DE','targets':report},indent=2,ensure_ascii=False))
 if __name__=='__main__': main()
