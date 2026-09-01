@@ -24,6 +24,7 @@ TARGETS={
  'Energieversorgung Oberhausen':{'minSites':130,'requireFullCoverage':True},
  'EWV Energie- und Wasser-Versorgung GmbH':{'minSites':100,'requireFullCoverage':True},
  'Gruppen-Gas- und Elektrizitätswerk Bergstraße AG':{'minSites':100,'requireFullCoverage':True},
+ 'ecowerk e-charge GmbH':{'minSites':90,'requireFullCoverage':True},
  'TotalEnergies':{'minSites':300,'requireFullCoverage':False,'knownGap':'Germany prices are station-specific; national fallback forbidden'},
 }
 
