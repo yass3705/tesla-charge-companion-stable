@@ -1,0 +1,61 @@
+name: France V9 IONITY exact offers
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - "data/v9/france-ionity-offers.json"
+      - "data/v9/source-registry.json"
+      - "tests/v9-france-ionity-exact-runtime.cjs"
+      - ".github/workflows/v9-france-ionity-exact-offers.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run deterministic IONITY runtime tests
+        run: node tests/v9-france-ionity-exact-runtime.cjs
+      - name: Validate compiled layer against published exact snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 3 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/operator_direct/ionity_exact_france.json \
+            -o /tmp/ionity_exact_france.json
+          python - <<'PY'
+          import json
+          src=json.load(open('/tmp/ionity_exact_france.json'))
+          compiled=json.load(open('data/v9/france-ionity-offers.json'))
+          assert src['failClosed'] is True
+          assert (src['evseCount'],src['resolvedEvseCount'],src['failureCount'],src['missingPriceCount'])==(1853,1850,3,0)
+          expected_fail={'FR*IOY*E1','FR*IOY*E2','FRTSLE2IOYGE'}
+          assert {x.get('evseId') for x in src['failures'] if x.get('stage')=='resolve'}==expected_fail
+          source_map={}
+          for station in src['stations']:
+              for c in station.get('connectors',[]):
+                  assert c.get('blockingFee') is None, (station.get('name'),c.get('sourceEvseId'),c.get('blockingFee'))
+                  evse=c.get('sourceEvseId')
+                  if not evse: continue
+                  p=c.get('adhocPrice') or {}
+                  assert p.get('unit')=='kWh' and p.get('currency')=='EUR' and p.get('amount') is not None
+                  source_map[evse]=float(p['amount'])
+          compiled_map={}
+          for offer in compiled['directOffers']:
+              assert offer.get('directOperatorOnly') is True and offer.get('verifiedScope')=='exact_evse'
+              assert offer.get('priority')==130
+              price=float(offer['pricing']['pricePerKwh'])
+              for evse in offer['evseIds']:
+                  assert evse not in compiled_map, evse
+                  compiled_map[evse]=price
+          assert len(source_map)==1850 and len(compiled_map)==1850
+          assert source_map==compiled_map
+          assert all(x not in compiled_map for x in expected_fail)
+          print('Compiled IONITY layer exactly matches published source:',len(compiled_map),'EVSEs')
+          PY
