@@ -1,0 +1,130 @@
+name: V9 Italy Neogy and Alperia EasyCharge tariffs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/neogy-alperia-italy-v9
+    paths:
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_neogy_alperia_italy.py
+      - scripts/v9_report_italy_direct_gap.py
+      - tests/v9-neogy-alperia-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - tests/v9-offer-validity.test.cjs
+      - tests/v9-pricing-window-segmentation.test.cjs
+      - .github/workflows/v9-italy-neogy-alperia.yml
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_neogy_alperia_italy.py
+      - scripts/v9_report_italy_direct_gap.py
+      - tests/v9-neogy-alperia-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - tests/v9-offer-validity.test.cjs
+      - tests/v9-pricing-window-segmentation.test.cjs
+      - .github/workflows/v9-italy-neogy-alperia.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-italy-neogy-alperia-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical public data-lab candidate
+        run: |
+          curl --fail --silent --show-error --location \
+            --output /tmp/neogy_alperia_italy_v9_candidate.json.gz \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/neogy_alperia_italy_v9_candidate.json.gz
+          test -s /tmp/neogy_alperia_italy_v9_candidate.json.gz
+
+      - name: Rebuild exact Neogy and EasyCharge overlays
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/v9_overlay_neogy_alperia_italy.py
+          python scripts/v9_overlay_neogy_alperia_italy.py \
+            --candidate /tmp/neogy_alperia_italy_v9_candidate.json.gz \
+            --out data/v9/italy-offers.json \
+            --report /tmp/neogy-alperia-overlay-report.json \
+            --publish
+
+      - name: Validate direct, subscription and post-charge semantics
+        run: |
+          node tests/v9-offer-validity.test.cjs
+          node tests/v9-pricing-window-segmentation.test.cjs
+          node tests/v9-neogy-alperia-italy-runtime.test.cjs
+          node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Run complete Italy functional QA
+        run: node tests/v9-italy-functional-qa.test.cjs
+
+      - name: Audit exact direct coverage after Neogy
+        run: |
+          mkdir -p /tmp/neogy-gap
+          python scripts/v9_report_italy_direct_gap.py \
+            --json-out /tmp/neogy-gap/italy-direct-gap-report.json \
+            --markdown-out /tmp/neogy-gap/italy-direct-gap-report.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary=json.loads(Path('/tmp/neogy-gap/italy-direct-gap-report.json').read_text())['summary']
+          assert summary['stations']==29696
+          assert summary['physicalEvse']==75025
+          assert summary['matchedDirectEvse']==52451
+          assert summary['uncoveredEvse']==22574
+          assert summary['directCoveragePct']==69.91
+          assert summary['orphanDirectOfferEvseIds']==0
+          print(json.dumps(summary,indent=2))
+          PY
+
+      - name: Require deterministic data on pull requests
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- data/v9/italy-offers.json
+
+      - name: Publish generated Italy catalogue on the integration branch
+        if: github.event_name != 'pull_request' && github.ref_name == 'feature/neogy-alperia-italy-v9'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json
+          if git diff --cached --quiet; then
+            echo 'Neogy and EasyCharge Italy catalogue already current'
+            exit 0
+          fi
+          git commit -m "data(v9): publish Neogy and EasyCharge overlay [run ${GITHUB_RUN_ID}]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload overlay and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-italy-neogy-alperia
+          path: |
+            /tmp/neogy-alperia-overlay-report.json
+            /tmp/neogy-gap/italy-direct-gap-report.json
+            /tmp/neogy-gap/italy-direct-gap-report.md
+          if-no-files-found: error
+          retention-days: 14

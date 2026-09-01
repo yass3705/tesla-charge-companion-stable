@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "type": "tcc-v9-precanary-observation",
+  "state": "OBSERVING",
+  "candidate": {
+    "sourceSha": "53077587df4fe7c06c5aaaf0c5bbde30bf313a72",
+    "runtimeFingerprint": "sha256:a5e85d6d57fdf6c168bf96866c824230307a7f3c0c8858330a9a8aa2c0a95a53",
+    "publicUrl": "https://yass3705.github.io/tesla-charge-companion-stable/v9-test/v9-app/",
+    "pagesDeployment": {
+      "runId": 33521700972,
+      "checkoutSha": "53077587df4fe7c06c5aaaf0c5bbde30bf313a72",
+      "completedAt": "2026-09-01T14:48:19Z",
+      "url": "https://github.com/yass3705/tesla-charge-companion-stable/actions/runs/33521700972"
+    },
+    "deploymentLock": {
+      "workflowPath": ".github/workflows/v9-device-test-pages.yml",
+      "automaticEventSha": "53077587df4fe7c06c5aaaf0c5bbde30bf313a72",
+      "manualReplacementRequired": true
+    }
+  },
+  "window": {
+    "startedAt": "2026-09-01T14:48:19Z",
+    "eligibleAfter": "2026-09-02T14:48:19Z",
+    "minimumHours": 24,
+    "minimumRuns": 25,
+    "trafficPercent": 0
+  },
+  "approval": {
+    "status": "RECORDED",
+    "scope": "begin_precanary_observation",
+    "recordedAt": "2026-09-01T14:06:28Z"
+  },
+  "evidence": {
+    "method": "three_sequential_public_first_device_packs",
+    "capturedAt": "2026-09-01T14:31:56Z",
+    "notes": "Pack averages are UI-reported from raw timings. Aggregate latency is derived from the rendered per-scenario millisecond values, allowing a 1 ms rounding drift per pack.",
+    "packs": [
+      {
+        "id": "public-pack-1",
+        "runs": 10,
+        "passes": 10,
+        "failures": 0,
+        "sourceErrors": 0,
+        "routingErrors": 0,
+        "averageLatencyMs": 7258,
+        "scenarios": [
+          {"id":"fr-cost-baseline","status":"PASS","durationMs":6249,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-cost-low-soc","status":"PASS","durationMs":5400,"stationsFound":1818,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-time","status":"PASS","durationMs":5516,"stationsFound":2876,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-distance","status":"PASS","durationMs":5553,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-deadline","status":"PASS","durationMs":5410,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-subscription","status":"PASS","durationMs":5439,"stationsFound":1818,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"nl-cost","status":"PASS","durationMs":2465,"stationsFound":3598,"stationsSelected":24,"routesSucceeded":24,"stationsScored":16},
+          {"id":"nl-time","status":"PASS","durationMs":2211,"stationsFound":4321,"stationsSelected":24,"routesSucceeded":24,"stationsScored":16},
+          {"id":"it-cost","status":"PASS","durationMs":18372,"stationsFound":1729,"stationsSelected":24,"routesSucceeded":24,"stationsScored":11},
+          {"id":"it-high-soc","status":"PASS","durationMs":15970,"stationsFound":1846,"stationsSelected":24,"routesSucceeded":24,"stationsScored":9}
+        ]
+      },
+      {
+        "id": "public-pack-2",
+        "runs": 10,
+        "passes": 10,
+        "failures": 0,
+        "sourceErrors": 0,
+        "routingErrors": 0,
+        "averageLatencyMs": 6872,
+        "scenarios": [
+          {"id":"fr-cost-baseline","status":"PASS","durationMs":5532,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-cost-low-soc","status":"PASS","durationMs":5405,"stationsFound":1818,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-time","status":"PASS","durationMs":5527,"stationsFound":2876,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-distance","status":"PASS","durationMs":5745,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-deadline","status":"PASS","durationMs":5482,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-subscription","status":"PASS","durationMs":5228,"stationsFound":1818,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"nl-cost","status":"PASS","durationMs":2263,"stationsFound":3598,"stationsSelected":24,"routesSucceeded":24,"stationsScored":16},
+          {"id":"nl-time","status":"PASS","durationMs":2134,"stationsFound":4321,"stationsSelected":24,"routesSucceeded":24,"stationsScored":16},
+          {"id":"it-cost","status":"PASS","durationMs":15960,"stationsFound":1729,"stationsSelected":24,"routesSucceeded":24,"stationsScored":11},
+          {"id":"it-high-soc","status":"PASS","durationMs":15444,"stationsFound":1846,"stationsSelected":24,"routesSucceeded":24,"stationsScored":9}
+        ]
+      },
+      {
+        "id": "public-pack-3",
+        "runs": 10,
+        "passes": 10,
+        "failures": 0,
+        "sourceErrors": 0,
+        "routingErrors": 0,
+        "averageLatencyMs": 6997,
+        "scenarios": [
+          {"id":"fr-cost-baseline","status":"PASS","durationMs":5671,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-cost-low-soc","status":"PASS","durationMs":5611,"stationsFound":1818,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-time","status":"PASS","durationMs":6190,"stationsFound":2876,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-distance","status":"PASS","durationMs":5869,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-deadline","status":"PASS","durationMs":5408,"stationsFound":933,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"fr-subscription","status":"PASS","durationMs":5562,"stationsFound":1818,"stationsSelected":24,"routesSucceeded":24,"stationsScored":8},
+          {"id":"nl-cost","status":"PASS","durationMs":2222,"stationsFound":3598,"stationsSelected":24,"routesSucceeded":24,"stationsScored":16},
+          {"id":"nl-time","status":"PASS","durationMs":2179,"stationsFound":4321,"stationsSelected":24,"routesSucceeded":24,"stationsScored":16},
+          {"id":"it-cost","status":"PASS","durationMs":15891,"stationsFound":1729,"stationsSelected":24,"routesSucceeded":24,"stationsScored":11},
+          {"id":"it-high-soc","status":"PASS","durationMs":15373,"stationsFound":1846,"stationsSelected":24,"routesSucceeded":24,"stationsScored":9}
+        ]
+      }
+    ],
+    "aggregate": {
+      "packs": 3,
+      "runs": 30,
+      "passes": 30,
+      "failures": 0,
+      "sourceErrors": 0,
+      "routingErrors": 0,
+      "routeAttempts": 720,
+      "routesSucceeded": 720,
+      "stationsScored": 300,
+      "totalDurationMs": 211281,
+      "averageLatencyMs": 7043,
+      "maxLatencyMs": 18372,
+      "criticalParityErrors": 0
+    }
+  }
+}

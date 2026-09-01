@@ -90,11 +90,14 @@ jobs:
           import json
           from pathlib import Path
           summary=json.loads(Path('/tmp/ewiva-gap/italy-direct-gap-report.json').read_text())['summary']
+          offers=json.loads(Path('data/v9/italy-offers.json').read_text())
+          direct_ids={evse_id for offer in offers['directOffers'] for evse_id in offer.get('evseIds',[]) if evse_id}
           assert summary['stations']==29696
           assert summary['physicalEvse']==75025
-          assert summary['matchedDirectEvse']==50914
-          assert summary['uncoveredEvse']==24111
-          assert summary['directCoveragePct']==67.86
+          assert summary['matchedDirectEvse']==len(direct_ids)
+          assert summary['matchedDirectEvse']>=50914
+          assert summary['uncoveredEvse']==75025-len(direct_ids)
+          assert summary['directCoveragePct']==round(100*len(direct_ids)/75025,2)
           assert summary['orphanDirectOfferEvseIds']==0
           print(json.dumps(summary,indent=2))
           PY

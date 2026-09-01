@@ -24,6 +24,37 @@ The rollout configuration contains a global kill switch. When enabled, every rol
 - A versioned config change is required for every real promotion.
 - CI validates the rollout engine, readiness engine and safe config contract.
 
+## Pre-canary observation gate
+
+Promotion from `preview` to the initial 1% canary requires a pinned public
+candidate and a versioned observation record in
+`ops/v9/canary-observation.json`. The record is evaluated independently from
+the promotion readiness gate:
+
+- at least 24 hours must elapse on the same deployed runtime fingerprint;
+- at least 25 public candidate runs must be recorded;
+- rollback thresholds must remain clear;
+- rollout stays `preview` with `canaryPercent: 0` throughout observation;
+- automatic Pages pushes stay pinned to the observed candidate SHA;
+- readiness remains closed until the explicit promotion change.
+
+Any change to the candidate code or data payload changes the fingerprint and
+yields `RESET_REQUIRED`. The promotion control files are excluded from this
+build fingerprint but remain guarded by CI; observation, tests, CI and
+documentation also do not alter the pinned runtime.
+
+During an active window, `v9-device-test-pages.yml` skips automatic push and
+pull-request builds for every SHA except the pinned candidate. The remaining
+V9 CI continues to validate development changes. Replacing the public
+candidate requires a versioned lock update, an explicit deployment and a
+restarted observation record.
+
 ## Current state
 
-The versioned configuration remains `preview`, `canaryPercent: 0`. V8 is still production.
+The versioned configuration remains `preview`, `canaryPercent: 0`. V8 is still
+production. Observation started at `2026-09-01T14:48:19Z` against deployed
+candidate `53077587df4fe7c06c5aaaf0c5bbde30bf313a72`. The initial public
+evidence contains 30/30 PASS runs, zero source or routing errors, 7,043 ms
+average latency and 18,372 ms maximum latency. The earliest possible 1%
+eligibility time is `2026-09-02T14:48:19Z`, provided the runtime fingerprint
+remains unchanged and the explicit readiness promotion gate is opened.
