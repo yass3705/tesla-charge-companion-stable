@@ -9,6 +9,7 @@ on:
     paths:
       - 'scripts/audit_powerdot_irve_matching.py'
       - 'scripts/audit_powerdot_connector_identity.py'
+      - 'scripts/test_powerdot_connector_identity.py'
       - 'scripts/build_france_irve_canonical.py'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/build_effective_france_tariff_network_registry.py'
@@ -24,6 +25,7 @@ on:
     paths:
       - 'scripts/audit_powerdot_irve_matching.py'
       - 'scripts/audit_powerdot_connector_identity.py'
+      - 'scripts/test_powerdot_connector_identity.py'
       - '.github/workflows/audit-france-irve-powerdot.yml'
 
 permissions:
@@ -43,11 +45,15 @@ jobs:
           python -m py_compile \
             scripts/audit_powerdot_irve_matching.py \
             scripts/audit_powerdot_connector_identity.py \
+            scripts/test_powerdot_connector_identity.py \
             scripts/build_france_irve_canonical.py \
             scripts/run_france_irve_canonical.py \
             scripts/build_effective_france_tariff_network_registry.py \
             scripts/enrich_france_irve_network_identity.py \
             scripts/run_enrich_france_irve_network_identity.py
+
+      - name: Test scoped Powerdot connector identity
+        run: python scripts/test_powerdot_connector_identity.py
 
       - name: Fetch Powerdot catalog from main without copying it into the refactor branch
         run: |

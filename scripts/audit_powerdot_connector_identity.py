@@ -4,7 +4,8 @@
 This is deliberately conservative. It never assumes that connector order and
 IRVE PDC order are equivalent. A tariff may be assigned to a canonical PDC only
 when either:
-1. the connector contains the exact canonical PDC id somewhere in its payload;
+1. the connector contains an exact canonical PDC id that is also declared by
+   its enclosing Powerdot location/entry/charger scope;
 2. an entry/charger explicitly carries PDC ids and every connector in that
    entry has the same structured tariff; or
 3. the location explicitly carries PDC ids and every connector at that
@@ -112,20 +113,20 @@ def tariff_signature(tariff):
     return json.dumps(canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
-def exact_pdc_values(value, canonical_pdc_ids, found=None, path=""):
-    """Find scalar values in a connector payload that exactly equal a PAN PDC id."""
+def exact_pdc_values(value, candidate_pdc_ids, found=None, path=""):
+    """Find connector scalars equal to a PDC id declared by its source scope."""
     if found is None:
         found = defaultdict(set)
     if isinstance(value, dict):
         for key, child in value.items():
             child_path = f"{path}.{key}" if path else key
-            exact_pdc_values(child, canonical_pdc_ids, found, child_path)
+            exact_pdc_values(child, candidate_pdc_ids, found, child_path)
     elif isinstance(value, list):
         for index, child in enumerate(value):
-            exact_pdc_values(child, canonical_pdc_ids, found, f"{path}[{index}]")
+            exact_pdc_values(child, candidate_pdc_ids, found, f"{path}[{index}]")
     elif isinstance(value, (str, int)):
         text = clean(value)
-        if text in canonical_pdc_ids:
+        if text in candidate_pdc_ids:
             found[path].add(text)
     return found
 
@@ -190,6 +191,9 @@ def main():
         location_ids = pdc_ids_from_scope(location)
         entry_ids = pdc_ids_from_scope(entry)
         charger_ids = pdc_ids_from_scope(charger)
+        scoped_canonical_ids = (
+            location_ids | entry_ids | charger_ids
+        ) & canonical_pdc_ids
         bucket["locationPdcIds"].update(location_ids)
         if location_ids:
             scope_counts["location_with_pdc_ids"] += 1
@@ -205,7 +209,7 @@ def main():
             signature = tariff_signature((connector or {}).get("tariff") or {})
             if signature:
                 signatures.append(signature)
-            matches_by_path = exact_pdc_values(connector, canonical_pdc_ids)
+            matches_by_path = exact_pdc_values(connector, scoped_canonical_ids)
             exact_ids = sorted({pid for ids in matches_by_path.values() for pid in ids})
             for path, ids in matches_by_path.items():
                 if ids:
@@ -352,11 +356,12 @@ def main():
 
     safe_pdc_ids = {row["pdcId"] for row in safe_rows}
     report = {
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "1.0.1",
         "dataset": "powerdot-connector-pdc-identity-audit",
         "productionReady": False,
         "policy": {
             "connectorOrderMayImplyPdcIdentity": False,
+            "connectorScalarMatchMustBeExplicitlyScoped": True,
             "physicalInventoryAuthority": "PAN IRVE static",
             "safeStrategies": ["connector_exact", "entry_group_uniform", "location_group_uniform"],
             "conflictingTariffsRankable": False,
