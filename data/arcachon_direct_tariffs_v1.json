@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "arcachon-direct-tariffs-france",
+  "networkId": "arcachon",
+  "label": "Ville d'Arcachon",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "sources": {
+    "officialAlizeNetworkPage": "https://alizecharge.com/partenaires/arcachon/"
+  },
+  "topology": {
+    "officialStationCount": 19,
+    "officialLogicalChargePointCount": 68,
+    "officialProximityStationCount": 4,
+    "officialProximityLogicalChargePointCount": 20,
+    "officialCitadineStationCount": 11,
+    "officialCitadineLogicalChargePointCount": 32,
+    "officialExpressStationCount": 4,
+    "officialExpressLogicalChargePointCount": 16,
+    "canonicalInventorySource": "PAN IRVE",
+    "granularityPolicy": "PAN PDC rows remain canonical. Current PAN represents the same 19 official sites with more connector/PDC rows than the 68 user-facing charge points stated by Alize."
+  },
+  "scope": {
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthorityAliases": ["R-Mob", "R MOB", "RMOB"],
+    "requiredCodeInsee": "33009",
+    "requiredStationNameTokens": ["ville d arcachon"],
+    "requiresExactLocalScope": true,
+    "directNetworkOnly": true,
+    "physicalInventoryFromIrveOnly": true,
+    "roamingMspTariffsRemainSeparate": true,
+    "parkingExcludedFromChargingTariff": true,
+    "genericAlizeLiberteNeverInheritsArcachonTariff": true,
+    "otherRMobNetworksNeverInheritArcachonTariff": true
+  },
+  "access": {
+    "alizeLiberteAvailable": true,
+    "arcachonSubscriptionId": "arcachon-resident",
+    "arcachonSubscriptionMonthlyFeeEur": 10.0,
+    "badgePurchaseEur": 12.0,
+    "subscriptionOptIn": true,
+    "residencyRequired": true,
+    "residencyEvidence": "Vehicle registration must be domiciled in Arcachon."
+  },
+  "tariffFamilies": [
+    {
+      "id": "arcachon-proximity-ac",
+      "kind": "AC",
+      "stationClass": "proximity",
+      "stationMaxPowerKw": 22.5,
+      "subscriberPricePerKwh": 0.25,
+      "publicPricePerKwh": 0.49,
+      "durationPerMinute": 0.10,
+      "durationThresholdMinutes": 180,
+      "durationStart": "07:00",
+      "durationEnd": "23:00"
+    },
+    {
+      "id": "arcachon-citadine-ac",
+      "kind": "AC",
+      "stationClass": "citadine",
+      "stationMinPowerKwExclusive": 22.5,
+      "stationMaxPowerKw": 30.5,
+      "subscriberPricePerKwh": 0.25,
+      "publicPricePerKwh": 0.55,
+      "durationPerMinute": 0.10,
+      "durationThresholdMinutes": 180,
+      "durationStart": "07:00",
+      "durationEnd": "23:00"
+    },
+    {
+      "id": "arcachon-citadine-dc",
+      "kind": "DC",
+      "stationClass": "citadine",
+      "stationMinPowerKwExclusive": 22.5,
+      "stationMaxPowerKw": 30.5,
+      "subscriberPricePerKwh": 0.55,
+      "publicPricePerKwh": 0.55,
+      "durationPerMinute": 0.15,
+      "durationThresholdMinutes": 60,
+      "durationStart": null,
+      "durationEnd": null
+    },
+    {
+      "id": "arcachon-express-240",
+      "kind": "DC",
+      "stationClass": "express",
+      "stationMinPowerKwExclusive": 30.5,
+      "stationMaxPowerKw": 240.5,
+      "subscriberPricePerKwh": 0.65,
+      "publicPricePerKwh": 0.65,
+      "durationPerMinute": 0.20,
+      "durationThresholdMinutes": 40,
+      "durationStart": null,
+      "durationEnd": null
+    }
+  ],
+  "exclusions": [
+    "Only R-Mob/Bouygues PAN stations in INSEE 33009 with explicit Ville d'Arcachon naming are eligible.",
+    "Other R-Mob or Alize Liberte stations never inherit Arcachon tariffs.",
+    "The 10 EUR/month resident offer is opt-in and must only affect ranking when explicitly selected.",
+    "The resident offer is only eligible for vehicles whose registration is domiciled in Arcachon.",
+    "Third-party roaming/eMSP prices remain separate.",
+    "Parking fees remain separate from charging.",
+    "PAN IRVE remains the sole physical inventory."
+  ]
+}
