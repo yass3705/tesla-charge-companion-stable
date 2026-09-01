@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.0.1",
   "dataset": "arcachon-direct-tariffs-france",
   "networkId": "arcachon",
   "label": "Ville d'Arcachon",
@@ -18,7 +18,8 @@
     "officialExpressStationCount": 4,
     "officialExpressLogicalChargePointCount": 16,
     "canonicalInventorySource": "PAN IRVE",
-    "granularityPolicy": "PAN PDC rows remain canonical. Current PAN represents the same 19 official sites with more connector/PDC rows than the 68 user-facing charge points stated by Alize."
+    "granularityPolicy": "PAN PDC rows remain canonical. Current PAN represents the same 19 official sites with more connector/PDC rows than the 68 user-facing charge points stated by Alize.",
+    "classificationReconciliation": "The official page labels Citadine as 22 kW AC / 30 kW DC. Current PAN reports three of the 11 Citadine sites with station maximum 40 kW. The four official Express sites reconcile exactly to the current PAN sites at 90 or 240 kW. Therefore 22.5-40.5 kW station maxima are treated as Citadine for canonical matching; this changes no published tariff amount."
   },
   "scope": {
     "canonicalUmbrellaTariffNetworkId": "alize-liberte",
@@ -61,7 +62,8 @@
       "kind": "AC",
       "stationClass": "citadine",
       "stationMinPowerKwExclusive": 22.5,
-      "stationMaxPowerKw": 30.5,
+      "stationMaxPowerKw": 40.5,
+      "officialNominalDcMaxPowerKw": 30.0,
       "subscriberPricePerKwh": 0.25,
       "publicPricePerKwh": 0.55,
       "durationPerMinute": 0.10,
@@ -74,7 +76,8 @@
       "kind": "DC",
       "stationClass": "citadine",
       "stationMinPowerKwExclusive": 22.5,
-      "stationMaxPowerKw": 30.5,
+      "stationMaxPowerKw": 40.5,
+      "officialNominalDcMaxPowerKw": 30.0,
       "subscriberPricePerKwh": 0.55,
       "publicPricePerKwh": 0.55,
       "durationPerMinute": 0.15,
@@ -86,7 +89,7 @@
       "id": "arcachon-express-240",
       "kind": "DC",
       "stationClass": "express",
-      "stationMinPowerKwExclusive": 30.5,
+      "stationMinPowerKwExclusive": 40.5,
       "stationMaxPowerKw": 240.5,
       "subscriberPricePerKwh": 0.65,
       "publicPricePerKwh": 0.65,
