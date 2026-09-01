@@ -35,12 +35,18 @@ the promotion readiness gate:
 - at least 25 public candidate runs must be recorded;
 - rollback thresholds must remain clear;
 - rollout stays `preview` with `canaryPercent: 0` throughout observation;
+- automatic Pages pushes stay pinned to the observed candidate SHA;
 - readiness remains closed until the explicit promotion change.
 
 Any change to the candidate code or data payload changes the fingerprint and
 yields `RESET_REQUIRED`. The promotion control files are excluded from this
 build fingerprint but remain guarded by CI; observation, tests, CI and
 documentation also do not alter the pinned runtime.
+
+During an active window, `v9-device-test-pages.yml` keeps pull-request checks
+available but skips automatic push builds for every SHA except the pinned
+candidate. Replacing the public candidate therefore requires an explicit
+manual deployment and a restarted observation record.
 
 ## Current state
 

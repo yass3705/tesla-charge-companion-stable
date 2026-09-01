@@ -1,6 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
+const fs=require('node:fs');
 const Observation=require('../scripts/v9-canary-observation.cjs');
 const observation=require('../ops/v9/canary-observation.json');
 const policy=require('../data/v9/canary-policy.json');
@@ -10,6 +11,7 @@ const clone=value=>JSON.parse(JSON.stringify(value));
 const fingerprint=observation.candidate.runtimeFingerprint;
 const blockedReadiness={verdict:'BLOCKED',ready:false};
 const readyReadiness={verdict:'READY',ready:true};
+const deploymentWorkflow=fs.readFileSync('.github/workflows/v9-device-test-pages.yml','utf8');
 
 const baseTree='100644 blob aaaa\tv9-app/app.js\n100644 blob bbbb\tdata/v9/rollout-config.json\n';
 const controlChange='100644 blob aaaa\tv9-app/app.js\n100644 blob cccc\tdata/v9/rollout-config.json\n';
@@ -32,6 +34,7 @@ let result=Observation.evaluateObservation({
   policy,
   rollout,
   readiness:blockedReadiness,
+  deploymentWorkflow,
   now:'2026-09-01T15:31:56Z',
   sourceFingerprint:fingerprint,
   currentFingerprint:fingerprint
@@ -47,6 +50,7 @@ result=Observation.evaluateObservation({
   policy,
   rollout,
   readiness:readyReadiness,
+  deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
   currentFingerprint:fingerprint
@@ -61,6 +65,7 @@ result=Observation.evaluateObservation({
   policy,
   rollout,
   readiness:readyReadiness,
+  deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
   currentFingerprint:'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
@@ -76,6 +81,7 @@ result=Observation.evaluateObservation({
   policy,
   rollout,
   readiness:readyReadiness,
+  deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
   currentFingerprint:fingerprint
@@ -89,6 +95,7 @@ result=Observation.evaluateObservation({
   policy,
   rollout:unsafeRollout,
   readiness:readyReadiness,
+  deploymentWorkflow,
   now:observation.window.eligibleAfter,
   sourceFingerprint:fingerprint,
   currentFingerprint:fingerprint
@@ -96,8 +103,21 @@ result=Observation.evaluateObservation({
 assert.equal(result.decision,'INVALID');
 assert(result.reasons.includes('rollout_must_remain_preview_zero'));
 
+result=Observation.evaluateObservation({
+  observation,
+  policy,
+  rollout,
+  readiness:readyReadiness,
+  deploymentWorkflow:'name: unlocked',
+  now:observation.window.eligibleAfter,
+  sourceFingerprint:fingerprint,
+  currentFingerprint:fingerprint
+});
+assert.equal(result.decision,'INVALID');
+assert(result.reasons.includes('pages_deployment_lock_missing'));
+
 console.log(JSON.stringify({
   ok:true,
   module:'tcc-v9-canary-observation',
-  checks:['live-evidence','aggregate-integrity','24h-window','stable-build','manual-gate','zero-traffic']
+  checks:['live-evidence','aggregate-integrity','24h-window','stable-build','pages-lock','manual-gate','zero-traffic']
 },null,2));

@@ -83,7 +83,7 @@ function sameAggregate(expected={},actual={}){
   return keys.every(key=>Number(expected[key])===Number(actual[key]));
 }
 
-function validateObservation(observation,policy,rollout){
+function validateObservation(observation,policy,rollout,deploymentWorkflow=''){
   const errors=[];
   if(observation?.schemaVersion!==1||observation?.type!=='tcc-v9-precanary-observation')errors.push('invalid_observation_schema');
   if(observation?.state!=='OBSERVING')errors.push('observation_not_active');
@@ -101,6 +101,9 @@ function validateObservation(observation,policy,rollout){
   if(policy?.active!==false)errors.push('canary_policy_must_remain_inactive');
   if(rollout?.stage!=='preview'||Number(rollout?.canaryPercent)!==0)errors.push('rollout_must_remain_preview_zero');
   if(observation?.approval?.status!=='RECORDED'||observation?.approval?.scope!=='begin_precanary_observation')errors.push('observation_approval_missing');
+  const lock=observation?.candidate?.deploymentLock||{};
+  if(lock.workflowPath!=='.github/workflows/v9-device-test-pages.yml'||lock.automaticPushSha!==observation?.candidate?.sourceSha||lock.manualReplacementRequired!==true)errors.push('invalid_pages_deployment_lock');
+  if(!String(deploymentWorkflow).includes(`github.sha == '${observation?.candidate?.sourceSha}'`))errors.push('pages_deployment_lock_missing');
   let derived=null;
   try{derived=deriveEvidence(observation?.evidence);}catch(error){errors.push(error.message);}
   if(derived&&!sameAggregate(observation?.evidence?.aggregate,derived))errors.push('aggregate_evidence_mismatch');
@@ -117,8 +120,8 @@ function validateObservation(observation,policy,rollout){
   return{ok:errors.length===0,errors,derived,firstStage,start,eligible};
 }
 
-function evaluateObservation({observation,policy,rollout,readiness,now=new Date(),sourceFingerprint,currentFingerprint}){
-  const validation=validateObservation(observation,policy,rollout);
+function evaluateObservation({observation,policy,rollout,readiness,deploymentWorkflow='',now=new Date(),sourceFingerprint,currentFingerprint}){
+  const validation=validateObservation(observation,policy,rollout,deploymentWorkflow);
   if(!validation.ok)return{decision:'INVALID',safe:false,reasons:validation.errors};
   const nowMs=new Date(now).getTime();
   if(!Number.isFinite(nowMs))return{decision:'INVALID',safe:false,reasons:['invalid_evaluation_time']};
@@ -173,9 +176,10 @@ function main(){
   const policy=readJson(root,'data/v9/canary-policy.json');
   const rollout=readJson(root,'data/v9/rollout-config.json');
   const readiness=readJson(root,'data/v9/access-readiness.json');
+  const deploymentWorkflow=fs.readFileSync(path.join(root,observation.candidate.deploymentLock.workflowPath),'utf8');
   const sourceFingerprint=runtimeFingerprint(observation.candidate.sourceSha,root);
   const currentFingerprint=runtimeFingerprint(args.ref,root);
-  const result=evaluateObservation({observation,policy,rollout,readiness,now:args.now||new Date(),sourceFingerprint,currentFingerprint});
+  const result=evaluateObservation({observation,policy,rollout,readiness,deploymentWorkflow,now:args.now||new Date(),sourceFingerprint,currentFingerprint});
   console.log(JSON.stringify(result,null,2));
   if(!result.safe)process.exitCode=1;
 }

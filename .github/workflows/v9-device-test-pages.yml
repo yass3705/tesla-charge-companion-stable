@@ -35,6 +35,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'push' || github.sha == 'bb185ded1cfffe3a4f4d864427a7fb0c1e30157a'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout V9 source
