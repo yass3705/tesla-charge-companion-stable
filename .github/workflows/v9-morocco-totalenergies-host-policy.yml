@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Validate TotalEnergies host inventory, attribution and unresolved channels
+      - name: Validate TotalEnergies host inventory, attribution and provenance-scoped channels
         run: |
           node - <<'NODE'
           const assert=require('assert');
@@ -57,8 +57,12 @@ jobs:
             assert.equal(links?.summary?.remaining_hosts_without_official_link_coordinates_in_this_report,5);
             assert.equal(links?.reconciliation?.corrected_second_tamesna_label,'RELAIS MAZAGAN');
 
-            assert.equal(tariff?.policy?.missing_or_null_tariff_means_free,false,'missing tariff must remain unresolved');
-            assert.equal(tariff?.policy?.missing_or_null_tariff_price_mad,null,'no implicit 0 MAD fallback');
+            // The current public tariff policy is an explicit business fallback, not native tariff evidence.
+            assert.equal(tariff?.policy?.missing_or_null_tariff_means_free,true,'current explicit TotalEnergies fallback retained');
+            assert.equal(tariff?.policy?.missing_or_null_tariff_price_mad,0,'fallback value remains 0 MAD');
+            assert.equal(tariff?.policy?.do_not_generalize_to_other_operators,true,'fallback must remain operator-scoped');
+            assert.equal(tariff?.evidence?.confidence,'anecdotal_not_official','fallback provenance must remain non-official');
+            assert.equal(tariff?.modeling?.tariff_channel,'TotalEnergies direct','fallback belongs only to TotalEnergies direct tariff channel');
             assert.equal(blocker?.production_impact,'None yet. Keep TotalEnergies Club EV-Charge status_source unresolved until a working read-only native request is validated.');
 
             assert.equal(alWaha?.station?.site_brand,'TotalEnergies');
@@ -83,7 +87,7 @@ jobs:
             assert.equal(al.access?.appSource,'Kilowatt public web map');
             assert.equal(al.access?.accessNetwork,'Kilowatt');
             assert.equal(al.status?.statusSource,'Kilowatt public web map');
-            assert.deepEqual(al.offers,[],'AL WAHA direct tariff remains unresolved');
+            assert.deepEqual(al.offers,[],'AL WAHA must not inherit TotalEnergies anecdotal tariff fallback');
 
             const generic=out.stations.filter(s=>s.canonicalId!==`MA:kilowatt:${exactId}`);
             assert.equal(generic.length,12);
@@ -92,12 +96,12 @@ jobs:
             assert(generic.every(s=>s.access?.appSource==='TotalEnergies official public website'),'official host source preserved');
             assert(generic.every(s=>s.access?.accessNetwork==null),'host inventory is not an access network attribution');
             assert(generic.every(s=>s.status?.state==='unknown'&&s.status?.statusSource==null),'no live status inferred');
-            assert(generic.every(s=>Array.isArray(s.offers)&&s.offers.length===0),'no tariff inferred');
+            assert(generic.every(s=>Array.isArray(s.offers)&&s.offers.length===0),'host inventory adapter must not convert anecdotal tariff policy into native offers');
 
             const src=(registry.sources||[]).find(s=>s.id==='morocco-totalenergies-hosts');
             assert(src,'TotalEnergies host source registered');
-            assert.deepEqual(src.capabilities,['inventory','connectors','access'],'registry must not claim TotalEnergies status/tariff capability');
+            assert.deepEqual(src.capabilities,['inventory','connectors','access'],'registry must not claim native TotalEnergies status/tariff capability');
 
-            console.log(JSON.stringify({ok:true,reconciledHosts:18,geolocatedHosts:13,diagnostics:5,alWahaCpo:'Kilowatt',genericHosts:12,tariff:'unresolved',clubEvChargeStatus:'blocked pending validated read-only endpoint'},null,2));
+            console.log(JSON.stringify({ok:true,reconciledHosts:18,geolocatedHosts:13,diagnostics:5,alWahaCpo:'Kilowatt',genericHosts:12,tariffFallback:'0 MAD anecdotal business rule; not native evidence or inherited by Kilowatt AL WAHA',clubEvChargeStatus:'blocked pending validated read-only endpoint'},null,2));
           })().catch(e=>{console.error(e);process.exit(1);});
           NODE
