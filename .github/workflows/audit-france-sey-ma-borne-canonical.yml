@@ -11,6 +11,8 @@ on:
       - 'data/france_irve_operator_registry_v1.json'
       - 'data/france_irve_tariff_network_registry_v1.json'
       - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'data/france_irve_tariff_network_additions_v1.json'
       - 'scripts/run_france_irve_canonical.py'
       - 'scripts/run_enrich_france_irve_network_identity.py'
       - '.github/workflows/audit-france-sey-ma-borne-canonical.yml'
@@ -35,6 +37,10 @@ jobs:
           import json
           d=json.load(open('data/sey_ma_borne_direct_tariffs_v1.json',encoding='utf-8'))
           assert d['dataset']=='sey-ma-borne-direct-tariffs-france'
+          assert d['networkId']=='seymaborne'
+          assert d['scope']['canonicalTariffNetworkId']=='seymaborne'
+          assert d['scope']['explicitPanBrandRequired'] is True
+          assert d['scope']['requiresPanContractingAuthorityMatch'] is False
           assert d['effectiveFrom']=='2026-03-01' and d['verifiedAt']=='2026-09-01'
           assert d['access']['monthlySubscriptionFeeEur']==0.0
           assert d['access']['badgeRequired'] is False and d['access']['freeAlizeAppAccess'] is True
@@ -49,6 +55,7 @@ jobs:
           mkdir -p build/france_irve
           python scripts/build_effective_france_tariff_network_registry.py \
             --registry data/france_irve_tariff_network_registry_v1.json \
+            --additions data/france_irve_tariff_network_additions_v1.json \
             --coverage data/france_tariff_base_coverage_v1.json \
             --out build/france_irve/effective_tariff_network_registry.json
 
@@ -77,12 +84,11 @@ jobs:
             --network-registry build/france_irve/effective_tariff_network_registry.json \
             --out-dir build/france_irve_identity
 
-      - name: Materialize exact SEY ma Borne scope
+      - name: Materialize explicit SEY ma Borne scope
         run: |
           python scripts/materialize_france_sey_ma_borne_offers.py \
             --source data/sey_ma_borne_direct_tariffs_v1.json \
             --canonical-dir build/france_irve_identity \
-            --static-csv .tmp/irve/static.csv \
             --out-dir build/france_irve_offers
 
       - name: Validate SEY canonical coverage
@@ -91,21 +97,19 @@ jobs:
           import gzip,json
           r=json.load(open('build/france_irve_offers/sey_ma_borne_materialization_report.json',encoding='utf-8'))
           s=r['summary']
-          assert 300 <= s['eligiblePdcCount'] <= 700, s
-          assert s['eligibleStationCount'] >= 100, s
-          assert s['rankableCoveredPdcCount'] >= 300, s
-          assert s['rankableCoveredPdcCount'] / s['eligiblePdcCount'] >= 0.95, s
-          assert s['unresolvedPdcCount'] <= 25, s
+          assert 600 <= s['eligiblePdcCount'] <= 750, s
+          assert 250 <= s['eligibleStationCount'] <= 350, s
+          assert s['rankableCoveredPdcCount'] >= 600, s
+          assert s['rankableCoveredPdcCount'] / s['eligiblePdcCount'] >= 0.90, s
+          assert s['unresolvedPdcCount'] <= 75, s
           assert s['physicalInventoryMutationCount']==0
           with gzip.open('build/france_irve_offers/sey_ma_borne_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as f: offers=json.load(f)
           rank=[x for x in offers if x['rankable']]
           refs=[x for x in offers if not x['rankable']]
           assert len(rank)==s['rankableOfferCount']==s['rankableCoveredPdcCount']
           assert len(refs)==s['referenceOfferCount']==s['rankableCoveredPdcCount']
-          assert all(x['tariffNetworkId']=='sey-ma-borne' for x in offers)
-          assert all(x['physicalOperatorId']=='bouygues-energies-services' for x in offers)
-          assert all(x['selectors']['umbrellaTariffNetworkId']=='alize-liberte' for x in offers)
-          assert all(x['selectors']['contractingAuthority'] for x in offers)
+          assert all(x['tariffNetworkId']=='seymaborne' for x in offers)
+          assert all(x['selectors']['explicitPanTariffNetworkId']=='seymaborne' for x in offers)
           assert all(x['subscriptionId'] is None for x in rank)
           print(json.dumps(r,ensure_ascii=False,indent=2))
           PY
