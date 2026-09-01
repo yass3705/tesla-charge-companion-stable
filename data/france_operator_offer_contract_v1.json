@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.2",
+  "schemaVersion": "1.1.3",
   "country": "FR",
   "purpose": "Canonical tariff/enrichment contract attached to PAN IRVE physical stations and PDCs",
   "invariants": {
@@ -64,7 +64,9 @@
     "end": "HH:MM when applicable",
     "days": "optional weekday array",
     "currency": "ISO currency",
-    "pricePerKwh": "energy charge",
+    "pricePerKwh": "energy charge; when includedEnergyKwh is positive this is the extra-energy rate above the included amount",
+    "energyBilling": "linear_kwh | started_kwh",
+    "includedEnergyKwh": "energy included in the rule connection fee before pricePerKwh applies",
     "chargePerMinute": "time fee while charging",
     "chargeThresholdMinutes": "elapsed charging time before chargePerMinute starts",
     "durationPerMinute": "connection/session-duration fee distinct from post-charge occupancy",
@@ -73,14 +75,23 @@
     "durationEnd": "optional clock-window end during which the duration surcharge is applied",
     "durationCap": "optional duration-fee cap",
     "connectionFee": "session/access fee",
-    "occupancyPerMinute": "post-charge or explicit occupancy fee",
+    "occupancyPerMinute": "linear or started-minute post-charge/occupancy fee",
     "occupancyThresholdMinutes": "grace/threshold after charge end before occupancy fee",
     "occupancyStart": "optional clock-window start for occupancy fee",
     "occupancyEnd": "optional clock-window end for occupancy fee",
     "occupancyCap": "optional occupancy cap",
+    "occupancyBilling": "linear_minute | started_minute | started_block",
+    "occupancyBlockMinutes": "minutes in one started post-charge block",
+    "occupancyBlockFee": "fee for each started post-charge block",
+    "occupancyTrigger": "event starting occupancy billing, such as after_charging_stops",
+    "occupancyDurationBasis": "duration input used for occupancy, such as connected_minutes_minus_charging_minutes",
+    "missingUnplugTimePolicy": "explicit behavior when unplug/connection-end time is missing, such as zero_post_charge",
     "parkingPerMinute": "parking fee only when explicitly part of charging transaction",
     "totalTransactionCap": "optional cap applied to the complete charging transaction",
+    "timeWindowSelection": "event selecting a time-window tariff, such as connection_start_local_time",
     "rounding": "optional billing rounding rule such as started_kwh_and_started_minute",
+    "roundingEpsilon": "numeric tolerance applied before started-unit ceiling",
+    "formulaFamily": "stable formula family identifier for lossless runtime conversion",
     "notes": "optional structured-semantics note"
   }
 }
