@@ -1,0 +1,27 @@
+name: Germany V9 station pricing contract
+
+on:
+  pull_request:
+    paths:
+      - 'data/v9/germany-station-pricing-sources.json'
+      - 'data/v9/germany-station-pricing-seed.json'
+      - 'scripts/build_germany_station_pricing_v9.py'
+      - 'scripts/test_germany_station_pricing_v9.py'
+      - '.github/workflows/germany-station-pricing-v9-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build station pricing overlay
+        run: python scripts/build_germany_station_pricing_v9.py
+      - name: Validate station pricing overlay
+        run: python scripts/test_germany_station_pricing_v9.py build/germany-station-pricing.json
