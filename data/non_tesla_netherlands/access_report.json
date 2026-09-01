@@ -1,20 +1,20 @@
 {
   "coveragePct": {
-    "knownOpeningHours": 89.181,
+    "knownOpeningHours": 89.173,
     "multiIntervalRegular": 0.009
   },
   "dataset": "dotnl-netherlands-access-patch-report",
   "metrics": {
-    "access24x7": 69858,
+    "access24x7": 69849,
     "accessScheduled": 188,
-    "accessUnknown": 8498,
+    "accessUnknown": 8504,
     "equalBeginEndIgnored": 9,
     "exceptionPeriods": 9,
-    "runtimeRowsPatched": 78528,
+    "runtimeRowsPatched": 78525,
     "stationsWithMultiIntervalRegular": 7,
-    "stationsWithParkingRestrictions": 11871,
-    "stationsWithParkingType": 26805
+    "stationsWithParkingRestrictions": 11865,
+    "stationsWithParkingType": 26824
   },
   "schemaVersion": 3,
-  "stationCount": 78528
+  "stationCount": 78525
 }
