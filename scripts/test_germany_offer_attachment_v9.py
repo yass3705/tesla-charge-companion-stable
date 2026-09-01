@@ -20,7 +20,9 @@ assert eam and all('EAM' in x for x in eam),eam
 assert bochum and all('Stadtwerkedrive' in x for x in bochum),bochum
 assert marke and all('Mark-E' in x for x in marke),marke
 assert not providers('Tesla'), 'Tesla must never attach Germany non-Tesla direct offers'
-assert {'fastned-de-standard','fastned-de-app-promo','fastned-gold'} <= {x['selectionId'] for x in matches('Fastned')}
+fast_selection_ids={x['selectionId'] for x in matches('Fastned')}
+assert {'fastned-de-standard','fastned-gold'} <= fast_selection_ids
+assert 'fastned-de-app-promo' not in fast_selection_ids, 'expired Fastned app promo must not remain attachable after 2026-08-31'
 assert {'ionity-de-direct','ionity-de-go','ionity-motion','ionity-power'} <= {x['selectionId'] for x in matches('IONITY')}
 assert {'aral-pulse-de-ad-hoc','aral-pulse-klassik','aral-pulse-extra','aral-pulse-adac-e-charge'} <= {x['selectionId'] for x in matches('Aral pulse')}
 assert {'enbw-mobility-plus-s','enbw-mobility-plus-m','enbw-mobility-plus-l'} == {x['selectionId'] for x in matches('EnBW mobility+')}
