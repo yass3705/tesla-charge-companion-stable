@@ -1,0 +1,94 @@
+name: Audit France Dreux canonical
+
+on:
+  push:
+    branches:
+      - refactor/france-irve-canonical
+    paths:
+      - 'data/dreux_direct_tariffs_v1.json'
+      - 'scripts/materialize_france_dreux_offers.py'
+      - 'scripts/test_dreux_materializer.py'
+      - 'data/france_irve_tariff_network_registry_v1.json'
+      - 'data/france_tariff_base_coverage_v1.json'
+      - 'scripts/build_effective_france_tariff_network_registry.py'
+      - 'scripts/run_france_irve_canonical.py'
+      - 'scripts/run_enrich_france_irve_network_identity.py'
+      - '.github/workflows/audit-france-dreux-canonical.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dreux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Validate Dreux source and materializer
+        run: |
+          python -m py_compile scripts/materialize_france_dreux_offers.py scripts/test_dreux_materializer.py
+          python scripts/test_dreux_materializer.py
+          python - <<'PY'
+          import json
+          d=json.load(open('data/dreux_direct_tariffs_v1.json',encoding='utf-8'))
+          assert d['verifiedAt']=='2026-09-01'
+          assert d['topology']['officialStationCount']==12
+          assert d['topology']['officialLogicalChargePointCount']==24
+          assert d['access']['dreuxSubscriptionMonthlyFeeEur']==10.0
+          assert d['access']['subscriptionOptIn'] is True
+          assert d['scope']['requiredCodeInsee']=='28134'
+          PY
+      - name: Build effective tariff-network registry
+        run: |
+          mkdir -p build/france_irve
+          python scripts/build_effective_france_tariff_network_registry.py \
+            --registry data/france_irve_tariff_network_registry_v1.json \
+            --additions data/france_irve_tariff_network_additions_v1.json \
+            --coverage data/france_tariff_base_coverage_v1.json \
+            --out build/france_irve/effective_tariff_network_registry.json
+      - name: Download current PAN IRVE snapshots
+        run: |
+          mkdir -p .tmp/irve
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84013/download' --output .tmp/irve/static.csv
+          curl --fail --location --retry 3 --retry-delay 3 'https://transport.data.gouv.fr/resources/84098/download' --output .tmp/irve/dynamic.csv
+          test -s .tmp/irve/static.csv
+          test -s .tmp/irve/dynamic.csv
+      - name: Rebuild canonical France identities
+        run: |
+          python scripts/run_france_irve_canonical.py --static-csv .tmp/irve/static.csv --dynamic-csv .tmp/irve/dynamic.csv --registry data/france_irve_operator_registry_v1.json --out-dir build/france_irve
+          python scripts/run_enrich_france_irve_network_identity.py --canonical-dir build/france_irve --operator-registry data/france_irve_operator_registry_v1.json --network-registry build/france_irve/effective_tariff_network_registry.json --out-dir build/france_irve_identity
+      - name: Materialize Dreux direct scope
+        run: |
+          python scripts/materialize_france_dreux_offers.py --source data/dreux_direct_tariffs_v1.json --canonical-dir build/france_irve_identity --static-csv .tmp/irve/static.csv --out-dir build/france_irve_offers
+      - name: Validate Dreux canonical coverage
+        run: |
+          python - <<'PY'
+          import gzip,json
+          r=json.load(open('build/france_irve_offers/dreux_materialization_report.json',encoding='utf-8'));s=r['summary'];t=r['officialTopology']
+          assert s['eligibleStationCount']==t['officialStationCount']==12,s
+          assert t['officialLogicalChargePointCount']==24,t
+          assert 24 <= s['eligiblePdcCount'] <= 60,s
+          assert s['coveredPdcCount']==s['eligiblePdcCount'],s
+          assert s['publicOfferCount']==s['eligiblePdcCount'] and s['subscriberOfferCount']==s['eligiblePdcCount'],s
+          assert s['unresolvedPdcCount']==0 and s['physicalInventoryMutationCount']==0,s
+          f=r['familyPdcCounts']
+          assert sum(f.values())==s['eligiblePdcCount'],f
+          assert f.get('dreux-citadine-ac',0)>0 and f.get('dreux-citadine-dc',0)>0 and f.get('dreux-express-150',0)>0,f
+          with gzip.open('build/france_irve_offers/dreux_pdc_offers_contract_v1_1.json.gz','rt',encoding='utf-8') as fh:offers=json.load(fh)
+          assert all(x['tariffNetworkId']=='dreux' and x['physicalOperatorId']=='bouygues-energies-services' for x in offers)
+          assert all(x['selectors']['codeInsee']=='28134' and x['selectors']['umbrellaTariffNetworkId']=='alize-liberte' for x in offers)
+          sub=[x for x in offers if x['subscriptionId']=='dreux'];pub=[x for x in offers if x['subscriptionId'] is None]
+          assert len(sub)==len(pub)==s['eligiblePdcCount']
+          print(json.dumps(r,ensure_ascii=False,indent=2))
+          PY
+      - name: Upload Dreux audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-dreux-canonical-audit
+          path: |
+            build/france_irve_identity/network_gap_report.json
+            build/france_irve_offers/dreux_materialization_report.json
+            build/france_irve_offers/dreux_pdc_offers_contract_v1_1.json.gz
+          retention-days: 14
