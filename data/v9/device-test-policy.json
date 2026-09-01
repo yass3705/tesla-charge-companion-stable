@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "enabled": true,
-  "maxWindowMinutes": 60,
+  "maxWindowMinutes": 120,
   "minimumRuns": 10,
   "minimumSuccessfulRuns": 10,
   "maxFailureRate": 0.05,
@@ -11,5 +11,5 @@
   "requireReadiness": true,
   "requireCanaryPercentZero": true,
   "autoCloseOnRollback": true,
-  "notes": "Optimized first-device V9 test policy window. Close after PASS or ROLLBACK. Random canary remains 0%."
+  "notes": "Optimized first-device V9 test policy window extended to 120 minutes for the controlled mobile test. Close after PASS or ROLLBACK. Random canary remains 0%."
 }
