@@ -3,9 +3,9 @@
   "enabled": true,
   "requireReadiness": true,
   "readinessApproved": true,
-  "tokenSha256": "62439aa8f92c9047cea21beb5a0bcff213a4828436ded3d299d3d6dd176f5dc8",
-  "tokenVersion": "device-test-20260901110924",
-  "expiresAt": "2026-09-01T12:09:24.000Z",
+  "tokenSha256": "eb7cb06d0d5eafbad3b21f2f1f5f58607aab73574eae6a50a858e12991bcb8e0",
+  "tokenVersion": "device-test-20260901112255-rotated",
+  "expiresAt": "2026-09-01T12:22:55.175Z",
   "maxGrantMinutes": 60,
-  "notes": "Temporary controlled single-device test window. Token plaintext is never committed."
+  "notes": "Temporary controlled single-device test window after secure token rotation. Token plaintext is never committed."
 }
