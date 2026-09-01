@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": "evreux-alize-tariff-review",
+  "country": "FR",
+  "verifiedAt": "2026-09-01",
+  "localScope": {
+    "label": "Ville d'Evreux",
+    "canonicalUmbrellaTariffNetworkId": "alize-liberte",
+    "physicalOperatorId": "bouygues-energies-services",
+    "contractingAuthority": "R-Mob",
+    "codeInsee": "27229",
+    "currentPanStationCount": 1,
+    "currentPanPdcCount": 6,
+    "exampleStation": "Ville d'Evreux - Rue Clément Ader"
+  },
+  "sources": {
+    "officialAlizeTariffs": "https://alizecharge.com/tarifs-alize/"
+  },
+  "decision": "reference_only_current_direct_tariff_unpublished",
+  "rankable": false,
+  "blockedReasons": [
+    "current_direct_evreux_tariff_not_published_on_verified_official_page",
+    "alize_app_station_tariff_required",
+    "third_party_price_observations_not_sufficient_for_direct_tariff"
+  ],
+  "policy": {
+    "genericAlizeTariffForbidden": true,
+    "otherRMobTariffsForbidden": true,
+    "parkingSeparate": true,
+    "physicalInventoryFromPanOnly": true
+  },
+  "notes": "Alize states that partner networks define their own tariffs and that current station tariffs are shown in the app. No current official direct Evreux amount was verified on 2026-09-01, so the six current PAN PDC stay unpriced and non-rankable."
+}
