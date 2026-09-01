@@ -1,0 +1,198 @@
+name: V9 Italy Repower direct tariffs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/repower-italy-v9-direct
+    paths:
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_repower_italy.py
+      - scripts/v9_overlay_neogy_alperia_italy.py
+      - scripts/v9_report_italy_direct_gap.py
+      - tests/v9-repower-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - tests/v9-italy-functional-qa.test.cjs
+      - .github/workflows/v9-italy-repower.yml
+      - .github/workflows/v9-italy-neogy-alperia.yml
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_repower_italy.py
+      - scripts/v9_overlay_neogy_alperia_italy.py
+      - scripts/v9_report_italy_direct_gap.py
+      - tests/v9-repower-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - tests/v9-italy-functional-qa.test.cjs
+      - .github/workflows/v9-italy-repower.yml
+      - .github/workflows/v9-italy-neogy-alperia.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-italy-repower-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical public data-lab candidates
+        run: |
+          set -euo pipefail
+          base='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national'
+          curl --fail --silent --show-error --location \
+            --output /tmp/repower_italy_v9_candidate.json.gz \
+            "$base/repower_italy_v9_candidate.json.gz"
+          curl --fail --silent --show-error --location \
+            --output /tmp/freetox_direct_stations_italy.json.gz \
+            "$base/freetox_direct_stations_italy.json.gz"
+          curl --fail --silent --show-error --location \
+            --output /tmp/ewiva_pos_direct_italy_candidate.json.gz \
+            "$base/ewiva_pos_direct_italy_candidate.json.gz"
+          curl --fail --silent --show-error --location \
+            --output /tmp/neogy_alperia_italy_v9_candidate.json.gz \
+            "$base/neogy_alperia_italy_v9_candidate.json.gz"
+          test -s /tmp/repower_italy_v9_candidate.json.gz
+          test -s /tmp/freetox_direct_stations_italy.json.gz
+          test -s /tmp/ewiva_pos_direct_italy_candidate.json.gz
+          test -s /tmp/neogy_alperia_italy_v9_candidate.json.gz
+
+      - name: Rebuild exact Repower overlay
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/v9_overlay_repower_italy.py \
+            scripts/v9_overlay_neogy_alperia_italy.py
+          python scripts/v9_overlay_repower_italy.py \
+            --candidate /tmp/repower_italy_v9_candidate.json.gz \
+            --out data/v9/italy-offers.json \
+            --report /tmp/repower-overlay-report.json \
+            --publish
+
+      - name: Validate runtime price and fail-closed semantics
+        run: |
+          node tests/v9-repower-italy-runtime.test.cjs
+          node tests/v9-italy-runtime-smoke.test.cjs
+          node tests/v9-offer-validity.test.cjs
+          node tests/v9-unknown-postcharge.test.cjs
+
+      - name: Run complete Italy functional QA
+        run: node tests/v9-italy-functional-qa.test.cjs
+
+      - name: Require composable Italy overlays
+        run: |
+          set -euo pipefail
+          python scripts/v9_overlay_freetox_italy.py \
+            --candidate /tmp/freetox_direct_stations_italy.json.gz \
+            --out /tmp/freetox-composed.json \
+            --report /tmp/freetox-composed-report.json \
+            --publish >/tmp/freetox-composed.log
+          cmp data/v9/italy-offers.json /tmp/freetox-composed.json
+          rm /tmp/freetox-composed.json
+
+          python scripts/v9_overlay_ewiva_pos_italy.py \
+            --candidate /tmp/ewiva_pos_direct_italy_candidate.json.gz \
+            --out /tmp/ewiva-composed.json \
+            --report /tmp/ewiva-composed-report.json \
+            --publish >/tmp/ewiva-composed.log
+          cmp data/v9/italy-offers.json /tmp/ewiva-composed.json
+          rm /tmp/ewiva-composed.json
+
+          python scripts/v9_overlay_neogy_alperia_italy.py \
+            --candidate /tmp/neogy_alperia_italy_v9_candidate.json.gz \
+            --out /tmp/neogy-composed.json \
+            --report /tmp/neogy-composed-report.json \
+            --publish >/tmp/neogy-composed.log
+          cmp data/v9/italy-offers.json /tmp/neogy-composed.json
+          rm /tmp/neogy-composed.json
+
+          python scripts/v9_overlay_repower_italy.py \
+            --candidate /tmp/repower_italy_v9_candidate.json.gz \
+            --out /tmp/repower-composed.json \
+            --report /tmp/repower-composed-report.json \
+            --publish >/tmp/repower-composed.log
+          cmp data/v9/italy-offers.json /tmp/repower-composed.json
+          rm /tmp/repower-composed.json
+
+      - name: Audit exact direct coverage after Repower
+        run: |
+          mkdir -p /tmp/repower-gap
+          python scripts/v9_report_italy_direct_gap.py \
+            --json-out /tmp/repower-gap/italy-direct-gap-report.json \
+            --markdown-out /tmp/repower-gap/italy-direct-gap-report.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('/tmp/repower-gap/italy-direct-gap-report.json').read_text())
+          summary=report['summary']
+          repower=next(row for row in report['ranking'] if row['cpo']=='Repower Vendita Italia SpA')
+          assert summary['stations']==29696
+          assert summary['physicalEvse']==75025
+          assert summary['matchedDirectEvse']==53112
+          assert summary['uncoveredEvse']==21913
+          assert summary['directCoveragePct']==70.79
+          assert summary['orphanDirectOfferEvseIds']==0
+          assert repower=={
+              'cpo':'Repower Vendita Italia SpA',
+              'stations':982,
+              'physicalEvse':1155,
+              'directCoveredEvse':661,
+              'uncoveredEvse':494,
+              'stationsWithGap':373,
+              'directCoveragePct':57.23,
+          }
+          print(json.dumps({'summary':summary,'repower':repower},indent=2))
+          PY
+
+      - name: Require deterministic data on pull requests
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- data/v9/italy-offers.json
+
+      - name: Publish generated Italy catalogue on the integration branch
+        if: github.event_name != 'pull_request' && github.ref_name == 'feature/repower-italy-v9-direct'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json
+          if git diff --cached --quiet; then
+            echo 'Repower Italy catalogue already current'
+            exit 0
+          fi
+          git commit -m "data(v9): publish Repower direct overlay [run ${GITHUB_RUN_ID}]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload overlay and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-italy-repower
+          path: |
+            /tmp/repower-overlay-report.json
+            /tmp/freetox-composed-report.json
+            /tmp/ewiva-composed-report.json
+            /tmp/neogy-composed-report.json
+            /tmp/repower-composed-report.json
+            /tmp/repower-gap/italy-direct-gap-report.json
+            /tmp/repower-gap/italy-direct-gap-report.md
+          if-no-files-found: error
+          retention-days: 14

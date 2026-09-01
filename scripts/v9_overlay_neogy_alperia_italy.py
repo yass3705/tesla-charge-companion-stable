@@ -414,6 +414,8 @@ def main() -> None:
     )
     unresolved_ids = {str(entry["evseId"]) for entry in unresolved_entries}
     published_direct_ids = set().union(*(exact_ids(offer) for offer in new_direct)) if new_direct else set()
+    expected_direct = len(retained_direct) + len(new_direct)
+    expected_subscriptions = len(retained_subscriptions) + len(new_subscriptions)
     gates = {
         "physicalStations29696": len(rows) == 29696,
         "physicalEvse75025": len(physical_ids) == 75025,
@@ -451,7 +453,7 @@ def main() -> None:
             and "activationFeeEur" not in offer["pricing"]
             for offer in new_subscriptions
         ),
-        "baselineCoreDirect50914": len(retained_direct) == 50914,
+        "baselineCoreDirectPreserved": len(retained_direct) >= 50914,
         "baselineCoreSubscriptions50008": len(retained_subscriptions) == 50008,
         "baselineEmsp1678": len(baseline_emsp) == 1678,
         "previousDirectIdempotent": len(previous_direct) in {0, 1537},
@@ -460,8 +462,9 @@ def main() -> None:
         and len(new_subscription_offer_ids) == len(set(new_subscription_offer_ids)),
         "noOfferIdCollision": not direct_id_collisions and not subscription_id_collisions,
         "noOtherDirectEvseCollision": not direct_evse_collisions,
-        "overlayDirect52451": len(overlay["directOffers"]) == 52451,
-        "overlaySubscriptions53134": len(overlay["subscriptionOffers"]) == 53134,
+        "overlayDirectComposed": len(overlay["directOffers"]) == expected_direct,
+        "overlaySubscriptionsComposed": len(overlay["subscriptionOffers"])
+        == expected_subscriptions,
         "otherDirectOffersPreservedExactly": [offer for offer in overlay["directOffers"] if not is_existing_direct(offer)]
         == retained_direct,
         "otherSubscriptionsPreservedExactly": [
