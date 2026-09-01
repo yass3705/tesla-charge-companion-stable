@@ -80,14 +80,14 @@ jobs:
           node --check site/v9-test/v9-app/scenario-runner.js
           grep -q "../../" site/v9-test/v9-gate/gate.js
           echo 'Isolated V9 test package validated; root index is byte-identical to main.'
-      - name: Upload Pages artifact
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST')
+      - name: Upload Pages artifact for explicit manual deployment only
+        if: github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST')
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST'
     needs: build
     runs-on: ubuntu-latest
     environment:
