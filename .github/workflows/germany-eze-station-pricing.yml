@@ -1,0 +1,33 @@
+name: Germany V9 eze.network station pricing
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/build_germany_eze_station_pricing_v9.py'
+      - '.github/workflows/germany-eze-station-pricing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build eze.network compound tariff pricing
+        run: python scripts/build_germany_eze_station_pricing_v9.py --out build/eze.json
+      - name: Validate eze.network coverage
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('build/eze.json'))
+          assert d['operator']=='eze.network'
+          assert d['entryCount'] > 0
+          assert all(len(x['chunks'])==2 for x in d['entries'])
+          assert all({c['pricePerKwh'] for c in x['chunks']}=={0.38} for x in d['entries'])
+          print({'sites':d['bnetzaSiteRows'],'entryCount':d['entryCount']})
+          PY
