@@ -51,8 +51,8 @@ def main():
     for e in (c[6] or []): g['ids'].add(e);evses.append(e)
   cfg=[]
   for j,g in enumerate(sorted(cfgmap.values(),key=lambda z:(z['kind'],z['power'],z['label']))):
-   ids=sorted(g['ids']);cnt=len(ids) if ids else g['count'];cfg.append([f'bnetza-site-{j}-{g["kind"].lower()}-{str(g["power"]).replace(".","_")}',g['label'],g['kind'],g['power'],cnt,[],ids])
-  unique_evses=sorted(set(evses));cnt=len(unique_evses) or declared or sum(c[4] for c in cfg);evse_total+=cnt
+   ids=sorted(g['ids']);cnt=max(len(ids),g['count']) if ids else g['count'];cfg.append([f'bnetza-site-{j}-{g["kind"].lower()}-{str(g["power"]).replace(".","_")}',g['label'],g['kind'],g['power'],cnt,[],ids])
+  unique_evses=sorted(set(evses));cnt=max(len(unique_evses),declared,sum(c[4] for c in cfg));evse_total+=cnt
   parsed_dates=[d for d in (commissioning_date(r[9]) for r in items) if d];commissioned=min(parsed_dates).isoformat() if parsed_dates else ''
   outrows.append([sid,name,addr,lat,lon,op,cnt,access,cfg,commissioned,network])
   aliases=[];rawops=set();all_evses=[]
