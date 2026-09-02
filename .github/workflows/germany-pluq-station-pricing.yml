@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/build_germany_pluq_station_pricing_v9.py'
+      - 'scripts/build_germany_bnetza_v9.py'
       - 'data/v9/germany-crosswalk.json'
       - '.github/workflows/germany-pluq-station-pricing.yml'
   workflow_dispatch:
@@ -19,6 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Rebuild Germany BNetzA crosswalk
+        run: python scripts/build_germany_bnetza_v9.py --out build/germany-static-pluq --crosswalk data/v9/germany-crosswalk.json
       - name: Build Pluq EVSE pricing from ROAD public flow
         run: python scripts/build_germany_pluq_station_pricing_v9.py
       - name: Validate useful coverage
