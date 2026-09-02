@@ -1,0 +1,33 @@
+name: Germany V9 Mer station pricing
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/build_germany_mer_station_pricing_v9.py'
+      - '.github/workflows/germany-mer-station-pricing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build Mer power-tier pricing
+        run: python scripts/build_germany_mer_station_pricing_v9.py --out build/mer.json
+      - name: Validate Mer coverage
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('build/mer.json'))
+          assert d['operator']=='Mer'
+          assert d['entryCount'] > 0
+          assert set(x['pricePerKwh'] for x in d['entries']).issubset({0.49,0.57,0.69})
+          assert all(x['evseId'] and x['powerKw']>0 for x in d['entries'])
+          print({'sites':d['bnetzaSiteRows'],'entryCount':d['entryCount'],'prices':sorted({x['pricePerKwh'] for x in d['entries']})})
+          PY
