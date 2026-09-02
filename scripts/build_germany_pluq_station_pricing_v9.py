@@ -24,7 +24,7 @@ def load_crosswalk(path):
  except Exception:return {}
  groups={}
  for e in d.get('entries',[]):
-  if e.get('operator')!='Pluq':continue
+  if 'pluq' not in str(e.get('operator') or '').lower():continue
   for evse in e.get('bnetzaEvseIds',[]):
    m=EVNUM_RE.search(evse)
    if m:groups.setdefault(m.group(1),[]).append({'evseId':evse,'bnetzaId':e.get('bnetzaId'),'canonicalId':e.get('canonicalId')})
