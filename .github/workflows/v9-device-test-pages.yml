@@ -23,6 +23,13 @@ on:
         description: 'Type DEPLOY_V9_TEST to publish /v9-test/ while keeping main at root'
         required: true
         default: 'NO'
+      target_sha:
+        description: 'Exact 40-character V9 candidate SHA to deploy'
+        required: true
+      confirm_replace_locked_test_deployment:
+        description: 'Type REPLACE_LOCKED_V9_TEST to reset the locked test deployment'
+        required: true
+        default: 'NO'
 
 permissions:
   contents: read
@@ -35,13 +42,49 @@ concurrency:
 
 jobs:
   build:
-    if: github.sha == '53077587df4fe7c06c5aaaf0c5bbde30bf313a72'
+    if: >-
+      github.event_name != 'workflow_dispatch' ||
+      (
+        inputs.deploy == 'DEPLOY_V9_TEST' &&
+        inputs.confirm_replace_locked_test_deployment == 'REPLACE_LOCKED_V9_TEST'
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout V9 source
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.target_sha || github.sha }}
           path: v9src
+          fetch-depth: 0
+      - name: Validate explicit candidate and branch drift
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='${{ inputs.target_sha }}'
+          branch='refactor/unified-data-engine-v9'
+          if ! [[ "$target" =~ ^[0-9a-f]{40}$ ]]; then
+            echo 'target_sha must be an exact lowercase 40-character commit SHA.' >&2
+            exit 1
+          fi
+          resolved="$(git -C v9src rev-parse HEAD)"
+          if [ "$resolved" != "$target" ]; then
+            echo "Checked out $resolved instead of requested $target." >&2
+            exit 1
+          fi
+          git -C v9src fetch --no-tags origin "$branch"
+          branch_head="$(git -C v9src rev-parse FETCH_HEAD)"
+          if ! git -C v9src merge-base --is-ancestor "$target" "$branch_head"; then
+            echo 'Requested candidate is not an ancestor of the current V9 branch.' >&2
+            exit 1
+          fi
+          unexpected="$(git -C v9src diff --name-only "$target" "$branch_head" | grep -Ev '^\.github/workflows/v9-device-test-pages\.yml$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'V9 runtime/data drift exists after the requested candidate; reset refused.' >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+          echo "Guarded reset accepted for candidate $target; branch head is $branch_head."
       - name: Checkout production main snapshot
         uses: actions/checkout@v4
         with:
@@ -82,13 +125,19 @@ jobs:
           grep -q "../../" site/v9-test/v9-gate/gate.js
           echo 'Isolated V9 test package validated; root index is byte-identical to main.'
       - name: Upload Pages artifact for explicit manual deployment only
-        if: github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST'
+        if: >-
+          github.event_name == 'workflow_dispatch' &&
+          inputs.deploy == 'DEPLOY_V9_TEST' &&
+          inputs.confirm_replace_locked_test_deployment == 'REPLACE_LOCKED_V9_TEST'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy == 'DEPLOY_V9_TEST'
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.deploy == 'DEPLOY_V9_TEST' &&
+      inputs.confirm_replace_locked_test_deployment == 'REPLACE_LOCKED_V9_TEST'
     needs: build
     runs-on: ubuntu-latest
     environment:
