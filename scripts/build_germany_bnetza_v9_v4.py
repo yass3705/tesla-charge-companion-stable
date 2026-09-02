@@ -67,12 +67,14 @@ def build(src,out,cross,alias_path,u):
    if not c and p is None and not e:continue
    p=p if p is not None else fnum(nv(r,'Nennleistung Ladeeinrichtung [kW]')) or 11.;k=kind(c,p,typ);key=(k,round(p,1),c);g=groups.setdefault(key,{'kind':k,'power':round(p,1),'connector':c,'evses':[]})
    if e:g['evses'].append(e);ev.append(e)
+  declared=int(fnum(nv(r,'Anzahl Ladepunkte')) or 0)
   if not groups:
-   cnt=int(fnum(nv(r,'Anzahl Ladepunkte')) or 1);p=fnum(nv(r,'Nennleistung Ladeeinrichtung [kW]')) or 11.;k=kind('',p,typ);groups[(k,round(p,1),'')]={'kind':k,'power':round(p,1),'connector':'','evses':[],'count':cnt}
+   cnt=declared or 1;p=fnum(nv(r,'Nennleistung Ladeeinrichtung [kW]')) or 11.;k=kind('',p,typ);groups[(k,round(p,1),'')]={'kind':k,'power':round(p,1),'connector':'','evses':[],'count':cnt}
   cfg=[]
   for i,g in enumerate(sorted(groups.values(),key=lambda x:(x['kind'],x['power'],x['connector']))):
    ids=sorted(set(g.get('evses',[])));cnt=len(ids) or g.get('count',1);cid=f'bnetza-{i}-{g["kind"].lower()}-{str(g["power"]).replace(".","_")}';label=f'BNetzA · {g["kind"]} {g["power"]:g} kW'+(f' · {g["connector"]}' if g['connector'] else '');cfg.append([cid,label,g['kind'],g['power'],cnt,[],ids])
-  count=len(set(ev)) or int(fnum(nv(r,'Anzahl Ladepunkte')) or sum(x[4] for x in cfg));evtot+=count;upd=nv(r,'Inbetriebnahmedatum') or now[:10];R.append([ID,name,address,round(lat,6),round(lon,6),op,count,0,cfg,upd,op]);C.append({'canonicalId':f'DE:national:{ID}','bnetzaId':ID,'bnetzaEvseIds':sorted(set(ev)),'aliases':[f'bnetza:{ID}'],'sourceIds':[],'operator':op,'rawOperator':rawop or None})
+  if len(cfg)==1 and declared>cfg[0][4]:cfg[0][4]=declared
+  count=max(len(set(ev)),declared,sum(x[4] for x in cfg));evtot+=count;upd=nv(r,'Inbetriebnahmedatum') or now[:10];R.append([ID,name,address,round(lat,6),round(lon,6),op,count,0,cfg,upd,op]);C.append({'canonicalId':f'DE:national:{ID}','bnetzaId':ID,'bnetzaEvseIds':sorted(set(ev)),'aliases':[f'bnetza:{ID}'],'sourceIds':[],'operator':op,'rawOperator':rawop or None})
  R.sort(key=lambda x:x[0]);C.sort(key=lambda x:x['bnetzaId']);O=Path(out);shutil.rmtree(O,ignore_errors=True);O.mkdir(parents=True,exist_ok=True);tiles=defaultdict(list)
  for r in R:tiles[tile(r[3],r[4])].append(r)
  mt=[]
