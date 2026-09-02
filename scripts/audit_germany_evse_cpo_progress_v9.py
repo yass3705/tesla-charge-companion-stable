@@ -19,7 +19,7 @@ def alias_map():
  return m
 
 def treatment_index(amap):
- direct=set();station=set();collectors=set();deferred={}
+ direct=set();station=set();collectors=set();partial_collectors=set();deferred={}
  for p in glob.glob('data/v9/germany-direct-offers*.json'):
   try:d=load(p)
   except:continue
@@ -36,15 +36,17 @@ def treatment_index(amap):
  p=Path('data/v9/germany-station-pricing-collectors.json')
  if p.exists():
   for c in load(p).get('collectors',[]):
-   if c.get('status')=='active_validated' and c.get('operator'):
-    op=amap.get(norm(c['operator']),c['operator']);collectors.add(norm(op))
+   if not c.get('operator'):continue
+   op=norm(amap.get(norm(c['operator']),c['operator']))
+   if c.get('status')=='active_validated':collectors.add(op)
+   elif c.get('status')=='active_partial':partial_collectors.add(op)
  p=Path('data/v9/germany-cpo-deferred-pricing.json')
  if p.exists():
   for c in load(p).get('cpos',[]):
    if c.get('operator'):
     op=amap.get(norm(c['operator']),c['operator']);deferred[norm(op)]=c.get('status','')
- done=direct|station|collectors|set(deferred)
- return {'done':done,'direct':direct,'station':station,'collectors':collectors,'deferred':deferred}
+ done=direct|station|collectors|partial_collectors|set(deferred)
+ return {'done':done,'direct':direct,'station':station,'collectors':collectors,'partialCollectors':partial_collectors,'deferred':deferred}
 
 def classify(opn,idx):
  status=idx['deferred'].get(opn,'')
@@ -53,6 +55,7 @@ def classify(opn,idx):
   if any(t in status for t in ('in_progress','partial','deferred','app_only')):return 'partial'
   if status.startswith('direct_dc_resolved') or status.startswith('direct_ac_resolved'):return 'partial'
   return 'complete'
+ if opn in idx['partialCollectors']:return 'partial'
  if opn in idx['collectors']:return 'complete'
  if opn in idx['station'] and opn not in idx['direct']:return 'partial'
  if opn in idx['direct']:return 'complete'
@@ -92,6 +95,6 @@ def main():
    treated_count+=1;classes[cls or 'partial']+=1;treated_rows.append({'evsePrefix':p,'dominantOperator':canonical,'classification':cls or 'partial','points':n})
   rows.append({'evsePrefix':p,'points':n,'dominantOperator':canonical,'dominantShare':round(domn/n,4),'treated':is_done,'classification':cls,'topOwners':owners[p].most_common(5)})
  total=len(rows);untreated=[x for x in rows if not x['treated']]
- out={'schemaVersion':2,'country':'DE','method':'unique EVSE party prefix','totalCpoCount':total,'treatedCpoCount':treated_count,'remainingCpoCount':total-treated_count,'treatedShare':round(treated_count/total,4) if total else 0,'classificationCounts':{'complete':classes['complete'],'partial':classes['partial'],'blocked':classes['blocked']},'treatedCpos':treated_rows,'topUntreated':untreated[:100],'ownerLabelsWithoutRecognizableEvsePrefix':len(no_prefix),'topOwnerLabelsWithoutPrefix':no_prefix.most_common(50),'note':'EVSE prefixes are the primary CPO identity counter. Classification is derived from explicit V9 source status: validated direct offers/collectors are complete; exact station seeds and explicit in-progress/deferred scopes are partial; explicit blocked_* records are blocked. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.'}
+ out={'schemaVersion':2,'country':'DE','method':'unique EVSE party prefix','totalCpoCount':total,'treatedCpoCount':treated_count,'remainingCpoCount':total-treated_count,'treatedShare':round(treated_count/total,4) if total else 0,'classificationCounts':{'complete':classes['complete'],'partial':classes['partial'],'blocked':classes['blocked']},'treatedCpos':treated_rows,'topUntreated':untreated[:100],'ownerLabelsWithoutRecognizableEvsePrefix':len(no_prefix),'topOwnerLabelsWithoutPrefix':no_prefix.most_common(50),'note':'EVSE prefixes are the primary CPO identity counter. Classification is derived from explicit V9 source status: validated direct offers/collectors are complete; validated partial collectors, exact station seeds and explicit in-progress/deferred scopes are partial; explicit blocked_* records are blocked. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.'}
  print(json.dumps(out,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()
