@@ -63,10 +63,16 @@ def open_reader(path):
         except UnicodeDecodeError:pass
     if text is None:raise RuntimeError('BNetzA export cannot be decoded')
     import io
-    sample=text[:65536]
+    lines=text.splitlines(True);start=None
+    for i,line in enumerate(lines[:100]):
+        if line.lstrip('\ufeff').startswith('Ladeeinrichtungs-ID;Betreiber;'):
+            start=i;break
+    if start is None:raise RuntimeError('BNetzA CSV header not found')
+    body=''.join(lines[start:])
+    sample=body[:65536]
     try:dialect=csv.Sniffer().sniff(sample,delimiters=';,\t|')
     except csv.Error:dialect=csv.excel;dialect.delimiter=';'
-    return csv.DictReader(io.StringIO(text),dialect=dialect)
+    return csv.DictReader(io.StringIO(body),dialect=dialect)
 
 def build(source,out_dir,crosswalk_path,aliases_path,source_url):
     aliases=load_aliases(aliases_path);reader=open_reader(source);rows=[];cross=[];source_rows=0;skipped=0;evse_total=0
