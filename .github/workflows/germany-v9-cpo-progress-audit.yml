@@ -5,6 +5,7 @@ on:
     paths:
       - 'data/v9/germany-operator-aliases*.json'
       - 'scripts/audit_germany_operator_normalization_v9.py'
+      - 'scripts/build_germany_bnetza_v9_compat.py'
       - '.github/workflows/germany-v9-cpo-progress-audit.yml'
   workflow_dispatch:
 
@@ -21,7 +22,7 @@ jobs:
           python-version: '3.12'
       - name: Build fresh BNetzA grouped dataset
         run: |
-          python scripts/build_germany_bnetza_v9.py --out build/germany-sites --crosswalk build/germany-crosswalk.json
+          python scripts/build_germany_bnetza_v9_compat.py --out build/germany-sites --crosswalk build/germany-crosswalk.json
       - name: Audit all German CPO identities
         run: |
           python scripts/audit_germany_operator_normalization_v9.py --sites build/germany-sites/all.json.gz --top 1000
