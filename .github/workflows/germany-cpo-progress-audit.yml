@@ -1,0 +1,23 @@
+name: Germany CPO progress audit
+
+on:
+  pull_request:
+    paths:
+      - 'data/v9/germany-*.json'
+      - 'scripts/audit_germany_cpo_progress_v9.py'
+      - '.github/workflows/germany-cpo-progress-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Germany CPO progress
+        run: python scripts/audit_germany_cpo_progress_v9.py
