@@ -4,8 +4,10 @@ on:
   pull_request:
     paths:
       - 'data/v9/germany-operator-aliases*.json'
-      - 'scripts/audit_germany_operator_normalization_v9.py'
-      - 'scripts/build_germany_bnetza_v9_compat.py'
+      - 'data/v9/germany-direct-offers*.json'
+      - 'data/v9/germany-station-pricing*.json'
+      - 'data/v9/germany-cpo-deferred-pricing.json'
+      - 'scripts/audit_germany_cpo_progress_v9.py'
       - '.github/workflows/germany-v9-cpo-progress-audit.yml'
   workflow_dispatch:
 
@@ -20,9 +22,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Build fresh BNetzA grouped dataset
-        run: |
-          python scripts/build_germany_bnetza_v9_compat.py --out build/germany-sites --crosswalk build/germany-crosswalk.json
-      - name: Audit all German CPO identities
-        run: |
-          python scripts/audit_germany_operator_normalization_v9.py --sites build/germany-sites/all.json.gz --top 1000
+      - name: Audit Germany CPO treated vs total
+        run: python scripts/audit_germany_cpo_progress_v9.py
