@@ -17,30 +17,50 @@ def alias_map():
    m[norm(c)]=c
    for a in x.get('aliases',[]):m[norm(a)]=c
  return m
-def treated(amap):
- names=set()
+
+def treatment_index(amap):
+ direct=set();station=set();collectors=set();deferred={}
  for p in glob.glob('data/v9/germany-direct-offers*.json'):
   try:d=load(p)
   except:continue
   for o in d.get('directOffers',[]):
    for k in ('operatorAliases','networkAliases'):
-    for n in o.get(k,[]):names.add(amap.get(norm(n),n))
+    for n in o.get(k,[]):direct.add(norm(amap.get(norm(n),n)))
  for p in glob.glob('data/v9/germany-station-pricing*.json'):
   try:d=load(p)
   except:continue
+  default_op=d.get('operator')
   for e in d.get('entries',[]):
-   if e.get('operator'):names.add(amap.get(norm(e['operator']),e['operator']))
+   op=e.get('operator') or default_op
+   if op:station.add(norm(amap.get(norm(op),op)))
  p=Path('data/v9/germany-station-pricing-collectors.json')
  if p.exists():
   for c in load(p).get('collectors',[]):
-   if c.get('status')=='active_validated' and c.get('operator'):names.add(amap.get(norm(c['operator']),c['operator']))
+   if c.get('status')=='active_validated' and c.get('operator'):
+    op=amap.get(norm(c['operator']),c['operator']);collectors.add(norm(op))
  p=Path('data/v9/germany-cpo-deferred-pricing.json')
  if p.exists():
   for c in load(p).get('cpos',[]):
-   if c.get('operator'):names.add(amap.get(norm(c['operator']),c['operator']))
- return {norm(x) for x in names}
+   if c.get('operator'):
+    op=amap.get(norm(c['operator']),c['operator']);deferred[norm(op)]=c.get('status','')
+ done=direct|station|collectors|set(deferred)
+ return {'done':done,'direct':direct,'station':station,'collectors':collectors,'deferred':deferred}
+
+def classify(opn,idx):
+ status=idx['deferred'].get(opn,'')
+ if status:
+  if status.startswith('blocked_'):return 'blocked'
+  if any(t in status for t in ('in_progress','partial','deferred','app_only')):return 'partial'
+  if status.startswith('direct_dc_resolved') or status.startswith('direct_ac_resolved'):return 'partial'
+  return 'complete'
+ if opn in idx['collectors']:return 'complete'
+ if opn in idx['station'] and opn not in idx['direct']:return 'partial'
+ if opn in idx['direct']:return 'complete'
+ if opn in idx['station']:return 'partial'
+ return None
+
 def reader():
- req=urllib.request.Request(URL,headers={'User-Agent':'TCC-V9-DE-EVSE-CPO-audit/1.0'})
+ req=urllib.request.Request(URL,headers={'User-Agent':'TCC-V9-DE-EVSE-CPO-audit/1.1'})
  with urllib.request.urlopen(req,timeout=180) as r:raw=r.read()
  text=None
  for enc in ('utf-8-sig','utf-8','cp1252','latin-1'):
@@ -55,7 +75,7 @@ def prefix(ev):
  return f'{m.group(1)}*{m.group(2)}' if m else None
 
 def main():
- amap=alias_map();done=treated(amap);owners=defaultdict(Counter);points=Counter();no_prefix=Counter()
+ amap=alias_map();idx=treatment_index(amap);owners=defaultdict(Counter);points=Counter();no_prefix=Counter()
  for r in reader():
   raw=(r.get('Betreiber') or '').strip();op=amap.get(norm(raw),raw)
   if norm(op)=='tesla':continue
@@ -65,12 +85,13 @@ def main():
    if not p:continue
    found=True;points[p]+=1;owners[p][op]+=1
   if not found and raw:no_prefix[op]+=1
- rows=[];treated_count=0
+ rows=[];treated_count=0;classes=Counter();treated_rows=[]
  for p,n in points.most_common():
-  dominant,domn=owners[p].most_common(1)[0];canonical=amap.get(norm(dominant),dominant);is_done=norm(canonical) in done
-  if is_done:treated_count+=1
-  rows.append({'evsePrefix':p,'points':n,'dominantOperator':canonical,'dominantShare':round(domn/n,4),'treated':is_done,'topOwners':owners[p].most_common(5)})
+  dominant,domn=owners[p].most_common(1)[0];canonical=amap.get(norm(dominant),dominant);opn=norm(canonical);is_done=opn in idx['done'];cls=classify(opn,idx) if is_done else None
+  if is_done:
+   treated_count+=1;classes[cls or 'partial']+=1;treated_rows.append({'evsePrefix':p,'dominantOperator':canonical,'classification':cls or 'partial','points':n})
+  rows.append({'evsePrefix':p,'points':n,'dominantOperator':canonical,'dominantShare':round(domn/n,4),'treated':is_done,'classification':cls,'topOwners':owners[p].most_common(5)})
  total=len(rows);untreated=[x for x in rows if not x['treated']]
- out={'schemaVersion':1,'country':'DE','method':'unique EVSE party prefix','totalCpoCount':total,'treatedCpoCount':treated_count,'remainingCpoCount':total-treated_count,'treatedShare':round(treated_count/total,4) if total else 0,'topUntreated':untreated[:100],'ownerLabelsWithoutRecognizableEvsePrefix':len(no_prefix),'topOwnerLabelsWithoutPrefix':no_prefix.most_common(50),'note':'EVSE prefixes are the primary CPO identity counter. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.'}
+ out={'schemaVersion':2,'country':'DE','method':'unique EVSE party prefix','totalCpoCount':total,'treatedCpoCount':treated_count,'remainingCpoCount':total-treated_count,'treatedShare':round(treated_count/total,4) if total else 0,'classificationCounts':{'complete':classes['complete'],'partial':classes['partial'],'blocked':classes['blocked']},'treatedCpos':treated_rows,'topUntreated':untreated[:100],'ownerLabelsWithoutRecognizableEvsePrefix':len(no_prefix),'topOwnerLabelsWithoutPrefix':no_prefix.most_common(50),'note':'EVSE prefixes are the primary CPO identity counter. Classification is derived from explicit V9 source status: validated direct offers/collectors are complete; exact station seeds and explicit in-progress/deferred scopes are partial; explicit blocked_* records are blocked. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.'}
  print(json.dumps(out,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()
