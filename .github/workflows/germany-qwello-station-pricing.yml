@@ -1,0 +1,29 @@
+name: Germany V9 Qwello station pricing
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/build_germany_qwello_station_pricing_v9.py'
+      - '.github/workflows/germany-qwello-station-pricing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/build_germany_qwello_station_pricing_v9.py --out build/qwello.json
+      - run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('build/qwello.json'))
+          assert d['entryCount'] > 0
+          assert all(x['operator']=='Qwello' and x['chunks'] for x in d['entries'])
+          print({'entryCount':d['entryCount']})
+          PY
