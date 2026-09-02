@@ -35,6 +35,11 @@ def treated(alias_map):
   for e in d.get('entries',[]):
    n=e.get('operator')
    if n:names.add(alias_map.get(norm(n),n))
+ collectors=Path('data/v9/germany-station-pricing-collectors.json')
+ if collectors.exists():
+  for c in load_json(collectors).get('collectors',[]):
+   if c.get('status')=='active_validated' and c.get('operator'):
+    n=c['operator'];names.add(alias_map.get(norm(n),n))
  p=Path('data/v9/germany-cpo-deferred-pricing.json')
  if p.exists():
   for e in load_json(p).get('cpos',[]):
