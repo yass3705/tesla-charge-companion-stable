@@ -1,0 +1,22 @@
+name: Germany Pluq ROAD public tariff probe
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/probe_pluq_road_tariffs_v9.py'
+      - '.github/workflows/germany-pluq-road-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe known German Pluq ROAD EVSE station IDs
+        run: python scripts/probe_pluq_road_tariffs_v9.py 7062634 0122364 0365296
