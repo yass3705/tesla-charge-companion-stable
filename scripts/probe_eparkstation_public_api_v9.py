@@ -10,9 +10,9 @@ def inspect(url):
     try:
         af,ast,act,body=get(url)
         urls=sorted(set(re.findall(r'https?://[^"\'`\\\s)]+',body)))
-        strings=sorted(set(re.findall(r'["\'`]([^"\'`]{1,220})["\'`]',body)))
-        interesting=[s for s in strings if re.search(r'(?i)(api|station|location|tariff|price|parking|charge|evse|connector|axios|baseurl|graphql)',s)]
-        print(json.dumps({'asset':url,'status':ast,'bytes':len(body),'urls':urls[:150],'interesting':interesting[:500]},ensure_ascii=False))
+        strings=sorted(set(re.findall(r'["\'`]([^"\'`]{1,240})["\'`]',body)))
+        interesting=[s for s in strings if re.search(r'(?i)(api|station|location|tariff|price|parking|charge|evse|connector|axios|baseurl|graphql|fetch\()',s)]
+        print(json.dumps({'asset':url,'status':ast,'bytes':len(body),'urls':urls[:200],'interesting':interesting[:700]},ensure_ascii=False))
         return body
     except Exception as e:
         print(json.dumps({'asset':url,'error':repr(e)},ensure_ascii=False));return ''
@@ -23,4 +23,4 @@ for asset in main_assets:
     body=inspect(asset)
     chunks=sorted(set(re.findall(r'[A-Za-z][A-Za-z0-9_-]+-[A-Za-z0-9_-]+\.js',body)))
     for name in chunks:
-        if re.search(r'(?i)(Location|Station|Tarif|Charge|Map)',name): inspect(urllib.parse.urljoin(asset,'../'+name))
+        if re.search(r'(?i)(Location|Station|Tarif|Charge|Map)',name): inspect(BASE+'/assets/'+name)
