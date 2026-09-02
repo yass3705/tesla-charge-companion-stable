@@ -1,0 +1,34 @@
+name: Germany V9 Pluq station pricing
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/build_germany_pluq_station_pricing_v9.py'
+      - 'data/v9/germany-crosswalk.json'
+      - '.github/workflows/germany-pluq-station-pricing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build Pluq EVSE pricing from ROAD public flow
+        run: python scripts/build_germany_pluq_station_pricing_v9.py
+      - name: Validate useful coverage
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('build/germany-pluq-station-pricing.json'))
+          assert d['operator']=='Pluq'
+          assert d['pricedStationIds'] > 0
+          assert d['entryCount'] > 0
+          assert all(x['currency']=='EUR' and x['connectorKind']=='AC' for x in d['entries'])
+          print({'pricedStationIds':d['pricedStationIds'],'entryCount':d['entryCount'],'errors':len(d['errors']),'prices':sorted({x['pricePerKwh'] for x in d['entries']})})
+          PY
