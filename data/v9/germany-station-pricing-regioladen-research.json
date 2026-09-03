@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "Regioladen+ GmbH & Co. KG",
+  "entries": [
+    {
+      "operator": "Regioladen+ GmbH & Co. KG",
+      "sourceProvider": "Halberstadtwerke official operator notice + GoingElectric station-level ad-hoc price",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Halberstadt/Kuehlinger-Strasse-Kuehlinger-Strasse-/94752/",
+      "operatorSourceUrl": "https://www.halberstadtwerke.de/produkte-services/energieloesungen/e-mobilitaet/oeffentliches-laden.html",
+      "stationName": "Kühlinger Straße DC",
+      "address": "Kühlinger Str. 12, 38820 Halberstadt",
+      "evseId": "DEHBSE001501",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.57,
+      "accessMode": "station-level ad-hoc direct payment"
+    },
+    {
+      "operator": "Regioladen+ GmbH & Co. KG",
+      "sourceProvider": "Halberstadtwerke official operator notice + GoingElectric station-level ad-hoc price",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Halberstadt/Kuehlinger-Strasse-Kuehlinger-Strasse-/94752/",
+      "operatorSourceUrl": "https://www.halberstadtwerke.de/produkte-services/energieloesungen/e-mobilitaet/oeffentliches-laden.html",
+      "stationName": "Kühlinger Straße DC",
+      "address": "Kühlinger Str. 12, 38820 Halberstadt",
+      "evseId": "DEHBSE001502",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.57,
+      "accessMode": "station-level ad-hoc direct payment"
+    }
+  ],
+  "policy": "Regioladen+ operates infrastructure transferred from multiple municipal utilities. Do not propagate the Halberstadt 0.57 EUR/kWh ad-hoc price to other Regioladen+ stations or legacy/shared EVSE prefixes. Rank only exact EVSE/station mappings with current public station-level ad-hoc evidence."
+}
