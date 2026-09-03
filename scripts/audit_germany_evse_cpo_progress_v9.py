@@ -23,7 +23,7 @@ def alias_map():
  return m
 
 def treatment_index(amap):
- direct=set();station=set();station_prefixes=defaultdict(set);collectors=set();partial_collectors=set();deferred={}
+ direct=set();station=set();station_prefixes=defaultdict(set);station_any_prefixes=set();collectors=set();partial_collectors=set();deferred={}
  for p in glob.glob('data/v9/germany-direct-offers*.json'):
   try:d=load(p)
   except:continue
@@ -35,10 +35,11 @@ def treatment_index(amap):
   except:continue
   default_op=d.get('operator')
   for e in d.get('entries',[]):
+   ep=prefix(e.get('evseId'))
+   if ep:station_any_prefixes.add(ep)
    op=e.get('operator') or default_op
    if not op:continue
    opn=norm(amap.get(norm(op),op));station.add(opn)
-   ep=prefix(e.get('evseId'))
    if ep:station_prefixes[opn].add(ep)
  p=Path('data/v9/germany-station-pricing-collectors.json')
  if p.exists():
@@ -53,7 +54,7 @@ def treatment_index(amap):
    if c.get('operator'):
     op=amap.get(norm(c['operator']),c['operator']);deferred[norm(op)]=c.get('status','')
  operator_done=direct|collectors|partial_collectors|set(deferred)
- return {'operatorDone':operator_done,'direct':direct,'station':station,'stationPrefixes':station_prefixes,'collectors':collectors,'partialCollectors':partial_collectors,'deferred':deferred}
+ return {'operatorDone':operator_done,'direct':direct,'station':station,'stationPrefixes':station_prefixes,'stationAnyPrefixes':station_any_prefixes,'collectors':collectors,'partialCollectors':partial_collectors,'deferred':deferred}
 
 def classify(opn,pfx,idx):
  status=idx['deferred'].get(opn,'')
@@ -65,11 +66,12 @@ def classify(opn,pfx,idx):
  if opn in idx['partialCollectors']:return 'partial'
  if opn in idx['collectors']:return 'complete'
  if opn in idx['direct']:return 'complete'
+ if pfx in idx['stationAnyPrefixes']:return 'partial'
  if pfx in idx['stationPrefixes'].get(opn,set()):return 'partial'
  return None
 
 def reader():
- req=urllib.request.Request(URL,headers={'User-Agent':'TCC-V9-DE-EVSE-CPO-audit/1.2'})
+ req=urllib.request.Request(URL,headers={'User-Agent':'TCC-V9-DE-EVSE-CPO-audit/1.3'})
  with urllib.request.urlopen(req,timeout=180) as r:raw=r.read()
  text=None
  for enc in ('utf-8-sig','utf-8','cp1252','latin-1'):
@@ -97,7 +99,7 @@ def main():
    treated_count+=1;classes[cls]+=1;treated_rows.append({'evsePrefix':p,'dominantOperator':canonical,'classification':cls,'points':n})
   rows.append({'evsePrefix':p,'points':n,'dominantOperator':canonical,'dominantShare':round(domn/n,4),'treated':is_done,'classification':cls,'topOwners':owners[p].most_common(5)})
  total=len(rows);untreated=[x for x in rows if not x['treated']]
- out={'schemaVersion':3,'country':'DE','method':'unique EVSE party prefix','totalCpoCount':total,'treatedCpoCount':treated_count,'remainingCpoCount':total-treated_count,'treatedShare':round(treated_count/total,4) if total else 0,'classificationCounts':{'complete':classes['complete'],'partial':classes['partial'],'blocked':classes['blocked']},'treatedCpos':treated_rows,'topUntreated':untreated[:100],'ownerLabelsWithoutRecognizableEvsePrefix':len(no_prefix),'topOwnerLabelsWithoutPrefix':no_prefix.most_common(50),'note':'EVSE prefixes are the primary CPO identity counter. Operator-wide direct offers, validated collectors and explicit deferred/status records classify all prefixes dominated by that canonical physical operator. Exact station-pricing seeds classify only the EVSE party prefixes actually present in those seeds, preventing a price verified on one party prefix from marking unrelated prefixes of the same operator as treated. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.'}
+ out={'schemaVersion':3,'country':'DE','method':'unique EVSE party prefix','totalCpoCount':total,'treatedCpoCount':treated_count,'remainingCpoCount':total-treated_count,'treatedShare':round(treated_count/total,4) if total else 0,'classificationCounts':{'complete':classes['complete'],'partial':classes['partial'],'blocked':classes['blocked']},'treatedCpos':treated_rows,'topUntreated':untreated[:100],'ownerLabelsWithoutRecognizableEvsePrefix':len(no_prefix),'topOwnerLabelsWithoutPrefix':no_prefix.most_common(50),'note':'EVSE prefixes are the primary CPO identity counter. Operator-wide direct offers, validated collectors and explicit deferred/status records classify all prefixes dominated by that canonical physical operator. Exact station-pricing seeds classify only the EVSE party prefixes actually present in those seeds, independently of the BNetzA owner-label spelling, preventing a price verified on one party prefix from marking unrelated prefixes of the same operator as treated. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.'}
  assert treated_count==sum(classes.values())
  assert treated_count+(total-treated_count)==total
  print(json.dumps(out,ensure_ascii=False,indent=2))
