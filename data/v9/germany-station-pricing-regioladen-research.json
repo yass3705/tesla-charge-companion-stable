@@ -33,7 +33,39 @@
       "currency": "EUR",
       "pricePerKwh": 0.57,
       "accessMode": "station-level ad-hoc direct payment"
+    },
+    {
+      "operator": "Regioladen+ GmbH & Co. KG",
+      "sourceProvider": "adhocladen.de current station-level ad-hoc price + Mobilithek/e-clearing EVSE identity via e-Stations + PreisStation Regioladen+ operator attribution",
+      "sourceUrl": "https://adhocladen.de/stockach/",
+      "evseSourceUrl": "https://www.e-stations.de/ladestationen/stockach/schloss-espasingen-55683",
+      "operatorSourceUrl": "https://www.preisstation.de/ladestation/6491-regioladen-stockach/",
+      "stationName": "Riedstraße / Schloss Espasingen",
+      "address": "Riedstr. 7, 78333 Stockach",
+      "evseId": "DERLAESSH000601",
+      "connectorKind": "AC",
+      "powerKw": 11.04,
+      "currency": "EUR",
+      "pricePerKwh": 0.62,
+      "accessMode": "station-level ad-hoc direct payment",
+      "evidenceNote": "Price is accepted only for this exact station/EVSE. The ad-hoc source identifies Ladenetz Riedstraße Stockach at 0.62 EUR/kWh; Mobilithek/e-clearing identifies the exact EVSE; PreisStation attributes the site to Regioladen+ GmbH & Co. KG."
+    },
+    {
+      "operator": "Regioladen+ GmbH & Co. KG",
+      "sourceProvider": "adhocladen.de current station-level ad-hoc price + Mobilithek/e-clearing EVSE identity via e-Stations + PreisStation Regioladen+ operator attribution",
+      "sourceUrl": "https://adhocladen.de/stockach/",
+      "evseSourceUrl": "https://www.e-stations.de/ladestationen/stockach/schloss-espasingen-55684",
+      "operatorSourceUrl": "https://www.preisstation.de/ladestation/6491-regioladen-stockach/",
+      "stationName": "Riedstraße / Schloss Espasingen",
+      "address": "Riedstr. 7, 78333 Stockach",
+      "evseId": "DERLAESSH000602",
+      "connectorKind": "AC",
+      "powerKw": 11.04,
+      "currency": "EUR",
+      "pricePerKwh": 0.62,
+      "accessMode": "station-level ad-hoc direct payment",
+      "evidenceNote": "Price is accepted only for this exact station/EVSE. The ad-hoc source identifies Ladenetz Riedstraße Stockach at 0.62 EUR/kWh; Mobilithek/e-clearing identifies the exact EVSE; PreisStation attributes the site to Regioladen+ GmbH & Co. KG."
     }
   ],
-  "policy": "Regioladen+ operates infrastructure transferred from multiple municipal utilities. Do not propagate the Halberstadt 0.57 EUR/kWh ad-hoc price to other Regioladen+ stations or legacy/shared EVSE prefixes. Rank only exact EVSE/station mappings with current public station-level ad-hoc evidence."
+  "policy": "Regioladen+ operates infrastructure transferred from multiple municipal utilities. Do not propagate the Halberstadt 0.57 EUR/kWh or Stockach 0.62 EUR/kWh ad-hoc prices to other Regioladen+ stations or legacy/shared EVSE prefixes. Rank only exact EVSE/station mappings with current public station-level ad-hoc evidence."
 }
