@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "Comfortcharge GmbH",
+  "entries": [
+    {
+      "sourceProvider": "PUMP station-level tariff feed",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-comfortcharge-weidenweg-28-duisburg/4b84f720-571f-11eb-8aac-59a746dfe586",
+      "evseId": "DE*CCH*ECCH1900003DLT*3",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.56,
+      "timeFeePerMinute": 0.08,
+      "timeFeeAfterMinutes": 120,
+      "accessMode": "public station tariff; exact payment channel not independently identified"
+    },
+    {
+      "sourceProvider": "PUMP station-level tariff feed",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-comfortcharge-weidenweg-28-duisburg/4b84f720-571f-11eb-8aac-59a746dfe586",
+      "evseId": "DE*CCH*ECCH1900003DLT*1",
+      "connectorKind": "DC",
+      "powerKw": 100,
+      "currency": "EUR",
+      "pricePerKwh": 0.79,
+      "timeFeePerMinute": 0.24,
+      "timeFeeAfterMinutes": 45,
+      "accessMode": "public station tariff; exact payment channel not independently identified"
+    },
+    {
+      "sourceProvider": "PUMP station-level tariff feed",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-comfortcharge-weidenweg-28-duisburg/4b84f720-571f-11eb-8aac-59a746dfe586",
+      "evseId": "DE*CCH*ECCH1900003DLT*2",
+      "connectorKind": "DC",
+      "powerKw": 100,
+      "currency": "EUR",
+      "pricePerKwh": 0.79,
+      "timeFeePerMinute": 0.24,
+      "timeFeeAfterMinutes": 45,
+      "accessMode": "public station tariff; exact payment channel not independently identified"
+    },
+    {
+      "sourceProvider": "PUMP station-level tariff feed",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-comfortcharge-weidenweg-28-duisburg/4b84f720-571f-11eb-8aac-59a746dfe586",
+      "evseId": "DE*CCH*ECCH1900003DLT*4",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.56,
+      "timeFeePerMinute": 0.08,
+      "timeFeeAfterMinutes": 120,
+      "accessMode": "public station tariff; exact payment channel not independently identified"
+    }
+  ],
+  "operatorEvidence": {
+    "termsSource": "https://www.comfortcharge.de/wp-content/uploads/2024/11/AGB-Comfortcharge-App.pdf",
+    "termsSummary": "Comfortcharge's official app terms state that the applicable conditions are shown before each charge and may vary by location, time, power and provider; a nationwide price must therefore not be inferred from individual stations.",
+    "qrSource": "https://www.comfortcharge.de/wp-content/uploads/2024/09/Bedienungsanleitung_Comfortcharge_Ladesaeulen.pdf",
+    "qrSummary": "Comfortcharge's official charging instructions support charging by card, app or QR/mobile website."
+  },
+  "policy": "Treat DE*CCH as station-specific. The Duisburg EVSE prices above are exact public station-level observations, but they are research-only until the payment channel is independently resolved. Other current public station evidence differs (for example 0.53 EUR/kWh AC and 0.74 EUR/kWh HPC at several locations), confirming that no Comfortcharge network fallback is safe. Continue resolving QR/mobile-web or AFIR/Mobilithek prices per EVSE; unverified points remain visible and unranked."
+}
