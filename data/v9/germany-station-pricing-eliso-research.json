@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "eliso / DE*ELI shared EVSE prefix",
+  "entries": [
+    {
+      "sourceProvider": "Eliso via Mobilithek, surfaced by adhocladen.de/ladestau.de",
+      "sourceUrl": "https://adhocladen.de/nuernberg/eliso-segmueller/",
+      "evseId": "DE*ELI*E3584432",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.49,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eliso via Mobilithek, surfaced by adhocladen.de/ladestau.de",
+      "sourceUrl": "https://adhocladen.de/nuernberg/eliso-segmueller/",
+      "evseId": "DE*ELI*E3584540",
+      "connectorKind": "DC",
+      "powerKw": 400,
+      "currency": "EUR",
+      "pricePerKwh": 0.49,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eliso via Mobilithek, surfaced by adhocladen.de/ladestau.de",
+      "sourceUrl": "https://ladestau.de/friedberg/deeli-augsburger-strasse/",
+      "evseId": "DE*ELI*E3584561",
+      "connectorKind": "DC",
+      "powerKw": 400,
+      "currency": "EUR",
+      "pricePerKwh": 0.49,
+      "accessMode": "station-level ad-hoc price feed"
+    },
+    {
+      "sourceProvider": "Eliso via Mobilithek, surfaced by adhocladen.de/ladestau.de",
+      "sourceUrl": "https://ladestau.de/neumuenster/eliso-2-autohof-neumuenster/",
+      "evseId": "DE*ELI*E3584569",
+      "connectorKind": "DC",
+      "powerKw": 400,
+      "currency": "EUR",
+      "pricePerKwh": 0.49,
+      "accessMode": "station-level ad-hoc price feed"
+    }
+  ],
+  "policy": "DE*ELI is not assumed homogeneous and may be shared by multiple physical operators. Use only exact EVSE-scoped ad-hoc prices. A separate PUMP station feed currently shows 0.56 EUR/kWh on some of the same Nürnberg EVSEs, demonstrating a channel/tariff mismatch that must be resolved rather than overwritten. Do not create a DE*ELI-wide fallback; continue AFIR/Mobilithek and QR/payment-channel verification per EVSE."
+}
