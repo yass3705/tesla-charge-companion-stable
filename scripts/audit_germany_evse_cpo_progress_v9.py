@@ -48,9 +48,10 @@ def treatment_index(amap):
    op=norm(amap.get(norm(c['operator']),c['operator']))
    if c.get('status')=='active_validated':collectors.add(op)
    elif c.get('status')=='active_partial':partial_collectors.add(op)
- p=Path('data/v9/germany-cpo-deferred-pricing.json')
- if p.exists():
-  for c in load(p).get('cpos',[]):
+ for p in glob.glob('data/v9/germany-cpo-deferred-pricing*.json'):
+  try:d=load(p)
+  except:continue
+  for c in d.get('cpos',[]):
    if c.get('operator'):
     op=amap.get(norm(c['operator']),c['operator']);deferred[norm(op)]=c.get('status','')
  operator_done=direct|collectors|partial_collectors|set(deferred)
