@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "verifiedAt": "2026-09-03",
+  "preIntegrationOnly": true,
+  "cpos": [
+    {
+      "operator": "Last Mile Solutions",
+      "evsePrefix": "DE*LMS",
+      "status": "blocked_no_public_direct_station_price",
+      "reason": "DE*LMS / Last Mile Solutions (Threeforce) supports direct/ad-hoc charging by web/app/QR and exposes the full price to the driver before a session, but the CPO/charge-point owner controls the tariff. Current public German DE*LMS station pages expose exact EVSE IDs while reporting the ad-hoc/direct price as unknown. A current VAB table publishes 0.61 EUR/kWh plus a fair-use fee for DE-LMS / Threeforce, but that table is an eMSP roaming tariff and therefore cannot be substituted for the physical CPO direct price. Searches of official Threeforce/Last Mile Solutions material, exact DE*LMS EVSE records and public aggregators did not reveal a reproducible unauthenticated station-level direct-payment tariff payload. Keep DE*LMS visible but unranked until a direct price can be reproduced for a specific EVSE/station or a safely scoped official CPO tariff is published.",
+      "sources": [
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Calbe-Saale/Bahnhof-Calbe-Ost-Grizehner-Strasse-22/55322/",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Aachen/APAG-Parkhaus-Luisenhospital-Mariabrunnstrasse-9/75449/",
+        "https://vab.be/-/media/vab-online/files/actuele-documenten/algemene-voorwaarden/b2b/tariffs-vab-charing-network-02-03-2026.pdf",
+        "https://apps.apple.com/de/app/threeforce-subscribers/id6608969668"
+      ],
+      "unblockRequires": "A reproducible public DE*LMS direct-payment/QR tariff payload tied to a specific EVSE or station, or a current official Last Mile Solutions/Threeforce own-network tariff whose physical-CPO scope is explicitly proven."
+    }
+  ]
+}
