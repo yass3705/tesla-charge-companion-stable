@@ -1,0 +1,128 @@
+name: Publish validated France Tesla export 26
+
+on:
+  push:
+    paths:
+      - .github/workflows/publish-france-export-26.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-france-export-26
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download validated export artifact
+        shell: bash
+        env:
+          EXPORT_URL: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-e62c-81f5-bb2d-e37692456706/raw?se=2026-09-03T16%3A14%3A32Z&sp=r&sv=2026-02-06&sr=b&scid=44297c28-f519-5db3-b185-11c300480a40&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-03T15%3A23%3A06Z&ske=2026-09-04T15%3A23%3A06Z&sks=b&skv=2026-02-06&sig=pPq2c7i6zICPf2%2B%2BzGHUQu%2B3AHLdHGesG4wNqYIACPc%3D"
+        run: |
+          curl -L --fail --retry 3 "$EXPORT_URL" -o /tmp/france-export-26.zip
+          mkdir -p /tmp/france-export-26
+          unzip -q /tmp/france-export-26.zip -d /tmp/france-export-26
+          test -s /tmp/france-export-26/tesla_stations.json
+          test -s /tmp/france-export-26/france-report.json
+
+      - name: Validate export and apply approved manual reviews
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          export_dir = Path('/tmp/france-export-26')
+          report = json.loads((export_dir / 'france-report.json').read_text())
+          stations = json.loads((export_dir / 'tesla_stations.json').read_text())
+
+          assert report.get('status') == 'ready', report.get('status')
+          assert report.get('country') == 'france'
+          assert report.get('chargeCompanionStationsBefore') == 276
+          assert report.get('chargeCompanionStationsAfter') == 278
+          assert report.get('newStationCount') == 2
+          assert report.get('automaticChangeCount') == 1
+          assert report.get('manualReviewStationCount') == 8
+          assert report.get('removedBaselineStationCount') == 0
+          assert report.get('otherCountriesUnchanged') is True
+          assert report.get('totalStationsBefore') == 1167
+          assert report.get('totalStationsAfter') == 1169
+
+          by_id = {s.get('id'): s for s in stations}
+          assert len(by_id) == len(stations) == 1169
+          assert sum(s.get('countryCode') == 'FR' for s in stations) == 278
+
+          # Approved manual-review values from France export #26.
+          by_id['tesla-cesson-france']['address'] = 'HJM3+RH5 RD 306, 77240 Cesson, France'
+
+          by_id['tesla-cosne-cours-sur-loire-france']['latitude'] = 47.383203
+          by_id['tesla-cosne-cours-sur-loire-france']['longitude'] = 2.917354
+
+          by_id['tesla-figeac-france-le-couquet-capdenac-le-haut']['latitude'] = 44.594794
+          by_id['tesla-figeac-france-le-couquet-capdenac-le-haut']['longitude'] = 2.061489
+
+          by_id['tesla-le-mans-france-rue-des-freres-voisin']['access'] = {
+              'limited': False,
+              'days': {
+                  str(day): {'open': True, 'start': '00:00', 'end': '24:00'}
+                  for day in range(7)
+              },
+              'afterCloseMode': 'exit_allowed',
+              'afterCloseNote': 'Accès 24 h/24, 7 j/7 indiqué par Tesla.',
+          }
+
+          by_id['tesla-moulins-les-metz-france']['latitude'] = 49.079574
+          by_id['tesla-moulins-les-metz-france']['longitude'] = 6.103651
+
+          by_id['tesla-montpellier-france']['address'] = '0 Odysseum Montpellier - Parking de la Mer, 34000 Montpellier, France'
+          by_id['tesla-rennes-france-cleunay']['address'] = '85 Rue Jules Vallès, 35000 Rennes, France'
+
+          by_id['tesla-varneville-bretteville-france']['address'] = '29A Vallée Carburants, 76890 Varneville-Bretteville, France'
+          by_id['tesla-varneville-bretteville-france']['latitude'] = 49.645688
+          by_id['tesla-varneville-bretteville-france']['longitude'] = 1.045868
+
+          # Critical export checks.
+          assert by_id['tesla-417319-france']['name'] == 'Tesla Férin, France'
+          assert by_id['tesla-444407-france']['name'] == 'Tesla Lexy, France'
+          assert by_id['tesla-montmarault-france']['stalls'] == 28
+          assert by_id['tesla-le-mans-france-rue-des-freres-voisin']['access']['limited'] is False
+
+          out = Path('data/tesla_stations.json')
+          out.write_text(json.dumps(stations, ensure_ascii=False, indent=2) + '\n')
+          json.loads(out.read_text())
+          print('France export #26 validated: 278 FR stations, 1169 total, 8 approved reviews applied.')
+          PY
+
+      - name: Guard against unrelated country changes
+        shell: bash
+        run: |
+          git show HEAD^:data/tesla_stations.json > /tmp/before.json || git show HEAD:data/tesla_stations.json > /tmp/before.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          before = json.loads(Path('/tmp/before.json').read_text())
+          after = json.loads(Path('data/tesla_stations.json').read_text())
+          b = [s for s in before if s.get('countryCode') != 'FR']
+          a = [s for s in after if s.get('countryCode') != 'FR']
+          assert b == a, 'Safety validation failed: a non-France Tesla station changed'
+          print('Safety check passed: all non-France Tesla stations unchanged.')
+          PY
+
+      - name: Commit France Tesla data
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/tesla_stations.json
+          git diff --cached --check
+          git diff --cached --quiet && { echo 'No data change to publish.'; exit 0; }
+          git commit -m "data(tesla): publish validated France export #26"
+          git pull --rebase origin main
+          git push origin HEAD:main
