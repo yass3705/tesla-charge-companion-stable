@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "LEW Natur",
+  "entries": [
+    {
+      "sourceProvider": "Vaylens via Mobilithek/public ad-hoc feed",
+      "sourceUrl": "https://ladestau.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10004*1",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Vaylens via Mobilithek/public ad-hoc feed",
+      "sourceUrl": "https://ladestau.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10004*2",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Vaylens via Mobilithek/public ad-hoc feed",
+      "sourceUrl": "https://ladestau.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10029*1",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Vaylens via Mobilithek/public ad-hoc feed",
+      "sourceUrl": "https://ladestau.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10029*2",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Mobilithek/public ad-hoc feed surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/guenzburg/lew-natur-kimmerle-ring-2/",
+      "evseId": "DE*LEW*EAC00111*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "accessMode": "ad-hoc direct payment by credit card, Girocard or website"
+    },
+    {
+      "sourceProvider": "Mobilithek/public ad-hoc feed surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/guenzburg/lew-natur-kimmerle-ring-2/",
+      "evseId": "DE*LEW*EAC00111*2",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "accessMode": "ad-hoc direct payment by credit card, Girocard or website"
+    }
+  ],
+  "policy": "Current exact public ad-hoc evidence supports 0.59 EUR/kWh on selected LEW Natur AC EVSEs and 0.74 EUR/kWh on selected DC/HPC EVSEs. Do not turn these observations into a network-wide fallback until the complete direct-payment tariff scope and any blocking fees are proven for every relevant station class. Continue Mobilithek/Vaylens/QR resolution per EVSE; unresolved points remain visible and unranked."
+}
