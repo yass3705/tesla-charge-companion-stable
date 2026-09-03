@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "Stadtwerke Recklinghausen GmbH",
+  "entries": [
+    {
+      "operator": "Stadtwerke Recklinghausen GmbH",
+      "sourceProvider": "adhocladen.de current station-level ad-hoc price sourced from Eco-Movement via Mobilithek",
+      "sourceUrl": "https://adhocladen.de/recklinghausen/stadtwerke-recklinghausen-rathausplatz-3/",
+      "stationName": "Rathausplatz",
+      "address": "Rathausplatz 3, 45657 Recklinghausen",
+      "evseId": "DE*SRE*E0026959*01",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.55,
+      "accessMode": "station-level ad-hoc direct payment",
+      "paymentChannels": ["qr", "credit_card"],
+      "evidenceNote": "Current source reports high confidence and 4/4 charge points with individual price. No network-wide extrapolation is made."
+    },
+    {
+      "operator": "Stadtwerke Recklinghausen GmbH",
+      "sourceProvider": "adhocladen.de current station-level ad-hoc price sourced from Eco-Movement via Mobilithek",
+      "sourceUrl": "https://adhocladen.de/recklinghausen/stadtwerke-recklinghausen-rathausplatz-3/",
+      "stationName": "Rathausplatz",
+      "address": "Rathausplatz 3, 45657 Recklinghausen",
+      "evseId": "DE*SRE*E0026959*02",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.55,
+      "accessMode": "station-level ad-hoc direct payment",
+      "paymentChannels": ["qr", "credit_card"]
+    },
+    {
+      "operator": "Stadtwerke Recklinghausen GmbH",
+      "sourceProvider": "adhocladen.de current station-level ad-hoc price sourced from Eco-Movement via Mobilithek",
+      "sourceUrl": "https://adhocladen.de/recklinghausen/stadtwerke-recklinghausen-rathausplatz-3/",
+      "stationName": "Rathausplatz",
+      "address": "Rathausplatz 3, 45657 Recklinghausen",
+      "evseId": "DE*SRE*EAC1001",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.55,
+      "accessMode": "station-level ad-hoc direct payment",
+      "paymentChannels": ["qr", "credit_card"]
+    },
+    {
+      "operator": "Stadtwerke Recklinghausen GmbH",
+      "sourceProvider": "adhocladen.de current station-level ad-hoc price sourced from Eco-Movement via Mobilithek",
+      "sourceUrl": "https://adhocladen.de/recklinghausen/stadtwerke-recklinghausen-rathausplatz-3/",
+      "stationName": "Rathausplatz",
+      "address": "Rathausplatz 3, 45657 Recklinghausen",
+      "evseId": "DE*SRE*EAC1002",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.55,
+      "accessMode": "station-level ad-hoc direct payment",
+      "paymentChannels": ["qr", "credit_card"]
+    }
+  ],
+  "policy": "Use 0.55 EUR/kWh only for the four exact Rathausplatz EVSE IDs evidenced by the current station-level source. Do not infer this price for other Stadtwerke Recklinghausen stations or for DE*SRE generally."
+}
