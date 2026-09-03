@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "BayWa Mobility Solutions / DE*122",
+  "entries": [
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/aichach/baywa-rudolf-diesel-strasse-8/",
+      "evseId": "DE*122*E7010101",
+      "connectorKind": "DC",
+      "powerKw": 400,
+      "currency": "EUR",
+      "pricePerKwh": 0.75,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/roettenbach/baywa-siemensstrasse-8/",
+      "evseId": "DE*122*E0000577",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 1.01,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/bad-toelz/baywa-eichlmuehlstr-8/",
+      "evseId": "DE*122*E0000443",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 1.01,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by ladestau.de",
+      "sourceUrl": "https://ladestau.de/feldkirchen/baywa-oberndorfer-strasse-24/",
+      "evseId": "DE*122*E7020401",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.75,
+      "accessMode": "station-level ad-hoc price feed"
+    }
+  ],
+  "policy": "BayWa ad-hoc prices vary strongly by station and connector class; current verified examples include 0.75 EUR/kWh HPC and 1.01 EUR/kWh AC, while other public BayWa locations expose still different prices. Never extrapolate a DE*122-wide tariff. Continue ingesting exact Mobilithek/AFIR or public QR/card-terminal prices per EVSE and leave unresolved points unranked."
+}
