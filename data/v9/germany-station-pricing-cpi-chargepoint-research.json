@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "ChargePoint / DE*CPI shared EVSE prefix",
+  "entries": [
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/nuernberg/chargepoint-111-flughafenstrasse/",
+      "evseId": "DE*CPI*E6920715*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.40,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/nuernberg/chargepoint-111-flughafenstrasse/",
+      "evseId": "DE*CPI*E6920715*2",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.40,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/nuernberg/chargepoint-flughafenstrasse-100/",
+      "evseId": "DE*CPI*E6768035*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.40,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement via Mobilithek, surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/nuernberg/chargepoint-flughafenstrasse-100/",
+      "evseId": "DE*CPI*E6768035*2",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.40,
+      "accessMode": "ad-hoc direct payment"
+    }
+  ],
+  "policy": "DE*CPI is a shared party/prefix in the German BNetzA catalogue and must never be treated as a single homogeneous physical CPO. These prices are valid only for the listed Nürnberg EVSEs. Continue resolving physical operator and exact ad-hoc tariff per EVSE from Mobilithek/AFIR, QR checkout or other verifiable station-level sources; never create a DE*CPI-wide tariff fallback."
+}
