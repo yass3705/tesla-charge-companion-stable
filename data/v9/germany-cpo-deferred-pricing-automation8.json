@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "verifiedAt": "2026-09-03",
+  "preIntegrationOnly": true,
+  "cpos": [
+    {
+      "operator": "APCOA PARKING Deutschland GmbH",
+      "evsePrefix": "DE*ACO",
+      "status": "blocked_no_public_direct_station_price",
+      "reason": "APCOA Germany publicly confirms charging availability and direct/app/RFID/roaming access, and multiple German APCOA location pages identify ad-hoc QR charging, but neither the official German location pages nor the current German FAQ expose the charging price. Exact DE*ACO EVSEs at Norderstedt and Dresden are publicly identifiable, yet current direct/ad-hoc price is still reported as unknown. Public web searches for German APCOA QR/Charge Assist/GreenFlux station pricing did not reveal a reproducible unauthenticated station tariff endpoint. Austrian APCOA prices are explicitly location-specific and must not be imported into Germany. Keep DE*ACO visible but unranked until an exact German QR/app/backend tariff can be reproduced.",
+      "sources": [
+        "https://www.apcoa.de/en/customer-service/service-at-a-glance/faq",
+        "https://www.apcoa.de/en/charge-more/find-a-charging-station",
+        "https://www.apcoa.de/en/charge-more/parking-charging/charging-an-electric-car",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Norderstedt/De-Gasperi-Passage-Berliner-Allee-15/108493/",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Dresden/Parkhaus-Strassburger-Platz-Strassburger-Platz-/97809/"
+      ],
+      "unblockRequires": "A public German APCOA station/EVSE tariff payload from the QR/app/backend, or a current official German tariff table that can be scoped safely to DE*ACO."
+    },
+    {
+      "operator": "IP Innovative Power GmbH",
+      "evsePrefix": "DE*IPG",
+      "status": "blocked_no_public_direct_station_price",
+      "reason": "Multiple current DE*IPG station records expose exact EVSE IDs and confirm ad-hoc/app/web access, but the direct price remains unknown. The only current machine-readable prices found for DEIPG are eMSP roaming tariffs (for example Kia Charge Business and Mercedes-Benz charging) and therefore cannot substitute for the physical CPO direct/ad-hoc price. No official public tariff table or reproducible unauthenticated station tariff endpoint was found after official-domain, exact-EVSE and aggregator searches. Keep DE*IPG visible but unranked.",
+      "sources": [
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Rheinsberg/Precise-Resort-Marina-Wolfsbruch-Wolfsbruch-3/84936/",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Luebeck/TRYP-by-Wyndham-Luebeck-Aquamarin-Doktor-Luise-Klinsmann-Strasse-13/76416/",
+        "https://www.preisstation.de/ladeanbieter/ip-innovative-power-gmbh/",
+        "https://business.kiacharge.com/web/en/kiafleet-nl/costs",
+        "https://chargeb2b.mercedes.me/web/nl/daimlerfleet-nl/costs"
+      ],
+      "unblockRequires": "A reproducible public DE*IPG direct-payment tariff per EVSE/station, or an official IP Innovative Power own-network tariff proven to apply to the physical CPO layer."
+    }
+  ]
+}
