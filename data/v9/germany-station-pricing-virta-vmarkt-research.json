@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "Virta International GmbH",
+  "entries": [
+    {
+      "operator": "Virta International GmbH",
+      "sourceProvider": "V-Markt official charging tariff + Mobilithek/DATEX II EVSE mapping via e-Stations",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/buchloe/v-markt-buchloe-43242",
+      "operatorSourceUrl": "https://www.v-markt.de/eladestationen",
+      "stationName": "V-Markt Buchloe",
+      "siteBrand": "V-Markt",
+      "address": "Justus-von-Liebig-Straße 5, 86807 Buchloe",
+      "evseId": "DE*VIR*E148487",
+      "connectorKind": "AC",
+      "powerKw": 7.36,
+      "currency": "EUR",
+      "pricePerKwh": 0.29,
+      "accessMode": "Virta app or Virta RFID direct charging offer published by V-Markt"
+    },
+    {
+      "operator": "Virta International GmbH",
+      "sourceProvider": "V-Markt official charging tariff + Mobilithek/DATEX II EVSE mapping via e-Stations",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/buchloe/v-markt-buchloe-43242",
+      "operatorSourceUrl": "https://www.v-markt.de/eladestationen",
+      "stationName": "V-Markt Buchloe",
+      "siteBrand": "V-Markt",
+      "address": "Justus-von-Liebig-Straße 5, 86807 Buchloe",
+      "evseId": "DE*VIR*E148474",
+      "connectorKind": "AC",
+      "powerKw": 7.36,
+      "currency": "EUR",
+      "pricePerKwh": 0.29,
+      "accessMode": "Virta app or Virta RFID direct charging offer published by V-Markt"
+    },
+    {
+      "operator": "Virta International GmbH",
+      "sourceProvider": "V-Markt official charging tariff + Mobilithek/DATEX II EVSE mapping via e-Stations",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/illertissen/v-markt-v-baumarkt-illertissen-42665",
+      "operatorSourceUrl": "https://www.v-markt.de/eladestationen",
+      "stationName": "V-Markt / V-Baumarkt Illertissen",
+      "siteBrand": "V-Markt",
+      "address": "Saumweg 19, 89257 Illertissen",
+      "evseId": "DE*VIR*E154235",
+      "connectorKind": "AC",
+      "powerKw": 7.36,
+      "currency": "EUR",
+      "pricePerKwh": 0.29,
+      "accessMode": "Virta app or Virta RFID direct charging offer published by V-Markt"
+    }
+  ],
+  "policy": "DE*VIR is a shared Virta technical/network prefix. Never apply 0.29 EUR/kWh to the full DE*VIR namespace. V-Markt officially publishes 0.29 EUR/kWh for its AC charging points when using the Virta app or Virta RFID and states that operative charging management is provided by Virta International GmbH. Other cards/providers can have different prices. Rank this evidence only for exact V-Markt EVSE matches listed here; ad-hoc/one-time prices remain unresolved and are not inferred."
+}
