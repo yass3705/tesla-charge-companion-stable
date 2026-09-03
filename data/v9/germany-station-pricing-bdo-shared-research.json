@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "DE*BDO shared EVSE prefix",
+  "entries": [
+    {
+      "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by ladestau.de",
+      "sourceUrl": "https://ladestau.de/rottendorf/lichtblick-quickcharge-ostring-2-4/",
+      "evseId": "DE*BDO*E038556538*1",
+      "connectorKind": "AC",
+      "powerKw": 7,
+      "currency": "EUR",
+      "pricePerKwh": 0.44,
+      "accessMode": "station-level ad-hoc price feed"
+    },
+    {
+      "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by ladestau.de",
+      "sourceUrl": "https://ladestau.de/rottendorf/lichtblick-quickcharge-ostring-2-4/",
+      "evseId": "DE*BDO*E155213770*1",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.44,
+      "accessMode": "station-level ad-hoc price feed"
+    },
+    {
+      "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by ladestau.de",
+      "sourceUrl": "https://ladestau.de/kaufbeuren/vwew-energie-innere-buchleuthenstr-15/",
+      "evseId": "DE*BDO*E022308680*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.33,
+      "accessMode": "station-level ad-hoc price feed"
+    },
+    {
+      "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/biebergemuend/ahs-solar-wirtheimer-strasse-17/",
+      "evseId": "DE*BDO*E238617226*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.42,
+      "accessMode": "ad-hoc direct payment"
+    },
+    {
+      "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by adhocladen.de",
+      "sourceUrl": "https://adhocladen.de/biebergemuend/ahs-solar-wirtheimer-strasse-17/",
+      "evseId": "DE*BDO*E238617226*2",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.42,
+      "accessMode": "ad-hoc direct payment"
+    }
+  ],
+  "policy": "DE*BDO is a shared EVSE prefix used by multiple physical operators and prices differ materially by site/operator (verified examples include 0.33, 0.42 and 0.44 EUR/kWh AC). Never attach a prefix-wide tariff. Only exact EVSE/station mappings with current public station-level price evidence may be ranked; unresolved DE*BDO points remain unranked."
+}
