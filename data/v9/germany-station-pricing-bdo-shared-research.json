@@ -7,6 +7,7 @@
   "operator": "DE*BDO shared EVSE prefix",
   "entries": [
     {
+      "operator": "LichtBlick eMobility GmbH",
       "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by ladestau.de",
       "sourceUrl": "https://ladestau.de/rottendorf/lichtblick-quickcharge-ostring-2-4/",
       "evseId": "DE*BDO*E038556538*1",
@@ -17,6 +18,7 @@
       "accessMode": "station-level ad-hoc price feed"
     },
     {
+      "operator": "LichtBlick eMobility GmbH",
       "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by ladestau.de",
       "sourceUrl": "https://ladestau.de/rottendorf/lichtblick-quickcharge-ostring-2-4/",
       "evseId": "DE*BDO*E155213770*1",
@@ -27,6 +29,7 @@
       "accessMode": "station-level ad-hoc price feed"
     },
     {
+      "operator": "VWEW-energie",
       "sourceProvider": "Eco-Movement/Mobilithek-derived live station feed surfaced by ladestau.de",
       "sourceUrl": "https://ladestau.de/kaufbeuren/vwew-energie-innere-buchleuthenstr-15/",
       "evseId": "DE*BDO*E022308680*1",
