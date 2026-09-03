@@ -83,6 +83,21 @@ function sameAggregate(expected={},actual={}){
   return keys.every(key=>Number(expected[key])===Number(actual[key]));
 }
 
+function hasPagesDeploymentLock(deploymentWorkflow,sourceSha){
+  const workflow=String(deploymentWorkflow||'');
+  const pinnedAutomaticLock=workflow.includes(`github.sha == '${sourceSha}'`);
+  const guardedManualReplacement=[
+    'target_sha:',
+    'confirm_replace_locked_test_deployment:',
+    'REPLACE_LOCKED_V9_TEST',
+    'target_sha must be an exact lowercase 40-character commit SHA.',
+    'merge-base --is-ancestor',
+    "github.event_name == 'workflow_dispatch'",
+    "inputs.deploy == 'DEPLOY_V9_TEST'"
+  ].every(token=>workflow.includes(token));
+  return pinnedAutomaticLock||guardedManualReplacement;
+}
+
 function validateObservation(observation,policy,rollout,deploymentWorkflow=''){
   const errors=[];
   if(observation?.schemaVersion!==1||observation?.type!=='tcc-v9-precanary-observation')errors.push('invalid_observation_schema');
@@ -104,7 +119,7 @@ function validateObservation(observation,policy,rollout,deploymentWorkflow=''){
   const lock=observation?.candidate?.deploymentLock||{};
   if(lock.workflowPath!=='.github/workflows/v9-device-test-pages.yml'||lock.automaticEventSha!==observation?.candidate?.sourceSha||lock.manualReplacementRequired!==true)errors.push('invalid_pages_deployment_lock');
   if(observation?.candidate?.pagesDeployment?.checkoutSha!==observation?.candidate?.sourceSha)errors.push('pages_checkout_sha_mismatch');
-  if(!String(deploymentWorkflow).includes(`github.sha == '${observation?.candidate?.sourceSha}'`))errors.push('pages_deployment_lock_missing');
+  if(!hasPagesDeploymentLock(deploymentWorkflow,observation?.candidate?.sourceSha))errors.push('pages_deployment_lock_missing');
   let derived=null;
   try{derived=deriveEvidence(observation?.evidence);}catch(error){errors.push(error.message);}
   if(derived&&!sameAggregate(observation?.evidence?.aggregate,derived))errors.push('aggregate_evidence_mismatch');
@@ -191,4 +206,4 @@ if(require.main===module){
   try{main();}catch(error){console.error(`V9 pre-canary observation blocked: ${error.message}`);process.exitCode=1;}
 }
 
-module.exports={PROMOTION_CONTROL_PATHS,RUNTIME_PATHS,deriveEvidence,evaluateObservation,fingerprintTree,runtimeFingerprint,sameAggregate,validateObservation};
+module.exports={PROMOTION_CONTROL_PATHS,RUNTIME_PATHS,deriveEvidence,evaluateObservation,fingerprintTree,hasPagesDeploymentLock,runtimeFingerprint,sameAggregate,validateObservation};
