@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "Firmenladen GmbH / DE*FLA shared EVSE prefix",
+  "entries": [
+    {
+      "sourceProvider": "GoingElectric station-level direct-payment record",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Luebeck/Wuerth-Taschenmacherstrasse-Taschenmacherstrasse-10/109580/",
+      "evseId": "DE*FLA*E1234669187*2",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "accessMode": "ad-hoc direct payment without contract"
+    },
+    {
+      "sourceProvider": "GoingElectric station-level direct-payment record",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Luebeck/Wuerth-Taschenmacherstrasse-Taschenmacherstrasse-10/109580/",
+      "evseId": "DE*FLA*E1234669255*1",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "accessMode": "ad-hoc direct payment without contract"
+    },
+    {
+      "sourceProvider": "GoingElectric station-level direct-payment record",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Luebeck/Wuerth-Taschenmacherstrasse-Taschenmacherstrasse-10/109580/",
+      "evseId": "DE*FLA*E1234669255*2",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "accessMode": "ad-hoc direct payment without contract"
+    }
+  ],
+  "policy": "DE*FLA is a shared EVSE prefix used by multiple physical operators, including Firmenladen and e-con. The 0.59 EUR/kWh direct price is valid only for the listed Würth Lübeck EVSEs and must never become a DE*FLA-wide fallback. Continue resolving physical operator and exact QR/direct tariff per EVSE; unresolved points remain visible and unranked."
+}
