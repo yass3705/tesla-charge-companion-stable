@@ -24,7 +24,7 @@ jobs:
       - name: Download validated export artifact
         shell: bash
         env:
-          EXPORT_URL: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-e62c-81f5-bb2d-e37692456706/raw?se=2026-09-03T16%3A14%3A32Z&sp=r&sv=2026-02-06&sr=b&scid=44297c28-f519-5db3-b185-11c300480a40&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-03T15%3A23%3A06Z&ske=2026-09-04T15%3A23%3A06Z&sks=b&skv=2026-02-06&sig=pPq2c7i6zICPf2%2B%2BzGHUQu%2B3AHLdHGesG4wNqYIACPc%3D"
+          EXPORT_URL: "https://sdmntprsoutheastus3.oaiusercontent.com/files/00000000-a700-820c-af7b-756927f0f817/raw?se=2026-09-03T16%3A26%3A10Z&sp=r&sv=2026-02-06&sr=b&scid=1a91f32a-ad1e-543c-9866-9d3b8dd9d6a0&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-03T15%3A29%3A34Z&ske=2026-09-04T15%3A29%3A34Z&sks=b&skv=2026-02-06&sig=BDZ%2BnAmLMzIq2tFVCPG0KNUgbY%2Bfspq2TwCvnkHUGTA%3D"
         run: |
           curl -L --fail --retry 3 "$EXPORT_URL" -o /tmp/france-export-26.zip
           mkdir -p /tmp/france-export-26
@@ -59,15 +59,11 @@ jobs:
           assert len(by_id) == len(stations) == 1169
           assert sum(s.get('countryCode') == 'FR' for s in stations) == 278
 
-          # Approved manual-review values from France export #26.
           by_id['tesla-cesson-france']['address'] = 'HJM3+RH5 RD 306, 77240 Cesson, France'
-
           by_id['tesla-cosne-cours-sur-loire-france']['latitude'] = 47.383203
           by_id['tesla-cosne-cours-sur-loire-france']['longitude'] = 2.917354
-
           by_id['tesla-figeac-france-le-couquet-capdenac-le-haut']['latitude'] = 44.594794
           by_id['tesla-figeac-france-le-couquet-capdenac-le-haut']['longitude'] = 2.061489
-
           by_id['tesla-le-mans-france-rue-des-freres-voisin']['access'] = {
               'limited': False,
               'days': {
@@ -77,18 +73,14 @@ jobs:
               'afterCloseMode': 'exit_allowed',
               'afterCloseNote': 'Accès 24 h/24, 7 j/7 indiqué par Tesla.',
           }
-
           by_id['tesla-moulins-les-metz-france']['latitude'] = 49.079574
           by_id['tesla-moulins-les-metz-france']['longitude'] = 6.103651
-
           by_id['tesla-montpellier-france']['address'] = '0 Odysseum Montpellier - Parking de la Mer, 34000 Montpellier, France'
           by_id['tesla-rennes-france-cleunay']['address'] = '85 Rue Jules Vallès, 35000 Rennes, France'
-
           by_id['tesla-varneville-bretteville-france']['address'] = '29A Vallée Carburants, 76890 Varneville-Bretteville, France'
           by_id['tesla-varneville-bretteville-france']['latitude'] = 49.645688
           by_id['tesla-varneville-bretteville-france']['longitude'] = 1.045868
 
-          # Critical export checks.
           assert by_id['tesla-417319-france']['name'] == 'Tesla Férin, France'
           assert by_id['tesla-444407-france']['name'] == 'Tesla Lexy, France'
           assert by_id['tesla-montmarault-france']['stalls'] == 28
@@ -103,7 +95,7 @@ jobs:
       - name: Guard against unrelated country changes
         shell: bash
         run: |
-          git show HEAD^:data/tesla_stations.json > /tmp/before.json || git show HEAD:data/tesla_stations.json > /tmp/before.json
+          git show HEAD^:data/tesla_stations.json > /tmp/before.json
           python3 - <<'PY'
           import json
           from pathlib import Path
