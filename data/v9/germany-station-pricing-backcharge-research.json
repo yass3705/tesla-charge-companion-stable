@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "Backcharge GmbH",
+  "entries": [
+    {
+      "sourceProvider": "Mobilithek AFIR/DATEX II via e-Stations.de",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/spahnharrenstaette/backcharge-gmbh-backcharge-georg-ruedebusch-56705",
+      "evseId": "DE*BCK*E1234627500*1",
+      "connectorKind": "AC",
+      "powerKw": 7.36,
+      "currency": "EUR",
+      "pricePerKwh": 0.42,
+      "startFeeEur": 0,
+      "accessMode": "AFIR ad-hoc tariff"
+    },
+    {
+      "sourceProvider": "Mobilithek AFIR/DATEX II via e-Stations.de",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/wietmarschen/backcharge-gmbh-backcharge-quartier-90-57773",
+      "evseId": "DE*BCK*E1234627602*10",
+      "connectorKind": "AC",
+      "powerKw": 3.68,
+      "currency": "EUR",
+      "pricePerKwh": 0.45,
+      "startFeeEur": 0,
+      "accessMode": "AFIR ad-hoc tariff"
+    },
+    {
+      "sourceProvider": "Mobilithek AFIR/DATEX II via e-Stations.de",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/rhede/backcharge-gmbh-backcharge-schmees-energietechnik-gmbh-ac-56408",
+      "evseId": "DE*BCK*E1000107562*1",
+      "connectorKind": "AC",
+      "powerKw": 7.36,
+      "currency": "EUR",
+      "pricePerKwh": 0.65,
+      "startFeeEur": 0,
+      "timeFeePerMinute": 0.10,
+      "timeFeeAfterMinutes": 240,
+      "accessMode": "AFIR ad-hoc tariff"
+    },
+    {
+      "sourceProvider": "Mobilithek AFIR/DATEX II via e-Stations.de",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/luhden/backcharge-gmbh-backcharge-57227",
+      "evseId": "DE*BCK*E1000131714*1",
+      "connectorKind": "AC",
+      "powerKw": 7.36,
+      "currency": "EUR",
+      "pricePerKwh": 0.68,
+      "startFeeEur": 0,
+      "accessMode": "AFIR ad-hoc tariff"
+    }
+  ],
+  "operatorEvidence": {
+    "source": "https://backcharge.de/",
+    "summary": "Backcharge states that charging follows the chargepoint operator price shown in its payment-service smartphone app, rather than a Backcharge-wide surcharge tariff."
+  },
+  "policy": "Exact AFIR/Mobilithek station/EVSE tariffs vary materially across DE*BCK, so no operator-wide fallback is allowed. Rank only EVSEs with a current exact price and preserve any published time component. Continue harvesting the Mobilithek/DATEX II feed for the remaining DE*BCK EVSEs; unmatched or unpriced points remain visible and unranked."
+}
