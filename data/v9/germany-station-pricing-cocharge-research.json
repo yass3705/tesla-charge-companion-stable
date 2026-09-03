@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-03",
+  "operator": "cocharge GmbH",
+  "entries": [
+    {
+      "sourceProvider": "PUMP public station page",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-cocharge-dusseldorfer-strasse-97-haan/20e5ffb4-1e7f-11f1-8003-97ef5f588a6c",
+      "identityCorroborationUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Haan/1A-SB-Autowaschanlage-Ohligser-Strasse-82-b/106616/",
+      "evseId": "DE*COC*E364*01",
+      "connectorKind": "DC",
+      "powerKw": 160,
+      "currency": "EUR",
+      "pricePerKwh": 0.87,
+      "accessMode": "public station tariff evidence"
+    },
+    {
+      "sourceProvider": "PUMP public station page",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-cocharge-dusseldorfer-strasse-97-haan/20e5ffb4-1e7f-11f1-8003-97ef5f588a6c",
+      "identityCorroborationUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Haan/1A-SB-Autowaschanlage-Ohligser-Strasse-82-b/106616/",
+      "evseId": "DE*COC*E364*02",
+      "connectorKind": "DC",
+      "powerKw": 160,
+      "currency": "EUR",
+      "pricePerKwh": 0.87,
+      "accessMode": "public station tariff evidence"
+    }
+  ],
+  "operatorEvidence": {
+    "source": "https://cocharge.de/",
+    "summary": "cocharge publishes 0.59 EUR/kWh gross as a selling price in its FAQ, but also explicitly allows hosts to define an individual community tariff, different day/night prices and their own blocking fee; roaming users can see partner pricing. Therefore no operator-wide exact tariff may be inferred from the 0.59 EUR/kWh figure."
+  },
+  "policy": "Treat DE*COC as station/EVSE-specific. Rank only EVSEs carrying exact current evidence. Do not propagate the 0.59 EUR/kWh FAQ selling price or the Haan 0.87 EUR/kWh observation to other cocharge points. Keep unmatched cocharge stations visible and unranked until an exact QR, AFIR/Mobilithek, CPO backend or equivalent station-level source is available. Time/idle components observed on third-party pages are deliberately not encoded here unless their trigger semantics are unambiguous."
+}
