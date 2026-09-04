@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-04",
+  "operator": "MEGA Grüne Energien GmbH & Co. KG",
+  "evsePrefix": "DE*003",
+  "entries": [
+    {
+      "operator": "MEGA Grüne Energien GmbH & Co. KG",
+      "sourceProvider": "MEGA public m8mit Direct-Pay portal",
+      "sourceUrl": "https://mega.m8mit.de/station/mega/DE*003*EACE0166382*01",
+      "stationName": "Mitarbeiter Parkplatz INNOQ",
+      "address": "Krischerstraße 100, 40789 Monheim am Rhein",
+      "evseId": "DE*003*EACE0166382*01",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.52,
+      "sessionFee": 0.58,
+      "blockingFeePerMinute": 0.10,
+      "blockingFeeAfterMinutes": 240,
+      "blockingFeeCap": 12.00,
+      "accessMode": "public ad-hoc/direct payment",
+      "paymentMethods": ["Visa", "Mastercard", "mobile payment"]
+    },
+    {
+      "operator": "MEGA Grüne Energien GmbH & Co. KG",
+      "sourceProvider": "MEGA public m8mit Direct-Pay portal",
+      "sourceUrl": "https://mega.m8mit.de/station/mega/DE*003*EACE0166382*02",
+      "stationName": "Mitarbeiter Parkplatz INNOQ",
+      "address": "Krischerstraße 100, 40789 Monheim am Rhein",
+      "evseId": "DE*003*EACE0166382*02",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.52,
+      "sessionFee": 0.58,
+      "blockingFeePerMinute": 0.10,
+      "blockingFeeAfterMinutes": 240,
+      "blockingFeeCap": 12.00,
+      "accessMode": "public ad-hoc/direct payment",
+      "paymentMethods": ["Visa", "Mastercard", "mobile payment"]
+    }
+  ],
+  "officialContext": {
+    "sourceUrl": "https://mega.m8mit.de/stationslist",
+    "note": "MEGA's public m8mit portal lists DE*003 charging points and exposes the exact Direct-Pay tariff on individual EVSE pages without authentication. The two INNOQ EVSEs above were verified directly on 2026-09-04."
+  },
+  "policy": "No DE*003-wide fallback is allowed from this evidence. MEGA/m8mit prices must be attached only to an exact EVSE whose public Direct-Pay page exposes the tariff. Roaming/eMSP prices are excluded."
+}
