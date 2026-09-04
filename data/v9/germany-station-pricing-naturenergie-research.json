@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-04",
+  "entries": [
+    {
+      "operator": "naturenergie holding AG",
+      "sourceProvider": "mobilithek_datex2_estations",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/bad-krozingen/naturenergie-community-bad-krozingen-johanniterstrasse-17-links-37681",
+      "evseId": "DE*EDH*E001644",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.51,
+      "blockingFeePerMinute": 0.10,
+      "blockingFeeAfterMinutes": 240,
+      "paymentMethods": ["credit_card", "app", "rfid"],
+      "notes": "Station-level AFIR/Mobilithek DATEX II-backed listing for Johanniterstr. 17, 79189 Bad Krozingen exposes this exact EVSE and the ad-hoc AC tariff of 0.51 EUR/kWh with 0.10 EUR/min blocking fee after 240 minutes. No start fee shown."
+    },
+    {
+      "operator": "naturenergie holding AG",
+      "sourceProvider": "mobilithek_datex2_estations",
+      "sourceUrl": "https://www.e-stations.de/ladestationen/bad-krozingen/naturenergie-community-bad-krozingen-johanniterstrasse-17-links-37681",
+      "evseId": "DE*EDH*E001645",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.51,
+      "blockingFeePerMinute": 0.10,
+      "blockingFeeAfterMinutes": 240,
+      "paymentMethods": ["credit_card", "app", "rfid"],
+      "notes": "Same verified station-level AFIR/Mobilithek DATEX II source identifies this exact EVSE at Johanniterstr. 17. The tariff is retained only for the verified station/EVSE and is not generalized to DE*EDH."
+    }
+  ],
+  "policy": "Only exact EVSE-level ad-hoc prices supported by station-level evidence are emitted. Do not extrapolate the Bad Krozingen price to other naturenergie/DE*EDH EVSEs: public sources show materially different prices at other sites and some sources expose eMSP rather than direct-pay prices."
+}
