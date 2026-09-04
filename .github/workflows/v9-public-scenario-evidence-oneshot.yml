@@ -57,21 +57,41 @@ jobs:
             for(let i=1;i<=3;i++){
               const context = await browser.newContext();
               const page = await context.newPage();
-              await page.goto(url,{waitUntil:'networkidle',timeout:120000});
-              await page.waitForSelector('#runScenarioPack',{state:'visible',timeout:30000});
-              await page.click('#runScenarioPack');
-              await page.waitForFunction(() => {
-                const el=document.getElementById('scenarioSummary');
-                return el && /^Runs 10 ·/.test(el.textContent||'') && /décision PASS/.test(el.textContent||'');
-              },{timeout:300000});
-              const rows=await page.evaluate(()=>JSON.parse(localStorage.getItem('tcc-v9-first-device-scenario-results-v1')||'[]'));
-              const telemetry=await page.evaluate(()=>({summary:window.TCCV9CanaryTelemetry.summary(),assessment:window.TCCV9CanaryTelemetry.rollbackAssessment(window.TCCV9CanaryTelemetry.summary())}));
-              if(rows.length!==10) throw new Error(`pack ${i}: expected 10 rows, got ${rows.length}`);
-              const failures=rows.filter(r=>!r.ok).length;
-              if(failures) throw new Error(`pack ${i}: ${failures} scenario failures`);
-              if(telemetry.assessment.rollback) throw new Error(`pack ${i}: rollback assessment triggered`);
-              packs.push({id:`public-pack-${i}`,capturedAt:new Date().toISOString(),rows,telemetry});
-              await context.close();
+              const diagnostics={pack:i,console:[],pageErrors:[],requestFailures:[]};
+              page.on('console',msg=>diagnostics.console.push({type:msg.type(),text:msg.text()}));
+              page.on('pageerror',err=>diagnostics.pageErrors.push(String(err && (err.stack||err.message) || err)));
+              page.on('requestfailed',req=>diagnostics.requestFailures.push({url:req.url(),failure:req.failure()}));
+              try {
+                const response=await page.goto(url,{waitUntil:'networkidle',timeout:120000});
+                diagnostics.httpStatus=response ? response.status() : null;
+                diagnostics.finalUrl=page.url();
+                await page.waitForSelector('#runScenarioPack',{state:'visible',timeout:30000});
+                diagnostics.lockedSha=await page.locator('body').evaluate(()=>document.body.innerText.includes('8d2c20b7c76004389edd8f4a3b80d6b314900ba0'));
+                await page.click('#runScenarioPack');
+                await page.waitForFunction(() => {
+                  const el=document.getElementById('scenarioSummary');
+                  return el && /^Runs 10 ·/.test(el.textContent||'') && /décision PASS/.test(el.textContent||'');
+                }, null, {timeout:300000});
+                const rows=await page.evaluate(()=>JSON.parse(localStorage.getItem('tcc-v9-first-device-scenario-results-v1')||'[]'));
+                const telemetry=await page.evaluate(()=>({summary:window.TCCV9CanaryTelemetry.summary(),assessment:window.TCCV9CanaryTelemetry.rollbackAssessment(window.TCCV9CanaryTelemetry.summary())}));
+                if(rows.length!==10) throw new Error(`pack ${i}: expected 10 rows, got ${rows.length}`);
+                const failures=rows.filter(r=>!r.ok).length;
+                if(failures) throw new Error(`pack ${i}: ${failures} scenario failures`);
+                if(telemetry.assessment.rollback) throw new Error(`pack ${i}: rollback assessment triggered`);
+                packs.push({id:`public-pack-${i}`,capturedAt:new Date().toISOString(),rows,telemetry,diagnostics});
+              } catch (e) {
+                diagnostics.summary=await page.locator('#scenarioSummary').textContent().catch(()=>null);
+                diagnostics.rows=await page.evaluate(()=>JSON.parse(localStorage.getItem('tcc-v9-first-device-scenario-results-v1')||'[]')).catch(()=>[]);
+                diagnostics.telemetry=await page.evaluate(()=>window.TCCV9CanaryTelemetry ? ({summary:window.TCCV9CanaryTelemetry.summary(),assessment:window.TCCV9CanaryTelemetry.rollbackAssessment(window.TCCV9CanaryTelemetry.summary())}) : null).catch(()=>null);
+                diagnostics.title=await page.title().catch(()=>null);
+                diagnostics.bodyText=(await page.locator('body').innerText().catch(()=>'' )).slice(0,12000);
+                fs.writeFileSync(`v9-public-pack-${i}-diagnostics.json`,JSON.stringify(diagnostics,null,2));
+                await page.screenshot({path:`v9-public-pack-${i}-failure.png`,fullPage:true}).catch(()=>{});
+                console.error(`PACK ${i} DIAGNOSTICS`,JSON.stringify(diagnostics,null,2));
+                throw e;
+              } finally {
+                await context.close();
+              }
             }
             await browser.close();
             fs.writeFileSync('v9-public-scenario-evidence.json',JSON.stringify({schemaVersion:1,targetSha:process.env.TARGET_SHA,publicUrl:url,capturedAt:new Date().toISOString(),packs},null,2));
@@ -91,10 +111,19 @@ jobs:
           console.log(`Fresh public evidence OK: ${rows.length}/30 PASS, 0 rollback signal.`);
           NODE
       - name: Upload fresh evidence
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: v9-public-scenario-evidence-8d2c20b7
           path: v9-public-scenario-evidence.json
           retention-days: 7
-
-# execution trigger: 2026-09-04 after Pages artifact verification
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-public-scenario-diagnostics-8d2c20b7
+          path: |
+            v9-public-pack-*-diagnostics.json
+            v9-public-pack-*-failure.png
+          if-no-files-found: ignore
+          retention-days: 7
