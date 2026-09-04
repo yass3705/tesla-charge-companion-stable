@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "country": "NL",
+  "generatedAt": "2026-08-29",
+  "policy": {
+    "dotNlRemainsFallback": true,
+    "directOperatorOffersOverrideFallbackInRanking": true,
+    "subscriptionsAreOptIn": true,
+    "subscriptionFeesExcludedFromSessionCost": true,
+    "onlyPhysicalOperatorMatches": true
+  },
+  "directOffers": [
+    {
+      "id": "fastned-direct-nl",
+      "provider": "Fastned direct",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.77,
+      "currency": "EUR",
+      "source": "https://www.fastnedcharging.com/nl/laden/tarieven"
+    },
+    {
+      "id": "ionity-direct-nl",
+      "provider": "IONITY direct",
+      "operatorAliases": ["IONITY", "Ionity"],
+      "kind": "DC",
+      "pricePerKwh": 0.76,
+      "currency": "EUR",
+      "source": "https://www.ionity.eu/nl"
+    },
+    {
+      "id": "ionity-go-nl",
+      "provider": "IONITY Go",
+      "operatorAliases": ["IONITY", "Ionity"],
+      "kind": "DC",
+      "pricePerKwh": 0.72,
+      "currency": "EUR",
+      "source": "https://www.ionity.eu/nl",
+      "note": "Tarif IONITY App sans abonnement mensuel."
+    },
+    {
+      "id": "lidl-direct-ac-nl",
+      "provider": "Lidl.nl direct",
+      "operatorAliases": ["Lidl", "LIDL"],
+      "kind": "AC",
+      "pricePerKwh": 0.55,
+      "currency": "EUR",
+      "source": "https://www.lidl.nl/c/laadpalen/s10015078"
+    },
+    {
+      "id": "lidl-direct-dc-nl",
+      "provider": "Lidl.nl direct",
+      "operatorAliases": ["Lidl", "LIDL"],
+      "kind": "DC",
+      "pricePerKwh": 0.60,
+      "currency": "EUR",
+      "source": "https://www.lidl.nl/c/laadpalen/s10015078"
+    },
+    {
+      "id": "lidl-plus-ac-nl",
+      "provider": "Lidl Plus",
+      "operatorAliases": ["Lidl", "LIDL"],
+      "kind": "AC",
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "source": "https://www.lidl.nl/c/laadpalen/s10015078",
+      "note": "Tarif via l'application gratuite Lidl Plus."
+    },
+    {
+      "id": "lidl-plus-dc-nl",
+      "provider": "Lidl Plus",
+      "operatorAliases": ["Lidl", "LIDL"],
+      "kind": "DC",
+      "pricePerKwh": 0.55,
+      "currency": "EUR",
+      "source": "https://www.lidl.nl/c/laadpalen/s10015078",
+      "note": "Tarif via l'application gratuite Lidl Plus."
+    }
+  ],
+  "subscriptionOffers": [
+    {
+      "id": "fastned-gold",
+      "selectionId": "fastned-gold",
+      "provider": "Fastned Gold",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.54,
+      "currency": "EUR",
+      "monthlyFeeEur": 5.99,
+      "monthlyFeePromotionEnd": "2026-09-30",
+      "monthlyFeeLabel": "5,99 €/mois jusqu'au 30/09/2026",
+      "source": "https://www.fastnedcharging.com/nl/laden/tarieven"
+    },
+    {
+      "id": "ionity-motion-nl",
+      "selectionId": "ionity-motion",
+      "provider": "IONITY Motion",
+      "operatorAliases": ["IONITY", "Ionity"],
+      "kind": "DC",
+      "pricePerKwh": 0.54,
+      "currency": "EUR",
+      "monthlyFeeEur": 5.99,
+      "source": "https://www.ionity.eu/nl/abonnementen"
+    },
+    {
+      "id": "ionity-power-nl",
+      "selectionId": "ionity-power",
+      "provider": "IONITY Power",
+      "operatorAliases": ["IONITY", "Ionity"],
+      "kind": "DC",
+      "pricePerKwh": 0.43,
+      "currency": "EUR",
+      "monthlyFeeEur": 11.99,
+      "source": "https://www.ionity.eu/nl/abonnementen"
+    }
+  ]
+}

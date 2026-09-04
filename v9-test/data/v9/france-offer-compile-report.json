@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-01T20:54:55.455990Z",
+  "source": "legacy-france-canonical/data/tariff_overlay_v1.json",
+  "directOfferCount": 16,
+  "directSubscriptionCount": 4,
+  "emspSubscriptionCount": 5,
+  "deferredCount": 4,
+  "deferred": [
+    {
+      "id": "electra-essential",
+      "kind": "subscription",
+      "reason": "price_not_materialized",
+      "runtime": "existing_electra_plus"
+    },
+    {
+      "id": "electra-smart",
+      "kind": "subscription",
+      "reason": "price_not_materialized",
+      "runtime": "existing_electra_plus"
+    },
+    {
+      "id": "belib-nonresident",
+      "kind": "subscription",
+      "reason": "price_not_materialized",
+      "runtime": "existing_belib_direct"
+    },
+    {
+      "id": "belib-resident",
+      "kind": "subscription",
+      "reason": "price_not_materialized",
+      "runtime": "existing_belib_direct"
+    }
+  ],
+  "physicalOnlyCount": 4,
+  "networkScopedCount": 21,
+  "upstreamDeferredValidated": [
+    {
+      "operator": "Plenitude On The Road",
+      "reason": "integrated except exact 75 kW boundary, which remains unclassified because the official class wording overlaps"
+    },
+    {
+      "operator": "IONITY Go/Motion/Power",
+      "reason": "subscriber prices remain personalized and require an authenticated active plan; IONITY Direct is integrated separately per station and connector"
+    },
+    {
+      "operator": "Allego",
+      "reason": "France country prices are defaults and exact charger price may vary"
+    },
+    {
+      "operator": "ENGIE Vianeo",
+      "reason": "Vianeo Max energy tariff is national but station-specific minute fees can still apply"
+    },
+    {
+      "operator": "TotalEnergies",
+      "reason": "station-service tariff is validated but must not be applied to every TotalEnergies concession"
+    },
+    {
+      "operator": "Powerdot",
+      "reason": "consumer tariff remains station-specific"
+    },
+    {
+      "operator": "Qovoltis",
+      "reason": "consumer tariff remains station-specific"
+    },
+    {
+      "operator": "Bump",
+      "reason": "consumer tariff remains station-specific"
+    },
+    {
+      "operator": "Electric 55 Charging",
+      "reason": "published minute grid is CPO-to-eMSP pricing, not guaranteed end-user price"
+    },
+    {
+      "operator": "e-Totem",
+      "reason": "current exact direct tariff is network/site-specific"
+    },
+    {
+      "operator": "DRIVECO",
+      "reason": "published national values are references, exact charger tariff is station-specific"
+    },
+    {
+      "operator": "Freshmile",
+      "reason": "direct price is network/station-specific"
+    }
+  ]
+}
