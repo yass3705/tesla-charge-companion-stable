@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-04",
+  "entries": [
+    {
+      "operator": "EDEKA-MIHA Charge GmbH",
+      "sourceProvider": "edeka_m8mit_directpay",
+      "sourceUrl": "https://edeka.m8mit.de/station/edeka/DE%2A384%2AE153162CS0002%2A01",
+      "evseId": "DE*384*E153162CS0002*1",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.48,
+      "paymentMethods": ["visa", "mastercard"],
+      "notes": "Public EDEKA Direct-Pay page exposes this exact EVSE and 48 ct/kWh. The temporary 50 EUR card reservation is a preauthorization, not a charging fee."
+    },
+    {
+      "operator": "EDEKA-MIHA Charge GmbH",
+      "sourceProvider": "edeka_m8mit_directpay",
+      "sourceUrl": "https://edeka.m8mit.de/station/edeka/DE%2A384%2AE164981CS0001%2A01",
+      "evseId": "DE*384*E164981CS0001*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.29,
+      "paymentMethods": ["visa", "mastercard"],
+      "notes": "Public EDEKA Direct-Pay page exposes this exact EVSE and 29 ct/kWh. No network-wide fallback is inferred."
+    },
+    {
+      "operator": "EDEKA-MIHA Charge GmbH",
+      "sourceProvider": "edeka_m8mit_directpay",
+      "sourceUrl": "https://edeka.m8mit.de/station/edeka/DE%2A384%2AE156331CS0001%2A01",
+      "evseId": "DE*384*E156331CS0001*1",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.48,
+      "paymentMethods": ["visa", "mastercard"],
+      "notes": "Public EDEKA Direct-Pay page exposes this exact EVSE and 48 ct/kWh. No extrapolation to other EDEKA-MIHA stations."
+    }
+  ],
+  "policy": "Only exact EVSE-level prices reproduced from the public EDEKA Direct-Pay portal are emitted. Never extrapolate AC/DC prices to another EVSE or station without opening its own Direct-Pay page."
+}
