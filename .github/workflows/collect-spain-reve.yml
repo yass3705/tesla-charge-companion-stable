@@ -82,10 +82,14 @@ jobs:
           fi
           python scripts/reve_es_collect.py "${args[@]}"
 
+      - name: Build TCC coverage audit from REVE snapshot
+        shell: bash
+        run: python scripts/reve_es_coverage.py
+
       - name: Commit pre-integration snapshot progress
         shell: bash
         run: |
-          # Stage first so brand-new files (state, metadata and the initial snapshot)
+          # Stage first so brand-new files (state, metadata, coverage and initial snapshot)
           # are detected as changes. `git diff` alone ignores untracked files.
           git add data/spain_reve
           if git diff --cached --quiet -- data/spain_reve; then
