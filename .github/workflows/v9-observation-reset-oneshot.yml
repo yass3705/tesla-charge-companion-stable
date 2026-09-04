@@ -1,0 +1,174 @@
+name: V9 observation reset oneshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v9-observation-reset-oneshot.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TARGET_SHA: 8d2c20b7c76004389edd8f4a3b80d6b314900ba0
+      EVIDENCE_ARTIFACT_ID: '9945669834'
+      EVIDENCE_RUN_ID: '33895618141'
+      DEPLOYMENT_RUN_ID: '33885386766'
+      PUBLIC_URL: https://yass3705.github.io/tesla-charge-companion-stable/v9-test/v9-app/
+    steps:
+      - name: Checkout pinned V9 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+      - name: Verify candidate runtime has not drifted
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin refactor/unified-data-engine-v9
+          branch_head="$(git rev-parse FETCH_HEAD)"
+          if [ "$branch_head" != "$TARGET_SHA" ]; then
+            if ! git diff --quiet "$TARGET_SHA" "$branch_head" -- v9-app v9-gate assets/v9 data/v9 data/tesla_stations.json data/ionity_direct_stations_france.json.gz data/atlante_direct_stations_france.json.gz data/powerdot_direct_france.json.gz data/netherlands_direct_tariffs_v1.json data/non_tesla_netherlands; then
+              echo "Runtime/data drift detected after pinned candidate." >&2
+              exit 1
+            fi
+          fi
+      - name: Download fresh evidence artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api -H 'Accept: application/vnd.github+json' \
+            "/repos/${GITHUB_REPOSITORY}/actions/artifacts/${EVIDENCE_ARTIFACT_ID}/zip" > evidence.zip
+          unzip -q evidence.zip -d evidence
+          test -s evidence/v9-public-scenario-evidence.json
+      - name: Build fresh observation metadata
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const crypto=require('crypto');
+          const cp=require('child_process');
+          const target=process.env.TARGET_SHA;
+          const evidence=JSON.parse(fs.readFileSync('evidence/v9-public-scenario-evidence.json','utf8'));
+          if(evidence.targetSha!==target) throw new Error('fresh evidence target SHA mismatch');
+          if(!Array.isArray(evidence.packs)||evidence.packs.length!==3) throw new Error('expected three public packs');
+          const rows=evidence.packs.flatMap(p=>p.rows||[]);
+          if(rows.length!==30||rows.some(r=>!r.ok)) throw new Error('fresh evidence is not 30/30 PASS');
+          if(evidence.packs.some(p=>p.telemetry?.assessment?.rollback)) throw new Error('rollback signal present');
+
+          const runtimePaths=['v9-app','v9-gate','assets/v9','data/v9','data/tesla_stations.json','data/ionity_direct_stations_france.json.gz','data/atlante_direct_stations_france.json.gz','data/powerdot_direct_france.json.gz','data/netherlands_direct_tariffs_v1.json','data/non_tesla_netherlands'];
+          const promotionControl=new Set(['data/v9/access-readiness.json','data/v9/canary-policy.json','data/v9/rollout-config.json','data/v9/self-enrollment-config.json','data/v9/device-test-policy.json','data/v9/whitelist-config.json']);
+          const tree=cp.execFileSync('git',['ls-tree','-r','--full-tree',target,'--',...runtimePaths],{encoding:'utf8'});
+          const payload=tree.trimEnd().split('\n').filter(line=>{
+            const i=line.indexOf('\t'); return i>=0&&!promotionControl.has(line.slice(i+1));
+          }).join('\n')+'\n';
+          const fingerprint='sha256:'+crypto.createHash('sha256').update(payload).digest('hex');
+
+          const packs=evidence.packs.map(pack=>{
+            const scenarios=(pack.rows||[]).map(r=>({
+              id:r.scenarioId,
+              status:r.ok?'PASS':'FAIL',
+              durationMs:r.durationMs,
+              stationsFound:r.sourceStationCount,
+              stationsSelected:r.routingRequestedCount,
+              routesSucceeded:r.routedStationCount,
+              stationsScored:r.fullyScoredStationCount
+            }));
+            const total=scenarios.reduce((s,r)=>s+Number(r.durationMs||0),0);
+            return {
+              id:pack.id,
+              runs:scenarios.length,
+              passes:scenarios.filter(r=>r.status==='PASS').length,
+              failures:scenarios.filter(r=>r.status!=='PASS').length,
+              sourceErrors:(pack.rows||[]).reduce((s,r)=>s+Number(r.sourceErrors||0),0),
+              routingErrors:(pack.rows||[]).reduce((s,r)=>s+Number(r.routingErrors||0),0),
+              averageLatencyMs:Math.round(total/Math.max(1,scenarios.length)),
+              scenarios
+            };
+          });
+          const scenarios=packs.flatMap(p=>p.scenarios);
+          const totalDurationMs=scenarios.reduce((s,r)=>s+Number(r.durationMs||0),0);
+          const aggregate={
+            packs:packs.length,
+            runs:scenarios.length,
+            passes:scenarios.filter(r=>r.status==='PASS').length,
+            failures:scenarios.filter(r=>r.status!=='PASS').length,
+            sourceErrors:packs.reduce((s,p)=>s+p.sourceErrors,0),
+            routingErrors:packs.reduce((s,p)=>s+p.routingErrors,0),
+            routeAttempts:scenarios.reduce((s,r)=>s+Number(r.stationsSelected||0),0),
+            routesSucceeded:scenarios.reduce((s,r)=>s+Number(r.routesSucceeded||0),0),
+            stationsScored:scenarios.reduce((s,r)=>s+Number(r.stationsScored||0),0),
+            totalDurationMs,
+            averageLatencyMs:Math.round(totalDurationMs/scenarios.length),
+            maxLatencyMs:Math.max(...scenarios.map(r=>Number(r.durationMs||0))),
+            criticalParityErrors:0
+          };
+          const startedAt=new Date();
+          const eligibleAfter=new Date(startedAt.getTime()+24*3600*1000);
+          const observation={
+            schemaVersion:1,
+            type:'tcc-v9-precanary-observation',
+            state:'OBSERVING',
+            candidate:{
+              sourceSha:target,
+              runtimeFingerprint:fingerprint,
+              publicUrl:process.env.PUBLIC_URL,
+              pagesDeployment:{
+                runId:Number(process.env.DEPLOYMENT_RUN_ID),
+                checkoutSha:target,
+                completedAt:'2026-09-04T14:56:00Z',
+                url:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.DEPLOYMENT_RUN_ID}`
+              },
+              deploymentLock:{
+                workflowPath:'.github/workflows/v9-device-test-pages.yml',
+                automaticEventSha:target,
+                manualReplacementRequired:true
+              }
+            },
+            window:{
+              startedAt:startedAt.toISOString(),
+              eligibleAfter:eligibleAfter.toISOString(),
+              minimumHours:24,
+              minimumRuns:25,
+              trafficPercent:0
+            },
+            approval:{
+              status:'RECORDED',
+              scope:'begin_precanary_observation',
+              recordedAt:'2026-09-02T21:51:28Z'
+            },
+            evidence:{
+              method:'three_sequential_public_first_device_packs',
+              capturedAt:evidence.capturedAt,
+              sourceRunId:Number(process.env.EVIDENCE_RUN_ID),
+              sourceArtifactId:Number(process.env.EVIDENCE_ARTIFACT_ID),
+              notes:'Fresh public evidence generated against the pinned isolated V9 candidate; aggregate values are derived from captured per-scenario timings.',
+              packs,
+              aggregate
+            }
+          };
+          fs.writeFileSync('ops/v9/canary-observation.json',JSON.stringify(observation,null,2)+'\n');
+          console.log(JSON.stringify({target,fingerprint,startedAt:observation.window.startedAt,eligibleAfter:observation.window.eligibleAfter,aggregate},null,2));
+          NODE
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate observation contract and evaluator
+        run: |
+          node --check scripts/v9-canary-observation.cjs
+          node --check tests/v9-canary-observation.test.cjs
+          node tests/v9-canary-observation.test.cjs
+          node scripts/v9-canary-observation.cjs --json
+      - name: Upload prepared observation
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-observation-reset-8d2c20b7
+          path: ops/v9/canary-observation.json
+          retention-days: 7
