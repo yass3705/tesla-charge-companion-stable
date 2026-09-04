@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "updatedAt": "2026-09-04",
+  "inventory": {
+    "authoritativeCpoTotal": null,
+    "reason": "REVE external /cpos still unavailable to the current pipeline; historical figures 189 and 618 are not valid current CPO denominators.",
+    "publicFallback": "MapaREVE internal public API is a candidate inventory source but is undocumented/unsupported and must be used conservatively."
+  },
+  "validatedNamed": [
+    "Allego",
+    "Interparking España / P-APP & WEB Servicios Digitales",
+    "Zunder",
+    "Wenea",
+    "Repsol",
+    "Eranovum",
+    "Fastned",
+    "Atlante",
+    "ACCIONA Recarga",
+    "Moeve / Cepsa"
+  ],
+  "historicalValidatedCounter": 20,
+  "historicalValidatedNamesUnreconciled": 10,
+  "consistencyNote": "The previous conversation-level counter reached 18 before ACCIONA and Moeve, but the repository does not contain a complete nominative ledger for the first 10 validated CPOs. Do not invent those names. Reconcile them only from source evidence or historical artifacts before treating the nominal ledger as complete.",
+  "blockedFailClosed": [
+    "Galp",
+    "BonpreuEsclat",
+    "Electra direct",
+    "TotalEnergies",
+    "Powerdot",
+    "Telpark",
+    "Iberdrola direct"
+  ],
+  "active": [
+    {
+      "name": "Endolla Barcelona",
+      "status": "exact official tariffs found; current tariff schema lacks day/night plus BSM-parking/street dimensions"
+    },
+    {
+      "name": "EDP Charge",
+      "status": "station-specific prices vary; exact public per-EVSE feed not yet found"
+    },
+    {
+      "name": "Electromaps",
+      "status": "connector price exposed in app; public integrable per-EVSE feed not yet found"
+    },
+    {
+      "name": "Iberdrola | bp pulse",
+      "status": "station-specific pricing; continue endpoint/ad-hoc investigation"
+    },
+    {
+      "name": "EMT Madrid",
+      "status": "official exact tariffs found, but tariff depends on specific car-park/street category not represented by current Spain tariff rule schema"
+    },
+    {
+      "name": "Endesa / Endesa On Your Way",
+      "status": "official site confirms price is point-specific and shown before charging; no exact public station feed integrated yet"
+    }
+  ],
+  "aliasesResolved": [
+    {"alias": "P-APP & WEB Servicios Digitales S.L.U.", "canonical": "Interparking España"},
+    {"alias": "Eranovum e-mobility", "canonical": "Eranovum"},
+    {"alias": "CEPSA", "canonical": "Moeve"},
+    {"alias": "Cepsa", "canonical": "Moeve"},
+    {"alias": "Acciona Recarga SL", "canonical": "ACCIONA Recarga"},
+    {"alias": "IONITY", "canonical": "IONITY"}
+  ],
+  "lastConsistencyCheck": {
+    "date": "2026-09-04",
+    "result": "historical denominator corrected; 618 rejected; nominal ledger gap detected (10 historical validated names missing from repository evidence); no blocked CPO re-audited without new evidence; new work focused on ACCIONA, Moeve, EMT Madrid and Endesa.",
+    "safeCorrectionsApplied": [
+      "added ACCIONA direct tariffs",
+      "added Moeve ultrafast direct tariff",
+      "resolved Cepsa to Moeve aliases",
+      "created nominative status ledger with explicit unreconciled historical gap"
+    ]
+  }
+}
