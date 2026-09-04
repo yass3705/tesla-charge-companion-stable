@@ -1,6 +1,11 @@
 name: Collect Spain REVE pre-integration
 
 on:
+  push:
+    branches:
+      - spain-reve-preintegration
+    paths:
+      - ".github/workflows/collect-spain-reve.yml"
   workflow_dispatch:
     inputs:
       force_new_cycle:
