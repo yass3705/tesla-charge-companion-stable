@@ -3,49 +3,63 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 200
+      "total": 1821
     },
     "format": {
-      "count": 200,
+      "count": 1821,
       "pct": 100.0,
-      "total": 200
+      "total": 1821
     },
     "maxAmperage": {
-      "count": 200,
+      "count": 1821,
       "pct": 100.0,
-      "total": 200
+      "total": 1821
     },
     "maxElectricPower": {
-      "count": 200,
+      "count": 1821,
       "pct": 100.0,
-      "total": 200
+      "total": 1821
     },
     "maxVoltage": {
-      "count": 200,
+      "count": 1821,
       "pct": 100.0,
-      "total": 200
+      "total": 1821
     },
     "powerType": {
-      "count": 200,
+      "count": 1821,
       "pct": 100.0,
-      "total": 200
+      "total": 1821
     },
     "standard": {
-      "count": 200,
+      "count": 1821,
       "pct": 100.0,
-      "total": 200
+      "total": 1821
     },
-    "total": 200
+    "total": 1821
   },
   "country": "ES",
   "cpos": {
-    "distinct": 1,
+    "distinct": 3,
     "items": [
       {
-        "connectors": 200,
+        "connectors": 1415,
+        "cpoName": "EDP CLIENTES SAU",
+        "evses": 1356,
+        "locations": 340,
+        "partyId": "GFX"
+      },
+      {
+        "connectors": 172,
+        "cpoName": "IONITY GmbH Sucursal en España",
+        "evses": 172,
+        "locations": 43,
+        "partyId": "IOY"
+      },
+      {
+        "connectors": 234,
         "cpoName": "QWELLO España SL",
-        "evses": 160,
-        "locations": 100,
+        "evses": 188,
+        "locations": 117,
         "partyId": "AEQ"
       }
     ]
@@ -54,45 +68,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 160
+      "total": 1716
     },
     "identifier": {
-      "count": 160,
+      "count": 1716,
       "pct": 100.0,
-      "total": 160
+      "total": 1716
     },
-    "total": 160
+    "total": 1716
   },
-  "generatedAt": "2026-09-04T18:21:40.924782Z",
+  "generatedAt": "2026-09-04T19:06:31.581434Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 100,
+      "count": 500,
       "pct": 100.0,
-      "total": 100
+      "total": 500
     },
     "coordinates": {
-      "count": 100,
+      "count": 500,
       "pct": 100.0,
-      "total": 100
+      "total": 500
     },
     "cpoIdentity": {
-      "count": 100,
+      "count": 500,
       "pct": 100.0,
-      "total": 100
+      "total": 500
     },
     "withEvses": {
-      "count": 100,
+      "count": 500,
       "pct": 100.0,
-      "total": 100
+      "total": 500
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 100,
-    "nextPage": 2,
-    "registryCoveragePct": 0.69,
+    "locationsStored": 500,
+    "nextPage": 6,
+    "registryCoveragePct": 3.43,
     "registryTotalCount": 14567,
     "totalPages": 146
   },
