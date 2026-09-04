@@ -14,10 +14,13 @@ on:
         default: "4"
         type: choice
         options: ["1", "2", "3", "4", "5"]
+  push:
+    branches: ["spain-reve-preintegration"]
+    paths: ["data/spain_reve/trigger.txt"]
   schedule:
-    # Runs hourly, but the collector exits immediately once the monthly cycle is complete.
-    # A new cycle is automatically started during the first 48 hours of each month.
-    - cron: "17 * * * *"
+    # Monthly refresh window: enough hourly slots to cover a complete national pass
+    # while avoiding all-month no-op Actions usage after the cycle is complete.
+    - cron: "17 * 1-2 * *"
 
 permissions:
   contents: write
@@ -58,7 +61,6 @@ jobs:
                   started = state.get('cycleStartedAt') or ''
                   same_month = started.startswith(now.strftime('%Y-%m'))
                   complete = bool(state.get('cycleCompletedAt'))
-                  # Only the first two UTC days can automatically start the month's cycle.
                   force = now.day <= 2 and (not same_month) and complete
               else:
                   force = now.day <= 2
@@ -89,8 +91,6 @@ jobs:
       - name: Commit pre-integration snapshot progress
         shell: bash
         run: |
-          # Stage first so brand-new files (state, metadata, coverage and initial snapshot)
-          # are detected as changes. `git diff` alone ignores untracked files.
           git add data/spain_reve
           if git diff --cached --quiet -- data/spain_reve; then
             echo "No REVE data change to commit."
