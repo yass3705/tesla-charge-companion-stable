@@ -14,9 +14,6 @@ on:
         default: "4"
         type: choice
         options: ["1", "2", "3", "4", "5"]
-  push:
-    branches: ["spain-reve-preintegration"]
-    paths: [".github/workflows/collect-spain-reve.yml"]
   schedule:
     # Runs hourly, but the collector exits immediately once the monthly cycle is complete.
     # A new cycle is automatically started during the first 48 hours of each month.
@@ -73,11 +70,11 @@ jobs:
           MANUAL_FORCE: ${{ inputs.force_new_cycle || false }}
           EVENT_NAME: ${{ github.event_name }}
 
-      - name: Collect REVE pages
+      - name: Collect up to 4 REVE pages
         shell: bash
         env:
           REVE_API_KEY: ${{ secrets.REVE_API_KEY }}
-          REVE_PAGES_PER_RUN: ${{ github.event_name == 'push' && '1' || inputs.pages_per_run || '4' }}
+          REVE_PAGES_PER_RUN: ${{ inputs.pages_per_run || '4' }}
         run: |
           args=()
           if [ "${{ steps.cycle.outputs.force }}" = "true" ]; then
@@ -92,6 +89,8 @@ jobs:
       - name: Commit pre-integration snapshot progress
         shell: bash
         run: |
+          # Stage first so brand-new files (state, metadata, coverage and initial snapshot)
+          # are detected as changes. `git diff` alone ignores untracked files.
           git add data/spain_reve
           if git diff --cached --quiet -- data/spain_reve; then
             echo "No REVE data change to commit."
