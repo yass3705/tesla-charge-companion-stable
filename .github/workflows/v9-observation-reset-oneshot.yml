@@ -26,7 +26,7 @@ jobs:
         with:
           ref: ${{ env.TARGET_SHA }}
           fetch-depth: 0
-      - name: Verify candidate runtime has not drifted
+      - name: Verify candidate runtime has not drifted and load current metadata test
         shell: bash
         run: |
           set -euo pipefail
@@ -38,6 +38,7 @@ jobs:
               exit 1
             fi
           fi
+          git show "$branch_head:tests/v9-canary-observation.test.cjs" > tests/v9-canary-observation.test.cjs
       - name: Download fresh evidence artifact
         shell: bash
         env:
@@ -123,7 +124,7 @@ jobs:
               pagesDeployment:{
                 runId:Number(process.env.DEPLOYMENT_RUN_ID),
                 checkoutSha:target,
-                completedAt:'2026-09-04T14:56:00Z',
+                completedAt:'2026-09-04T14:44:05Z',
                 url:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.DEPLOYMENT_RUN_ID}`
               },
               deploymentLock:{
