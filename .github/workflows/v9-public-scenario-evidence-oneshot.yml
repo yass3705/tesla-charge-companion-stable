@@ -47,7 +47,7 @@ jobs:
       - name: Run three sequential public packs
         shell: bash
         run: |
-          cat > /tmp/run-v9-packs.cjs <<'NODE'
+          cat > run-v9-packs.cjs <<'NODE'
           const { chromium } = require('playwright');
           const fs = require('fs');
           const url = process.env.V9_URL;
@@ -77,7 +77,7 @@ jobs:
             fs.writeFileSync('v9-public-scenario-evidence.json',JSON.stringify({schemaVersion:1,targetSha:process.env.TARGET_SHA,publicUrl:url,capturedAt:new Date().toISOString(),packs},null,2));
           })().catch(e=>{console.error(e);process.exit(1)});
           NODE
-          node /tmp/run-v9-packs.cjs
+          node run-v9-packs.cjs
       - name: Validate evidence
         run: |
           node - <<'NODE'
