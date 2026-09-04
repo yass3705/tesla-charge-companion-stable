@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-04",
+  "policy": {
+    "directOperatorOffersOverrideFallbackInRanking": true,
+    "subscriptionsAreOptIn": true,
+    "subscriptionFeesExcludedFromSessionCost": true,
+    "onlyPhysicalOperatorMatches": true,
+    "failClosedWhenStationSpecificPriceIsNotPublic": true
+  },
+  "directOffers": [],
+  "subscriptionOffers": [
+    {
+      "id": "zunder-easy-es",
+      "selectionId": "zunder-easy",
+      "provider": "Zunder Easy",
+      "operatorAliases": ["Zunder"],
+      "kind": "DC",
+      "pricePerKwh": 0.51,
+      "currency": "EUR",
+      "monthlyFeeEur": 1.99,
+      "source": "https://www.zunder.com/suscripciones/",
+      "note": "Prix réduit explicitement applicable à tous les points du réseau Zunder. Le tarif public sans abonnement reste exclu car Zunder publie des exceptions selon puissance et localisation."
+    },
+    {
+      "id": "zunder-pro-es",
+      "selectionId": "zunder-pro",
+      "provider": "Zunder Pro",
+      "operatorAliases": ["Zunder"],
+      "kind": "DC",
+      "pricePerKwh": 0.39,
+      "currency": "EUR",
+      "monthlyFeeEur": 11.99,
+      "source": "https://www.zunder.com/suscripciones/",
+      "note": "Prix réduit explicitement applicable à tous les points du réseau Zunder. Le tarif public sans abonnement reste exclu car Zunder publie des exceptions selon puissance et localisation."
+    }
+  ]
+}
