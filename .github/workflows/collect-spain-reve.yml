@@ -1,8 +1,6 @@
 name: Collect Spain REVE pre-integration
 
 on:
-  push:
-    branches: ["spain-reve-preintegration"]
   workflow_dispatch:
     inputs:
       force_new_cycle:
