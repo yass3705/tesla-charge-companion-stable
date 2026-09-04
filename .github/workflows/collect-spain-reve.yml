@@ -14,6 +14,8 @@ on:
         default: "4"
         type: choice
         options: ["1", "2", "3", "4", "5"]
+  push:
+    branches: ["spain-reve-preintegration"]
   schedule:
     # Runs hourly, but the collector exits immediately once the monthly cycle is complete.
     # A new cycle is automatically started during the first 48 hours of each month.
@@ -70,11 +72,11 @@ jobs:
           MANUAL_FORCE: ${{ inputs.force_new_cycle || false }}
           EVENT_NAME: ${{ github.event_name }}
 
-      - name: Collect up to 4 REVE pages
+      - name: Collect one REVE page for transport validation
         shell: bash
         env:
           REVE_API_KEY: ${{ secrets.REVE_API_KEY }}
-          REVE_PAGES_PER_RUN: ${{ inputs.pages_per_run || '4' }}
+          REVE_PAGES_PER_RUN: "1"
         run: |
           args=()
           if [ "${{ steps.cycle.outputs.force }}" = "true" ]; then
