@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-04",
+  "operator": "Stadtwerke Stralsund GmbH",
+  "evsePrefix": "DE*HST",
+  "entries": [
+    {
+      "operator": "Stadtwerke Stralsund GmbH",
+      "sourceProvider": "GoingElectric station-level ad-hoc tariff data",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Baabe/Haus-des-Gastes-Am-Kurpark-9/46885/",
+      "stationName": "Haus des Gastes",
+      "address": "Am Kurpark 9, 18586 Baabe",
+      "evseId": "DE*HST*E1234642540*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.48,
+      "accessMode": "station-level ad-hoc/direct price",
+      "paymentMethods": ["app", "RFID", "web/QR"]
+    },
+    {
+      "operator": "Stadtwerke Stralsund GmbH",
+      "sourceProvider": "GoingElectric station-level ad-hoc tariff data",
+      "sourceUrl": "https://www.goingelectric.de/stromtankstellen/Deutschland/Baabe/Haus-des-Gastes-Am-Kurpark-9/46885/",
+      "stationName": "Haus des Gastes",
+      "address": "Am Kurpark 9, 18586 Baabe",
+      "evseId": "DE*HST*E1234642540*2",
+      "connectorKind": "AC",
+      "powerKw": 11,
+      "currency": "EUR",
+      "pricePerKwh": 0.48,
+      "accessMode": "station-level ad-hoc/direct price",
+      "paymentMethods": ["app", "RFID", "web/QR"]
+    }
+  ],
+  "officialContext": {
+    "sourceUrl": "https://www.stadtwerke-stralsund.de/produkte/ladetarife-und-standorte",
+    "note": "Stadtwerke Stralsund officially confirms its own public charging network and publishes separate contractual card tariffs. These card tariffs are not used as ad-hoc station prices. The exact 0.48 EUR/kWh direct price above is retained only for the two verified Baabe EVSEs."
+  },
+  "policy": "No DE*HST-wide or Stadtwerke-Stralsund-wide ad-hoc fallback is allowed from this evidence. Public sources show station-specific direct prices can differ across Stadtwerke Stralsund sites, so only exact EVSE-level evidence is accepted. Contractual PREMIUM/START/BUSINESS and roaming prices remain separate from ad-hoc CPO pricing."
+}
