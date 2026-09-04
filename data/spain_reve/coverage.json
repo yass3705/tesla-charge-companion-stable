@@ -3,50 +3,71 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 3610
+      "total": 6461
     },
     "format": {
-      "count": 3610,
+      "count": 6461,
       "pct": 100.0,
-      "total": 3610
+      "total": 6461
     },
     "maxAmperage": {
-      "count": 3610,
+      "count": 6461,
       "pct": 100.0,
-      "total": 3610
+      "total": 6461
     },
     "maxElectricPower": {
-      "count": 3610,
+      "count": 6461,
       "pct": 100.0,
-      "total": 3610
+      "total": 6461
     },
     "maxVoltage": {
-      "count": 3610,
+      "count": 6461,
       "pct": 100.0,
-      "total": 3610
+      "total": 6461
     },
     "powerType": {
-      "count": 3610,
+      "count": 6461,
       "pct": 100.0,
-      "total": 3610
+      "total": 6461
     },
     "standard": {
-      "count": 3610,
+      "count": 6461,
       "pct": 100.0,
-      "total": 3610
+      "total": 6461
     },
-    "total": 3610
+    "total": 6461
   },
   "country": "ES",
   "cpos": {
-    "distinct": 4,
+    "distinct": 10,
     "items": [
+      {
+        "connectors": 33,
+        "cpoName": "Allego Spain S.L.U",
+        "evses": 33,
+        "locations": 1,
+        "partyId": "ALL"
+      },
       {
         "connectors": 1651,
         "cpoName": "EDP CLIENTES SAU",
         "evses": 1584,
         "locations": 456,
         "partyId": "GFX"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "ENDESA X WAY, S.L.",
+        "evses": 6,
+        "locations": 3,
+        "partyId": "ESX"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "GRUP SUPECO MAXOR SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "GSM"
       },
       {
         "connectors": 172,
@@ -56,6 +77,20 @@
         "partyId": "IOY"
       },
       {
+        "connectors": 252,
+        "cpoName": "MOEVE COMMERCIAL, SAU",
+        "evses": 252,
+        "locations": 120,
+        "partyId": "MOE"
+      },
+      {
+        "connectors": 1191,
+        "cpoName": "Punto Recargas SL",
+        "evses": 1181,
+        "locations": 137,
+        "partyId": "PWH"
+      },
+      {
         "connectors": 234,
         "cpoName": "QWELLO España SL",
         "evses": 188,
@@ -63,10 +98,17 @@
         "partyId": "AEQ"
       },
       {
-        "connectors": 1553,
+        "connectors": 1248,
+        "cpoName": "Tesla Spain SLU",
+        "evses": 1159,
+        "locations": 103,
+        "partyId": "TSL"
+      },
+      {
+        "connectors": 1672,
         "cpoName": "Wenea Services Spain, S.L.",
-        "evses": 1517,
-        "locations": 284,
+        "evses": 1636,
+        "locations": 319,
         "partyId": "WEN"
       }
     ]
@@ -75,45 +117,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 3461
+      "total": 6212
     },
     "identifier": {
-      "count": 3461,
+      "count": 6212,
       "pct": 100.0,
-      "total": 3461
+      "total": 6212
     },
-    "total": 3461
+    "total": 6212
   },
-  "generatedAt": "2026-09-04T20:11:27.100821Z",
+  "generatedAt": "2026-09-04T21:31:15.757919Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 900,
+      "count": 1300,
       "pct": 100.0,
-      "total": 900
+      "total": 1300
     },
     "coordinates": {
-      "count": 900,
+      "count": 1300,
       "pct": 100.0,
-      "total": 900
+      "total": 1300
     },
     "cpoIdentity": {
-      "count": 900,
+      "count": 1300,
       "pct": 100.0,
-      "total": 900
+      "total": 1300
     },
     "withEvses": {
-      "count": 900,
+      "count": 1300,
       "pct": 100.0,
-      "total": 900
+      "total": 1300
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 900,
-    "nextPage": 10,
-    "registryCoveragePct": 6.18,
+    "locationsStored": 1300,
+    "nextPage": 14,
+    "registryCoveragePct": 8.92,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
