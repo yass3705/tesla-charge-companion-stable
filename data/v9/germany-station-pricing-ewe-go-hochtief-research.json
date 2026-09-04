@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-04",
+  "operator": "EWE Go HOCHTIEF Ladepartner GmbH & Co. KG",
+  "entries": [
+    {
+      "operator": "EWE Go HOCHTIEF Ladepartner GmbH & Co. KG",
+      "sourceProvider": "PUMP station tariff data cross-checked against Bundesnetzagentur-derived station identity",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-ewe_go_hochtief_ladepartner-adenauerring-19-duderstadt/daad8867-0e9f-11f0-8f0c-2d9151c797f5",
+      "operatorSourceUrl": "https://www.ewego-hochtief.de/",
+      "stationName": "EHT_14163_01",
+      "address": "Adenauerring 19, 37115 Duderstadt",
+      "evseId": "DE*EHT*E14163*1*1",
+      "connectorKind": "DC",
+      "powerKw": 400,
+      "currency": "EUR",
+      "pricePerKwh": 0.69,
+      "idleFeePerMinute": 0.12,
+      "idleFeeAfterMinutes": 240,
+      "accessMode": "station-level direct/ad-hoc price observed for this exact EVSE"
+    },
+    {
+      "operator": "EWE Go HOCHTIEF Ladepartner GmbH & Co. KG",
+      "sourceProvider": "PUMP station tariff data cross-checked against Bundesnetzagentur-derived station identity",
+      "sourceUrl": "https://app.pumpapp.co/de/ladestation-ewe_go_hochtief_ladepartner-adenauerring-19-duderstadt/daad8867-0e9f-11f0-8f0c-2d9151c797f5",
+      "operatorSourceUrl": "https://www.ewego-hochtief.de/",
+      "stationName": "EHT_14163_01",
+      "address": "Adenauerring 19, 37115 Duderstadt",
+      "evseId": "DE*EHT*E14163*1*2",
+      "connectorKind": "DC",
+      "powerKw": 400,
+      "currency": "EUR",
+      "pricePerKwh": 0.69,
+      "idleFeePerMinute": 0.12,
+      "idleFeeAfterMinutes": 240,
+      "accessMode": "station-level direct/ad-hoc price observed for this exact EVSE"
+    }
+  ],
+  "policy": "The DE*EHT prefix identifies EWE Go HOCHTIEF Ladepartner infrastructure, but this research record deliberately attaches 0.69 EUR/kWh plus 0.12 EUR/min after 240 minutes only to the two exact Duderstadt EVSEs above. The official operator site verifies the joint-venture operator and Duderstadt site, while PUMP exposes the station-level tariff. No prefix-wide or national fallback is permitted until an official universal tariff or further exact station-level evidence is available. Roaming/eMSP prices are excluded."
+}
