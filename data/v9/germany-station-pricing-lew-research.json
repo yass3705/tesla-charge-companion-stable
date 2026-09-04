@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-04",
+  "operator": "LEW Natur GmbH",
+  "entries": [
+    {
+      "sourceProvider": "vaylens_ladestau",
+      "sourceUrl": "https://ladestau.de/schwabmuenchen/lew-natur-weidenhartstrasse-35/",
+      "evseId": "DE*LEW*EDC10069*1",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestau",
+      "sourceUrl": "https://ladestau.de/schwabmuenchen/lew-natur-weidenhartstrasse-35/",
+      "evseId": "DE*LEW*EDC10069*2",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestau",
+      "sourceUrl": "https://ladestau.de/schwabmuenchen/lew-natur-weidenhartstrasse-35/",
+      "evseId": "DE*LEW*EDC10070*1",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestau",
+      "sourceUrl": "https://ladestau.de/schwabmuenchen/lew-natur-weidenhartstrasse-35/",
+      "evseId": "DE*LEW*EDC10070*2",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_adhocladen",
+      "sourceUrl": "https://adhocladen.de/illertissen/lew-natur-krankenhausstrasse-1/",
+      "evseId": "DE*LEW*EAC00095*1",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_adhocladen",
+      "sourceUrl": "https://adhocladen.de/illertissen/lew-natur-krankenhausstrasse-1/",
+      "evseId": "DE*LEW*EAC00095*2",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "currency": "EUR",
+      "pricePerKwh": 0.59,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestatistik",
+      "sourceUrl": "https://ladestatistik.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10004*1",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestatistik",
+      "sourceUrl": "https://ladestatistik.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10004*2",
+      "connectorKind": "DC",
+      "powerKw": 50,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestatistik",
+      "sourceUrl": "https://ladestatistik.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10029*1",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    },
+    {
+      "sourceProvider": "vaylens_ladestatistik",
+      "sourceUrl": "https://ladestatistik.de/landsberg-am-lech/lew-natur-sandauer-strasse-252/",
+      "evseId": "DE*LEW*EDC10029*2",
+      "connectorKind": "DC",
+      "powerKw": 150,
+      "currency": "EUR",
+      "pricePerKwh": 0.74,
+      "paymentMethods": ["direct_pay"]
+    }
+  ],
+  "policy": "Only exact current EVSE-level ad-hoc prices are retained. No DE*LEW network fallback is inferred: current public station data shows materially different AC prices by site, while older aggregator snapshots also contain higher DC prices than the current live Vaylens-backed values. Time/blocking components are not encoded here because the retained public pages do not prove the onset rule consistently enough for all selected EVSEs."
+}
