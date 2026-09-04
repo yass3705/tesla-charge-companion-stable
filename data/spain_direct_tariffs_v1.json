@@ -139,6 +139,37 @@
       "currency": "EUR",
       "source": "https://www.fastnedcharging.com/es/cargando/tarifas",
       "note": "Remise officielle de 10 % sur le prix standard Espagne via l'app Fastned; calcul déterministe 0,59 x 0,90 = 0,531 €/kWh."
+    },
+    {
+      "id": "acciona-direct-up-to-22kw-es",
+      "provider": "ACCIONA Recarga direct",
+      "operatorAliases": ["ACCIONA", "ACCIONA Recarga", "Acciona Recarga SL"],
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.35,
+      "currency": "EUR",
+      "source": "https://recarga.acciona.com/",
+      "note": "Tarif officiel ACCIONA Espagne pour les chargeurs jusqu'à 22 kW, TVA incluse. Application uniquement aux points propres ACCIONA."
+    },
+    {
+      "id": "acciona-direct-over-22kw-es",
+      "provider": "ACCIONA Recarga direct",
+      "operatorAliases": ["ACCIONA", "ACCIONA Recarga", "Acciona Recarga SL"],
+      "minPowerKw": 22.001,
+      "pricePerKwh": 0.55,
+      "currency": "EUR",
+      "source": "https://recarga.acciona.com/",
+      "note": "Tarif officiel ACCIONA Espagne pour les chargeurs de plus de 22 kW, TVA incluse."
+    },
+    {
+      "id": "moeve-direct-ultrafast-es",
+      "provider": "Moeve direct",
+      "operatorAliases": ["Moeve", "CEPSA", "Cepsa"],
+      "kind": "DC",
+      "minPowerKw": 150,
+      "pricePerKwh": 0.60,
+      "currency": "EUR",
+      "source": "https://www.moeve.es/es/particular/movilidad-electrica/recarga-electrica/tarifas-y-suscripciones",
+      "note": "Moeve publie 0,60 €/kWh pour sa recharge ultrarapide; son réseau ultrarapide est annoncé à partir de 150 kW. Application uniquement aux points physiquement opérés par Moeve/Cepsa."
     }
   ],
   "subscriptionOffers": [
