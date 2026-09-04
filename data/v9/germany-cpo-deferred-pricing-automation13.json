@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "verifiedAt": "2026-09-04",
+  "preIntegrationOnly": true,
+  "cpos": [
+    {
+      "operator": "GOLDBECK Parking Services GmbH",
+      "evsePrefix": "DE*GOL",
+      "status": "blocked_public_station_price_unresolved",
+      "reason": "GOLDBECK publicly confirms German EV charging products, consumption-based billing and no monthly fee, but the public charging pages and customer-account entry points do not expose a reproducible current German per-kWh price for a specific station/EVSE. Public web searches for DE*GOL expose station identities and roaming/eMSP values, but no verifiable current physical CPO price. Austrian GOLDBECK prices and eMSP/roaming tariffs are explicitly excluded from German CPO pricing. After official site, public account/charging pages, station-level discovery and public web/aggregator checks, no exact German station/EVSE price is safely attachable.",
+      "sources": [
+        "https://www.goldbeck-parking.de/e-laden",
+        "https://www.goldbeck-parking.de/en/charging",
+        "https://www.goldbeck-parking.de/en/customeraccount/login"
+      ],
+      "unblockRequires": "A public GOLDBECK Mobility/direct-payment payload, tariff page, receipt/example, or other reproducible source exposing the exact current German charging price for a DE*GOL station/EVSE."
+    },
+    {
+      "operator": "APCOA Deutschland GmbH",
+      "evsePrefix": "DE*ACO",
+      "status": "blocked_public_station_price_unresolved",
+      "reason": "Current APCOA Germany pages confirm charging locations and ad-hoc QR/direct-payment capability at multiple sites, but do not expose a reproducible current charging price in public HTML. A previously recorded 0.45 EUR/kWh Neumarkt Leipzig value is no longer present on the current official page and has been fail-closed rather than retained as stale evidence. Public station directories confirm APCOA ownership and DE*ACO EVSE identities at other German sites, while their ad-hoc price remains unknown. eMSP/roaming prices and foreign APCOA tariffs are not used as CPO prices.",
+      "sources": [
+        "https://www.apcoa.de/e-laden-mehr/standorte/leipzig/neumarkt",
+        "https://www.apcoa.de/e-laden-mehr/standorte/leipzig/petersbogen"
+      ],
+      "unblockRequires": "A reproducible APCOA QR/direct-payment endpoint or official station tariff exposing the exact current price for a DE*ACO EVSE/station, or a new official APCOA German tariff explicitly scoped to its physical charging network."
+    }
+  ]
+}
