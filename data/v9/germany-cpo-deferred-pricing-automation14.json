@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "verifiedAt": "2026-09-04",
+  "preIntegrationOnly": true,
+  "cpos": [
+    {
+      "operator": "medl GmbH",
+      "evsePrefix": "DE*MDL",
+      "status": "partial_display_direct_payment_resolved",
+      "reason": "medl's current official eTanke page publishes an exact Direct Payment price of 0.44 EUR/kWh with no start fee and no blocking fee, but explicitly scopes that price to medl-eTanken equipped with a display (petrol-colored on the official location map). Stations without a display can have different prices. The public official page does not expose a machine-readable EVSE-to-display mapping, so applying 0.44 EUR/kWh to every DE*MDL EVSE would overgeneralize. The exact tariff is therefore recorded as a resolved partial scope, not as an operator-wide fallback.",
+      "sources": [
+        "https://www.medl.de/e-mobilitaet/medl-etanke/"
+      ],
+      "resolvedPricing": {
+        "payment": "direct_payment",
+        "pricePerKwh": 0.44,
+        "currency": "EUR",
+        "startFee": 0.0,
+        "blockingFee": 0.0,
+        "scope": "medl-eTanke locations equipped with display only"
+      },
+      "unblockRequires": "A reproducible official station/EVSE mapping identifying which DE*MDL charge points are display-equipped (the petrol-colored locations on medl's map), or exact QR/direct-payment payloads for individual DE*MDL EVSEs. That would allow the 0.44 EUR/kWh tariff to be attached station-by-station without extrapolation."
+    }
+  ]
+}
