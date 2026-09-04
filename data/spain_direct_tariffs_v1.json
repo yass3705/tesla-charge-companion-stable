@@ -43,6 +43,29 @@
       "currency": "EUR",
       "source": "https://wenea.com/tarifas-de-carga/",
       "note": "Uniquement stations propres Wenea; les stations exploitées en partenariat peuvent avoir des tarifs différents et restent exclues."
+    },
+    {
+      "id": "repsol-direct-normal-22kw-es",
+      "provider": "Repsol direct",
+      "operatorAliases": ["Repsol"],
+      "kind": "AC",
+      "minPowerKw": 22,
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.36,
+      "currency": "EUR",
+      "source": "https://www.repsol.es/particulares/vehiculos/movilidad-electrica/pago-por-recarga/",
+      "note": "Repsol publie 0,36 €/kWh pour la recharge normale et documente cette classe à 22 kW. Application stricte uniquement aux connecteurs Repsol 22 kW; les opérateurs tiers visibles dans Waylet sont exclus."
+    },
+    {
+      "id": "repsol-direct-ultrafast-es",
+      "provider": "Repsol direct",
+      "operatorAliases": ["Repsol"],
+      "kind": "DC",
+      "minPowerKw": 151,
+      "pricePerKwh": 0.56,
+      "currency": "EUR",
+      "source": "https://www.repsol.es/particulares/vehiculos/movilidad-electrica/pago-por-recarga/",
+      "note": "Repsol publie 0,56 €/kWh pour la recharge ultrarrapide et définit cette classe à plus de 150 kW. La recharge rapide 50 kW reste exclue car le tarif officiel est seulement indiqué 'desde 0,48 €/kWh'."
     }
   ],
   "subscriptionOffers": [
