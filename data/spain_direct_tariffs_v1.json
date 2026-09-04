@@ -119,6 +119,26 @@
       "currency": "EUR",
       "source": "https://www.repsol.es/particulares/vehiculos/movilidad-electrica/pago-por-recarga/",
       "note": "Repsol publie 0,56 €/kWh pour la recharge ultrarrapide et définit cette classe à plus de 150 kW. La recharge rapide 50 kW reste exclue car le tarif officiel est seulement indiqué 'desde 0,48 €/kWh'."
+    },
+    {
+      "id": "fastned-direct-es",
+      "provider": "Fastned direct",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.59,
+      "currency": "EUR",
+      "source": "https://www.fastnedcharging.com/es/cargando/tarifas",
+      "note": "Prix standard officiel Espagne, valable sur les stations Fastned. Les tarifs tiers via badges ne sont pas inclus."
+    },
+    {
+      "id": "fastned-app-es",
+      "provider": "Fastned app",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.531,
+      "currency": "EUR",
+      "source": "https://www.fastnedcharging.com/es/cargando/tarifas",
+      "note": "Remise officielle de 10 % sur le prix standard Espagne via l'app Fastned; calcul déterministe 0,59 x 0,90 = 0,531 €/kWh."
     }
   ],
   "subscriptionOffers": [
@@ -185,6 +205,66 @@
       "monthlyFeeEur": 8.99,
       "source": "https://wenea.com/tarifas-de-carga/",
       "note": "Uniquement stations propres Wenea éligibles à Everyday."
+    },
+    {
+      "id": "fastned-gold-es",
+      "selectionId": "fastned-gold",
+      "provider": "Fastned Gold",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.41,
+      "currency": "EUR",
+      "monthlyFeeEur": 5.99,
+      "source": "https://www.fastnedcharging.com/es/cargando/tarifas",
+      "note": "Tarif abonné officiel Espagne. Frais mensuels promotionnels valables jusqu'au 30 septembre 2026."
+    },
+    {
+      "id": "atlante-go-atlante-es",
+      "selectionId": "atlante-go",
+      "provider": "Atlante Go",
+      "operatorAliases": ["Atlante"],
+      "kind": "DC",
+      "pricePerKwh": 0.29,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "source": "https://atlante.energy/es/myatlante-app/",
+      "note": "Tarif officiel Atlante Go sur toutes les stations Atlante en Espagne. Offre réservée aux particuliers."
+    },
+    {
+      "id": "atlante-go-electra-es",
+      "selectionId": "atlante-go",
+      "provider": "Atlante Go / ChargeLeague",
+      "operatorAliases": ["Electra"],
+      "kind": "DC",
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "source": "https://atlante.energy/es/myatlante-app/",
+      "note": "Tarif officiel Atlante Go ChargeLeague en Espagne sur les stations Electra. Le tarif direct Electra reste fail-closed."
+    },
+    {
+      "id": "atlante-go-fastned-es",
+      "selectionId": "atlante-go",
+      "provider": "Atlante Go / ChargeLeague",
+      "operatorAliases": ["Fastned"],
+      "kind": "DC",
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "source": "https://atlante.energy/es/myatlante-app/",
+      "note": "Tarif officiel Atlante Go ChargeLeague en Espagne sur les stations Fastned."
+    },
+    {
+      "id": "atlante-go-ionity-es",
+      "selectionId": "atlante-go",
+      "provider": "Atlante Go / ChargeLeague",
+      "operatorAliases": ["IONITY", "Ionity"],
+      "kind": "DC",
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "monthlyFeeEur": 9.99,
+      "source": "https://atlante.energy/es/myatlante-app/",
+      "note": "Tarif officiel Atlante Go ChargeLeague en Espagne sur les stations IONITY."
     }
   ]
 }
