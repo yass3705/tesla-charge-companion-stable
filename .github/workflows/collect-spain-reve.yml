@@ -85,12 +85,14 @@ jobs:
       - name: Commit pre-integration snapshot progress
         shell: bash
         run: |
-          if git diff --quiet -- data/spain_reve; then
+          # Stage first so brand-new files (state, metadata and the initial snapshot)
+          # are detected as changes. `git diff` alone ignores untracked files.
+          git add data/spain_reve
+          if git diff --cached --quiet -- data/spain_reve; then
             echo "No REVE data change to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/spain_reve
           git commit -m "data(es): advance REVE pre-integration snapshot"
           git push
