@@ -15,11 +15,10 @@ import argparse
 import gzip
 import json
 import os
+import subprocess
 import sys
-import time
-import urllib.error
+import tempfile
 import urllib.parse
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -67,27 +66,77 @@ def save_gzip_json(path: Path, data: Any) -> None:
 
 
 def api_get(api_key: str, endpoint: str, params: dict[str, Any] | None = None) -> tuple[Any, dict[str, str]]:
+    """GET REVE through curl.
+
+    REVE currently returns 401 for Python urllib from GitHub-hosted runners even
+    with the same valid API key, while curl from the same runner succeeds. Use
+    curl here to match the validated transport path and keep the collector
+    deterministic across local and GitHub execution.
+    """
     url = BASE_URL + endpoint
     if params:
         url += "?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(
-        url,
-        headers={
-            "x-api-key": api_key,
-            "Accept": "application/json",
-            "User-Agent": "TeslaChargeCompanion-REVE/1.0",
-        },
-    )
+
+    with tempfile.TemporaryDirectory(prefix="reve-") as tmpdir:
+        headers_path = Path(tmpdir) / "headers.txt"
+        body_path = Path(tmpdir) / "body.json"
+        proc = subprocess.run(
+            [
+                "curl",
+                "-sS",
+                "--max-time",
+                "120",
+                "-D",
+                str(headers_path),
+                "-o",
+                str(body_path),
+                "-H",
+                f"x-api-key: {api_key}",
+                "-H",
+                "Accept: application/json",
+                url,
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        headers_text = headers_path.read_text(encoding="utf-8", errors="replace") if headers_path.exists() else ""
+        body = body_path.read_text(encoding="utf-8", errors="replace") if body_path.exists() else ""
+
+    status_code = 0
+    header_lines = headers_text.splitlines()
+    last_http_index = -1
+    for i, line in enumerate(header_lines):
+        if line.startswith("HTTP/"):
+            last_http_index = i
+            parts = line.split()
+            if len(parts) >= 2 and parts[1].isdigit():
+                status_code = int(parts[1])
+
+    headers: dict[str, str] = {}
+    if last_http_index >= 0:
+        for line in header_lines[last_http_index + 1 :]:
+            if not line.strip():
+                break
+            if ":" not in line:
+                continue
+            key, value = line.split(":", 1)
+            headers[key.strip().lower()] = value.strip()
+
+    if proc.returncode != 0 and status_code == 0:
+        stderr = (proc.stderr or "").strip()
+        raise RuntimeError(f"REVE curl failed (exit {proc.returncode}): {stderr[:500]}")
+    if status_code == 429:
+        raise RuntimeError("REVE rate limit reached (HTTP 429)")
+    if status_code != 200:
+        raise RuntimeError(f"REVE HTTP {status_code or 'unknown'}: {body[:500]}")
+
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-            headers = {k.lower(): v for k, v in resp.headers.items()}
-            return payload, headers
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", errors="replace")
-        if e.code == 429:
-            raise RuntimeError("REVE rate limit reached (HTTP 429)") from e
-        raise RuntimeError(f"REVE HTTP {e.code}: {body[:500]}") from e
+        payload = json.loads(body)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"REVE returned invalid JSON: {body[:500]}") from e
+    return payload, headers
 
 
 def merge_locations(existing: dict[str, Any], rows: list[dict[str, Any]]) -> tuple[dict[str, Any], int, int]:
