@@ -3,22 +3,14 @@
   "country": "DE",
   "preIntegrationOnly": true,
   "researchOnly": true,
-  "verifiedAt": "2026-09-03",
+  "verifiedAt": "2026-09-04",
   "operator": "APCOA Deutschland GmbH",
-  "entries": [
-    {
-      "operator": "APCOA Deutschland GmbH",
-      "sourceProvider": "APCOA Germany official location page",
-      "sourceUrl": "https://www.apcoa.de/e-laden-mehr/standorte/leipzig/neumarkt",
-      "stationName": "Neumarkt",
-      "address": "Peterskirchhof 7, 04109 Leipzig",
-      "connectorKind": "AC",
-      "powerKw": 22,
-      "chargePointCount": 60,
-      "currency": "EUR",
-      "pricePerKwh": 0.45,
-      "accessMode": "station-level direct payment at the car-park payment terminal"
-    }
-  ],
-  "policy": "APCOA publishes 0.45 EUR/kWh specifically for the Neumarkt Leipzig location. The price is attached only to this exact station and MUST NOT be propagated to other APCOA locations. Other German APCOA pages confirm QR/ad-hoc availability but do not expose a reproducible charging price, and foreign APCOA tariffs are excluded."
+  "entries": [],
+  "policy": "Fail closed. A previously recorded 0.45 EUR/kWh value for APCOA Neumarkt Leipzig is no longer exposed by the current official APCOA location page and therefore is not retained as active station-pricing evidence. The current APCOA pages confirm charging availability and, at several locations, ad-hoc QR/direct payment, but do not expose a reproducible current charging price in public HTML. Aggregator/eMSP prices are discovery-only and are not promoted to physical CPO pricing. Foreign APCOA tariffs are excluded.",
+  "supersededEvidence": {
+    "stationName": "Neumarkt Leipzig",
+    "previousPricePerKwh": 0.45,
+    "reason": "The current official APCOA charging/location page no longer publishes this charging price. Current page address metadata also differs from the earlier research snapshot. Keeping the old numeric value would violate fail-closed station-level verification.",
+    "currentOfficialSource": "https://www.apcoa.de/e-laden-mehr/standorte/leipzig/neumarkt"
+  }
 }
