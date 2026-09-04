@@ -14,6 +14,9 @@ on:
         default: "4"
         type: choice
         options: ["1", "2", "3", "4", "5"]
+  push:
+    branches: ["spain-reve-preintegration"]
+    paths: [".github/workflows/collect-spain-reve.yml"]
   schedule:
     # Runs hourly, but the collector exits immediately once the monthly cycle is complete.
     # A new cycle is automatically started during the first 48 hours of each month.
