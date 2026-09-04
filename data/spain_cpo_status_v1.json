@@ -5,7 +5,8 @@
   "inventory": {
     "authoritativeCpoTotal": null,
     "reason": "REVE external /cpos still unavailable to the current pipeline; historical figures 189 and 618 are not valid current CPO denominators.",
-    "publicFallback": "MapaREVE internal public API is a candidate inventory source but is undocumented/unsupported and must be used conservatively."
+    "publicFallback": "Use the official Spanish DGT DATEX II energy-infrastructure feed as the primary nominative inventory fallback because it exposes operator names per charging site. REVE /api/public/v1 may enrich status/tariffs but is undocumented/unsupported and must remain optional/conservative.",
+    "dgtFallbackEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents parsing the official DGT DATEX II feed, including operator.name, and optional REVE enrichment. It also documents the unsupported public REVE endpoint separately, preventing accidental treatment as an authoritative supported API."
   },
   "validatedNamed": [
     "Allego",
@@ -63,16 +64,16 @@
     {"alias": "CEPSA", "canonical": "Moeve"},
     {"alias": "Cepsa", "canonical": "Moeve"},
     {"alias": "Acciona Recarga SL", "canonical": "ACCIONA Recarga"},
+    {"alias": "Cargacoches", "canonical": "ACCIONA Recarga", "note": "ACCIONA Energía acquired Cargacoches in 2021. Treat as an alias only for the legacy own Cargacoches network; Cargacoches/ACCIONA-managed third-party chargers must not inherit ACCIONA direct tariffs unless physical operation is confirmed."},
     {"alias": "IONITY", "canonical": "IONITY"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-04",
-    "result": "historical denominator corrected; 618 rejected; nominal ledger gap detected (10 historical validated names missing from repository evidence); no blocked CPO re-audited without new evidence; new work focused on ACCIONA, Moeve, EMT Madrid and Endesa.",
+    "result": "No counter change: historical validated=20, nominatively reconciled=10, blocked=7, active=6. Added an official DGT DATEX II inventory fallback instead of relying on unsupported REVE public endpoints. Resolved legacy Cargacoches -> ACCIONA Recarga with a strict third-party exclusion to avoid tariff leakage. No blocked CPO was re-audited without new evidence; no active investigation was repeated >2 runs without a new piste.",
     "safeCorrectionsApplied": [
-      "added ACCIONA direct tariffs",
-      "added Moeve ultrafast direct tariff",
-      "resolved Cepsa to Moeve aliases",
-      "created nominative status ledger with explicit unreconciled historical gap"
+      "promoted official DGT DATEX II operator feed as nominative inventory fallback",
+      "kept REVE /api/public/v1 explicitly unsupported/optional",
+      "resolved legacy Cargacoches to ACCIONA Recarga with third-party managed points excluded"
     ]
   }
 }
