@@ -3,49 +3,49 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 1821
+      "total": 3610
     },
     "format": {
-      "count": 1821,
+      "count": 3610,
       "pct": 100.0,
-      "total": 1821
+      "total": 3610
     },
     "maxAmperage": {
-      "count": 1821,
+      "count": 3610,
       "pct": 100.0,
-      "total": 1821
+      "total": 3610
     },
     "maxElectricPower": {
-      "count": 1821,
+      "count": 3610,
       "pct": 100.0,
-      "total": 1821
+      "total": 3610
     },
     "maxVoltage": {
-      "count": 1821,
+      "count": 3610,
       "pct": 100.0,
-      "total": 1821
+      "total": 3610
     },
     "powerType": {
-      "count": 1821,
+      "count": 3610,
       "pct": 100.0,
-      "total": 1821
+      "total": 3610
     },
     "standard": {
-      "count": 1821,
+      "count": 3610,
       "pct": 100.0,
-      "total": 1821
+      "total": 3610
     },
-    "total": 1821
+    "total": 3610
   },
   "country": "ES",
   "cpos": {
-    "distinct": 3,
+    "distinct": 4,
     "items": [
       {
-        "connectors": 1415,
+        "connectors": 1651,
         "cpoName": "EDP CLIENTES SAU",
-        "evses": 1356,
-        "locations": 340,
+        "evses": 1584,
+        "locations": 456,
         "partyId": "GFX"
       },
       {
@@ -61,6 +61,13 @@
         "evses": 188,
         "locations": 117,
         "partyId": "AEQ"
+      },
+      {
+        "connectors": 1553,
+        "cpoName": "Wenea Services Spain, S.L.",
+        "evses": 1517,
+        "locations": 284,
+        "partyId": "WEN"
       }
     ]
   },
@@ -68,46 +75,46 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 1716
+      "total": 3461
     },
     "identifier": {
-      "count": 1716,
+      "count": 3461,
       "pct": 100.0,
-      "total": 1716
+      "total": 3461
     },
-    "total": 1716
+    "total": 3461
   },
-  "generatedAt": "2026-09-04T19:06:31.581434Z",
+  "generatedAt": "2026-09-04T20:11:27.100821Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 500,
+      "count": 900,
       "pct": 100.0,
-      "total": 500
+      "total": 900
     },
     "coordinates": {
-      "count": 500,
+      "count": 900,
       "pct": 100.0,
-      "total": 500
+      "total": 900
     },
     "cpoIdentity": {
-      "count": 500,
+      "count": 900,
       "pct": 100.0,
-      "total": 500
+      "total": 900
     },
     "withEvses": {
-      "count": 500,
+      "count": 900,
       "pct": 100.0,
-      "total": 500
+      "total": 900
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 500,
-    "nextPage": 6,
-    "registryCoveragePct": 3.43,
-    "registryTotalCount": 14567,
+    "locationsStored": 900,
+    "nextPage": 10,
+    "registryCoveragePct": 6.18,
+    "registryTotalCount": 14569,
     "totalPages": 146
   },
   "source": "REVE",
