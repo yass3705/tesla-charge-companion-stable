@@ -1,27 +1,85 @@
 #!/usr/bin/env python3
-import argparse,json
-from datetime import datetime,timezone
+import argparse
+import json
+from datetime import datetime, timezone
 from pathlib import Path
 
-def load(p): return json.loads(Path(p).read_text())
-def parse_time(v):
- if not v:return None
- try:return datetime.fromisoformat(str(v).replace('Z','+00:00'))
- except ValueError:return None
-def is_active(o,now):
- until=parse_time(o.get('validUntil'))
- return until is None or until>=now
+
+def load(path):
+    return json.loads(Path(path).read_text())
+
+
+def parse_time(value):
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except ValueError:
+        return None
+
+
+def is_active(offer, now):
+    until = parse_time(offer.get('validUntil'))
+    return until is None or until >= now
+
+
+def discover_extensions():
+    """Discover every Germany direct-offer extension by repository convention.
+
+    This deliberately replaces the historical hand-maintained default list so a
+    newly verified CPO cannot be classified by the audits while being silently
+    omitted from the consolidated direct-offer build. Explicit --extensions
+    arguments remain supported for targeted tests.
+    """
+    return sorted(
+        str(path)
+        for path in Path('data/v9').glob('germany-direct-offers-*-extension.json')
+    )
+
 
 def main():
- a=argparse.ArgumentParser();a.add_argument('--base',default='data/v9/germany-direct-offers.json');a.add_argument('--extensions',nargs='*',default=['data/v9/germany-direct-offers-aral-extension.json','data/v9/germany-direct-offers-enbw-extension.json','data/v9/germany-direct-offers-swu-extension.json','data/v9/germany-direct-offers-westfalen-extension.json','data/v9/germany-direct-offers-eam-extension.json','data/v9/germany-direct-offers-stadtwerke-luebeck-extension.json','data/v9/germany-direct-offers-swlb-extension.json','data/v9/germany-direct-offers-stadtwerke-bochum-extension.json','data/v9/germany-direct-offers-mark-e-extension.json','data/v9/germany-direct-offers-stadtwerke-wuerzburg-extension.json','data/v9/germany-direct-offers-q1-extension.json','data/v9/germany-direct-offers-stadtwerke-goettingen-extension.json','data/v9/germany-direct-offers-ovag-extension.json','data/v9/germany-direct-offers-wemag-extension.json','data/v9/germany-direct-offers-stadtwerke-neuss-extension.json','data/v9/germany-direct-offers-infra-fuerth-extension.json','data/v9/germany-direct-offers-evo-extension.json','data/v9/germany-direct-offers-ewv-extension.json','data/v9/germany-direct-offers-ggew-extension.json','data/v9/germany-direct-offers-ecowerk-extension.json','data/v9/germany-direct-offers-autostrom-plus-extension.json','data/v9/germany-direct-offers-stadtwerke-konstanz-extension.json','data/v9/germany-direct-offers-stadtwerke-bruchsal-extension.json','data/v9/germany-direct-offers-jolt-extension.json','data/v9/germany-direct-offers-maingau-extension.json','data/v9/germany-direct-offers-jet-extension.json','data/v9/germany-direct-offers-stadtwerke-heidelberg-extension.json','data/v9/germany-direct-offers-stadtwerke-ruesselsheim-extension.json','data/v9/germany-direct-offers-stadtwerke-witten-extension.json','data/v9/germany-direct-offers-albwerk-extension.json','data/v9/germany-direct-offers-stadtwerke-bielefeld-extension.json','data/v9/germany-direct-offers-e-werk-mittelbaden-extension.json','data/v9/germany-direct-offers-stadtwerk-am-see-extension.json','data/v9/germany-direct-offers-wsw-extension.json','data/v9/germany-direct-offers-17er-extension.json','data/v9/germany-direct-offers-praeg-extension.json','data/v9/germany-direct-offers-evi-hildesheim-extension.json','data/v9/germany-direct-offers-stadtwerke-castrop-rauxel-extension.json','data/v9/germany-direct-offers-badenova-extension.json','data/v9/germany-direct-offers-mainzer-stadtwerke-extension.json','data/v9/germany-direct-offers-bilkraft-extension.json','data/v9/germany-direct-offers-next-wave-extension.json','data/v9/germany-direct-offers-swb-extension.json','data/v9/germany-direct-offers-stromspeichermarkt-extension.json','data/v9/germany-direct-offers-kiel-kassel-dueren-extension.json','data/v9/germany-direct-offers-stadtwerke-bonn-extension.json','data/v9/germany-direct-offers-lsw-evm-extension.json','data/v9/germany-direct-offers-stadtwerke-heilbronn-extension.json','data/v9/germany-direct-offers-jena-extension.json','data/v9/germany-direct-offers-nvb-team-extension.json','data/v9/germany-direct-offers-eins-gera-stendal-extension.json','data/v9/germany-direct-offers-uez-extension.json','data/v9/germany-direct-offers-fairenergie-extension.json','data/v9/germany-direct-offers-suec-extension.json','data/v9/germany-direct-offers-pfalzwerke-extension.json','data/v9/germany-direct-offers-henw-extension.json','data/v9/germany-direct-offers-esb-extension.json','data/v9/germany-direct-offers-berliner-stadtwerke-extension.json','data/v9/germany-direct-offers-nergie-extension.json','data/v9/germany-direct-offers-stadtwerke-duesseldorf-extension.json','data/v9/germany-direct-offers-sachsenenergie-extension.json','data/v9/germany-direct-offers-deer-extension.json','data/v9/germany-direct-offers-mvv-extension.json','data/v9/germany-direct-offers-eswe-extension.json','data/v9/germany-direct-offers-stadtwerke-stuttgart-extension.json']);a.add_argument('--out',default='build/germany-direct-offers.json');x=a.parse_args()
- now=datetime.now(timezone.utc);base=load(x.base);raw=list(base.get('directOffers',[]));seen={o['id'] for o in raw}
- for p in x.extensions:
-  d=load(p);assert d.get('country')=='DE'
-  for o in d.get('directOffers',[]):
-   if o['id'] in seen: raise SystemExit(f'duplicate offer id: {o["id"]}')
-   raw.append(o);seen.add(o['id'])
- offers=[o for o in raw if is_active(o,now)];expired=[o['id'] for o in raw if not is_active(o,now)]
- out=dict(base);out['directOffers']=offers;out['generatedFrom']=[x.base,*x.extensions];out['effectiveOfferCount']=len(offers);out['expiredOfferIds']=expired;out['builtAt']=now.isoformat()
- q=Path(x.out);q.parent.mkdir(parents=True,exist_ok=True);q.write_text(json.dumps(out,separators=(',',':'),ensure_ascii=False)+'\n')
- print(json.dumps({'country':out.get('country'),'effectiveOfferCount':len(offers),'expiredOfferIds':expired,'selectionCount':len({o.get('selectionId') for o in offers})},indent=2))
-if __name__=='__main__':main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--base', default='data/v9/germany-direct-offers.json')
+    parser.add_argument('--extensions', nargs='*', default=None)
+    parser.add_argument('--out', default='build/germany-direct-offers.json')
+    args = parser.parse_args()
+
+    extensions = args.extensions if args.extensions is not None else discover_extensions()
+    now = datetime.now(timezone.utc)
+    base = load(args.base)
+    raw = list(base.get('directOffers', []))
+    seen = {offer['id'] for offer in raw}
+
+    for path in extensions:
+        data = load(path)
+        assert data.get('country') == 'DE', path
+        for offer in data.get('directOffers', []):
+            if offer['id'] in seen:
+                raise SystemExit(f'duplicate offer id: {offer["id"]}')
+            raw.append(offer)
+            seen.add(offer['id'])
+
+    offers = [offer for offer in raw if is_active(offer, now)]
+    expired = [offer['id'] for offer in raw if not is_active(offer, now)]
+
+    out = dict(base)
+    out['directOffers'] = offers
+    out['generatedFrom'] = [args.base, *extensions]
+    out['effectiveOfferCount'] = len(offers)
+    out['expiredOfferIds'] = expired
+    out['builtAt'] = now.isoformat()
+
+    target = Path(args.out)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(out, separators=(',', ':'), ensure_ascii=False) + '\n')
+    print(json.dumps({
+        'country': out.get('country'),
+        'effectiveOfferCount': len(offers),
+        'expiredOfferIds': expired,
+        'selectionCount': len({offer.get('selectionId') for offer in offers}),
+        'extensionCount': len(extensions),
+    }, indent=2))
+
+
+if __name__ == '__main__':
+    main()
