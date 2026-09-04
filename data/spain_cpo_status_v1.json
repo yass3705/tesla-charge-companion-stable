@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "ES",
-  "updatedAt": "2026-09-04",
+  "updatedAt": "2026-09-05",
   "inventory": {
     "authoritativeCpoTotal": null,
     "reason": "REVE external /cpos still unavailable to the current pipeline; historical figures 189 and 618 are not valid current CPO denominators.",
@@ -37,7 +37,8 @@
     "Powerdot",
     "Telpark",
     "Iberdrola direct",
-    "IONITY direct"
+    "IONITY direct",
+    "Qwello España"
   ],
   "active": [
     {
@@ -65,8 +66,12 @@
       "status": "official site confirms price is point-specific and shown before charging; no exact public station feed integrated yet"
     },
     {
-      "name": "Qwello España",
-      "status": "confirmed physical CPO in Spain with operating/deploying public chargers; official Spanish tariff source not found in this run. Generic Qwello tariff pages are location/country-specific and must not be reused for Spain. Continue station/ad-hoc/app/backend investigation fail-closed."
+      "name": "Plenitude On The Road",
+      "status": "official Spain page publishes exact pay-as-you-go rates by power class (Quick AC <=22 kW 0.39 EUR/kWh; Fast DC <75 kW 0.55 EUR/kWh; Fast+/Ultra Fast DC >=75 kW 0.59 EUR/kWh) plus post-charge occupancy fees. Plenitude also operates its own public charging infrastructure but the app exposes a much larger partner network; do not attach these prices to arbitrary physical CPO aliases until own-network versus roaming eligibility is resolved."
+    },
+    {
+      "name": "Mobilize Fast Charge",
+      "status": "Renault/Mobilize confirms deployment into Spain in 2026 and an own ultra-fast network. Official published pricing is launch-window dependent (credit-card launch rate 0.41 EUR/kWh for each station's first two months; Mobilize Charge Pass 0.39 EUR/kWh for one year), so no timeless Spain-wide direct tariff can be integrated without station opening dates or station-specific current pricing."
     }
   ],
   "excludedNonCpoOrPlatform": [
@@ -85,16 +90,18 @@
     {"alias": "EasyCharger", "canonical": "Zunder", "note": "Zunder's official history states that EasyCharger changed its name and image to Zunder in 2022; current legal entity is Grupo Easycharger S.A."},
     {"alias": "Grupo Easycharger, S.A.", "canonical": "Zunder"},
     {"alias": "IBIL public charging network / energy retail", "canonical": "Repsol", "note": "Repsol acquired IBIL's public charging network and EV energy-commercialization activities in 2019. Do not alias present-day IBIL technology/third-party infrastructure-operation records to Repsol automatically."},
-    {"alias": "IONITY", "canonical": "IONITY"}
+    {"alias": "IONITY", "canonical": "IONITY"},
+    {"alias": "Qwello España SL", "canonical": "Qwello España"}
   ],
   "lastConsistencyCheck": {
-    "date": "2026-09-04",
-    "result": "Historical validated=20, nominatively reconciled=10, blocked=8, active=7, excluded platform/non-CPO identities=1. DGT live directory still exposes an 82629 KB feed updated 2026-09-04 10:17 CEST. Qwello España was added as an active physical CPO after official evidence of Spanish deployment, but no Spanish exact tariff was inferred from tariffs published for other countries/locations. EVcharge/Etecnic was explicitly excluded as a standalone CPO identity because its official material describes multi-operator management software with configurable tariffs. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added to validatedNamed.",
+    "date": "2026-09-05",
+    "result": "Historical validated=20, nominatively reconciled=10, blocked=9, active=8, excluded platform/non-CPO identities=1. Qwello España moved from active to fail-closed after official Spain-site, charging-flow, public-web and ad-hoc/payment research found no exact Spanish kWh/min tariff even though the app/station shows running cost; tariffs from Germany, France, Sweden and Poland were explicitly rejected for Spain. Plenitude On The Road and Mobilize Fast Charge were added as active CPO investigations from official sources. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; historical unreconciled names remain 10 rather than being guessed.",
     "safeCorrectionsApplied": [
-      "recorded current DGT feed modification timestamp",
-      "recorded non-authoritative REVE public location scale only as investigation metadata, not as CPO total",
-      "classified Qwello España as active/fail-closed pending exact Spanish station tariff source",
-      "excluded EVcharge/Etecnic platform identity from physical-CPO counting and tariff inheritance"
+      "moved Qwello España from active to fail-closed after exhausting current public exact-price paths without extrapolating foreign tariffs",
+      "resolved Qwello España SL legal-entity alias to Qwello España",
+      "added Plenitude On The Road as active with exact Spain power-class tariffs but strict own-network/roaming eligibility guard",
+      "added Mobilize Fast Charge as active with explicit station-launch-window pricing constraint",
+      "kept the historical validated-name gap explicit instead of reconstructing missing names by inference"
     ]
   }
 }
