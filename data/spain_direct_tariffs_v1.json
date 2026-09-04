@@ -45,6 +45,59 @@
       "note": "Uniquement stations propres Wenea; les stations exploitées en partenariat peuvent avoir des tarifs différents et restent exclues."
     },
     {
+      "id": "eranovum-direct-up-to-22kw-es",
+      "provider": "Eranovum direct",
+      "operatorAliases": ["Eranovum", "Eranovum e-mobility"],
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.35,
+      "currency": "EUR",
+      "source": "https://eranovum.energy/es/nuestras-tarifas/",
+      "note": "Grille officielle Espagne Eranovum: jusqu'à 22 kW = 0,35 €/kWh. Application uniquement aux points physiquement opérés par Eranovum."
+    },
+    {
+      "id": "eranovum-direct-30kw-es",
+      "provider": "Eranovum direct",
+      "operatorAliases": ["Eranovum", "Eranovum e-mobility"],
+      "minPowerKw": 30,
+      "maxPowerKw": 30,
+      "pricePerKwh": 0.40,
+      "currency": "EUR",
+      "source": "https://eranovum.energy/es/nuestras-tarifas/",
+      "note": "Grille officielle Espagne Eranovum: classe 30 kW = 0,40 €/kWh; les puissances intermédiaires non publiées restent fail-closed."
+    },
+    {
+      "id": "eranovum-direct-60kw-es",
+      "provider": "Eranovum direct",
+      "operatorAliases": ["Eranovum", "Eranovum e-mobility"],
+      "minPowerKw": 60,
+      "maxPowerKw": 60,
+      "pricePerKwh": 0.43,
+      "currency": "EUR",
+      "source": "https://eranovum.energy/es/nuestras-tarifas/",
+      "note": "Grille officielle Espagne Eranovum: classe 60 kW = 0,43 €/kWh; aucune interpolation entre classes."
+    },
+    {
+      "id": "eranovum-direct-120kw-es",
+      "provider": "Eranovum direct",
+      "operatorAliases": ["Eranovum", "Eranovum e-mobility"],
+      "minPowerKw": 120,
+      "maxPowerKw": 120,
+      "pricePerKwh": 0.46,
+      "currency": "EUR",
+      "source": "https://eranovum.energy/es/nuestras-tarifas/",
+      "note": "Grille officielle Espagne Eranovum: classe 120 kW = 0,46 €/kWh; aucune interpolation entre classes."
+    },
+    {
+      "id": "eranovum-direct-150plus-es",
+      "provider": "Eranovum direct",
+      "operatorAliases": ["Eranovum", "Eranovum e-mobility"],
+      "minPowerKw": 150,
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "source": "https://eranovum.energy/es/nuestras-tarifas/",
+      "note": "Grille officielle Espagne Eranovum: à partir de 150 kW = 0,49 €/kWh."
+    },
+    {
       "id": "repsol-direct-normal-22kw-es",
       "provider": "Repsol direct",
       "operatorAliases": ["Repsol"],
