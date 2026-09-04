@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "verifiedAt": "2026-09-04",
+  "preIntegrationOnly": true,
+  "cpos": [
+    {
+      "operator": "Sonnenstrom Saarpfalz OHG",
+      "evsePrefix": "DE*SSP",
+      "status": "partial_dynamic_contract_resolved_ad_hoc_pending",
+      "reason": "Official Sonnenstrom Saarpfalz material resolves the own-network Charge Flex contract exactly as a dynamic tariff: 34.900 ct/kWh base price plus the EPEX SPOT Day-Ahead component applicable at session start; the spot component changes every 15 minutes. The official page also specifies a DC post-charge blocking fee of 20.000 ct/min after 60 free minutes, capped at 12.00 EUR per session, and no AC blocking fee. Public station records tie DE*SSP EVSEs to Sonnenstrom Saarpfalz, including the Zweibruecken Energiepark. However, public ad-hoc/direct-payment station pages currently report the direct price as unknown, and a static per-kWh value would be incorrect because the contractual price is time-dependent. Keep this CPO partially treated until the live spot component can be reproduced at query/session-start time or a public ad-hoc QR payload exposes an exact station price.",
+      "sources": [
+        "https://sonnenstrom-saarpfalz.de/",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Zweibruecken/Energiepark-Stockholmer-Strasse-/51345/"
+      ],
+      "resolvedContract": {
+        "name": "Charge Flex",
+        "basePriceCtPerKwh": 34.9,
+        "spotComponent": "EPEX SPOT Day-Ahead; changes every 15 minutes; session uses spot price at charging start",
+        "monthlyFeeEur": 0,
+        "acBlockingFee": null,
+        "dcBlockingFee": {
+          "freeMinutesAfterChargingStops": 60,
+          "priceEurPerMinute": 0.2,
+          "capEurPerSession": 12.0
+        }
+      },
+      "unblockRequires": "A reproducible public live feed for the current 15-minute spot component usable by TCC at session-start time, or a public DE*SSP QR/direct-payment payload exposing the exact ad-hoc price for a specific EVSE/station."
+    }
+  ]
+}
