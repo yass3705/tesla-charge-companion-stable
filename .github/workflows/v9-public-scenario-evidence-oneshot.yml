@@ -1,0 +1,98 @@
+name: V9 public scenario evidence oneshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v9-public-scenario-evidence-oneshot.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TARGET_SHA: 8d2c20b7c76004389edd8f4a3b80d6b314900ba0
+      V9_URL: https://yass3705.github.io/tesla-charge-companion-stable/v9-test/v9-app/
+    steps:
+      - name: Checkout pinned V9 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+      - name: Verify candidate still matches V9 runtime branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin refactor/unified-data-engine-v9
+          branch_head="$(git rev-parse FETCH_HEAD)"
+          if [ "$branch_head" != "$TARGET_SHA" ]; then
+            if git diff --quiet "$TARGET_SHA" "$branch_head" -- v9-app v9-gate assets/v9 data/v9 data/tesla_stations.json data/ionity_direct_stations_france.json.gz data/atlante_direct_stations_france.json.gz data/powerdot_direct_france.json.gz data/netherlands_direct_tariffs_v1.json data/non_tesla_netherlands; then
+              echo "Branch metadata moved without runtime drift; pinned runtime candidate remains valid."
+            else
+              echo "Runtime/data drift detected after pinned candidate." >&2
+              exit 1
+            fi
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run three sequential public packs
+        shell: bash
+        run: |
+          cat > /tmp/run-v9-packs.cjs <<'NODE'
+          const { chromium } = require('playwright');
+          const fs = require('fs');
+          const url = process.env.V9_URL;
+          (async()=>{
+            const browser = await chromium.launch({headless:true});
+            const packs=[];
+            for(let i=1;i<=3;i++){
+              const context = await browser.newContext();
+              const page = await context.newPage();
+              await page.goto(url,{waitUntil:'networkidle',timeout:120000});
+              await page.waitForSelector('#runScenarioPack',{state:'visible',timeout:30000});
+              await page.click('#runScenarioPack');
+              await page.waitForFunction(() => {
+                const el=document.getElementById('scenarioSummary');
+                return el && /^Runs 10 ·/.test(el.textContent||'') && /décision PASS/.test(el.textContent||'');
+              },{timeout:300000});
+              const rows=await page.evaluate(()=>JSON.parse(localStorage.getItem('tcc-v9-first-device-scenario-results-v1')||'[]'));
+              const telemetry=await page.evaluate(()=>({summary:window.TCCV9CanaryTelemetry.summary(),assessment:window.TCCV9CanaryTelemetry.rollbackAssessment(window.TCCV9CanaryTelemetry.summary())}));
+              if(rows.length!==10) throw new Error(`pack ${i}: expected 10 rows, got ${rows.length}`);
+              const failures=rows.filter(r=>!r.ok).length;
+              if(failures) throw new Error(`pack ${i}: ${failures} scenario failures`);
+              if(telemetry.assessment.rollback) throw new Error(`pack ${i}: rollback assessment triggered`);
+              packs.push({id:`public-pack-${i}`,capturedAt:new Date().toISOString(),rows,telemetry});
+              await context.close();
+            }
+            await browser.close();
+            fs.writeFileSync('v9-public-scenario-evidence.json',JSON.stringify({schemaVersion:1,targetSha:process.env.TARGET_SHA,publicUrl:url,capturedAt:new Date().toISOString(),packs},null,2));
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node /tmp/run-v9-packs.cjs
+      - name: Validate evidence
+        run: |
+          node - <<'NODE'
+          const e=require('./v9-public-scenario-evidence.json');
+          if(e.targetSha!==process.env.TARGET_SHA) throw new Error('target SHA mismatch');
+          if(e.packs.length!==3) throw new Error('expected 3 packs');
+          const rows=e.packs.flatMap(p=>p.rows);
+          if(rows.length!==30) throw new Error('expected 30 scenarios');
+          if(rows.some(r=>!r.ok)) throw new Error('scenario failure');
+          if(e.packs.some(p=>p.telemetry.assessment.rollback)) throw new Error('rollback signal');
+          console.log(`Fresh public evidence OK: ${rows.length}/30 PASS, 0 rollback signal.`);
+          NODE
+      - name: Upload fresh evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-public-scenario-evidence-8d2c20b7
+          path: v9-public-scenario-evidence.json
+          retention-days: 7
