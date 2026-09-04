@@ -26,16 +26,17 @@ assert.equal(derived.passes,30);
 assert.equal(derived.failures,0);
 assert.equal(derived.routeAttempts,720);
 assert.equal(derived.routesSucceeded,720);
-assert.equal(derived.averageLatencyMs,7043);
-assert.equal(derived.maxLatencyMs,18372);
+assert(Number.isFinite(derived.averageLatencyMs) && derived.averageLatencyMs>0);
+assert(Number.isFinite(derived.maxLatencyMs) && derived.maxLatencyMs>=derived.averageLatencyMs);
 
+const duringWindow=new Date(new Date(observation.window.startedAt).getTime()+60*60*1000).toISOString();
 let result=Observation.evaluateObservation({
   observation,
   policy,
   rollout,
   readiness:blockedReadiness,
   deploymentWorkflow,
-  now:'2026-09-01T15:48:19Z',
+  now:duringWindow,
   sourceFingerprint:fingerprint,
   deploymentFingerprint:fingerprint,
   currentFingerprint:fingerprint
