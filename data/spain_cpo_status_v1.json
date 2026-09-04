@@ -9,8 +9,10 @@
     "officialDgtFeed": "https://infocar.dgt.es/datex2/v3/miterd/EnergyInfrastructureTablePublication/electrolineras.xml",
     "officialDgtFeedChecked": "2026-09-04",
     "officialDgtFeedObservedSize": "82629 KB",
+    "officialDgtFeedObservedModified": "2026-09-04T10:17:14+02:00",
     "officialDgtUpdateFrequency": "24h",
-    "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only."
+    "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
+    "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator"
   },
   "validatedNamed": [
     "Allego",
@@ -61,6 +63,16 @@
     {
       "name": "Endesa / Endesa On Your Way",
       "status": "official site confirms price is point-specific and shown before charging; no exact public station feed integrated yet"
+    },
+    {
+      "name": "Qwello España",
+      "status": "confirmed physical CPO in Spain with operating/deploying public chargers; official Spanish tariff source not found in this run. Generic Qwello tariff pages are location/country-specific and must not be reused for Spain. Continue station/ad-hoc/app/backend investigation fail-closed."
+    }
+  ],
+  "excludedNonCpoOrPlatform": [
+    {
+      "name": "EVcharge / Etecnic",
+      "reason": "Official EVcharge/Etecnic material describes a charge-point management SaaS/platform used by municipalities, companies and other operators, with customer-configurable tariffs by time, power and user group. Do not count the platform name itself as a physical CPO or propagate one tariff across stations unless a specific station's physical operator is independently identified."
     }
   ],
   "aliasesResolved": [
@@ -77,12 +89,12 @@
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-04",
-    "result": "Historical validated=20, nominatively reconciled=10, blocked=8, active=6. Added the exact official DGT electrolineras.xml feed metadata; the total operator count still requires parsing the 80+ MB feed and deduplicating operator names/aliases. IONITY direct moved fail-closed because IONITY now explicitly states prices can vary by specific location even within one country. Resolved EasyCharger/Grupo Easycharger -> Zunder and legacy IBIL public network -> Repsol with strict caveats preventing tariff leakage to third-party infrastructure. No previously blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added to validatedNamed.",
+    "result": "Historical validated=20, nominatively reconciled=10, blocked=8, active=7, excluded platform/non-CPO identities=1. DGT live directory still exposes an 82629 KB feed updated 2026-09-04 10:17 CEST. Qwello España was added as an active physical CPO after official evidence of Spanish deployment, but no Spanish exact tariff was inferred from tariffs published for other countries/locations. EVcharge/Etecnic was explicitly excluded as a standalone CPO identity because its official material describes multi-operator management software with configurable tariffs. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added to validatedNamed.",
     "safeCorrectionsApplied": [
-      "recorded exact official DGT electrolineras.xml source and daily update metadata",
-      "classified IONITY direct fail-closed after current official station-specific-pricing confirmation",
-      "resolved EasyCharger and Grupo Easycharger aliases to Zunder",
-      "resolved legacy IBIL public charging-network/energy-retail records to Repsol while excluding present-day IBIL technology and third-party operations"
+      "recorded current DGT feed modification timestamp",
+      "recorded non-authoritative REVE public location scale only as investigation metadata, not as CPO total",
+      "classified Qwello España as active/fail-closed pending exact Spanish station tariff source",
+      "excluded EVcharge/Etecnic platform identity from physical-CPO counting and tariff inheritance"
     ]
   }
 }
