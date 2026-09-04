@@ -9,7 +9,42 @@
     "onlyPhysicalOperatorMatches": true,
     "failClosedWhenStationSpecificPriceIsNotPublic": true
   },
-  "directOffers": [],
+  "directOffers": [
+    {
+      "id": "wenea-direct-ac-es",
+      "provider": "Wenea direct",
+      "operatorAliases": ["Wenea"],
+      "kind": "AC",
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.39,
+      "currency": "EUR",
+      "source": "https://wenea.com/tarifas-de-carga/",
+      "note": "Uniquement stations propres Wenea; les stations exploitées en partenariat peuvent avoir des tarifs différents et restent exclues."
+    },
+    {
+      "id": "wenea-direct-dc-es",
+      "provider": "Wenea direct",
+      "operatorAliases": ["Wenea"],
+      "kind": "DC",
+      "minPowerKw": 50,
+      "maxPowerKw": 150,
+      "pricePerKwh": 0.49,
+      "currency": "EUR",
+      "source": "https://wenea.com/tarifas-de-carga/",
+      "note": "Uniquement stations propres Wenea; les stations exploitées en partenariat peuvent avoir des tarifs différents et restent exclues."
+    },
+    {
+      "id": "wenea-direct-hpc-es",
+      "provider": "Wenea direct",
+      "operatorAliases": ["Wenea"],
+      "kind": "DC",
+      "minPowerKw": 151,
+      "pricePerKwh": 0.59,
+      "currency": "EUR",
+      "source": "https://wenea.com/tarifas-de-carga/",
+      "note": "Uniquement stations propres Wenea; les stations exploitées en partenariat peuvent avoir des tarifs différents et restent exclues."
+    }
+  ],
   "subscriptionOffers": [
     {
       "id": "zunder-easy-es",
@@ -34,6 +69,46 @@
       "monthlyFeeEur": 11.99,
       "source": "https://www.zunder.com/suscripciones/",
       "note": "Prix réduit explicitement applicable à tous les points du réseau Zunder. Le tarif public sans abonnement reste exclu car Zunder publie des exceptions selon puissance et localisation."
+    },
+    {
+      "id": "wenea-everyday-ac-es",
+      "selectionId": "wenea-everyday",
+      "provider": "Wenea Everyday",
+      "operatorAliases": ["Wenea"],
+      "kind": "AC",
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.29,
+      "currency": "EUR",
+      "monthlyFeeEur": 8.99,
+      "source": "https://wenea.com/tarifas-de-carga/",
+      "note": "Uniquement stations propres Wenea éligibles à Everyday."
+    },
+    {
+      "id": "wenea-everyday-dc-es",
+      "selectionId": "wenea-everyday",
+      "provider": "Wenea Everyday",
+      "operatorAliases": ["Wenea"],
+      "kind": "DC",
+      "minPowerKw": 50,
+      "maxPowerKw": 150,
+      "pricePerKwh": 0.37,
+      "currency": "EUR",
+      "monthlyFeeEur": 8.99,
+      "source": "https://wenea.com/tarifas-de-carga/",
+      "note": "Uniquement stations propres Wenea éligibles à Everyday."
+    },
+    {
+      "id": "wenea-everyday-hpc-es",
+      "selectionId": "wenea-everyday",
+      "provider": "Wenea Everyday",
+      "operatorAliases": ["Wenea"],
+      "kind": "DC",
+      "minPowerKw": 151,
+      "pricePerKwh": 0.44,
+      "currency": "EUR",
+      "monthlyFeeEur": 8.99,
+      "source": "https://wenea.com/tarifas-de-carga/",
+      "note": "Uniquement stations propres Wenea éligibles à Everyday."
     }
   ]
 }
