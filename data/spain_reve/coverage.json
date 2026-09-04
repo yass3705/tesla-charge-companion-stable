@@ -1,0 +1,104 @@
+{
+  "connectors": {
+    "embeddedTariffReference": {
+      "count": 0,
+      "pct": 0.0,
+      "total": 200
+    },
+    "format": {
+      "count": 200,
+      "pct": 100.0,
+      "total": 200
+    },
+    "maxAmperage": {
+      "count": 200,
+      "pct": 100.0,
+      "total": 200
+    },
+    "maxElectricPower": {
+      "count": 200,
+      "pct": 100.0,
+      "total": 200
+    },
+    "maxVoltage": {
+      "count": 200,
+      "pct": 100.0,
+      "total": 200
+    },
+    "powerType": {
+      "count": 200,
+      "pct": 100.0,
+      "total": 200
+    },
+    "standard": {
+      "count": 200,
+      "pct": 100.0,
+      "total": 200
+    },
+    "total": 200
+  },
+  "country": "ES",
+  "cpos": {
+    "distinct": 1,
+    "items": [
+      {
+        "connectors": 200,
+        "cpoName": "QWELLO España SL",
+        "evses": 160,
+        "locations": 100,
+        "partyId": "AEQ"
+      }
+    ]
+  },
+  "evses": {
+    "embeddedStatus": {
+      "count": 0,
+      "pct": 0.0,
+      "total": 160
+    },
+    "identifier": {
+      "count": 160,
+      "pct": 100.0,
+      "total": 160
+    },
+    "total": 160
+  },
+  "generatedAt": "2026-09-04T18:21:40.924782Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "locations": {
+    "addressAndCity": {
+      "count": 100,
+      "pct": 100.0,
+      "total": 100
+    },
+    "coordinates": {
+      "count": 100,
+      "pct": 100.0,
+      "total": 100
+    },
+    "cpoIdentity": {
+      "count": 100,
+      "pct": 100.0,
+      "total": 100
+    },
+    "withEvses": {
+      "count": 100,
+      "pct": 100.0,
+      "total": 100
+    }
+  },
+  "schemaVersion": 1,
+  "snapshot": {
+    "complete": false,
+    "locationsStored": 100,
+    "nextPage": 2,
+    "registryCoveragePct": 0.69,
+    "registryTotalCount": 14567,
+    "totalPages": 146
+  },
+  "source": "REVE",
+  "tariffs": {
+    "connectorTariffEndpointCollected": false,
+    "note": "Dedicated /connectors/tariffs collection is audited separately; no tariff is inferred from missing location fields."
+  }
+}
