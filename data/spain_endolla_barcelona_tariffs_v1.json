@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-05",
+  "operator": "Endolla Barcelona",
+  "policy": {
+    "onlyPhysicalOperatorMatches": true,
+    "failClosedWhenLocationOrTimeBandUnknown": true,
+    "doNotCollapseSubscriptionAndPayAsYouGo": true,
+    "parkingFeesExcluded": true
+  },
+  "source": "https://endolla.barcelona/es/modalidades-de-pago",
+  "operatorAliases": [
+    "Endolla Barcelona",
+    "B:SM Endolla",
+    "BSM Endolla"
+  ],
+  "vehicleClass": "car_or_van",
+  "offers": [
+    {
+      "plan": "EcoOne",
+      "subscription": false,
+      "locationClass": "BSM_PARKING",
+      "chargeType": "NORMAL",
+      "dayPricePerKwh": 0.35,
+      "nightPricePerKwh": 0.30,
+      "currency": "EUR"
+    },
+    {
+      "plan": "EcoOne",
+      "subscription": false,
+      "locationClass": "STREET",
+      "chargeType": "FAST_OR_SEMIFAST",
+      "dayPricePerKwh": 0.49,
+      "nightPricePerKwh": 0.44,
+      "currency": "EUR"
+    },
+    {
+      "plan": "EcoVehicles",
+      "subscription": true,
+      "monthlyFeeEur": 4.20,
+      "temporaryMonthlyFeeEur": 2.10,
+      "temporaryMonthlyFeeValidThrough": "2026-09-30",
+      "locationClass": "BSM_PARKING",
+      "chargeType": "NORMAL",
+      "dayPricePerKwh": 0.27,
+      "nightPricePerKwh": 0.22,
+      "currency": "EUR"
+    },
+    {
+      "plan": "EcoVehicles",
+      "subscription": true,
+      "monthlyFeeEur": 4.20,
+      "temporaryMonthlyFeeEur": 2.10,
+      "temporaryMonthlyFeeValidThrough": "2026-09-30",
+      "locationClass": "STREET",
+      "chargeType": "FAST_OR_SEMIFAST",
+      "dayPricePerKwh": 0.40,
+      "nightPricePerKwh": 0.35,
+      "currency": "EUR"
+    }
+  ],
+  "notes": [
+    "Official Endolla payment page distinguishes BSM parking from street charging and day from night pricing.",
+    "The runtime must not apply a tariff unless operator, vehicle class, location class, plan and time band are known.",
+    "Parking charges in BSM car parks are separate from Endolla charging prices."
+  ]
+}
