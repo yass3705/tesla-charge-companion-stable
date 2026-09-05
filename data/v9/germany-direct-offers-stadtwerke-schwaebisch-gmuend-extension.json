@@ -15,7 +15,7 @@
       "connectorKinds": ["AC"],
       "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.58}],"blockingFee":{"currency":"EUR","pricePerMinute":0.10,"afterMinutes":240}},
       "payment": {"registrationRequired": true, "channels": ["rfid"]},
-      "subscription": {"id":"stadtwerke-schwaebisch-gmuend-gmuender-fahrstrom","monthlyFee":1.0,"currency":"EUR","optionalOneTimeRfidFee":20.0},
+      "subscription": {"id":"stadtwerke-schwaebisch-gmuend-gmuender-fahrstrom","monthlyFee":1.0,"currency":"EUR"},
       "currency": "EUR",
       "priority": 100,
       "directOperatorOnly": true,
@@ -31,7 +31,7 @@
       "connectorKinds": ["DC"],
       "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.68}],"blockingFee":{"currency":"EUR","pricePerMinute":0.10,"afterMinutes":240}},
       "payment": {"registrationRequired": true, "channels": ["rfid"]},
-      "subscription": {"id":"stadtwerke-schwaebisch-gmuend-gmuender-fahrstrom","monthlyFee":1.0,"currency":"EUR","optionalOneTimeRfidFee":20.0},
+      "subscription": {"id":"stadtwerke-schwaebisch-gmuend-gmuender-fahrstrom","monthlyFee":1.0,"currency":"EUR"},
       "currency": "EUR",
       "priority": 100,
       "directOperatorOnly": true,
@@ -45,5 +45,5 @@
   },
   "roamingDeferred": {"reason":"Only the operator-owned physical network tariff is attached here; third-party ladenetz/roaming pricing is not propagated to other CPOs."},
   "adhocDeferred": {"reason":"Official ad-hoc tariff is 1.00 EUR start fee + 0.60 EUR/kWh AC or 0.70 EUR/kWh DC, plus 0.10 EUR/min blocking after 240 minutes. The current V9 direct-offer schema/runtime must not silently drop the fixed per-session start fee, so ad-hoc stays fail-closed until that fee can be represented exactly."},
-  "note": "Gmünder Fahrstrom costs 1.00 EUR/month. The 20 EUR registration fee applies to non-customers; Stadtwerke customers pay no card order fee."
+  "note": "Gmünder Fahrstrom costs 1.00 EUR/month. A 20 EUR registration fee applies only to non-customers; Stadtwerke customers pay no card order fee, so that conditional fee is documented here rather than modeled as a universal card cost."
 }
