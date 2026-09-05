@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "operator": "Plenergy",
+  "canonicalName": "Plenergy",
+  "source": {
+    "type": "official",
+    "publisher": "Plenergy",
+    "stationUrlPattern": "https://plenergy.es/estacion/{station-slug}/",
+    "chargingInstructionsUrl": "https://plenergy.es/carga-electrica/",
+    "rebrandSourceUrl": "https://plenergy.es/plenoil-renueva-su-marca-y-pasa-a-denominarse-plenergy/",
+    "checkedAt": "2026-09-05",
+    "notes": "Official Plenergy station pages expose an electric-charger 'Precio KW' field on a per-station basis. Some stations currently expose a numeric value and others expose a blank value, so tariff coverage must be station-specific and fail closed. Official Plenergy material confirms Plenoil was renamed Plenergy."
+  },
+  "scope": {
+    "include": "Physical Plenergy/legacy Plenoil service stations in Spain where the official station page exposes a numeric electric-charging Precio KW value.",
+    "exclude": [
+      "stations whose official Precio KW field is blank",
+      "third-party charging points merely near or interoperable with a Plenergy site",
+      "fuel prices and wash/service prices",
+      "historical third-party observations not confirmed by the current official station page"
+    ],
+    "failClosed": true
+  },
+  "seedStations": [
+    {
+      "name": "Garrucha I",
+      "address": "Avenida Andalucía, s/n",
+      "energyEurPerKwh": 0.36,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-garrucha-i/?lang=en"
+    },
+    {
+      "name": "Leganés I",
+      "address": "Calle Aluminio 8",
+      "energyEurPerKwh": 0.36,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-leganes-i/?lang=en"
+    },
+    {
+      "name": "Águilas I",
+      "address": "Ctra. Lorca, 30",
+      "energyEurPerKwh": 0.70,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-aguilas-i/?lang=en"
+    },
+    {
+      "name": "Santurtzi I",
+      "address": "El Árbol Kalea 21-25",
+      "energyEurPerKwh": 0.36,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-santurtzi-i/?lang=en"
+    },
+    {
+      "name": "Sant Joan d'Alacant II",
+      "address": "Carrer Benimagrell, 1",
+      "energyEurPerKwh": 0.36,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-sant-joan-dalacant-II/?lang=en"
+    },
+    {
+      "name": "Córdoba III",
+      "address": "Avenida de la Torrecilla, s/n",
+      "energyEurPerKwh": 0.36,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-cordoba-iii/?lang=en"
+    },
+    {
+      "name": "Elche I",
+      "address": "Avda. Almansa, 19",
+      "energyEurPerKwh": 0.36,
+      "officialUrl": "https://plenergy.es/estacion/plenoil-elche-i/?lang=en"
+    }
+  ],
+  "knownBlankExamples": [
+    "Aspe I",
+    "Sagunto I",
+    "Fuenlabrada I",
+    "Alhaurín de la Torre I"
+  ],
+  "integrationRule": "Match the exact physical Plenergy station to its official station page and ingest only a currently numeric Precio KW. If the field is blank or the station identity is ambiguous, leave the tariff unresolved. Do not generalize 0.36 EUR/kWh or any other observed value across the network."
+}
