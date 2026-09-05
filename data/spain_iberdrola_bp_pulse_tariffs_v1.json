@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-05",
+  "operator": "Iberdrola | bp pulse",
+  "policy": {
+    "onlyPhysicalOperatorMatches": true,
+    "failClosedWhenPowerClassIsUnknownOrUnpublished": true,
+    "doNotApplyToIberdrolaDirect": true
+  },
+  "source": "https://iberdrola-bppulse.es/cargar-coche-electrico/tarifas/",
+  "operatorAliases": [
+    "Iberdrola | bp pulse",
+    "IBERDROLA BP PULSE",
+    "Iberdrola BP Pulse"
+  ],
+  "directOffers": [
+    {
+      "id": "iberdrola-bp-pulse-7-4kw-es",
+      "minPowerKw": 7.4,
+      "maxPowerKw": 7.4,
+      "pricePerKwh": 0.35,
+      "currency": "EUR"
+    },
+    {
+      "id": "iberdrola-bp-pulse-over-7-4-to-22kw-es",
+      "minPowerKwExclusive": 7.4,
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.39,
+      "currency": "EUR"
+    },
+    {
+      "id": "iberdrola-bp-pulse-50kw-es",
+      "minPowerKw": 50,
+      "maxPowerKw": 50,
+      "pricePerKwh": 0.45,
+      "currency": "EUR"
+    },
+    {
+      "id": "iberdrola-bp-pulse-over-50-to-200kw-es",
+      "minPowerKwExclusive": 50,
+      "maxPowerKw": 200,
+      "pricePerKwh": 0.60,
+      "currency": "EUR"
+    },
+    {
+      "id": "iberdrola-bp-pulse-over-200kw-es",
+      "minPowerKwExclusive": 200,
+      "pricePerKwh": 0.67,
+      "currency": "EUR"
+    }
+  ],
+  "notes": [
+    "Official Iberdrola | bp pulse Spain page states prices are based on charger power and available via app.",
+    "No interpolation is allowed for unpublished gaps such as >22 kW and <50 kW.",
+    "Do not propagate these prices to stations whose physical operator is Iberdrola rather than Iberdrola | bp pulse."
+  ]
+}
