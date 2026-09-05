@@ -144,3 +144,5 @@ console.log(JSON.stringify({
   module:'tcc-v9-canary-observation',
   checks:['live-evidence','aggregate-integrity','24h-window','stable-build','pages-lock','manual-gate','zero-traffic']
 },null,2));
+
+// Post-window revalidation trigger requested after the 24h observation gate matured.
