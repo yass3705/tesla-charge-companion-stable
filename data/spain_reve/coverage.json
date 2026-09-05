@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 9722
+      "total": 10499
     },
     "format": {
-      "count": 9722,
+      "count": 10499,
       "pct": 100.0,
-      "total": 9722
+      "total": 10499
     },
     "maxAmperage": {
-      "count": 9722,
+      "count": 10499,
       "pct": 100.0,
-      "total": 9722
+      "total": 10499
     },
     "maxElectricPower": {
-      "count": 9722,
+      "count": 10499,
       "pct": 100.0,
-      "total": 9722
+      "total": 10499
     },
     "maxVoltage": {
-      "count": 9722,
+      "count": 10499,
       "pct": 100.0,
-      "total": 9722
+      "total": 10499
     },
     "powerType": {
-      "count": 9722,
+      "count": 10499,
       "pct": 100.0,
-      "total": 9722
+      "total": 10499
     },
     "standard": {
-      "count": 9722,
+      "count": 10499,
       "pct": 100.0,
-      "total": 9722
+      "total": 10499
     },
-    "total": 9722
+    "total": 10499
   },
   "country": "ES",
   "cpos": {
@@ -56,10 +56,10 @@
         "partyId": "GFX"
       },
       {
-        "connectors": 3267,
+        "connectors": 4044,
         "cpoName": "ENDESA X WAY, S.L.",
-        "evses": 3266,
-        "locations": 1577,
+        "evses": 4043,
+        "locations": 1962,
         "partyId": "ESX"
       },
       {
@@ -117,45 +117,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 9472
+      "total": 10249
     },
     "identifier": {
-      "count": 9472,
+      "count": 10249,
       "pct": 100.0,
-      "total": 9472
+      "total": 10249
     },
-    "total": 9472
+    "total": 10249
   },
-  "generatedAt": "2026-09-05T03:08:57.547717Z",
+  "generatedAt": "2026-09-05T04:15:13.245732Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 2874,
+      "count": 3259,
       "pct": 100.0,
-      "total": 2874
+      "total": 3259
     },
     "coordinates": {
-      "count": 2874,
+      "count": 3259,
       "pct": 100.0,
-      "total": 2874
+      "total": 3259
     },
     "cpoIdentity": {
-      "count": 2874,
+      "count": 3259,
       "pct": 100.0,
-      "total": 2874
+      "total": 3259
     },
     "withEvses": {
-      "count": 2874,
+      "count": 3259,
       "pct": 100.0,
-      "total": 2874
+      "total": 3259
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 2874,
-    "nextPage": 30,
-    "registryCoveragePct": 19.73,
+    "locationsStored": 3259,
+    "nextPage": 34,
+    "registryCoveragePct": 22.37,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
