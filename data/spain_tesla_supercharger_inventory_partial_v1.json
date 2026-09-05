@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-05",
+  "operator": "Tesla Supercharger",
+  "coverage": "official_public_pages_partial",
+  "policy": {
+    "officialTeslaPagesOnly": true,
+    "inventoryDoesNotImplyTariffCoverage": true,
+    "doNotInferPricesFromNearbyStations": true,
+    "excludeDestinationChargers": true
+  },
+  "stations": [
+    {"pageKey":"4002559","name":"Córdoba","address":"7 Calle Gema, Córdoba, Andalucía 14014","stalls":8,"maxPowerKw":250,"exactTariffEncoded":true},
+    {"pageKey":"madridsupercharger","name":"Madrid - Nuevos Ministerios","address":"100 Paseo de la Castellana, Madrid 28046","stalls":18,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"MadridNorthessupercharger","name":"Alcobendas","address":"13 Avenida de Europa, Alcobendas, Madrid 28108","stalls":20,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"32355","name":"Madrid - Plaza de los Mostenses","address":"s/n Plaza de los Mostenses, Madrid 28015","stalls":8,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"299962","name":"Majadahonda","address":"2 C.C. Gran Plaza 2, C. de los Químicos, Majadahonda 28222","stalls":20,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"BarcelonaUrbanessupercharger","name":"Barcelona - L'Illa Diagonal","address":"557 Avinguda Diagonal, Barcelona 08029","stalls":4,"maxPowerKw":150,"exactTariffEncoded":false},
+    {"pageKey":"santcugatsupercharger","name":"Sant Cugat del Vallès","address":"15-17 Camí de Can Camps, Sant Cugat del Vallès 08174","stalls":20,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"lleidasupercharger","name":"Lleida / Torrefarrera","address":"S N La Variant, Torrefarrera 25123","stalls":16,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"rivabellosasupercharger","name":"Rivabellosa","address":"Poligono Industrial Arasur, Rivabellosa 01213","stalls":12,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"tordesillassupercharger","name":"Tordesillas","address":"Km 147 Ctra. Burgos Salamanca, Tordesillas 47100","stalls":12,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"30023","name":"Lerma","address":"Camino de Villalmanzo, Lerma 09340","stalls":10,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"arizasupercharger","name":"Ariza","address":"197 Carretera de Madrid, Ariza 50220","stalls":12,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"albacetesupercharger","name":"Albacete / La Gineta","address":"KM 52 Autovia de Alicante, Albacete 02110","stalls":8,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"manzanaressupercharger","name":"Manzanares","address":"Km 173 Autovia de Andalucía, Manzanares 13200","stalls":12,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"30006","name":"Alicante","address":"s/n Avinguda de Dénia, Alicante 03016","stalls":20,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"ondarasupercharger","name":"Ondara","address":"Avda Costa Blanca 27 CC Portal de la Marina, Ondara 03760","stalls":16,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"guarromansupercharger","name":"Guarromán","address":"sn Polígono Industrial de Guadiel, Guarromán 23210","stalls":12,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"cullarspainsupercharger","name":"Cúllar","address":"369 A-92N, Cúllar 18891","stalls":8,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"fuengirolasupercharger","name":"Fuengirola","address":"48 Avenida del Higuerón, Fuengirola 29630","stalls":11,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"meridasupercharger","name":"Mérida","address":"C. las Palmas 17, Mérida 06800","stalls":14,"maxPowerKw":250,"exactTariffEncoded":false},
+    {"pageKey":"416852","name":"Benacazón","address":"3 Diseminado Autovia, Benacazón 41805","stalls":12,"maxPowerKw":250,"exactTariffEncoded":false}
+  ],
+  "notes": [
+    "Every row is backed by a current official Tesla Find Us page discovered on 2026-09-05.",
+    "Only Córdoba 4002559 currently has exact public energy prices captured in spain_tesla_supercharger_station_tariffs_v1.json.",
+    "Tesla pages for the other inventoried stations expose station identity, stall count, power and tariff headings but the crawler does not expose the numeric tariff values; those stations remain fail-closed for energy price.",
+    "This is a partial national inventory and must not be used as the Spain-wide station denominator until enumeration is complete."
+  ]
+}
