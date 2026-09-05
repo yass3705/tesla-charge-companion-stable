@@ -3,7 +3,7 @@ import argparse,csv,gzip,hashlib,json,math,re,shutil,tempfile,unicodedata,urllib
 from collections import defaultdict
 from datetime import datetime,timezone
 from pathlib import Path
-URL='https://data.bundesnetzagentur.de/Bundesnetzagentur/DE/Fachthemen/ElektrizitaetundGas/E-Mobilitaet/Ladesaeulenregister_BNetzA_2026-07-28.csv';TILE=.5
+URL='https://data.bundesnetzagentur.de/Bundesnetzagentur/DE/Fachthemen/ElektrizitaetundGas/E-Mobilitaet/Ladesaeulenregister_BNetzA_2026-09-01.csv';TILE=.5
 
 def t(v): return str(v or '').strip()
 def n(v):
