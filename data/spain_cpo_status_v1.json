@@ -13,7 +13,7 @@
     "officialDgtUpdateFrequency": "24h",
     "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
     "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator",
-    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. A fresh direct download attempt on 2026-09-05 failed again; do not repeat the identical route without a new transport path. Keep the national CPO denominator null rather than substituting 189, 618, station counts, or REVE location counts.",
+    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Do not repeat the identical direct-download route without a new transport path. A current public mirror derived from mapareve.es (updated 2026-09-04) is useful only to discover/prioritize operator names; never use its tariff observations as pricing authority and never use one province as a national denominator.",
     "teslaOfficialSpainSuperchargerStationTotal": 105,
     "teslaOfficialSpainSuperchargerInventorySource": "https://www.tesla.com/es_es/findus/list/superchargers/Spain",
     "teslaOfficialSpainSuperchargerInventoryFile": "spain_tesla_supercharger_national_index_v1.json",
@@ -38,7 +38,7 @@
   ],
   "historicalValidatedCounter": 25,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository now reconciles 15 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger has a complete official Spain station inventory of 105 entries, but exact tariff coverage remains 1/105, so Tesla remains active and is not promoted as fully tariff-validated.",
+  "consistencyNote": "The repository reconciles 15 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger, Feníe Energía public charging and PowerGo have official station-level tariff paths but incomplete national tariff coverage, so they remain active rather than being promoted as fully validated.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -59,6 +59,14 @@
     {
       "name": "Tesla Supercharger",
       "status": "official national station inventory complete at 105 entries; exact station/time/vehicle-class tariff coverage remains 1/105 (Córdoba location 4002559). Repeated public station-page probing has not exposed numeric tariffs for the other stations; do not repeat the same investigation again without a new official/guest tariff surface."
+    },
+    {
+      "name": "Feníe Energía public charging",
+      "status": "new official station-level pricing path confirmed at recarga.fenieenergia.es/punto-recarga/{id}. Seven exact station examples are seeded, demonstrating site-specific prices from 0.15 to 0.50 EUR/kWh plus optional session fees. Continue station inventory/enumeration; never generalize by power or network name."
+    },
+    {
+      "name": "PowerGo",
+      "status": "official locations-and-tariffs surface exposes exact station prices and PowerGo states tariffs are dynamic. Two Spanish stations are seeded (+B Energías Sueca and Selwo Aventura). Continue Spanish station enumeration and preserve payment-channel surcharges separately."
     }
   ],
   "excludedNonCpoOrPlatform": [
@@ -94,19 +102,22 @@
     {"alias": "AVANQUA OCEANOGRÀFIC, S.L.", "canonical": "Avanqua Oceanogràfic", "note": "Exact legal manager of the Oceanogràfic València installation; tariff scope is that site only."},
     {"alias": "AVANQUA OCEANOGRAFIC SL", "canonical": "Avanqua Oceanogràfic", "note": "Normalized operator spelling for the Oceanogràfic València installation only."},
     {"alias": "PAVAPARK MOVILIDAD, S.L.", "canonical": "Pavapark"},
-    {"alias": "UMBRELLA", "canonical": "Umbrella eMobility"}
+    {"alias": "UMBRELLA", "canonical": "Umbrella eMobility"},
+    {"alias": "FENÍE ENERGÍA", "canonical": "Feníe Energía public charging", "note": "Use only for physical public charging points served by Feníe's own public charging platform; station owner may differ and exact station tariff must come from the official station page."},
+    {"alias": "FENIE ENERGIA", "canonical": "Feníe Energía public charging", "note": "Accent-normalized operator spelling; same station-level fail-closed rule applies."},
+    {"alias": "POWERGO", "canonical": "PowerGo"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=25, nominatively reconciled=15, blocked=14, active=1, excluded platform/non-CPO identities=2. Avanqua Oceanogràfic is newly source-validated only for its 22x22 kW Oceanogràfic València EVSE at 0.30 EUR/kWh. Pavapark and Umbrella eMobility are newly fail-closed because public station observations show variable/site-specific pricing while their official surfaces do not publish a deterministic station/EVSE tariff feed. Tesla remains active but its identical public-page tariff investigation is now explicitly paused until a new source path exists. Authoritative national CPO denominator remains null.",
+    "result": "Historical validated=25, nominatively reconciled=15, blocked=14, active=3, excluded platform/non-CPO identities=2. New REVE-derived operator evidence was used only for prioritization. Feníe Energía and PowerGo were added as active because official public station-level tariff surfaces were found and seeded, but national tariff coverage is incomplete. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null.",
     "safeCorrectionsApplied": [
-      "reconciled the actual main-branch state instead of relying on previously announced but unverifiable commit hashes",
-      "added Avanqua Oceanogràfic as a site-scoped validated CPO with an official 0.30 EUR/kWh tariff for exactly 22 EVSE at 22 kW",
-      "classified Pavapark fail-closed after official Moviltik/Pavapark evidence showed app-managed charging without a public deterministic charging-price table and public station data showed differing prices by site",
-      "classified Umbrella eMobility fail-closed because the official app exposes charging/payment functions but no public deterministic tariff source was found; third-party AC/DC prices were not promoted",
-      "added four conservative aliases without tariff propagation beyond the verified physical operator/site scope",
-      "marked the repeated Tesla public station-page tariff route as exhausted pending a genuinely new source path",
-      "recorded another failed direct DGT XML download and prohibited repeating the identical route without a new transport path",
+      "added a current REVE-derived operator mirror as a discovery/prioritization aid only, explicitly forbidding its use as tariff authority or national denominator",
+      "added Feníe Energía public charging as active with seven exact official station tariffs and explicit station-id-only matching",
+      "preserved Feníe session fees separately where published and recorded that managed stations can be private/restricted",
+      "added PowerGo as active with two exact official Spanish station tariffs and documented its dynamic-pricing/payment-channel semantics",
+      "added three conservative operator aliases for Feníe/PowerGo without tariff propagation",
+      "did not promote either new active CPO to fully validated because national station/tariff coverage is incomplete",
+      "did not re-audit blocked CPOs or repeat the exhausted Tesla/DGT direct-download routes",
       "retained authoritativeCpoTotal=null and the historical validated-name gap rather than guessing either value"
     ]
   }
