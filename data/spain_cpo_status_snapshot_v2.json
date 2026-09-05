@@ -48,38 +48,16 @@
     "Umbrella eMobility"
   ],
   "active": [
-    {
-      "name": "Tesla Supercharger",
-      "status": "official station inventory complete at 105; exact numeric tariff coverage remains 1/105; do not repeat public station-page probing without a new official or guest tariff surface"
-    },
-    {
-      "name": "Feníe Energía public charging",
-      "status": "official station-level tariff path confirmed; continue exact station enumeration only"
-    },
-    {
-      "name": "PowerGo",
-      "status": "official live locations-and-prices surface confirmed; tariffs are dynamic, so continue station enumeration and never freeze a network-wide value"
-    },
-    {
-      "name": "Powy",
-      "status": "official direct QR payment path exists; exact Spanish EVSE/QR enumeration still required"
-    },
-    {
-      "name": "Naturgy public charging",
-      "status": "current app identity confirmed; deterministic current tariff field still needs backend/app confirmation"
-    },
-    {
-      "name": "Plenergy",
-      "status": "official station pages expose Precio KW for some sites and blanks for others; ingest exact numeric station values only"
-    },
-    {
-      "name": "emovili FAST",
-      "status": "official CPO surface confirms public network operation plus TPV, roaming, direct mobile payment and web payment without subscription. Public official web pages do not expose deterministic numeric tariffs by station/EVSE; third-party observed values vary (for example 0.35-0.36 EUR/kWh at some 22 kW sites) and are not authoritative. Next useful step is app/web-payment guest backend or exact station session surface; do not use emovili blog averages as tariffs."
-    },
-    {
-      "name": "U energia public charging",
-      "status": "official U energia map/app network confirmed. U Movilidad App Store history states users can enter without creating an account and includes a 'Condiciones y otros costes' section showing greater detail of prices billed for charging. Exact station/connector prices are therefore plausibly guest-readable but not exposed on the public web map; next useful step is guest app/backend extraction."
-    }
+    {"name":"Tesla Supercharger","status":"official station inventory complete at 105; exact numeric tariff coverage remains 1/105; do not repeat public station-page probing without a new official or guest tariff surface"},
+    {"name":"Feníe Energía public charging","status":"official station-level tariff path confirmed; continue exact station enumeration only"},
+    {"name":"PowerGo","status":"official live locations-and-prices surface confirmed; tariffs are dynamic, so continue station enumeration and never freeze a network-wide value"},
+    {"name":"Powy","status":"official direct QR payment path exists; exact Spanish EVSE/QR enumeration still required"},
+    {"name":"Naturgy public charging","status":"current app identity confirmed; deterministic current tariff field still needs backend/app confirmation"},
+    {"name":"Plenergy","status":"official station pages expose Precio KW for some sites and blanks for others; ingest exact numeric station values only"},
+    {"name":"emovili FAST","status":"official CPO surface confirms public network operation plus TPV, roaming, direct mobile payment and web payment without subscription. Public official web pages do not expose deterministic numeric tariffs by station/EVSE; third-party observed values vary and are not authoritative. Next useful step is app/web-payment guest backend or exact station session surface; do not use emovili blog averages as tariffs."},
+    {"name":"U energia public charging","status":"official U energia map/app network confirmed. U Movilidad exposes detailed billed-price conditions in-app; exact station/connector prices remain to be extracted from the guest/app surface."},
+    {"name":"REMO Sustainable Mobility","status":"official REMO Spain app is explicitly available in Spain and states charger status, pricing and access are shown in-app. REVE/DGT-derived inventory confirms Spanish REMO-operated sites. No deterministic numeric public-web tariff was found; next useful step is app/backend or exact charger-session extraction."},
+    {"name":"APK Electric","status":"official APK2 support confirms charging can be started without the app by scanning the bay QR code, entering an email and payment-card details. APK2 identifies APK Electric as its Spanish public charging initiative. No deterministic numeric energy tariff was found on official public pages; next useful step is the QR guest checkout/session surface."}
   ],
   "excludedNonCpoOrPlatform": [
     "EVcharge / Etecnic",
@@ -127,7 +105,12 @@
     {"alias":"ELECTRICA SOLLERENSE S.A.","canonical":"U energia public charging"},
     {"alias":"Eléctrica Sollerense","canonical":"U energia public charging"},
     {"alias":"UEnergia","canonical":"U energia public charging"},
-    {"alias":"U Movilidad","canonical":"U energia public charging"}
+    {"alias":"U Movilidad","canonical":"U energia public charging"},
+    {"alias":"REMO SUSTAINABLE MOBILITY S.L","canonical":"REMO Sustainable Mobility"},
+    {"alias":"REMO SUSTAINABLE MOBILITY SL","canonical":"REMO Sustainable Mobility"},
+    {"alias":"REMO","canonical":"REMO Sustainable Mobility"},
+    {"alias":"APK ELECTRIC, S.L.","canonical":"APK Electric"},
+    {"alias":"APK ELECTRIC, S.L","canonical":"APK Electric"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
@@ -137,27 +120,22 @@
     "validatedNamed": 17,
     "historicalValidatedNamesUnreconciled": 10,
     "blocked": 13,
-    "active": 8,
+    "active": 10,
     "excludedNonCpoOrPlatform": 2,
     "checks": [
       "no canonical overlap across validated, blocked and active sets",
       "27 = 17 nominatively reconciled validated names + 10 historical unreconciled validated names",
       "no blocked CPO was re-audited without new evidence",
       "no repeated Tesla public-page or DGT direct-download loop was retried",
-      "emovili FAST third-party numeric prices were not promoted as authoritative tariffs",
-      "U energia third-party numeric prices were not promoted as authoritative tariffs",
-      "legacy Eléctrica Sollerense identity was normalized to current U energia charging identity without carrying any legacy tariff"
+      "REMO public app evidence establishes a station-specific pricing surface but no numeric tariff was promoted without extraction",
+      "APK Electric QR guest-payment evidence establishes a station/session path but no numeric tariff was invented",
+      "REVE/DGT-derived operator labels are used for discovery and identity only, not as tariff authority"
     ]
   },
   "runEvidence": {
-    "emoviliOfficial": [
-      "https://emovili.com/fast/",
-      "https://emovili.com/fast/app-punto-recarga/"
-    ],
-    "uEnergiaOfficial": [
-      "https://www.uenergia.es/es/puntos-de-recarga-para-vehiculos-electricos/",
-      "https://www.uenergia.es/es/puntos-recarga/",
-      "https://apps.apple.com/es/app/u-movilidad/id1524438326"
-    ]
+    "emoviliOfficial": ["https://emovili.com/fast/","https://emovili.com/fast/app-punto-recarga/"],
+    "uEnergiaOfficial": ["https://www.uenergia.es/es/puntos-de-recarga-para-vehiculos-electricos/","https://www.uenergia.es/es/puntos-recarga/","https://apps.apple.com/es/app/u-movilidad/id1524438326"],
+    "remoOfficial": ["https://me-remo.com/es/","https://me-remo.com/es/carga-tu-vehiculo/","https://me-remo.com/landing-store-app/","https://apps.apple.com/es/app/remo/id6450786486"],
+    "apkElectricOfficial": ["https://support.apk2.es/hc/es/articles/35540862121629-Ventajas-de-recargar-tu-veh%C3%ADculo-en-APK-Electric","https://apk2gestion.com/es/servicios/puntos-de-recarga"]
   }
 }
