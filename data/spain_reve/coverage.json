@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 21352
+      "total": 22515
     },
     "format": {
-      "count": 21352,
+      "count": 22515,
       "pct": 100.0,
-      "total": 21352
+      "total": 22515
     },
     "maxAmperage": {
-      "count": 21352,
+      "count": 22515,
       "pct": 100.0,
-      "total": 21352
+      "total": 22515
     },
     "maxElectricPower": {
-      "count": 21352,
+      "count": 22515,
       "pct": 100.0,
-      "total": 21352
+      "total": 22515
     },
     "maxVoltage": {
-      "count": 21352,
+      "count": 22515,
       "pct": 100.0,
-      "total": 21352
+      "total": 22515
     },
     "powerType": {
-      "count": 21352,
+      "count": 22515,
       "pct": 100.0,
-      "total": 21352
+      "total": 22515
     },
     "standard": {
-      "count": 21352,
+      "count": 22515,
       "pct": 100.0,
-      "total": 21352
+      "total": 22515
     },
-    "total": 21352
+    "total": 22515
   },
   "country": "ES",
   "cpos": {
-    "distinct": 35,
+    "distinct": 36,
     "items": [
       {
         "connectors": 33,
@@ -175,6 +175,13 @@
         "partyId": "IOY"
       },
       {
+        "connectors": 2,
+        "cpoName": "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "ALT"
+      },
+      {
         "connectors": 861,
         "cpoName": "MAKSU ESPAÑA SL",
         "evses": 861,
@@ -189,10 +196,10 @@
         "partyId": "MOE"
       },
       {
-        "connectors": 5,
+        "connectors": 87,
         "cpoName": "PAVAPARK MOVILIDAD SL",
-        "evses": 5,
-        "locations": 2,
+        "evses": 87,
+        "locations": 38,
         "partyId": "PAV"
       },
       {
@@ -238,10 +245,10 @@
         "partyId": "RSM"
       },
       {
-        "connectors": 6182,
+        "connectors": 7061,
         "cpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA",
-        "evses": 4077,
-        "locations": 1658,
+        "evses": 4779,
+        "locations": 1926,
         "partyId": "REP"
       },
       {
@@ -280,10 +287,10 @@
         "partyId": "WEN"
       },
       {
-        "connectors": 2,
+        "connectors": 202,
         "cpoName": "ZERO CARBON EMOBILITY, S.L.",
-        "evses": 2,
-        "locations": 1,
+        "evses": 202,
+        "locations": 81,
         "partyId": "ZCN"
       }
     ]
@@ -292,45 +299,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 18876
+      "total": 19862
     },
     "identifier": {
-      "count": 18876,
+      "count": 19862,
       "pct": 100.0,
-      "total": 18876
+      "total": 19862
     },
-    "total": 18876
+    "total": 19862
   },
-  "generatedAt": "2026-09-05T16:01:59.280568Z",
+  "generatedAt": "2026-09-05T17:10:53.146176Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 6646,
+      "count": 7031,
       "pct": 100.0,
-      "total": 6646
+      "total": 7031
     },
     "coordinates": {
-      "count": 6646,
+      "count": 7031,
       "pct": 100.0,
-      "total": 6646
+      "total": 7031
     },
     "cpoIdentity": {
-      "count": 6646,
+      "count": 7031,
       "pct": 100.0,
-      "total": 6646
+      "total": 7031
     },
     "withEvses": {
-      "count": 6646,
+      "count": 7031,
       "pct": 100.0,
-      "total": 6646
+      "total": 7031
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 6646,
-    "nextPage": 70,
-    "registryCoveragePct": 45.62,
+    "locationsStored": 7031,
+    "nextPage": 74,
+    "registryCoveragePct": 48.26,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
