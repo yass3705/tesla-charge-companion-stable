@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "operator": "Electra direct",
+  "canonicalName": "Electra direct",
+  "source": {
+    "type": "official",
+    "publisher": "Electra",
+    "url": "https://intercom.help/go-electra/es/articles/7987274-nuestras-tarifas",
+    "stationIndexUrl": "https://stations.go-electra.com/fr",
+    "checkedAt": "2026-09-05",
+    "publishedAt": "2026-07-01",
+    "notes": "Electra's official tariff help page states that in Spain charging paid by bank card at the terminal costs 0.59 EUR/kWh VAT included. App/Autocharge pricing is variable between 0.39 and 0.59 EUR/kWh and must not be represented as a fixed direct-app tariff. The official public station site exposes Spanish Electra stations and confirms bank-card payment at the charger."
+  },
+  "scope": {
+    "include": "Physical Electra-network charging stations in Spain, only for ad-hoc bank-card payment at the charging terminal.",
+    "exclude": [
+      "Electra app/Autocharge sessions, whose current tariff is station-dependent within 0.39-0.59 EUR/kWh",
+      "Electra+ subscription discounts",
+      "Charge League partner networks",
+      "RFID/eMSP sessions, which may add third-party fees",
+      "non-Electra physical stations"
+    ],
+    "failClosed": true
+  },
+  "tariffs": [
+    {
+      "paymentChannel": "bank_card_terminal",
+      "energyEurPerKwh": 0.59,
+      "vatIncluded": true,
+      "countryScope": "ES"
+    }
+  ],
+  "dynamicOrUnresolved": [
+    {
+      "paymentChannel": "electra_app_or_autocharge",
+      "observedOfficialRangeEurPerKwh": [0.39, 0.59],
+      "rule": "Do not materialize a fixed tariff. Resolve the exact current station tariff from the official station/app surface when available."
+    }
+  ],
+  "integrationRule": "Apply 0.59 EUR/kWh only when the EVSE is confirmed as a physical Electra-network charger in Spain and the simulated payment channel is ad-hoc bank card at the terminal. Never use the range endpoints as station prices and never propagate this tariff to Charge League roaming partners."
+}
