@@ -35,15 +35,15 @@
     "Endolla Barcelona",
     "EMT Madrid",
     "Avanqua Oceanogràfic",
-    "AMB Electrolineres"
+    "AMB Electrolineres",
+    "Electra direct"
   ],
-  "historicalValidatedCounter": 26,
+  "historicalValidatedCounter": 27,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository now reconciles 16 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. AMB Electrolineres is validated from the current official AMB tariff table, with strict scope to the AMB network and connector/power class. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy and Naturgy public charging remain active because exact national station/EVSE tariff coverage is incomplete.",
+  "consistencyNote": "The repository now reconciles 17 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Electra direct is validated for the Spain-wide ad-hoc bank-card terminal tariff only; Electra app/Autocharge pricing remains station-dependent and must stay dynamic/fail-closed. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy and Naturgy public charging remain active because exact national station/EVSE tariff coverage is incomplete.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
-    "Electra direct",
     "TotalEnergies",
     "Powerdot",
     "Telpark",
@@ -121,18 +121,20 @@
     {"alias": "NATURGY RECARGA", "canonical": "Naturgy public charging", "note": "Current public-charging app identity; do not confuse with Naturgy home/business charger installation products."},
     {"alias": "easyRecarga", "canonical": "Naturgy public charging", "note": "Legacy Naturgy public-charging app identity; use only for identity continuity, never to carry historical tariffs into the current app."},
     {"alias": "Electrolineres AMB", "canonical": "AMB Electrolineres", "note": "Official metropolitan charging service identity; tariffs apply only to physical points belonging to the AMB Electrolineres network."},
-    {"alias": "AMB Electrolineres", "canonical": "AMB Electrolineres", "note": "Canonical network label used by the official AMB app/service."}
+    {"alias": "AMB Electrolineres", "canonical": "AMB Electrolineres", "note": "Canonical network label used by the official AMB app/service."},
+    {"alias": "ELECTRA", "canonical": "Electra direct", "note": "Use only for physical Electra-network stations in Spain. The validated 0.59 EUR/kWh tariff applies to ad-hoc bank-card payment at the terminal; app/Autocharge prices remain station-dependent."}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Validated historical total=26, nominatively reconciled=16, unreconciled historical names=10, blocked=14, active=5, excluded platform/non-CPO identities=2. AMB Electrolineres is newly validated from the current official AMB tariff table. No canonical overlap exists across validated, blocked and active sets. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null; 189 and 618 remain explicitly non-authoritative historical figures.",
+    "result": "Validated historical total=27, nominatively reconciled=17, unreconciled historical names=10, blocked=13, active=5, excluded platform/non-CPO identities=2. Electra direct moved from fail-closed to validated because a new official tariff page dated 2026-07-01 proves the Spain-wide ad-hoc bank-card terminal price of 0.59 EUR/kWh VAT included; app/Autocharge remains variable and is not materialized. No canonical overlap exists across validated, blocked and active sets. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null; 189 and 618 remain explicitly non-authoritative historical figures.",
     "safeCorrectionsApplied": [
-      "validated AMB Electrolineres from the current official AMB tariff table and created a dedicated tariff file with connector/power-class matching and overstay charges",
-      "incremented the validated historical counter from 25 to 26 and reconciled named validated CPOs from 15 to 16 while keeping the 10-name historical gap unchanged",
-      "added Electrolineres AMB identity alias with a strict physical-network scope guard",
-      "did not promote Naturgy domestic/home installation pricing as public CPO pricing",
-      "did not import PRIO Portugal eMSP/charging-card tariffs into Spain",
-      "did not re-audit the 14 blocked CPOs, Tesla public station pages or the failed DGT direct-download route without new evidence",
+      "moved Electra direct from blockedFailClosed to validatedNamed based on new current official evidence",
+      "created spain_electra_direct_tariffs_v1.json with payment-channel scoping and a strict fail-closed rule for variable app pricing",
+      "incremented the validated historical counter from 26 to 27 and reconciled named validated CPOs from 16 to 17 while keeping the 10-name historical gap unchanged",
+      "added ELECTRA identity alias with explicit physical-network and payment-channel guards",
+      "did not reuse the 0.39-0.59 EUR/kWh app range as exact station prices",
+      "did not propagate Electra direct pricing to Charge League partners or RFID/eMSP sessions",
+      "did not re-audit the remaining blocked CPOs, Tesla public station pages or the failed DGT direct-download route without new evidence",
       "checked canonical status sets for overlap and retained authoritativeCpoTotal=null"
     ]
   }
