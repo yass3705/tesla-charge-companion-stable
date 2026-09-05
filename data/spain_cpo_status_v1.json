@@ -13,7 +13,7 @@
     "officialDgtUpdateFrequency": "24h",
     "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
     "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator",
-    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Keep the national CPO denominator null rather than substituting 189, 618, station counts, or REVE location counts.",
+    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. A fresh direct download attempt on 2026-09-05 failed again; do not repeat the identical route without a new transport path. Keep the national CPO denominator null rather than substituting 189, 618, station counts, or REVE location counts.",
     "teslaOfficialSpainSuperchargerStationTotal": 105,
     "teslaOfficialSpainSuperchargerInventorySource": "https://www.tesla.com/es_es/findus/list/superchargers/Spain",
     "teslaOfficialSpainSuperchargerInventoryFile": "spain_tesla_supercharger_national_index_v1.json",
@@ -33,11 +33,12 @@
     "Plenitude On The Road",
     "Iberdrola | bp pulse",
     "Endolla Barcelona",
-    "EMT Madrid"
+    "EMT Madrid",
+    "Avanqua Oceanogràfic"
   ],
-  "historicalValidatedCounter": 24,
+  "historicalValidatedCounter": 25,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository reconciles 14 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger now has a complete official Spain station inventory of 105 entries, but exact tariff coverage remains 1/105, so Tesla remains active and is not promoted as fully tariff-validated.",
+  "consistencyNote": "The repository now reconciles 15 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger has a complete official Spain station inventory of 105 entries, but exact tariff coverage remains 1/105, so Tesla remains active and is not promoted as fully tariff-validated.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -50,12 +51,14 @@
     "Qwello España",
     "Endesa / Endesa On Your Way",
     "Mobilize Fast Charge",
-    "EDP Charge"
+    "EDP Charge",
+    "Pavapark",
+    "Umbrella eMobility"
   ],
   "active": [
     {
       "name": "Tesla Supercharger",
-      "status": "official national station inventory complete at 105 entries; exact station/time/vehicle-class tariff coverage remains 1/105 (Córdoba location 4002559), so continue official station-surface tariff acquisition fail-closed"
+      "status": "official national station inventory complete at 105 entries; exact station/time/vehicle-class tariff coverage remains 1/105 (Córdoba location 4002559). Repeated public station-page probing has not exposed numeric tariffs for the other stations; do not repeat the same investigation again without a new official/guest tariff surface."
     }
   ],
   "excludedNonCpoOrPlatform": [
@@ -87,16 +90,23 @@
     {"alias": "BSM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
     {"alias": "Electro-EMT", "canonical": "EMT Madrid"},
     {"alias": "Tesla", "canonical": "Tesla Supercharger", "note": "For charging-network records only; do not apply to non-Supercharger Tesla destination charging or unrelated Tesla entities."},
-    {"alias": "TESLA SUPERCHARGER", "canonical": "Tesla Supercharger"}
+    {"alias": "TESLA SUPERCHARGER", "canonical": "Tesla Supercharger"},
+    {"alias": "AVANQUA OCEANOGRÀFIC, S.L.", "canonical": "Avanqua Oceanogràfic", "note": "Exact legal manager of the Oceanogràfic València installation; tariff scope is that site only."},
+    {"alias": "AVANQUA OCEANOGRAFIC SL", "canonical": "Avanqua Oceanogràfic", "note": "Normalized operator spelling for the Oceanogràfic València installation only."},
+    {"alias": "PAVAPARK MOVILIDAD, S.L.", "canonical": "Pavapark"},
+    {"alias": "UMBRELLA", "canonical": "Umbrella eMobility"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=24, nominatively reconciled=14, blocked=12, active=1, excluded platform/non-CPO identities=2. Tesla official Spain Supercharger station inventory is now complete at 105 unique entries from Tesla's national list; exact tariff coverage is still 1/105, so Tesla remains active. Authoritative national CPO denominator remains null. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; the historical unreconciled-name gap remains 10.",
+    "result": "Historical validated=25, nominatively reconciled=15, blocked=14, active=1, excluded platform/non-CPO identities=2. Avanqua Oceanogràfic is newly source-validated only for its 22x22 kW Oceanogràfic València EVSE at 0.30 EUR/kWh. Pavapark and Umbrella eMobility are newly fail-closed because public station observations show variable/site-specific pricing while their official surfaces do not publish a deterministic station/EVSE tariff feed. Tesla remains active but its identical public-page tariff investigation is now explicitly paused until a new source path exists. Authoritative national CPO denominator remains null.",
     "safeCorrectionsApplied": [
-      "added a dedicated official Tesla Spain national Supercharger index with 105 unique station names",
-      "replaced the previous Tesla inventory-completeness blocker with the narrower exact-tariff-coverage blocker",
-      "kept Tesla Supercharger active because station inventory completion does not imply tariff completion",
-      "kept exact pricing fail-closed at 1/105 stations; no Córdoba tariff was propagated to another station",
+      "reconciled the actual main-branch state instead of relying on previously announced but unverifiable commit hashes",
+      "added Avanqua Oceanogràfic as a site-scoped validated CPO with an official 0.30 EUR/kWh tariff for exactly 22 EVSE at 22 kW",
+      "classified Pavapark fail-closed after official Moviltik/Pavapark evidence showed app-managed charging without a public deterministic charging-price table and public station data showed differing prices by site",
+      "classified Umbrella eMobility fail-closed because the official app exposes charging/payment functions but no public deterministic tariff source was found; third-party AC/DC prices were not promoted",
+      "added four conservative aliases without tariff propagation beyond the verified physical operator/site scope",
+      "marked the repeated Tesla public station-page tariff route as exhausted pending a genuinely new source path",
+      "recorded another failed direct DGT XML download and prohibited repeating the identical route without a new transport path",
       "retained authoritativeCpoTotal=null and the historical validated-name gap rather than guessing either value"
     ]
   }
