@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "provider": "Plenitude On The Road",
+  "generatedAt": "2026-09-05",
+  "policy": {
+    "onlyPhysicalOperatorMatches": true,
+    "excludeRoamingPartnerStations": true,
+    "failClosedOutsideExplicitPowerClasses": true
+  },
+  "operatorAliases": [
+    "Plenitude On The Road",
+    "Plenitude On The Road S.r.l.",
+    "Plenitude On The Road Srl"
+  ],
+  "directOffers": [
+    {
+      "id": "plenitude-direct-quick-es",
+      "kind": "AC",
+      "maxPowerKw": 22,
+      "pricePerKwh": 0.39,
+      "currency": "EUR",
+      "source": "https://eniplenitude.es/hogar/movilidad-electrica/app/",
+      "note": "Official Spain Quick rate. Apply only where the physical operator is Plenitude On The Road; partner/roaming stations are excluded."
+    },
+    {
+      "id": "plenitude-direct-fast-es",
+      "kind": "DC",
+      "maxPowerKw": 75,
+      "pricePerKwh": 0.55,
+      "currency": "EUR",
+      "source": "https://eniplenitude.es/hogar/movilidad-electrica/app/",
+      "note": "Official Spain Fast rate for DC up to 75 kW. Apply only where the physical operator is Plenitude On The Road."
+    },
+    {
+      "id": "plenitude-direct-fastplus-ultrafast-es",
+      "kind": "DC",
+      "minPowerKw": 75,
+      "pricePerKwh": 0.59,
+      "currency": "EUR",
+      "source": "https://eniplenitude.es/hogar/movilidad-electrica/app/",
+      "note": "Official Spain Fast+/Ultra Fast rate for DC >=75 kW. Apply only where the physical operator is Plenitude On The Road."
+    }
+  ],
+  "occupancyFees": [
+    {
+      "class": "Quick AC <=22 kW",
+      "freeMinutesAfterCharge": 60,
+      "pricePerMinute": 0.12,
+      "currency": "EUR",
+      "exception": "not applicable 23:00-07:00"
+    },
+    {
+      "class": "Fast DC <=75 kW",
+      "freeMinutesAfterCharge": 60,
+      "pricePerMinute": 0.20,
+      "currency": "EUR"
+    },
+    {
+      "class": "Fast+/Ultra Fast DC >=75 kW",
+      "freeMinutesAfterCharge": 60,
+      "pricePerMinute": 0.30,
+      "currency": "EUR"
+    }
+  ],
+  "validation": {
+    "officialSourceStatesOwnNetworkOnly": true,
+    "officialSourceStatesPartnerPricesMayVary": true,
+    "status": "source-validated-data-side"
+  }
+}
