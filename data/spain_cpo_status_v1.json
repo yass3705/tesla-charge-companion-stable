@@ -13,7 +13,7 @@
     "officialDgtUpdateFrequency": "24h",
     "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
     "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator",
-    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML could not be downloaded from the current execution environment. Keep the denominator null rather than substituting 189, 618, station counts, or REVE location counts."
+    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Keep the denominator null rather than substituting 189, 618, station counts, or REVE location counts."
   },
   "validatedNamed": [
     "Allego",
@@ -27,11 +27,13 @@
     "ACCIONA Recarga",
     "Moeve / Cepsa",
     "Plenitude On The Road",
-    "Iberdrola | bp pulse"
+    "Iberdrola | bp pulse",
+    "Endolla Barcelona",
+    "EMT Madrid"
   ],
-  "historicalValidatedCounter": 22,
+  "historicalValidatedCounter": 24,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository now reconciles 12 validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Iberdrola | bp pulse is the 22nd historical source-validated CPO after its current official Spain tariff table was encoded fail-closed by exact published power classes.",
+  "consistencyNote": "The repository now reconciles 14 validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Endolla Barcelona and EMT Madrid are now source-validated through dedicated fail-closed tariff matrices that preserve their mandatory location/time dimensions rather than flattening them into unsafe generic tariffs.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -46,16 +48,7 @@
     "Mobilize Fast Charge",
     "EDP Charge"
   ],
-  "active": [
-    {
-      "name": "Endolla Barcelona",
-      "status": "exact official tariffs found; current tariff schema lacks day/night plus BSM-parking/street dimensions"
-    },
-    {
-      "name": "EMT Madrid",
-      "status": "official exact tariffs found, but tariff depends on specific car-park/street category not represented by current Spain tariff rule schema"
-    }
-  ],
+  "active": [],
   "excludedNonCpoOrPlatform": [
     {
       "name": "EVcharge / Etecnic",
@@ -80,18 +73,21 @@
     {"alias": "Qwello España SL", "canonical": "Qwello España"},
     {"alias": "Plenitude On The Road S.r.l.", "canonical": "Plenitude On The Road"},
     {"alias": "Plenitude On The Road Srl", "canonical": "Plenitude On The Road"},
-    {"alias": "IBERDROLA BP PULSE", "canonical": "Iberdrola | bp pulse", "note": "Exact operator label observed in current Spain charging data; do not use this alias for Iberdrola-direct stations."}
+    {"alias": "IBERDROLA BP PULSE", "canonical": "Iberdrola | bp pulse", "note": "Exact operator label observed in current Spain charging data; do not use this alias for Iberdrola-direct stations."},
+    {"alias": "B:SM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
+    {"alias": "BSM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
+    {"alias": "Electro-EMT", "canonical": "EMT Madrid"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=22, nominatively reconciled=12, blocked=12, active=2, excluded platform/non-CPO identities=2. The actual main branch was reconciled from da76e4b8; later conversation-level 189/618 denominator states were not present on GitHub and conflict with the ledger's explicit null authoritative total, so they were rejected. Iberdrola | bp pulse moved from active to validated using its current official power-based Spain tariff table. EDP Charge moved from active to fail-closed because its official app is the tariff surface and current public REVE-derived observations show station-level variation without a supported exact public EVSE tariff feed. Electromaps moved from active to excluded platform/eMSP because its own FAQ states the underlying owner/CPO sets the charging tariff and Electromaps may add a service surcharge. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; the historical unreconciled-name gap remains 10.",
+    "result": "Historical validated=24, nominatively reconciled=14, blocked=12, active=0, excluded platform/non-CPO identities=2. Endolla Barcelona and EMT Madrid moved from active to validated after their current official pages were rechecked and exact tariff matrices were encoded without losing mandatory context dimensions. DGT authoritative denominator remains null because the official 82+ MB XML still cannot be downloaded in this environment. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; the historical unreconciled-name gap remains 10.",
     "safeCorrectionsApplied": [
-      "rejected conversation-only 189/618 CPO denominators and retained authoritativeCpoTotal=null until the official DGT operator inventory can be parsed",
-      "moved Iberdrola | bp pulse from active to validatedNamed and added a dedicated fail-closed official power-class tariff file",
-      "resolved exact label IBERDROLA BP PULSE to Iberdrola | bp pulse while explicitly excluding Iberdrola-direct stations",
-      "moved EDP Charge from active to blockedFailClosed after a fresh official/app plus current public-data audit confirmed station-level price variation without a supported public exact EVSE feed",
-      "moved Electromaps / Electromaps SL from active to excludedNonCpoOrPlatform for tariff propagation; underlying physical CPO must be resolved per station",
-      "kept the historical validated-name gap explicit instead of reconstructing missing names by inference"
+      "encoded Endolla Barcelona exact pay-as-you-go and subscription car/van tariffs by BSM-parking versus street and day versus night; runtime must fail closed when these dimensions are unknown",
+      "encoded EMT Madrid exact charging tariffs by location/charge category, including the four current official price classes; runtime must fail closed when location class is unknown",
+      "moved Endolla Barcelona and EMT Madrid from active to validatedNamed because exact official data is now preserved in dedicated tariff matrices rather than requiring an unsafe generic rule",
+      "resolved B:SM Endolla and BSM Endolla to Endolla Barcelona with an explicit parking-fee guard",
+      "resolved Electro-EMT to EMT Madrid",
+      "kept authoritativeCpoTotal null and retained the historical validated-name gap rather than guessing either value"
     ]
   }
 }
