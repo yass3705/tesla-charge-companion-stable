@@ -39,7 +39,9 @@
     "Telpark",
     "Iberdrola direct",
     "IONITY direct",
-    "Qwello España"
+    "Qwello España",
+    "Endesa / Endesa On Your Way",
+    "Mobilize Fast Charge"
   ],
   "active": [
     {
@@ -61,14 +63,6 @@
     {
       "name": "EMT Madrid",
       "status": "official exact tariffs found, but tariff depends on specific car-park/street category not represented by current Spain tariff rule schema"
-    },
-    {
-      "name": "Endesa / Endesa On Your Way",
-      "status": "official site confirms price is point-specific and shown before charging; no exact public station feed integrated yet"
-    },
-    {
-      "name": "Mobilize Fast Charge",
-      "status": "Renault/Mobilize confirms deployment into Spain in 2026 and an own ultra-fast network. Official published pricing is launch-window dependent (credit-card launch rate 0.41 EUR/kWh for each station's first two months; Mobilize Charge Pass 0.39 EUR/kWh for one year), so no timeless Spain-wide direct tariff can be integrated without station opening dates or station-specific current pricing. Renault Group is transitioning charging services toward the Plug Inn brand in 2026; keep identity resolution active and do not assume the France rollout timing applies identically to Spain."
     }
   ],
   "excludedNonCpoOrPlatform": [
@@ -94,13 +88,12 @@
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=21, nominatively reconciled=11, blocked=9, active=7, excluded platform/non-CPO identities=1. Plenitude On The Road moved from active to source-validated after its official Spain tariff page explicitly stated that the published Spain rates apply only to Plenitude On The Road charging points and that prices at other operators may vary. A dedicated fail-closed tariff data file was added with strict physical-operator matching and roaming exclusion. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; historical unreconciled names remain 10 rather than being guessed.",
+    "result": "Historical validated=21, nominatively reconciled=11, blocked=11, active=5, excluded platform/non-CPO identities=1. Endesa and Mobilize moved from active to fail-closed after fresh official-source audits produced no safe timeless national rule: Endesa explicitly prices each concrete point and exposes the price before charging in a multi-operator app; Mobilize/Plug Inn pricing remains tied to station launch windows and the Spain branding/timing cannot safely be inferred from France. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; historical unreconciled names remain 10 rather than being guessed.",
     "safeCorrectionsApplied": [
-      "moved Plenitude On The Road from active to validatedNamed",
-      "incremented historical validated counter from 20 to 21 and nominatively reconciled names from 10 to 11",
-      "resolved Plenitude On The Road S.r.l./Srl legal-name aliases",
-      "added dedicated fail-closed Plenitude Spain tariff data with strict own-network scope and partner-station exclusion",
-      "kept Mobilize/Plug Inn identity transition active without assuming France branding timing applies to Spain",
+      "moved Endesa / Endesa On Your Way from active to blockedFailClosed after current official source confirmed point-specific pricing in the multi-operator app",
+      "moved Mobilize Fast Charge from active to blockedFailClosed because the published direct tariff is station-launch-window dependent and no station-opening-date feed or current station-specific public tariff feed was found",
+      "kept Plug Inn fast charge branding transition unaliased for Spain because Renault Group's April 2026 announcement explicitly anchors the first fast-network rename step to France while Renault Spain still surfaces Mobilize fast charge",
+      "kept historical validated counter at 21 and nominatively reconciled names at 11; no tariff was invented or extrapolated",
       "kept the historical validated-name gap explicit instead of reconstructing missing names by inference"
     ]
   }
