@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 13992
+      "total": 15626
     },
     "format": {
-      "count": 13992,
+      "count": 15626,
       "pct": 100.0,
-      "total": 13992
+      "total": 15626
     },
     "maxAmperage": {
-      "count": 13992,
+      "count": 15626,
       "pct": 100.0,
-      "total": 13992
+      "total": 15626
     },
     "maxElectricPower": {
-      "count": 13992,
+      "count": 15626,
       "pct": 100.0,
-      "total": 13992
+      "total": 15626
     },
     "maxVoltage": {
-      "count": 13992,
+      "count": 15626,
       "pct": 100.0,
-      "total": 13992
+      "total": 15626
     },
     "powerType": {
-      "count": 13992,
+      "count": 15626,
       "pct": 100.0,
-      "total": 13992
+      "total": 15626
     },
     "standard": {
-      "count": 13992,
+      "count": 15626,
       "pct": 100.0,
-      "total": 13992
+      "total": 15626
     },
-    "total": 13992
+    "total": 15626
   },
   "country": "ES",
   "cpos": {
-    "distinct": 32,
+    "distinct": 35,
     "items": [
       {
         "connectors": 33,
@@ -133,10 +133,17 @@
         "partyId": "ETE"
       },
       {
-        "connectors": 138,
+        "connectors": 20,
+        "cpoName": "FASTNED ESPAÑA, S.L.",
+        "evses": 16,
+        "locations": 2,
+        "partyId": "FAS"
+      },
+      {
+        "connectors": 466,
         "cpoName": "FENIE ENERGIA, SA",
-        "evses": 123,
-        "locations": 68,
+        "evses": 406,
+        "locations": 223,
         "partyId": "FEN"
       },
       {
@@ -168,10 +175,10 @@
         "partyId": "IOY"
       },
       {
-        "connectors": 10,
+        "connectors": 861,
         "cpoName": "MAKSU ESPAÑA SL",
-        "evses": 10,
-        "locations": 2,
+        "evses": 861,
+        "locations": 109,
         "partyId": "EPK"
       },
       {
@@ -196,10 +203,17 @@
         "partyId": "PLE"
       },
       {
-        "connectors": 3,
+        "connectors": 47,
+        "cpoName": "Powergo Public SL",
+        "evses": 47,
+        "locations": 11,
+        "partyId": "PGO"
+      },
+      {
+        "connectors": 116,
         "cpoName": "Prio Recharge Sl.",
-        "evses": 3,
-        "locations": 1,
+        "evses": 116,
+        "locations": 57,
         "partyId": "PRR"
       },
       {
@@ -224,11 +238,18 @@
         "partyId": "RSM"
       },
       {
-        "connectors": 183,
+        "connectors": 456,
         "cpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA",
-        "evses": 122,
-        "locations": 50,
+        "evses": 301,
+        "locations": 113,
         "partyId": "REP"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "SCL AGROPIENSO F22009468",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "F22"
       },
       {
         "connectors": 1248,
@@ -271,46 +292,46 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 13609
+      "total": 15100
     },
     "identifier": {
-      "count": 13609,
+      "count": 15100,
       "pct": 100.0,
-      "total": 13609
+      "total": 15100
     },
-    "total": 13609
+    "total": 15100
   },
-  "generatedAt": "2026-09-05T08:57:14.834099Z",
+  "generatedAt": "2026-09-05T10:11:24.309573Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 4706,
+      "count": 5101,
       "pct": 100.0,
-      "total": 4706
+      "total": 5101
     },
     "coordinates": {
-      "count": 4706,
+      "count": 5101,
       "pct": 100.0,
-      "total": 4706
+      "total": 5101
     },
     "cpoIdentity": {
-      "count": 4706,
+      "count": 5101,
       "pct": 100.0,
-      "total": 4706
+      "total": 5101
     },
     "withEvses": {
-      "count": 4706,
+      "count": 5101,
       "pct": 100.0,
-      "total": 4706
+      "total": 5101
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 4706,
-    "nextPage": 50,
-    "registryCoveragePct": 32.31,
-    "registryTotalCount": 14566,
+    "locationsStored": 5101,
+    "nextPage": 54,
+    "registryCoveragePct": 35.02,
+    "registryTotalCount": 14567,
     "totalPages": 146
   },
   "source": "REVE",
