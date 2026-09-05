@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "operator": "Avanqua Oceanogràfic",
+  "scope": {
+    "site": "Oceanogràfic València parking",
+    "address": "Carrer d'Eduardo Primo Yúfera, 1B, 46013 València",
+    "managedBy": "AVANQUA OCEANOGRÀFIC, S.L.",
+    "stationCount": 11,
+    "evseCount": 22,
+    "connectorType": "Type 2",
+    "powerKw": 22,
+    "parkingFeeSeparate": true
+  },
+  "tariff": {
+    "pricePerKwh": 0.30,
+    "currency": "EUR",
+    "unit": "kWh"
+  },
+  "aliases": [
+    "AVANQUA OCEANOGRÀFIC, S.L.",
+    "AVANQUA OCEANOGRAFIC SL",
+    "Oceanogràfic València"
+  ],
+  "sources": [
+    {
+      "url": "https://www.oceanografic.org/planifica-tu-visita-al-oceanografic-de-valencia/como-llegar-y-parking/",
+      "authority": "official_site",
+      "evidence": "Oceanogràfic publishes 22 Type-2 charging points at 22 kW and a charging cost of 0.3 €/kWh."
+    },
+    {
+      "url": "https://www.oceanografic.org/wp-content/uploads/2024/06/Oceanografic_Documento_web_MovesIII.pdf",
+      "authority": "official_project_document",
+      "evidence": "MOVES III project document identifies AVANQUA OCEANOGRÀFIC, S.L. as manager and specifies the same 22 charging points at 22 kW."
+    }
+  ],
+  "failClosed": {
+    "doNotGeneralizeBeyondSite": true,
+    "doNotIncludeParkingFeeInEnergyPrice": true,
+    "doNotApplyToOtherAvanquaOrCACSASites": true,
+    "note": "This tariff is exact only for the Oceanogràfic València parking installation described by the official sources."
+  },
+  "checkedAt": "2026-09-05"
+}
