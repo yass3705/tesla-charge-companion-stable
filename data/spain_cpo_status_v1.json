@@ -33,7 +33,7 @@
   ],
   "historicalValidatedCounter": 24,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository now reconciles 14 validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Endolla Barcelona and EMT Madrid are now source-validated through dedicated fail-closed tariff matrices that preserve their mandatory location/time dimensions rather than flattening them into unsafe generic tariffs.",
+  "consistencyNote": "The repository reconciles 14 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger now has a proven official station-level exact tariff path and one exact Spanish station encoded, but remains active until nationwide station coverage is inventoried rather than being promoted prematurely as fully validated.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -48,7 +48,12 @@
     "Mobilize Fast Charge",
     "EDP Charge"
   ],
-  "active": [],
+  "active": [
+    {
+      "name": "Tesla Supercharger",
+      "status": "official public Find Us pages can expose exact station/time/vehicle-class tariffs; Córdoba location 4002559 encoded as first fail-closed station, nationwide Spain station inventory/coverage still required"
+    }
+  ],
   "excludedNonCpoOrPlatform": [
     {
       "name": "EVcharge / Etecnic",
@@ -76,18 +81,19 @@
     {"alias": "IBERDROLA BP PULSE", "canonical": "Iberdrola | bp pulse", "note": "Exact operator label observed in current Spain charging data; do not use this alias for Iberdrola-direct stations."},
     {"alias": "B:SM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
     {"alias": "BSM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
-    {"alias": "Electro-EMT", "canonical": "EMT Madrid"}
+    {"alias": "Electro-EMT", "canonical": "EMT Madrid"},
+    {"alias": "Tesla", "canonical": "Tesla Supercharger", "note": "For charging-network records only; do not apply to non-Supercharger Tesla destination charging or unrelated Tesla entities."},
+    {"alias": "TESLA SUPERCHARGER", "canonical": "Tesla Supercharger"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=24, nominatively reconciled=14, blocked=12, active=0, excluded platform/non-CPO identities=2. Endolla Barcelona and EMT Madrid moved from active to validated after their current official pages were rechecked and exact tariff matrices were encoded without losing mandatory context dimensions. DGT authoritative denominator remains null because the official 82+ MB XML still cannot be downloaded in this environment. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; the historical unreconciled-name gap remains 10.",
+    "result": "Historical validated=24, nominatively reconciled=14, blocked=12, active=1, excluded platform/non-CPO identities=2. Tesla Supercharger was added as active only after new official evidence showed public station-level exact tariffs on Tesla Find Us pages. Córdoba location 4002559 is encoded fail-closed by exact station ID, time band and vehicle tariff class; Tesla is not yet counted as fully validated because nationwide Spanish station coverage is incomplete. Authoritative DGT CPO denominator remains null. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; the historical unreconciled-name gap remains 10.",
     "safeCorrectionsApplied": [
-      "encoded Endolla Barcelona exact pay-as-you-go and subscription car/van tariffs by BSM-parking versus street and day versus night; runtime must fail closed when these dimensions are unknown",
-      "encoded EMT Madrid exact charging tariffs by location/charge category, including the four current official price classes; runtime must fail closed when location class is unknown",
-      "moved Endolla Barcelona and EMT Madrid from active to validatedNamed because exact official data is now preserved in dedicated tariff matrices rather than requiring an unsafe generic rule",
-      "resolved B:SM Endolla and BSM Endolla to Endolla Barcelona with an explicit parking-fee guard",
-      "resolved Electro-EMT to EMT Madrid",
-      "kept authoritativeCpoTotal null and retained the historical validated-name gap rather than guessing either value"
+      "added a dedicated partial Tesla Supercharger station tariff dataset using only exact official public Find Us pricing",
+      "encoded Córdoba Tesla location 4002559 separately for Tesla owner/member and other-EV non-member tariff classes with exact time bands",
+      "kept Tesla Supercharger active rather than fully validated because one station must not be generalized to the Spanish network",
+      "resolved Tesla and TESLA SUPERCHARGER aliases only in charging-network context with a guard excluding destination chargers and unrelated Tesla entities",
+      "retained authoritativeCpoTotal=null and the historical validated-name gap rather than guessing either value"
     ]
   }
 }
