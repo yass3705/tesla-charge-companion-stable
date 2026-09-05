@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "canonicalCpo": "Feníe Energía public charging",
+  "status": "active-partial",
+  "pricingAuthority": "official Feníe Energía public station pages",
+  "matchingRule": "Match only by exact official Feníe station id. Never infer a network-wide price from power, owner, municipality, or another Feníe-managed station.",
+  "stations": [
+    {"stationId":"0532","name":"SOBRARBE MOTOR S.L.","powerKw":22.0,"energyEurPerKwh":0.25,"sessionFeeEur":1.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0532"},
+    {"stationId":"0525","name":"Guardamar de la Safor","powerKw":22.0,"energyEurPerKwh":0.25,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0525"},
+    {"stationId":"0502","name":"Aguilar de Campoo","powerKw":7.4,"energyEurPerKwh":0.35,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0502"},
+    {"stationId":"0518","name":"ESTACIÓ DE SERVICI SES JARDINES CB","powerKw":50.0,"energyEurPerKwh":0.50,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0518"},
+    {"stationId":"0766","name":"CHV Patronato de Torreciudad 4","powerKw":7.4,"energyEurPerKwh":0.40,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0766"},
+    {"stationId":"0364","name":"CENTRO DE EXPOSICIONES Y CONGRESOS LIENZO NORTE","powerKw":7.4,"energyEurPerKwh":0.15,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0364"},
+    {"stationId":"0472","name":"PARKING MASSENS","powerKw":7.0,"energyEurPerKwh":0.42,"sessionFeeEur":0.50,"source":"https://recarga.fenieenergia.es/punto-recarga/0472"}
+  ],
+  "notes":[
+    "Official pages demonstrate that Feníe-managed public charging prices are station-specific (examples range from 0.15 to 0.50 EUR/kWh and may include a session fee).",
+    "Some Feníe-managed stations are private/restricted; accessibility must be preserved separately from energy price.",
+    "Do not mark the CPO fully covered until its Spanish station inventory is enumerated and exact official pricing is captured station by station."
+  ]
+}
