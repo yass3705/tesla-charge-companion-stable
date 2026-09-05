@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "country": "ES",
-  "updatedAt": "2026-09-05",
+  "updatedAt": "2026-09-06",
   "inventory": {
     "authoritativeCpoTotal": null,
     "workingInventoryOperatorCount": 618,
@@ -51,7 +51,7 @@
     {"name":"PowerGo","status":"official live locations-and-prices surface confirmed; tariffs are dynamic, so continue station enumeration and never freeze a network-wide value"},
     {"name":"Powy","status":"official direct QR payment path exists; exact Spanish EVSE/QR enumeration still required"},
     {"name":"Naturgy public charging","status":"current app identity confirmed; deterministic current tariff field still needs backend/app confirmation"},
-    {"name":"Plenergy","status":"official station pages expose Precio KW for some sites and blanks for others; ingest exact numeric station values only"},
+    {"name":"Plenergy","status":"official station pages expose Precio KW on a per-station basis. Exact numeric coverage is now 14 stations in the maintained tariff file; blank fields remain unresolved and no observed value is generalized network-wide."},
     {"name":"emovili FAST","status":"official CPO surface confirms public network operation plus TPV, roaming, direct mobile payment and web payment without subscription. Public official web pages do not expose deterministic numeric tariffs by station/EVSE; third-party observed values vary and are not authoritative. Next useful step is app/web-payment guest backend or exact station session surface; do not use emovili blog averages as tariffs."},
     {"name":"U energia public charging","status":"official U energia map/app network confirmed. U Movilidad exposes detailed billed-price conditions in-app; exact station/connector prices remain to be extracted from the guest/app surface."},
     {"name":"REMO Sustainable Mobility","status":"official REMO Spain app is explicitly available in Spain and states charger status, pricing and access are shown in-app. REVE/DGT-derived inventory confirms Spanish REMO-operated sites. No deterministic numeric public-web tariff was found; next useful step is app/backend or exact charger-session extraction."},
@@ -118,7 +118,7 @@
     {"alias":"Bonpreu Esclat","canonical":"BonpreuEsclat"}
   ],
   "lastConsistencyCheck": {
-    "date": "2026-09-05",
+    "date": "2026-09-06",
     "result": "green",
     "workingInventoryOperatorLabels": 618,
     "validatedHistorical": 27,
@@ -130,10 +130,10 @@
     "checks": [
       "no canonical overlap across validated, blocked and active sets",
       "27 = 17 nominatively reconciled validated names + 10 historical unreconciled validated names",
-      "BonpreuEsclat was re-audited only because new official point-selection and terminal-price evidence was found",
-      "no other blocked CPO was re-audited without new evidence",
+      "Plenergy exact numeric station coverage increased from 7 to 14 solely from current official station pages",
+      "Plenergy pages with blank Precio KW remain unresolved; no 0.36 EUR/kWh network-wide extrapolation was made",
+      "no blocked CPO was re-audited without new evidence",
       "no repeated Tesla public-page or DGT direct-download loop was retried",
-      "no numeric BonpreuEsclat base tariff was invented: the official 0.19 EUR/kWh figure is only a conditional Energia-customer discount through 2026-12-31",
       "REVE/DGT-derived operator labels are used for discovery and identity only, not as tariff authority"
     ]
   },
@@ -143,6 +143,15 @@
     "remoOfficial": ["https://me-remo.com/es/","https://me-remo.com/es/carga-tu-vehiculo/","https://me-remo.com/landing-store-app/","https://apps.apple.com/es/app/remo/id6450786486"],
     "apkElectricOfficial": ["https://support.apk2.es/hc/es/articles/35540862121629-Ventajas-de-recargar-tu-veh%C3%ADculo-en-APK-Electric","https://apk2gestion.com/es/servicios/puntos-de-recarga"],
     "endesaOfficial": ["https://prod.store.endesaxway.com/es/es/nuestra-oferta/app-endesaxway-servicio-recarga/tarifas"],
-    "bonpreuOfficial": ["https://www.bonpreuesclat.cat/es/estaciones-de-carga-vehiculos-electricos-instrucciones","https://www.bonpreuesclat.cat/es/web/bonpreu/promociones-energia"]
+    "bonpreuOfficial": ["https://www.bonpreuesclat.cat/es/estaciones-de-carga-vehiculos-electricos-instrucciones","https://www.bonpreuesclat.cat/es/web/bonpreu/promociones-energia"],
+    "plenergyOfficialAdded20260906": [
+      "https://plenergy.es/estacion/plenergy-ondara-i/",
+      "https://plenergy.es/estacion/plenoil-osuna-i/",
+      "https://plenergy.es/estacion/plenoil-cartes-i/?lang=ca",
+      "https://plenergy.es/estacion/plenoil-murcia-II/",
+      "https://plenergy.es/estacion/plenoil-el-ejido-i/?lang=en",
+      "https://plenergy.es/estacion/plenoil-santa-pola-i/",
+      "https://plenergy.es/estacion/plenoil-madrid-III/"
+    ]
   }
 }
