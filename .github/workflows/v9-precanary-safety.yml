@@ -7,6 +7,9 @@ on:
       - 'assets/v9/canary-telemetry.js'
       - 'assets/v9/rollout-engine.js'
       - 'data/v9/rollout-config.json'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/access-readiness.json'
+      - 'ops/v9/canary-activation.json'
       - 'v9-app/**'
       - 'tests/v9-precanary.test.cjs'
       - '.github/workflows/v9-precanary-safety.yml'
@@ -17,6 +20,9 @@ on:
       - 'assets/v9/canary-telemetry.js'
       - 'assets/v9/rollout-engine.js'
       - 'data/v9/rollout-config.json'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/access-readiness.json'
+      - 'ops/v9/canary-activation.json'
       - 'v9-app/**'
       - 'tests/v9-precanary.test.cjs'
       - '.github/workflows/v9-precanary-safety.yml'
@@ -41,15 +47,19 @@ jobs:
           node --check tests/v9-precanary.test.cjs
       - name: Pre-canary contract
         run: node tests/v9-precanary.test.cjs
-      - name: Safe zero-traffic config
+      - name: Safe preview or initial-canary config
         run: |
           node - <<'NODE'
           const fs=require('fs');
           const c=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
-          if(c.stage!=='preview')throw new Error('pre-canary must remain preview');
-          if(Number(c.canaryPercent)!==0)throw new Error('pre-canary traffic must remain 0%');
-          if(c.productionPath!=='v9-app/')throw new Error('production candidate must point to isolated v9-app');
+          const p=JSON.parse(fs.readFileSync('data/v9/canary-policy.json','utf8'));
+          const r=JSON.parse(fs.readFileSync('data/v9/access-readiness.json','utf8'));
+          const a=fs.existsSync('ops/v9/canary-activation.json')?JSON.parse(fs.readFileSync('ops/v9/canary-activation.json','utf8')):null;
+          const preview=c.stage==='preview'&&Number(c.canaryPercent)===0&&p.active===false;
+          const canary=c.stage==='canary'&&Number(c.canaryPercent)===1&&Number(p.initialPercent)===1&&p.active===true&&r.ready===true&&r.verdict==='READY'&&c.killSwitch===false&&c.v8Path==='v8-app/'&&a?.status==='APPROVED_FOR_DEPLOYMENT'&&Number(a?.percent)===1&&a?.fullWindowValidation?.conclusion==='success';
+          if(!preview&&!canary)throw new Error('configuration is neither safe 0% preview nor approved 1% canary');
+          if(c.productionPath!=='v9-app/'||c.canaryPath!=='v9-app/')throw new Error('production candidate must point to isolated v9-app');
           if(c.productionPath===c.previewPath)throw new Error('preview and production candidate must be distinct');
           if(!fs.existsSync('v9-app/index.html')||!fs.existsSync('v9-app/app.js'))throw new Error('v9-app candidate missing');
-          console.log('Pre-canary zero-traffic configuration OK');
+          console.log(canary?'Initial 1% canary configuration OK':'Pre-canary zero-traffic configuration OK');
           NODE

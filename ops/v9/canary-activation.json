@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "type": "tcc-v9-canary-activation",
+  "status": "APPROVED_FOR_DEPLOYMENT",
+  "stage": "canary",
+  "percent": 1,
+  "approvedAt": "2026-09-05T23:52:19Z",
+  "preparedAt": "2026-09-05T23:52:19Z",
+  "candidate": {
+    "observationSourceSha": "8d2c20b7c76004389edd8f4a3b80d6b314900ba0",
+    "runtimeFingerprint": "sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697",
+    "publicValidationUrl": "https://yass3705.github.io/tesla-charge-companion-stable/v9-test/v9-app/"
+  },
+  "fullWindowValidation": {
+    "workflow": "V9 pre-canary observation",
+    "runId": 33999132520,
+    "conclusion": "success",
+    "completedAt": "2026-09-05T23:36:58Z"
+  },
+  "evidence": {
+    "runs": 30,
+    "passes": 30,
+    "failures": 0,
+    "sourceErrors": 0,
+    "routingErrors": 0,
+    "criticalParityErrors": 0,
+    "averageLatencyMs": 2682,
+    "maxLatencyMs": 5914.399999999994
+  },
+  "rollback": {
+    "fallbackPath": "v8-app/",
+    "killSwitchField": "data/v9/rollout-config.json#killSwitch",
+    "readinessRequired": true
+  }
+}

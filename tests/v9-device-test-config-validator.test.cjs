@@ -1,57 +1,16 @@
-const assert = require('node:assert/strict');
-const Window = require('../assets/v9/device-test-window-engine.js');
-const Validator = require('../scripts/v9-validate-device-test-config.cjs');
-
-const current = Validator.readConfiguration();
-const currentResult = Validator.validateConfiguration(current);
-assert.equal(currentResult.ok, true, currentResult.errors.join(', '));
-
-const now = new Date('2026-09-01T12:00:00Z');
-const closed = {
-  rollout: { ...current.rollout, stage: 'preview', canaryPercent: 0, killSwitch: false, canaryPath: 'v9-app/', productionPath: 'v9-app/' },
-  selfEnrollment: { ...current.selfEnrollment, enabled: false, readinessApproved: false, tokenSha256: '', expiresAt: null, maxGrantMinutes: 60 },
-  readiness: { ...current.readiness, ready: false, verdict: 'BLOCKED' },
-  devicePolicy: { ...current.devicePolicy, enabled: false, maxWindowMinutes: 60 }
-};
-assert.equal(Validator.validateConfiguration(closed, { now }).mode, 'CLOSED');
-
-const openPlan = Window.openPlan({
-  tokenSha256: 'a'.repeat(64),
-  tokenVersion: 'device-test-validator',
-  now,
-  windowMinutes: 30,
-  selfEnrollment: closed.selfEnrollment,
-  readiness: closed.readiness,
-  devicePolicy: closed.devicePolicy,
-  rollout: closed.rollout
-});
-const controlled = {
-  rollout: closed.rollout,
-  selfEnrollment: openPlan.files['data/v9/self-enrollment-config.json'],
-  readiness: openPlan.files['data/v9/access-readiness.json'],
-  devicePolicy: openPlan.files['data/v9/device-test-policy.json']
-};
-const controlledResult = Validator.validateConfiguration(controlled, { now: new Date('2026-09-01T12:01:00Z') });
-assert.equal(controlledResult.ok, true, controlledResult.errors.join(', '));
-assert.equal(controlledResult.mode, 'CONTROLLED_WINDOW');
-
-const invalidHash = structuredClone(controlled);
-invalidHash.selfEnrollment.tokenSha256 = 'plaintext-token';
-assert.equal(Validator.validateConfiguration(invalidHash, { now }).ok, false);
-
-const expired = structuredClone(controlled);
-assert.equal(Validator.validateConfiguration(expired, { now: new Date('2026-09-01T12:31:00Z') }).ok, false);
-
-const mixed = structuredClone(closed);
-mixed.selfEnrollment.enabled = true;
-assert.equal(Validator.validateConfiguration(mixed, { now }).ok, false);
-
-const canary = structuredClone(controlled);
-canary.rollout.canaryPercent = 1;
-assert.equal(Validator.validateConfiguration(canary, { now }).ok, false);
-
-console.log(JSON.stringify({
-  ok: true,
-  module: 'tcc-v9-device-test-config-validator',
-  checks: ['closed', 'controlled-window', 'hash-only', 'expiry', 'mixed-state', 'zero-canary']
-}, null, 2));
+const assert=require('node:assert/strict');
+const Validator=require('../scripts/v9-validate-device-test-config.cjs');
+const current=Validator.readConfiguration();
+const currentResult=Validator.validateConfiguration(current,{now:new Date('2026-09-05T23:55:00Z')});assert.equal(currentResult.ok,true,currentResult.errors.join(', '));assert.equal(currentResult.mode,'CANARY');assert.equal(currentResult.canaryPercent,1);
+const now=new Date('2026-09-01T12:00:00Z');
+const closed={rollout:{...current.rollout,stage:'preview',canaryPercent:0,killSwitch:false,v8Path:'./',canaryPath:'v9-app/',productionPath:'v9-app/'},selfEnrollment:{...current.selfEnrollment,enabled:false,readinessApproved:false,tokenSha256:'',expiresAt:null,maxGrantMinutes:60},readiness:{...current.readiness,ready:false,verdict:'BLOCKED'},devicePolicy:{...current.devicePolicy,enabled:false,maxWindowMinutes:60},canaryPolicy:{...current.canaryPolicy,active:false}};
+assert.equal(Validator.validateConfiguration(closed,{now}).mode,'CLOSED');
+const controlled={rollout:closed.rollout,selfEnrollment:{...closed.selfEnrollment,enabled:true,readinessApproved:true,tokenSha256:'a'.repeat(64),tokenVersion:'device-test-validator',expiresAt:'2026-09-01T12:30:00Z',maxGrantMinutes:30},readiness:{...closed.readiness,ready:true,verdict:'READY',updatedAt:'2026-09-01T12:00:00Z'},devicePolicy:{...closed.devicePolicy,enabled:true,requireReadiness:true,requireCanaryPercentZero:true,autoCloseOnRollback:true,maxWindowMinutes:30,minimumRuns:10,minimumSuccessfulRuns:10},canaryPolicy:closed.canaryPolicy};
+const controlledResult=Validator.validateConfiguration(controlled,{now:new Date('2026-09-01T12:01:00Z')});assert.equal(controlledResult.ok,true,controlledResult.errors.join(', '));assert.equal(controlledResult.mode,'CONTROLLED_WINDOW');
+const invalidHash=structuredClone(controlled);invalidHash.selfEnrollment.tokenSha256='plaintext-token';assert.equal(Validator.validateConfiguration(invalidHash,{now}).ok,false);
+const expired=structuredClone(controlled);assert.equal(Validator.validateConfiguration(expired,{now:new Date('2026-09-01T12:31:00Z')}).ok,false);
+const mixed=structuredClone(closed);mixed.selfEnrollment.enabled=true;assert.equal(Validator.validateConfiguration(mixed,{now}).ok,false);
+const unsafeCanary=structuredClone(current);unsafeCanary.rollout.canaryPercent=5;assert.equal(Validator.validateConfiguration(unsafeCanary,{now:new Date('2026-09-05T23:55:00Z')}).ok,false);
+const noFallback=structuredClone(current);noFallback.rollout.v8Path='./';assert.equal(Validator.validateConfiguration(noFallback,{now:new Date('2026-09-05T23:55:00Z')}).ok,false);
+const activeTokenDuringCanary=structuredClone(current);activeTokenDuringCanary.selfEnrollment.enabled=true;activeTokenDuringCanary.selfEnrollment.tokenSha256='b'.repeat(64);activeTokenDuringCanary.selfEnrollment.expiresAt='2030-01-01T00:00:00Z';assert.equal(Validator.validateConfiguration(activeTokenDuringCanary,{now:new Date('2026-09-05T23:55:00Z')}).ok,false);
+console.log(JSON.stringify({ok:true,module:'tcc-v9-device-test-config-validator',checks:['active-canary','closed','controlled-window','hash-only','expiry','mixed-state','initial-percent-only','isolated-v8-control','no-token-during-canary']},null,2));

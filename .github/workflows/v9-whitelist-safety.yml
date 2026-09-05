@@ -6,6 +6,9 @@ on:
       - 'assets/v9/whitelist-engine.js'
       - 'data/v9/whitelist-config.json'
       - 'data/v9/rollout-config.json'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/access-readiness.json'
+      - 'ops/v9/canary-activation.json'
       - 'tests/v9-whitelist-engine.test.cjs'
       - '.github/workflows/v9-whitelist-safety.yml'
   push:
@@ -14,6 +17,9 @@ on:
       - 'assets/v9/whitelist-engine.js'
       - 'data/v9/whitelist-config.json'
       - 'data/v9/rollout-config.json'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/access-readiness.json'
+      - 'ops/v9/canary-activation.json'
       - 'tests/v9-whitelist-engine.test.cjs'
       - '.github/workflows/v9-whitelist-safety.yml'
   workflow_dispatch:
@@ -35,16 +41,21 @@ jobs:
           node --check tests/v9-whitelist-engine.test.cjs
       - name: Whitelist contract
         run: node tests/v9-whitelist-engine.test.cjs
-      - name: Safe inactive configuration
+      - name: Safe inactive whitelist configuration
         run: |
           node - <<'NODE'
           const fs=require('fs');
           const w=JSON.parse(fs.readFileSync('data/v9/whitelist-config.json','utf8'));
           const r=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
-          if(w.enabled!==false)throw new Error('whitelist must remain disabled until explicit manual activation');
-          if(!Array.isArray(w.identities)||w.identities.length!==0)throw new Error('versioned whitelist must remain empty before explicit device enrollment');
+          const p=JSON.parse(fs.readFileSync('data/v9/canary-policy.json','utf8'));
+          const ready=JSON.parse(fs.readFileSync('data/v9/access-readiness.json','utf8'));
+          const a=fs.existsSync('ops/v9/canary-activation.json')?JSON.parse(fs.readFileSync('ops/v9/canary-activation.json','utf8')):null;
+          if(w.enabled!==false)throw new Error('explicit whitelist must remain disabled during random canary');
+          if(!Array.isArray(w.identities)||w.identities.length!==0)throw new Error('versioned whitelist must remain empty');
           if(w.requireReadiness!==true)throw new Error('whitelist must require readiness');
           if(w.candidatePath!=='v9-app/')throw new Error('whitelist candidate must target v9-app');
-          if(r.canaryPercent!==0||r.stage!=='preview')throw new Error('random canary must remain disabled while preparing whitelist');
-          console.log('V9 whitelist safely inactive; random canary remains 0%');
+          const preview=r.stage==='preview'&&Number(r.canaryPercent)===0&&p.active===false;
+          const canary=r.stage==='canary'&&Number(r.canaryPercent)===1&&p.active===true&&ready.ready===true&&ready.verdict==='READY'&&r.v8Path==='v8-app/'&&w.fallbackPath==='v8-app/'&&a?.status==='APPROVED_FOR_DEPLOYMENT'&&Number(a?.percent)===1;
+          if(!preview&&!canary)throw new Error('rollout state incompatible with inactive whitelist');
+          console.log(canary?'Whitelist safely inactive during 1% random canary':'Whitelist safely inactive during 0% preview');
           NODE
