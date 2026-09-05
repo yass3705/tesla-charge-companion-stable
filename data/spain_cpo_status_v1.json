@@ -7,12 +7,13 @@
     "reason": "REVE external /cpos still unavailable to the current pipeline; historical figures 189 and 618 are not valid current CPO denominators.",
     "publicFallback": "Use the official Spanish DGT DATEX II energy-infrastructure feed as the primary nominative inventory fallback because it exposes operator names per charging site. REVE /api/public/v1 may enrich status/tariffs but is undocumented/unsupported and must remain optional/conservative.",
     "officialDgtFeed": "https://infocar.dgt.es/datex2/v3/miterd/EnergyInfrastructureTablePublication/electrolineras.xml",
-    "officialDgtFeedChecked": "2026-09-04",
+    "officialDgtFeedChecked": "2026-09-05",
     "officialDgtFeedObservedSize": "82629 KB",
     "officialDgtFeedObservedModified": "2026-09-04T10:17:14+02:00",
     "officialDgtUpdateFrequency": "24h",
     "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
-    "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator"
+    "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator",
+    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML could not be downloaded from the current execution environment. Keep the denominator null rather than substituting 189, 618, station counts, or REVE location counts."
   },
   "validatedNamed": [
     "Allego",
@@ -25,11 +26,12 @@
     "Atlante",
     "ACCIONA Recarga",
     "Moeve / Cepsa",
-    "Plenitude On The Road"
+    "Plenitude On The Road",
+    "Iberdrola | bp pulse"
   ],
-  "historicalValidatedCounter": 21,
+  "historicalValidatedCounter": 22,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The previous conversation-level counter reached 18 before ACCIONA and Moeve; Plenitude is now the 21st source-validated CPO. The repository still does not contain a complete nominative ledger for the first 10 validated CPOs. Do not invent those names. Reconcile them only from source evidence or historical artifacts before treating the nominal ledger as complete.",
+  "consistencyNote": "The repository now reconciles 12 validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Iberdrola | bp pulse is the 22nd historical source-validated CPO after its current official Spain tariff table was encoded fail-closed by exact published power classes.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -41,24 +43,13 @@
     "IONITY direct",
     "Qwello España",
     "Endesa / Endesa On Your Way",
-    "Mobilize Fast Charge"
+    "Mobilize Fast Charge",
+    "EDP Charge"
   ],
   "active": [
     {
       "name": "Endolla Barcelona",
       "status": "exact official tariffs found; current tariff schema lacks day/night plus BSM-parking/street dimensions"
-    },
-    {
-      "name": "EDP Charge",
-      "status": "station-specific prices vary; exact public per-EVSE feed not yet found"
-    },
-    {
-      "name": "Electromaps",
-      "status": "connector price exposed in app; public integrable per-EVSE feed not yet found"
-    },
-    {
-      "name": "Iberdrola | bp pulse",
-      "status": "station-specific pricing; continue endpoint/ad-hoc investigation"
     },
     {
       "name": "EMT Madrid",
@@ -69,6 +60,10 @@
     {
       "name": "EVcharge / Etecnic",
       "reason": "Official EVcharge/Etecnic material describes a charge-point management SaaS/platform used by municipalities, companies and other operators, with customer-configurable tariffs by time, power and user group. Do not count the platform name itself as a physical CPO or propagate one tariff across stations unless a specific station's physical operator is independently identified."
+    },
+    {
+      "name": "Electromaps / Electromaps SL",
+      "reason": "Electromaps' current official FAQ states charging tariffs are set by the station owner or CPO, may vary by kWh/minute/fixed fee, and Electromaps can add its own service surcharge. Treat Electromaps as an eMSP/aggregation platform for tariff purposes, not as a physical CPO identity to which one direct tariff can be propagated. Resolve the underlying physical CPO per station/EVSE instead."
     }
   ],
   "aliasesResolved": [
@@ -84,16 +79,18 @@
     {"alias": "IONITY", "canonical": "IONITY"},
     {"alias": "Qwello España SL", "canonical": "Qwello España"},
     {"alias": "Plenitude On The Road S.r.l.", "canonical": "Plenitude On The Road"},
-    {"alias": "Plenitude On The Road Srl", "canonical": "Plenitude On The Road"}
+    {"alias": "Plenitude On The Road Srl", "canonical": "Plenitude On The Road"},
+    {"alias": "IBERDROLA BP PULSE", "canonical": "Iberdrola | bp pulse", "note": "Exact operator label observed in current Spain charging data; do not use this alias for Iberdrola-direct stations."}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=21, nominatively reconciled=11, blocked=11, active=5, excluded platform/non-CPO identities=1. Endesa and Mobilize moved from active to fail-closed after fresh official-source audits produced no safe timeless national rule: Endesa explicitly prices each concrete point and exposes the price before charging in a multi-operator app; Mobilize/Plug Inn pricing remains tied to station launch windows and the Spain branding/timing cannot safely be inferred from France. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; historical unreconciled names remain 10 rather than being guessed.",
+    "result": "Historical validated=22, nominatively reconciled=12, blocked=12, active=2, excluded platform/non-CPO identities=2. The actual main branch was reconciled from da76e4b8; later conversation-level 189/618 denominator states were not present on GitHub and conflict with the ledger's explicit null authoritative total, so they were rejected. Iberdrola | bp pulse moved from active to validated using its current official power-based Spain tariff table. EDP Charge moved from active to fail-closed because its official app is the tariff surface and current public REVE-derived observations show station-level variation without a supported exact public EVSE tariff feed. Electromaps moved from active to excluded platform/eMSP because its own FAQ states the underlying owner/CPO sets the charging tariff and Electromaps may add a service surcharge. No blocked CPO was re-audited without new evidence; no duplicate canonical CPO was added; the historical unreconciled-name gap remains 10.",
     "safeCorrectionsApplied": [
-      "moved Endesa / Endesa On Your Way from active to blockedFailClosed after current official source confirmed point-specific pricing in the multi-operator app",
-      "moved Mobilize Fast Charge from active to blockedFailClosed because the published direct tariff is station-launch-window dependent and no station-opening-date feed or current station-specific public tariff feed was found",
-      "kept Plug Inn fast charge branding transition unaliased for Spain because Renault Group's April 2026 announcement explicitly anchors the first fast-network rename step to France while Renault Spain still surfaces Mobilize fast charge",
-      "kept historical validated counter at 21 and nominatively reconciled names at 11; no tariff was invented or extrapolated",
+      "rejected conversation-only 189/618 CPO denominators and retained authoritativeCpoTotal=null until the official DGT operator inventory can be parsed",
+      "moved Iberdrola | bp pulse from active to validatedNamed and added a dedicated fail-closed official power-class tariff file",
+      "resolved exact label IBERDROLA BP PULSE to Iberdrola | bp pulse while explicitly excluding Iberdrola-direct stations",
+      "moved EDP Charge from active to blockedFailClosed after a fresh official/app plus current public-data audit confirmed station-level price variation without a supported public exact EVSE feed",
+      "moved Electromaps / Electromaps SL from active to excludedNonCpoOrPlatform for tariff propagation; underlying physical CPO must be resolved per station",
       "kept the historical validated-name gap explicit instead of reconstructing missing names by inference"
     ]
   }
