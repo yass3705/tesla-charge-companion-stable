@@ -38,7 +38,7 @@
   ],
   "historicalValidatedCounter": 25,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository reconciles 15 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger, Feníe Energía public charging and PowerGo have official station-level tariff paths but incomplete national tariff coverage, so they remain active rather than being promoted as fully validated.",
+  "consistencyNote": "The repository reconciles 15 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy and Naturgy public charging have promising official/public exact-price paths but incomplete national station/EVSE tariff coverage, so they remain active rather than being promoted as fully validated.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -62,11 +62,19 @@
     },
     {
       "name": "Feníe Energía public charging",
-      "status": "new official station-level pricing path confirmed at recarga.fenieenergia.es/punto-recarga/{id}. Seven exact station examples are seeded, demonstrating site-specific prices from 0.15 to 0.50 EUR/kWh plus optional session fees. Continue station inventory/enumeration; never generalize by power or network name."
+      "status": "official station-level pricing path confirmed at recarga.fenieenergia.es/punto-recarga/{id}. Seven exact station examples are seeded, demonstrating site-specific prices from 0.15 to 0.50 EUR/kWh plus optional session fees. Continue station inventory/enumeration; never generalize by power or network name."
     },
     {
       "name": "PowerGo",
       "status": "official locations-and-tariffs surface exposes exact station prices and PowerGo states tariffs are dynamic. Two Spanish stations are seeded (+B Energías Sueca and Selwo Aventura). Continue Spanish station enumeration and preserve payment-channel surcharges separately."
+    },
+    {
+      "name": "Powy",
+      "status": "official Spain surface states charging prices vary by operator/location and are shown before charging. Powy also documents direct QR payment without registration, creating a plausible guest exact-price path. Exact Spanish station/EVSE QR identifiers are not yet enumerated, so do not promote generic or Italian tariffs; next useful step is station/QR enumeration or a public guest backend discovered from those QR links."
+    },
+    {
+      "name": "Naturgy public charging",
+      "status": "current NATURGY RECARGA public app listing confirms a public-charging app backed by Etecnic with charger and plug selection; legacy easyRecarga explicitly exposed tariffs per charging point and connector. Current Naturgy web pages do not expose deterministic public-network prices, and the current app description does not prove the tariff field is still exposed. Keep active pending confirmation of the current app/backend tariff field; never reuse legacy prices or generic public-charging estimates."
     }
   ],
   "excludedNonCpoOrPlatform": [
@@ -94,6 +102,8 @@
     {"alias": "Plenitude On The Road S.r.l.", "canonical": "Plenitude On The Road"},
     {"alias": "Plenitude On The Road Srl", "canonical": "Plenitude On The Road"},
     {"alias": "IBERDROLA BP PULSE", "canonical": "Iberdrola | bp pulse", "note": "Exact operator label observed in current Spain charging data; do not use this alias for Iberdrola-direct stations."},
+    {"alias": "Charging Together", "canonical": "Iberdrola | bp pulse", "note": "Charging Together S.L. is the legal joint-venture operator behind charging points identified by Iberdrola as Iberdrola | bp pulse. Do not apply this alias to Iberdrola-direct points."},
+    {"alias": "Charging Together S.L.", "canonical": "Iberdrola | bp pulse", "note": "Legal-name variant for the Iberdrola | bp pulse joint venture only; keep Iberdrola-direct stations separate."},
     {"alias": "B:SM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
     {"alias": "BSM Endolla", "canonical": "Endolla Barcelona", "note": "Use only where the charging network/operator is Endolla Barcelona; BSM parking fees are separate."},
     {"alias": "Electro-EMT", "canonical": "EMT Madrid"},
@@ -105,20 +115,23 @@
     {"alias": "UMBRELLA", "canonical": "Umbrella eMobility"},
     {"alias": "FENÍE ENERGÍA", "canonical": "Feníe Energía public charging", "note": "Use only for physical public charging points served by Feníe's own public charging platform; station owner may differ and exact station tariff must come from the official station page."},
     {"alias": "FENIE ENERGIA", "canonical": "Feníe Energía public charging", "note": "Accent-normalized operator spelling; same station-level fail-closed rule applies."},
-    {"alias": "POWERGO", "canonical": "PowerGo"}
+    {"alias": "POWERGO", "canonical": "PowerGo"},
+    {"alias": "Powy Charge", "canonical": "Powy", "note": "Powy's official charging app/payment surface; exact tariff remains station/EVSE specific."},
+    {"alias": "NATURGY RECARGA", "canonical": "Naturgy public charging", "note": "Current public-charging app identity; do not confuse with Naturgy home/business charger installation products."},
+    {"alias": "easyRecarga", "canonical": "Naturgy public charging", "note": "Legacy Naturgy public-charging app identity; use only for identity continuity, never to carry historical tariffs into the current app."}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=25, nominatively reconciled=15, blocked=14, active=3, excluded platform/non-CPO identities=2. New REVE-derived operator evidence was used only for prioritization. Feníe Energía and PowerGo were added as active because official public station-level tariff surfaces were found and seeded, but national tariff coverage is incomplete. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null.",
+    "result": "Historical validated=25, nominatively reconciled=15, blocked=14, active=5, excluded platform/non-CPO identities=2. Powy and Naturgy public charging are newly active rather than validated because their public/app evidence establishes plausible station-level tariff paths but not complete current Spanish EVSE tariff coverage. Charging Together is resolved as an alias of Iberdrola | bp pulse, not a separate CPO. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null; 189 and 618 remain explicitly non-authoritative historical figures.",
     "safeCorrectionsApplied": [
-      "added a current REVE-derived operator mirror as a discovery/prioritization aid only, explicitly forbidding its use as tariff authority or national denominator",
-      "added Feníe Energía public charging as active with seven exact official station tariffs and explicit station-id-only matching",
-      "preserved Feníe session fees separately where published and recorded that managed stations can be private/restricted",
-      "added PowerGo as active with two exact official Spanish station tariffs and documented its dynamic-pricing/payment-channel semantics",
-      "added three conservative operator aliases for Feníe/PowerGo without tariff propagation",
-      "did not promote either new active CPO to fully validated because national station/tariff coverage is incomplete",
-      "did not re-audit blocked CPOs or repeat the exhausted Tesla/DGT direct-download routes",
-      "retained authoritativeCpoTotal=null and the historical validated-name gap rather than guessing either value"
+      "reconciled against the actual main-branch file and recent commit history rather than relying on previously announced but absent commit hashes",
+      "kept historicalValidatedCounter=25 and historicalValidatedNamesUnreconciled=10 unchanged because no new fully validated CPO was proven in this run",
+      "added Powy as active only after official evidence showed station/location-dependent prices plus a guest QR payment path; no generic tariff was imported",
+      "added Naturgy public charging as active only; current app identity is confirmed, but current exact tariff-field exposure still requires backend/app verification",
+      "resolved Charging Together and Charging Together S.L. to Iberdrola | bp pulse with an explicit guard against Iberdrola-direct stations",
+      "added conservative Powy Charge, NATURGY RECARGA and easyRecarga identity aliases without propagating tariff values",
+      "did not re-audit the 14 blocked CPOs, Tesla public station pages or the failed DGT direct-download route without new evidence",
+      "checked canonical status sets for overlap and retained authoritativeCpoTotal=null"
     ]
   }
 }
