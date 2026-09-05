@@ -1,0 +1,36 @@
+{
+  "prefix": "DE*LMS",
+  "alias": "Last Mile Solutions / Threeforce B.V. (technical platform prefix; not a single physical CPO)",
+  "status": "partial",
+  "classification": "shared_technical_prefix",
+  "canonical_scope": "BNetzA 2026-09-01 canonical prefix queue",
+  "evidence": [
+    {
+      "type": "primary_platform_identity",
+      "source": "Last Mile Solutions",
+      "finding": "Last Mile Solutions states that Threeforce B.V. trades as Last Mile Solutions and provides technical/administrative services for multiple charge-point operators and charging-card providers; LMS explicitly states it is not the end-user's provider."
+    },
+    {
+      "type": "identifier_mapping",
+      "source": "Blue Current support",
+      "finding": "Service-provider identifiers explicitly map LAST MILE SOLUTIONS (GERMANY) to DE-LMS."
+    },
+    {
+      "type": "station_level_identity",
+      "source": "GoingElectric station evidence",
+      "finding": "DE*LMS EVSE IDs are observed at a STAWAG Stadtwerke Aachen site, demonstrating that the DE*LMS identifier can coexist with a different physical/operator brand."
+    },
+    {
+      "type": "multi_operator_evidence",
+      "source": "public station discovery",
+      "finding": "DE*LMS EVSE IDs are observed across multiple German municipal/physical operators; therefore no operator-wide tariff may be attached to the prefix itself."
+    }
+  ],
+  "pricing_policy": {
+    "prefix_tariff": null,
+    "reason": "DE*LMS is a CPMS/service-provider identifier spanning multiple operators and station tariffs. A single tariff would be an unsafe extrapolation.",
+    "allowed_resolution": "Resolve exact price per EVSE/site using primary CPO/QR/direct-payment data or AFIR/Mobilithek/DATEX II evidence; otherwise remain fail-closed for that EVSE."
+  },
+  "blocked": false,
+  "next_action": "Enumerate DE*LMS EVSEs by physical operator and resolve station-level prices where primary/public evidence exists."
+}
