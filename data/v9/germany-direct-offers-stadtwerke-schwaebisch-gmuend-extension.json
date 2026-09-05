@@ -36,45 +36,14 @@
       "priority": 100,
       "directOperatorOnly": true,
       "defaultSelected": false
-    },
-    {
-      "id": "stadtwerke-schwaebisch-gmuend-adhoc-ac",
-      "selectionId": "stadtwerke-schwaebisch-gmuend-adhoc",
-      "provider": "Stadtwerke Schwäbisch Gmünd Ad-Hoc",
-      "operatorAliases": ["Stadtwerke Schwäbisch Gmünd GmbH", "Stadtwerke Schwäbisch Gmünd"],
-      "countries": ["DE"],
-      "connectorKinds": ["AC"],
-      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.60}],"blockingFee":{"currency":"EUR","pricePerMinute":0.10,"afterMinutes":240}},
-      "payment": {"registrationRequired": false, "channels": ["web","app"]},
-      "subscription": {"id":"stadtwerke-schwaebisch-gmuend-adhoc","monthlyFee":0.0,"currency":"EUR"},
-      "currency": "EUR",
-      "priority": 100,
-      "directOperatorOnly": true,
-      "defaultSelected": false,
-      "note": "Official tariff also includes a 1.00 EUR start fee per ad-hoc charging session; runtime must not silently drop this fixed session fee."
-    },
-    {
-      "id": "stadtwerke-schwaebisch-gmuend-adhoc-dc",
-      "selectionId": "stadtwerke-schwaebisch-gmuend-adhoc",
-      "provider": "Stadtwerke Schwäbisch Gmünd Ad-Hoc",
-      "operatorAliases": ["Stadtwerke Schwäbisch Gmünd GmbH", "Stadtwerke Schwäbisch Gmünd"],
-      "countries": ["DE"],
-      "connectorKinds": ["DC"],
-      "pricing": {"type":"rules","rules":[{"scope":"allDay","start":"00:00","end":"24:00","billing":"kwh","currency":"EUR","pricePerKwh":0.70}],"blockingFee":{"currency":"EUR","pricePerMinute":0.10,"afterMinutes":240}},
-      "payment": {"registrationRequired": false, "channels": ["web","app"]},
-      "subscription": {"id":"stadtwerke-schwaebisch-gmuend-adhoc","monthlyFee":0.0,"currency":"EUR"},
-      "currency": "EUR",
-      "priority": 100,
-      "directOperatorOnly": true,
-      "defaultSelected": false,
-      "note": "Official tariff also includes a 1.00 EUR start fee per ad-hoc charging session; runtime must not silently drop this fixed session fee."
     }
   ],
   "stationScope": {
     "operatorOwnedNetworkOnly": true,
     "evsePrefixObserved": "DE*SGD",
-    "evidence": "Official Stadtwerke Schwäbisch Gmünd page states that it operates 117 charge points in Schwäbisch Gmünd and publishes Gmünder Fahrstrom and ad-hoc AC/DC tariffs. Public station-level records expose DE*SGD EVSEs including DE*SGD*E002301 through DE*SGD*E002305 at Fehrle-Parkhaus."
+    "evidence": "Official Stadtwerke Schwäbisch Gmünd page states that it operates 117 charge points in Schwäbisch Gmünd and publishes Gmünder Fahrstrom tariffs. Public station-level records expose DE*SGD EVSEs including DE*SGD*E002301 through DE*SGD*E002305 at Fehrle-Parkhaus."
   },
   "roamingDeferred": {"reason":"Only the operator-owned physical network tariff is attached here; third-party ladenetz/roaming pricing is not propagated to other CPOs."},
-  "note": "Gmünder Fahrstrom costs 1.00 EUR/month. The 20 EUR registration fee applies to non-customers; Stadtwerke customers pay no card order fee. Ad-hoc has a 1.00 EUR session start fee, documented explicitly and not approximated into the kWh price."
+  "adhocDeferred": {"reason":"Official ad-hoc tariff is 1.00 EUR start fee + 0.60 EUR/kWh AC or 0.70 EUR/kWh DC, plus 0.10 EUR/min blocking after 240 minutes. The current V9 direct-offer schema/runtime must not silently drop the fixed per-session start fee, so ad-hoc stays fail-closed until that fee can be represented exactly."},
+  "note": "Gmünder Fahrstrom costs 1.00 EUR/month. The 20 EUR registration fee applies to non-customers; Stadtwerke customers pay no card order fee."
 }
