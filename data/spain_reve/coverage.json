@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 12885
+      "total": 13992
     },
     "format": {
-      "count": 12885,
+      "count": 13992,
       "pct": 100.0,
-      "total": 12885
+      "total": 13992
     },
     "maxAmperage": {
-      "count": 12885,
+      "count": 13992,
       "pct": 100.0,
-      "total": 12885
+      "total": 13992
     },
     "maxElectricPower": {
-      "count": 12885,
+      "count": 13992,
       "pct": 100.0,
-      "total": 12885
+      "total": 13992
     },
     "maxVoltage": {
-      "count": 12885,
+      "count": 13992,
       "pct": 100.0,
-      "total": 12885
+      "total": 13992
     },
     "powerType": {
-      "count": 12885,
+      "count": 13992,
       "pct": 100.0,
-      "total": 12885
+      "total": 13992
     },
     "standard": {
-      "count": 12885,
+      "count": 13992,
       "pct": 100.0,
-      "total": 12885
+      "total": 13992
     },
-    "total": 12885
+    "total": 13992
   },
   "country": "ES",
   "cpos": {
@@ -98,10 +98,10 @@
         "partyId": "GFX"
       },
       {
-        "connectors": 730,
+        "connectors": 1709,
         "cpoName": "ELECTROMAPS SL",
-        "evses": 730,
-        "locations": 217,
+        "evses": 1709,
+        "locations": 543,
         "partyId": "EMP"
       },
       {
@@ -133,10 +133,10 @@
         "partyId": "ETE"
       },
       {
-        "connectors": 10,
+        "connectors": 138,
         "cpoName": "FENIE ENERGIA, SA",
-        "evses": 9,
-        "locations": 5,
+        "evses": 123,
+        "locations": 68,
         "partyId": "FEN"
       },
       {
@@ -271,46 +271,46 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 12516
+      "total": 13609
     },
     "identifier": {
-      "count": 12516,
+      "count": 13609,
       "pct": 100.0,
-      "total": 12516
+      "total": 13609
     },
-    "total": 12516
+    "total": 13609
   },
-  "generatedAt": "2026-09-05T07:06:28.274258Z",
+  "generatedAt": "2026-09-05T08:57:14.834099Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 4317,
+      "count": 4706,
       "pct": 100.0,
-      "total": 4317
+      "total": 4706
     },
     "coordinates": {
-      "count": 4317,
+      "count": 4706,
       "pct": 100.0,
-      "total": 4317
+      "total": 4706
     },
     "cpoIdentity": {
-      "count": 4317,
+      "count": 4706,
       "pct": 100.0,
-      "total": 4317
+      "total": 4706
     },
     "withEvses": {
-      "count": 4317,
+      "count": 4706,
       "pct": 100.0,
-      "total": 4317
+      "total": 4706
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 4317,
-    "nextPage": 46,
-    "registryCoveragePct": 29.63,
-    "registryTotalCount": 14568,
+    "locationsStored": 4706,
+    "nextPage": 50,
+    "registryCoveragePct": 32.31,
+    "registryTotalCount": 14566,
     "totalPages": 146
   },
   "source": "REVE",
