@@ -34,7 +34,6 @@
   "historicalValidatedNamesUnreconciled": 10,
   "blockedFailClosed": [
     "Galp",
-    "BonpreuEsclat",
     "TotalEnergies",
     "Powerdot",
     "Telpark",
@@ -57,7 +56,8 @@
     {"name":"U energia public charging","status":"official U energia map/app network confirmed. U Movilidad exposes detailed billed-price conditions in-app; exact station/connector prices remain to be extracted from the guest/app surface."},
     {"name":"REMO Sustainable Mobility","status":"official REMO Spain app is explicitly available in Spain and states charger status, pricing and access are shown in-app. REVE/DGT-derived inventory confirms Spanish REMO-operated sites. No deterministic numeric public-web tariff was found; next useful step is app/backend or exact charger-session extraction."},
     {"name":"APK Electric","status":"official APK2 support confirms charging can be started without the app by scanning the bay QR code, entering an email and payment-card details. APK2 identifies APK Electric as its Spanish public charging initiative. No deterministic numeric energy tariff was found on official public pages; next useful step is the QR guest checkout/session surface."},
-    {"name":"Endesa / Endesa On Your Way","status":"reopened from fail-closed on new official evidence: Endesa states the final price is shown in-app for each connector before charging, prices can vary by start time and specific charger/promotions, and e-Smart is a 20% discount over e-Flex. Exact connector-level extraction is still required; no network-wide numeric value may be inferred."}
+    {"name":"Endesa / Endesa On Your Way","status":"reopened from fail-closed on new official evidence: Endesa states the final price is shown in-app for each connector before charging, prices can vary by start time and specific charger/promotions, and e-Smart is a 20% discount over e-Flex. Exact connector-level extraction is still required; no network-wide numeric value may be inferred."},
+    {"name":"BonpreuEsclat","status":"reopened from fail-closed on new official evidence: BonpreuEsclat states the user selects the charging point at the payment terminal and that prices are shown on the terminal; the BonpreuEsclat Mobilitat app is an alternative payment/control surface. A 0.19 EUR/kWh discount exists for eligible BonpreuEsclat Energia customers through 2026-12-31, but this is a discount, not a base station tariff. Exact point-level terminal/app extraction is still required."}
   ],
   "excludedNonCpoOrPlatform": [
     "EVcharge / Etecnic",
@@ -112,7 +112,10 @@
     {"alias":"APK ELECTRIC, S.L.","canonical":"APK Electric"},
     {"alias":"APK ELECTRIC, S.L","canonical":"APK Electric"},
     {"alias":"Endesa X Way","canonical":"Endesa / Endesa On Your Way"},
-    {"alias":"Endesa On Your Way","canonical":"Endesa / Endesa On Your Way"}
+    {"alias":"Endesa On Your Way","canonical":"Endesa / Endesa On Your Way"},
+    {"alias":"Bonpreu, S.A.U.","canonical":"BonpreuEsclat"},
+    {"alias":"Bonpreu, S.A.U","canonical":"BonpreuEsclat"},
+    {"alias":"Bonpreu Esclat","canonical":"BonpreuEsclat"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
@@ -121,16 +124,16 @@
     "validatedHistorical": 27,
     "validatedNamed": 17,
     "historicalValidatedNamesUnreconciled": 10,
-    "blocked": 12,
-    "active": 11,
+    "blocked": 11,
+    "active": 12,
     "excludedNonCpoOrPlatform": 2,
     "checks": [
       "no canonical overlap across validated, blocked and active sets",
       "27 = 17 nominatively reconciled validated names + 10 historical unreconciled validated names",
-      "Endesa was re-audited only because new official connector-level pricing evidence was found",
+      "BonpreuEsclat was re-audited only because new official point-selection and terminal-price evidence was found",
       "no other blocked CPO was re-audited without new evidence",
       "no repeated Tesla public-page or DGT direct-download loop was retried",
-      "no numeric Endesa tariff was invented: official evidence only establishes a per-connector pre-session tariff surface with time/site exceptions",
+      "no numeric BonpreuEsclat base tariff was invented: the official 0.19 EUR/kWh figure is only a conditional Energia-customer discount through 2026-12-31",
       "REVE/DGT-derived operator labels are used for discovery and identity only, not as tariff authority"
     ]
   },
@@ -139,6 +142,7 @@
     "uEnergiaOfficial": ["https://www.uenergia.es/es/puntos-de-recarga-para-vehiculos-electricos/","https://www.uenergia.es/es/puntos-recarga/","https://apps.apple.com/es/app/u-movilidad/id1524438326"],
     "remoOfficial": ["https://me-remo.com/es/","https://me-remo.com/es/carga-tu-vehiculo/","https://me-remo.com/landing-store-app/","https://apps.apple.com/es/app/remo/id6450786486"],
     "apkElectricOfficial": ["https://support.apk2.es/hc/es/articles/35540862121629-Ventajas-de-recargar-tu-veh%C3%ADculo-en-APK-Electric","https://apk2gestion.com/es/servicios/puntos-de-recarga"],
-    "endesaOfficial": ["https://prod.store.endesaxway.com/es/es/nuestra-oferta/app-endesaxway-servicio-recarga/tarifas"]
+    "endesaOfficial": ["https://prod.store.endesaxway.com/es/es/nuestra-oferta/app-endesaxway-servicio-recarga/tarifas"],
+    "bonpreuOfficial": ["https://www.bonpreuesclat.cat/es/estaciones-de-carga-vehiculos-electricos-instrucciones","https://www.bonpreuesclat.cat/es/web/bonpreu/promociones-energia"]
   }
 }
