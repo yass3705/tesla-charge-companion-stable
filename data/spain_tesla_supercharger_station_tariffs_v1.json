@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-05",
+  "operator": "Tesla Supercharger",
+  "coverage": "station_specific_partial",
+  "policy": {
+    "onlyPhysicalOperatorMatches": true,
+    "failClosedWhenStationIdUnknown": true,
+    "failClosedWhenVehicleTariffClassUnknown": true,
+    "failClosedWhenTimeBandUnknown": true,
+    "doNotGeneralizeAcrossStations": true,
+    "doNotGeneralizeAcrossTeslaMemberAndNonTesla": true
+  },
+  "sources": [
+    "https://www.tesla.com/en_IE/findus/location/supercharger/4002559",
+    "https://www.tesla.com/es_es/support/charging/supercharging"
+  ],
+  "operatorAliases": [
+    "Tesla",
+    "Tesla Supercharger",
+    "TESLA SUPERCHARGER"
+  ],
+  "stations": [
+    {
+      "teslaLocationId": "4002559",
+      "name": "Córdoba, Spain",
+      "address": "7 Calle Gema, Córdoba, Andalucía 14014",
+      "maxPowerKw": 250,
+      "stallCountObserved": 8,
+      "tariffs": [
+        {
+          "vehicleTariffClass": "TESLA_OWNER_OR_MEMBER",
+          "timeBands": [
+            {"start": "00:00", "end": "04:00", "pricePerKwh": 0.39, "currency": "EUR"},
+            {"start": "04:00", "end": "08:00", "pricePerKwh": 0.31, "currency": "EUR"},
+            {"start": "08:00", "end": "24:00", "pricePerKwh": 0.39, "currency": "EUR"}
+          ]
+        },
+        {
+          "vehicleTariffClass": "OTHER_EV_NON_MEMBER",
+          "timeBands": [
+            {"start": "00:00", "end": "04:00", "pricePerKwh": 0.55, "currency": "EUR"},
+            {"start": "04:00", "end": "08:00", "pricePerKwh": 0.43, "currency": "EUR"},
+            {"start": "08:00", "end": "24:00", "pricePerKwh": 0.55, "currency": "EUR"}
+          ]
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Tesla states that Supercharging prices and time-of-use periods are station-specific and visible in the Tesla app/navigation; therefore no Spain-wide Tesla energy tariff may be inferred.",
+    "The Córdoba official Find Us page currently exposes exact public station-level prices for Tesla owners/members and for other EVs.",
+    "This file is intentionally partial coverage. Runtime must match the exact Tesla location ID (or an independently verified exact station identity), vehicle tariff class and time band before applying a price.",
+    "Congestion/idle fees are separate from the energy price and are not encoded here."
+  ]
+}
