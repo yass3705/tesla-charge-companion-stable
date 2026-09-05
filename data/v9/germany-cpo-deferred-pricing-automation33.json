@@ -1,0 +1,38 @@
+{
+  "automation": "CPO Allemagne V9",
+  "generated_at_utc": "2026-09-05T18:58:00Z",
+  "scope": "BNetzA 2026-09-01 canonical CPO party-prefixes, DE*TSL excluded",
+  "source_state": "germany-cpo-deferred-pricing-automation32.json",
+  "canonical_counts": {
+    "total": 556,
+    "treated": 212,
+    "complete": 92,
+    "partial": 103,
+    "blocked": 17,
+    "remaining": 344
+  },
+  "new_cpos": {
+    "DE*LMS": {
+      "alias": "Last Mile Solutions / Threeforce B.V. (technical platform prefix)",
+      "status": "partial",
+      "classification": "shared_technical_prefix",
+      "canonical_evse": null,
+      "canonical_evse_note": "Exact EVSE count intentionally not restated in this run because the canonical BNetzA CSV endpoint was transiently unavailable; prefix membership comes from the previously recertified canonical queue.",
+      "pricing": "No prefix-wide tariff. Resolve by EVSE/site and physical operator from primary CPO, QR/direct-payment or AFIR/Mobilithek/DATEX II evidence; otherwise fail-closed.",
+      "evidence_summary": "LMS explicitly describes itself as a technical/administrative platform for multiple providers/CPOs and not the user's provider; DE-LMS is mapped as the German LMS service-provider identifier; DE*LMS EVSE IDs occur at third-party physical operators such as STAWAG."
+    }
+  },
+  "alias_updates": {
+    "DE*LMS": "Last Mile Solutions / Threeforce B.V. — shared technical platform prefix, not a single physical CPO"
+  },
+  "blocked_policy": "Do not re-audit blocked prefixes without new primary or station-level evidence.",
+  "coherence": {
+    "arithmetic": "92 + 103 + 17 = 212; 556 - 212 = 344",
+    "duplicate_alias_check": "passed",
+    "blocked_reaudit_check": "passed",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "counter_named_state_check": "passed",
+    "canonical_source_check": "passed with transient-source note: previously recertified 556-prefix canon retained; no denominator or EVSE count changed from unavailable live CSV"
+  },
+  "next_target": "Next highest-coverage canonical untreated prefix after DE*LMS, excluding all historically treated aliases; do not infer queue entries from non-canonical web results."
+}
