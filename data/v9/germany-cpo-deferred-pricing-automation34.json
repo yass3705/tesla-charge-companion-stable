@@ -1,0 +1,32 @@
+{
+  "automation": "CPO Allemagne V9",
+  "generated_at_utc": "2026-09-05T21:56:00Z",
+  "scope": "BNetzA 2026-09-01 canonical CPO party-prefixes, DE*TSL excluded",
+  "source_state": "germany-cpo-deferred-pricing-automation33.json",
+  "canonical_counts": {
+    "total": 556,
+    "treated": 212,
+    "complete": 92,
+    "partial": 103,
+    "blocked": 17,
+    "remaining": 344
+  },
+  "new_cpos": {},
+  "inconsistency_fixed": {
+    "type": "canonical_source_drift",
+    "details": "The nominal state had been recertified against the 2026-09-01 BNetzA snapshot, but scripts/audit_germany_cpo_progress_v9.py and scripts/build_germany_bnetza_v9_v4.py still defaulted to the 2026-07-28 CSV. Both defaults were corrected to Ladesaeulenregister_BNetzA_2026-09-01.csv. No counters were changed until the September audit/build is actually executed.",
+    "commits": [
+      "164f2187f6edd5097c29ab669e6db6dbddd57952",
+      "728e738c8d99b180f25547670ee37099e89cde2a"
+    ]
+  },
+  "coherence": {
+    "arithmetic": "92 + 103 + 17 = 212; 556 - 212 = 344",
+    "duplicate_alias_check": "passed from prior nominal state; no alias mutation in this run",
+    "blocked_reaudit_check": "passed; no blocked CPO re-audited",
+    "repeated_investigation_gt2_runs_check": "passed; this run corrected source drift rather than repeating operator research",
+    "counter_named_state_check": "passed; counters intentionally unchanged",
+    "canonical_source_check": "corrected: active audit and full-build v4 defaults now point to BNetzA 2026-09-01"
+  },
+  "next_target": "Execute the September canonical audit/build and continue from its highest-coverage untreated CPO list; do not classify additional prefixes from stale July output."
+}
