@@ -1,0 +1,103 @@
+name: V9 canary activation package
+
+on:
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/whitelist-config.json'
+      - 'ops/v9/canary-observation.json'
+      - 'ops/v9/canary-activation.json'
+      - 'scripts/v9-canary-observation.cjs'
+      - 'scripts/v9-canary-activation.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-canary-observation.test.cjs'
+      - 'tests/v9-canary-activation.test.cjs'
+      - 'tests/v9-canary-policy-engine.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - '.github/workflows/v9-canary-activation.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/canary-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/whitelist-config.json'
+      - 'ops/v9/canary-observation.json'
+      - 'ops/v9/canary-activation.json'
+      - 'scripts/v9-canary-observation.cjs'
+      - 'scripts/v9-canary-activation.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-canary-observation.test.cjs'
+      - 'tests/v9-canary-activation.test.cjs'
+      - 'tests/v9-canary-policy-engine.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - '.github/workflows/v9-canary-activation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-one-percent-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check scripts/v9-canary-observation.cjs
+          node --check scripts/v9-canary-activation.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
+          node --check tests/v9-canary-observation.test.cjs
+          node --check tests/v9-canary-activation.test.cjs
+          node --check tests/v9-canary-policy-engine.test.cjs
+          node --check tests/v9-device-test-config-validator.test.cjs
+          node --check tests/v9-rollout-engine.test.cjs
+          node --check tests/v9-access-router-engine.test.cjs
+          node --check tests/v9-access-gateway.test.cjs
+      - name: Historical full-window evidence
+        run: node tests/v9-canary-observation.test.cjs
+      - name: Activation evidence and stable candidate
+        env:
+          TARGET_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          node tests/v9-canary-activation.test.cjs
+          node scripts/v9-canary-activation.cjs --ref "$TARGET_REF" --json
+      - name: Access-state contract
+        run: |
+          node tests/v9-device-test-config-validator.test.cjs
+          node scripts/v9-validate-device-test-config.cjs
+      - name: Policy and routing contracts
+        run: |
+          node tests/v9-canary-policy-engine.test.cjs
+          node tests/v9-rollout-engine.test.cjs
+          node tests/v9-access-router-engine.test.cjs
+          node tests/v9-access-gateway.test.cjs
+      - name: Exact initial-stage gate
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const policy=JSON.parse(fs.readFileSync('data/v9/canary-policy.json','utf8'));
+          const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
+          const readiness=JSON.parse(fs.readFileSync('data/v9/access-readiness.json','utf8'));
+          const activation=JSON.parse(fs.readFileSync('ops/v9/canary-activation.json','utf8'));
+          if(policy.active!==true)throw new Error('canary policy inactive');
+          if(rollout.stage!=='canary'||Number(rollout.canaryPercent)!==1)throw new Error('rollout is not exactly 1% canary');
+          if(Number(policy.initialPercent)!==1)throw new Error('policy initial stage is not 1%');
+          if(readiness.ready!==true||readiness.verdict!=='READY')throw new Error('readiness is not green');
+          if(rollout.killSwitch===true)throw new Error('kill switch is active');
+          if(rollout.v8Path!=='v8-app/'||rollout.canaryPath!=='v9-app/')throw new Error('isolated control/candidate paths invalid');
+          if(activation.status!=='APPROVED_FOR_DEPLOYMENT'||activation.fullWindowValidation.conclusion!=='success')throw new Error('manual full-window approval missing');
+          console.log('V9 1% canary package is internally consistent and deployment-eligible.');
+          NODE

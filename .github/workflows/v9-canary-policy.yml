@@ -6,6 +6,8 @@ on:
       - 'assets/v9/canary-policy-engine.js'
       - 'data/v9/canary-policy.json'
       - 'data/v9/rollout-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'ops/v9/canary-activation.json'
       - 'tests/v9-canary-policy-engine.test.cjs'
       - '.github/workflows/v9-canary-policy.yml'
   push:
@@ -14,6 +16,8 @@ on:
       - 'assets/v9/canary-policy-engine.js'
       - 'data/v9/canary-policy.json'
       - 'data/v9/rollout-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'ops/v9/canary-activation.json'
       - 'tests/v9-canary-policy-engine.test.cjs'
       - '.github/workflows/v9-canary-policy.yml'
   workflow_dispatch:
@@ -35,14 +39,25 @@ jobs:
           node --check tests/v9-canary-policy-engine.test.cjs
       - name: Canary policy contract
         run: node tests/v9-canary-policy-engine.test.cjs
-      - name: Canary remains inactive
+      - name: Canary configuration consistency
         run: |
           node - <<'NODE'
           const fs=require('fs');
           const policy=JSON.parse(fs.readFileSync('data/v9/canary-policy.json','utf8'));
           const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
-          if(policy.active!==false)throw new Error('canary policy must remain inactive');
-          if(rollout.canaryPercent!==0||rollout.stage!=='preview')throw new Error('real canary traffic must remain disabled');
-          if(rollout.productionPath==='v9-preview/')throw new Error('production target must remain distinct from preview');
-          console.log('V9 canary policy safe: inactive, zero traffic, dedicated candidate target');
+          const readiness=JSON.parse(fs.readFileSync('data/v9/access-readiness.json','utf8'));
+          const activation=JSON.parse(fs.readFileSync('ops/v9/canary-activation.json','utf8'));
+          if(rollout.productionPath==='v9-preview/'||rollout.canaryPath==='v9-preview/')throw new Error('candidate target must remain distinct from preview');
+          if(policy.active===true){
+            if(rollout.stage!=='canary')throw new Error('active canary policy requires canary rollout stage');
+            if(Number(rollout.canaryPercent)!==Number(policy.initialPercent))throw new Error('active canary must start at the initial policy percentage');
+            if(readiness.ready!==true||readiness.verdict!=='READY')throw new Error('active canary requires READY state');
+            if(rollout.killSwitch===true)throw new Error('activation cannot start with the kill switch enabled');
+            if(rollout.v8Path!=='v8-app/')throw new Error('canary control must use the isolated V8 path');
+            if(activation.status!=='APPROVED_FOR_DEPLOYMENT'||Number(activation.percent)!==Number(policy.initialPercent))throw new Error('manual activation approval missing or inconsistent');
+            console.log(`V9 canary policy safe: active at ${rollout.canaryPercent}%, READY, isolated V8 control`);
+          }else{
+            if(rollout.canaryPercent!==0||rollout.stage!=='preview')throw new Error('inactive policy requires preview at 0%');
+            console.log('V9 canary policy safe: inactive preview at 0%');
+          }
           NODE

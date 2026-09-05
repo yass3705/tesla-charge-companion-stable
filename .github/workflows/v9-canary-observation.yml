@@ -14,9 +14,12 @@ on:
       - 'data/netherlands_direct_tariffs_v1.json'
       - 'data/non_tesla_netherlands/**'
       - 'ops/v9/canary-observation.json'
+      - 'ops/v9/canary-activation.json'
       - '.github/workflows/v9-device-test-pages.yml'
       - 'scripts/v9-canary-observation.cjs'
+      - 'scripts/v9-canary-activation.cjs'
       - 'tests/v9-canary-observation.test.cjs'
+      - 'tests/v9-canary-activation.test.cjs'
       - '.github/workflows/v9-canary-observation.yml'
   push:
     branches: [main, 'refactor/unified-data-engine-v9']
@@ -32,9 +35,12 @@ on:
       - 'data/netherlands_direct_tariffs_v1.json'
       - 'data/non_tesla_netherlands/**'
       - 'ops/v9/canary-observation.json'
+      - 'ops/v9/canary-activation.json'
       - '.github/workflows/v9-device-test-pages.yml'
       - 'scripts/v9-canary-observation.cjs'
+      - 'scripts/v9-canary-activation.cjs'
       - 'tests/v9-canary-observation.test.cjs'
+      - 'tests/v9-canary-activation.test.cjs'
       - '.github/workflows/v9-canary-observation.yml'
   workflow_dispatch:
 
@@ -54,11 +60,21 @@ jobs:
       - name: Syntax
         run: |
           node --check scripts/v9-canary-observation.cjs
+          node --check scripts/v9-canary-activation.cjs
           node --check tests/v9-canary-observation.test.cjs
-      - name: Observation contract
+          node --check tests/v9-canary-activation.test.cjs
+      - name: Immutable observation contract
         run: node tests/v9-canary-observation.test.cjs
-      - name: Evaluate pinned public candidate
-        run: node scripts/v9-canary-observation.cjs --json
+      - name: Canary activation contract
+        run: node tests/v9-canary-activation.test.cjs
+      - name: Evaluate pinned public candidate or approved activation
+        env:
+          TARGET_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if node -e "const p=require('./data/v9/canary-policy.json');process.exit(p.active===true?0:1)"; then
+            node scripts/v9-canary-activation.cjs --ref "$TARGET_REF" --json
+          else
+            node scripts/v9-canary-observation.cjs --ref "$TARGET_REF" --json
+          fi
 
-# Operator approval recorded 2026-09-02T21:51:28Z:
-# validate the full observation window, then promote the V9 canary to 1% only if every gate is green.
+# Operator approval confirmed after the completed 24h window: initial 1% only if every gate is green.

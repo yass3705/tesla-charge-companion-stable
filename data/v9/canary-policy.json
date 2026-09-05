@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "active": false,
+  "active": true,
   "initialPercent": 1,
   "stages": [
     {"percent": 1, "minHours": 24, "minRuns": 25},
@@ -23,5 +23,5 @@
     "requireZeroRollbackSignals": true,
     "manualApprovalRequired": true
   },
-  "notes": "Policy only. Canary remains inactive and rollout-config canaryPercent remains 0 until an explicit promotion."
+  "notes": "Policy active for the explicitly approved 1% V9 canary. Every later stage still requires its own minimum window, minimum run count, green readiness, stable build, zero rollback signal, and manual approval."
 }

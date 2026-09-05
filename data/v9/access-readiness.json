@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "verdict": "BLOCKED",
-  "ready": false,
-  "updatedAt": "2026-09-01T12:12:04.788Z",
-  "reason": "First-device validation completed: PASS 10/10, 0 source errors, 0 routing errors, 1,926 ms average duration. Controlled access is closed; random canary remains 0%."
+  "verdict": "READY",
+  "ready": true,
+  "updatedAt": "2026-09-05T23:52:19Z",
+  "reason": "Full-window pre-canary validation passed on GitHub Actions run 33999132520 after 30.738 hours: 30/30 scenario runs passed, with zero failures, source errors, routing errors, or critical parity errors. Operator authorization permits the initial 1% canary."
 }
