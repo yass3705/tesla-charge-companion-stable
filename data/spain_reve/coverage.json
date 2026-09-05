@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 22515
+      "total": 24243
     },
     "format": {
-      "count": 22515,
+      "count": 24243,
       "pct": 100.0,
-      "total": 22515
+      "total": 24243
     },
     "maxAmperage": {
-      "count": 22515,
+      "count": 24243,
       "pct": 100.0,
-      "total": 22515
+      "total": 24243
     },
     "maxElectricPower": {
-      "count": 22515,
+      "count": 24243,
       "pct": 100.0,
-      "total": 22515
+      "total": 24243
     },
     "maxVoltage": {
-      "count": 22515,
+      "count": 24243,
       "pct": 100.0,
-      "total": 22515
+      "total": 24243
     },
     "powerType": {
-      "count": 22515,
+      "count": 24243,
       "pct": 100.0,
-      "total": 22515
+      "total": 24243
     },
     "standard": {
-      "count": 22515,
+      "count": 24243,
       "pct": 100.0,
-      "total": 22515
+      "total": 24243
     },
-    "total": 22515
+    "total": 24243
   },
   "country": "ES",
   "cpos": {
-    "distinct": 36,
+    "distinct": 40,
     "items": [
       {
         "connectors": 33,
@@ -77,6 +77,13 @@
         "partyId": "BSM"
       },
       {
+        "connectors": 114,
+        "cpoName": "CENTROS COMERCIALES CARREFOUR SA",
+        "evses": 56,
+        "locations": 54,
+        "partyId": "CRF"
+      },
+      {
         "connectors": 79,
         "cpoName": "CHARGING TOGETHER SL",
         "evses": 69,
@@ -98,11 +105,25 @@
         "partyId": "GFX"
       },
       {
+        "connectors": 55,
+        "cpoName": "Electrica Sollerense SA",
+        "evses": 55,
+        "locations": 13,
+        "partyId": "SOL"
+      },
+      {
         "connectors": 1709,
         "cpoName": "ELECTROMAPS SL",
         "evses": 1709,
         "locations": 543,
         "partyId": "EMP"
+      },
+      {
+        "connectors": 277,
+        "cpoName": "Empresa Municipal de Transportes de Madrid, S. A.",
+        "evses": 277,
+        "locations": 24,
+        "partyId": "EMT"
       },
       {
         "connectors": 4901,
@@ -161,11 +182,18 @@
         "partyId": "GSM"
       },
       {
-        "connectors": 285,
+        "connectors": 1545,
         "cpoName": "IBERDROLA CLIENTES S.A.U",
-        "evses": 247,
-        "locations": 79,
+        "evses": 1350,
+        "locations": 366,
         "partyId": "IBD"
+      },
+      {
+        "connectors": 15,
+        "cpoName": "ION SMART ENERGY 2000 SL",
+        "evses": 15,
+        "locations": 8,
+        "partyId": "CRE"
       },
       {
         "connectors": 172,
@@ -196,10 +224,10 @@
         "partyId": "MOE"
       },
       {
-        "connectors": 87,
+        "connectors": 94,
         "cpoName": "PAVAPARK MOVILIDAD SL",
-        "evses": 87,
-        "locations": 38,
+        "evses": 94,
+        "locations": 41,
         "partyId": "PAV"
       },
       {
@@ -299,45 +327,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 19862
+      "total": 21375
     },
     "identifier": {
-      "count": 19862,
+      "count": 21375,
       "pct": 100.0,
-      "total": 19862
+      "total": 21375
     },
-    "total": 19862
+    "total": 21375
   },
-  "generatedAt": "2026-09-05T17:10:53.146176Z",
+  "generatedAt": "2026-09-05T18:23:09.117685Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 7031,
+      "count": 7420,
       "pct": 100.0,
-      "total": 7031
+      "total": 7420
     },
     "coordinates": {
-      "count": 7031,
+      "count": 7420,
       "pct": 100.0,
-      "total": 7031
+      "total": 7420
     },
     "cpoIdentity": {
-      "count": 7031,
+      "count": 7420,
       "pct": 100.0,
-      "total": 7031
+      "total": 7420
     },
     "withEvses": {
-      "count": 7031,
+      "count": 7420,
       "pct": 100.0,
-      "total": 7031
+      "total": 7420
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 7031,
-    "nextPage": 74,
-    "registryCoveragePct": 48.26,
+    "locationsStored": 7420,
+    "nextPage": 78,
+    "registryCoveragePct": 50.93,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
