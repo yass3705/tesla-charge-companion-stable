@@ -1,0 +1,52 @@
+{
+  "automation": "CPO Allemagne V9",
+  "generated_at_utc": "2026-09-05T23:51:00Z",
+  "source_state": "germany-cpo-deferred-pricing-automation34.json",
+  "canonical_counts": {
+    "nominal_total": 556,
+    "nominal_treated": 212,
+    "nominal_complete": 92,
+    "nominal_partial": 103,
+    "nominal_blocked": 17,
+    "nominal_remaining": 344,
+    "certification_status": "suspended_pending_true_2026-09-01_dataset_audit"
+  },
+  "significant_inconsistency_fixed": {
+    "type": "false_sep1_artifact_recertification",
+    "supersedes": [
+      "germany-cpo-deferred-pricing-automation24.json canonicalEvidence",
+      "later claims relying on artifact 9811881557 as a Sep-1 source"
+    ],
+    "workflowRunId": 33536409190,
+    "artifactId": 9811881557,
+    "artifactName": "germany-v9-bnetza-preintegration",
+    "artifactCreatedAt": "2026-09-01T17:14:59Z",
+    "manifestGeneratedAt": "2026-09-01T17:13:48.642432Z",
+    "manifestSourceUrl": "https://data.bundesnetzagentur.de/Bundesnetzagentur/DE/Fachthemen/ElektrizitaetundGas/E-Mobilitaet/Ladesaeulenregister_BNetzA_2026-07-28.csv",
+    "details": "The CI artifact was created on Sep 1 but its own build/germany-static/manifest.json proves that it ingested the Jul 28 BNetzA CSV. It therefore cannot certify a Sep-1 556-prefix denominator or Sep-1 untreated queue. The prior source-default fixes in audit_germany_evse_cpo_progress_v9.py and build_germany_bnetza_v9_v4.py remain correct, but a fresh run against the true Sep-1 CSV is required before changing canonical counters.",
+    "ct_p_correction": {
+      "prefix": "DE*CTP",
+      "previous_claim": "0 EVSE in the artifact/canon",
+      "artifact_recheck": "684 explicit DE*CTP EVSE IDs in germany-site-crosswalk.json, all normalized to Servipark Deutschland GmbH in this Jul-28-source artifact",
+      "status": "prior noncanonical/zero-EVSE assertion invalidated; do not increment Sep counters until true Sep-1 audit"
+    }
+  },
+  "research_progress": {
+    "DE*CTP": {
+      "alias": "Servipark Deutschland GmbH / Contipark",
+      "provisional_status": "active_candidate_pending_sep1_canonical_confirmation",
+      "pricing": "Official Contipark pages publish direct-payment station prices and show that pricing is site-dependent. Current examples include 0.55 EUR/kWh on multiple Contipark-operated sites and 0.66 EUR/kWh at Braunschweig Wallstrasse; therefore no prefix-wide price may be inferred. Resolve station/EVSE-level from the official Contipark site or direct-payment payload, otherwise fail closed.",
+      "guardrail": "Do not promote third-party 0.44/0.45/0.46/0.59 observations as a universal CPO tariff."
+    }
+  },
+  "coherence": {
+    "nominal_arithmetic": "92 + 103 + 17 = 212; 556 - 212 = 344",
+    "canonical_denominator_check": "FAILED certification: 556 currently remains nominal historical state, not freshly certified against true Sep-1 CSV",
+    "duplicate_alias_check": "no new treated alias inserted",
+    "blocked_reaudit_check": "passed; no historical blocked CPO re-audited",
+    "repeated_investigation_gt2_runs_check": "passed; this run investigated source provenance and a contradicted canonical candidate",
+    "counter_named_state_check": "nominal arithmetic passes, but canonical certification is suspended",
+    "automatic_safe_correction": "new state documents and supersedes the false artifact provenance claim without rewriting historical files"
+  },
+  "next_target": "Obtain/execute a fresh audit against Ladesaeulenregister_BNetzA_2026-09-01.csv using the corrected scripts, rebuild the actual Sep-1 prefix set and counts, reconcile DE*CTP and any other additions/removals, then resume highest-coverage untreated CPO research."
+}
