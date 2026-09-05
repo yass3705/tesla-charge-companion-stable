@@ -9,7 +9,7 @@
     "stationUrlPattern": "https://plenergy.es/estacion/{station-slug}/",
     "chargingInstructionsUrl": "https://plenergy.es/carga-electrica/",
     "rebrandSourceUrl": "https://plenergy.es/plenoil-renueva-su-marca-y-pasa-a-denominarse-plenergy/",
-    "checkedAt": "2026-09-05",
+    "checkedAt": "2026-09-06",
     "notes": "Official Plenergy station pages expose an electric-charger 'Precio KW' field on a per-station basis. Some stations currently expose a numeric value and others expose a blank value, so tariff coverage must be station-specific and fail closed. Official Plenergy material confirms Plenoil was renamed Plenergy."
   },
   "scope": {
@@ -23,54 +23,28 @@
     "failClosed": true
   },
   "seedStations": [
-    {
-      "name": "Garrucha I",
-      "address": "Avenida Andalucía, s/n",
-      "energyEurPerKwh": 0.36,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-garrucha-i/?lang=en"
-    },
-    {
-      "name": "Leganés I",
-      "address": "Calle Aluminio 8",
-      "energyEurPerKwh": 0.36,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-leganes-i/?lang=en"
-    },
-    {
-      "name": "Águilas I",
-      "address": "Ctra. Lorca, 30",
-      "energyEurPerKwh": 0.70,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-aguilas-i/?lang=en"
-    },
-    {
-      "name": "Santurtzi I",
-      "address": "El Árbol Kalea 21-25",
-      "energyEurPerKwh": 0.36,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-santurtzi-i/?lang=en"
-    },
-    {
-      "name": "Sant Joan d'Alacant II",
-      "address": "Carrer Benimagrell, 1",
-      "energyEurPerKwh": 0.36,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-sant-joan-dalacant-II/?lang=en"
-    },
-    {
-      "name": "Córdoba III",
-      "address": "Avenida de la Torrecilla, s/n",
-      "energyEurPerKwh": 0.36,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-cordoba-iii/?lang=en"
-    },
-    {
-      "name": "Elche I",
-      "address": "Avda. Almansa, 19",
-      "energyEurPerKwh": 0.36,
-      "officialUrl": "https://plenergy.es/estacion/plenoil-elche-i/?lang=en"
-    }
+    {"name":"Garrucha I","address":"Avenida Andalucía, s/n","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-garrucha-i/?lang=en"},
+    {"name":"Leganés I","address":"Calle Aluminio 8","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-leganes-i/?lang=en"},
+    {"name":"Águilas I","address":"Ctra. Lorca, 30","energyEurPerKwh":0.70,"officialUrl":"https://plenergy.es/estacion/plenoil-aguilas-i/?lang=en"},
+    {"name":"Santurtzi I","address":"El Árbol Kalea 21-25","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-santurtzi-i/?lang=en"},
+    {"name":"Sant Joan d'Alacant II","address":"Carrer Benimagrell, 1","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-sant-joan-dalacant-II/?lang=en"},
+    {"name":"Córdoba III","address":"Avenida de la Torrecilla, s/n","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-cordoba-iii/?lang=en"},
+    {"name":"Elche I","address":"Avda. Almansa, 19","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-elche-i/?lang=en"},
+    {"name":"Ondara I","address":"Av. Alacant, 82","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenergy-ondara-i/"},
+    {"name":"Osuna I","address":"Sor Angela de la Cruz, 91","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-osuna-i/"},
+    {"name":"Cartes I","address":"La Llanada, 2","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-cartes-i/?lang=ca"},
+    {"name":"Murcia II","address":"Avenida de Santa Catalina & Costera Sur","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-murcia-II/"},
+    {"name":"El Ejido I","address":"Avda. El Treinta, 105","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-el-ejido-i/?lang=en"},
+    {"name":"Santa Pola I","address":"Ctra. Elche-Santa Pola, 34","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-santa-pola-i/"},
+    {"name":"Madrid III","address":"Calle Pirotecnia, 2","energyEurPerKwh":0.36,"officialUrl":"https://plenergy.es/estacion/plenoil-madrid-III/"}
   ],
   "knownBlankExamples": [
     "Aspe I",
     "Sagunto I",
     "Fuenlabrada I",
-    "Alhaurín de la Torre I"
+    "Alhaurín de la Torre I",
+    "L'Eliana I",
+    "Torrevieja II"
   ],
   "integrationRule": "Match the exact physical Plenergy station to its official station page and ingest only a currently numeric Precio KW. If the field is blank or the station identity is ambiguous, leave the tariff unresolved. Do not generalize 0.36 EUR/kWh or any other observed value across the network."
 }
