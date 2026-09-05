@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "operator": "AMB Electrolineres",
+  "canonicalName": "AMB Electrolineres",
+  "source": {
+    "type": "official",
+    "publisher": "Àrea Metropolitana de Barcelona (AMB)",
+    "url": "https://www.amb.cat/s/es/web/mobilitat/mobilitat-sostenible/electrolineres.html",
+    "checkedAt": "2026-09-05",
+    "notes": "Official AMB service page states these are the current tariffs, final amounts payable by users with VAT included, and that the applicable tariff is shown for each connector in the app before charging."
+  },
+  "scope": {
+    "include": "Only charging points belonging to the metropolitan AMB Electrolineres network.",
+    "exclude": [
+      "Barcelona Endolla/B:SM points unless independently identified as AMB Electrolineres",
+      "third-party roaming networks accessible through the AMB app",
+      "parking fees or other non-charging charges"
+    ],
+    "failClosed": true
+  },
+  "tariffs": [
+    {
+      "class": "normal",
+      "powerRule": "AC Schuko, <7 kW",
+      "energyEurPerKwh": 0.24,
+      "maxUseMinutes": 120,
+      "overstayEurPerMinute": 0.012
+    },
+    {
+      "class": "semi-rapid",
+      "powerRule": "AC Mennekes, >=7 kW and <=40 kW",
+      "energyEurPerKwh": 0.28,
+      "maxUseMinutes": 60,
+      "overstayEurPerMinute": 0.104
+    },
+    {
+      "class": "rapid",
+      "powerRule": "DC CHAdeMO/CCS, >=40 kW and <=100 kW",
+      "energyEurPerKwh": 0.30,
+      "maxUseMinutes": 30,
+      "overstayEurPerMinute": 0.399
+    },
+    {
+      "class": "ultra-rapid",
+      "powerRule": "DC CCS, >100 kW",
+      "energyEurPerKwh": 0.36,
+      "maxUseMinutes": 30,
+      "overstayEurPerMinute": 0.720
+    }
+  ],
+  "tax": {
+    "vatIncluded": true
+  },
+  "integrationRule": "Apply only after matching the physical charging point to the AMB Electrolineres network and its connector/power class. Never propagate these prices to interoperable third-party networks or other Barcelona-area CPOs."
+}
