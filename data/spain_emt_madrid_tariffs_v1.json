@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-05",
+  "operator": "EMT Madrid",
+  "policy": {
+    "onlyPhysicalOperatorMatches": true,
+    "failClosedWhenLocationClassUnknown": true,
+    "parkingFeesExcluded": true,
+    "reservationAndOverstayFeesAreSeparate": true
+  },
+  "source": "https://www.emtmadrid.es/emting/eulaelectroemt.aspx",
+  "operatorAliases": [
+    "EMT Madrid",
+    "Electro-EMT"
+  ],
+  "offers": [
+    {
+      "locationClass": "PUBLIC_ACCESS_ROAD_COLON_JARDINES_DEL_DESCUBRIMIENTO",
+      "chargeType": "FAST",
+      "pricePerKwh": 0.40,
+      "currency": "EUR"
+    },
+    {
+      "locationClass": "EMT_MANAGED_CAR_PARK",
+      "chargeType": "FAST",
+      "pricePerKwh": 0.35,
+      "currency": "EUR"
+    },
+    {
+      "locationClass": "PARK_AND_RIDE_PITIS_FUENTE_DE_LA_MORA_AVIACION_ESPANOLA_ESTADIO_METROPOLITANO",
+      "chargeType": "SLOW",
+      "pricePerKwh": 0.35,
+      "currency": "EUR"
+    },
+    {
+      "locationClass": "EMT_ROTATION_OR_MIXED_CAR_PARK",
+      "chargeType": "SLOW",
+      "pricePerKwh": 0.00,
+      "currency": "EUR"
+    }
+  ],
+  "fees": {
+    "minimumBalanceToStartEur": 4.00,
+    "reservationFeeEur": 2.00,
+    "reservationLeadMinutes": 60,
+    "postChargeRemovalGraceMinutes": 10,
+    "postChargeOverstayFeeEur": 2.00
+  },
+  "notes": [
+    "All prices are VAT-inclusive according to EMT's current official Electro-EMT terms.",
+    "Do not infer a tariff from charger speed alone: the location class is mandatory.",
+    "Parking charges, where applicable, are outside this charging tariff table."
+  ]
+}
