@@ -13,7 +13,7 @@
     "officialDgtUpdateFrequency": "24h",
     "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
     "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator",
-    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Do not repeat the identical direct-download route without a new transport path. A current public mirror derived from mapareve.es (updated 2026-09-04) is useful only to discover/prioritize operator names; never use its tariff observations as pricing authority and never use one province as a national denominator.",
+    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Do not repeat the identical direct-download route without a new transport path. A current public mirror derived from mapareve.es is useful only to discover/prioritize operator names; never use its tariff observations as pricing authority and never use one province as a national denominator.",
     "teslaOfficialSpainSuperchargerStationTotal": 105,
     "teslaOfficialSpainSuperchargerInventorySource": "https://www.tesla.com/es_es/findus/list/superchargers/Spain",
     "teslaOfficialSpainSuperchargerInventoryFile": "spain_tesla_supercharger_national_index_v1.json",
@@ -34,11 +34,12 @@
     "Iberdrola | bp pulse",
     "Endolla Barcelona",
     "EMT Madrid",
-    "Avanqua Oceanogràfic"
+    "Avanqua Oceanogràfic",
+    "AMB Electrolineres"
   ],
-  "historicalValidatedCounter": 25,
+  "historicalValidatedCounter": 26,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository reconciles 15 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy and Naturgy public charging have promising official/public exact-price paths but incomplete national station/EVSE tariff coverage, so they remain active rather than being promoted as fully validated.",
+  "consistencyNote": "The repository now reconciles 16 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. AMB Electrolineres is validated from the current official AMB tariff table, with strict scope to the AMB network and connector/power class. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy and Naturgy public charging remain active because exact national station/EVSE tariff coverage is incomplete.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -118,18 +119,19 @@
     {"alias": "POWERGO", "canonical": "PowerGo"},
     {"alias": "Powy Charge", "canonical": "Powy", "note": "Powy's official charging app/payment surface; exact tariff remains station/EVSE specific."},
     {"alias": "NATURGY RECARGA", "canonical": "Naturgy public charging", "note": "Current public-charging app identity; do not confuse with Naturgy home/business charger installation products."},
-    {"alias": "easyRecarga", "canonical": "Naturgy public charging", "note": "Legacy Naturgy public-charging app identity; use only for identity continuity, never to carry historical tariffs into the current app."}
+    {"alias": "easyRecarga", "canonical": "Naturgy public charging", "note": "Legacy Naturgy public-charging app identity; use only for identity continuity, never to carry historical tariffs into the current app."},
+    {"alias": "Electrolineres AMB", "canonical": "AMB Electrolineres", "note": "Official metropolitan charging service identity; tariffs apply only to physical points belonging to the AMB Electrolineres network."},
+    {"alias": "AMB Electrolineres", "canonical": "AMB Electrolineres", "note": "Canonical network label used by the official AMB app/service."}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Historical validated=25, nominatively reconciled=15, blocked=14, active=5, excluded platform/non-CPO identities=2. Powy and Naturgy public charging are newly active rather than validated because their public/app evidence establishes plausible station-level tariff paths but not complete current Spanish EVSE tariff coverage. Charging Together is resolved as an alias of Iberdrola | bp pulse, not a separate CPO. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null; 189 and 618 remain explicitly non-authoritative historical figures.",
+    "result": "Validated historical total=26, nominatively reconciled=16, unreconciled historical names=10, blocked=14, active=5, excluded platform/non-CPO identities=2. AMB Electrolineres is newly validated from the current official AMB tariff table. No canonical overlap exists across validated, blocked and active sets. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null; 189 and 618 remain explicitly non-authoritative historical figures.",
     "safeCorrectionsApplied": [
-      "reconciled against the actual main-branch file and recent commit history rather than relying on previously announced but absent commit hashes",
-      "kept historicalValidatedCounter=25 and historicalValidatedNamesUnreconciled=10 unchanged because no new fully validated CPO was proven in this run",
-      "added Powy as active only after official evidence showed station/location-dependent prices plus a guest QR payment path; no generic tariff was imported",
-      "added Naturgy public charging as active only; current app identity is confirmed, but current exact tariff-field exposure still requires backend/app verification",
-      "resolved Charging Together and Charging Together S.L. to Iberdrola | bp pulse with an explicit guard against Iberdrola-direct stations",
-      "added conservative Powy Charge, NATURGY RECARGA and easyRecarga identity aliases without propagating tariff values",
+      "validated AMB Electrolineres from the current official AMB tariff table and created a dedicated tariff file with connector/power-class matching and overstay charges",
+      "incremented the validated historical counter from 25 to 26 and reconciled named validated CPOs from 15 to 16 while keeping the 10-name historical gap unchanged",
+      "added Electrolineres AMB identity alias with a strict physical-network scope guard",
+      "did not promote Naturgy domestic/home installation pricing as public CPO pricing",
+      "did not import PRIO Portugal eMSP/charging-card tariffs into Spain",
       "did not re-audit the 14 blocked CPOs, Tesla public station pages or the failed DGT direct-download route without new evidence",
       "checked canonical status sets for overlap and retained authoritativeCpoTotal=null"
     ]
