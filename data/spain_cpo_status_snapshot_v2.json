@@ -41,7 +41,6 @@
     "Iberdrola direct",
     "IONITY direct",
     "Qwello España",
-    "Endesa / Endesa On Your Way",
     "Mobilize Fast Charge",
     "EDP Charge",
     "Pavapark",
@@ -57,7 +56,8 @@
     {"name":"emovili FAST","status":"official CPO surface confirms public network operation plus TPV, roaming, direct mobile payment and web payment without subscription. Public official web pages do not expose deterministic numeric tariffs by station/EVSE; third-party observed values vary and are not authoritative. Next useful step is app/web-payment guest backend or exact station session surface; do not use emovili blog averages as tariffs."},
     {"name":"U energia public charging","status":"official U energia map/app network confirmed. U Movilidad exposes detailed billed-price conditions in-app; exact station/connector prices remain to be extracted from the guest/app surface."},
     {"name":"REMO Sustainable Mobility","status":"official REMO Spain app is explicitly available in Spain and states charger status, pricing and access are shown in-app. REVE/DGT-derived inventory confirms Spanish REMO-operated sites. No deterministic numeric public-web tariff was found; next useful step is app/backend or exact charger-session extraction."},
-    {"name":"APK Electric","status":"official APK2 support confirms charging can be started without the app by scanning the bay QR code, entering an email and payment-card details. APK2 identifies APK Electric as its Spanish public charging initiative. No deterministic numeric energy tariff was found on official public pages; next useful step is the QR guest checkout/session surface."}
+    {"name":"APK Electric","status":"official APK2 support confirms charging can be started without the app by scanning the bay QR code, entering an email and payment-card details. APK2 identifies APK Electric as its Spanish public charging initiative. No deterministic numeric energy tariff was found on official public pages; next useful step is the QR guest checkout/session surface."},
+    {"name":"Endesa / Endesa On Your Way","status":"reopened from fail-closed on new official evidence: Endesa states the final price is shown in-app for each connector before charging, prices can vary by start time and specific charger/promotions, and e-Smart is a 20% discount over e-Flex. Exact connector-level extraction is still required; no network-wide numeric value may be inferred."}
   ],
   "excludedNonCpoOrPlatform": [
     "EVcharge / Etecnic",
@@ -110,7 +110,9 @@
     {"alias":"REMO SUSTAINABLE MOBILITY SL","canonical":"REMO Sustainable Mobility"},
     {"alias":"REMO","canonical":"REMO Sustainable Mobility"},
     {"alias":"APK ELECTRIC, S.L.","canonical":"APK Electric"},
-    {"alias":"APK ELECTRIC, S.L","canonical":"APK Electric"}
+    {"alias":"APK ELECTRIC, S.L","canonical":"APK Electric"},
+    {"alias":"Endesa X Way","canonical":"Endesa / Endesa On Your Way"},
+    {"alias":"Endesa On Your Way","canonical":"Endesa / Endesa On Your Way"}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
@@ -119,16 +121,16 @@
     "validatedHistorical": 27,
     "validatedNamed": 17,
     "historicalValidatedNamesUnreconciled": 10,
-    "blocked": 13,
-    "active": 10,
+    "blocked": 12,
+    "active": 11,
     "excludedNonCpoOrPlatform": 2,
     "checks": [
       "no canonical overlap across validated, blocked and active sets",
       "27 = 17 nominatively reconciled validated names + 10 historical unreconciled validated names",
-      "no blocked CPO was re-audited without new evidence",
+      "Endesa was re-audited only because new official connector-level pricing evidence was found",
+      "no other blocked CPO was re-audited without new evidence",
       "no repeated Tesla public-page or DGT direct-download loop was retried",
-      "REMO public app evidence establishes a station-specific pricing surface but no numeric tariff was promoted without extraction",
-      "APK Electric QR guest-payment evidence establishes a station/session path but no numeric tariff was invented",
+      "no numeric Endesa tariff was invented: official evidence only establishes a per-connector pre-session tariff surface with time/site exceptions",
       "REVE/DGT-derived operator labels are used for discovery and identity only, not as tariff authority"
     ]
   },
@@ -136,6 +138,7 @@
     "emoviliOfficial": ["https://emovili.com/fast/","https://emovili.com/fast/app-punto-recarga/"],
     "uEnergiaOfficial": ["https://www.uenergia.es/es/puntos-de-recarga-para-vehiculos-electricos/","https://www.uenergia.es/es/puntos-recarga/","https://apps.apple.com/es/app/u-movilidad/id1524438326"],
     "remoOfficial": ["https://me-remo.com/es/","https://me-remo.com/es/carga-tu-vehiculo/","https://me-remo.com/landing-store-app/","https://apps.apple.com/es/app/remo/id6450786486"],
-    "apkElectricOfficial": ["https://support.apk2.es/hc/es/articles/35540862121629-Ventajas-de-recargar-tu-veh%C3%ADculo-en-APK-Electric","https://apk2gestion.com/es/servicios/puntos-de-recarga"]
+    "apkElectricOfficial": ["https://support.apk2.es/hc/es/articles/35540862121629-Ventajas-de-recargar-tu-veh%C3%ADculo-en-APK-Electric","https://apk2gestion.com/es/servicios/puntos-de-recarga"],
+    "endesaOfficial": ["https://prod.store.endesaxway.com/es/es/nuestra-oferta/app-endesaxway-servicio-recarga/tarifas"]
   }
 }
