@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 11961
+      "total": 12885
     },
     "format": {
-      "count": 11961,
+      "count": 12885,
       "pct": 100.0,
-      "total": 11961
+      "total": 12885
     },
     "maxAmperage": {
-      "count": 11961,
+      "count": 12885,
       "pct": 100.0,
-      "total": 11961
+      "total": 12885
     },
     "maxElectricPower": {
-      "count": 11961,
+      "count": 12885,
       "pct": 100.0,
-      "total": 11961
+      "total": 12885
     },
     "maxVoltage": {
-      "count": 11961,
+      "count": 12885,
       "pct": 100.0,
-      "total": 11961
+      "total": 12885
     },
     "powerType": {
-      "count": 11961,
+      "count": 12885,
       "pct": 100.0,
-      "total": 11961
+      "total": 12885
     },
     "standard": {
-      "count": 11961,
+      "count": 12885,
       "pct": 100.0,
-      "total": 11961
+      "total": 12885
     },
-    "total": 11961
+    "total": 12885
   },
   "country": "ES",
   "cpos": {
@@ -98,17 +98,17 @@
         "partyId": "GFX"
       },
       {
-        "connectors": 35,
+        "connectors": 730,
         "cpoName": "ELECTROMAPS SL",
-        "evses": 35,
-        "locations": 13,
+        "evses": 730,
+        "locations": 217,
         "partyId": "EMP"
       },
       {
-        "connectors": 4672,
+        "connectors": 4901,
         "cpoName": "ENDESA X WAY, S.L.",
-        "evses": 4671,
-        "locations": 2367,
+        "evses": 4900,
+        "locations": 2552,
         "partyId": "ESX"
       },
       {
@@ -271,45 +271,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 11592
+      "total": 12516
     },
     "identifier": {
-      "count": 11592,
+      "count": 12516,
       "pct": 100.0,
-      "total": 11592
+      "total": 12516
     },
-    "total": 11592
+    "total": 12516
   },
-  "generatedAt": "2026-09-05T06:06:16.826928Z",
+  "generatedAt": "2026-09-05T07:06:28.274258Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 3928,
+      "count": 4317,
       "pct": 100.0,
-      "total": 3928
+      "total": 4317
     },
     "coordinates": {
-      "count": 3928,
+      "count": 4317,
       "pct": 100.0,
-      "total": 3928
+      "total": 4317
     },
     "cpoIdentity": {
-      "count": 3928,
+      "count": 4317,
       "pct": 100.0,
-      "total": 3928
+      "total": 4317
     },
     "withEvses": {
-      "count": 3928,
+      "count": 4317,
       "pct": 100.0,
-      "total": 3928
+      "total": 4317
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 3928,
-    "nextPage": 42,
-    "registryCoveragePct": 26.96,
+    "locationsStored": 4317,
+    "nextPage": 46,
+    "registryCoveragePct": 29.63,
     "registryTotalCount": 14568,
     "totalPages": 146
   },
