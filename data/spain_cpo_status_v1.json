@@ -4,7 +4,11 @@
   "updatedAt": "2026-09-05",
   "inventory": {
     "authoritativeCpoTotal": null,
-    "reason": "REVE external /cpos still unavailable to the current pipeline; historical figures 189 and 618 are not valid current CPO denominators.",
+    "reason": "REVE external /cpos still unavailable to the current pipeline; historical figures 189 and 618 are not valid authoritative direct-API CPO denominators. A current REVE-derived public mirror does enumerate 618 operator labels and is retained only as the working inventory count pending direct authoritative extraction.",
+    "workingInventoryOperatorCount": 618,
+    "workingInventorySource": "https://observatorio.electrips.es/infraestructura",
+    "workingInventorySourceBasis": "REVE-derived operator table; data through 2026-08-18",
+    "workingInventoryChecked": "2026-09-05",
     "publicFallback": "Use the official Spanish DGT DATEX II energy-infrastructure feed as the primary nominative CPO inventory fallback because it exposes operator names per charging site. REVE /api/public/v1 may enrich status/tariffs but is undocumented/unsupported and must remain optional/conservative.",
     "officialDgtFeed": "https://infocar.dgt.es/datex2/v3/miterd/EnergyInfrastructureTablePublication/electrolineras.xml",
     "officialDgtFeedChecked": "2026-09-05",
@@ -12,8 +16,8 @@
     "officialDgtFeedObservedModified": "2026-09-04T10:17:14+02:00",
     "officialDgtUpdateFrequency": "24h",
     "dgtFallbackEvidence": "DGT NAP publishes the national electric-vehicle charging dataset in DATEX II v3 with MITERD as data owner and DGT as publisher. The live directory exposes electrolineras.xml. @gasolinaradar/dgt-ev-collector 1.5.1 independently documents streaming this official feed and extracting operator.name. REVE /api/public/v1 remains unsupported and optional only.",
-    "revePublicObservedScale": "approximately 14550 locations / approximately 582 pages at 25 locations per page, as documented by @gasolinaradar/dgt-ev-collector 1.5.1; informational only, not an authoritative CPO denominator",
-    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Do not repeat the identical direct-download route without a new transport path. A current public mirror derived from mapareve.es is useful only to discover/prioritize operator names; never use its tariff observations as pricing authority and never use one province as a national denominator.",
+    "revePublicObservedScale": "Current REVE-derived mirror reports 44,171 public charging points, 13,648 locations and 618 operator labels as of 2026-08-18. Use 618 only as the working operator-label inventory count, not as an authoritative direct-API CPO denominator because aliases/platform identities may be present.",
+    "currentRunInventoryNote": "The official DGT directory is live and current, but the 82+ MB XML still cannot be downloaded from the current execution environment. Do not repeat the identical direct-download route without a new transport path. The current REVE-derived public mirror is useful to enumerate/prioritize operator labels; never use its average/observed tariffs as pricing authority.",
     "teslaOfficialSpainSuperchargerStationTotal": 105,
     "teslaOfficialSpainSuperchargerInventorySource": "https://www.tesla.com/es_es/findus/list/superchargers/Spain",
     "teslaOfficialSpainSuperchargerInventoryFile": "spain_tesla_supercharger_national_index_v1.json",
@@ -40,7 +44,7 @@
   ],
   "historicalValidatedCounter": 27,
   "historicalValidatedNamesUnreconciled": 10,
-  "consistencyNote": "The repository now reconciles 17 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Electra direct is validated for the Spain-wide ad-hoc bank-card terminal tariff only; Electra app/Autocharge pricing remains station-dependent and must stay dynamic/fail-closed. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy and Naturgy public charging remain active because exact national station/EVSE tariff coverage is incomplete.",
+  "consistencyNote": "The repository now reconciles 17 fully source-validated CPOs by name and preserves the historical gap of 10 earlier validated names instead of guessing them. Electra direct is validated for the Spain-wide ad-hoc bank-card terminal tariff only; Electra app/Autocharge pricing remains station-dependent and must stay dynamic/fail-closed. Plenergy is newly active because official station pages expose exact per-station Precio KW values for some sites and blanks for others. Tesla Supercharger, Feníe Energía public charging, PowerGo, Powy, Naturgy public charging and Plenergy remain active because exact national station/EVSE tariff coverage is incomplete.",
   "blockedFailClosed": [
     "Galp",
     "BonpreuEsclat",
@@ -76,6 +80,10 @@
     {
       "name": "Naturgy public charging",
       "status": "current NATURGY RECARGA public app listing confirms a public-charging app backed by Etecnic with charger and plug selection; legacy easyRecarga explicitly exposed tariffs per charging point and connector. Current Naturgy web pages do not expose deterministic public-network prices, and the current app description does not prove the tariff field is still exposed. Keep active pending confirmation of the current app/backend tariff field; never reuse legacy prices or generic public-charging estimates."
+    },
+    {
+      "name": "Plenergy",
+      "status": "official Plenergy/legacy Plenoil station pages expose a station-level electric-charger Precio KW field. Seven numeric official examples are seeded (including 0.36 EUR/kWh and one 0.70 EUR/kWh site), while other current station pages expose the field blank. Continue enumerating exact station pages and ingest only currently numeric values; never generalize any observed price network-wide."
     }
   ],
   "excludedNonCpoOrPlatform": [
@@ -122,20 +130,23 @@
     {"alias": "easyRecarga", "canonical": "Naturgy public charging", "note": "Legacy Naturgy public-charging app identity; use only for identity continuity, never to carry historical tariffs into the current app."},
     {"alias": "Electrolineres AMB", "canonical": "AMB Electrolineres", "note": "Official metropolitan charging service identity; tariffs apply only to physical points belonging to the AMB Electrolineres network."},
     {"alias": "AMB Electrolineres", "canonical": "AMB Electrolineres", "note": "Canonical network label used by the official AMB app/service."},
-    {"alias": "ELECTRA", "canonical": "Electra direct", "note": "Use only for physical Electra-network stations in Spain. The validated 0.59 EUR/kWh tariff applies to ad-hoc bank-card payment at the terminal; app/Autocharge prices remain station-dependent."}
+    {"alias": "ELECTRA", "canonical": "Electra direct", "note": "Use only for physical Electra-network stations in Spain. The validated 0.59 EUR/kWh tariff applies to ad-hoc bank-card payment at the terminal; app/Autocharge prices remain station-dependent."},
+    {"alias": "Plenoil", "canonical": "Plenergy", "note": "Official Plenergy announcement dated 2024-12-12 confirms Plenoil changed its name to Plenergy; legacy station URLs may still contain plenoil slugs."},
+    {"alias": "PLENOIL, S.L.", "canonical": "Plenergy", "note": "Legacy/legal operator label observed in REVE-derived data; resolve to current Plenergy identity, but tariff ingestion remains exact-station only."}
   ],
   "lastConsistencyCheck": {
     "date": "2026-09-05",
-    "result": "Validated historical total=27, nominatively reconciled=17, unreconciled historical names=10, blocked=13, active=5, excluded platform/non-CPO identities=2. Electra direct moved from fail-closed to validated because a new official tariff page dated 2026-07-01 proves the Spain-wide ad-hoc bank-card terminal price of 0.59 EUR/kWh VAT included; app/Autocharge remains variable and is not materialized. No canonical overlap exists across validated, blocked and active sets. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null; 189 and 618 remain explicitly non-authoritative historical figures.",
+    "result": "Working inventory=618 REVE-derived operator labels (non-authoritative direct-API denominator). Validated historical total=27, nominatively reconciled=17, unreconciled historical names=10, blocked=13, active=6, excluded platform/non-CPO identities=2. Electra direct moved from blocked to validated on new official current evidence; Plenergy was added active with an official station-level exact-price path. No canonical overlap exists across validated, blocked and active sets. Tesla remains active at 1/105 exact-price stations. Authoritative national CPO denominator remains null.",
     "safeCorrectionsApplied": [
+      "retained 618 as an explicit working REVE-derived operator-label inventory while keeping authoritativeCpoTotal=null",
       "moved Electra direct from blockedFailClosed to validatedNamed based on new current official evidence",
       "created spain_electra_direct_tariffs_v1.json with payment-channel scoping and a strict fail-closed rule for variable app pricing",
-      "incremented the validated historical counter from 26 to 27 and reconciled named validated CPOs from 16 to 17 while keeping the 10-name historical gap unchanged",
-      "added ELECTRA identity alias with explicit physical-network and payment-channel guards",
-      "did not reuse the 0.39-0.59 EUR/kWh app range as exact station prices",
-      "did not propagate Electra direct pricing to Charge League partners or RFID/eMSP sessions",
+      "added Plenergy as active and created spain_plenergy_public_station_tariffs_v1.json with seven exact official station examples and explicit blank-field fail-closed behavior",
+      "resolved Plenoil and PLENOIL, S.L. to current Plenergy identity from the official rebrand announcement",
+      "did not reuse REVE-derived average tariffs as pricing authority",
+      "did not generalize Plenergy 0.36 EUR/kWh or the 0.70 EUR/kWh Águilas example across the network",
       "did not re-audit the remaining blocked CPOs, Tesla public station pages or the failed DGT direct-download route without new evidence",
-      "checked canonical status sets for overlap and retained authoritativeCpoTotal=null"
+      "checked canonical status sets for overlap"
     ]
   }
 }
