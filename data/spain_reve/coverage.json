@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 17111
+      "total": 18504
     },
     "format": {
-      "count": 17111,
+      "count": 18504,
       "pct": 100.0,
-      "total": 17111
+      "total": 18504
     },
     "maxAmperage": {
-      "count": 17111,
+      "count": 18504,
       "pct": 100.0,
-      "total": 17111
+      "total": 18504
     },
     "maxElectricPower": {
-      "count": 17111,
+      "count": 18504,
       "pct": 100.0,
-      "total": 17111
+      "total": 18504
     },
     "maxVoltage": {
-      "count": 17111,
+      "count": 18504,
       "pct": 100.0,
-      "total": 17111
+      "total": 18504
     },
     "powerType": {
-      "count": 17111,
+      "count": 18504,
       "pct": 100.0,
-      "total": 17111
+      "total": 18504
     },
     "standard": {
-      "count": 17111,
+      "count": 18504,
       "pct": 100.0,
-      "total": 17111
+      "total": 18504
     },
-    "total": 17111
+    "total": 18504
   },
   "country": "ES",
   "cpos": {
@@ -238,10 +238,10 @@
         "partyId": "RSM"
       },
       {
-        "connectors": 1941,
+        "connectors": 3334,
         "cpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA",
-        "evses": 1120,
-        "locations": 497,
+        "evses": 1850,
+        "locations": 875,
         "partyId": "REP"
       },
       {
@@ -292,45 +292,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 15919
+      "total": 16649
     },
     "identifier": {
-      "count": 15919,
+      "count": 16649,
       "pct": 100.0,
-      "total": 15919
+      "total": 16649
     },
-    "total": 15919
+    "total": 16649
   },
-  "generatedAt": "2026-09-05T11:41:29.773352Z",
+  "generatedAt": "2026-09-05T13:16:34.756617Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 5485,
+      "count": 5863,
       "pct": 100.0,
-      "total": 5485
+      "total": 5863
     },
     "coordinates": {
-      "count": 5485,
+      "count": 5863,
       "pct": 100.0,
-      "total": 5485
+      "total": 5863
     },
     "cpoIdentity": {
-      "count": 5485,
+      "count": 5863,
       "pct": 100.0,
-      "total": 5485
+      "total": 5863
     },
     "withEvses": {
-      "count": 5485,
+      "count": 5863,
       "pct": 100.0,
-      "total": 5485
+      "total": 5863
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 5485,
-    "nextPage": 58,
-    "registryCoveragePct": 37.65,
+    "locationsStored": 5863,
+    "nextPage": 62,
+    "registryCoveragePct": 40.25,
     "registryTotalCount": 14567,
     "totalPages": 146
   },
