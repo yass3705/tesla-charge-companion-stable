@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 29276
+      "total": 30758
     },
     "format": {
-      "count": 29276,
+      "count": 30758,
       "pct": 100.0,
-      "total": 29276
+      "total": 30758
     },
     "maxAmperage": {
-      "count": 29276,
+      "count": 30758,
       "pct": 100.0,
-      "total": 29276
+      "total": 30758
     },
     "maxElectricPower": {
-      "count": 29276,
+      "count": 30758,
       "pct": 100.0,
-      "total": 29276
+      "total": 30758
     },
     "maxVoltage": {
-      "count": 29276,
+      "count": 30758,
       "pct": 100.0,
-      "total": 29276
+      "total": 30758
     },
     "powerType": {
-      "count": 29276,
+      "count": 30758,
       "pct": 100.0,
-      "total": 29276
+      "total": 30758
     },
     "standard": {
-      "count": 29276,
+      "count": 30758,
       "pct": 100.0,
-      "total": 29276
+      "total": 30758
     },
-    "total": 29276
+    "total": 30758
   },
   "country": "ES",
   "cpos": {
@@ -182,10 +182,10 @@
         "partyId": "GSM"
       },
       {
-        "connectors": 6578,
+        "connectors": 8060,
         "cpoName": "IBERDROLA CLIENTES S.A.U",
-        "evses": 5819,
-        "locations": 1482,
+        "evses": 7152,
+        "locations": 1854,
         "partyId": "IBD"
       },
       {
@@ -327,45 +327,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 25844
+      "total": 27177
     },
     "identifier": {
-      "count": 25844,
-      "pct": 100.0,
-      "total": 25844
+      "count": 27171,
+      "pct": 99.98,
+      "total": 27177
     },
-    "total": 25844
+    "total": 27177
   },
-  "generatedAt": "2026-09-05T21:55:14.455372Z",
+  "generatedAt": "2026-09-05T23:27:33.072097Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 8536,
+      "count": 8908,
       "pct": 100.0,
-      "total": 8536
+      "total": 8908
     },
     "coordinates": {
-      "count": 8536,
+      "count": 8908,
       "pct": 100.0,
-      "total": 8536
+      "total": 8908
     },
     "cpoIdentity": {
-      "count": 8536,
+      "count": 8908,
       "pct": 100.0,
-      "total": 8536
+      "total": 8908
     },
     "withEvses": {
-      "count": 8536,
+      "count": 8908,
       "pct": 100.0,
-      "total": 8536
+      "total": 8908
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 8536,
-    "nextPage": 90,
-    "registryCoveragePct": 58.59,
+    "locationsStored": 8908,
+    "nextPage": 94,
+    "registryCoveragePct": 61.14,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
