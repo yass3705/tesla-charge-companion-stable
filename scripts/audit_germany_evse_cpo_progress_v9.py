@@ -50,6 +50,7 @@ def treatment_index(amap):
     collectors = set()
     partial_collectors = set()
     deferred = {}
+    deferred_prefixes = {}
 
     for path in glob.glob('data/v9/germany-direct-offers*.json'):
         try:
@@ -96,13 +97,18 @@ def treatment_index(amap):
         except Exception:
             continue
         for record in deferred_records(data):
+            status = record.get('status', '')
+            for evse_prefix in record.get('evsePrefixes', []):
+                normalized_prefix = prefix(f'{evse_prefix}E') if '*E' not in evse_prefix else prefix(evse_prefix)
+                if normalized_prefix:
+                    deferred_prefixes[normalized_prefix] = status
             operator = record.get('operator') or record.get('cpo')
             if not operator:
                 continue
             canonical = amap.get(norm(operator), operator)
-            deferred[norm(canonical)] = record.get('status', '')
+            deferred[norm(canonical)] = status
             for alias in record.get('operatorAliases', []):
-                deferred[norm(amap.get(norm(alias), alias))] = record.get('status', '')
+                deferred[norm(amap.get(norm(alias), alias))] = status
 
     operator_done = direct | collectors | partial_collectors | set(deferred)
     return {
@@ -114,19 +120,29 @@ def treatment_index(amap):
         'collectors': collectors,
         'partialCollectors': partial_collectors,
         'deferred': deferred,
+        'deferredPrefixes': deferred_prefixes,
     }
 
 
+def classify_status(status):
+    if not status:
+        return None
+    if status.startswith('blocked_'):
+        return 'blocked'
+    if any(token in status for token in ('in_progress', 'partial', 'deferred', 'app_only')):
+        return 'partial'
+    if status.startswith('direct_dc_resolved') or status.startswith('direct_ac_resolved'):
+        return 'partial'
+    return 'complete'
+
+
 def classify(opn, evse_prefix, index):
+    prefix_status = index['deferredPrefixes'].get(evse_prefix, '')
+    if prefix_status:
+        return classify_status(prefix_status)
     status = index['deferred'].get(opn, '')
     if status:
-        if status.startswith('blocked_'):
-            return 'blocked'
-        if any(token in status for token in ('in_progress', 'partial', 'deferred', 'app_only')):
-            return 'partial'
-        if status.startswith('direct_dc_resolved') or status.startswith('direct_ac_resolved'):
-            return 'partial'
-        return 'complete'
+        return classify_status(status)
     if opn in index['partialCollectors']:
         return 'partial'
     if opn in index['collectors']:
@@ -141,7 +157,7 @@ def classify(opn, evse_prefix, index):
 
 
 def reader():
-    request = urllib.request.Request(URL, headers={'User-Agent': 'TCC-V9-DE-EVSE-CPO-audit/1.4'})
+    request = urllib.request.Request(URL, headers={'User-Agent': 'TCC-V9-DE-EVSE-CPO-audit/1.5'})
     with urllib.request.urlopen(request, timeout=180) as response:
         raw = response.read()
     text = None
@@ -212,7 +228,7 @@ def main():
     total = len(rows)
     untreated = [row for row in rows if not row['treated']]
     out = {
-        'schemaVersion': 4,
+        'schemaVersion': 5,
         'country': 'DE',
         'method': 'unique EVSE party prefix',
         'totalCpoCount': total,
@@ -228,7 +244,7 @@ def main():
         'topUntreated': untreated[:100],
         'ownerLabelsWithoutRecognizableEvsePrefix': len(no_prefix),
         'topOwnerLabelsWithoutPrefix': no_prefix.most_common(50),
-        'note': 'EVSE prefixes are the primary CPO identity counter. Operator-wide direct offers, validated collectors and explicit deferred/status records classify all prefixes dominated by that canonical physical operator. Both historical cpos and newer deferred containers are accepted. Exact station-pricing seeds classify only the EVSE party prefixes actually present in those seeds. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.',
+        'note': 'EVSE prefixes are the primary CPO identity counter. Explicit evsePrefixes in deferred/status records take precedence over operator-name matching, which keeps transfers/shared-network aliases fail-closed and prevents missed classifications. Operator-wide direct offers, validated collectors and explicit deferred/status records classify all prefixes dominated by that canonical physical operator. Both historical cpos and newer deferred containers are accepted. Exact station-pricing seeds classify only the EVSE party prefixes actually present in those seeds. Owner labels without a recognizable EVSE prefix are tracked separately and are not automatically counted as distinct CPOs.',
     }
     assert treated_count == sum(classes.values())
     assert treated_count + (total - treated_count) == total
