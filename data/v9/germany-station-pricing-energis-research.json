@@ -1,0 +1,46 @@
+{
+  "operator": "energis GmbH",
+  "country": "DE",
+  "status": "partial",
+  "firstPass": true,
+  "deferredAfterFirstPass": true,
+  "reason": "energis public EVSEs are confirmed under DE*ISE, but no current official network-wide direct-payment tariff matrix was found. Station-level direct-payment evidence must not be generalized.",
+  "aliases": [
+    "energis",
+    "energis GmbH"
+  ],
+  "technicalNamespaces": [
+    {
+      "prefix": "DE*ISE",
+      "scope": "confirmed on energis EVSEs; treat as technical/shared until physical-operator exclusivity is proven"
+    }
+  ],
+  "evidence": [
+    {
+      "sourceType": "station_registry",
+      "url": "https://www.e-stations.de/ladestationen/schmelz/ladestation-19280",
+      "observedAt": "2026-09-06",
+      "finding": "energis GmbH is listed as physical operator; EVSE DE*ISE*E0012088 confirms DE*ISE usage."
+    },
+    {
+      "sourceType": "station_registry",
+      "url": "https://www.preisstation.de/ladestation/102937-energis-gmbh-illingen/",
+      "observedAt": "2026-09-06",
+      "finding": "energis GmbH at Illingen; EVSEs DE*ISE*E0016512 and DE*ISE*E0016511 confirm the same namespace."
+    },
+    {
+      "sourceType": "station_level_discovery",
+      "url": "https://www.ladeguru.de/ladestation/energis-gmbh/66636-tholey/49262",
+      "observedAt": "2026-09-06",
+      "finding": "Current direct-payment station observation at Zum Schaumbergturm, Tholey: 0.55 EUR/kWh AC plus 0.03 EUR/min blocking component; exact activation threshold not reliably exposed in the retrieved result."
+    },
+    {
+      "sourceType": "official_cpo_context",
+      "url": "https://energis.de/ratgeber/mobilitaet/e_auto_laden_kosten",
+      "observedAt": "2026-09-06",
+      "finding": "Official energis guidance states public charging prices vary by provider, charging speed and billing model; it does not publish a universal energis direct-payment price matrix."
+    }
+  ],
+  "noGlobalTariffInferred": true,
+  "nextActionAfterFirstTraverse": "Enumerate canonical energis EVSEs, resolve DE*ISE physical operators, then retrieve direct-payment checkout/AFIR tariff fields for exact station mapping."
+}
