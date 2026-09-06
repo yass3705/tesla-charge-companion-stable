@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "e-regio",
+  "aliases": ["e-regio GmbH & Co. KG"],
+  "evsePrefix": "DE*ERE",
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-06",
+  "status": "partial-deferred",
+  "officialEvidence": {
+    "network": "More than 70 locations and more than 190 public charging points operated by e-regio in its region.",
+    "adhoc": "All charging points have QR codes for ad-hoc charging without registration; supported payments include credit card, Apple Pay, Google Pay and PayPal; most fast chargers are being equipped with card terminals.",
+    "pricingPolicy": "The currently applicable station prices are shown in the e-regio LadeApp. e-regio explicitly states that prices can be lower at specific stations or times, so published tariff figures are ceilings rather than a guaranteed per-EVSE price.",
+    "source": "https://www.e-regio.de/privatkunden/e-mobilitaet/laden-unterwegs"
+  },
+  "stationLevelEvidence": [
+    {
+      "location": "Hengebachstr. 301, Heimbach",
+      "evseIds": ["DE*ERE*E0101*00L", "DE*ERE*E0101*00R"],
+      "priceEurPerKwh": 0.52,
+      "blockingFeeEurPerMin": 0.03,
+      "sourceType": "current station-level discovery source",
+      "source": "https://www.automatenwegweiser.de/automat/e-regio-gmbh-co-kg/heimbach/heimbach-ac-dc"
+    }
+  ],
+  "decision": "No operator-wide direct fallback is created. The official source confirms ad-hoc access and explicitly station/time-dependent pricing; exact current EVSE prices must come from the QR/chargecloud surface or another station-level verified source. Defer deeper enumeration until the 591-CPO first pass is complete."
+}
