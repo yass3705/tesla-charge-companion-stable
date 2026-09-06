@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Husum",
+  "aliases": ["Stadtwerke Husum GmbH"],
+  "evsePrefix": "DE*HUS",
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-06",
+  "status": "partial-deferred",
+  "officialEvidence": {
+    "currentSiteState": "The operator's current website states that its pages are being rebuilt and some information/functions are temporarily incomplete; e-mobility remains listed as a current service.",
+    "source": "https://www.stadtwerke-husum.de/"
+  },
+  "evseEvidence": [
+    {
+      "evseId": "DE*HUS*EHU048*02",
+      "location": "Glockensteg 3, 25889 Witzwort",
+      "powerKw": 22,
+      "source": "https://swhu.m8mit.de/station/swhu/DE%2AHUS%2AEHU048%2A02"
+    }
+  ],
+  "additionalCurrentInfrastructureEvidence": "Current station directories identify Stadtwerke Husum as operator of public AC/DC/HPC sites, including 150 kW sites in Husum and Breklum, but no sufficiently authoritative current direct price was exposed in this pass.",
+  "decision": "Operator and DE*HUS namespace are confirmed, but no current official direct/ad-hoc tariff was publicly retrievable while the operator website is incomplete. Keep unpriced and defer further m8mit/QR/backend investigation until after the 591-CPO first pass. No historical tariff is extrapolated."
+}
