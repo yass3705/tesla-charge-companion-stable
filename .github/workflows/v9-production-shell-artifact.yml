@@ -144,7 +144,7 @@ jobs:
             site/v9-production-runtime
           retention-days: 7
 
-      - name: Smoke live isolated Pages payload
+      - name: Smoke live Pages rollout state
         shell: bash
         env:
           BASE_URL: https://yass3705.github.io/tesla-charge-companion-stable
@@ -160,21 +160,61 @@ jobs:
           }
 
           fetch "$BASE_URL/" "$tmp/root.html"
+          fetch "$BASE_URL/assets/update.js?v=7310" "$tmp/update.js"
+          fetch "$BASE_URL/assets/v9-production-bootstrap.js?v=1" "$tmp/bootstrap.js"
+          fetch "$BASE_URL/service-worker.js?v=7310" "$tmp/service-worker.js"
+          fetch "$BASE_URL/v9-production-control.json" "$tmp/control.json"
           fetch "$BASE_URL/v9-production-shell/" "$tmp/shell.html"
           fetch "$BASE_URL/v9-production-shell/shell-config.json" "$tmp/shell-config.json"
           fetch "$BASE_URL/v9-production-shell/bridge.js" "$tmp/bridge.js"
+          fetch "$BASE_URL/v9-production-runtime/assets/v9/rollout-engine.js" "$tmp/rollout-engine.js"
           fetch "$BASE_URL/v9-production-runtime/assets/v9/runtime-engine.js" "$tmp/runtime-engine.js"
           fetch "$BASE_URL/v9-production-runtime/assets/v9/browser-loaders.js" "$tmp/browser-loaders.js"
           fetch "$BASE_URL/v9-production-runtime/data/v9/source-registry.json" "$tmp/source-registry.json"
 
           grep -q '<meta name="tcc-build" content="7310">' "$tmp/root.html"
+          grep -q 'assets/update.js?v=7310' "$tmp/root.html"
+          grep -q "const CURRENT_BUILD=String(meta?.content||'').trim();" "$tmp/update.js"
+          grep -q 'loadProductionCanaryBootstrap();' "$tmp/update.js"
+          grep -q "workerUrl.searchParams.get('v')" "$tmp/service-worker.js"
           grep -q 'location.replace(CONTROL_FALLBACK)' "$tmp/shell.html"
           grep -q '8d2c20b7c76004389edd8f4a3b80d6b314900ba0' "$tmp/shell-config.json"
           grep -q 'sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697' "$tmp/shell-config.json"
           grep -q '"runtimeBase": "v9-production-runtime"' "$tmp/shell-config.json"
-          grep -q '"mode": "shadow"' "$tmp/shell-config.json"
+
+          node --check "$tmp/update.js"
+          node --check "$tmp/bootstrap.js"
+          node --check "$tmp/service-worker.js"
           node --check "$tmp/bridge.js"
+          node --check "$tmp/rollout-engine.js"
           node --check "$tmp/runtime-engine.js"
           node --check "$tmp/browser-loaders.js"
+
+          node - "$tmp/control.json" "$tmp/shell-config.json" "$tmp/rollout-engine.js" <<'NODE'
+          const fs=require('fs');
+          const [controlPath,shellPath,enginePath]=process.argv.slice(2);
+          const control=JSON.parse(fs.readFileSync(controlPath,'utf8'));
+          const shell=JSON.parse(fs.readFileSync(shellPath,'utf8'));
+          const Rollout=require(require('path').resolve(enginePath));
+          const sha='8d2c20b7c76004389edd8f4a3b80d6b314900ba0';
+          const fp='sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697';
+          if(control.active!==true||control.stage!=='canary'||control.canaryPercent!==1||control.killSwitch!==false)throw new Error('live control is not exact active 1% canary');
+          if(control.readiness?.ready!==true||control.readiness?.verdict!=='READY')throw new Error('live readiness is not READY');
+          if(control.observedCandidateSha!==sha||control.runtimeFingerprint!==fp)throw new Error('live control pin mismatch');
+          if(shell.mode!=='candidate'||shell.observedCandidateSha!==sha||shell.runtimeFingerprint!==fp)throw new Error('live shell is not pinned candidate mode');
+          if(shell.runtimeBase!=='v9-production-runtime'||shell.fallback!=='legacy-compare')throw new Error('live shell fallback/isolation mismatch');
+          let v9=0;
+          for(let i=0;i<10000;i++){
+            const identity=`live-smoke-${i}`;
+            const a=Rollout.decide({config:control,identity,readiness:control.readiness});
+            const b=Rollout.decide({config:control,identity,readiness:control.readiness});
+            if(JSON.stringify(a)!==JSON.stringify(b))throw new Error('non-deterministic live cohort');
+            if(a.engine==='v9')v9++;
+          }
+          const percent=v9/100;
+          if(percent<0.8||percent>1.2)throw new Error(`live 1% distribution outside tolerance: ${percent}%`);
+          console.log(JSON.stringify({ok:true,live:true,canaryPercent:control.canaryPercent,sample:10000,v9,percent,shellMode:shell.mode},null,2));
+          NODE
+
           node -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); if(!Array.isArray(x.sources)||!x.sources.length) process.exit(1); console.log('live registry sources',x.sources.length)" "$tmp/source-registry.json"
-          echo 'PASS: live Pages serves stable root plus isolated shadow shell and exact pinned V9 runtime.'
+          echo 'PASS: live Pages serves the guarded active 1% V9 canary behind the stable V7.3 UI.'
