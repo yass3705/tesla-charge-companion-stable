@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "evsePrefix": "DE*MSU",
+  "status": "partial_shared_technical_prefix_station_level_only",
+  "verifiedAt": "2026-09-06",
+  "preIntegrationOnly": true,
+  "canonicalEvidence": {
+    "source": "workflow artifact germany-v9-bnetza-preintegration / build/germany-site-crosswalk.json",
+    "snapshotCaveat": "artifact source manifest is BNetzA 2026-07-28; used only as last-known first-pass membership evidence per project fallback policy",
+    "evseCount": 117,
+    "ownerDistribution": [
+      ["BCW Hotels & Resorts GmbH", 35],
+      ["Stadtwerke Blankenburg GmbH", 30],
+      ["WALTHER-WERKE Ferdinand Walther GmbH", 21],
+      ["Merseburger Wasser und Service GmbH", 16],
+      ["ZG Raiffeisen eG", 9],
+      ["ZG Raiffeisen Baustoffe GmbH", 4],
+      ["ZG Raiffeisen Technik GmbH", 2]
+    ],
+    "sharedPrefix": true
+  },
+  "stationLevelEvidence": [
+    {
+      "physicalOperator": "Stadtwerke Blankenburg GmbH",
+      "evseExamples": ["DE*MSU*ESWBL*CO7*1", "DE*MSU*ESWBL*CO7*2", "DE*MSU*ESWBL*AB1*3", "DE*MSU*ESWBL*AB1*4"],
+      "pricePerKwhEur": 0.59,
+      "startFeeEur": 0.99,
+      "blockingFee": null,
+      "sourceType": "Mobilithek/DATEX-II republished station-level evidence",
+      "source": "https://www.e-stations.de/ladestationen/blankenburg/blankenburg-fichtestrasse-6-45023"
+    }
+  ],
+  "publicDirectSurface": {
+    "operator": "Stadtwerke Blankenburg GmbH",
+    "surface": "m8mit public station pages expose DE*MSU EVSEs and identify the physical operator; tariff widgets are loaded dynamically and must be resolved per station/EVSE.",
+    "sources": [
+      "https://swbl.m8mit.de/stationslist",
+      "https://swbl.m8mit.de/station/swbl/DE%2AMSU%2AESWBL%2ACO10%2A02"
+    ]
+  },
+  "decision": "DE*MSU is a shared technical namespace, not a tariff scope. Resolve each EVSE to its physical operator and exact direct/AFIR price. The Stadtwerke Blankenburg 0.59 EUR/kWh + 0.99 EUR start-fee observation remains scoped only to the verified SWBL EVSEs; no prefix-wide fallback is emitted."
+}
