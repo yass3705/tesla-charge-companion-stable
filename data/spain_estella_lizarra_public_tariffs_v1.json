@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "currency": "EUR",
+  "operatorCanonical": "Ayuntamiento de Estella-Lizarra",
+  "accessPlatform": "Navarra te recarga",
+  "platformProvider": "ETECNIC Movilidad Eléctrica",
+  "updatedAt": "2026-09-06",
+  "tariffs": [
+    {
+      "locationName": "Aparcamiento de la estación de autobuses de Estella-Lizarra",
+      "scope": "two double semi-rapid municipal chargers, four charging bays",
+      "energyPriceEurPerKwh": 0.30,
+      "vatIncluded": true,
+      "effectiveEvidenceDate": "2026-09-02",
+      "conditionalDiscounts": [
+        {
+          "discountPercent": 20,
+          "condition": "vehicle has fiscal domicile in Estella-Lizarra and discount has been requested and authorized",
+          "applyAsDefault": false
+        }
+      ],
+      "matchingPolicy": "fail-closed: apply only to the municipal chargers explicitly identified as the two double chargers in the surface car park at the Estella-Lizarra bus station; do not generalize to other Navarra te recarga locations or ETECNIC-managed chargers",
+      "officialSources": [
+        "https://www.estella-lizarra.com/noticias/ya-estan-en-funcionamiento-los-dos-puntos-de-recarga-para-vehiculos-electricos-del-aparcamiento-de-la-estacion/",
+        "https://www.estella-lizarra.com/noticias/el-ayuntamiento-instala-dos-puntos-de-recarga-para-vehiculos-electricos-en-el-aparcamiento-de-la-estacion-que-podran-dar-servicio-a-cuatro-coches-a-la-vez/",
+        "https://www.navarra.es/es/-/nota-prensa/desarrollo-economico-lanza-una-aplicacion-con-la-que-entidades-locales-podran-gestionar-sus-puntos-de-recarga-de-vehiculo-electrico"
+      ]
+    }
+  ],
+  "notes": [
+    "Navarra te recarga is a shared public platform for local authorities, not a network-wide tariff authority.",
+    "The 0.30 EUR/kWh tariff must not be propagated to other municipalities using Navarra te recarga.",
+    "The 20% resident benefit is conditional and must never be treated as the public default tariff."
+  ]
+}
