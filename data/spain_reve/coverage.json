@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 32456
+      "total": 33773
     },
     "format": {
-      "count": 32456,
+      "count": 33773,
       "pct": 100.0,
-      "total": 32456
+      "total": 33773
     },
     "maxAmperage": {
-      "count": 32456,
+      "count": 33773,
       "pct": 100.0,
-      "total": 32456
+      "total": 33773
     },
     "maxElectricPower": {
-      "count": 32456,
+      "count": 33773,
       "pct": 100.0,
-      "total": 32456
+      "total": 33773
     },
     "maxVoltage": {
-      "count": 32456,
+      "count": 33773,
       "pct": 100.0,
-      "total": 32456
+      "total": 33773
     },
     "powerType": {
-      "count": 32456,
+      "count": 33773,
       "pct": 100.0,
-      "total": 32456
+      "total": 33773
     },
     "standard": {
-      "count": 32456,
+      "count": 33773,
       "pct": 100.0,
-      "total": 32456
+      "total": 33773
     },
-    "total": 32456
+    "total": 33773
   },
   "country": "ES",
   "cpos": {
-    "distinct": 42,
+    "distinct": 44,
     "items": [
       {
         "connectors": 83,
@@ -98,10 +98,10 @@
         "partyId": "FCT"
       },
       {
-        "connectors": 8,
+        "connectors": 126,
         "cpoName": "Consejo Insular de la Energía de Gran Canaria",
-        "evses": 6,
-        "locations": 3,
+        "evses": 102,
+        "locations": 56,
         "partyId": "MGC"
       },
       {
@@ -147,10 +147,10 @@
         "partyId": "CEL"
       },
       {
-        "connectors": 62,
+        "connectors": 1103,
         "cpoName": "ERANOVUM E-MOBILITY, S.L.",
-        "evses": 62,
-        "locations": 24,
+        "evses": 1103,
+        "locations": 308,
         "partyId": "ERA"
       },
       {
@@ -189,10 +189,17 @@
         "partyId": "GSM"
       },
       {
-        "connectors": 9339,
+        "connectors": 22,
+        "cpoName": "H2PLT,S.A.",
+        "evses": 22,
+        "locations": 1,
+        "partyId": "H2P"
+      },
+      {
+        "connectors": 9463,
         "cpoName": "IBERDROLA CLIENTES S.A.U",
-        "evses": 8353,
-        "locations": 2252,
+        "evses": 8475,
+        "locations": 2288,
         "partyId": "IBD"
       },
       {
@@ -229,6 +236,13 @@
         "evses": 252,
         "locations": 120,
         "partyId": "MOE"
+      },
+      {
+        "connectors": 12,
+        "cpoName": "Moya Estaciones Electricas SL",
+        "evses": 12,
+        "locations": 1,
+        "partyId": "MOY"
       },
       {
         "connectors": 2,
@@ -341,45 +355,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 28780
+      "total": 30073
     },
     "identifier": {
-      "count": 28774,
+      "count": 30067,
       "pct": 99.98,
-      "total": 28780
+      "total": 30073
     },
-    "total": 28780
+    "total": 30073
   },
-  "generatedAt": "2026-09-06T01:05:36.971815Z",
+  "generatedAt": "2026-09-06T02:11:19.089543Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 9441,
+      "count": 9816,
       "pct": 100.0,
-      "total": 9441
+      "total": 9816
     },
     "coordinates": {
-      "count": 9441,
+      "count": 9816,
       "pct": 100.0,
-      "total": 9441
+      "total": 9816
     },
     "cpoIdentity": {
-      "count": 9441,
+      "count": 9816,
       "pct": 100.0,
-      "total": 9441
+      "total": 9816
     },
     "withEvses": {
-      "count": 9441,
+      "count": 9816,
       "pct": 100.0,
-      "total": 9441
+      "total": 9816
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 9441,
-    "nextPage": 102,
-    "registryCoveragePct": 64.8,
+    "locationsStored": 9816,
+    "nextPage": 106,
+    "registryCoveragePct": 67.37,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
