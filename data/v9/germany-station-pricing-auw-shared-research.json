@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "evsePrefix": "DE*AUW",
+  "status": "partial_shared_prefix_fail_closed",
+  "verifiedAt": "2026-09-06",
+  "preIntegrationOnly": true,
+  "canonicalEvidence": {
+    "source": "workflow artifact germany-v9-bnetza-preintegration / build/germany-site-crosswalk.json",
+    "snapshotCaveat": "artifact source manifest is BNetzA 2026-07-28; used only as last-known first-pass membership evidence per project fallback policy",
+    "evseCount": 127,
+    "ownerDistribution": [
+      ["Allgäuer Überlandwerk GmbH", 69],
+      ["Zeus Zentrale Energie- und Service GmbH", 17],
+      ["Parkhaus Dietmannsried GmbH", 10],
+      ["Gemeinde Waltenhofen", 8],
+      ["Energieversorgung Oberstdorf GmbH", 7]
+    ],
+    "sharedPrefix": true
+  },
+  "officialAuewDirectPayment": {
+    "scope": "Only stations physically operated / tariffed as AllgäuStrom StromTankstellen; never prefix-wide across third-party DE*AUW owners",
+    "validFrom": "2026-04-13",
+    "payment": "Ad-hoc by credit card after QR/direct flow; 50 EUR card reservation is a temporary preauthorization, not a charging cost",
+    "tiers": [
+      {"stationClass": "AC tariff zone I", "pricePerKwhEur": 0.51, "startFeeEur": 1.00, "blocking": "0.05 EUR/min after 180 min, 07:00-22:00"},
+      {"stationClass": "AC tariff zone II", "pricePerKwhEur": 0.51, "startFeeEur": 1.00, "blocking": null},
+      {"stationClass": "DC up to 50 kW", "pricePerKwhEur": 0.57, "startFeeEur": 0.00, "blocking": "0.06 EUR/min after 180 min, 07:00-22:00"},
+      {"stationClass": "DC over 50 kW", "pricePerKwhEur": 0.66, "startFeeEur": 0.00, "blocking": "0.10 EUR/min after 45 min"}
+    ],
+    "source": "https://auew.de/privatkunden/e-mobilitaet/allgaeustrom-stromtankstellen/"
+  },
+  "decision": "Do not attach the AÜW matrix to DE*AUW globally. Resolve each EVSE to the physical operator first; apply the official AÜW direct matrix only where AÜW/AllgäuStrom ownership or tariff scope is verified. Other DE*AUW EVSEs remain unpriced until exact operator/station evidence exists.",
+  "discoveryCrossChecks": [
+    "Current Allgäuer Überlandwerk station examples independently match 0.51 EUR/kWh + 1.00 EUR AC and 0.57/0.66 EUR/kWh DC tiers, but are not used to widen scope beyond official AÜW evidence."
+  ]
+}
