@@ -1,0 +1,59 @@
+name: Synchroniser Allego Direct dans TCC V8
+
+on:
+  schedule:
+    - cron: "47 11 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-allego-direct-v8
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer TCC
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Télécharger la base Allego directe vérifiée
+        run: |
+          curl --fail --location --retry 4 --retry-delay 5 \
+            --output data/allego_direct_stations_france.json.gz \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/allego_direct_stations_france.json.gz
+
+      - name: Valider le périmètre et les prix directs
+        run: |
+          node --check assets/v8-allego-direct.js
+          node --check assets/v8-belib-pricing.js
+          node --check scripts/test_allego_v8_overlay.mjs
+          node --check scripts/test_allego_v8_dataset.mjs
+          node scripts/test_allego_v8_overlay.mjs
+          node scripts/test_allego_v8_dataset.mjs data/allego_direct_stations_france.json.gz
+          grep -q "v8-allego-direct.js" assets/v8-belib-pricing.js
+          grep -q "DATA_URL='../data/allego_direct_stations_france.json.gz'" assets/v8-allego-direct.js
+
+      - name: Publier uniquement en cas de changement
+        shell: bash
+        run: |
+          if git diff --quiet -- data/allego_direct_stations_france.json.gz; then
+            echo "Aucun changement Allego Direct à publier."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/allego_direct_stations_france.json.gz
+          git commit -m "data(allego): refresh V8 Direct France station tariffs"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1

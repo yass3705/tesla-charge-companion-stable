@@ -73,3 +73,15 @@
 
   window.TCCV8BelibPricing={connectedTimeCost,ruleFor,installPricing,revision:REVISION};
 })();
+
+// V8 preview uses this stable-main bridge to load operator overlays that are
+// intentionally kept outside the RC branch. Dynamic loading is fail-open: if
+// Allego data is absent or invalid, the rest of TCC continues unchanged.
+(function(){
+  if(typeof document==='undefined'||document.querySelector('script[data-tcc-allego-direct]'))return;
+  const script=document.createElement('script');
+  script.src='../assets/v8-allego-direct.js?v=20260826a';
+  script.async=false;
+  script.dataset.tccAllegoDirect='1';
+  document.head.appendChild(script);
+})();
