@@ -1,0 +1,59 @@
+{
+  "prefix": "DE*CTP",
+  "operator": "Servipark Deutschland GmbH / Contipark",
+  "status": "partial_station_level_fail_closed",
+  "checked_at": "2026-09-06",
+  "official_findings": {
+    "direct_payment": "Contipark officially states that spontaneous direct payment is available through the Charge Assist app or website, operated by GreenFlux.",
+    "registration": "Direct payment is available without a charging card; a valid payment method is entered in Charge Assist.",
+    "blocking_fee": "Contipark states that it generally does not levy a blocking fee for Direct Payment charging sessions.",
+    "parking_fee": "Parking fees remain separate and may apply according to the specific parking facility.",
+    "official_price_publication": "No universal direct-payment kWh price was found on the public Contipark page; the applicable direct tariff must therefore be resolved at station/EVSE checkout level."
+  },
+  "station_level_evidence": [
+    {
+      "site": "Contipark Parkhaus Kuckelke, Dortmund",
+      "evse_prefix": "DE*CTP*E340510",
+      "observed_direct_price_eur_per_kwh": 0.46,
+      "start_fee": 0,
+      "blocking_fee": 0,
+      "source_role": "discovery/verification only; not promoted as network-wide tariff"
+    },
+    {
+      "site": "Contipark Parkhaus StadtCenter, Dueren",
+      "evse_prefix": "DE*CTP*E07700",
+      "observed_direct_prices_eur_per_kwh": [0.45, 0.46],
+      "start_fee": 0,
+      "blocking_fee": 0,
+      "source_role": "proves station/EVSE price variability; not promoted as network-wide tariff"
+    },
+    {
+      "site": "Contipark Parkhaus Keldersplatz, Solingen",
+      "evse_prefix": "DE*CTP*E305700",
+      "observed_direct_prices_eur_per_kwh": [0.45, 0.46],
+      "start_fee": 0,
+      "blocking_fee": 0,
+      "source_role": "proves EVSE-level price variability; not promoted as network-wide tariff"
+    },
+    {
+      "site": "Contipark Parkhaus Wallstrasse, Braunschweig",
+      "evse_prefix": "DE*CTP*E304900",
+      "observed_direct_prices_eur_per_kwh": [0.45, 0.46],
+      "start_fee": 0,
+      "blocking_fee": 0,
+      "source_role": "proves EVSE-level price variability; not promoted as network-wide tariff"
+    }
+  ],
+  "decision": "Do not create a DE*CTP fallback tariff. Resolve each canonical EVSE through Contipark/GreenFlux direct-payment checkout or another station-level verifiable source. Preserve parking fees as separate site costs and do not fabricate a blocking fee.",
+  "aliases_resolved": [
+    "Servipark Deutschland GmbH",
+    "Contipark"
+  ],
+  "sources": [
+    "https://www.contipark.de/de/produkte/e-auto-laden-beim-parken/",
+    "https://www.e-stations.de/ladestationen/dortmund/contipark-parkhaus-kuckelke-30771",
+    "https://www.e-stations.de/ladestationen/dueren/contipark-parkhaus-stadtcenter-42691",
+    "https://www.e-stations.de/ladestationen/solingen/contipark-parkhaus-keldersplatz-36438",
+    "https://www.e-stations.de/ladestationen/braunschweig/contipark-parkhaus-wallstrasse-36023"
+  ]
+}
