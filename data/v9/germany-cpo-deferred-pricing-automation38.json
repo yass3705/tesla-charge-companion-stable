@@ -1,0 +1,61 @@
+{
+  "automation": "CPO Allemagne V9",
+  "generated_at_utc": "2026-09-06T14:55:00Z",
+  "source_state": "germany-cpo-deferred-pricing-automation37.json",
+  "canonical_counts": {
+    "nominal_total": 556,
+    "nominal_treated": 212,
+    "nominal_complete": 92,
+    "nominal_partial": 103,
+    "nominal_blocked": 17,
+    "nominal_remaining": 344,
+    "certification_status": "suspended_pending_true_2026-09-01_dataset_audit"
+  },
+  "important_correction": {
+    "incorrect_previous_pr_reference": 73,
+    "actual_germany_pr": 69,
+    "actual_branch": "germany-v9-preintegration",
+    "actual_pr_state": "open_draft_conflicted",
+    "reason": "PR #73 is Morocco EVOne/EVPlug; Germany national BNetzA pre-integration is PR #69. All new work in this run was written only to the actual Germany branch."
+  },
+  "research_progress": {
+    "new_research_files": [
+      "germany-station-pricing-efl-shared-research.json",
+      "germany-station-pricing-ipg-research.json"
+    ],
+    "counter_effect": "none_until_sep1_canonical_membership_is_rebuilt",
+    "DE*EFL": {
+      "status": "partial_shared_prefix_fail_closed",
+      "aliases_resolved": ["Pluq Assets BV", "BOGAMA Einzelunternehmung", "Comoly GmbH", "ENERGU"],
+      "finding": "Multiple physical operators are verified under DE*EFL; no prefix-wide tariff is valid. Exact EVSE -> physical operator -> station price resolution required."
+    },
+    "DE*IPG": {
+      "status": "partial_operator_resolved_price_fail_closed",
+      "alias": "IP Innovative Power GmbH",
+      "finding": "Operator identity is verified. Direct ad-hoc price remains unresolved; roaming/eMSP prices are not promoted."
+    },
+    "duplicate_avoidance": {
+      "DE*SMC": "already has germany-station-pricing-smopi-research.json; not re-audited",
+      "DE*VIR": "already has germany-station-pricing-virta-vmarkt-research.json; not re-audited"
+    }
+  },
+  "coherence": {
+    "nominal_arithmetic": "92 + 103 + 17 = 212; 556 - 212 = 344",
+    "canonical_denominator_check": "still suspended pending genuine 2026-09-01 canonical rebuild",
+    "duplicate_alias_check": "passed",
+    "blocked_reaudit_check": "passed",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "counter_named_state_check": "passed nominally; research progress intentionally not added to counters without Sep-1 canonical membership proof",
+    "pr_reference_check": "corrected from #73 to #69"
+  },
+  "ci": {
+    "pr": 69,
+    "branch": "germany-v9-preintegration",
+    "head": "f8608226071c8dff8e8f0a21405482bac650b47c",
+    "mergeable": false,
+    "draft": true,
+    "workflow_runs_on_head": 0,
+    "action": "No rebase/merge/promotion attempted because the PR is conflicted and those changes can alter V9 integration semantics."
+  },
+  "next_target": "Continue untreated highest-coverage prefixes from the real Sep-1 canonical rebuild once available; meanwhile research-only work may proceed on prefixes with unambiguous current membership without changing certified counters."
+}
