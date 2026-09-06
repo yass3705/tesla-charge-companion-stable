@@ -1,0 +1,137 @@
+name: V9 production shell artifact
+
+on:
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'v9-production-shell/**'
+      - 'ops/v9/production-shell-readiness.json'
+      - '.github/workflows/v9-production-shell-artifact.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'v9-production-shell/**'
+      - 'ops/v9/production-shell-readiness.json'
+      - '.github/workflows/v9-production-shell-artifact.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v9-production-shell-artifact-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout shell source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: shellsrc
+          fetch-depth: 0
+
+      - name: Checkout observed V9 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: 8d2c20b7c76004389edd8f4a3b80d6b314900ba0
+          path: candidate
+          fetch-depth: 1
+
+      - name: Checkout production control snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+          fetch-depth: 1
+
+      - name: Assemble isolated stable-UI V9-engine artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate rev-parse HEAD)" = '8d2c20b7c76004389edd8f4a3b80d6b314900ba0'
+          grep -q '<meta name="tcc-build" content="7310">' site/index.html
+          root_before="$(sha256sum site/index.html | awk '{print $1}')"
+
+          rm -rf site/v9-production-shell site/assets/v9 site/data/v9
+          mkdir -p site/v9-production-shell site/assets/v9 site/data/v9 site/data/non_tesla_netherlands
+          rsync -a --delete shellsrc/v9-production-shell/ site/v9-production-shell/
+          rsync -a --delete candidate/assets/v9/ site/assets/v9/
+          rsync -a --delete candidate/data/v9/ site/data/v9/
+
+          cp candidate/data/tesla_stations.json site/data/tesla_stations.json
+          cp candidate/data/atlante_direct_stations_france.json.gz site/data/atlante_direct_stations_france.json.gz
+          cp candidate/data/powerdot_direct_france.json.gz site/data/powerdot_direct_france.json.gz
+          cp candidate/data/netherlands_direct_tariffs_v1.json site/data/netherlands_direct_tariffs_v1.json
+          rsync -a --delete candidate/data/non_tesla_netherlands/ site/data/non_tesla_netherlands/
+
+          root_after="$(sha256sum site/index.html | awk '{print $1}')"
+          test "$root_before" = "$root_after"
+
+      - name: Validate shell contract and pinned candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check shellsrc/v9-production-shell/bridge.js
+          node shellsrc/tests/v9-production-engine-shell.test.cjs
+          node --check site/assets/v9/runtime-engine.js
+          node --check site/assets/v9/browser-loaders.js
+          grep -q '8d2c20b7c76004389edd8f4a3b80d6b314900ba0' site/v9-production-shell/shell-config.json
+          grep -q 'sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697' site/v9-production-shell/shell-config.json
+          grep -q '"mode": "shadow"' site/v9-production-shell/shell-config.json
+          grep -q "location.replace(CONTROL_FALLBACK)" site/v9-production-shell/index.html
+          ! grep -q 'v9-app/app.js' site/v9-production-shell/index.html
+
+      - name: Validate active local source dependencies for FR NL IT
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const path=require('path');
+          const site='site';
+          const registry=JSON.parse(fs.readFileSync(path.join(site,'data/v9/source-registry.json'),'utf8'));
+          const scope=new Set(['FR','NL','IT']);
+          const missing=[];
+          for(const source of registry.sources||[]){
+            if(source.active!==true)continue;
+            const countries=source.countries||[];
+            if(!countries.includes('*')&&!countries.some(c=>scope.has(c)))continue;
+            if(source.adapter==='runtime-user-stations'||source.url||source.urls)continue;
+            for(const key of ['path','manifest']){
+              if(source[key]&&!fs.existsSync(path.join(site,source[key])))missing.push(`${source.id}:${source[key]}`);
+            }
+            if(source.root&&!fs.existsSync(path.join(site,source.root)))missing.push(`${source.id}:${source.root}`);
+          }
+          if(missing.length)throw new Error(`Missing production-shell dependencies: ${missing.join(', ')}`);
+          console.log('PASS: all active local FR/NL/IT source dependencies are packaged.');
+          NODE
+
+      - name: Prove production root remains unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp -s site/index.html <(git -C site show HEAD:index.html)
+          test -s site/v9-production-shell/index.html
+          test -s site/v9-production-shell/bridge.js
+          test -s site/assets/v9/runtime-engine.js
+          test -s site/data/v9/source-registry.json
+          echo 'PASS: isolated shell artifact is complete; production root is byte-identical to main.'
+
+      - name: Upload validation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-production-shell-shadow-${{ github.sha }}
+          path: |
+            site/index.html
+            site/v9-production-shell
+            site/assets/v9
+            site/data/v9
+            site/data/tesla_stations.json
+            site/data/atlante_direct_stations_france.json.gz
+            site/data/powerdot_direct_france.json.gz
+            site/data/netherlands_direct_tariffs_v1.json
+            site/data/non_tesla_netherlands
+          retention-days: 7
