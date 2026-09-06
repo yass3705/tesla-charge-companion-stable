@@ -23,7 +23,9 @@ assert.equal(rollout.canaryPath,shell.candidatePath);
 assert.equal(readiness.ready,true,'engine readiness evidence is retained');
 assert.equal(readiness.verdict,'READY');
 assert.equal(activation.fullWindowValidation?.conclusion,'success','completed engine validation evidence must be retained');
-assert.equal(activation.candidate?.sha,shell.observedCandidateSha,'shell gate must reference the observed candidate');
+assert.equal(activation.candidate?.observationSourceSha,shell.observedCandidateSha,'shell gate must reference the observed candidate');
+assert.equal(activation.candidate?.runtimeFingerprint,shell.runtimeFingerprint,'shell gate must reference the observed runtime fingerprint');
+assert.equal(Number(activation.fullWindowValidation?.runId),Number(shell.fullWindowRunId),'shell gate must reference the completed full-window run');
 assert.ok(Array.isArray(shell.reasons)&&shell.reasons.length>=3);
 assert.ok(Array.isArray(shell.requiredBeforeUserCanary)&&shell.requiredBeforeUserCanary.length>=5);
 
