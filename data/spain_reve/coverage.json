@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 42151
+      "total": 43636
     },
     "format": {
-      "count": 42151,
+      "count": 43636,
       "pct": 100.0,
-      "total": 42151
+      "total": 43636
     },
     "maxAmperage": {
-      "count": 42151,
+      "count": 43636,
       "pct": 100.0,
-      "total": 42151
+      "total": 43636
     },
     "maxElectricPower": {
-      "count": 42151,
+      "count": 43636,
       "pct": 100.0,
-      "total": 42151
+      "total": 43636
     },
     "maxVoltage": {
-      "count": 42151,
+      "count": 43636,
       "pct": 100.0,
-      "total": 42151
+      "total": 43636
     },
     "powerType": {
-      "count": 42151,
+      "count": 43636,
       "pct": 100.0,
-      "total": 42151
+      "total": 43636
     },
     "standard": {
-      "count": 42151,
+      "count": 43636,
       "pct": 100.0,
-      "total": 42151
+      "total": 43636
     },
-    "total": 42151
+    "total": 43636
   },
   "country": "ES",
   "cpos": {
-    "distinct": 53,
+    "distinct": 54,
     "items": [
       {
         "connectors": 1768,
@@ -112,10 +112,10 @@
         "partyId": "CHT"
       },
       {
-        "connectors": 883,
+        "connectors": 2337,
         "cpoName": "CHARGING TOGETHER SL",
-        "evses": 785,
-        "locations": 156,
+        "evses": 2094,
+        "locations": 511,
         "partyId": "FCT"
       },
       {
@@ -124,6 +124,13 @@
         "evses": 102,
         "locations": 56,
         "partyId": "MGC"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "DRIVECO ESPAÑA S.L.",
+        "evses": 6,
+        "locations": 2,
+        "partyId": "DRV"
       },
       {
         "connectors": 8,
@@ -385,10 +392,10 @@
         "partyId": "PWY"
       },
       {
-        "connectors": 78,
+        "connectors": 103,
         "cpoName": "Totalenergies Marketing España, S.A.U.",
-        "evses": 78,
-        "locations": 21,
+        "evses": 103,
+        "locations": 27,
         "partyId": "TCB"
       },
       {
@@ -418,45 +425,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 38069
+      "total": 39409
     },
     "identifier": {
-      "count": 38063,
+      "count": 39403,
       "pct": 99.98,
-      "total": 38069
+      "total": 39409
     },
-    "total": 38069
+    "total": 39409
   },
-  "generatedAt": "2026-09-06T20:27:22.392025Z",
+  "generatedAt": "2026-09-06T21:23:34.322021Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 12438,
+      "count": 12801,
       "pct": 100.0,
-      "total": 12438
+      "total": 12801
     },
     "coordinates": {
-      "count": 12438,
+      "count": 12801,
       "pct": 100.0,
-      "total": 12438
+      "total": 12801
     },
     "cpoIdentity": {
-      "count": 12438,
+      "count": 12801,
       "pct": 100.0,
-      "total": 12438
+      "total": 12801
     },
     "withEvses": {
-      "count": 12438,
+      "count": 12801,
       "pct": 100.0,
-      "total": 12438
+      "total": 12801
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 12438,
-    "nextPage": 134,
-    "registryCoveragePct": 85.37,
+    "locationsStored": 12801,
+    "nextPage": 138,
+    "registryCoveragePct": 87.86,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
