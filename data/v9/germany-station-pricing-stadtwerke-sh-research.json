@@ -1,0 +1,48 @@
+{
+  "operator": "Stadtwerke SH GmbH & Co. KG",
+  "country": "DE",
+  "status": "partial",
+  "firstPass": true,
+  "deferredAfterFirstPass": true,
+  "reason": "The operator's own charging product and observed ad-hoc/direct-payment channel do not currently prove a single universal tariff across all canonical EVSEs.",
+  "aliases": [
+    "Stadtwerke SH",
+    "Stadtwerke SH GmbH & Co. KG"
+  ],
+  "evidence": [
+    {
+      "sourceType": "official_cpo",
+      "url": "https://www.stadtwerke-sh.de/produkte/e-mobilitaet/e-ladestandorte",
+      "observedAt": "2026-09-06",
+      "finding": "Official public charging page states a uniform 0.50 EUR/kWh for the operator's additional e-mobility card and identifies vaylens as the Community Charging app partner."
+    },
+    {
+      "sourceType": "station_level_discovery",
+      "url": "https://www.ladeguru.de/ladestation/stadtwerke-sh-gmbh-%26-co.-kg/24837-schleswig/50542",
+      "observedAt": "2026-09-06",
+      "finding": "Current station-level direct-payment observation at Sankt Juergener Strasse, Schleswig: 0.77 EUR/kWh AC, without contract/card."
+    },
+    {
+      "sourceType": "station_level_discovery",
+      "url": "https://www.ladeguru.de/ladestation/stadtwerke-sh-gmbh-%26-co.-kg/24837-schleswig/50235",
+      "observedAt": "2026-09-06",
+      "finding": "Current station-level direct-payment observation at Stadtfeld 2, Schleswig: 0.77 EUR/kWh AC."
+    }
+  ],
+  "pricingRules": {
+    "operatorCard": {
+      "energyEurPerKwh": 0.50,
+      "scope": "Stadtwerke SH e-mobility card only",
+      "eligibleAsDirectAdHocFallback": false
+    },
+    "stationLevelDirectPaymentObserved": [
+      {
+        "energyEurPerKwh": 0.77,
+        "scope": "verified station examples only",
+        "sourceAuthority": "third_party_station_level"
+      }
+    ]
+  },
+  "noGlobalTariffInferred": true,
+  "nextActionAfterFirstTraverse": "Resolve canonical Stadtwerke SH EVSEs and query their vaylens/direct-payment checkout or AFIR/Mobilithek station tariff fields before promoting any tariff rule."
+}
