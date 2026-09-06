@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 40933
+      "total": 42151
     },
     "format": {
-      "count": 40933,
+      "count": 42151,
       "pct": 100.0,
-      "total": 40933
+      "total": 42151
     },
     "maxAmperage": {
-      "count": 40933,
+      "count": 42151,
       "pct": 100.0,
-      "total": 40933
+      "total": 42151
     },
     "maxElectricPower": {
-      "count": 40933,
+      "count": 42151,
       "pct": 100.0,
-      "total": 40933
+      "total": 42151
     },
     "maxVoltage": {
-      "count": 40933,
+      "count": 42151,
       "pct": 100.0,
-      "total": 40933
+      "total": 42151
     },
     "powerType": {
-      "count": 40933,
+      "count": 42151,
       "pct": 100.0,
-      "total": 40933
+      "total": 42151
     },
     "standard": {
-      "count": 40933,
+      "count": 42151,
       "pct": 100.0,
-      "total": 40933
+      "total": 42151
     },
-    "total": 40933
+    "total": 42151
   },
   "country": "ES",
   "cpos": {
@@ -112,10 +112,10 @@
         "partyId": "CHT"
       },
       {
-        "connectors": 126,
+        "connectors": 883,
         "cpoName": "CHARGING TOGETHER SL",
-        "evses": 113,
-        "locations": 38,
+        "evses": 785,
+        "locations": 156,
         "partyId": "FCT"
       },
       {
@@ -217,10 +217,10 @@
         "partyId": "FEN"
       },
       {
-        "connectors": 306,
+        "connectors": 767,
         "cpoName": "Galp Energía España, S.A.U.",
-        "evses": 303,
-        "locations": 158,
+        "evses": 762,
+        "locations": 400,
         "partyId": "DLP"
       },
       {
@@ -418,45 +418,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 36938
+      "total": 38069
     },
     "identifier": {
-      "count": 36932,
+      "count": 38063,
       "pct": 99.98,
-      "total": 36938
+      "total": 38069
     },
-    "total": 36938
+    "total": 38069
   },
-  "generatedAt": "2026-09-06T19:01:07.179808Z",
+  "generatedAt": "2026-09-06T20:27:22.392025Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 12078,
+      "count": 12438,
       "pct": 100.0,
-      "total": 12078
+      "total": 12438
     },
     "coordinates": {
-      "count": 12078,
+      "count": 12438,
       "pct": 100.0,
-      "total": 12078
+      "total": 12438
     },
     "cpoIdentity": {
-      "count": 12078,
+      "count": 12438,
       "pct": 100.0,
-      "total": 12078
+      "total": 12438
     },
     "withEvses": {
-      "count": 12078,
+      "count": 12438,
       "pct": 100.0,
-      "total": 12078
+      "total": 12438
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 12078,
-    "nextPage": 130,
-    "registryCoveragePct": 82.9,
+    "locationsStored": 12438,
+    "nextPage": 134,
+    "registryCoveragePct": 85.37,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
