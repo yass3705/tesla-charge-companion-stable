@@ -13,43 +13,13 @@
     "teslaExactTariffCoveredStations": 1
   },
   "validatedNamed": [
-    "Allego",
-    "Interparking España / P-APP & WEB Servicios Digitales",
-    "Zunder",
-    "Wenea",
-    "Repsol",
-    "Eranovum",
-    "Fastned",
-    "Atlante",
-    "ACCIONA Recarga",
-    "Moeve / Cepsa",
-    "Plenitude On The Road",
-    "Iberdrola | bp pulse",
-    "Endolla Barcelona",
-    "EMT Madrid",
-    "Avanqua Oceanogràfic",
-    "AMB Electrolineres",
-    "Electra direct",
-    "Ayuntamiento de Estella-Lizarra"
+    "Allego","Interparking España / P-APP & WEB Servicios Digitales","Zunder","Wenea","Repsol","Eranovum","Fastned","Atlante","ACCIONA Recarga","Moeve / Cepsa","Plenitude On The Road","Iberdrola | bp pulse","Endolla Barcelona","EMT Madrid","Avanqua Oceanogràfic","AMB Electrolineres","Electra direct","Ayuntamiento de Estella-Lizarra","Feníe Energía public charging"
   ],
-  "historicalValidatedCounter": 28,
+  "historicalValidatedCounter": 29,
   "historicalValidatedNamesUnreconciled": 10,
-  "blockedFailClosed": [
-    "Galp",
-    "TotalEnergies",
-    "Powerdot",
-    "Telpark",
-    "Iberdrola direct",
-    "IONITY direct",
-    "Qwello España",
-    "Mobilize Fast Charge",
-    "EDP Charge",
-    "Pavapark",
-    "Umbrella eMobility"
-  ],
+  "blockedFailClosed": ["Galp","TotalEnergies","Powerdot","Telpark","Iberdrola direct","IONITY direct","Qwello España","Mobilize Fast Charge","EDP Charge","Pavapark","Umbrella eMobility"],
   "active": [
     {"name":"Tesla Supercharger","status":"official station inventory complete at 105; exact numeric tariff coverage remains 1/105; do not repeat public station-page probing without a new official or guest tariff surface"},
-    {"name":"Feníe Energía public charging","status":"official station-level tariff path confirmed; continue exact station enumeration only"},
     {"name":"PowerGo","status":"official live locations-and-prices surface confirmed; tariffs are dynamic, so continue station enumeration and never freeze a network-wide value"},
     {"name":"Powy","status":"official direct QR payment path exists; exact Spanish EVSE/QR enumeration still required"},
     {"name":"Naturgy public charging","status":"current NATURGY RECARGA app identity confirmed and developed by ETECNIC; deterministic current tariff field still needs backend/app confirmation; do not confuse residential Naturgy electricity tariffs with public charging"},
@@ -61,105 +31,21 @@
     {"name":"Endesa / Endesa On Your Way","status":"official evidence says final price is shown for each connector before charging and can vary by start time/charger/promotions; exact connector-level extraction required"},
     {"name":"BonpreuEsclat","status":"official instructions say point is selected at terminal and price is shown there; app is an alternative surface; exact point-level terminal/app extraction required"},
     {"name":"Estabanell Mobilitat","status":"official Estabanell app lets users locate accessible chargers, select a plug, activate/reserve charging and pay when required; no deterministic station/EVSE numeric tariff found on official public web surfaces; managed third-party sites remain fail-closed"},
-    {"name":"AenaEV / Aena public charging","status":"official Aena evidence confirms AenaEV app-based charger/take selection and tariffs available in-app, varying from 0.27 to 0.40 EUR/kWh depending on the selected charging preset; exact tariff mapping by charger/preset remains required, so no range value is applied as a station tariff"}
+    {"name":"AenaEV / Aena public charging","status":"official Aena evidence confirms AenaEV app-based charger selection and tariffs available in-app; exact tariff mapping by charger/preset remains required, so no range value is applied as a station tariff"}
   ],
-  "excludedNonCpoOrPlatform": [
-    "EVcharge / Etecnic",
-    "Electromaps / Electromaps SL",
-    "Navarra te recarga (shared local-authority platform; not a single CPO)"
-  ],
+  "excludedNonCpoOrPlatform": ["EVcharge / Etecnic","Electromaps / Electromaps SL","Navarra te recarga (shared local-authority platform; not a single CPO)"],
   "aliasesResolved": [
-    {"alias":"P-APP & WEB Servicios Digitales S.L.U.","canonical":"Interparking España"},
-    {"alias":"Eranovum e-mobility","canonical":"Eranovum"},
-    {"alias":"CEPSA","canonical":"Moeve"},
-    {"alias":"Cepsa","canonical":"Moeve"},
-    {"alias":"Acciona Recarga SL","canonical":"ACCIONA Recarga"},
-    {"alias":"Cargacoches","canonical":"ACCIONA Recarga"},
-    {"alias":"EasyCharger","canonical":"Zunder"},
-    {"alias":"Grupo Easycharger, S.A.","canonical":"Zunder"},
-    {"alias":"IBIL public charging network / energy retail","canonical":"Repsol"},
-    {"alias":"IONITY","canonical":"IONITY"},
-    {"alias":"Qwello España SL","canonical":"Qwello España"},
-    {"alias":"Plenitude On The Road S.r.l.","canonical":"Plenitude On The Road"},
-    {"alias":"Plenitude On The Road Srl","canonical":"Plenitude On The Road"},
-    {"alias":"IBERDROLA BP PULSE","canonical":"Iberdrola | bp pulse"},
-    {"alias":"Charging Together","canonical":"Iberdrola | bp pulse"},
-    {"alias":"Charging Together S.L.","canonical":"Iberdrola | bp pulse"},
-    {"alias":"B:SM Endolla","canonical":"Endolla Barcelona"},
-    {"alias":"BSM Endolla","canonical":"Endolla Barcelona"},
-    {"alias":"Electro-EMT","canonical":"EMT Madrid"},
-    {"alias":"Tesla","canonical":"Tesla Supercharger"},
-    {"alias":"TESLA SUPERCHARGER","canonical":"Tesla Supercharger"},
-    {"alias":"AVANQUA OCEANOGRÀFIC, S.L.","canonical":"Avanqua Oceanogràfic"},
-    {"alias":"AVANQUA OCEANOGRAFIC SL","canonical":"Avanqua Oceanogràfic"},
-    {"alias":"PAVAPARK MOVILIDAD, S.L.","canonical":"Pavapark"},
-    {"alias":"UMBRELLA","canonical":"Umbrella eMobility"},
-    {"alias":"FENÍE ENERGÍA","canonical":"Feníe Energía public charging"},
-    {"alias":"FENIE ENERGIA","canonical":"Feníe Energía public charging"},
-    {"alias":"POWERGO","canonical":"PowerGo"},
-    {"alias":"Powy Charge","canonical":"Powy"},
-    {"alias":"NATURGY RECARGA","canonical":"Naturgy public charging"},
-    {"alias":"easyRecarga","canonical":"Naturgy public charging"},
-    {"alias":"Electrolineres AMB","canonical":"AMB Electrolineres"},
-    {"alias":"AMB Electrolineres","canonical":"AMB Electrolineres"},
-    {"alias":"ELECTRA","canonical":"Electra direct"},
-    {"alias":"Plenoil","canonical":"Plenergy"},
-    {"alias":"PLENOIL, S.L.","canonical":"Plenergy"},
-    {"alias":"EMOVILI FAST, S.L.","canonical":"emovili FAST"},
-    {"alias":"Emovili Fast","canonical":"emovili FAST"},
-    {"alias":"ELECTRICA SOLLERENSE S.A.","canonical":"U energia public charging"},
-    {"alias":"Eléctrica Sollerense","canonical":"U energia public charging"},
-    {"alias":"UEnergia","canonical":"U energia public charging"},
-    {"alias":"U Movilidad","canonical":"U energia public charging"},
-    {"alias":"REMO SUSTAINABLE MOBILITY S.L","canonical":"REMO Sustainable Mobility"},
-    {"alias":"REMO SUSTAINABLE MOBILITY SL","canonical":"REMO Sustainable Mobility"},
-    {"alias":"REMO","canonical":"REMO Sustainable Mobility"},
-    {"alias":"APK ELECTRIC, S.L.","canonical":"APK Electric"},
-    {"alias":"APK ELECTRIC, S.L","canonical":"APK Electric"},
-    {"alias":"Endesa X Way","canonical":"Endesa / Endesa On Your Way"},
-    {"alias":"Endesa On Your Way","canonical":"Endesa / Endesa On Your Way"},
-    {"alias":"Bonpreu, S.A.U.","canonical":"BonpreuEsclat"},
-    {"alias":"Bonpreu, S.A.U","canonical":"BonpreuEsclat"},
-    {"alias":"Bonpreu Esclat","canonical":"BonpreuEsclat"},
-    {"alias":"Estabanell Energia","canonical":"Estabanell Mobilitat"},
-    {"alias":"Estabanell","canonical":"Estabanell Mobilitat"},
-    {"alias":"Aena EV","canonical":"AenaEV / Aena public charging"},
-    {"alias":"AenaEV","canonical":"AenaEV / Aena public charging"}
+    {"alias":"P-APP & WEB Servicios Digitales S.L.U.","canonical":"Interparking España"},{"alias":"Eranovum e-mobility","canonical":"Eranovum"},{"alias":"CEPSA","canonical":"Moeve"},{"alias":"Cepsa","canonical":"Moeve"},{"alias":"Acciona Recarga SL","canonical":"ACCIONA Recarga"},{"alias":"Cargacoches","canonical":"ACCIONA Recarga"},{"alias":"EasyCharger","canonical":"Zunder"},{"alias":"Grupo Easycharger, S.A.","canonical":"Zunder"},{"alias":"IBIL public charging network / energy retail","canonical":"Repsol"},{"alias":"IONITY","canonical":"IONITY"},{"alias":"Qwello España SL","canonical":"Qwello España"},{"alias":"Plenitude On The Road S.r.l.","canonical":"Plenitude On The Road"},{"alias":"Plenitude On The Road Srl","canonical":"Plenitude On The Road"},{"alias":"IBERDROLA BP PULSE","canonical":"Iberdrola | bp pulse"},{"alias":"Charging Together","canonical":"Iberdrola | bp pulse"},{"alias":"Charging Together S.L.","canonical":"Iberdrola | bp pulse"},{"alias":"B:SM Endolla","canonical":"Endolla Barcelona"},{"alias":"BSM Endolla","canonical":"Endolla Barcelona"},{"alias":"Electro-EMT","canonical":"EMT Madrid"},{"alias":"Tesla","canonical":"Tesla Supercharger"},{"alias":"TESLA SUPERCHARGER","canonical":"Tesla Supercharger"},{"alias":"AVANQUA OCEANOGRÀFIC, S.L.","canonical":"Avanqua Oceanogràfic"},{"alias":"AVANQUA OCEANOGRAFIC SL","canonical":"Avanqua Oceanogràfic"},{"alias":"PAVAPARK MOVILIDAD, S.L.","canonical":"Pavapark"},{"alias":"UMBRELLA","canonical":"Umbrella eMobility"},{"alias":"FENÍE ENERGÍA","canonical":"Feníe Energía public charging"},{"alias":"FENIE ENERGIA","canonical":"Feníe Energía public charging"},{"alias":"POWERGO","canonical":"PowerGo"},{"alias":"Powy Charge","canonical":"Powy"},{"alias":"NATURGY RECARGA","canonical":"Naturgy public charging"},{"alias":"easyRecarga","canonical":"Naturgy public charging"},{"alias":"Electrolineres AMB","canonical":"AMB Electrolineres"},{"alias":"AMB Electrolineres","canonical":"AMB Electrolineres"},{"alias":"ELECTRA","canonical":"Electra direct"},{"alias":"Plenoil","canonical":"Plenergy"},{"alias":"PLENOIL, S.L.","canonical":"Plenergy"},{"alias":"EMOVILI FAST, S.L.","canonical":"emovili FAST"},{"alias":"Emovili Fast","canonical":"emovili FAST"},{"alias":"ELECTRICA SOLLERENSE S.A.","canonical":"U energia public charging"},{"alias":"Eléctrica Sollerense","canonical":"U energia public charging"},{"alias":"UEnergia","canonical":"U energia public charging"},{"alias":"U Movilidad","canonical":"U energia public charging"},{"alias":"REMO SUSTAINABLE MOBILITY S.L","canonical":"REMO Sustainable Mobility"},{"alias":"REMO SUSTAINABLE MOBILITY SL","canonical":"REMO Sustainable Mobility"},{"alias":"REMO","canonical":"REMO Sustainable Mobility"},{"alias":"APK ELECTRIC, S.L.","canonical":"APK Electric"},{"alias":"APK ELECTRIC, S.L","canonical":"APK Electric"},{"alias":"Endesa X Way","canonical":"Endesa / Endesa On Your Way"},{"alias":"Endesa On Your Way","canonical":"Endesa / Endesa On Your Way"},{"alias":"Bonpreu, S.A.U.","canonical":"BonpreuEsclat"},{"alias":"Bonpreu, S.A.U","canonical":"BonpreuEsclat"},{"alias":"Bonpreu Esclat","canonical":"BonpreuEsclat"},{"alias":"Estabanell Energia","canonical":"Estabanell Mobilitat"},{"alias":"Estabanell","canonical":"Estabanell Mobilitat"},{"alias":"Aena EV","canonical":"AenaEV / Aena public charging"},{"alias":"AenaEV","canonical":"AenaEV / Aena public charging"}
   ],
   "lastConsistencyCheck": {
-    "date": "2026-09-06",
-    "result": "green",
-    "workingInventoryOperatorLabels": 618,
-    "validatedHistorical": 28,
-    "validatedNamed": 18,
-    "historicalValidatedNamesUnreconciled": 10,
-    "blocked": 11,
-    "active": 14,
-    "excludedNonCpoOrPlatform": 3,
-    "checks": [
-      "no canonical overlap across validated, blocked and active sets",
-      "28 = 18 nominatively reconciled validated names + 10 historical unreconciled validated names",
-      "Ayuntamiento de Estella-Lizarra is validated only for the two double chargers at the bus-station surface car park at 0.30 EUR/kWh VAT included",
-      "Navarra te recarga is treated as a shared platform and its Estella-Lizarra tariff is not generalized to other municipalities",
-      "the 20% Estella-Lizarra fiscal-domicile benefit is conditional and not the public default tariff",
-      "AenaEV remains active, not validated, because the official 0.27-0.40 EUR/kWh range lacks deterministic charger/preset mapping in the public evidence",
-      "current NATURGY RECARGA app identity is confirmed but no residential/home Naturgy tariff is promoted to public charging",
-      "no blocked CPO was re-audited without new evidence",
-      "REVE/DGT-derived operator labels remain discovery/identity evidence only, never tariff authority"
-    ]
+    "date":"2026-09-06","result":"green","workingInventoryOperatorLabels":618,"validatedHistorical":29,"validatedNamed":19,"historicalValidatedNamesUnreconciled":10,"blocked":11,"active":13,"excludedNonCpoOrPlatform":3,
+    "checks":["no canonical overlap across validated, blocked and active sets","29 = 19 nominatively reconciled validated names + 10 historical unreconciled validated names","Feníe is source-validated because official station pages expose deterministic station-level prices; this does not imply full Spanish station enumeration","19 exact Feníe station IDs are currently captured and station-specific values are never generalized network-wide","fixed Feníe session fees are preserved separately from EUR/kWh where published","private/employees-only or repair-marked Feníe examples remain excluded/fail-closed","no blocked CPO was re-audited without new evidence","REVE/DGT-derived operator labels remain discovery/identity evidence only, never tariff authority"]
   },
   "runEvidence": {
-    "estellaLizarraOfficial": [
-      "https://www.estella-lizarra.com/noticias/ya-estan-en-funcionamiento-los-dos-puntos-de-recarga-para-vehiculos-electricos-del-aparcamiento-de-la-estacion/",
-      "https://www.estella-lizarra.com/noticias/el-ayuntamiento-instala-dos-puntos-de-recarga-para-vehiculos-electricos-en-el-aparcamiento-de-la-estacion-que-podran-dar-servicio-a-cuatro-coches-a-la-vez/",
-      "https://www.navarra.es/es/-/nota-prensa/desarrollo-economico-lanza-una-aplicacion-con-la-que-entidades-locales-podran-gestionar-sus-puntos-de-recarga-de-vehiculo-electrico"
-    ],
-    "aenaOfficial": [
-      "https://www.aena.es/es/prensa/el-aeropuerto-de-ibiza-pone-en-servicio-cargadores-para-vehiculos---electricos.html"
-    ],
-    "naturgyApp": [
-      "https://apps.apple.com/es/app/naturgy-recarga/id6756056047"
-    ],
-    "inventory": ["https://observatorio.electrips.es/infraestructura"]
+    "fenieOfficial":["https://recarga.fenieenergia.es/","https://recarga.fenieenergia.es/punto-recarga/0518","https://recarga.fenieenergia.es/punto-recarga/0765","https://recargas.fenieenergia.es/punto-recarga/0532","https://recarga.fenieenergia.es/punto-recarga/0428","https://recarga.fenieenergia.es/punto-recarga/0364"],
+    "estellaLizarraOfficial":["https://www.estella-lizarra.com/noticias/ya-estan-en-funcionamiento-los-dos-puntos-de-recarga-para-vehiculos-electricos-del-aparcamiento-de-la-estacion/","https://www.navarra.es/es/-/nota-prensa/desarrollo-economico-lanza-una-aplicacion-con-la-que-entidades-locales-podran-gestionar-sus-puntos-de-recarga-de-vehiculo-electrico"],
+    "aenaOfficial":["https://www.aena.es/es/prensa/el-aeropuerto-de-ibiza-pone-en-servicio-cargadores-para-vehiculos---electricos.html"],
+    "naturgyApp":["https://apps.apple.com/es/app/naturgy-recarga/id6756056047"],
+    "inventory":["https://observatorio.electrips.es/infraestructura"]
   }
 }
