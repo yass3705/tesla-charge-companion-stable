@@ -1,0 +1,125 @@
+name: V9 production canary activation
+
+on:
+  push:
+    branches: ['activate/v9-production-canary-1pct']
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/update.js'
+      - 'assets/v9-production-bootstrap.js'
+      - 'index.html'
+      - 'service-worker.js'
+      - 'v9-production-control.json'
+      - 'v9-production-shell/shell-config.json'
+      - 'tests/v9-production-bootstrap.test.cjs'
+      - 'tests/pwa-build-contract.test.cjs'
+      - '.github/workflows/v9-production-canary-activation.yml'
+      - '.github/workflows/v9-canary-check-20260904.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v9-production-canary-activation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout activation candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch current main control
+        run: git fetch --no-tags origin main
+
+      - name: Restrict activation diff to reviewed integration files
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git diff --name-only origin/main...HEAD | sort)"
+          expected="$(cat <<'EOF' | sort
+          .github/workflows/v9-canary-check-20260904.yml
+          .github/workflows/v9-production-canary-activation.yml
+          assets/update.js
+          assets/v9-production-bootstrap.js
+          index.html
+          service-worker.js
+          tests/pwa-build-contract.test.cjs
+          tests/v9-production-bootstrap.test.cjs
+          v9-production-control.json
+          v9-production-shell/shell-config.json
+          EOF
+          )"
+          printf '%s\n' "$actual"
+          test "$actual" = "$expected"
+          git diff --quiet origin/main...HEAD -- v9-production-runtime/
+          echo 'PASS: observed V9 runtime is byte-untouched by activation.'
+
+      - name: Prove stable HTML change is only update bootstrap cache bust
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const cp=require('child_process');
+          const current=fs.readFileSync('index.html','utf8');
+          const baseline=cp.execFileSync('git',['show','origin/main:index.html'],{encoding:'utf8'});
+          const restored=current.replace('assets/update.js?v=7310','assets/update.js?v=1');
+          if(restored!==baseline)throw new Error('index.html changed beyond the reviewed update.js cache-bust');
+          if(!current.includes('assets/update.js?v=7310'))throw new Error('build-aligned update bootstrap missing');
+          console.log('PASS: V7.3 HTML/UI is otherwise byte-identical to main.');
+          NODE
+
+      - name: Static syntax checks
+        run: |
+          set -euo pipefail
+          node --check assets/update.js
+          node --check assets/v9-production-bootstrap.js
+          node --check service-worker.js
+          node --check v9-production-runtime/assets/v9/rollout-engine.js
+          node --check v9-production-shell/bridge.js
+
+      - name: Validate PWA build contract
+        run: node tests/pwa-build-contract.test.cjs
+
+      - name: Validate one percent bootstrap and loop guards
+        run: node tests/v9-production-bootstrap.test.cjs
+
+      - name: Validate activation pins and fallback contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const control=JSON.parse(fs.readFileSync('v9-production-control.json','utf8'));
+          const shell=JSON.parse(fs.readFileSync('v9-production-shell/shell-config.json','utf8'));
+          const sha='8d2c20b7c76004389edd8f4a3b80d6b314900ba0';
+          const fp='sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697';
+          if(control.active!==true||control.stage!=='canary'||control.canaryPercent!==1||control.killSwitch!==false)throw new Error('activation is not exact 1% canary');
+          if(control.requireReadiness!==true||control.readiness?.ready!==true||control.readiness?.verdict!=='READY')throw new Error('readiness gate is not green');
+          if(control.observedCandidateSha!==sha||control.runtimeFingerprint!==fp)throw new Error('control pin mismatch');
+          if(shell.mode!=='candidate'||shell.observedCandidateSha!==sha||shell.runtimeFingerprint!==fp)throw new Error('shell pin/mode mismatch');
+          if(shell.fallback!=='legacy-compare'||shell.runtimeBase!=='v9-production-runtime')throw new Error('shell fallback/runtime isolation mismatch');
+          console.log('PASS: exact 1% activation, pinned runtime, stable UI and legacy compare fallback.');
+          NODE
+
+      - name: Verify currently served shadow precondition
+        shell: bash
+        env:
+          BASE_URL: https://yass3705.github.io/tesla-charge-companion-stable
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          curl --fail --silent --show-error --location --retry 8 --retry-delay 3 --retry-all-errors "$BASE_URL/" -o "$tmp/root.html"
+          curl --fail --silent --show-error --location --retry 8 --retry-delay 3 --retry-all-errors "$BASE_URL/v9-production-shell/shell-config.json" -o "$tmp/shell.json"
+          curl --fail --silent --show-error --location --retry 8 --retry-delay 3 --retry-all-errors "$BASE_URL/v9-production-runtime/assets/v9/rollout-engine.js" -o "$tmp/rollout.js"
+          grep -q '<meta name="tcc-build" content="7310">' "$tmp/root.html"
+          grep -q '"mode": "shadow"' "$tmp/shell.json"
+          grep -q '8d2c20b7c76004389edd8f4a3b80d6b314900ba0' "$tmp/shell.json"
+          node --check "$tmp/rollout.js"
+          echo 'PASS: live control is still V7.3 + shadow shell before activation merge.'

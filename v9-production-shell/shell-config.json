@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "mode": "shadow",
+  "mode": "candidate",
   "controlIndex": "../index.html",
   "expectedControlBuild": "7310",
   "runtimeBase": "v9-production-runtime",
@@ -8,5 +8,5 @@
   "runtimeFingerprint": "sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697",
   "engineScopeCountries": ["FR", "NL", "IT"],
   "fallback": "legacy-compare",
-  "notes": "Shadow-only production-shell prototype. The stable V7.3 UI remains authoritative and visible; the exact observed V9 runtime and its data dependencies are isolated under /v9-production-runtime/ to avoid collisions with production control data."
+  "notes": "Candidate mode for the guarded production canary. Stable V7.3 UI remains the shell; V9 is used for compare only, with automatic legacy-compare fallback on any candidate execution failure. Runtime and data remain isolated under /v9-production-runtime/."
 }
