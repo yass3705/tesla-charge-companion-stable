@@ -3,49 +3,49 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 35666
+      "total": 36883
     },
     "format": {
-      "count": 35666,
+      "count": 36883,
       "pct": 100.0,
-      "total": 35666
+      "total": 36883
     },
     "maxAmperage": {
-      "count": 35666,
+      "count": 36883,
       "pct": 100.0,
-      "total": 35666
+      "total": 36883
     },
     "maxElectricPower": {
-      "count": 35666,
+      "count": 36883,
       "pct": 100.0,
-      "total": 35666
+      "total": 36883
     },
     "maxVoltage": {
-      "count": 35666,
+      "count": 36883,
       "pct": 100.0,
-      "total": 35666
+      "total": 36883
     },
     "powerType": {
-      "count": 35666,
+      "count": 36883,
       "pct": 100.0,
-      "total": 35666
+      "total": 36883
     },
     "standard": {
-      "count": 35666,
+      "count": 36883,
       "pct": 100.0,
-      "total": 35666
+      "total": 36883
     },
-    "total": 35666
+    "total": 36883
   },
   "country": "ES",
   "cpos": {
     "distinct": 45,
     "items": [
       {
-        "connectors": 83,
+        "connectors": 929,
         "cpoName": "(ZUNDER) Grupo Easychargar SA",
-        "evses": 83,
-        "locations": 22,
+        "evses": 929,
+        "locations": 226,
         "partyId": "ZUN"
       },
       {
@@ -161,10 +161,10 @@
         "partyId": "AYA"
       },
       {
-        "connectors": 1554,
+        "connectors": 1925,
         "cpoName": "Etecnic Movilidad Electrica, SRL",
-        "evses": 1438,
-        "locations": 582,
+        "evses": 1796,
+        "locations": 759,
         "partyId": "ETE"
       },
       {
@@ -362,45 +362,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 31856
+      "total": 33060
     },
     "identifier": {
-      "count": 31850,
+      "count": 33054,
       "pct": 99.98,
-      "total": 31856
+      "total": 33060
     },
-    "total": 31856
+    "total": 33060
   },
-  "generatedAt": "2026-09-06T04:12:56.260836Z",
+  "generatedAt": "2026-09-06T05:44:17.279068Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 10569,
+      "count": 10950,
       "pct": 100.0,
-      "total": 10569
+      "total": 10950
     },
     "coordinates": {
-      "count": 10569,
+      "count": 10950,
       "pct": 100.0,
-      "total": 10569
+      "total": 10950
     },
     "cpoIdentity": {
-      "count": 10569,
+      "count": 10950,
       "pct": 100.0,
-      "total": 10569
+      "total": 10950
     },
     "withEvses": {
-      "count": 10569,
+      "count": 10950,
       "pct": 100.0,
-      "total": 10569
+      "total": 10950
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 10569,
-    "nextPage": 114,
-    "registryCoveragePct": 72.54,
+    "locationsStored": 10950,
+    "nextPage": 118,
+    "registryCoveragePct": 75.15,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
