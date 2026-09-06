@@ -1,0 +1,38 @@
+{
+  "automation": "CPO Allemagne V9",
+  "generated_at_utc": "2026-09-06T15:53:00Z",
+  "source_state": "germany-cpo-deferred-pricing-automation38.json",
+  "canonical_counts": {
+    "nominal_total": 556,
+    "nominal_treated": 212,
+    "nominal_complete": 92,
+    "nominal_partial": 103,
+    "nominal_blocked": 17,
+    "nominal_remaining": 344,
+    "certification_status": "suspended_pending_true_2026-09-01_dataset_audit"
+  },
+  "research_progress": {
+    "new_research_files": [
+      "germany-station-pricing-ctp-contipark-research.json"
+    ],
+    "counter_effect": "none_until_sep1_canonical_membership_is_rebuilt",
+    "DE*CTP": {
+      "status": "partial_station_level_fail_closed",
+      "aliases_resolved": ["Servipark Deutschland GmbH", "Contipark"],
+      "official_direct_payment": "Charge Assist / GreenFlux direct payment via app or web is officially documented by Contipark.",
+      "official_blocking_fee": "No blocking fee for Direct Payment according to Contipark.",
+      "pricing_finding": "Current station-level evidence shows both 0.45 and 0.46 EUR/kWh among DE*CTP EVSEs, including variation within individual parking facilities. No DE*CTP-wide fallback tariff is valid.",
+      "next_action": "Resolve canonical DE*CTP EVSEs individually through Contipark/GreenFlux checkout or another station-level verifiable source."
+    }
+  },
+  "coherence": {
+    "nominal_arithmetic": "92 + 103 + 17 = 212; 556 - 212 = 344",
+    "canonical_denominator_check": "still suspended pending genuine 2026-09-01 canonical rebuild",
+    "duplicate_alias_check": "passed",
+    "blocked_reaudit_check": "passed",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "counter_named_state_check": "passed nominally; DE*CTP research intentionally not added to counters without Sep-1 canonical membership proof",
+    "pr_reference_check": "PR #69 / germany-v9-preintegration retained"
+  },
+  "next_target": "Continue research-only classification of untreated prefixes while certified counters remain frozen; prioritize prefixes with unambiguous current operator identity and station-level tariff surfaces."
+}
