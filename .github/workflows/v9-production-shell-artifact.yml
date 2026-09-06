@@ -75,7 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           node --check shellsrc/v9-production-shell/bridge.js
-          node shellsrc/tests/v9-production-engine-shell.test.cjs
+          (cd shellsrc && node tests/v9-production-engine-shell.test.cjs)
           node --check site/assets/v9/runtime-engine.js
           node --check site/assets/v9/browser-loaders.js
           grep -q '8d2c20b7c76004389edd8f4a3b80d6b314900ba0' site/v9-production-shell/shell-config.json
