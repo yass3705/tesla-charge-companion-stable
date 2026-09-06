@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Goch",
+  "aliases": ["Stadtwerke Goch GmbH", "Stadtwerke Goch Energie GmbH"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-06",
+  "status": "partial-deferred",
+  "officialEvidence": {
+    "ownCardTariff": {
+      "name": "vollmacherKarte",
+      "acEurPerKwh": 0.49,
+      "fastEurPerKwh": 0.67,
+      "scope": "Stadtwerke Goch charging stations for card users",
+      "source": "https://www.stadtwerke-goch.de/ladekarte-hier-beantragen/"
+    },
+    "billingPlatform": "ecotap / Threeforce B.V."
+  },
+  "stationLevelEvidence": [
+    {
+      "location": "Voßheider Straße 208, Goch",
+      "evseNamespace": "NL*LMS",
+      "priceEurPerKwh": 0.41,
+      "startFeeEur": 0,
+      "blockingFeeEur": 0,
+      "sourceType": "Mobilithek/AFIR surfaced by e-Stations",
+      "source": "https://www.e-stations.de/ladestationen/goch/ecotap-stadtwerke-goch-57993"
+    },
+    {
+      "location": "Klever Straße 26-28, Goch",
+      "evseNamespace": "NL*LMS",
+      "priceEurPerKwh": 0.41,
+      "startFeeEur": 0,
+      "blockingFeeEur": 0,
+      "sourceType": "Mobilithek/AFIR surfaced by e-Stations",
+      "source": "https://www.e-stations.de/ladestationen/goch/ecotap-stadtwerke-goch-56177"
+    }
+  ],
+  "decision": "Do not equate the official vollmacherKarte contract tariff with ad-hoc/direct pricing. Current AFIR station data also exposes Stadtwerke-Goch-branded AC points under an NL*LMS billing namespace at 0.41 EUR/kWh, proving that physical operator, billing namespace and access channel must be resolved per EVSE. Defer deeper mapping until the 591-CPO first pass is complete."
+}
