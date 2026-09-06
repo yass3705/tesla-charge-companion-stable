@@ -12,14 +12,17 @@
 <script>
 (async function(){
   'use strict';
-  const CONTROL_FALLBACK='../';
-  const failClosed=(reason)=>{console.error('[TCC V9 shell] fail closed:',reason);location.replace(CONTROL_FALLBACK);};
+  let cfg=null;
+  const inferredFallback=location.pathname.includes('/v9-test/')?'../../':'../';
+  const failClosed=(reason)=>{console.error('[TCC V9 shell] fail closed:',reason);location.replace(cfg?.controlFallback||inferredFallback);};
   try{
+    const bridgeUrl=new URL('./bridge.js',location.href).href;
     const cfgResponse=await fetch('./shell-config.json',{cache:'no-store'});
     if(!cfgResponse.ok)throw new Error(`shell config ${cfgResponse.status}`);
-    const cfg=await cfgResponse.json();
+    cfg=await cfgResponse.json();
     if(cfg.schemaVersion!==1||!['shadow','candidate'].includes(cfg.mode))throw new Error('invalid shell config');
     if(cfg.observedCandidateSha!=='8d2c20b7c76004389edd8f4a3b80d6b314900ba0')throw new Error('candidate SHA is not pinned');
+    if(!cfg.controlBase||!cfg.controlIndex||!cfg.controlFallback)throw new Error('control paths missing');
     const controlResponse=await fetch(cfg.controlIndex,{cache:'no-store'});
     if(!controlResponse.ok)throw new Error(`control index ${controlResponse.status}`);
     const controlHtml=await controlResponse.text();
@@ -27,7 +30,7 @@
     const build=parsed.querySelector('meta[name="tcc-build"]')?.content||'';
     if(build!==String(cfg.expectedControlBuild||''))throw new Error(`control build mismatch: ${build||'missing'}`);
 
-    const base=parsed.createElement('base');base.setAttribute('href','../');parsed.head.prepend(base);
+    const base=parsed.createElement('base');base.setAttribute('href',cfg.controlBase);parsed.head.prepend(base);
     const marker=parsed.createElement('meta');marker.setAttribute('name','tcc-v9-shell');marker.setAttribute('content',cfg.mode);parsed.head.append(marker);
     parsed.title=`${parsed.title} · V9 ${cfg.mode}`;
 
@@ -45,8 +48,8 @@
       'assets/v9/adapters/france-emsp-compact.js','assets/v9/adapters/france-crosswalk.js','assets/v9/adapters/france-irve-status.js',
       'assets/v9/adapters/morocco-public.js','assets/v9/browser-loaders.js'
     ];
-    for(const path of dependencies){const script=parsed.createElement('script');script.defer=true;script.src=`${runtimeBase}/${path}`;parsed.body.append(script);}
-    const bridge=parsed.createElement('script');bridge.defer=true;bridge.src='v9-production-shell/bridge.js';parsed.body.append(bridge);
+    for(const path of dependencies){const script=parsed.createElement('script');script.defer=true;script.setAttribute('src',`${runtimeBase}/${path}`);parsed.body.append(script);}
+    const bridge=parsed.createElement('script');bridge.defer=true;bridge.setAttribute('src',bridgeUrl);parsed.body.append(bridge);
 
     document.open();document.write('<!doctype html>'+parsed.documentElement.outerHTML);document.close();
   }catch(err){failClosed(err?.message||err);}

@@ -7,6 +7,9 @@ const readiness=JSON.parse(fs.readFileSync('ops/v9/production-shell-readiness.js
 const loader=fs.readFileSync('v9-production-shell/index.html','utf8');
 
 assert.equal(cfg.mode,'shadow');
+assert.equal(cfg.controlBase,'../');
+assert.equal(cfg.controlIndex,'../index.html');
+assert.equal(cfg.controlFallback,'../');
 assert.equal(cfg.expectedControlBuild,'7310');
 assert.equal(cfg.observedCandidateSha,'8d2c20b7c76004389edd8f4a3b80d6b314900ba0');
 assert.deepEqual(cfg.engineScopeCountries,['FR','NL','IT']);
@@ -14,8 +17,9 @@ assert.equal(cfg.fallback,'legacy-compare');
 assert.equal(readiness.ready,false);
 assert.equal(readiness.state,'BLOCKED');
 assert.match(loader,/control build mismatch/);
-assert.match(loader,/location\.replace\(CONTROL_FALLBACK\)/);
-assert.match(loader,/v9-production-shell\/bridge\.js/);
+assert.match(loader,/cfg\?\.controlFallback\|\|inferredFallback/);
+assert.match(loader,/new URL\('\.\/bridge\.js',location\.href\)/);
+assert.match(loader,/base\.setAttribute\('href',cfg\.controlBase\)/);
 assert.doesNotMatch(loader,/v9-app\/app\.js/);
 
 assert.deepEqual(Shell.rankingWeights('balanced'),{price:.5,distance:.5});
@@ -32,4 +36,4 @@ const normal=Shell.dcCurve('normal','realistic'),warm=Shell.dcCurve('warm','real
 assert.equal(normal.length,14);assert(warm[0].powerKw>normal[0].powerKw);
 const session=Shell.buildSession({startSoc:20,targetSoc:80,startAt:start,disconnectAt:disconnect,condition:'normal',profile:'realistic'});
 assert.equal(session.batteryCapacityKwh,75);assert.equal(session.consumptionKwhPer100Km,15);assert.equal(session.vehicleMaxAcKw,11);assert.equal(session.vehicleMaxDcKw,250);assert(Array.isArray(session.chargeCurve));
-console.log(JSON.stringify({ok:true,module:'tcc-v9-production-engine-shell',mode:cfg.mode,controlBuild:cfg.expectedControlBuild,scope:cfg.engineScopeCountries,failClosed:true},null,2));
+console.log(JSON.stringify({ok:true,module:'tcc-v9-production-engine-shell',mode:cfg.mode,controlBuild:cfg.expectedControlBuild,scope:cfg.engineScopeCountries,failClosed:true,pathPortable:true},null,2));
