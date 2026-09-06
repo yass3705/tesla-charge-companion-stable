@@ -7,7 +7,9 @@
   "matchingRule": "Match only an exact PowerGo location from an official PowerGo page. Prices are dynamic and may differ by payment channel; never apply one site's tariff to another site.",
   "stations": [
     {"name":"+B Energías Sueca","location":"Sueca, Valencia","connector":"CCS","powerKw":120,"energyEurPerKwh":0.43,"source":"https://www.powergo.es/ubicaciones-y-tarifas/"},
-    {"name":"Selwo Aventura","location":"Estepona, Málaga","connector":"Type 2","powerKw":22,"energyEurPerKwh":0.36,"chargingPoints":12,"source":"https://www.powergo.energy/locaties/selwo-aventura-powergo/"}
+    {"name":"Selwo Aventura","location":"Estepona, Málaga","connector":"Type 2","powerKw":22,"energyEurPerKwh":0.36,"chargingPoints":12,"source":"https://www.powergo.energy/locaties/selwo-aventura-powergo/"},
+    {"name":"+B Energías Denia","location":"Denia, Alicante","connector":"CHADEMO","powerKw":50,"energyEurPerKwh":0.44,"chargingPoints":3,"source":"https://www.powergo.energy/locaties/b-energias-denia-powergo/"},
+    {"name":"+B Energías Xátiva","location":"Xátiva, Valencia","connector":"CHADEMO","powerKw":50,"energyEurPerKwh":0.50,"chargingPoints":3,"source":"https://www.powergo.energy/locaties/b-energias-xativa-powergo/"}
   ],
   "notes":[
     "PowerGo explicitly states that charging tariffs are dynamic.",
