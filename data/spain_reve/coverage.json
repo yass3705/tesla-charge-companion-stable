@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 39914
+      "total": 40933
     },
     "format": {
-      "count": 39914,
+      "count": 40933,
       "pct": 100.0,
-      "total": 39914
+      "total": 40933
     },
     "maxAmperage": {
-      "count": 39914,
+      "count": 40933,
       "pct": 100.0,
-      "total": 39914
+      "total": 40933
     },
     "maxElectricPower": {
-      "count": 39914,
+      "count": 40933,
       "pct": 100.0,
-      "total": 39914
+      "total": 40933
     },
     "maxVoltage": {
-      "count": 39914,
+      "count": 40933,
       "pct": 100.0,
-      "total": 39914
+      "total": 40933
     },
     "powerType": {
-      "count": 39914,
+      "count": 40933,
       "pct": 100.0,
-      "total": 39914
+      "total": 40933
     },
     "standard": {
-      "count": 39914,
+      "count": 40933,
       "pct": 100.0,
-      "total": 39914
+      "total": 40933
     },
-    "total": 39914
+    "total": 40933
   },
   "country": "ES",
   "cpos": {
-    "distinct": 50,
+    "distinct": 53,
     "items": [
       {
         "connectors": 1768,
@@ -49,10 +49,10 @@
         "partyId": "ZUN"
       },
       {
-        "connectors": 1380,
+        "connectors": 1713,
         "cpoName": "ACCIONA Recarga",
-        "evses": 1250,
-        "locations": 282,
+        "evses": 1542,
+        "locations": 421,
         "partyId": "ARE"
       },
       {
@@ -77,10 +77,10 @@
         "partyId": "CAN"
       },
       {
-        "connectors": 10,
+        "connectors": 377,
         "cpoName": "Atlante Iberia S.L.",
-        "evses": 10,
-        "locations": 4,
+        "evses": 377,
+        "locations": 104,
         "partyId": "ATE"
       },
       {
@@ -105,6 +105,13 @@
         "partyId": "ELC"
       },
       {
+        "connectors": 62,
+        "cpoName": "Charging Together Norte SL",
+        "evses": 62,
+        "locations": 8,
+        "partyId": "CHT"
+      },
+      {
         "connectors": 126,
         "cpoName": "CHARGING TOGETHER SL",
         "evses": 113,
@@ -117,6 +124,13 @@
         "evses": 102,
         "locations": 56,
         "partyId": "MGC"
+      },
+      {
+        "connectors": 8,
+        "cpoName": "EDISON NEXT SPAIN SLU",
+        "evses": 8,
+        "locations": 4,
+        "partyId": "EDX"
       },
       {
         "connectors": 1651,
@@ -175,6 +189,13 @@
         "partyId": "AYA"
       },
       {
+        "connectors": 3,
+        "cpoName": "ESTACION DE SERVICIO VILLAROSA S.A.",
+        "evses": 3,
+        "locations": 1,
+        "partyId": "VIL"
+      },
+      {
         "connectors": 1925,
         "cpoName": "Etecnic Movilidad Electrica, SRL",
         "evses": 1796,
@@ -196,10 +217,10 @@
         "partyId": "FEN"
       },
       {
-        "connectors": 60,
+        "connectors": 306,
         "cpoName": "Galp Energía España, S.A.U.",
-        "evses": 60,
-        "locations": 32,
+        "evses": 303,
+        "locations": 158,
         "partyId": "DLP"
       },
       {
@@ -397,46 +418,46 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 35963
+      "total": 36938
     },
     "identifier": {
-      "count": 35957,
+      "count": 36932,
       "pct": 99.98,
-      "total": 35963
+      "total": 36938
     },
-    "total": 35963
+    "total": 36938
   },
-  "generatedAt": "2026-09-06T08:12:02.373060Z",
+  "generatedAt": "2026-09-06T19:01:07.179808Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 11700,
+      "count": 12078,
       "pct": 100.0,
-      "total": 11700
+      "total": 12078
     },
     "coordinates": {
-      "count": 11700,
+      "count": 12078,
       "pct": 100.0,
-      "total": 11700
+      "total": 12078
     },
     "cpoIdentity": {
-      "count": 11700,
+      "count": 12078,
       "pct": 100.0,
-      "total": 11700
+      "total": 12078
     },
     "withEvses": {
-      "count": 11700,
+      "count": 12078,
       "pct": 100.0,
-      "total": 11700
+      "total": 12078
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 11700,
-    "nextPage": 126,
-    "registryCoveragePct": 80.34,
-    "registryTotalCount": 14564,
+    "locationsStored": 12078,
+    "nextPage": 130,
+    "registryCoveragePct": 82.9,
+    "registryTotalCount": 14569,
     "totalPages": 146
   },
   "source": "REVE",
