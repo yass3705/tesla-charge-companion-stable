@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 33773
+      "total": 34679
     },
     "format": {
-      "count": 33773,
+      "count": 34679,
       "pct": 100.0,
-      "total": 33773
+      "total": 34679
     },
     "maxAmperage": {
-      "count": 33773,
+      "count": 34679,
       "pct": 100.0,
-      "total": 33773
+      "total": 34679
     },
     "maxElectricPower": {
-      "count": 33773,
+      "count": 34679,
       "pct": 100.0,
-      "total": 33773
+      "total": 34679
     },
     "maxVoltage": {
-      "count": 33773,
+      "count": 34679,
       "pct": 100.0,
-      "total": 33773
+      "total": 34679
     },
     "powerType": {
-      "count": 33773,
+      "count": 34679,
       "pct": 100.0,
-      "total": 33773
+      "total": 34679
     },
     "standard": {
-      "count": 33773,
+      "count": 34679,
       "pct": 100.0,
-      "total": 33773
+      "total": 34679
     },
-    "total": 33773
+    "total": 34679
   },
   "country": "ES",
   "cpos": {
-    "distinct": 44,
+    "distinct": 45,
     "items": [
       {
         "connectors": 83,
@@ -147,17 +147,24 @@
         "partyId": "CEL"
       },
       {
-        "connectors": 1103,
+        "connectors": 1156,
         "cpoName": "ERANOVUM E-MOBILITY, S.L.",
-        "evses": 1103,
-        "locations": 308,
+        "evses": 1156,
+        "locations": 334,
         "partyId": "ERA"
       },
       {
-        "connectors": 86,
+        "connectors": 3,
+        "cpoName": "ESTACION DE SERVICIO AYALA S.L.",
+        "evses": 3,
+        "locations": 1,
+        "partyId": "AYA"
+      },
+      {
+        "connectors": 567,
         "cpoName": "Etecnic Movilidad Electrica, SRL",
-        "evses": 80,
-        "locations": 41,
+        "evses": 523,
+        "locations": 205,
         "partyId": "ETE"
       },
       {
@@ -259,10 +266,10 @@
         "partyId": "PAV"
       },
       {
-        "connectors": 18,
+        "connectors": 387,
         "cpoName": "PLENOIL, S.L.",
-        "evses": 18,
-        "locations": 9,
+        "evses": 387,
+        "locations": 194,
         "partyId": "PLE"
       },
       {
@@ -355,45 +362,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 30073
+      "total": 30941
     },
     "identifier": {
-      "count": 30067,
+      "count": 30935,
       "pct": 99.98,
-      "total": 30073
+      "total": 30941
     },
-    "total": 30073
+    "total": 30941
   },
-  "generatedAt": "2026-09-06T02:11:19.089543Z",
+  "generatedAt": "2026-09-06T03:32:05.960666Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 9816,
+      "count": 10192,
       "pct": 100.0,
-      "total": 9816
+      "total": 10192
     },
     "coordinates": {
-      "count": 9816,
+      "count": 10192,
       "pct": 100.0,
-      "total": 9816
+      "total": 10192
     },
     "cpoIdentity": {
-      "count": 9816,
+      "count": 10192,
       "pct": 100.0,
-      "total": 9816
+      "total": 10192
     },
     "withEvses": {
-      "count": 9816,
+      "count": 10192,
       "pct": 100.0,
-      "total": 9816
+      "total": 10192
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 9816,
-    "nextPage": 106,
-    "registryCoveragePct": 67.37,
+    "locationsStored": 10192,
+    "nextPage": 110,
+    "registryCoveragePct": 69.95,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
