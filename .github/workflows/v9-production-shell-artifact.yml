@@ -6,12 +6,14 @@ on:
     paths:
       - 'v9-production-shell/**'
       - 'ops/v9/production-shell-readiness.json'
+      - 'tests/v9-production-routing-smoke.test.cjs'
       - '.github/workflows/v9-production-shell-artifact.yml'
   pull_request:
     branches: [main]
     paths:
       - 'v9-production-shell/**'
       - 'ops/v9/production-shell-readiness.json'
+      - 'tests/v9-production-routing-smoke.test.cjs'
       - '.github/workflows/v9-production-shell-artifact.yml'
   workflow_dispatch:
 
@@ -83,6 +85,14 @@ jobs:
           grep -q '"mode": "shadow"' site/v9-production-shell/shell-config.json
           grep -q "location.replace(CONTROL_FALLBACK)" site/v9-production-shell/index.html
           ! grep -q 'v9-app/app.js' site/v9-production-shell/index.html
+
+      - name: Smoke deterministic 1 percent routing and fail-closed gates
+        shell: bash
+        env:
+          V9_ROLLOUT_ENGINE: candidate/assets/v9/rollout-engine.js
+        run: |
+          set -euo pipefail
+          node shellsrc/tests/v9-production-routing-smoke.test.cjs
 
       - name: Validate active local source dependencies for FR NL IT
         shell: bash
