@@ -1,0 +1,43 @@
+{
+  "automation": "CPO Allemagne V9",
+  "generated_at_utc": "2026-09-06T02:51:00Z",
+  "source_state": "germany-cpo-deferred-pricing-automation36.json",
+  "canonical_counts": {
+    "nominal_total": 556,
+    "nominal_treated": 212,
+    "nominal_complete": 92,
+    "nominal_partial": 103,
+    "nominal_blocked": 17,
+    "nominal_remaining": 344,
+    "certification_status": "suspended_pending_true_2026-09-01_dataset_audit"
+  },
+  "technical_progress": {
+    "official_bnetza_current_snapshot": "Bundesnetzagentur currently publishes Liste der Ladesaeulen Stand 1 September 2026 and a CSV download; the project builder URL is aligned to Ladesaeulenregister_BNetzA_2026-09-01.csv.",
+    "official_public_webservice": "Bundesnetzagentur now documents a public Ladesaeulenregister interface updated daily; REST JSON/XML are documented at the interface page, but a public machine endpoint was not exposed directly on that page during this run.",
+    "ci_root_cause_correction": {
+      "previous_classification": "generic CI trigger regression / workflow not being scheduled",
+      "verified_pr_state": "PR #69 targets refactor/unified-data-engine-v9 and is mergeable=false, rebaseable=false, mergeable_state=dirty.",
+      "base_workflow_check": "The Germany full-build workflow file is not present on refactor/unified-data-engine-v9; it exists only on germany-v9-preintegration.",
+      "conclusion": "The lack of pull_request runs is not evidence of a builder failure. The PR is currently conflicted (dirty), which prevents reliable PR CI scheduling; additionally the dedicated Germany workflow is branch-only relative to the PR base.",
+      "safe_action": "No rebase, conflict resolution, base-branch workflow promotion or force push performed because those actions can alter V9 integration semantics and are outside low-impact autonomous fixes."
+    }
+  },
+  "research_progress": {
+    "new_cpos_counted": 0,
+    "aliases_added": 0,
+    "DE*CTP": {
+      "alias": "Servipark Deutschland GmbH / Contipark",
+      "status": "active_candidate_pending_sep1_canonical_confirmation",
+      "counter_effect": "none"
+    }
+  },
+  "coherence": {
+    "nominal_arithmetic": "92 + 103 + 17 = 212; 556 - 212 = 344",
+    "canonical_denominator_check": "certification suspended until a genuine 2026-09-01 build/audit is available",
+    "duplicate_alias_check": "passed",
+    "blocked_reaudit_check": "passed",
+    "repeated_investigation_gt2_runs_check": "passed; this run resolved the CI/root-source blocker rather than repeating pricing research",
+    "counter_named_state_check": "passed nominally; counters intentionally unchanged without Sep-1 canonical proof"
+  },
+  "next_target": "Obtain a genuine Sep-1 canonical build without unsafe conflict resolution; once available, reconcile prefix membership/counts and resume highest-coverage untreated CPO research."
+}
