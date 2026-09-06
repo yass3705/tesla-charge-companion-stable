@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 38289
+      "total": 39914
     },
     "format": {
-      "count": 38289,
+      "count": 39914,
       "pct": 100.0,
-      "total": 38289
+      "total": 39914
     },
     "maxAmperage": {
-      "count": 38289,
+      "count": 39914,
       "pct": 100.0,
-      "total": 38289
+      "total": 39914
     },
     "maxElectricPower": {
-      "count": 38289,
+      "count": 39914,
       "pct": 100.0,
-      "total": 38289
+      "total": 39914
     },
     "maxVoltage": {
-      "count": 38289,
+      "count": 39914,
       "pct": 100.0,
-      "total": 38289
+      "total": 39914
     },
     "powerType": {
-      "count": 38289,
+      "count": 39914,
       "pct": 100.0,
-      "total": 38289
+      "total": 39914
     },
     "standard": {
-      "count": 38289,
+      "count": 39914,
       "pct": 100.0,
-      "total": 38289
+      "total": 39914
     },
-    "total": 38289
+    "total": 39914
   },
   "country": "ES",
   "cpos": {
-    "distinct": 47,
+    "distinct": 50,
     "items": [
       {
         "connectors": 1768,
@@ -49,11 +49,18 @@
         "partyId": "ZUN"
       },
       {
-        "connectors": 118,
+        "connectors": 1380,
         "cpoName": "ACCIONA Recarga",
-        "evses": 103,
-        "locations": 24,
+        "evses": 1250,
+        "locations": 282,
         "partyId": "ARE"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ADURIZ ENERGIA SLU",
+        "evses": 9,
+        "locations": 2,
+        "partyId": "ADU"
       },
       {
         "connectors": 33,
@@ -77,10 +84,10 @@
         "partyId": "ATE"
       },
       {
-        "connectors": 4,
+        "connectors": 93,
         "cpoName": "BARCELONA DE SERVEIS MUNICIPALS, SA",
-        "evses": 4,
-        "locations": 2,
+        "evses": 93,
+        "locations": 41,
         "partyId": "BSM"
       },
       {
@@ -259,10 +266,10 @@
         "partyId": "MOY"
       },
       {
-        "connectors": 2,
+        "connectors": 126,
         "cpoName": "Naturgy Nuevas Energías, SLU",
-        "evses": 2,
-        "locations": 1,
+        "evses": 115,
+        "locations": 30,
         "partyId": "NTG"
       },
       {
@@ -278,6 +285,13 @@
         "evses": 94,
         "locations": 41,
         "partyId": "PAV"
+      },
+      {
+        "connectors": 30,
+        "cpoName": "PLENOIL CANARIAS, S.L.U.",
+        "evses": 30,
+        "locations": 15,
+        "partyId": "PLC"
       },
       {
         "connectors": 387,
@@ -315,10 +329,10 @@
         "partyId": "AEQ"
       },
       {
-        "connectors": 373,
+        "connectors": 423,
         "cpoName": "REMO SUSTAINABLE MOBILITY S.L",
-        "evses": 373,
-        "locations": 102,
+        "evses": 423,
+        "locations": 120,
         "partyId": "RSM"
       },
       {
@@ -343,10 +357,10 @@
         "partyId": "TSL"
       },
       {
-        "connectors": 4,
+        "connectors": 56,
         "cpoName": "The F Charging Espana S.L.U.",
-        "evses": 4,
-        "locations": 1,
+        "evses": 56,
+        "locations": 14,
         "partyId": "PWY"
       },
       {
@@ -369,6 +383,13 @@
         "evses": 202,
         "locations": 81,
         "partyId": "ZCN"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ZOILO RIOS, S.A.",
+        "evses": 7,
+        "locations": 3,
+        "partyId": "001"
       }
     ]
   },
@@ -376,46 +397,46 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 34466
+      "total": 35963
     },
     "identifier": {
-      "count": 34460,
+      "count": 35957,
       "pct": 99.98,
-      "total": 34466
+      "total": 35963
     },
-    "total": 34466
+    "total": 35963
   },
-  "generatedAt": "2026-09-06T07:06:41.321315Z",
+  "generatedAt": "2026-09-06T08:12:02.373060Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 11323,
+      "count": 11700,
       "pct": 100.0,
-      "total": 11323
+      "total": 11700
     },
     "coordinates": {
-      "count": 11323,
+      "count": 11700,
       "pct": 100.0,
-      "total": 11323
+      "total": 11700
     },
     "cpoIdentity": {
-      "count": 11323,
+      "count": 11700,
       "pct": 100.0,
-      "total": 11323
+      "total": 11700
     },
     "withEvses": {
-      "count": 11323,
+      "count": 11700,
       "pct": 100.0,
-      "total": 11323
+      "total": 11700
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 11323,
-    "nextPage": 122,
-    "registryCoveragePct": 77.71,
-    "registryTotalCount": 14570,
+    "locationsStored": 11700,
+    "nextPage": 126,
+    "registryCoveragePct": 80.34,
+    "registryTotalCount": 14564,
     "totalPages": 146
   },
   "source": "REVE",
