@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-06",
+  "operationalDenominator": 591,
+  "countingPolicy": {
+    "canonicalReliabilityRetry": false,
+    "reason": "The single allowed canonical reliability attempt was already consumed. Continue breadth-first with the last-known 591 denominator.",
+    "cumulativeUniqueSeen": null,
+    "cumulativeUniqueSeenReason": "Historical nominal states cannot be reconciled without repeating the prohibited canonical rebuild; assert only forward deltas from first-pass checkpoints."
+  },
+  "thisPass": {
+    "newCpos": ["Stadtwerke Goch", "e-regio", "Stadtwerke Solingen", "Stadtwerke Husum"],
+    "newCount": 4,
+    "complete": 0,
+    "partial": 4,
+    "blocked": 0,
+    "deferredAfterFirstPass": 4,
+    "files": [
+      "data/v9/germany-station-pricing-stadtwerke-goch-research.json",
+      "data/v9/germany-station-pricing-e-regio-research.json",
+      "data/v9/germany-station-pricing-stadtwerke-solingen-research.json",
+      "data/v9/germany-station-pricing-stadtwerke-husum-research.json"
+    ]
+  },
+  "aliasesAndScope": {
+    "Stadtwerke Goch": "aliases Stadtwerke Goch GmbH / Stadtwerke Goch Energie GmbH; official card tariff separated from current AFIR ad-hoc points under the NL*LMS billing namespace",
+    "e-regio": "e-regio GmbH & Co. KG; DE*ERE confirmed; official QR ad-hoc exists but exact current price is station/time dependent",
+    "Stadtwerke Solingen": "Stadtwerke Solingen GmbH; DE*SOL confirmed; current official tariff is location/operator-specific and displayed pre-session in the Lade-App",
+    "Stadtwerke Husum": "Stadtwerke Husum GmbH; DE*HUS confirmed; current website incomplete and no authoritative direct price exposed"
+  },
+  "coherence": {
+    "status": "ok",
+    "duplicateAliasCheck": "passed against PR changed-file inventory and existing dedicated research/direct-offer filenames; none of the four had a dedicated first-pass pricing research file",
+    "blockedReauditCheck": "passed; no previously deferred CPO from earlier first-pass checkpoints was re-audited",
+    "repeatedInvestigationCheck": "passed; all four are breadth-first first-pass additions",
+    "tariffScopeCheck": "passed; contract/app/AFIR layers kept separate and no operator-wide tariff inferred where station-specific pricing applies",
+    "canonicalPolicyCheck": "passed; no second canonical rebuild attempted",
+    "counterCheck": "only +4 forward delta asserted; no fabricated cumulative seen/591 count"
+  },
+  "nextTargetsPolicy": "Continue with canonical operator aliases that have no dedicated direct-offer or research file, prioritizing new CPOs over any deferred deep dive. Candidates include Stadtwerke SH, EA EnergieArchitektur and energis after duplicate verification."
+}
