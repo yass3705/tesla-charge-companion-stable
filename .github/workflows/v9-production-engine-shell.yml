@@ -1,0 +1,50 @@
+name: V9 production engine shell safety
+
+on:
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'v9-production-shell/**'
+      - 'tests/v9-production-engine-shell.test.cjs'
+      - 'ops/v9/production-shell-readiness.json'
+      - '.github/workflows/v9-production-engine-shell.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'v9-production-shell/**'
+      - 'tests/v9-production-engine-shell.test.cjs'
+      - 'ops/v9/production-shell-readiness.json'
+      - '.github/workflows/v9-production-engine-shell.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check v9-production-shell/bridge.js
+          node --check tests/v9-production-engine-shell.test.cjs
+      - name: Stable-UI engine-shell contract
+        run: node tests/v9-production-engine-shell.test.cjs
+      - name: No public exposure while shell is shadow-only
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const shell=JSON.parse(fs.readFileSync('v9-production-shell/shell-config.json','utf8'));
+          const gate=JSON.parse(fs.readFileSync('ops/v9/production-shell-readiness.json','utf8'));
+          const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
+          const policy=JSON.parse(fs.readFileSync('data/v9/canary-policy.json','utf8'));
+          if(shell.mode!=='shadow')throw new Error('prototype must remain shadow-only');
+          if(gate.ready!==false||gate.state!=='BLOCKED')throw new Error('production shell gate must stay BLOCKED');
+          if(rollout.stage!=='preview'||Number(rollout.canaryPercent)!==0)throw new Error('public exposure must remain 0%');
+          if(policy.active!==false)throw new Error('random canary policy must remain inactive');
+          console.log('PASS: shadow shell cannot expose public V9 traffic.');
+          NODE
