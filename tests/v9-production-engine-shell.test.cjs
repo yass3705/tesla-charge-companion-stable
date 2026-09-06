@@ -8,6 +8,7 @@ const loader=fs.readFileSync('v9-production-shell/index.html','utf8');
 
 assert.equal(cfg.mode,'shadow');
 assert.equal(cfg.expectedControlBuild,'7310');
+assert.equal(cfg.runtimeBase,'v9-production-runtime');
 assert.equal(cfg.observedCandidateSha,'8d2c20b7c76004389edd8f4a3b80d6b314900ba0');
 assert.deepEqual(cfg.engineScopeCountries,['FR','NL','IT']);
 assert.equal(cfg.fallback,'legacy-compare');
@@ -32,4 +33,4 @@ const normal=Shell.dcCurve('normal','realistic'),warm=Shell.dcCurve('warm','real
 assert.equal(normal.length,14);assert(warm[0].powerKw>normal[0].powerKw);
 const session=Shell.buildSession({startSoc:20,targetSoc:80,startAt:start,disconnectAt:disconnect,condition:'normal',profile:'realistic'});
 assert.equal(session.batteryCapacityKwh,75);assert.equal(session.consumptionKwhPer100Km,15);assert.equal(session.vehicleMaxAcKw,11);assert.equal(session.vehicleMaxDcKw,250);assert(Array.isArray(session.chargeCurve));
-console.log(JSON.stringify({ok:true,module:'tcc-v9-production-engine-shell',mode:cfg.mode,controlBuild:cfg.expectedControlBuild,scope:cfg.engineScopeCountries,failClosed:true},null,2));
+console.log(JSON.stringify({ok:true,module:'tcc-v9-production-engine-shell',mode:cfg.mode,controlBuild:cfg.expectedControlBuild,runtimeBase:cfg.runtimeBase,scope:cfg.engineScopeCountries,failClosed:true},null,2));

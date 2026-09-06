@@ -7,6 +7,7 @@ on:
       - 'v9-production-shell/**'
       - 'ops/v9/production-shell-readiness.json'
       - 'tests/v9-production-routing-smoke.test.cjs'
+      - 'tests/v9-production-engine-shell.test.cjs'
       - '.github/workflows/v9-production-shell-artifact.yml'
   pull_request:
     branches: [main]
@@ -14,6 +15,7 @@ on:
       - 'v9-production-shell/**'
       - 'ops/v9/production-shell-readiness.json'
       - 'tests/v9-production-routing-smoke.test.cjs'
+      - 'tests/v9-production-engine-shell.test.cjs'
       - '.github/workflows/v9-production-shell-artifact.yml'
   workflow_dispatch:
 
@@ -57,17 +59,17 @@ jobs:
           grep -q '<meta name="tcc-build" content="7310">' site/index.html
           root_before="$(sha256sum site/index.html | awk '{print $1}')"
 
-          rm -rf site/v9-production-shell site/assets/v9 site/data/v9
-          mkdir -p site/v9-production-shell site/assets/v9 site/data/v9 site/data/non_tesla_netherlands
+          rm -rf site/v9-production-shell site/v9-production-runtime
+          mkdir -p site/v9-production-shell site/v9-production-runtime/assets/v9 site/v9-production-runtime/data/v9 site/v9-production-runtime/data/non_tesla_netherlands
           rsync -a --delete shellsrc/v9-production-shell/ site/v9-production-shell/
-          rsync -a --delete candidate/assets/v9/ site/assets/v9/
-          rsync -a --delete candidate/data/v9/ site/data/v9/
+          rsync -a --delete candidate/assets/v9/ site/v9-production-runtime/assets/v9/
+          rsync -a --delete candidate/data/v9/ site/v9-production-runtime/data/v9/
 
-          cp candidate/data/tesla_stations.json site/data/tesla_stations.json
-          cp candidate/data/atlante_direct_stations_france.json.gz site/data/atlante_direct_stations_france.json.gz
-          cp candidate/data/powerdot_direct_france.json.gz site/data/powerdot_direct_france.json.gz
-          cp candidate/data/netherlands_direct_tariffs_v1.json site/data/netherlands_direct_tariffs_v1.json
-          rsync -a --delete candidate/data/non_tesla_netherlands/ site/data/non_tesla_netherlands/
+          cp candidate/data/tesla_stations.json site/v9-production-runtime/data/tesla_stations.json
+          cp candidate/data/atlante_direct_stations_france.json.gz site/v9-production-runtime/data/atlante_direct_stations_france.json.gz
+          cp candidate/data/powerdot_direct_france.json.gz site/v9-production-runtime/data/powerdot_direct_france.json.gz
+          cp candidate/data/netherlands_direct_tariffs_v1.json site/v9-production-runtime/data/netherlands_direct_tariffs_v1.json
+          rsync -a --delete candidate/data/non_tesla_netherlands/ site/v9-production-runtime/data/non_tesla_netherlands/
 
           root_after="$(sha256sum site/index.html | awk '{print $1}')"
           test "$root_before" = "$root_after"
@@ -78,10 +80,11 @@ jobs:
           set -euo pipefail
           node --check shellsrc/v9-production-shell/bridge.js
           (cd shellsrc && node tests/v9-production-engine-shell.test.cjs)
-          node --check site/assets/v9/runtime-engine.js
-          node --check site/assets/v9/browser-loaders.js
+          node --check site/v9-production-runtime/assets/v9/runtime-engine.js
+          node --check site/v9-production-runtime/assets/v9/browser-loaders.js
           grep -q '8d2c20b7c76004389edd8f4a3b80d6b314900ba0' site/v9-production-shell/shell-config.json
           grep -q 'sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697' site/v9-production-shell/shell-config.json
+          grep -q '"runtimeBase": "v9-production-runtime"' site/v9-production-shell/shell-config.json
           grep -q '"mode": "shadow"' site/v9-production-shell/shell-config.json
           grep -q "location.replace(CONTROL_FALLBACK)" site/v9-production-shell/index.html
           ! grep -q 'v9-app/app.js' site/v9-production-shell/index.html
@@ -101,8 +104,8 @@ jobs:
           node - <<'NODE'
           const fs=require('fs');
           const path=require('path');
-          const site='site';
-          const registry=JSON.parse(fs.readFileSync(path.join(site,'data/v9/source-registry.json'),'utf8'));
+          const runtime='site/v9-production-runtime';
+          const registry=JSON.parse(fs.readFileSync(path.join(runtime,'data/v9/source-registry.json'),'utf8'));
           const scope=new Set(['FR','NL','IT']);
           const missing=[];
           for(const source of registry.sources||[]){
@@ -111,12 +114,12 @@ jobs:
             if(!countries.includes('*')&&!countries.some(c=>scope.has(c)))continue;
             if(source.adapter==='runtime-user-stations'||source.url||source.urls)continue;
             for(const key of ['path','manifest']){
-              if(source[key]&&!fs.existsSync(path.join(site,source[key])))missing.push(`${source.id}:${source[key]}`);
+              if(source[key]&&!fs.existsSync(path.join(runtime,source[key])))missing.push(`${source.id}:${source[key]}`);
             }
-            if(source.root&&!fs.existsSync(path.join(site,source.root)))missing.push(`${source.id}:${source.root}`);
+            if(source.root&&!fs.existsSync(path.join(runtime,source.root)))missing.push(`${source.id}:${source.root}`);
           }
           if(missing.length)throw new Error(`Missing production-shell dependencies: ${missing.join(', ')}`);
-          console.log('PASS: all active local FR/NL/IT source dependencies are packaged.');
+          console.log('PASS: all active local FR/NL/IT source dependencies are isolated inside the pinned runtime namespace.');
           NODE
 
       - name: Prove production root remains unchanged
@@ -126,9 +129,10 @@ jobs:
           cmp -s site/index.html <(git -C site show HEAD:index.html)
           test -s site/v9-production-shell/index.html
           test -s site/v9-production-shell/bridge.js
-          test -s site/assets/v9/runtime-engine.js
-          test -s site/data/v9/source-registry.json
-          echo 'PASS: isolated shell artifact is complete; production root is byte-identical to main.'
+          test -s site/v9-production-runtime/assets/v9/runtime-engine.js
+          test -s site/v9-production-runtime/data/v9/source-registry.json
+          test ! -e site/assets/v9
+          echo 'PASS: isolated shell/runtime artifact is complete; production root and production data namespace remain untouched.'
 
       - name: Upload validation artifact
         uses: actions/upload-artifact@v4
@@ -137,11 +141,5 @@ jobs:
           path: |
             site/index.html
             site/v9-production-shell
-            site/assets/v9
-            site/data/v9
-            site/data/tesla_stations.json
-            site/data/atlante_direct_stations_france.json.gz
-            site/data/powerdot_direct_france.json.gz
-            site/data/netherlands_direct_tariffs_v1.json
-            site/data/non_tesla_netherlands
+            site/v9-production-runtime
           retention-days: 7
