@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 43636
+      "total": 44930
     },
     "format": {
-      "count": 43636,
+      "count": 44930,
       "pct": 100.0,
-      "total": 43636
+      "total": 44930
     },
     "maxAmperage": {
-      "count": 43636,
+      "count": 44930,
       "pct": 100.0,
-      "total": 43636
+      "total": 44930
     },
     "maxElectricPower": {
-      "count": 43636,
+      "count": 44930,
       "pct": 100.0,
-      "total": 43636
+      "total": 44930
     },
     "maxVoltage": {
-      "count": 43636,
+      "count": 44930,
       "pct": 100.0,
-      "total": 43636
+      "total": 44930
     },
     "powerType": {
-      "count": 43636,
+      "count": 44930,
       "pct": 100.0,
-      "total": 43636
+      "total": 44930
     },
     "standard": {
-      "count": 43636,
+      "count": 44930,
       "pct": 100.0,
-      "total": 43636
+      "total": 44930
     },
-    "total": 43636
+    "total": 44930
   },
   "country": "ES",
   "cpos": {
-    "distinct": 54,
+    "distinct": 73,
     "items": [
       {
         "connectors": 1768,
@@ -63,11 +63,39 @@
         "partyId": "ADU"
       },
       {
+        "connectors": 6,
+        "cpoName": "AJUNTAMENT DE BUNYOLA",
+        "evses": 6,
+        "locations": 4,
+        "partyId": "814"
+      },
+      {
+        "connectors": 25,
+        "cpoName": "AJUNTAMENT DE CALVIÀ",
+        "evses": 25,
+        "locations": 25,
+        "partyId": "CAL"
+      },
+      {
+        "connectors": 24,
+        "cpoName": "AJUNTAMENT DE SANT LLUIS",
+        "evses": 24,
+        "locations": 24,
+        "partyId": "710"
+      },
+      {
         "connectors": 33,
         "cpoName": "Allego Spain S.L.U",
         "evses": 33,
         "locations": 1,
         "partyId": "ALL"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "ARTEALCA SL",
+        "evses": 4,
+        "locations": 1,
+        "partyId": "BEX"
       },
       {
         "connectors": 16,
@@ -82,6 +110,13 @@
         "evses": 377,
         "locations": 104,
         "partyId": "ATE"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Autos Pisa SL",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "925"
       },
       {
         "connectors": 93,
@@ -105,6 +140,13 @@
         "partyId": "ELC"
       },
       {
+        "connectors": 13,
+        "cpoName": "Chargepoint",
+        "evses": 13,
+        "locations": 5,
+        "partyId": "CPI"
+      },
+      {
         "connectors": 62,
         "cpoName": "Charging Together Norte SL",
         "evses": 62,
@@ -119,11 +161,39 @@
         "partyId": "FCT"
       },
       {
+        "connectors": 16,
+        "cpoName": "CHELMONTE, SL",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "CH1"
+      },
+      {
         "connectors": 126,
         "cpoName": "Consejo Insular de la Energía de Gran Canaria",
         "evses": 102,
         "locations": 56,
         "partyId": "MGC"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "DIRAN S.A.",
+        "evses": 3,
+        "locations": 1,
+        "partyId": "DIR"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "Ditec Hanstein SA",
+        "evses": 4,
+        "locations": 4,
+        "partyId": "924"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "DORSOL, SAU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "DRS"
       },
       {
         "connectors": 6,
@@ -159,6 +229,20 @@
         "evses": 1709,
         "locations": 543,
         "partyId": "EMP"
+      },
+      {
+        "connectors": 32,
+        "cpoName": "EMAYA, S.A.",
+        "evses": 16,
+        "locations": 16,
+        "partyId": "EMA"
+      },
+      {
+        "connectors": 190,
+        "cpoName": "Emovili Fast, S.L.",
+        "evses": 190,
+        "locations": 47,
+        "partyId": "EMO"
       },
       {
         "connectors": 277,
@@ -210,6 +294,13 @@
         "partyId": "ETE"
       },
       {
+        "connectors": 2,
+        "cpoName": "Explotaciones IOndustriales Sur de Tenerife SL",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "275"
+      },
+      {
         "connectors": 20,
         "cpoName": "FASTNED ESPAÑA, S.L.",
         "evses": 16,
@@ -245,11 +336,39 @@
         "partyId": "H2P"
       },
       {
+        "connectors": 1,
+        "cpoName": "HERNAZOS GESTIÓN S.L",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "HDT"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "HOTELES SOL DEL SUR, SA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "HSS"
+      },
+      {
         "connectors": 9463,
         "cpoName": "IBERDROLA CLIENTES S.A.U",
         "evses": 8475,
         "locations": 2288,
         "partyId": "IBD"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Ibérica de Tecnología y Servicios de Automoción, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "914"
+      },
+      {
+        "connectors": 36,
+        "cpoName": "InstaVolt ES",
+        "evses": 19,
+        "locations": 4,
+        "partyId": "ICP"
       },
       {
         "connectors": 15,
@@ -313,6 +432,13 @@
         "evses": 94,
         "locations": 41,
         "partyId": "PAV"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "PETRO PALOL, S.L.",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "843"
       },
       {
         "connectors": 30,
@@ -392,11 +518,18 @@
         "partyId": "PWY"
       },
       {
-        "connectors": 103,
+        "connectors": 1013,
         "cpoName": "Totalenergies Marketing España, S.A.U.",
-        "evses": 103,
-        "locations": 27,
+        "evses": 1006,
+        "locations": 258,
         "partyId": "TCB"
+      },
+      {
+        "connectors": 14,
+        "cpoName": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+        "evses": 7,
+        "locations": 5,
+        "partyId": "UMH"
       },
       {
         "connectors": 1672,
@@ -425,45 +558,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 39409
+      "total": 40637
     },
     "identifier": {
-      "count": 39403,
-      "pct": 99.98,
-      "total": 39409
+      "count": 40631,
+      "pct": 99.99,
+      "total": 40637
     },
-    "total": 39409
+    "total": 40637
   },
-  "generatedAt": "2026-09-06T21:23:34.322021Z",
+  "generatedAt": "2026-09-06T22:37:15.171242Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 12801,
+      "count": 13180,
       "pct": 100.0,
-      "total": 12801
+      "total": 13180
     },
     "coordinates": {
-      "count": 12801,
+      "count": 13180,
       "pct": 100.0,
-      "total": 12801
+      "total": 13180
     },
     "cpoIdentity": {
-      "count": 12801,
+      "count": 13180,
       "pct": 100.0,
-      "total": 12801
+      "total": 13180
     },
     "withEvses": {
-      "count": 12801,
+      "count": 13180,
       "pct": 100.0,
-      "total": 12801
+      "total": 13180
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 12801,
-    "nextPage": 138,
-    "registryCoveragePct": 87.86,
+    "locationsStored": 13180,
+    "nextPage": 142,
+    "registryCoveragePct": 90.47,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
