@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-06",
+  "evsePrefix": "DE*IPG",
+  "operator": "IP Innovative Power GmbH",
+  "classification": "operator_resolved_ad_hoc_price_unresolved",
+  "officialEvidence": {
+    "operatorSite": "https://ipinnovativepower.com/",
+    "operatorDescription": "IP Innovative Power GmbH operates Energy-as-a-Service microgrids including EV charging infrastructure in Germany and other European markets.",
+    "marketPartnerInfo": "https://ipinnovativepower.com/marktpartnerinformation/"
+  },
+  "stationEvidence": [
+    {
+      "evseId": "DEIPGE00001247",
+      "address": "Hugenottenallee 167, 63263 Neu-Isenburg",
+      "connectorKind": "AC",
+      "powerKw": 22,
+      "operator": "IP Innovative Power GmbH",
+      "source": "https://www.automatenwegweiser.de/automat/ip-innovative-power-gmbh/neu-isenburg/ip-innovative-power-hugenottenallee-167-neu-isenburg",
+      "role": "public_data_operator_identity"
+    }
+  ],
+  "pricingEvidence": {
+    "directAdHoc": "unresolved",
+    "notes": "Public station directories confirm ad-hoc/web/app access at multiple IP Innovative Power sites but do not expose a verified direct price. Kia Charge Business publishes eMSP roaming prices for DEIPG; those are not CPO-direct prices and are discovery-only. App-store user comments are not authoritative tariff evidence and are not promoted."
+  },
+  "policy": "Resolve DE*IPG to IP Innovative Power GmbH where canonical operator identity matches. Do not attach roaming/eMSP prices to the physical CPO. Keep direct ad-hoc tariff fail-closed until a primary checkout, QR/web endpoint, AFIR/Mobilithek price field or other station-level public source provides the exact current price.",
+  "status": "partial_operator_resolved_price_fail_closed"
+}
