@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "scope": "v9-cpo-first-pass",
+  "date": "2026-09-06",
+  "operationalDenominator": 591,
+  "canonicalRebuild": "not_retried_per_user_directive",
+  "purpose": "First-pass coverage only. Previously investigated CPOs are deferred until all known CPOs have received at least one pass.",
+  "newFirstPass": [
+    {
+      "canonicalName": "Stadtwerke Flensburg GmbH",
+      "aliases": ["Stadtwerke Flensburg", "SWFL"],
+      "evsePrefix": "DE*SFL",
+      "status": "partial",
+      "deferredUntilAfterFirstPass": true,
+      "pricingPolicy": "fail_closed",
+      "findings": [
+        "Official price sheet valid from 2026-02-01 gives the contracted Flensburger Ladekarte tariff: AC 0.39 EUR/kWh, DC 0.49 EUR/kWh, blocking 0.10 EUR/min after 240 min capped at 12 EUR. This is not promoted as the ad-hoc/direct price.",
+        "Public m8mit station pages confirm DE*SFL EVSEs and Stadtwerke Flensburg GmbH as operator, including AC and DC examples.",
+        "A current station-level third-party page reports direct card payment at one AC site at 0.59 EUR/kWh plus 1.50 EUR start fee. Because this conflicts with the contracted card tariff and is not an official network-wide direct tariff, no prefix-wide direct offer is created."
+      ],
+      "sources": [
+        "https://www.stadtwerke-flensburg.de/fileadmin/user_upload/PDFs/1.1.4_E-Mobilitaet/Preis_und_Informationsblatt_Ladekarte.pdf",
+        "https://www.stadtwerke-flensburg.de/produkte/e-mobilitaet",
+        "https://swfl.m8mit.de/station/swfl/DE%2ASFL%2AESFL085%2A02",
+        "https://www.ladeguru.de/ladestation/stadtwerke-flensburg-gmbh/24943-flensburg/43595"
+      ],
+      "nextAfterTraversal": "Enumerate DE*SFL direct-payment checkout values and confirm whether the 0.59 EUR/kWh + 1.50 EUR structure is universal or station-specific."
+    },
+    {
+      "canonicalName": "Stadtwerke Emden GmbH",
+      "aliases": ["Stadtwerke Emden", "SWE Emden"],
+      "evsePrefix": "DE*EMD",
+      "status": "partial",
+      "deferredUntilAfterFirstPass": true,
+      "pricingPolicy": "fail_closed",
+      "findings": [
+        "Official 2026 electromobility page states that charging can be started with the SWE card or QR code and that users without a card can pay by credit card or PayPal.",
+        "Official contracted SWE card product currently lists AC 0.54 EUR/kWh and DC 0.64 EUR/kWh, with lower prices for SWE energy customers. These card prices are not assumed to equal QR/direct payment.",
+        "Public station data confirms DE*EMD EVSEs, for example DE*EMD*E001301 and DE*EMD*E001302. No trustworthy current numeric ad-hoc price was exposed in the sources checked, so direct pricing remains fail-closed."
+      ],
+      "sources": [
+        "https://stadtwerke-emden.de/strom/elektromobilitaet",
+        "https://stadtwerke-emden.de/strom/elektromobilitaet/ladekarte-bestellen",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Emden/Paapsand-Paapsand-32/33456/"
+      ],
+      "nextAfterTraversal": "Probe the public QR/direct checkout for representative DE*EMD EVSEs and map exact direct prices by station if exposed."
+    },
+    {
+      "canonicalName": "Aschaffenburger Versorgungs-GmbH / Stadtwerke Aschaffenburg",
+      "aliases": ["AVG", "Stadtwerke Aschaffenburg"],
+      "evsePrefix": "DE*AVG",
+      "status": "partial",
+      "deferredUntilAfterFirstPass": true,
+      "pricingPolicy": "fail_closed",
+      "findings": [
+        "Official current page identifies AVG as the charging-infrastructure operator/partner with ladenetz.de and lists 68 current public charging points across 23 sites.",
+        "From 2026-06-01 AVG explicitly offers a separate ad-hoc tariff via QR code/app/debit or credit card and separate AC/DC pricing, with occupancy fees after 240 min AC and 90 min DC; the page's numeric tariff table is image-only in the accessible text, so no numeric value is inferred.",
+        "Station data confirms the DE*AVG namespace, for example DE*AVG*E003010 at Parkhaus Suedbahnhof. Since the official numeric ad-hoc values could not be extracted reliably in this pass, pricing remains fail-closed."
+      ],
+      "sources": [
+        "https://www.stwab.de/emobil",
+        "https://www.goingelectric.de/stromtankstellen/Deutschland/Aschaffenburg/Parkhaus-Suedbahnhof-Suedbahnhofstrasse-19/87481/"
+      ],
+      "nextAfterTraversal": "Recover the official image-only tariff matrix or query the ladenetz direct checkout for DE*AVG EVSEs; do not infer values from the stated 0.06 EUR/kWh reduction."
+    }
+  ],
+  "runDelta": {
+    "newFirstPassCpos": 3,
+    "complete": 0,
+    "partial": 3,
+    "newBlocked": 0,
+    "deferred": 3
+  },
+  "coherence": {
+    "duplicateAudit": "passed_against_pr69_changed_file_inventory",
+    "reAuditOfDeferredCpo": false,
+    "canonicalRebuildRetried": false,
+    "networkWideTariffExtrapolation": false,
+    "notes": "Initial Kiel and Pfalzwerke candidates were discarded before investigation because PR #69 already contains dedicated direct-offer files for both."
+  }
+}
