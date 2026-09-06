@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "mode": "shadow",
+  "controlIndex": "../index.html",
+  "expectedControlBuild": "7310",
+  "runtimeBase": ".",
+  "observedCandidateSha": "8d2c20b7c76004389edd8f4a3b80d6b314900ba0",
+  "runtimeFingerprint": "sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697",
+  "engineScopeCountries": ["FR", "NL", "IT"],
+  "fallback": "legacy-compare",
+  "notes": "Shadow-only production-shell prototype. The stable V7.3 UI remains authoritative and visible; V9 runs only as an isolated comparison probe until shell readiness is promoted separately."
+}
