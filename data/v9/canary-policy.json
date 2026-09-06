@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "active": true,
+  "active": false,
   "initialPercent": 1,
   "stages": [
     {"percent": 1, "minHours": 24, "minRuns": 25},
@@ -23,5 +23,5 @@
     "requireZeroRollbackSignals": true,
     "manualApprovalRequired": true
   },
-  "notes": "Policy active for the explicitly approved 1% V9 canary. Every later stage still requires its own minimum window, minimum run count, green readiness, stable build, zero rollback signal, and manual approval."
+  "notes": "The V9 engine candidate is validated and eligible for a future 1% stage, but public user exposure is intentionally inactive until a production user shell is READY. The completed observation evidence is retained and is not reset by this control-plane correction."
 }

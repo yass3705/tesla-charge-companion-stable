@@ -1,4 +1,4 @@
-name: V9 canary activation package
+name: V9 canary control plane
 
 on:
   pull_request:
@@ -12,6 +12,7 @@ on:
       - 'data/v9/whitelist-config.json'
       - 'ops/v9/canary-observation.json'
       - 'ops/v9/canary-activation.json'
+      - 'ops/v9/production-shell-readiness.json'
       - 'scripts/v9-canary-observation.cjs'
       - 'scripts/v9-canary-activation.cjs'
       - 'scripts/v9-validate-device-test-config.cjs'
@@ -19,6 +20,7 @@ on:
       - 'tests/v9-canary-activation.test.cjs'
       - 'tests/v9-canary-policy-engine.test.cjs'
       - 'tests/v9-device-test-config-validator.test.cjs'
+      - 'tests/v9-production-shell-readiness.test.cjs'
       - '.github/workflows/v9-canary-activation.yml'
   push:
     branches: ['refactor/unified-data-engine-v9']
@@ -31,6 +33,7 @@ on:
       - 'data/v9/whitelist-config.json'
       - 'ops/v9/canary-observation.json'
       - 'ops/v9/canary-activation.json'
+      - 'ops/v9/production-shell-readiness.json'
       - 'scripts/v9-canary-observation.cjs'
       - 'scripts/v9-canary-activation.cjs'
       - 'scripts/v9-validate-device-test-config.cjs'
@@ -38,6 +41,7 @@ on:
       - 'tests/v9-canary-activation.test.cjs'
       - 'tests/v9-canary-policy-engine.test.cjs'
       - 'tests/v9-device-test-config-validator.test.cjs'
+      - 'tests/v9-production-shell-readiness.test.cjs'
       - '.github/workflows/v9-canary-activation.yml'
   workflow_dispatch:
 
@@ -45,7 +49,7 @@ permissions:
   contents: read
 
 jobs:
-  validate-one-percent-package:
+  validate-control-plane:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -66,14 +70,21 @@ jobs:
           node --check tests/v9-rollout-engine.test.cjs
           node --check tests/v9-access-router-engine.test.cjs
           node --check tests/v9-access-gateway.test.cjs
+          node --check tests/v9-production-shell-readiness.test.cjs
       - name: Historical full-window evidence
         run: node tests/v9-canary-observation.test.cjs
-      - name: Activation evidence and stable candidate
+      - name: Production shell gate
+        run: node tests/v9-production-shell-readiness.test.cjs
+      - name: Candidate evidence appropriate to exposure state
         env:
           TARGET_REF: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          node tests/v9-canary-activation.test.cjs
-          node scripts/v9-canary-activation.cjs --ref "$TARGET_REF" --json
+          if node -e "const s=require('./ops/v9/production-shell-readiness.json');process.exit(s.ready===true?0:1)"; then
+            node tests/v9-canary-activation.test.cjs
+            node scripts/v9-canary-activation.cjs --ref "$TARGET_REF" --json
+          else
+            node scripts/v9-canary-observation.cjs --ref "$TARGET_REF" --json
+          fi
       - name: Access-state contract
         run: |
           node tests/v9-device-test-config-validator.test.cjs
@@ -84,7 +95,7 @@ jobs:
           node tests/v9-rollout-engine.test.cjs
           node tests/v9-access-router-engine.test.cjs
           node tests/v9-access-gateway.test.cjs
-      - name: Exact initial-stage gate
+      - name: Exposure-state invariant
         run: |
           node - <<'NODE'
           const fs=require('fs');
@@ -92,12 +103,22 @@ jobs:
           const rollout=JSON.parse(fs.readFileSync('data/v9/rollout-config.json','utf8'));
           const readiness=JSON.parse(fs.readFileSync('data/v9/access-readiness.json','utf8'));
           const activation=JSON.parse(fs.readFileSync('ops/v9/canary-activation.json','utf8'));
-          if(policy.active!==true)throw new Error('canary policy inactive');
-          if(rollout.stage!=='canary'||Number(rollout.canaryPercent)!==1)throw new Error('rollout is not exactly 1% canary');
-          if(Number(policy.initialPercent)!==1)throw new Error('policy initial stage is not 1%');
-          if(readiness.ready!==true||readiness.verdict!=='READY')throw new Error('readiness is not green');
-          if(rollout.killSwitch===true)throw new Error('kill switch is active');
-          if(rollout.v8Path!=='v8-app/'||rollout.canaryPath!=='v9-app/')throw new Error('isolated control/candidate paths invalid');
-          if(activation.status!=='APPROVED_FOR_DEPLOYMENT'||activation.fullWindowValidation.conclusion!=='success')throw new Error('manual full-window approval missing');
-          console.log('V9 1% canary package is internally consistent and deployment-eligible.');
+          const shell=JSON.parse(fs.readFileSync('ops/v9/production-shell-readiness.json','utf8'));
+          if(readiness.ready!==true||readiness.verdict!=='READY')throw new Error('validated engine readiness evidence was lost');
+          if(activation.fullWindowValidation?.conclusion!=='success')throw new Error('historical full-window evidence missing');
+          if(shell.ready===true){
+            if(policy.active!==true)throw new Error('READY production shell requires active canary policy');
+            if(rollout.stage!=='canary'||Number(rollout.canaryPercent)!==1)throw new Error('READY production shell must start at exactly 1%');
+            if(Number(policy.initialPercent)!==1)throw new Error('policy initial stage is not 1%');
+            if(rollout.killSwitch===true)throw new Error('kill switch is active');
+            if(rollout.v8Path!==shell.controlPath||rollout.canaryPath!==shell.candidatePath)throw new Error('declared control/candidate paths do not match production shell');
+            if(activation.status!=='APPROVED_FOR_DEPLOYMENT')throw new Error('manual full-window approval missing');
+            console.log('Production shell READY: exact 1% public canary is deployment-eligible.');
+          }else{
+            if(shell.state!=='BLOCKED')throw new Error('non-ready shell must be explicitly BLOCKED');
+            if(policy.active!==false)throw new Error('blocked production shell must keep public canary policy inactive');
+            if(rollout.stage!=='preview'||Number(rollout.canaryPercent)!==0)throw new Error('blocked production shell must enforce zero public exposure');
+            if(rollout.v8Path!==shell.controlPath)throw new Error('fallback must match actual production control root');
+            console.log('Production shell BLOCKED: engine evidence retained, public user exposure forced to 0%.');
+          }
           NODE
