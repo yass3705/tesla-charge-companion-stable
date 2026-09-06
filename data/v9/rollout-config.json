@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "stage": "canary",
-  "canaryPercent": 1,
+  "stage": "preview",
+  "canaryPercent": 0,
   "killSwitch": false,
   "requireReadiness": true,
   "salt": "tcc-v9-rollout-v1",
-  "v8Path": "v8-app/",
+  "v8Path": "./",
   "previewPath": "v9-preview/",
   "canaryPath": "v9-app/",
   "productionPath": "v9-app/",
-  "notes": "Initial V9 canary approved at 1%. The deterministic gateway sends the remaining 99% to the isolated V8 control path. Any readiness or kill-switch failure falls back to V8."
+  "notes": "User traffic remains on the actual production root (V7.3 Stable). The V9 engine candidate retains its completed 24h evidence, but user exposure is hard-disabled until ops/v9/production-shell-readiness.json is READY. v8Path is the legacy control-path field and currently resolves to the production root."
 }
