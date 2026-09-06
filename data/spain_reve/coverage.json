@@ -3,56 +3,56 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 30758
+      "total": 31248
     },
     "format": {
-      "count": 30758,
+      "count": 31248,
       "pct": 100.0,
-      "total": 30758
+      "total": 31248
     },
     "maxAmperage": {
-      "count": 30758,
+      "count": 31248,
       "pct": 100.0,
-      "total": 30758
+      "total": 31248
     },
     "maxElectricPower": {
-      "count": 30758,
+      "count": 31248,
       "pct": 100.0,
-      "total": 30758
+      "total": 31248
     },
     "maxVoltage": {
-      "count": 30758,
+      "count": 31248,
       "pct": 100.0,
-      "total": 30758
+      "total": 31248
     },
     "powerType": {
-      "count": 30758,
+      "count": 31248,
       "pct": 100.0,
-      "total": 30758
+      "total": 31248
     },
     "standard": {
-      "count": 30758,
+      "count": 31248,
       "pct": 100.0,
-      "total": 30758
+      "total": 31248
     },
-    "total": 30758
+    "total": 31248
   },
   "country": "ES",
   "cpos": {
-    "distinct": 40,
+    "distinct": 42,
     "items": [
       {
-        "connectors": 33,
+        "connectors": 83,
         "cpoName": "(ZUNDER) Grupo Easychargar SA",
-        "evses": 33,
-        "locations": 9,
+        "evses": 83,
+        "locations": 22,
         "partyId": "ZUN"
       },
       {
-        "connectors": 39,
+        "connectors": 118,
         "cpoName": "ACCIONA Recarga",
-        "evses": 32,
-        "locations": 12,
+        "evses": 103,
+        "locations": 24,
         "partyId": "ARE"
       },
       {
@@ -63,17 +63,17 @@
         "partyId": "ALL"
       },
       {
-        "connectors": 2,
+        "connectors": 10,
         "cpoName": "Atlante Iberia S.L.",
-        "evses": 2,
-        "locations": 1,
+        "evses": 10,
+        "locations": 4,
         "partyId": "ATE"
       },
       {
-        "connectors": 2,
+        "connectors": 4,
         "cpoName": "BARCELONA DE SERVEIS MUNICIPALS, SA",
-        "evses": 2,
-        "locations": 1,
+        "evses": 4,
+        "locations": 2,
         "partyId": "BSM"
       },
       {
@@ -84,17 +84,24 @@
         "partyId": "CRF"
       },
       {
-        "connectors": 79,
+        "connectors": 8,
+        "cpoName": "CHARG-ELECTRA SPAIN SL",
+        "evses": 8,
+        "locations": 1,
+        "partyId": "ELC"
+      },
+      {
+        "connectors": 126,
         "cpoName": "CHARGING TOGETHER SL",
-        "evses": 69,
-        "locations": 23,
+        "evses": 113,
+        "locations": 38,
         "partyId": "FCT"
       },
       {
-        "connectors": 4,
+        "connectors": 8,
         "cpoName": "Consejo Insular de la Energía de Gran Canaria",
-        "evses": 4,
-        "locations": 2,
+        "evses": 6,
+        "locations": 3,
         "partyId": "MGC"
       },
       {
@@ -126,10 +133,10 @@
         "partyId": "EMT"
       },
       {
-        "connectors": 4901,
+        "connectors": 4928,
         "cpoName": "ENDESA X WAY, S.L.",
-        "evses": 4900,
-        "locations": 2552,
+        "evses": 4927,
+        "locations": 2565,
         "partyId": "ESX"
       },
       {
@@ -140,17 +147,17 @@
         "partyId": "CEL"
       },
       {
-        "connectors": 25,
+        "connectors": 62,
         "cpoName": "ERANOVUM E-MOBILITY, S.L.",
-        "evses": 25,
-        "locations": 11,
+        "evses": 62,
+        "locations": 24,
         "partyId": "ERA"
       },
       {
-        "connectors": 36,
+        "connectors": 86,
         "cpoName": "Etecnic Movilidad Electrica, SRL",
-        "evses": 34,
-        "locations": 19,
+        "evses": 80,
+        "locations": 41,
         "partyId": "ETE"
       },
       {
@@ -168,10 +175,10 @@
         "partyId": "FEN"
       },
       {
-        "connectors": 32,
+        "connectors": 60,
         "cpoName": "Galp Energía España, S.A.U.",
-        "evses": 32,
-        "locations": 17,
+        "evses": 60,
+        "locations": 32,
         "partyId": "DLP"
       },
       {
@@ -182,10 +189,10 @@
         "partyId": "GSM"
       },
       {
-        "connectors": 8060,
+        "connectors": 8131,
         "cpoName": "IBERDROLA CLIENTES S.A.U",
-        "evses": 7152,
-        "locations": 1854,
+        "evses": 7220,
+        "locations": 1875,
         "partyId": "IBD"
       },
       {
@@ -224,6 +231,13 @@
         "partyId": "MOE"
       },
       {
+        "connectors": 2,
+        "cpoName": "Naturgy Nuevas Energías, SLU",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "NTG"
+      },
+      {
         "connectors": 94,
         "cpoName": "PAVAPARK MOVILIDAD SL",
         "evses": 94,
@@ -231,10 +245,10 @@
         "partyId": "PAV"
       },
       {
-        "connectors": 2,
+        "connectors": 18,
         "cpoName": "PLENOIL, S.L.",
-        "evses": 2,
-        "locations": 1,
+        "evses": 18,
+        "locations": 9,
         "partyId": "PLE"
       },
       {
@@ -266,10 +280,10 @@
         "partyId": "AEQ"
       },
       {
-        "connectors": 9,
+        "connectors": 20,
         "cpoName": "REMO SUSTAINABLE MOBILITY S.L",
-        "evses": 9,
-        "locations": 3,
+        "evses": 20,
+        "locations": 7,
         "partyId": "RSM"
       },
       {
@@ -301,10 +315,10 @@
         "partyId": "PWY"
       },
       {
-        "connectors": 28,
+        "connectors": 78,
         "cpoName": "Totalenergies Marketing España, S.A.U.",
-        "evses": 28,
-        "locations": 8,
+        "evses": 78,
+        "locations": 21,
         "partyId": "TCB"
       },
       {
@@ -327,45 +341,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 27177
+      "total": 27647
     },
     "identifier": {
-      "count": 27171,
+      "count": 27641,
       "pct": 99.98,
-      "total": 27177
+      "total": 27647
     },
-    "total": 27177
+    "total": 27647
   },
-  "generatedAt": "2026-09-05T23:27:33.072097Z",
+  "generatedAt": "2026-09-06T00:20:05.230203Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 8908,
+      "count": 9064,
       "pct": 100.0,
-      "total": 8908
+      "total": 9064
     },
     "coordinates": {
-      "count": 8908,
+      "count": 9064,
       "pct": 100.0,
-      "total": 8908
+      "total": 9064
     },
     "cpoIdentity": {
-      "count": 8908,
+      "count": 9064,
       "pct": 100.0,
-      "total": 8908
+      "total": 9064
     },
     "withEvses": {
-      "count": 8908,
+      "count": 9064,
       "pct": 100.0,
-      "total": 8908
+      "total": 9064
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 8908,
-    "nextPage": 94,
-    "registryCoveragePct": 61.14,
+    "locationsStored": 9064,
+    "nextPage": 98,
+    "registryCoveragePct": 62.21,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
