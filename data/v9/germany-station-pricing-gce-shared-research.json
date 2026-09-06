@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "evsePrefix": "DE*GCE",
+  "status": "partial_shared_prefix_station_level_only",
+  "verifiedAt": "2026-09-06",
+  "preIntegrationOnly": true,
+  "canonicalEvidence": {
+    "source": "workflow artifact germany-v9-bnetza-preintegration / build/germany-site-crosswalk.json",
+    "snapshotCaveat": "artifact source manifest is BNetzA 2026-07-28; used only as last-known first-pass membership evidence per project fallback policy",
+    "evseCount": 110,
+    "ownerDistribution": [
+      ["Volkswagen Immobilien GmbH", 40],
+      ["Volkswagen AG, Standort Braunschweig", 22],
+      ["Autohaus im Geiseltal GmbH", 4],
+      ["B. Widmann GmbH & Co. KG", 3],
+      ["Autohaus Habinghorst GmbH & Co.KG", 3],
+      ["nox Germany GmbH", 3]
+    ],
+    "sharedPrefix": true
+  },
+  "stationLevelEvidence": [
+    {
+      "physicalOperator": "Volkswagen Immobilien Vermietgesellschaft für VW-/Audi-Händlerbetriebe mbH",
+      "location": "Schmalbachstraße 1, Braunschweig",
+      "evseExamples": ["DE*GCE*EACCS346711", "DE*GCE*EACCS346721", "DE*GCE*EACCS346731", "DE*GCE*EDCCS346712", "DE*GCE*EDCCS346722", "DE*GCE*EDCCS346732"],
+      "pricePerKwhEur": 0.80,
+      "sourceType": "current station-level discovery evidence",
+      "source": "https://app.pumpapp.co/de/ladestation-volim-volkswagen-immobilien-vermietgesellschaft-fur-vw-audi-haendlerbetriebe-gmbh-schmalbachstrasse-1-braunschweig/ecb20ce1-49ea-11ed-907e-a1c56c292497"
+    },
+    {
+      "physicalOperator": "Autohaus am Regenstein / Autohaus Wernigerode GmbH",
+      "location": "Dornbergsweg 45, Wernigerode",
+      "evseExamples": ["DE*GCE*EACCR271471", "DE*GCE*EDCCR271472"],
+      "pricePerKwhEur": 0.80,
+      "sourceType": "current station-level discovery evidence",
+      "source": "https://app.pumpapp.co/de/ladestation-autohaus-am-regenstein-nl-der-ah-wernigerode-gmbh-dornbergsweg-45-wernigerode/de9bb9fb-134a-11ef-b48a-b7290d30c2e5"
+    }
+  ],
+  "decision": "The identical 0.80 EUR/kWh observations at two physical operators are insufficient to infer a DE*GCE-wide rule. Resolve exact EVSE/physical operator and seek a primary direct-payment or AFIR/Mobilithek tariff before ranking; otherwise keep the point visible but unpriced."
+}
