@@ -1,0 +1,68 @@
+name: V9 France IRVE dynamic status
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 * * * *'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/build_france_irve_dynamic_v9.py'
+      - '.github/workflows/v9-france-irve-dynamic.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-france-irve-dynamic
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+          fetch-depth: 0
+
+      - name: Build fresh IRVE dynamic status snapshot
+        run: python scripts/build_france_irve_dynamic_v9.py
+
+      - name: Validate dynamic coverage
+        run: |
+          python - <<'PY'
+          import gzip,json
+          from pathlib import Path
+          p=Path('data/v9/france-irve-dynamic-status.json.gz')
+          with gzip.open(p,'rt',encoding='utf-8') as f:d=json.load(f)
+          assert d['schemaVersion']==1
+          assert d['country']=='FR'
+          assert d['sourceRows']>50000,d
+          assert len(d['records'])>50000,d
+          ratio=d['unmatchedPdc']/max(1,d['sourceRows'])
+          assert ratio<0.20,(ratio,d['unmatchedPdc'],d['sourceRows'])
+          known=sum(1 for r in d['records'] if str(r.get('etat_pdc','')).strip())
+          assert known>50000,known
+          print(json.dumps({'sourceRows':d['sourceRows'],'matched':len(d['records']),'unmatched':d['unmatchedPdc'],'unmatchedRatio':ratio,'gzipBytes':p.stat().st_size},indent=2))
+          PY
+
+      - name: Publish dynamic snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-irve-dynamic-status.json.gz
+          if git diff --cached --quiet; then
+            echo 'No dynamic IRVE changes'
+            exit 0
+          fi
+          git commit -m "data(v9): refresh France IRVE dynamic status [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin refactor/unified-data-engine-v9
+            if git push origin HEAD:refactor/unified-data-engine-v9; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1

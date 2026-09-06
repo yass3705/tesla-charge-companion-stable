@@ -1,0 +1,62 @@
+name: V9 access gateway safety
+
+on:
+  push:
+    branches: [main, refactor/unified-data-engine-v9]
+    paths:
+      - 'assets/v9/access-router-engine.js'
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'assets/v9/whitelist-engine.js'
+      - 'assets/v9/rollout-engine.js'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/whitelist-config.json'
+      - 'v9-gate/**'
+      - 'tests/v9-access-router-engine.test.cjs'
+      - 'tests/v9-access-gateway.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - '.github/workflows/v9-access-gateway.yml'
+  pull_request:
+    paths:
+      - 'assets/v9/access-router-engine.js'
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'assets/v9/whitelist-engine.js'
+      - 'assets/v9/rollout-engine.js'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/whitelist-config.json'
+      - 'v9-gate/**'
+      - 'tests/v9-access-router-engine.test.cjs'
+      - 'tests/v9-access-gateway.test.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - '.github/workflows/v9-access-gateway.yml'
+  workflow_dispatch:
+
+jobs:
+  gateway-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check assets/v9/access-router-engine.js
+          node --check assets/v9/rollout-engine.js
+          node --check v9-gate/gate.js
+          node --check scripts/v9-validate-device-test-config.cjs
+      - name: Access router contract
+        run: node tests/v9-access-router-engine.test.cjs
+      - name: Gateway contract
+        run: node tests/v9-access-gateway.test.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs

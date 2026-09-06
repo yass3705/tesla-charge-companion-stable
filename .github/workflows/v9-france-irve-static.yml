@@ -1,0 +1,71 @@
+name: V9 France IRVE static baseline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 1 * *'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/build_france_irve_v9.py'
+      - '.github/workflows/v9-france-irve-static.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-france-irve-static
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+          fetch-depth: 0
+
+      - name: Build IRVE-native V9 static catalogue
+        run: python scripts/build_france_irve_v9.py
+
+      - name: Validate physical baseline
+        run: |
+          python - <<'PY'
+          import json,gzip
+          from pathlib import Path
+          m=json.loads(Path('data/v9/france-static/manifest.json').read_text())
+          assert m['schemaVersion']==2
+          assert m['dataset']=='france-irve-static-v9'
+          assert m['stationCount']>30000, m
+          assert m['pdcCount']>100000, m
+          assert m['tileCount']>20, m
+          with gzip.open('data/v9/france-static/all.json.gz','rt',encoding='utf-8') as f: rows=json.load(f)
+          assert len(rows)==m['stationCount']
+          assert all(len(r)>=10 for r in rows[:100])
+          assert any(any(len(c)>=7 and c[6] for c in r[8]) for r in rows[:5000])
+          cw=json.loads(Path('data/v9/france-crosswalk.json').read_text())
+          assert len(cw['entries'])==m['stationCount']
+          assert any(e.get('pdcIds') for e in cw['entries'])
+          print(json.dumps({'stations':m['stationCount'],'pdc':m['pdcCount'],'tiles':m['tileCount'],'allBytes':m['allBytes']},indent=2))
+          PY
+
+      - name: Publish V9 static baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-static data/v9/france-crosswalk.json
+          if git diff --cached --quiet; then
+            echo 'No static IRVE changes'
+            exit 0
+          fi
+          git commit -m "data(v9): refresh France IRVE static baseline [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin refactor/unified-data-engine-v9
+            if git push origin HEAD:refactor/unified-data-engine-v9; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1

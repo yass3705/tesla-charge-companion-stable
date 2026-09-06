@@ -1,0 +1,88 @@
+name: V9 France provider crosswalk
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['V9 France IRVE static baseline']
+    types: [completed]
+  schedule:
+    - cron: '47 4 2 * *'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/enrich_france_crosswalk_v9.py'
+      - 'scripts/audit_france_provider_alias_coverage.py'
+      - 'scripts/audit_bump_v9_readiness.py'
+      - '.github/workflows/v9-france-crosswalk.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-france-provider-crosswalk
+  cancel-in-progress: true
+
+jobs:
+  enrich:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'refactor/unified-data-engine-v9')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          fetch-depth: 1
+
+      - name: Build provider overlay from exact IRVE identifiers
+        run: python scripts/enrich_france_crosswalk_v9.py
+      - name: Build provider alias coverage audit
+        run: python scripts/audit_france_provider_alias_coverage.py
+      - name: Audit Bump identity and tariff readiness
+        run: python scripts/audit_bump_v9_readiness.py
+      - name: Validate crosswalk safety and isolation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=json.loads(Path('data/v9/france-crosswalk.json').read_text());overlay=json.loads(Path('data/v9/france-provider-crosswalk.json').read_text());candidates=json.loads(Path('data/v9/france-crosswalk-candidates.json').read_text());coverage=json.loads(Path('data/v9/france-provider-alias-coverage-report.json').read_text());bump=json.loads(Path('data/v9/france-bump-readiness-report.json').read_text())
+          assert len(base['entries'])>30000 and overlay.get('kind')=='provider-crosswalk-overlay'
+          meta=overlay.get('enrichment',{});assert meta.get('filesSeen',0)>=3 and meta.get('recordsSeen',0)>0 and meta.get('stationsEnriched',0)>0,meta
+          base_ids={e.get('canonicalId') for e in base['entries']};provider_counts={}
+          for e in overlay['entries']:
+            assert e.get('canonicalId') in base_ids
+            for s in e.get('sourceIds',[]):assert s.get('match')=='exact_irve_identifier';provider_counts[s.get('source')]=provider_counts.get(s.get('source'),0)+1
+            assert all(not str(a).startswith('geo:') for a in e.get('aliases',[]))
+          assert candidates.get('policy')=='review_only_never_runtime' and candidates.get('count')==len(candidates.get('candidates',[]))
+          policy=coverage.get('policy',{});assert policy.get('runtimeExactOnly') is True and policy.get('geographicCandidatesReviewOnly') is True and policy.get('noTariffActivationFromProximity') is True and policy.get('providerAliasDoesNotImplyTariffAvailability') is True and policy.get('noSyntheticNetworkWideTariff') is True
+          summary=coverage.get('summary',{});assert summary.get('aviaPicotyCombinedExactCanonicalStations',0)>0,summary
+          focus=coverage.get('focus',{});assert all(p in focus for p in ('avia-picoty','avia-volt','bump','powerdot'))
+          assert focus['avia-picoty']['exactRuntimeAliasCount']>0 or focus['avia-volt']['exactRuntimeAliasCount']>0
+          assert bump.get('provider')=='bump' and bump.get('schemaVersion')==4
+          bp=bump.get('policy',{});assert bp.get('runtimeExactOnly') is True and bp.get('geographicFallbackAllowed') is False and bp.get('tariffDataCannotCreatePhysicalStations') is True and bp.get('timeChangingTariffsRequireExactSemanticCompilation') is True and bp.get('bandedTariffsFailClosedUntilCompiled') is True
+          bs=bump.get('summary',{});assert bs.get('directTariffSourcesPresent') is True and bs.get('timeChangingTariffPointCount',0)>0 and bs.get('timeChangingRuleFamilyCount',0)>0
+          assert bs.get('simpleExactTemporalCandidateCount',0)+bs.get('complexTemporalDeferredCandidateCount',0)==bs.get('timeChangingTariffPointCount')
+          temporal=bump.get('timeChangingSemantics',{});assert temporal.get('count')==bs.get('timeChangingTariffPointCount') and temporal.get('ruleFamilyCount')==bs.get('timeChangingRuleFamilyCount') and temporal.get('ruleFamilies')
+          assert temporal.get('bandedPointCount')==bs.get('bandedTariffPointCount') and temporal.get('bandedPointCount',0)>0 and len(temporal.get('bandedPoints',[]))==temporal.get('bandedPointCount')
+          for point in temporal['bandedPoints']:
+            assert point.get('idPdcItinerance') and any(isinstance(r,dict) and isinstance(r.get('bands'),list) and r.get('bands') for r in point.get('rules',[])),point
+          if bs.get('currentExactCrosswalkAliasCount',0)==0:assert bs.get('runtimeTariffEligible') is False
+          powerdot_exact=provider_counts.get('powerdot',0)
+          print(json.dumps({**meta,'providerExactAliases':provider_counts,'powerdotExactAliases':powerdot_exact,'powerdotResolution':'exact' if powerdot_exact else 'unresolved_no_exact_identifier_no_fuzzy_fallback','coverageSummary':summary,'coverageFocus':focus,'bumpReadiness':bs,'bumpBandedPoints':temporal.get('bandedPoints',[]),'bumpNext':bump.get('next')},indent=2))
+          PY
+      - name: Publish provider overlay and review candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf data-lab
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-provider-crosswalk.json data/v9/france-crosswalk-candidates.json data/v9/france-provider-alias-coverage-report.json data/v9/france-bump-readiness-report.json
+          if git diff --cached --quiet; then echo 'No provider crosswalk changes';exit 0;fi
+          git commit -m "data(v9): refresh France provider crosswalk [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3; do git pull --rebase origin refactor/unified-data-engine-v9;if git push origin HEAD:refactor/unified-data-engine-v9;then exit 0;fi;sleep $((attempt * 3));done
+          exit 1

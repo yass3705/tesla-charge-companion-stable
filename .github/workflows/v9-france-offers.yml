@@ -1,0 +1,148 @@
+name: V9 France offer overlays
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '11 5 2 * *'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/compile_france_v9_offers.py'
+      - 'scripts/compile_belib_v9_offers.py'
+      - 'scripts/compile_e55c_v9_offers.py'
+      - 'scripts/compile_etotem_v9_offers.py'
+      - 'scripts/compile_qovoltis_v9_offers.py'
+      - 'scripts/compile_bump_v9_offers.py'
+      - 'assets/v9/adapters/direct-offers.js'
+      - '.github/workflows/v9-france-offers.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-france-offers
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-stable
+          ref: refactor/france-irve-canonical
+          path: legacy-france-canonical
+          fetch-depth: 1
+      - uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          ref: main
+          path: data-lab
+          fetch-depth: 1
+      - name: Compile conservative direct and eMSP layers
+        run: python scripts/compile_france_v9_offers.py --input legacy-france-canonical/data/tariff_overlay_v1.json
+      - name: Compile exact Belib official tariff layer
+        run: python scripts/compile_belib_v9_offers.py --input data-lab/data/operator_direct/belib_official_paris.json
+      - name: Compile exact E55C EVSE tariff layer
+        run: python scripts/compile_e55c_v9_offers.py --station-verification data-lab/data/station_verifications/electric55_lons_le_saunier_rue_lecourbe_alize_2026_08_22.json --operator-source data-lab/data/operator_direct/electric55_official_france.json
+      - name: Compile exact e-Totem station and EVSE tariff layer
+        run: python scripts/compile_etotem_v9_offers.py --nantes data-lab/data/station_verifications/nantes_etotem_sainte_luce_planchonnais_ac_dc_app_2026_08_22.json --larochelle data-lab/data/station_verifications/la_rochelle_place_jb_marcet_etotem_g10_app_2026_08_22.json --montargis data-lab/data/station_verifications/etotem_montargis_commissariat_app_2026_08_22.json
+      - name: Compile exact SYDER-QOVOLTIS territorial tariff layer
+        run: python scripts/compile_qovoltis_v9_offers.py --input data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json
+      - name: Compile exact Bump PDC tariff layer
+        run: python scripts/compile_bump_v9_offers.py --tariffs data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz
+      - name: Validate offer safety
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('data/v9/france-direct-offers.json').read_text())
+          e=json.loads(Path('data/v9/france-emsp-offers.json').read_text())
+          b=json.loads(Path('data/v9/france-belib-offers.json').read_text())
+          x=json.loads(Path('data/v9/france-e55c-offers.json').read_text())
+          t=json.loads(Path('data/v9/france-etotem-offers.json').read_text())
+          q=json.loads(Path('data/v9/france-qovoltis-offers.json').read_text())
+          u=json.loads(Path('data/v9/france-bump-offers.json').read_text())
+          r=json.loads(Path('data/v9/france-offer-compile-report.json').read_text())
+          assert all(z['country']=='FR' for z in (d,e,b,x,t,q,u))
+          assert d['policy']['subscriptionsOptIn'] is True and d['policy']['directCpoAndRoamingSeparate'] is True
+          assert len(d['directOffers'])>=10 and len(e['subscriptionOffers'])>=3
+          for row in d['directOffers']+d['subscriptionOffers']+e['subscriptionOffers']:
+            assert row.get('operatorAliases') and isinstance(row.get('pricing'),dict),row
+          assert len(b['directOffers'])==4 and len(b['subscriptionOffers'])==8
+          assert b['policy']['networkBrandOnly'] is True and b['policy']['connectedTimeBlocksPreservedExactly'] is True
+          assert x['policy']['exactEvseRequired'] is True and x['policy']['networkWideGeneralization'] is False
+          assert len(x['directOffers'])==1 and x['directOffers'][0]['evseIds']==['FR*55C*EFR39000*P7PPFG*1']
+          assert t['policy']['exactIdentityRequired'] is True and len(t['directOffers'])==3
+          assert q['policy']['identityMode']=='physical_network_and_territory' and q['policy']['territory']=='Rhône hors Métropole de Lyon'
+          assert len(q['directOffers'])==2 and len(q['subscriptionOffers'])==2
+          assert u['schemaVersion']==6
+          assert u['policy']['exactPdcRequired'] is True
+          assert u['policy']['geographicFallbackAllowed'] is False
+          assert u['policy']['tariffDataCannotCreatePhysicalStations'] is True
+          assert u['policy']['sourceRankableRequired'] is True
+          assert u['policy']['unsupportedTimeChangingTariffsFailClosed'] is True
+          assert u['policy']['conditionalFeeConditionsSupported']==['energy_above_kwh','session_duration_after_minutes']
+          assert u['policy']['conditionalFeeConditionsUseAndSemantics'] is True
+          assert u['policy']['sessionDurationSurchargeSupported'] is True
+          assert u['policy']['energyTimeBandsSupported'] is True
+          assert u['policy']['energyTimeBandCrossingSegmentedByPricingEngine'] is True
+          assert u['policy']['postChargeOccupancyTimeBandsSupported'] is True
+          assert u['summary']['exactBumpAliases']==1886
+          assert len(u['directOffers'])==u['summary']['offers']
+          assert all(z['verifiedScope']=='exact_evse' and len(z['evseIds'])==1 for z in u['directOffers'])
+          ids={z['evseIds'][0] for z in u['directOffers']}
+          assert len(ids)==len(u['directOffers'])<=u['summary']['exactBumpAliases']
+          temporal=[z for z in u['directOffers'] if z.get('metadata',{}).get('timeChanging') is True]
+          assert len(temporal)==u['summary']['temporalOffers']
+          supported={'minimum_energy_post_charge_occupancy','minimum_energy_conditional_flat_fee','minimum_energy_duration_conditional_flat_fee','minimum_energy_session_duration_surcharge','minimum_energy_time_bands','minimum_energy_post_charge_occupancy_time_bands'}
+          assert all(z['metadata'].get('semanticFamily') in supported for z in temporal)
+          occupancy=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_post_charge_occupancy']
+          conditional=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_conditional_flat_fee']
+          combined=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_duration_conditional_flat_fee']
+          duration=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_session_duration_surcharge']
+          energy_bands=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_time_bands']
+          occupancy_bands=[z for z in temporal if z['metadata']['semanticFamily']=='minimum_energy_post_charge_occupancy_time_bands']
+          assert len(occupancy)==u['summary']['postChargeOccupancyOffers'] and occupancy
+          assert len(conditional)==u['summary']['conditionalEnergyOffers'] and conditional
+          assert len(combined)==u['summary']['combinedEnergyDurationOffers'] and combined
+          assert len(duration)==u['summary']['sessionDurationSurchargeOffers'] and duration
+          assert len(energy_bands)==u['summary']['energyTimeBandOffers']==4
+          assert len(occupancy_bands)==u['summary']['postChargeOccupancyTimeBandOffers']==4
+          for z in combined:
+            conditions=z['pricing']['conditionalSessionFees'][0]['conditions']
+            assert {c['kind'] for c in conditions}=={'energy_above_kwh','session_duration_after_minutes'}
+          for z in energy_bands:
+            assert z['pricing']['requiresSegmentationOnTariffBoundary'] is True
+            assert {(r['start'],r['end'],r['pricePerKwh']) for r in z['pricing']['rules']}=={('10:00','17:00',0.25),('17:00','10:00',0.395)}
+          for z in occupancy_bands:
+            fee=z['pricing']['postChargeFee']
+            assert fee['graceMinutes']==15 and fee['eurPerMinute']==0.2 and fee['exemptLocalWindows']==[{'start':'23:00','end':'09:00'}]
+          assert u['summary']['timeChangingSeen']==u['summary']['temporalOffers']+u['summary']['timeChangingDeferred']
+          assert u['summary']['timeChangingDeferred']==0
+          assert sum(1 for z in u['deferred'] if z.get('reason')=='unsupported_time_changing_rule_family')==0
+          deferred={z.get('id') for z in r.get('deferred',[])}
+          for required in ('electra-essential','electra-smart','belib-nonresident','belib-resident'):assert required in deferred
+          print(json.dumps({'generic':{k:r[k] for k in ('directOfferCount','directSubscriptionCount','emspSubscriptionCount','deferredCount')},'bump':u['summary']},indent=2))
+          PY
+      - name: Publish V9 offer overlays
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf legacy-france-canonical data-lab
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-direct-offers.json data/v9/france-emsp-offers.json data/v9/france-belib-offers.json data/v9/france-e55c-offers.json data/v9/france-etotem-offers.json data/v9/france-qovoltis-offers.json data/v9/france-bump-offers.json data/v9/france-offer-compile-report.json
+          if git diff --cached --quiet; then echo 'No offer changes';exit 0;fi
+          git commit -m "data(v9): refresh France offer overlays [run ${GITHUB_RUN_ID}]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin refactor/unified-data-engine-v9
+            if git push origin HEAD:refactor/unified-data-engine-v9; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1

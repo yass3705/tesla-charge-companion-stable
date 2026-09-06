@@ -1,0 +1,49 @@
+name: V9 production readiness gate
+
+on:
+  pull_request:
+    paths:
+      - 'assets/v9/**'
+      - 'tests/v9-**'
+      - 'v9-shadow/**'
+      - '.github/workflows/v9-readiness-gate.yml'
+  push:
+    branches: [main, 'refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/**'
+      - 'tests/v9-**'
+      - 'v9-shadow/**'
+      - '.github/workflows/v9-readiness-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readiness-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: |
+          node --check assets/v9/readiness-engine.js
+          node --check assets/v9/parity-engine.js
+          node --check assets/v9/runtime-engine.js
+          node --check assets/v9/station-score-engine.js
+          node --check tests/v9-readiness-engine.test.cjs
+      - name: Readiness contract
+        run: node tests/v9-readiness-engine.test.cjs
+      - name: Shadow session contract
+        run: node tests/v9-shadow-session-parity.test.cjs
+      - name: Shadow SOC timing contract
+        run: node tests/v9-shadow-soc-timing-parity.test.cjs
+      - name: Shadow scenario matrix
+        run: node tests/v9-shadow-scenario-matrix.test.cjs
+      - name: SOC energy timeline pricing
+        run: node tests/v9-energy-timeline-pricing.test.cjs
+      - name: Runtime integration
+        run: node tests/v9-runtime-engine.test.cjs

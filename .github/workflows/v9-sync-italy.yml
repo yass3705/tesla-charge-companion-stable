@@ -1,0 +1,167 @@
+name: V9 sync Italy validated catalogue
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/italy-v9-duferco
+    paths:
+      - scripts/v9_build_italy_catalog.py
+      - assets/v9/adapters/direct-offers.js
+      - assets/v9/adapters/national-compact.js
+      - assets/v9/browser-loaders.js
+      - assets/v9/offer-engine.js
+      - assets/v9/pricing-engine.js
+      - assets/v9/session-engine.js
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - data/v9/source-registry.json
+      - .github/workflows/v9-sync-italy.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DATA_REPO: yass3705/tesla-charge-companion-data-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download latest validated Italy consolidation
+        run: |
+          set -euo pipefail
+          RUN_ID="$(gh run list \
+            --repo "$DATA_REPO" \
+            --workflow italy-v9-consolidation.yml \
+            --branch research/italy-consolidation-v9-a2a \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId')"
+          test -n "$RUN_ID"
+          mkdir -p /tmp/italy
+          gh run download "$RUN_ID" \
+            --repo "$DATA_REPO" \
+            -n italy-v9-consolidated-candidate \
+            -D /tmp/italy
+          test -s /tmp/italy/consolidation/italy_v9_candidate.json.gz
+          echo "Using validated data-lab Italy run $RUN_ID"
+
+      - name: Build V9 browser catalogue and offers
+        run: |
+          python scripts/v9_build_italy_catalog.py \
+            --input /tmp/italy/consolidation/italy_v9_candidate.json.gz
+
+      - name: Validate published Italy shapes and counts
+        run: |
+          python - <<'PY'
+          import gzip, json
+          from pathlib import Path
+          manifest=json.loads(Path('data/v9/italy-static/manifest.json').read_text())
+          offers=json.loads(Path('data/v9/italy-offers.json').read_text())
+          report=json.loads(Path('data/v9/italy-build-report.json').read_text())
+          registry=json.loads(Path('data/v9/source-registry.json').read_text())
+          assert manifest['country']=='IT'
+          assert manifest['stationCount']==29696
+          assert len(manifest['tiles']) >= 20
+          assert report['directOffers']==25626
+          assert report['subscriptionOffers']==2764
+          assert report['emspOffers']==2281
+          assert len(offers['directOffers'])==25626
+          assert len(offers['subscriptionOffers'])==2764
+          assert len(offers['emspOffers'])==2281
+          assert offers['policy']['emspNeverMasqueradesAsDirect'] is True
+          assert offers['policy']['calendarAwareDirectTariffs'] is True
+          assert offers['policy']['unknownStationSpecificPostChargeFeesFailClosed'] is True
+          duferco=[o for o in offers['directOffers'] if o.get('provider')=='Duferco Mobility']
+          assert len(duferco)==1648
+          assert all(o['pricing']['type']=='rules' for o in duferco)
+          assert all(o['pricing']['holidayCalendar']=='IT' for o in duferco)
+          assert all(o['pricing']['postChargeFeeUnknown'] is True for o in duferco)
+          assert all(len(o['pricing']['rules'])==6 for o in duferco)
+          assert all(o['metadata']['timeZone']=='Europe/Rome' for o in duferco)
+          ids={s['id'] for s in registry['sources']}
+          assert {'italy-pun','italy-verified-offers'} <= ids
+          with gzip.open('data/v9/italy-static/all.json.gz','rt',encoding='utf-8') as fh:
+              rows=json.load(fh)
+          assert len(rows)==manifest['stationCount']
+          assert all(r[0] and r[3] is not None and r[4] is not None for r in rows)
+          print(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Smoke test generic V9 adapters and loader dispatch
+        run: |
+          node - <<'JS'
+          const direct=require('./assets/v9/adapters/direct-offers.js');
+          const national=require('./assets/v9/adapters/national-compact.js');
+          const loaders=require('./assets/v9/browser-loaders.js');
+          const payload={country:'IT',emspOffers:[{id:'x',provider:'NextCharge',evseIds:['ITGESE1'],verifiedScope:'exact_evse',pricing:{type:'kwh',pricePerKwh:.5}}]};
+          const normalized=direct.normalizePayload(payload);
+          if(normalized.offerRules.length!==1||normalized.offerRules[0].kind!=='emsp'||normalized.offerRules[0].directOperatorOnly!==false)throw new Error('eMSP normalization failed');
+          const row=['S1','Test','Roma',41.9,12.5,'GES',1,[],[['ITGESE1','GES · ITGESE1','DC',150,1,[],[]]],'2026-08-30T00:00:00Z','OPERATIONAL','GES'];
+          const station=national.normalizeRow(row,{countryCode:'IT',sourceId:'italy-pun'});
+          if(station.status.state!=='available'||station.evses[0].id!=='ITGESE1')throw new Error('Italy national normalization failed');
+          const registry={sources:[{id:'italy-pun',active:true,adapter:'national-compact-v4',root:'data/v9/italy-static/',manifest:'data/v9/italy-static/manifest.json',countries:['IT']}]};
+          const created=loaders.createRegistryLoaders({registry,adapters:{nationalCompact:national},fetchImpl:async()=>{throw new Error('fetch should not run while creating loaders')}});
+          if(typeof created['italy-pun']!=='function')throw new Error('national-compact-v4 runtime dispatch failed');
+          console.log({emspKind:normalized.offerRules[0].kind,status:station.status.state,evse:station.evses[0].id,loaderV4:true});
+          JS
+
+      - name: Validate Italy published runtime including Duferco
+        run: node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Validate Italy V9 tariff eligibility and cheapest-offer selection
+        run: |
+          node - <<'JS'
+          const directAdapter=require('./assets/v9/adapters/direct-offers.js');
+          const OfferEngine=require('./assets/v9/offer-engine.js');
+          const SessionEngine=require('./assets/v9/session-engine.js');
+          const payload={
+            country:'IT',
+            directOffers:[{id:'direct',provider:'A2A',evseIds:['ITTESTE1'],verifiedScope:'exact_evse',priority:130,pricing:{type:'kwh',pricePerKwh:0.55}}],
+            subscriptionOffers:[{id:'sub',selectionId:'atlante_go',provider:'Atlante',evseIds:['ITTESTE1'],verifiedScope:'exact_evse',priority:120,pricing:{type:'kwh',pricePerKwh:0.49}}],
+            emspOffers:[{id:'emsp',provider:'NextCharge',evseIds:['ITTESTE1'],verifiedScope:'exact_evse',priority:90,pricing:{type:'kwh',pricePerKwh:0.60}}]
+          };
+          const normalized=directAdapter.normalizePayload(payload).offerRules;
+          const fallback={id:'pun-fallback',provider:'PUN',kind:'national_fallback',countries:['IT'],priority:30,pricing:{type:'kwh',pricePerKwh:0.40}};
+          const station={id:'IT:test',countryCode:'IT',offers:[fallback,...normalized]};
+          const session={energyKwh:20,consumptionKwhPer100Km:15,targetCurrency:'EUR'};
+          const noSubEligible=OfferEngine.eligibleOffers(station,[],{countryCode:'IT'});
+          if(noSubEligible.some(o=>o.subscriptionId))throw new Error('unselected subscription leaked into eligibility');
+          if(noSubEligible.some(o=>o.kind==='national_fallback'))throw new Error('PUN fallback not suppressed by richer offers');
+          const noSub=SessionEngine.evaluateStation(station,session,{selectedSubscriptions:[]});
+          if(noSub.best?.offerId!=='direct'||noSub.best?.total!==11)throw new Error(`unexpected no-sub best: ${JSON.stringify(noSub.best)}`);
+          const withSub=SessionEngine.evaluateStation(station,session,{selectedSubscriptions:['atlante_go']});
+          if(withSub.best?.offerId!=='sub'||withSub.best?.total!==9.8)throw new Error(`unexpected selected-sub best: ${JSON.stringify(withSub.best)}`);
+          const emspWins={...station,offers:station.offers.map(o=>o.id==='emsp'?{...o,pricing:{type:'kwh',pricePerKwh:0.45}}:o)};
+          const cheapEmsp=SessionEngine.evaluateStation(emspWins,session,{selectedSubscriptions:[]});
+          if(cheapEmsp.best?.offerId!=='emsp'||cheapEmsp.best?.total!==9)throw new Error(`validated eMSP cannot win on price: ${JSON.stringify(cheapEmsp.best)}`);
+          console.log({noSubscription:noSub.best,selectedSubscription:withSub.best,cheapestValidatedEmsp:cheapEmsp.best});
+          JS
+
+      - name: Publish generated Italy data on integration branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-static data/v9/italy-offers.json data/v9/italy-build-report.json
+          if git diff --cached --quiet; then
+            echo 'Italy generated data already current'
+            exit 0
+          fi
+          git commit -m 'data(v9): publish Italy catalogue with Duferco'
+          git push origin "HEAD:${GITHUB_REF_NAME}"

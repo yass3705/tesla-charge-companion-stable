@@ -1,0 +1,149 @@
+name: V9 isolated device test Pages
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'v9-app/**'
+      - 'v9-gate/**'
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - '.github/workflows/v9-device-test-pages.yml'
+  push:
+    branches: [refactor/unified-data-engine-v9]
+    paths:
+      - 'v9-app/**'
+      - 'v9-gate/**'
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - '.github/workflows/v9-device-test-pages.yml'
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Type DEPLOY_V9_TEST to publish /v9-test/ while keeping main at root'
+        required: true
+        default: 'NO'
+      target_sha:
+        description: 'Exact 40-character V9 candidate SHA to deploy'
+        required: true
+      confirm_replace_locked_test_deployment:
+        description: 'Type REPLACE_LOCKED_V9_TEST to reset the locked test deployment'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: v9-isolated-device-test-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: >-
+      github.event_name != 'workflow_dispatch' ||
+      (
+        inputs.deploy == 'DEPLOY_V9_TEST' &&
+        inputs.confirm_replace_locked_test_deployment == 'REPLACE_LOCKED_V9_TEST'
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout V9 source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.target_sha || github.sha }}
+          path: v9src
+          fetch-depth: 0
+      - name: Validate explicit candidate and branch drift
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='${{ inputs.target_sha }}'
+          branch='refactor/unified-data-engine-v9'
+          if ! [[ "$target" =~ ^[0-9a-f]{40}$ ]]; then
+            echo 'target_sha must be an exact lowercase 40-character commit SHA.' >&2
+            exit 1
+          fi
+          resolved="$(git -C v9src rev-parse HEAD)"
+          if [ "$resolved" != "$target" ]; then
+            echo "Checked out $resolved instead of requested $target." >&2
+            exit 1
+          fi
+          git -C v9src fetch --no-tags origin "$branch"
+          branch_head="$(git -C v9src rev-parse FETCH_HEAD)"
+          if ! git -C v9src merge-base --is-ancestor "$target" "$branch_head"; then
+            echo 'Requested candidate is not an ancestor of the current V9 branch.' >&2
+            exit 1
+          fi
+          unexpected="$(git -C v9src diff --name-only "$target" "$branch_head" | grep -Ev '^\.github/workflows/v9-device-test-pages\.yml$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'V9 runtime/data drift exists after the requested candidate; reset refused.' >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+          echo "Guarded reset accepted for candidate $target; branch head is $branch_head."
+      - name: Checkout production main snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+      - name: Build isolated /v9-test tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site/v9-test
+          mkdir -p site/v9-test/{v9-app,v9-gate,assets/v9,data/v9,data/non_tesla_netherlands}
+          rsync -a --delete v9src/v9-app/ site/v9-test/v9-app/
+          rsync -a --delete v9src/v9-gate/ site/v9-test/v9-gate/
+          cp v9src/v9-gate/test-gate.js site/v9-test/v9-gate/gate.js
+          rsync -a --delete v9src/assets/v9/ site/v9-test/assets/v9/
+          rsync -a --delete v9src/data/v9/ site/v9-test/data/v9/
+          cp v9src/data/tesla_stations.json site/v9-test/data/tesla_stations.json
+          cp v9src/data/ionity_direct_stations_france.json.gz site/v9-test/data/ionity_direct_stations_france.json.gz
+          cp v9src/data/atlante_direct_stations_france.json.gz site/v9-test/data/atlante_direct_stations_france.json.gz
+          cp v9src/data/powerdot_direct_france.json.gz site/v9-test/data/powerdot_direct_france.json.gz
+          cp v9src/data/netherlands_direct_tariffs_v1.json site/v9-test/data/netherlands_direct_tariffs_v1.json
+          rsync -a --delete v9src/data/non_tesla_netherlands/ site/v9-test/data/non_tesla_netherlands/
+      - name: Validate root stays production main
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp -s site/index.html <(git -C site show HEAD:index.html)
+          test -s site/v9-test/v9-gate/index.html
+          test -s site/v9-test/v9-app/index.html
+          test -s site/v9-test/v9-app/scenario-runner.js
+          test -s site/v9-test/assets/v9/runtime-engine.js
+          test -s site/v9-test/assets/v9/device-scenario-engine.js
+          test -s site/v9-test/data/v9/source-registry.json
+          test -s site/v9-test/data/v9/first-device-scenarios.json
+          node --check site/v9-test/v9-gate/gate.js
+          node --check site/v9-test/v9-app/app.js
+          node --check site/v9-test/v9-app/scenario-runner.js
+          grep -q "../../" site/v9-test/v9-gate/gate.js
+          echo 'Isolated V9 test package validated; root index is byte-identical to main.'
+      - name: Upload Pages artifact for explicit manual deployment only
+        if: >-
+          github.event_name == 'workflow_dispatch' &&
+          inputs.deploy == 'DEPLOY_V9_TEST' &&
+          inputs.confirm_replace_locked_test_deployment == 'REPLACE_LOCKED_V9_TEST'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.deploy == 'DEPLOY_V9_TEST' &&
+      inputs.confirm_replace_locked_test_deployment == 'REPLACE_LOCKED_V9_TEST'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy production main + isolated V9 test subtree
+        id: deployment
+        uses: actions/deploy-pages@v4

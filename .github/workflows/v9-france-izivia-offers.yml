@@ -1,0 +1,71 @@
+name: V9 France IZIVIA offers
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/compile_izivia_v9_offers.py'
+      - 'tests/v9-france-izivia-network-audit.cjs'
+      - '.github/workflows/v9-france-izivia-offers.yml'
+      - 'data/v9/france-static/**'
+      - 'data/v9/france-izivia-offers.json'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'scripts/compile_izivia_v9_offers.py'
+      - 'tests/v9-france-izivia-network-audit.cjs'
+      - '.github/workflows/v9-france-izivia-offers.yml'
+      - 'data/v9/france-static/**'
+      - 'data/v9/france-izivia-offers.json'
+
+permissions:
+  contents: write
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/unified-data-engine-v9
+      - name: Validate compiler syntax
+        run: python -m py_compile scripts/compile_izivia_v9_offers.py
+      - name: Compile exact MAMP IZIVIA offers
+        run: python scripts/compile_izivia_v9_offers.py
+      - name: Verify output policy
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('data/v9/france-izivia-offers.json'))
+          assert p['policy']['physicalInventoryCreated'] is False
+          assert p['policy']['exactNetworkRequired']=='MAMP'
+          assert p['policy']['exactEvseRequired'] is True
+          assert p['policy']['geographicFallback'] is False
+          assert p['sourceEvidence']['stats']['eligible22Pdcs']==48
+          assert p['sourceEvidence']['stats']['eligible24Pdcs']==60
+          assert sum(len(o.get('evseIds',[])) for o in p['directOffers'])==108
+          assert all(o.get('evseIds') for o in p['directOffers'])
+          assert all(o['pricing']['pricePerKwh'] in (0.38,0.44) for o in p['directOffers'])
+          print(json.dumps(p['sourceEvidence']['stats']))
+          PY
+      - name: Publish compiled IZIVIA offers on V9 branch
+        if: github.repository == 'yass3705/tesla-charge-companion-stable'
+        run: |
+          if git diff --quiet -- data/v9/france-izivia-offers.json; then
+            echo 'IZIVIA offers already current'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/france-izivia-offers.json
+          git commit -m 'data(v9): publish exact IZIVIA MAMP offers'
+          git push origin HEAD:refactor/unified-data-engine-v9
+      - name: Upload compiled IZIVIA offers
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-izivia-offers
+          path: data/v9/france-izivia-offers.json
+          if-no-files-found: error
+          retention-days: 7

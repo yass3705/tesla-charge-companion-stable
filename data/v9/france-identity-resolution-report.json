@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-08-29T20:18:00Z",
+  "policy": {
+    "runtimeExactOnly": true,
+    "geographicCandidatesReviewOnly": true,
+    "neverActivateTariffFromProximityAlone": true
+  },
+  "resolutions": [
+    {
+      "provider": "Freshmile",
+      "network": "SDEC15 public IRVE",
+      "site": "Saint-Flour, Allée Georges Pompidou",
+      "status": "resolved_exact_evse_set",
+      "evseIds": ["FRFR1EQAHS1", "FRFR1EUSWB1", "FRFR1EYKHW1"],
+      "stationIdUsed": false,
+      "reason": "station identifiers conflict across copied IRVE datasets; exact PDC identifiers and connector/power composition are deterministic",
+      "runtimeEligible": true,
+      "tariffOfferId": "freshmile-sdec15-saint-flour-georges-pompidou"
+    },
+    {
+      "provider": "Powerdot",
+      "scope": "France",
+      "status": "unresolved_no_exact_irve_identifier",
+      "runtimeEligible": false,
+      "geographicFallbackAllowed": false,
+      "source": "data/powerdot_direct_france.json.gz",
+      "reason": "current provider snapshot does not expose an exact IRVE station/PDC identifier that can be linked deterministically to the national baseline"
+    },
+    {
+      "provider": "Qovoltis",
+      "network": "SYDER-QOVOLTIS",
+      "scope": "Rhône hors Métropole de Lyon",
+      "status": "resolved_by_exact_territorial_network_scope",
+      "runtimeEligible": true,
+      "identityMode": "physical_network_and_territory",
+      "stationRuleReplicationRequired": false,
+      "source": "data-lab/data/operator_direct/syder_qovoltis_official_auvergne_rhone_alpes.json",
+      "reason": "official tariff contract is defined for the SYDER-QOVOLTIS territorial public network and varies by power class/customer profile rather than by individual station"
+    }
+  ],
+  "next": [
+    "compile SYDER-QOVOLTIS tariff rules with power/customer-profile scoping",
+    "resolve provider-specific Powerdot IDs only when an exact IRVE identifier becomes available",
+    "quantify and validate existing Bump and AVIA-Picoty exact provider aliases"
+  ]
+}

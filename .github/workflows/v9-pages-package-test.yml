@@ -1,0 +1,85 @@
+name: V9 Pages package test
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'v9-preview/**'
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - 'data/non_tesla_netherlands/**'
+      - 'data/netherlands_direct_tariffs_v1.json'
+      - 'data/tesla_stations.json'
+      - '.github/workflows/v9-pages-package-test.yml'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'v9-preview/**'
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - 'data/non_tesla_netherlands/**'
+      - 'data/netherlands_direct_tariffs_v1.json'
+      - 'data/tesla_stations.json'
+      - '.github/workflows/v9-pages-package-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated Pages package
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .v9-pages-site
+          mkdir -p .v9-pages-site/v9-preview .v9-pages-site/assets/v9 .v9-pages-site/data/v9
+          rsync -a --delete v9-preview/ .v9-pages-site/v9-preview/
+          rsync -a --delete assets/v9/ .v9-pages-site/assets/v9/
+          rsync -a --delete data/v9/ .v9-pages-site/data/v9/
+          cp data/tesla_stations.json .v9-pages-site/data/tesla_stations.json
+          cp data/netherlands_direct_tariffs_v1.json .v9-pages-site/data/netherlands_direct_tariffs_v1.json
+          mkdir -p .v9-pages-site/data/non_tesla_netherlands
+          rsync -a --delete data/non_tesla_netherlands/ .v9-pages-site/data/non_tesla_netherlands/
+      - name: Validate preview package
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .v9-pages-site/v9-preview/index.html
+          test -s .v9-pages-site/v9-preview/app.js
+          test -s .v9-pages-site/assets/v9/browser-loaders.js
+          test -s .v9-pages-site/assets/v9/runtime-engine.js
+          test -s .v9-pages-site/data/v9/source-registry.json
+          test -s .v9-pages-site/data/v9/france-direct-offers.json
+          test -s .v9-pages-site/data/v9/france-static/manifest.json
+          test -s .v9-pages-site/data/non_tesla_netherlands/manifest.json
+          node --check .v9-pages-site/v9-preview/app.js
+          node --check .v9-pages-site/assets/v9/browser-loaders.js
+          node --check .v9-pages-site/assets/v9/runtime-engine.js
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('.v9-pages-site')
+          registry=json.loads((root/'data/v9/source-registry.json').read_text())
+          for source in registry['sources']:
+              if source.get('active') is False:
+                  continue
+              if source.get('adapter') in {'tesla-json','direct-offer-json'}:
+                  p=root/source['path']
+                  if not p.exists():
+                      raise SystemExit(f"missing packaged source: {source['id']} -> {p}")
+              if source.get('adapter','').startswith('national-compact-v'):
+                  p=root/source['manifest']
+                  if not p.exists():
+                      raise SystemExit(f"missing packaged manifest: {source['id']} -> {p}")
+          html=(root/'v9-preview/index.html').read_text()
+          for rel in ('../assets/v9/browser-loaders.js','../assets/v9/runtime-engine.js'):
+              if rel not in html:
+                  raise SystemExit(f'missing preview script reference: {rel}')
+          print('V9 Pages package OK')
+          PY
+      - name: Package size
+        run: du -sh .v9-pages-site

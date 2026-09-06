@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "requireReadiness": true,
+  "identities": [],
+  "candidatePath": "v9-app/",
+  "fallbackPath": "v8-app/",
+  "notes": "Explicit whitelist remains disabled during the random 1% canary. Non-canary identities use the isolated V8 control path."
+}

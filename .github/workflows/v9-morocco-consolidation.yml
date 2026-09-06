@@ -1,0 +1,122 @@
+name: V9 Morocco non-Tesla consolidation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-consolidation-20260831-resync2']
+    paths:
+      - 'assets/v9/adapters/morocco-*.js'
+      - 'assets/v9/browser-loaders.js'
+      - 'assets/v9/pricing-engine.js'
+      - 'assets/v9/session-engine.js'
+      - 'data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-consolidation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public data-lab read-only
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          path: data-lab
+          persist-credentials: false
+      - name: Validate Morocco V9 consolidation
+        run: |
+          node - <<'NODE'
+          const assert=require('assert');
+          const fs=require('fs');
+          const physical=require('./assets/v9/adapters/morocco-public.js');
+          const evone=require('./assets/v9/adapters/morocco-evone-policy.js');
+          const shell=require('./assets/v9/adapters/morocco-shell-vivo-diagnostic.js');
+          const browser=require('./assets/v9/browser-loaders.js');
+          const pricing=require('./assets/v9/pricing-engine.js');
+          const session=require('./assets/v9/session-engine.js');
+          const registry=JSON.parse(fs.readFileSync('./data/v9/source-registry.json','utf8'));
+          const read=p=>JSON.parse(fs.readFileSync(`./data-lab/reports/morocco/${p}`,'utf8'));
+
+          const expectedPhysical=['morocco-evgo-native','morocco-fastvolt-public','morocco-kilowatt-public','morocco-totalenergies-hosts'];
+          const maSources=registry.sources.filter(s=>Array.isArray(s.countries)&&s.countries.includes('MA'));
+          assert.deepEqual(maSources.map(s=>s.id).sort(),expectedPhysical.slice().sort(),'only four physical Morocco registry sources');
+          assert(maSources.every(s=>s.adapter==='morocco-public-v1'&&s.active===true));
+          assert(!registry.sources.some(s=>/evone|evplug|shell|vivo/i.test(s.id)&&Array.isArray(s.countries)&&s.countries.includes('MA')),'eMSP/diagnostic sources must not be physical registry entries');
+
+          const loaders=browser.createRegistryLoaders({registry,adapters:{moroccoPublic:physical},fetchImpl:async()=>{throw new Error('not invoked in registry wiring test');}});
+          for(const id of expectedPhysical)assert.equal(typeof loaders[id],'function',`browser loader wired for ${id}`);
+
+          for(const native of ['charging','suspendedEV','preparing','finishing'])assert.equal(physical.evgoClassify({status:native}),'occupied_or_active_session');
+          assert.equal(physical.evgoClassify({status:'available',isAvailable:true,isTemporarilyUnavailable:true}),'out_of_service');
+          assert.equal(physical.evgoClassify({status:'available',isAvailable:true,isLongTermUnavailable:true}),'out_of_service');
+          assert.equal(physical.evgoClassify({status:'available',isAvailable:false}),'unknown');
+
+          const fastRaw=read('fastvolt/latest-public-map-inventory.json');
+          const fastStations=physical.normalizeFastVoltDataset(fastRaw);
+          assert.equal(fastStations.length,97);
+          const w=fastStations.find(s=>s.sourceStationId==='W00057');
+          assert(w,'FastVolt W00057');
+          assert.equal(w.physicalOperator.name,'FastVolt / Afrimobility');
+          assert.equal(w.access.siteBrand,'Afriquia');
+          assert.equal(w.access.appSource,'FastVolt public web map');
+          assert.equal(w.status.statusSource,null);
+          assert.equal(w.evses[0].connectors.filter(c=>c.kind==='DC'&&c.powerKw===360).length,4);
+          assert.equal(w.evses[0].connectors.filter(c=>c.kind==='AC'&&c.powerKw===22).length,2);
+          const dc=session.evaluateStation(w,{durationMinutes:10,energyKwh:0,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+          assert.equal(dc.chargingKind,'DC');
+          assert.equal(dc.eligibleOfferCount,1,'AC FastVolt tariff excluded for DC session');
+          assert.equal(dc.best?.offerId,'fastvolt-direct-dc:W00057');
+          assert.equal(dc.best?.total,25,'10 min FastVolt DC = 25 MAD');
+          const acOffer=w.offers.find(o=>o.connectorKinds?.includes('AC'));
+          const acPrice=pricing.evaluateOffer(acOffer,{durationMinutes:10,energyKwh:0});
+          assert.equal(acPrice.currency,'MAD');
+          assert.equal(acPrice.totalEur,5,'10 min FastVolt AC = 5 MAD');
+
+          const kiloRaw=read('kilowatt/latest-public-station-inventory.json');
+          const kilo=physical.normalizeKilowattDataset(kiloRaw);
+          assert.equal(kilo.length,43);
+          assert(kilo.every(s=>s.physicalOperator?.name==='Kilowatt'));
+          assert(kilo.every(s=>s.access?.appSource==='Kilowatt public web map'));
+
+          const official=read('totalenergies/official-network-inventory-2026-08-23.json');
+          const links=read('totalenergies/official-link-reconciliation-2026-08-30.json');
+          const alWaha=read('totalenergies/al-waha-cpo-attribution.json');
+          const total=physical.normalizeTotalEnergies(official,alWaha,links);
+          assert.equal(total.summary.reconciledHosts,18);
+          assert.equal(total.summary.geolocatedHosts,13);
+          assert.equal(total.summary.excludedWithoutGeo,5);
+          const al=total.stations.find(s=>s.canonicalId===`MA:kilowatt:${alWaha.station.kilowatt_station_id}`);
+          assert(al);
+          assert.equal(al.physicalOperator.name,'Kilowatt');
+          assert.equal(al.access.siteBrand,'TotalEnergies');
+          assert.equal(al.status.statusSource,'Kilowatt public web map');
+          assert.deepEqual(al.offers,[]);
+          assert(total.stations.filter(s=>s!==al).every(s=>s.physicalOperator===null&&s.status.statusSource===null&&s.offers.length===0));
+
+          const statuses=['Available','Occupied','Charging','Faulted','Offline','Unknown','Unavailable','FutureStatus'];
+          const split=evone.splitProductionAndDiagnostics(statuses.map((status,i)=>({id:String(i),status})));
+          assert.deepEqual(split.production.map(x=>x.status.nativeState),['Available','Occupied','Charging']);
+          assert.equal(split.excluded.length,5);
+          assert(split.excluded.every(x=>x.diagnosticOnly===true&&x.productionEligible===false));
+
+          const alJazira=shell.normalizeShellVivoDiagnostic(read('shell-vivo/al-jazira-evidence-2026-08-30.json'));
+          assert.equal(alJazira.access.siteBrand,'Shell');
+          assert.equal(alJazira.access.accessNetwork,'Shell Recharge');
+          assert.equal(alJazira.physicalOperator,null);
+          assert.deepEqual(alJazira.offers,[]);
+          assert.equal(alJazira.status.statusSource,null);
+          assert.equal(alJazira.productionEligible,false);
+          const melloussa=shell.normalizeShellVivoDiagnostic(read('shell-vivo/melloussa-ev-charging-conflict-2026-08-29.json'));
+          assert.equal(melloussa.access.siteBrand,'Shell');
+          assert.equal(melloussa.access.accessNetwork,null);
+          assert.equal(melloussa.physicalOperator,null);
+          assert.equal(melloussa.productionEligible,false);
+
+          console.log(JSON.stringify({ok:true,physicalRegistrySources:expectedPhysical,fastVolt:{productionStations:fastStations.length,w00057ChargingKind:dc.chargingKind,w00057EligibleOffers:dc.eligibleOfferCount,dc10minMAD:dc.best.total,ac10minMAD:acPrice.totalEur},kilowatt:{productionStations:kilo.length},totalEnergies:total.summary,evone:{production:split.production.map(x=>x.status.nativeState),excluded:split.excluded.map(x=>x.status.nativeState)},shell:{alJaziraProduction:alJazira.productionEligible,melloussaProduction:melloussa.productionEligible}},null,2));
+          NODE

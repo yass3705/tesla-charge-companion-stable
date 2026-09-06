@@ -1,0 +1,173 @@
+name: V9 unified data engine
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - 'v9-preview/**'
+      - 'docs/v9-**'
+      - 'docs/v9/**'
+      - 'tests/v9-**'
+      - 'scripts/v9/**'
+      - '.github/workflows/v9-unified-data-engine-test.yml'
+  push:
+    branches: [main, 'refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/**'
+      - 'data/v9/**'
+      - 'v9-preview/**'
+      - 'tests/v9-**'
+      - 'scripts/v9/**'
+      - '.github/workflows/v9-unified-data-engine-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unified-data-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax checks
+        run: |
+          node --check assets/v9/data-engine.js
+          node --check assets/v9/offer-engine.js
+          node --check assets/v9/pricing-engine.js
+          node --check assets/v9/session-engine.js
+          node --check assets/v9/vehicle-profile-engine.js
+          node --check assets/v9/charge-model-engine.js
+          node --check assets/v9/session-planner-engine.js
+          node --check assets/v9/station-score-engine.js
+          node --check assets/v9/routing-engine.js
+          node --check assets/v9/browser-routing.js
+          node --check assets/v9/runtime-engine.js
+          node --check assets/v9/browser-loaders.js
+          node --check assets/v9/adapters/tesla-json.js
+          node --check assets/v9/adapters/national-compact.js
+          node --check assets/v9/adapters/direct-offers.js
+          node --check assets/v9/adapters/legacy-direct-tariffs.js
+          node --check assets/v9/adapters/legacy-direct-stations.js
+          node --check assets/v9/adapters/france-emsp-compact.js
+          node --check assets/v9/adapters/france-crosswalk.js
+          node --check assets/v9/adapters/france-irve-status.js
+          node --check tests/v9-bump-exact-scope.test.cjs
+          node --check tests/v9-france-coverage-audit.cjs
+          node --check tests/v9-france-direct-identity-audit.cjs
+          node --check tests/v9-ionity-crosswalk-audit.cjs
+          node --check tests/v9-vehicle-profile-engine.test.cjs
+          node --check tests/v9-charge-model-engine.test.cjs
+          node --check tests/v9-session-planner-engine.test.cjs
+          node --check tests/v9-pricing-window-segmentation.test.cjs
+          node --check tests/v9-offer-validity.test.cjs
+          node --check tests/v9-energy-timeline-pricing.test.cjs
+          node --check tests/v9-station-score-engine.test.cjs
+          node --check tests/v9-charge-score-integration.test.cjs
+          node --check tests/v9-routing-engine.test.cjs
+          node --check scripts/v9/build-france-ionity-crosswalk.cjs
+          node --check v9-preview/app.js
+      - name: Validate source registry
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('data/v9/source-registry.json','utf8'));
+          if(r.schemaVersion!==1||r.engine!=='tcc-v9-unified-data')throw new Error('invalid V9 registry');
+          const ids=r.sources.map(x=>x.id), unique=new Set(ids);
+          if(ids.length!==unique.size)throw new Error('duplicate source ids');
+          for(const source of r.sources){
+            if(!source.id||!source.adapter||!Array.isArray(source.countries)||!source.capabilities?.length)throw new Error(`invalid source ${source.id||'unknown'}`);
+          }
+          const required=['tesla-global','france-national','france-crosswalk','france-irve-dynamic','france-canonical-direct-offers','france-qovoltis-offers','france-freshmile-offers','france-bump-offers','france-emsp-offers','netherlands-dotnl','netherlands-direct-offers'];
+          for(const id of required)if(!unique.has(id))throw new Error(`missing source ${id}`);
+          const franceDirect=r.sources.find(x=>x.id==='france-canonical-direct-offers');
+          if(franceDirect.path!=='data/v9/france-direct-offers.json'||franceDirect.active!==true)throw new Error('France direct migration source not bound to embedded snapshot');
+          const qovoltis=r.sources.find(x=>x.id==='france-qovoltis-offers');
+          if(qovoltis.path!=='data/v9/france-qovoltis-offers.json'||qovoltis.active!==true||qovoltis.adapter!=='direct-offer-json'||qovoltis.priority?.tariff!==125)throw new Error('Qovoltis verified V9 source not bound to embedded snapshot');
+          if(JSON.stringify(qovoltis.capabilities)!==JSON.stringify(['tariff','subscription']))throw new Error('Qovoltis source must remain tariff/subscription-only and may not create inventory');
+          const freshmile=r.sources.find(x=>x.id==='france-freshmile-offers');
+          if(freshmile.path!=='data/v9/france-freshmile-offers.json'||freshmile.active!==true)throw new Error('Freshmile exact V9 source not bound to embedded snapshot');
+          const bump=r.sources.find(x=>x.id==='france-bump-offers');
+          if(bump.path!=='data/v9/france-bump-offers.json'||bump.active!==true||bump.adapter!=='direct-offer-json'||bump.priority?.tariff!==125)throw new Error('Bump exact V9 source not bound to embedded snapshot');
+          if(bump.capabilities.length!==1||bump.capabilities[0]!=='tariff')throw new Error('Bump source must be tariff-only and may not create inventory');
+          const franceEmsp=r.sources.find(x=>x.id==='france-emsp-offers');
+          if(franceEmsp.active!==false||franceEmsp.adapter!=='france-emsp-compact-v1'||franceEmsp.manifest!=='data/non_tesla_france/manifest.json'||!franceEmsp.disabledReason)throw new Error('France legacy eMSP tariff source must remain explicitly disabled until a genuine tariff snapshot exists');
+          if(!fs.existsSync(franceEmsp.manifest))throw new Error('France eMSP manifest missing');
+          for(const source of r.sources.filter(x=>x.active!==false)){
+            if(source.path && ['tesla-json','direct-offer-json','direct-tariff-gzip','direct-station-gzip'].includes(source.adapter) && !fs.existsSync(source.path))throw new Error(`active source path missing: ${source.id} -> ${source.path}`);
+            if(source.manifest && (/^national-compact-v\d+$/.test(source.adapter)||source.adapter==='france-emsp-compact-v1') && !fs.existsSync(source.manifest))throw new Error(`active manifest missing: ${source.id} -> ${source.manifest}`);
+          }
+          if(r.rules.mergeBeforePrune!==true||r.rules.operatorsDerivedFromFinalStations!==true||r.rules.sourceMayRemoveForeignEntities!==false)throw new Error('V9 invariants missing');
+          if(r.rules.exactCrosswalkBeforeFuzzyMatching!==true||r.rules.dynamicStatusMustBeFresh!==true)throw new Error('France V9 safety invariants missing');
+          const vehicles=JSON.parse(fs.readFileSync('data/v9/vehicle-profiles.json','utf8'));
+          if(vehicles.schemaVersion!==1||!Array.isArray(vehicles.profiles)||!vehicles.profiles.length)throw new Error('invalid vehicle profile catalog');
+          console.log(`V9 registry OK: ${ids.length} sources · ${vehicles.profiles.length} vehicle profile(s)`);
+          NODE
+      - name: Core invariants
+        run: node tests/v9-data-engine.test.cjs
+      - name: Compatibility adapters
+        run: node tests/v9-adapters.test.cjs
+      - name: Browser loader selection
+        run: node tests/v9-browser-loaders.test.cjs
+      - name: France physical/status/tariff model
+        run: node tests/v9-france-model.test.cjs
+      - name: Exact Belib tariff migration
+        run: node tests/v9-belib-migration.test.cjs
+      - name: Exact E55C tariff migration
+        run: node tests/v9-e55c-migration.test.cjs
+      - name: Fail-closed IONITY migration
+        run: node tests/v9-ionity-migration.test.cjs
+      - name: Exact Atlante EVSE migration
+        run: node tests/v9-atlante-migration.test.cjs
+      - name: Exact Powerdot PDC migration
+        run: node tests/v9-powerdot-migration.test.cjs
+      - name: Exact e-Totem PDC migration
+        run: node tests/v9-etotem-migration.test.cjs
+      - name: Exact Freshmile station/PDC migration
+        run: node tests/v9-france-freshmile-offers.test.cjs
+      - name: Exact Bump PDC tariff scope
+        run: node tests/v9-bump-exact-scope.test.cjs
+      - name: Exact Electroverse/Electra PDC migration
+        run: node tests/v9-france-emsp-migration.test.cjs
+      - name: France tariff hierarchy regression
+        run: node tests/v9-france-tariff-hierarchy.test.cjs
+      - name: France national tariff coverage audit
+        run: node tests/v9-france-coverage-audit.cjs
+      - name: France direct identity audit
+        run: node tests/v9-france-direct-identity-audit.cjs
+      - name: IONITY deterministic crosswalk audit
+        run: node tests/v9-ionity-crosswalk-audit.cjs
+      - name: Build IONITY deterministic crosswalk artifact
+        run: node scripts/v9/build-france-ionity-crosswalk.cjs artifacts/france-ionity-crosswalk.json
+      - name: Upload IONITY crosswalk artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-ionity-crosswalk
+          path: artifacts/france-ionity-crosswalk.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Unified offers and subscriptions
+        run: node tests/v9-offer-engine.test.cjs
+      - name: Unified vehicle profiles
+        run: node tests/v9-vehicle-profile-engine.test.cjs
+      - name: SOC-aware charge model
+        run: node tests/v9-charge-model-engine.test.cjs
+      - name: SOC target and unplug deadline planning
+        run: node tests/v9-session-planner-engine.test.cjs
+      - name: Tariff-window and post-charge segmentation
+        run: node tests/v9-pricing-window-segmentation.test.cjs
+      - name: Date-bounded offer validity
+        run: node tests/v9-offer-validity.test.cjs
+      - name: SOC energy timeline tariff allocation
+        run: node tests/v9-energy-timeline-pricing.test.cjs
+      - name: Station scoring
+        run: node tests/v9-station-score-engine.test.cjs
+      - name: Routed SOC charge integration
+        run: node tests/v9-charge-score-integration.test.cjs
+      - name: Routing and approach energy
+        run: node tests/v9-routing-engine.test.cjs
+      - name: Unified runtime integration
+        run: node tests/v9-runtime-engine.test.cjs
+      - name: Real Eindhoven composition
+        run: node tests/v9-real-eindhoven.test.cjs

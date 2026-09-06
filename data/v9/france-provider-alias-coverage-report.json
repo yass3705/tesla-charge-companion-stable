@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 2,
+  "country": "FR",
+  "generatedAt": "2026-08-30T12:12:33.185077Z",
+  "policy": {
+    "runtimeExactOnly": true,
+    "geographicCandidatesReviewOnly": true,
+    "noTariffActivationFromProximity": true,
+    "providerAliasDoesNotImplyTariffAvailability": true,
+    "noSyntheticNetworkWideTariff": true
+  },
+  "summary": {
+    "providerCount": 8,
+    "totalExactRuntimeAliases": 4686,
+    "totalExactCanonicalStations": 989,
+    "totalReviewOnlyCandidates": 4405,
+    "aviaPicotyCombinedExactCanonicalStations": 41,
+    "aviaPicotyDualConfirmedCanonicalStations": 41,
+    "aviaPicotyHasExactRuntimeIdentity": true,
+    "aviaPicotyHasRankableTariff": false,
+    "bumpHasExactRuntimeIdentity": true,
+    "powerdotHasExactRuntimeIdentity": false
+  },
+  "aviaPicotyTariffReadiness": {
+    "identityStatus": "exact_runtime_identity_available",
+    "exactCanonicalStationCount": 41,
+    "dualConfirmedCanonicalStationCount": 41,
+    "directTariffStatus": "pricing_signals_present_requires_semantic_validation",
+    "irveTariffFallbackStatus": "unavailable_no_raw_tarification",
+    "runtimeTariffEligible": false,
+    "reason": "Exact AVIA identity exists, but no validated rankable tariff source is currently available; keep stations visible without inventing a price.",
+    "irveIndex": {
+      "source": "data-lab/data/national/avia_volt_picoty_station_index.json",
+      "stationCount": 41,
+      "pdcCount": 237,
+      "pdcWithTarificationRaw": 0,
+      "stationsWithTarificationRaw": 0
+    },
+    "directSnapshot": {
+      "source": "data-lab/data/national/avia_picoty_direct_stations_france.json.gz",
+      "pricingLikeKeys": {
+        "aviaBrandSitesOperatedByOtherCposIncluded": 1,
+        "generatedAt": 1,
+        "irveExplicitKwhPriceCounts": 1,
+        "observedPriceEvidence": 41,
+        "observedThirdPartyPricesAreRankable": 1,
+        "pricesFailClosed": 1,
+        "stationsWithIrveExplicitKwhPrice": 1,
+        "stationsWithObservedPriceEvidence": 1,
+        "tarificationRawValues": 41
+      },
+      "nonEmptyPricingLikeSamples": [
+        {
+          "path": "generatedAt",
+          "value": "2026-08-26T08:49:39.293039+00:00"
+        },
+        {
+          "path": "scope.aviaBrandSitesOperatedByOtherCposIncluded",
+          "value": "False"
+        },
+        {
+          "path": "scope.pricesFailClosed",
+          "value": "True"
+        },
+        {
+          "path": "scope.observedThirdPartyPricesAreRankable",
+          "value": "False"
+        },
+        {
+          "path": "counts.stationsWithObservedPriceEvidence",
+          "value": "8"
+        },
+        {
+          "path": "counts.stationsWithIrveExplicitKwhPrice",
+          "value": "0"
+        },
+        {
+          "path": "stations[5].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'carbuprix', 'note': 'Salles-sur-Mer'}"
+        },
+        {
+          "path": "stations[6].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'cross-check', 'note': 'Saint-Palais-sur-Mer; roaming prices ignored'}"
+        },
+        {
+          "path": "stations[12].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'cross-check', 'note': 'Hillion'}"
+        },
+        {
+          "path": "stations[18].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'carbuprix', 'note': 'Lormont, 3 Avenue de la Resistance'}"
+        },
+        {
+          "path": "stations[26].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'carbuprix', 'note': 'Nantes, 162 Route de Rennes'}"
+        },
+        {
+          "path": "stations[35].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'cross-check', 'note': 'Maulette - Aire de la Prairie'}"
+        },
+        {
+          "path": "stations[36].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'cross-check', 'note': 'Maulette - Aire du Val Raymond'}"
+        },
+        {
+          "path": "stations[38].observedPriceEvidence",
+          "value": "{'eurPerKwh': 0.65, 'source': 'cross-check', 'note': \"Les Sables-d'Olonne\"}"
+        }
+      ]
+    }
+  },
+  "focus": {
+    "avia-picoty": {
+      "provider": "avia-picoty",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_picoty_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    "avia-volt": {
+      "provider": "avia-volt",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_volt_picoty_station_index.json"
+      ],
+      "candidateSourceFiles": []
+    },
+    "bump": {
+      "provider": "bump",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 1886,
+      "exactCanonicalStationCount": 192,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/bump_direct_inventory_france.json.gz",
+        "data/national/bump_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    "powerdot": {
+      "provider": "powerdot",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 2321,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 2321
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/powerdot_direct_france.json.gz"
+      ]
+    }
+  },
+  "providers": [
+    {
+      "provider": "allego",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 239,
+      "exactCanonicalStationCount": 154,
+      "reviewOnlyCandidateCount": 552,
+      "reviewOnlyCandidateKinds": {
+        "ambiguous_exact": 552
+      },
+      "exactSourceFiles": [
+        "data/national/allego_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": [
+        "data/national/allego_direct_stations_france.json.gz"
+      ]
+    },
+    {
+      "provider": "atlante",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 170,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 170
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/national/atlante_direct_stations_france.json.gz"
+      ]
+    },
+    {
+      "provider": "avia-picoty",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_picoty_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    {
+      "provider": "avia-volt",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 41,
+      "exactCanonicalStationCount": 41,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/avia_volt_picoty_station_index.json"
+      ],
+      "candidateSourceFiles": []
+    },
+    {
+      "provider": "belib",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 760,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 760
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/national/belib_stations_paris.json"
+      ]
+    },
+    {
+      "provider": "bump",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 1886,
+      "exactCanonicalStationCount": 192,
+      "reviewOnlyCandidateCount": 0,
+      "reviewOnlyCandidateKinds": {},
+      "exactSourceFiles": [
+        "data/national/bump_direct_inventory_france.json.gz",
+        "data/national/bump_direct_stations_france.json.gz"
+      ],
+      "candidateSourceFiles": []
+    },
+    {
+      "provider": "electric55",
+      "status": "exact_runtime_aliases_available",
+      "exactRuntimeAliasCount": 2479,
+      "exactCanonicalStationCount": 602,
+      "reviewOnlyCandidateCount": 602,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 602
+      },
+      "exactSourceFiles": [
+        "data/national/electric55_stations_france.json"
+      ],
+      "candidateSourceFiles": [
+        "data/national/electric55_stations_france.json"
+      ]
+    },
+    {
+      "provider": "powerdot",
+      "status": "review_only_no_exact_runtime_alias",
+      "exactRuntimeAliasCount": 0,
+      "exactCanonicalStationCount": 0,
+      "reviewOnlyCandidateCount": 2321,
+      "reviewOnlyCandidateKinds": {
+        "geo_candidate_only": 2321
+      },
+      "exactSourceFiles": [],
+      "candidateSourceFiles": [
+        "data/powerdot_direct_france.json.gz"
+      ]
+    }
+  ]
+}

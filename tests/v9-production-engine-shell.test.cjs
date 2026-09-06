@@ -1,0 +1,36 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const Shell=require('../v9-production-shell/bridge.js');
+const cfg=JSON.parse(fs.readFileSync('v9-production-shell/shell-config.json','utf8'));
+const readiness=JSON.parse(fs.readFileSync('ops/v9/production-shell-readiness.json','utf8'));
+const loader=fs.readFileSync('v9-production-shell/index.html','utf8');
+
+assert.equal(cfg.mode,'shadow');
+assert.equal(cfg.expectedControlBuild,'7310');
+assert.equal(cfg.runtimeBase,'v9-production-runtime');
+assert.equal(cfg.observedCandidateSha,'8d2c20b7c76004389edd8f4a3b80d6b314900ba0');
+assert.deepEqual(cfg.engineScopeCountries,['FR','NL','IT']);
+assert.equal(cfg.fallback,'legacy-compare');
+assert.equal(readiness.ready,false);
+assert.equal(readiness.state,'BLOCKED');
+assert.match(loader,/control build mismatch/);
+assert.match(loader,/location\.replace\(CONTROL_FALLBACK\)/);
+assert.match(loader,/v9-production-shell\/bridge\.js/);
+assert.doesNotMatch(loader,/v9-app\/app\.js/);
+
+assert.deepEqual(Shell.rankingWeights('balanced'),{price:.5,distance:.5});
+assert.deepEqual(Shell.rankingWeights('price'),{price:.7,distance:.3});
+assert.deepEqual(Shell.rankingWeights('distance'),{price:.3,distance:.7});
+const rows=Shell.rankRows([{station:{name:'Near expensive'},total:20,distanceKm:1},{station:{name:'Far cheap'},total:10,distanceKm:10}], 'price',20);
+assert.equal(rows[0].station.name,'Far cheap');
+const distanceRows=Shell.rankRows([{station:{name:'Near expensive'},total:20,distanceKm:1},{station:{name:'Far cheap'},total:10,distanceKm:10}], 'distance',20);
+assert.equal(distanceRows[0].station.name,'Near expensive');
+const start=Shell.combineDateTime('2026-09-06','23:30');
+const disconnect=Shell.combineDateTime('2026-09-06','01:00',start);
+assert(new Date(disconnect)>new Date(start));
+const normal=Shell.dcCurve('normal','realistic'),warm=Shell.dcCurve('warm','realistic');
+assert.equal(normal.length,14);assert(warm[0].powerKw>normal[0].powerKw);
+const session=Shell.buildSession({startSoc:20,targetSoc:80,startAt:start,disconnectAt:disconnect,condition:'normal',profile:'realistic'});
+assert.equal(session.batteryCapacityKwh,75);assert.equal(session.consumptionKwhPer100Km,15);assert.equal(session.vehicleMaxAcKw,11);assert.equal(session.vehicleMaxDcKw,250);assert(Array.isArray(session.chargeCurve));
+console.log(JSON.stringify({ok:true,module:'tcc-v9-production-engine-shell',mode:cfg.mode,controlBuild:cfg.expectedControlBuild,runtimeBase:cfg.runtimeBase,scope:cfg.engineScopeCountries,failClosed:true},null,2));

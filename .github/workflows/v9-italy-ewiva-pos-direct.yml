@@ -1,0 +1,133 @@
+name: V9 Italy Ewiva POS direct tariffs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/v9-ewiva-pos-direct-italy
+    paths:
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_ewiva_pos_italy.py
+      - scripts/v9_report_italy_direct_gap.py
+      - tests/v9-ewiva-pos-direct-runtime.test.cjs
+      - tests/v9-ewiva-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - tests/v9-offer-validity.test.cjs
+      - .github/workflows/v9-italy-ewiva-pos-direct.yml
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - data/v9/italy-offers.json
+      - data/v9/italy-static/all.json.gz
+      - scripts/v9_overlay_ewiva_pos_italy.py
+      - scripts/v9_report_italy_direct_gap.py
+      - tests/v9-ewiva-pos-direct-runtime.test.cjs
+      - tests/v9-ewiva-italy-runtime.test.cjs
+      - tests/v9-italy-runtime-smoke.test.cjs
+      - tests/v9-offer-validity.test.cjs
+      - .github/workflows/v9-italy-ewiva-pos-direct.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v9-italy-ewiva-pos-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download canonical public data-lab candidate
+        run: |
+          curl --fail --silent --show-error --location \
+            --output /tmp/ewiva_pos_direct_italy_candidate.json.gz \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/ewiva_pos_direct_italy_candidate.json.gz
+          test -s /tmp/ewiva_pos_direct_italy_candidate.json.gz
+
+      - name: Rebuild the strict Ewiva POS overlay
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/v9_overlay_ewiva_pos_italy.py
+          python scripts/v9_overlay_ewiva_pos_italy.py \
+            --candidate /tmp/ewiva_pos_direct_italy_candidate.json.gz \
+            --out data/v9/italy-offers.json \
+            --report /tmp/ewiva-pos-overlay-report.json \
+            --publish
+
+      - name: Validate Ewiva direct, eMSP separation and Italy runtime
+        run: |
+          node tests/v9-offer-validity.test.cjs
+          node tests/v9-ewiva-pos-direct-runtime.test.cjs
+          node tests/v9-ewiva-italy-runtime.test.cjs
+          node tests/v9-italy-runtime-smoke.test.cjs
+
+      - name: Run complete Italy functional QA
+        run: node tests/v9-italy-functional-qa.test.cjs
+
+      - name: Audit exact direct coverage after Ewiva
+        run: |
+          mkdir -p /tmp/ewiva-gap
+          python scripts/v9_report_italy_direct_gap.py \
+            --json-out /tmp/ewiva-gap/italy-direct-gap-report.json \
+            --markdown-out /tmp/ewiva-gap/italy-direct-gap-report.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary=json.loads(Path('/tmp/ewiva-gap/italy-direct-gap-report.json').read_text())['summary']
+          offers=json.loads(Path('data/v9/italy-offers.json').read_text())
+          direct_ids={evse_id for offer in offers['directOffers'] for evse_id in offer.get('evseIds',[]) if evse_id}
+          assert summary['stations']==29696
+          assert summary['physicalEvse']==75025
+          assert summary['matchedDirectEvse']==len(direct_ids)
+          assert summary['matchedDirectEvse']>=50914
+          assert summary['uncoveredEvse']==75025-len(direct_ids)
+          assert summary['directCoveragePct']==round(100*len(direct_ids)/75025,2)
+          assert summary['orphanDirectOfferEvseIds']==0
+          print(json.dumps(summary,indent=2))
+          PY
+
+      - name: Require deterministic data on pull requests
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- data/v9/italy-offers.json
+
+      - name: Publish generated Italy catalogue on the integration branch
+        if: github.event_name != 'pull_request' && github.ref_name == 'feature/v9-ewiva-pos-direct-italy'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/v9/italy-offers.json
+          if git diff --cached --quiet; then
+            echo 'Ewiva POS Italy catalogue already current'
+            exit 0
+          fi
+          git commit -m "data(v9): publish Ewiva POS Italy overlay [run ${GITHUB_RUN_ID}]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload overlay and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-italy-ewiva-pos-direct
+          path: |
+            /tmp/ewiva-pos-overlay-report.json
+            /tmp/ewiva-gap/italy-direct-gap-report.json
+            /tmp/ewiva-gap/italy-direct-gap-report.md
+          if-no-files-found: error
+          retention-days: 14

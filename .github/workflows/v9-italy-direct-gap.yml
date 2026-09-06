@@ -1,0 +1,50 @@
+name: V9 Italy direct tariff gap
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/v9_report_italy_direct_gap.py'
+      - 'data/v9/italy-static/**'
+      - 'data/v9/italy-offers.json'
+      - '.github/workflows/v9-italy-direct-gap.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile audit script
+        run: python -m py_compile scripts/v9_report_italy_direct_gap.py
+      - name: Compute exact Italy direct-tariff gap
+        run: |
+          mkdir -p artifacts
+          python scripts/v9_report_italy_direct_gap.py \
+            --json-out artifacts/italy-direct-gap-report.json \
+            --markdown-out artifacts/italy-direct-gap-report.md
+      - name: Validate current Italy scale
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('artifacts/italy-direct-gap-report.json').read_text())
+          s = report['summary']
+          assert s['stations'] >= 29000, s
+          assert s['physicalEvse'] >= 74000, s
+          assert s['matchedDirectEvse'] >= 48000, s
+          assert s['uncoveredEvse'] > 0, s
+          assert s['orphanDirectOfferEvseIds'] == 0, s
+          print(json.dumps(s, indent=2))
+          PY
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: italy-v9-direct-gap
+          path: artifacts/italy-direct-gap-report.*
+          if-no-files-found: error

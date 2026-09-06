@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "state": "BLOCKED",
+  "ready": false,
+  "controlVersion": "7.3-stable",
+  "controlPath": "./",
+  "candidateKind": "engine-validation-harness",
+  "candidatePath": "v9-app/",
+  "observedCandidateSha": "8d2c20b7c76004389edd8f4a3b80d6b314900ba0",
+  "runtimeFingerprint": "sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697",
+  "fullWindowRunId": 33999132520,
+  "activationEvidenceCommit": "9e0b86e5ffa4d584f2c495eb56bd6b8c19e2059f",
+  "prototype": {
+    "status": "BUILDING",
+    "path": "v9-production-shell/",
+    "mode": "shadow",
+    "controlUi": "7.3-stable",
+    "engineScopeCountries": ["FR", "NL", "IT"],
+    "fallback": "legacy-compare",
+    "strategy": "Reuse the stable V7.3 UI and substitute only the comparison engine; do not fork or migrate the whole UI."
+  },
+  "reasons": [
+    "The public production root is V7.3 Stable while the original rollout contract assumed V8 was already production.",
+    "v9-app is still a technical validation harness with enrollment/scenario controls and pre-canary copy, not the production user application shell.",
+    "A stable-UI/V9-engine shell now exists only in shadow mode; it must pass artifact and device validation before it can become the public canary target."
+  ],
+  "requiredBeforeUserCanary": [
+    "Promote the stable-UI/V9-engine shell from shadow to candidate only after its mapping and fallback tests are green.",
+    "Declare the actual production control version and path explicitly instead of assuming V8.",
+    "Make every bootstrap/config/runtime failure continue on the control application without a redirect loop.",
+    "Verify the production Pages artifact contains the pinned candidate runtime and its pinned data dependencies.",
+    "Run routing smoke tests proving deterministic 1% allocation and zero user exposure when this readiness file is BLOCKED."
+  ],
+  "notes": "This gate separates engine validation from user-facing production exposure. The shell prototype deliberately reuses V7.3 UI and keeps public traffic at 0% while preserving the completed V9 engine observation."
+}

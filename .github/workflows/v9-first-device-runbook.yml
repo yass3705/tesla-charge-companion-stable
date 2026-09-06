@@ -1,0 +1,51 @@
+name: V9 first device runbook safety
+
+on:
+  pull_request:
+    paths:
+      - 'assets/v9/rollout-engine.js'
+      - 'assets/v9/access-router-engine.js'
+      - 'assets/v9/self-enrollment-engine.js'
+      - 'assets/v9/device-test-engine.js'
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'docs/v9-first-device-test-runbook.md'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - '.github/workflows/v9-first-device-runbook.yml'
+  push:
+    branches: [main, refactor/unified-data-engine-v9]
+    paths:
+      - 'data/v9/rollout-config.json'
+      - 'data/v9/self-enrollment-config.json'
+      - 'data/v9/access-readiness.json'
+      - 'data/v9/device-test-policy.json'
+      - 'scripts/v9-first-device-test-runbook.cjs'
+      - 'scripts/v9-validate-device-test-config.cjs'
+      - 'tests/v9-device-test-config-validator.test.cjs'
+      - '.github/workflows/v9-first-device-runbook.yml'
+  workflow_dispatch:
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax
+        run: |
+          node --check assets/v9/rollout-engine.js
+          node --check assets/v9/access-router-engine.js
+          node --check scripts/v9-first-device-test-runbook.cjs
+          node --check scripts/v9-validate-device-test-config.cjs
+      - name: Repository state runbook precheck
+        run: node scripts/v9-first-device-test-runbook.cjs
+      - name: Fail-closed or controlled-window configuration
+        run: node scripts/v9-validate-device-test-config.cjs
+      - name: Configuration validator contract
+        run: node tests/v9-device-test-config-validator.test.cjs
