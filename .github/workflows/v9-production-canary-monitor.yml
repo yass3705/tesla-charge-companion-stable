@@ -1,0 +1,66 @@
+name: V9 production canary monitor
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'v9-production-control.json'
+      - 'v9-production-shell/shell-config.json'
+      - 'v9-production-runtime/**'
+      - 'scripts/v9-production-canary-monitor.cjs'
+      - '.github/workflows/v9-production-canary-monitor.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v9-production-canary-monitor
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    name: Observe live canary
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current production state
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate live routing, readiness, pins and fail-closed controls
+        env:
+          BASE_URL: https://yass3705.github.io/tesla-charge-companion-stable
+          SAMPLE_SIZE: '10000'
+          RESULT_PATH: v9-canary-monitor-result.json
+        run: node scripts/v9-production-canary-monitor.cjs
+
+      - name: Publish observation summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f v9-canary-monitor-result.json ]; then
+            cat v9-canary-monitor-result.json
+            {
+              echo '## V9 production canary observation'
+              echo
+              echo '```json'
+              cat v9-canary-monitor-result.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'No monitor result file was produced.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Archive observation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-canary-observation-${{ github.run_id }}
+          path: v9-canary-monitor-result.json
+          if-no-files-found: warn
+          retention-days: 14
