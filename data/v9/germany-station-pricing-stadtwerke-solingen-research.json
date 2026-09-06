@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Solingen",
+  "aliases": ["Stadtwerke Solingen GmbH"],
+  "evsePrefix": "DE*SOL",
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-06",
+  "status": "partial-deferred",
+  "officialEvidence": {
+    "network": "Stadtwerke Solingen states it operates about 80 charging stations / 160 charging points in the public and semi-public area of Solingen.",
+    "pricingPolicy": "Current AC/DC kWh costs must be read in the Stadtwerke Solingen Lade-App; the operator expressly states that the applicable price is location/operator-specific and is the price displayed before charging.",
+    "registeredStartFee": "Registered customers have the 0.49 EUR per-session start fee waived; no operator-wide kWh value is published on the current public page.",
+    "sources": [
+      "https://www.stadtwerke-solingen.de/ueber-uns/presse/presseinformation/neue-lade-app-stadtwerke-solingen-verfuegbar/",
+      "https://www.stadtwerke-solingen.de/privat-gewerbekunden/elektromobilitaet/ladesaeulen-in-solingen/",
+      "https://www.stadtwerke-solingen.de/privat-gewerbekunden/elektromobilitaet/stadtwerke-solingen-ladekarte/"
+    ]
+  },
+  "evseEvidence": [
+    "DE*SOL*E00169*001",
+    "DE*SOL*E00169*002",
+    "DE*SOL*E00153*001",
+    "DE*SOL*E00153*002"
+  ],
+  "decision": "Fail closed at station/EVSE scope. The current official service makes the pre-session app tariff authoritative and warns that prices can vary by location/operator. Do not infer a universal DE*SOL kWh price. Defer app/chargecloud enumeration until after the first pass across all 591 known CPOs."
+}
