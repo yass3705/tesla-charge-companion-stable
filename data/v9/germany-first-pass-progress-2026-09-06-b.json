@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-06",
+  "operationalDenominator": 591,
+  "countingPolicy": {
+    "canonicalReliabilityRetry": false,
+    "reason": "The one allowed canonical-reliability attempt has already been used. Per project policy, retain 591 and continue breadth-first.",
+    "cumulativeUniqueSeen": null,
+    "cumulativeUniqueSeenReason": "Historical 556/568/591 states cannot be retroactively reconciled without repeating the forbidden canonical rebuild. Only forward first-pass deltas are asserted from this checkpoint onward."
+  },
+  "thisPass": {
+    "newPrefixes": ["DE*AUW", "DE*MSU", "DE*GCE"],
+    "newCount": 3,
+    "complete": 0,
+    "partial": 3,
+    "blocked": 0,
+    "deferredAfterFirstPass": 3,
+    "files": [
+      "data/v9/germany-station-pricing-auw-shared-research.json",
+      "data/v9/germany-station-pricing-msu-shared-research.json",
+      "data/v9/germany-station-pricing-gce-shared-research.json"
+    ]
+  },
+  "aliasesAndScope": {
+    "DE*AUW": "shared namespace; Allgäuer Überlandwerk GmbH is the largest known owner but does not own the whole prefix; AÜW/AllgäuStrom direct tariff is scoped only to verified AÜW stations",
+    "DE*MSU": "shared namespace used by Stadtwerke Blankenburg, BCW Hotels & Resorts, WALTHER-WERKE, Merseburger Wasser und Service, ZG Raiffeisen and others; station-level resolution required",
+    "DE*GCE": "shared namespace spanning Volkswagen Immobilien/Volkswagen AG and multiple independent dealerships/operators; station-level resolution required"
+  },
+  "coherence": {
+    "status": "ok",
+    "duplicateAliasCheck": "passed against existing dedicated research filenames and current deferred state",
+    "blockedReauditCheck": "passed; no previously blocked/deferred CPO was re-audited",
+    "repeatedInvestigationCheck": "passed; all three prefixes receive a dedicated first-pass record in this run",
+    "tariffScopeCheck": "passed; no shared-prefix tariff extrapolation",
+    "canonicalPolicyCheck": "passed; no second canonical rebuild attempted",
+    "counterCheck": "only +3 forward delta asserted; no fabricated cumulative seen/591 count"
+  },
+  "nextTargetsPolicy": "Continue breadth-first with prefixes absent from existing direct-offer/research/deferred records. Prefer shared or homogeneous prefixes that can be classified once quickly; defer unresolved exact pricing until after all 591 known CPOs have received one pass."
+}
