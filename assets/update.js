@@ -1,22 +1,33 @@
 // Tesla Charge Companion — robust Home Screen / PWA update checker.
-// Build 7306 fixes stale iOS Home Screen installations without requiring the icon to be deleted.
+// The active build is derived from the served page so future releases cannot
+// drift from app-version.json or the service-worker cache namespace.
 (function(){
   'use strict';
 
-  const CURRENT_BUILD='7306';
-  const CURRENT_CACHE=`tcc-v${CURRENT_BUILD}-stable`;
   const meta=document.querySelector('meta[name="tcc-build"]');
-  if(meta)meta.content=CURRENT_BUILD;
+  const CURRENT_BUILD=String(meta?.content||'').trim();
+  const CURRENT_CACHE=CURRENT_BUILD?`tcc-v${CURRENT_BUILD}-stable`:'';
 
   let checking=false;
   let registrationPromise=null;
 
+  function validBuild(value){return /^\d+$/.test(String(value||''));}
+
+  function loadProductionCanaryBootstrap(){
+    if(document.querySelector('script[data-tcc-v9-production-bootstrap]'))return;
+    const script=document.createElement('script');
+    script.src='assets/v9-production-bootstrap.js?v=1';
+    script.dataset.tccV9ProductionBootstrap='1';
+    script.onerror=()=>console.info('[TCC] V9 production bootstrap unavailable; staying on stable control.');
+    document.head.appendChild(script);
+  }
+
   async function registerWorker(){
-    if(!('serviceWorker' in navigator))return null;
+    if(!validBuild(CURRENT_BUILD)||!('serviceWorker' in navigator))return null;
     if(registrationPromise)return registrationPromise;
     registrationPromise=(async()=>{
       try{
-        const reg=await navigator.serviceWorker.register(`./service-worker.js?v=${CURRENT_BUILD}`,{updateViaCache:'none'});
+        const reg=await navigator.serviceWorker.register(`./service-worker.js?v=${encodeURIComponent(CURRENT_BUILD)}`,{updateViaCache:'none'});
         await reg.update().catch(()=>{});
         await navigator.serviceWorker.ready.catch(()=>reg);
         return reg;
@@ -29,7 +40,7 @@
   }
 
   async function clearOldAppCaches(){
-    if(!('caches' in window))return;
+    if(!CURRENT_CACHE||!('caches' in window))return;
     try{
       const keys=await caches.keys();
       await Promise.all(keys
@@ -59,7 +70,7 @@
   }
 
   async function checkForUpdate(){
-    if(checking||!navigator.onLine)return false;
+    if(checking||!navigator.onLine||!validBuild(CURRENT_BUILD))return false;
     checking=true;
     try{
       const response=await fetch(`app-version.json?_=${Date.now()}`,{
@@ -69,7 +80,7 @@
       if(!response.ok)return false;
       const payload=await response.json();
       const remote=String(payload?.build||'').trim();
-      if(!remote)return false;
+      if(!validBuild(remote))return false;
 
       const urlBuild=new URL(location.href).searchParams.get('app');
       if(remote!==CURRENT_BUILD||urlBuild!==remote){
@@ -85,6 +96,10 @@
       checking=false;
     }
   }
+
+  // Canary selection is external to the stable application. Loading failure is
+  // intentionally harmless: the stable V7.3 control continues normally.
+  loadProductionCanaryBootstrap();
 
   // Production bootstrap for the DOT-NL national catalogue. It runs only after
   // the regular deferred scripts (app + France catalogue) have initialized, so
@@ -119,8 +134,10 @@
 
   window.tccCheckForAppUpdate=checkForUpdate;
   window.tccForceAppUpdate=async function(){
+    if(!validBuild(CURRENT_BUILD))return false;
     await registerWorker();
     await clearOldAppCaches();
     location.replace(versionedUrl(CURRENT_BUILD));
+    return true;
   };
 })();
