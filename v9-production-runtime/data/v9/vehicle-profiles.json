@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "generic-ev-preview",
+      "label": "VE générique 75 kWh (preview)",
+      "status": "provisional",
+      "battery": {"usableKwh": 75},
+      "consumption": {"kwhPer100Km": 15},
+      "charging": {"acMaxKw": 11, "dcMaxKw": 250, "efficiency": 0.92},
+      "metadata": {
+        "purpose": "Preview technique uniquement; ne représente pas un véhicule constructeur précis.",
+        "verified": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "maxWindowMinutes": 60,
+  "minimumRuns": 10,
+  "minimumSuccessfulRuns": 10,
+  "maxFailureRate": 0.05,
+  "maxRoutingErrors": 0,
+  "maxSourceErrors": 0,
+  "maxAverageDurationMs": 12000,
+  "requireReadiness": true,
+  "requireCanaryPercentZero": true,
+  "autoCloseOnRollback": true,
+  "notes": "First-device pack completed successfully on iPhone: 10/10 PASS, 1,926 ms average, no source or routing errors. Window closed after PASS."
+}

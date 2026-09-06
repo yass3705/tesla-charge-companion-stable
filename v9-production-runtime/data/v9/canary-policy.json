@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "active": false,
+  "initialPercent": 1,
+  "stages": [
+    {"percent": 1, "minHours": 24, "minRuns": 25},
+    {"percent": 5, "minHours": 24, "minRuns": 75},
+    {"percent": 10, "minHours": 24, "minRuns": 150},
+    {"percent": 25, "minHours": 48, "minRuns": 300},
+    {"percent": 50, "minHours": 48, "minRuns": 600},
+    {"percent": 100, "minHours": 72, "minRuns": 1000}
+  ],
+  "rollback": {
+    "maxFailureRate": 0.05,
+    "maxSourceErrorRate": 0.01,
+    "maxRoutingErrorRate": 0.05,
+    "maxAverageLatencyMs": 12000,
+    "maxCriticalParityErrors": 0
+  },
+  "promotion": {
+    "requireReadiness": true,
+    "requireStableBuild": true,
+    "requireZeroRollbackSignals": true,
+    "manualApprovalRequired": true
+  },
+  "notes": "Policy only. Canary remains inactive and rollout-config canaryPercent remains 0 until an explicit promotion."
+}
