@@ -1,0 +1,46 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-06",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 10,
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke SH GmbH & Co. KG",
+      "status": "partial",
+      "deferred": true
+    },
+    {
+      "name": "energis GmbH",
+      "status": "partial",
+      "deferred": true,
+      "namespace": "DE*ISE"
+    },
+    {
+      "name": "EA EnergieArchitektur GmbH",
+      "status": "partial",
+      "deferred": true,
+      "namespacesObserved": ["DE*EAD", "DE*DEA"]
+    }
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Historical canonical snapshots are contradictory; do not invent a global seen/591 numerator. Continue recording reliable per-run deltas and named first passes until traversal is complete.",
+  "nextQueue": [
+    "next unseen CPOs after repository anti-duplicate check"
+  ]
+}
