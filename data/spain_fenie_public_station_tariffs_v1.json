@@ -2,21 +2,39 @@
   "schemaVersion": 1,
   "country": "ES",
   "canonicalCpo": "Feníe Energía public charging",
-  "status": "active-partial",
+  "status": "source-validated-partial-coverage",
   "pricingAuthority": "official Feníe Energía public station pages",
-  "matchingRule": "Match only by exact official Feníe station id. Never infer a network-wide price from power, owner, municipality, or another Feníe-managed station.",
+  "updatedAt": "2026-09-06",
+  "matchingRule": "Match only by exact official Feníe station id. Never infer a network-wide price from power, owner, municipality, or another Feníe-managed station. Preserve fixed per-session fees where explicitly stated.",
   "stations": [
-    {"stationId":"0532","name":"SOBRARBE MOTOR S.L.","powerKw":22.0,"energyEurPerKwh":0.25,"sessionFeeEur":1.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0532"},
-    {"stationId":"0525","name":"Guardamar de la Safor","powerKw":22.0,"energyEurPerKwh":0.25,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0525"},
-    {"stationId":"0502","name":"Aguilar de Campoo","powerKw":7.4,"energyEurPerKwh":0.35,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0502"},
-    {"stationId":"0518","name":"ESTACIÓ DE SERVICI SES JARDINES CB","powerKw":50.0,"energyEurPerKwh":0.50,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0518"},
-    {"stationId":"0766","name":"CHV Patronato de Torreciudad 4","powerKw":7.4,"energyEurPerKwh":0.40,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0766"},
-    {"stationId":"0364","name":"CENTRO DE EXPOSICIONES Y CONGRESOS LIENZO NORTE","powerKw":7.4,"energyEurPerKwh":0.15,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0364"},
-    {"stationId":"0472","name":"PARKING MASSENS","powerKw":7.0,"energyEurPerKwh":0.42,"sessionFeeEur":0.50,"source":"https://recarga.fenieenergia.es/punto-recarga/0472"}
+    {"stationId":"0532","name":"SOBRARBE MOTOR S.L.","energyEurPerKwh":0.25,"sessionFeeEur":1.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0532"},
+    {"stationId":"0525","name":"Guardamar de la Safor","energyEurPerKwh":0.25,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0525"},
+    {"stationId":"0502","name":"Aguilar de Campoo","energyEurPerKwh":0.35,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0502"},
+    {"stationId":"0518","name":"ESTACIÓ DE SERVICI SES JARDINES CB","energyEurPerKwh":0.50,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0518"},
+    {"stationId":"0766","name":"CHV Patronato de Torreciudad 4","energyEurPerKwh":0.40,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0766"},
+    {"stationId":"0765","name":"CHV Patronato de Torreciudad 3","energyEurPerKwh":0.40,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0765"},
+    {"stationId":"0364","name":"CENTRO DE EXPOSICIONES Y CONGRESOS LIENZO NORTE","energyEurPerKwh":0.15,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0364"},
+    {"stationId":"0472","name":"PARKING MASSENS","energyEurPerKwh":0.42,"sessionFeeEur":0.50,"source":"https://recarga.fenieenergia.es/punto-recarga/0472"},
+    {"stationId":"0428","name":"El Palmeral","energyEurPerKwh":0.30,"sessionFeeEur":1.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0428"},
+    {"stationId":"0063","name":"Vivanco Cultura de Vino","energyEurPerKwh":0.35,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0063"},
+    {"stationId":"0503","name":"Brañosera","energyEurPerKwh":0.35,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0503"},
+    {"stationId":"0173","name":"ASEMIET","energyEurPerKwh":0.50,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0173"},
+    {"stationId":"0551","name":"Parking Casa Misericordia PR2","energyEurPerKwh":0.35,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0551"},
+    {"stationId":"0313","name":"Instalaciones Boned-Braco","energyEurPerKwh":0.25,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0313"},
+    {"stationId":"0774","name":"CHV Camping Urbión Cargador 2","energyEurPerKwh":0.45,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0774"},
+    {"stationId":"0564","name":"TALLER ANDRES CONIL","energyEurPerKwh":0.45,"sessionFeeEur":1.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0564"},
+    {"stationId":"0475","name":"Ayuntamiento de Ribafrecha","energyEurPerKwh":0.25,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0475"},
+    {"stationId":"0686","name":"CLUB DE TENIS Y PADEL TORTOSA","energyEurPerKwh":0.45,"sessionFeeEur":0.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0686"},
+    {"stationId":"0121","name":"SABIÑANIGO","energyEurPerKwh":0.25,"sessionFeeEur":1.0,"source":"https://recarga.fenieenergia.es/punto-recarga/0121"}
   ],
-  "notes":[
-    "Official pages demonstrate that Feníe-managed public charging prices are station-specific (examples range from 0.15 to 0.50 EUR/kWh and may include a session fee).",
-    "Some Feníe-managed stations are private/restricted; accessibility must be preserved separately from energy price.",
-    "Do not mark the CPO fully covered until its Spanish station inventory is enumerated and exact official pricing is captured station by station."
+  "excludedExamples": [
+    {"stationId":"0065","reason":"private station; no public charging tariff applicability"},
+    {"stationId":"0536","reason":"employees-only access; not public TCC coverage"},
+    {"stationId":"0158","reason":"official page marks station pending repair; retained fail-closed until operational status is current"}
+  ],
+  "notes": [
+    "Official station pages demonstrate material station-level price variation, so network-wide extrapolation is forbidden.",
+    "Exact tariff coverage now contains 19 station IDs, including fixed session fees where published.",
+    "Source-validated means the CPO has a deterministic official station-level pricing path; it does not mean every Spanish Feníe station has been enumerated yet."
   ]
 }
