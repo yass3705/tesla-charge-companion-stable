@@ -1,0 +1,49 @@
+{
+  "country": "DE",
+  "phase": "first-pass-all-cpos",
+  "date": "2026-09-06",
+  "canonicalPolicy": {
+    "targetKnownCpos": 591,
+    "reliabilityAttempt": "performed-once",
+    "result": "unable-to-reconstruct-591-name-canon-from-current-branch-artifacts",
+    "fallback": "use-last-known-591-and-do-not-block-first-pass"
+  },
+  "antiStagnation": {
+    "rule": "CPOs already investigated repeatedly without resolution are deferred until every known CPO has received a first pass",
+    "noRepeatedAuditWithoutNewEvidence": true
+  },
+  "thisPass": [
+    {
+      "prefix": "DE*VIR",
+      "status": "partial-deferred",
+      "reason": "first-pass evidence confirms station/EVSE tariff data exists but prefix cannot safely receive a universal price",
+      "evidence": [
+        "PUMP: DE*VIR*E160033 DC 0.94 EUR/kWh + 0.24 EUR/min after 20 min; DE*VIR*E160034 AC 0.64 EUR/kWh + 0.12 EUR/min after 180 min",
+        "Hubject/m8mit: DE*VIR*E222230 DC 0.95 EUR/kWh + 1.99 EUR direct-pay fee + 0.24 EUR/min after 30 min"
+      ],
+      "decision": "fail-closed station/EVSE mapping required; defer further work until first pass is complete"
+    },
+    {
+      "prefix": "DE*LMS",
+      "status": "partial-deferred",
+      "reason": "shared LastMileSolutions platform prefix; physical operators vary and public station listings expose ad-hoc availability without a universal direct price",
+      "evidence": [
+        "APAG Luisenhospital Aachen DE*LMS*E1234631509/1510: ad-hoc available, direct price unknown",
+        "Gemeinde Binz DE*LMS*E52000109*1: ad-hoc available, direct price unknown"
+      ],
+      "decision": "resolve EVSE to physical operator before tariff assignment; defer repeated platform investigation"
+    },
+    {
+      "prefix": "DE*RLA",
+      "status": "partial-deferred",
+      "reason": "station-level evidence does not expose a verified direct price",
+      "evidence": [
+        "Halberstadt DE*RLA*EHBS000701..704: ad-hoc available but price unknown; displayed 0.35 EUR/kWh is an eMSP/card tariff and is not promoted to CPO direct"
+      ],
+      "decision": "no tariff extrapolation; defer until after full first pass"
+    }
+  ],
+  "counting": {
+    "note": "Do not claim a new global seen/complete/partial count from this checkpoint because the branch does not currently expose a reconstructable 591-entry nominal canon. The operational denominator remains 591 per last-known project state."
+  }
+}
