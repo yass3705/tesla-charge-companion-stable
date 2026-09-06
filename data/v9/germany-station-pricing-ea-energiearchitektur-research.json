@@ -1,0 +1,45 @@
+{
+  "operator": "EA EnergieArchitektur GmbH",
+  "country": "DE",
+  "status": "partial",
+  "firstPass": true,
+  "deferredAfterFirstPass": true,
+  "reason": "Current station-level direct-payment evidence shows materially different prices across EA EnergieArchitektur sites and even multiple EVSE namespaces, so no network-wide tariff can be inferred.",
+  "aliases": [
+    "EA EnergieArchitektur",
+    "EA EnergieArchitektur GmbH",
+    "EA EnergieArchitektur Dresden GmbH"
+  ],
+  "technicalNamespacesObserved": [
+    "DE*EAD",
+    "DE*DEA"
+  ],
+  "evidence": [
+    {
+      "sourceType": "afir_mobilithek_derived_station_registry",
+      "url": "https://www.e-stations.de/ladestationen/michendorf/ea-energiearchitektur-gmbh-32029",
+      "observedAt": "2026-09-06",
+      "finding": "Michendorf EVSE DE*EAD*E100174 is reported from Mobilithek/Eco-Movement with 0.92 EUR/kWh ad-hoc AC, no start fee and no blocking fee."
+    },
+    {
+      "sourceType": "station_level_discovery",
+      "url": "https://ladestau.de/wilsdruff/ea-energiearchitektur-strasse-des-friedens-10/",
+      "observedAt": "2026-09-06",
+      "finding": "Wilsdruff EVSEs DE*EAD*E260242*02*001*1 and *2: 0.95 EUR/kWh DC; page attributes infrastructure/status source to Eco Movement via Mobilithek."
+    },
+    {
+      "sourceType": "station_level_discovery",
+      "url": "https://app.pumpapp.co/de/ladestation-ea-energiearchitektur-gewerbepark-nord-7-uebigau/3d974e05-66a0-11ed-ac72-672487c4a5ac",
+      "observedAt": "2026-09-06",
+      "finding": "Uebigau EVSEs DE*DEA*E271342*05*001*1 and *2: 1.19 EUR/kWh plus 0.10 EUR/min after 180 minutes in the retrieved station-level observation."
+    },
+    {
+      "sourceType": "station_level_discovery",
+      "url": "https://www.ladeguru.de/ladestation/ea-energiearchitektur-gmbh/16259-bad-freienwalde/10258",
+      "observedAt": "2026-09-06",
+      "finding": "Bad Freienwalde direct-payment observation: 1.10 EUR/kWh AC."
+    }
+  ],
+  "noGlobalTariffInferred": true,
+  "nextActionAfterFirstTraverse": "Resolve DE*EAD and DE*DEA aliases against the canonical EVSE inventory and prefer Mobilithek/AFIR or public direct-payment checkout values per EVSE."
+}
