@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "researchOnly": true,
+  "verifiedAt": "2026-09-06",
+  "evsePrefix": "DE*EFL",
+  "classification": "shared_technical_prefix_station_level_only",
+  "evidence": [
+    {
+      "operator": "Pluq Assets BV",
+      "evseIds": ["DE*EFL*EV0365296*C1", "DE*EFL*EV0365296*C2"],
+      "source": "https://www.preisstation.de/ladestation/110576-pluq-fehmarn/",
+      "role": "operator_identity"
+    },
+    {
+      "operator": "Pluq Assets BV",
+      "evseIds": ["DE*EFL*EV7062634*C1", "DE*EFL*EV7062634*C2", "DE*EFL*EV0122364*C1", "DE*EFL*EV0122364*C2"],
+      "source": "https://www.preisstation.de/ladestation/108177-pluq-barleben/",
+      "role": "operator_identity"
+    },
+    {
+      "operator": "BOGAMA Einzelunternehmung",
+      "evseIds": ["DE*EFL*EV7964840*C1", "DE*EFL*EV7964840*C2"],
+      "source": "https://www.preisstation.de/ladestation/101847-parkplatz-udostr-boppard/",
+      "role": "operator_identity"
+    },
+    {
+      "operator": "Comoly GmbH",
+      "evseIds": ["DE*EFL*EV8583325*C1", "DE*EFL*EV8583325*C2"],
+      "observedPricePerKwh": 1.15,
+      "blockingFeePerMinute": 0.10,
+      "blockingFeeAfterMinutes": 240,
+      "currency": "EUR",
+      "source": "https://app.pumpapp.co/en/charging-station-comoly-gmbh-ettlinger-strasse-rastatt/fb46a3b0-75bf-11f1-89b4-75bea5878430",
+      "role": "discovery_only_station_price"
+    }
+  ],
+  "policy": "DE*EFL is not a single tariff authority. Multiple physical operators are verified under the same EVSE prefix, so no prefix-wide price may be inferred. Resolve exact EVSE to physical operator and use only primary/public station-level ad-hoc evidence; otherwise keep the EVSE visible and unpriced.",
+  "status": "partial_shared_prefix_fail_closed"
+}
