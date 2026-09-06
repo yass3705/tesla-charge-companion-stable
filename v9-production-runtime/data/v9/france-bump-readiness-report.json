@@ -1,0 +1,4030 @@
+{
+  "schemaVersion": 4,
+  "country": "FR",
+  "provider": "bump",
+  "generatedAt": "2026-08-30T12:12:34.127487Z",
+  "policy": {
+    "runtimeExactOnly": true,
+    "geographicFallbackAllowed": false,
+    "tariffDataCannotCreatePhysicalStations": true,
+    "tariffActivationRequiresExactCanonicalIdentity": true,
+    "timeChangingTariffsRequireExactSemanticCompilation": true,
+    "bandedTariffsFailClosedUntilCompiled": true
+  },
+  "summary": {
+    "currentExactCrosswalkAliasCount": 1886,
+    "exactIrveValuesFoundAcrossDirectSources": 1886,
+    "exactMatchFields": {
+      "idPdcItinerance": 5653,
+      "pdcId": 1886,
+      "id_pdc_itinerance": 1886
+    },
+    "directTariffSourcesPresent": true,
+    "pricingSignalSamples": {
+      "tariffsGraphql": 30,
+      "tariffsTcc": 30
+    },
+    "identityGapLikelyParserRelated": false,
+    "runtimeTariffEligible": true,
+    "timeChangingTariffPointCount": 665,
+    "timeChangingRuleFamilyCount": 6,
+    "simpleExactTemporalCandidateCount": 13,
+    "complexTemporalDeferredCandidateCount": 652,
+    "bandedTariffPointCount": 8
+  },
+  "currentExactAliasesSample": [
+    {
+      "canonicalId": "FR:national:FRBMPP111368P50039591232699",
+      "id": "FRBMPE6330"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP111368P50039591232699",
+      "id": "FRBMPE9191"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP111368P50039591232699",
+      "id": "FRBMPE9531"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE1151"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE2682"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE3845"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE3966"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE4051"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE4502"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE5329"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE5591"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE6119"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE7146"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE7849"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP11936P",
+      "id": "FRBMPE9574"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE2344"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE4459"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE5427"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE6442"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE7349"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP130325P",
+      "id": "FRBMPE9460"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE4510"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE5898"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE6294"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP133513P50084740179426",
+      "id": "FRBMPE6897"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE2459"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE2531"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE3420"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140845P50096462605308",
+      "id": "FRBMPE7380"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE1981"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE5359"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE7191"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP140846P50077504159406",
+      "id": "FRBMPE9551"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE1605"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2090"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2211"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2469"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2660"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2804"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE2973"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE4751"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE5289"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE6443"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE7150"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP141314P50090530200436",
+      "id": "FRBMPE7841"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE1987"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE3779"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE4828"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE5822"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE7358"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP150397P",
+      "id": "FRBMPE8273"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE1261"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE2192"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE4236"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE6902"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE7085"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153945P500741764047950",
+      "id": "FRBMPE7433"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE2976"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE4527"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE4581"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE5294"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE7086"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE7416"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE7552"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153946P726319074000400",
+      "id": "FRBMPE8298"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE1513"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE3265"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE3643"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP153947P500491375900720",
+      "id": "FRBMPE6152"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE2225"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE5349"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE5562"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE6093"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154411P50053482052097",
+      "id": "FRBMPE8156"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE5079"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE5734"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE7840"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE8660"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154412P50081847136404",
+      "id": "FRBMPE9775"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE1254"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE2559"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE2726"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154414P50001382023099",
+      "id": "FRBMPE2832"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE3431"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE8376"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE9828"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154415P50087055396899",
+      "id": "FRBMPE9982"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154416P500424816506570",
+      "id": "FRBMPE8155"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154416P500424816506570",
+      "id": "FRBMPE8263"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP154416P500424816506570",
+      "id": "FRBMPE8336"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE1595"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE2537"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE6110"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE6167"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE7013"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE7174"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE7483"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167297P50062452353870",
+      "id": "FRBMPE9474"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167300P500016734358620",
+      "id": "FRBMPE1641"
+    },
+    {
+      "canonicalId": "FR:national:FRBMPP167300P500016734358620",
+      "id": "FRBMPE3184"
+    }
+  ],
+  "timeChangingSemantics": {
+    "count": 665,
+    "componentKeys": {
+      "currency": 665,
+      "energyEurPerKwh": 665,
+      "timeEurPerHour": 665,
+      "flatFeeEur": 665,
+      "minPriceEur": 665,
+      "parkingText": 665,
+      "isTariffChangingInTime": 665
+    },
+    "ruleKinds": {
+      "minimum_total": 665,
+      "energy": 661,
+      "flat_fee": 638,
+      "post_charge_occupancy": 13,
+      "session_duration_surcharge": 6,
+      "post_charge_occupancy_time_bands": 4,
+      "energy_time_bands": 4
+    },
+    "ruleKeys": {
+      "kind": 1991,
+      "amountEur": 1303,
+      "eurPerKwh": 661,
+      "conditions": 638,
+      "eurPerMinute": 19,
+      "graceMinutes": 13,
+      "bands": 8,
+      "afterMinutes": 6
+    },
+    "nestedRuleKeys": {
+      "kind": 2645,
+      "amountEur": 1303,
+      "eurPerKwh": 669,
+      "value": 654,
+      "conditions": 638,
+      "eurPerMinute": 27,
+      "graceMinutes": 21,
+      "start": 16,
+      "end": 16,
+      "bands": 8,
+      "afterMinutes": 6
+    },
+    "ruleFamilyCount": 6,
+    "simpleExactCandidateCount": 13,
+    "complexConditionalCount": 652,
+    "bandedPointCount": 8,
+    "bandedPoints": [
+      {
+        "idPdcItinerance": "FRBMPE8022",
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.45,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": "Duration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM",
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy",
+            "eurPerKwh": 0.45
+          },
+          {
+            "kind": "post_charge_occupancy_time_bands",
+            "bands": [
+              {
+                "start": "23:00",
+                "end": "09:00",
+                "eurPerMinute": 0.0,
+                "graceMinutes": 0
+              },
+              {
+                "start": "09:00",
+                "end": "23:00",
+                "eurPerMinute": 0.2,
+                "graceMinutes": 15
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,45 €/kWh",
+          "short": "0,45 €/kWh. Minimum 0,50 €",
+          "long": "While charging:\nEnergy consumption: 0,45 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPE3493",
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.45,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": "Duration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM",
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy",
+            "eurPerKwh": 0.45
+          },
+          {
+            "kind": "post_charge_occupancy_time_bands",
+            "bands": [
+              {
+                "start": "23:00",
+                "end": "09:00",
+                "eurPerMinute": 0.0,
+                "graceMinutes": 0
+              },
+              {
+                "start": "09:00",
+                "end": "23:00",
+                "eurPerMinute": 0.2,
+                "graceMinutes": 15
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,45 €/kWh",
+          "short": "0,45 €/kWh. Minimum 0,50 €",
+          "long": "While charging:\nEnergy consumption: 0,45 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPE9492",
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.45,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": "Duration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM",
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy",
+            "eurPerKwh": 0.45
+          },
+          {
+            "kind": "post_charge_occupancy_time_bands",
+            "bands": [
+              {
+                "start": "23:00",
+                "end": "09:00",
+                "eurPerMinute": 0.0,
+                "graceMinutes": 0
+              },
+              {
+                "start": "09:00",
+                "end": "23:00",
+                "eurPerMinute": 0.2,
+                "graceMinutes": 15
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,45 €/kWh",
+          "short": "0,45 €/kWh. Minimum 0,50 €",
+          "long": "While charging:\nEnergy consumption: 0,45 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPE8140",
+        "tariffId": "01a7ad0c-641c-8686-fbde-d8c0fdcb4a04",
+        "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.45,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": "Duration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM",
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy",
+            "eurPerKwh": 0.45
+          },
+          {
+            "kind": "post_charge_occupancy_time_bands",
+            "bands": [
+              {
+                "start": "23:00",
+                "end": "09:00",
+                "eurPerMinute": 0.0,
+                "graceMinutes": 0
+              },
+              {
+                "start": "09:00",
+                "end": "23:00",
+                "eurPerMinute": 0.2,
+                "graceMinutes": 15
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,45 €/kWh",
+          "short": "0,45 €/kWh. Minimum 0,50 €",
+          "long": "While charging:\nEnergy consumption: 0,45 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPEBMP1957",
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.2499996,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": null,
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy_time_bands",
+            "bands": [
+              {
+                "start": "10:00",
+                "end": "17:00",
+                "eurPerKwh": 0.25
+              },
+              {
+                "start": "17:00",
+                "end": "10:00",
+                "eurPerKwh": 0.395
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,25 €/kWh",
+          "short": "0,25 €/kWh. Minimum 0,50 €",
+          "long": "Energy consumption: 0,25 €/kWh between 10:00 AM and 5:00 PM\nThen 0,395 €/kWh between 5:00 PM and 10:00 AM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPEBMP1959",
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.2499996,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": null,
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy_time_bands",
+            "bands": [
+              {
+                "start": "10:00",
+                "end": "17:00",
+                "eurPerKwh": 0.25
+              },
+              {
+                "start": "17:00",
+                "end": "10:00",
+                "eurPerKwh": 0.395
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,25 €/kWh",
+          "short": "0,25 €/kWh. Minimum 0,50 €",
+          "long": "Energy consumption: 0,25 €/kWh between 10:00 AM and 5:00 PM\nThen 0,395 €/kWh between 5:00 PM and 10:00 AM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPEBMP1960",
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.2499996,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": null,
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy_time_bands",
+            "bands": [
+              {
+                "start": "10:00",
+                "end": "17:00",
+                "eurPerKwh": 0.25
+              },
+              {
+                "start": "17:00",
+                "end": "10:00",
+                "eurPerKwh": 0.395
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,25 €/kWh",
+          "short": "0,25 €/kWh. Minimum 0,50 €",
+          "long": "Energy consumption: 0,25 €/kWh between 10:00 AM and 5:00 PM\nThen 0,395 €/kWh between 5:00 PM and 10:00 AM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      },
+      {
+        "idPdcItinerance": "FRBMPEBMP1958",
+        "tariffId": "49e2cd1d-8fbf-0e6f-966f-b187d45c30c4",
+        "tariffName": "SCI Beauval - Base Tarif",
+        "components": {
+          "currency": "EUR",
+          "energyEurPerKwh": 0.2499996,
+          "timeEurPerHour": null,
+          "flatFeeEur": null,
+          "minPriceEur": 0.5,
+          "parkingText": null,
+          "isTariffChangingInTime": true
+        },
+        "rules": [
+          {
+            "kind": "minimum_total",
+            "amountEur": 0.5
+          },
+          {
+            "kind": "energy_time_bands",
+            "bands": [
+              {
+                "start": "10:00",
+                "end": "17:00",
+                "eurPerKwh": 0.25
+              },
+              {
+                "start": "17:00",
+                "end": "10:00",
+                "eurPerKwh": 0.395
+              }
+            ]
+          }
+        ],
+        "sourceText": {
+          "quick": "0,25 €/kWh",
+          "short": "0,25 €/kWh. Minimum 0,50 €",
+          "long": "Energy consumption: 0,25 €/kWh between 10:00 AM and 5:00 PM\nThen 0,395 €/kWh between 5:00 PM and 10:00 AM\n\nMinimum 0,50 € Inc. VAT"
+        }
+      }
+    ],
+    "ruleFamilies": [
+      {
+        "count": 622,
+        "signature": "minimum_total(amountEur)|flat_fee(amountEur,conditions):conditions[kind,value]|energy(eurPerKwh)",
+        "example": {
+          "idPdcItinerance": "FRBMPE6747",
+          "tariffName": "Bump - SAGS - Annemasse - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.5499996,
+            "timeEurPerHour": null,
+            "flatFeeEur": 1.2,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "flat_fee",
+              "amountEur": 1.2,
+              "conditions": [
+                {
+                  "kind": "energy_above_kwh",
+                  "value": 0.5
+                }
+              ]
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.55
+            }
+          ],
+          "sourceText": {
+            "quick": "0,55 €/kWh",
+            "short": "0,55 €/kWh + 1,20 € fixe. Minimum 0,50 €",
+            "long": "Fixed price: 1,20 € above 0.5kWh consumed\n\nEnergy consumption: 0,55 €/kWh\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 16,
+        "signature": "minimum_total(amountEur)|flat_fee(amountEur,conditions):conditions[kind,value;kind,value]|energy(eurPerKwh)",
+        "example": {
+          "idPdcItinerance": "FRBMPE8460",
+          "tariffName": "Bump - SAGS -LES ARCS 2000 - LAC DES COMBES - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.45,
+            "timeEurPerHour": null,
+            "flatFeeEur": 0.9999996,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "flat_fee",
+              "amountEur": 1.0,
+              "conditions": [
+                {
+                  "kind": "energy_above_kwh",
+                  "value": 1.0
+                },
+                {
+                  "kind": "session_duration_after_minutes",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.45
+            }
+          ],
+          "sourceText": {
+            "quick": "0,45 €/kWh",
+            "short": "0,45 €/kWh + 1,00 € fixe. Minimum 0,50 €",
+            "long": "Fixed price: 1,00 € above 1kWh consumed and after 1 minutes of usage\n\nEnergy consumption: 0,45 €/kWh\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 13,
+        "signature": "minimum_total(amountEur)|energy(eurPerKwh)|post_charge_occupancy(eurPerMinute,graceMinutes)",
+        "example": {
+          "idPdcItinerance": "FRBMPEBMP4107",
+          "tariffName": "Mairie d'Hérépian - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.3999996,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": "Duration: 0,12 €/minute after 3h of usage",
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.4
+            },
+            {
+              "kind": "post_charge_occupancy",
+              "eurPerMinute": 0.12,
+              "graceMinutes": 180
+            }
+          ],
+          "sourceText": {
+            "quick": "0,40 €/kWh",
+            "short": "0,40 €/kWh. Minimum 0,50 €",
+            "long": "While charging:\nEnergy consumption: 0,40 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,12 €/minute after 3h of usage\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 6,
+        "signature": "minimum_total(amountEur)|energy(eurPerKwh)|session_duration_surcharge(afterMinutes,eurPerMinute)",
+        "example": {
+          "idPdcItinerance": "FRBMPE3876",
+          "tariffName": "Duval Energies - Chapelle des Fougeretz - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.336,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.336
+            },
+            {
+              "kind": "session_duration_surcharge",
+              "eurPerMinute": 0.048,
+              "afterMinutes": 240
+            }
+          ],
+          "sourceText": {
+            "quick": "0,336 €/kWh",
+            "short": "0,336 €/kWh. Minimum 0,50 €",
+            "long": "Energy consumption: 0,336 €/kWh\n\nDuration: 0,048 €/minute after 4h of usage\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 4,
+        "signature": "minimum_total(amountEur)|energy(eurPerKwh)|post_charge_occupancy_time_bands(bands):bands[end,eurPerMinute,graceMinutes,start;end,eurPerMinute,graceMinutes,start]",
+        "example": {
+          "idPdcItinerance": "FRBMPE8022",
+          "tariffName": "Village Le Rouret Pierre & Vacances - Grospierres: Base tariff",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.45,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": "Duration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM",
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy",
+              "eurPerKwh": 0.45
+            },
+            {
+              "kind": "post_charge_occupancy_time_bands",
+              "bands": [
+                {
+                  "start": "23:00",
+                  "end": "09:00",
+                  "eurPerMinute": 0.0,
+                  "graceMinutes": 0
+                },
+                {
+                  "start": "09:00",
+                  "end": "23:00",
+                  "eurPerMinute": 0.2,
+                  "graceMinutes": 15
+                }
+              ]
+            }
+          ],
+          "sourceText": {
+            "quick": "0,45 €/kWh",
+            "short": "0,45 €/kWh. Minimum 0,50 €",
+            "long": "While charging:\nEnergy consumption: 0,45 €/kWh\n\nWhile parking (no energy delivered):\nDuration: 0,00 €/minute between 11:00 PM and 9:00 AM\nThen 0,20 €/minute after 15 minutes of usage and between 9:00 AM and 11:00 PM\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      },
+      {
+        "count": 4,
+        "signature": "minimum_total(amountEur)|energy_time_bands(bands):bands[end,eurPerKwh,start;end,eurPerKwh,start]",
+        "example": {
+          "idPdcItinerance": "FRBMPEBMP1957",
+          "tariffName": "SCI Beauval - Base Tarif",
+          "components": {
+            "currency": "EUR",
+            "energyEurPerKwh": 0.2499996,
+            "timeEurPerHour": null,
+            "flatFeeEur": null,
+            "minPriceEur": 0.5,
+            "parkingText": null,
+            "isTariffChangingInTime": true
+          },
+          "rules": [
+            {
+              "kind": "minimum_total",
+              "amountEur": 0.5
+            },
+            {
+              "kind": "energy_time_bands",
+              "bands": [
+                {
+                  "start": "10:00",
+                  "end": "17:00",
+                  "eurPerKwh": 0.25
+                },
+                {
+                  "start": "17:00",
+                  "end": "10:00",
+                  "eurPerKwh": 0.395
+                }
+              ]
+            }
+          ],
+          "sourceText": {
+            "quick": "0,25 €/kWh",
+            "short": "0,25 €/kWh. Minimum 0,50 €",
+            "long": "Energy consumption: 0,25 €/kWh between 10:00 AM and 5:00 PM\nThen 0,395 €/kWh between 5:00 PM and 10:00 AM\n\nMinimum 0,50 € Inc. VAT"
+          }
+        }
+      }
+    ]
+  },
+  "sources": {
+    "inventory": {
+      "source": "data-lab/data/national/bump_direct_inventory_france.json.gz",
+      "exists": true,
+      "profile": {
+        "topKeys": {
+          "idPdcItinerance": 2269,
+          "idPdcLocal": 2269,
+          "powerKw": 2269,
+          "tarification": 2269,
+          "free": 2269,
+          "paymentAdHoc": 2269,
+          "paymentCard": 2269,
+          "paymentOther": 2269,
+          "raw": 2269,
+          "classification": 2269,
+          "components": 2269,
+          "operator": 1516,
+          "tariffClassCounts": 1516,
+          "missing": 1516,
+          "stationKey": 1515,
+          "idStationItinerance": 1515,
+          "idStationLocal": 1515,
+          "name": 1515,
+          "brand": 1515,
+          "operatorPhone": 1515,
+          "address": 1515,
+          "inseeCode": 1515,
+          "coordinates": 1515,
+          "hours": 1515,
+          "accessCondition": 1515,
+          "declaredPointCount": 1515,
+          "observedPointCount": 1515,
+          "lastUpdate": 1515,
+          "tariffStrings": 1515,
+          "points": 1515,
+          "schemaVersion": 1,
+          "dataset": 1,
+          "country": 1,
+          "scope": 1,
+          "source": 1,
+          "counts": 1,
+          "tariffStringCounts": 1,
+          "stations": 1,
+          "onlyOfficialBumpPublishedStations": 1,
+          "onlyRowsWhoseOperatorIsBump": 1,
+          "roamingPartnerStationsIncluded": 1,
+          "tariffFieldPresentInOfficialIrve": 1,
+          "tariffsAreCandidatesUntilValidated": 1,
+          "rankableTariffsPublished": 1,
+          "datasetApi": 1,
+          "datasetId": 1,
+          "datasetTitle": 1,
+          "resourceId": 1,
+          "resourceUrl": 1,
+          "resourceLastModified": 1,
+          "resourceSha256": 1,
+          "latestRowUpdate": 1,
+          "headers": 1,
+          "sourceRows": 1,
+          "bumpOperatedRows": 1,
+          "rejectedNonBumpRows": 1,
+          "stationCount": 1,
+          "pointCount": 1,
+          "stationsWithExplicitPriceCandidate": 1,
+          "uniqueNonEmptyTariffStrings": 1
+        },
+        "identifierLikeKeys": {
+          "idPdcItinerance": 2269,
+          "idPdcLocal": 2269,
+          "stationKey": 1515,
+          "idStationItinerance": 1515,
+          "idStationLocal": 1515,
+          "stations": 1,
+          "onlyOfficialBumpPublishedStations": 1,
+          "roamingPartnerStationsIncluded": 1,
+          "tariffsAreCandidatesUntilValidated": 1,
+          "datasetId": 1,
+          "resourceId": 1,
+          "stationCount": 1,
+          "stationsWithExplicitPriceCandidate": 1
+        },
+        "pricingLikeKeys": {
+          "tariffClassCounts": 1516,
+          "tariffStrings": 1515,
+          "tariffStringCounts": 1,
+          "tariffFieldPresentInOfficialIrve": 1,
+          "tariffsAreCandidatesUntilValidated": 1,
+          "rankableTariffsPublished": 1,
+          "bumpOperatedRows": 1,
+          "stationsWithExplicitPriceCandidate": 1,
+          "uniqueNonEmptyTariffStrings": 1
+        },
+        "pricingSamples": [
+          {
+            "path": "scope.tariffFieldPresentInOfficialIrve",
+            "value": "False"
+          },
+          {
+            "path": "scope.tariffsAreCandidatesUntilValidated",
+            "value": "True"
+          },
+          {
+            "path": "scope.rankableTariffsPublished",
+            "value": "False"
+          },
+          {
+            "path": "counts.bumpOperatedRows",
+            "value": "2269"
+          },
+          {
+            "path": "counts.stationsWithExplicitPriceCandidate",
+            "value": "0"
+          },
+          {
+            "path": "counts.tariffClassCounts",
+            "value": "{'missing': 2269}"
+          },
+          {
+            "path": "counts.uniqueNonEmptyTariffStrings",
+            "value": "0"
+          },
+          {
+            "path": "stations[0].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[1].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[2].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[3].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[4].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[5].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[6].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[7].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[8].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[9].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[10].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[11].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[12].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[13].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[14].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[15].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[16].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[17].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[18].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[19].tariffClassCounts",
+            "value": "{'missing': 1}"
+          },
+          {
+            "path": "stations[20].tariffClassCounts",
+            "value": "{'missing': 3}"
+          },
+          {
+            "path": "stations[21].tariffClassCounts",
+            "value": "{'missing': 4}"
+          },
+          {
+            "path": "stations[22].tariffClassCounts",
+            "value": "{'missing': 2}"
+          }
+        ]
+      },
+      "exactIrveValueCount": 100,
+      "exactIrveMatchesSample": [
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3656",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5249",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6285",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6904",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9495",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7587",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1952",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2996",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1754",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2856",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4607",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8008",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1434",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2188",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1564",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9847",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6217",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7908",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9209",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8416",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8688",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4747",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6186",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4454",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8667",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5555",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8939",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5048",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9468",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0023",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0070",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0455",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0460",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE0422",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE0421",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8621",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1482",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4793",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4791",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4790",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4792",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8131",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6059",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0282",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0281",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0280",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1199",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3496",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6319",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1600",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5234",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2983",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8372",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4458",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0946",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0945",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0943",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0947",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0948",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0944",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4735",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4876",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4821",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4877",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4831",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4865",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4818",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4817",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4864",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4823",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4824",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4873",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4826",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4825",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP8466",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4872",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4867",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4777",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4771",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4775",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4340",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1629",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4543",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4502",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4051",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1151",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3845",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5329",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5591",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7146",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7849",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9574",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3966",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2682",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6119",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9086",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3011",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7773",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7839",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6764",
+          "field": "idPdcItinerance"
+        }
+      ]
+    },
+    "stations": {
+      "source": "data-lab/data/national/bump_direct_stations_france.json.gz",
+      "exists": true,
+      "profile": {
+        "topKeys": {
+          "gratuit": 4536,
+          "observations": 4536,
+          "pdcId": 2268,
+          "powerKw": 2268,
+          "tarification": 2268,
+          "paiementActe": 2268,
+          "paiementCb": 2268,
+          "paiementAutre": 2268,
+          "conditionAcces": 2268,
+          "raw": 2268,
+          "__id": 2268,
+          "nom_amenageur": 2268,
+          "siren_amenageur": 2268,
+          "contact_amenageur": 2268,
+          "nom_operateur": 2268,
+          "contact_operateur": 2268,
+          "telephone_operateur": 2268,
+          "nom_enseigne": 2268,
+          "id_station_itinerance": 2268,
+          "id_station_local": 2268,
+          "nom_station": 2268,
+          "implantation_station": 2268,
+          "adresse_station": 2268,
+          "code_insee_commune": 2268,
+          "coordonneesXY": 2268,
+          "nbre_pdc": 2268,
+          "id_pdc_itinerance": 2268,
+          "id_pdc_local": 2268,
+          "puissance_nominale": 2268,
+          "prise_type_ef": 2268,
+          "prise_type_2": 2268,
+          "prise_type_combo_ccs": 2268,
+          "prise_type_chademo": 2268,
+          "prise_type_autre": 2268,
+          "paiement_acte": 2268,
+          "condition_acces": 2268,
+          "reservation": 2268,
+          "horaires": 2268,
+          "accessibilite_pmr": 2268,
+          "restriction_gabarit": 2268,
+          "station_deux_roues": 2268,
+          "date_maj": 2268,
+          "operator": 1515,
+          "stationId": 1514,
+          "name": 1514,
+          "address": 1514,
+          "city": 1514,
+          "coordinates": 1514,
+          "stationCountPdc": 1514,
+          "tariffs": 1514,
+          "evses": 1514,
+          "country": 1,
+          "generatedAt": 1,
+          "source": 1,
+          "scope": 1,
+          "counts": 1,
+          "stations": 1,
+          "type": 1,
+          "dataset": 1,
+          "resourceId": 1,
+          "api": 1,
+          "operatorDirectOnly": 1,
+          "roamingIncluded": 1,
+          "franceStationCount": 1,
+          "franceEvseCount": 1,
+          "stationsWithTarification": 1,
+          "evsesWithTarification": 1
+        },
+        "identifierLikeKeys": {
+          "pdcId": 2268,
+          "__id": 2268,
+          "id_station_itinerance": 2268,
+          "id_station_local": 2268,
+          "nom_station": 2268,
+          "implantation_station": 2268,
+          "adresse_station": 2268,
+          "nbre_pdc": 2268,
+          "id_pdc_itinerance": 2268,
+          "id_pdc_local": 2268,
+          "station_deux_roues": 2268,
+          "stationId": 1514,
+          "stationCountPdc": 1514,
+          "evses": 1514,
+          "stations": 1,
+          "resourceId": 1,
+          "franceStationCount": 1,
+          "franceEvseCount": 1,
+          "stationsWithTarification": 1,
+          "evsesWithTarification": 1
+        },
+        "pricingLikeKeys": {
+          "nom_operateur": 2268,
+          "contact_operateur": 2268,
+          "telephone_operateur": 2268,
+          "tariffs": 1514,
+          "generatedAt": 1
+        },
+        "pricingSamples": [
+          {
+            "path": "generatedAt",
+            "value": "2026-08-25T23:57:40.366190+00:00"
+          },
+          {
+            "path": "stations[0].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[0].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[0].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[1].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[1].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[1].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[2].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[2].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[2].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[3].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[3].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[3].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[4].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[4].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[4].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[5].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[5].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[5].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[6].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[6].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[6].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[7].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[7].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[7].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[8].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[8].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          },
+          {
+            "path": "stations[8].evses[0].raw.telephone_operateur",
+            "value": "01 76 40 12 80"
+          },
+          {
+            "path": "stations[9].evses[0].raw.nom_operateur",
+            "value": "Bump"
+          },
+          {
+            "path": "stations[9].evses[0].raw.contact_operateur",
+            "value": "exploitation@bump-charge.com"
+          }
+        ]
+      },
+      "exactIrveValueCount": 50,
+      "exactIrveMatchesSample": [
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3656",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3656",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5249",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5249",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6285",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6285",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6904",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6904",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9495",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9495",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7587",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7587",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1952",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1952",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2996",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2996",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1754",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1754",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2856",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2856",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4607",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4607",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8008",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8008",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1434",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1434",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2188",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2188",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1564",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1564",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9847",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9847",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6217",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6217",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7908",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7908",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9209",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9209",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8416",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8416",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6186",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6186",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4747",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4747",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8688",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8688",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8667",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8667",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4454",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4454",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8939",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8939",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5555",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5555",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5048",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5048",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9468",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9468",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0070",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0070",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0023",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0023",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0455",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0455",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0460",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0460",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE0422",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE0422",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE0421",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE0421",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8621",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8621",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1482",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1482",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4793",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4793",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4791",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4791",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4790",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4790",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4792",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4792",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8131",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8131",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6059",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6059",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0280",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0280",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0282",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0282",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0281",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0281",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1600",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1600",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1199",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1199",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6319",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6319",
+          "field": "id_pdc_itinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3496",
+          "field": "pdcId"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3496",
+          "field": "id_pdc_itinerance"
+        }
+      ]
+    },
+    "tariffsGraphql": {
+      "source": "data-lab/data/national/bump_direct_tariffs_graphql_france.json.gz",
+      "exists": true,
+      "profile": {
+        "topKeys": {
+          "idPdcItinerance": 4464,
+          "suffix": 4464,
+          "powerKw": 4464,
+          "name": 3819,
+          "points": 2980,
+          "tariffId": 2305,
+          "currency": 2305,
+          "type": 2305,
+          "energyEurPerKwh": 2305,
+          "timeEurPerHour": 2305,
+          "flatFeeEur": 2305,
+          "minPriceEur": 2305,
+          "quickPriceType": 2305,
+          "quickPriceEur": 2305,
+          "isTariffChangingInTime": 2305,
+          "parkingText": 2305,
+          "quick": 2305,
+          "short": 2305,
+          "long": 2305,
+          "appEvseId": 2196,
+          "appEvseIdentifier": 2196,
+          "tariffGroupId": 2196,
+          "mapped": 2196,
+          "tariff": 2196,
+          "stationKey": 1514,
+          "idStationItinerance": 1514,
+          "address": 1514,
+          "latitude": 1514,
+          "longitude": 1514,
+          "match": 1514,
+          "status": 1514,
+          "method": 1467,
+          "distanceMeters": 1466,
+          "locationId": 1466,
+          "locationName": 1466,
+          "mappingFallback": 82,
+          "stationTariffGroupFallbackPoints": 60,
+          "reason": 48,
+          "schemaVersion": 1,
+          "dataset": 1,
+          "generatedAt": 1,
+          "operator": 1,
+          "country": 1,
+          "scope": 1,
+          "source": 1,
+          "counts": 1,
+          "tariffGroups": 1,
+          "stations": 1,
+          "directCpoOnly": 1,
+          "roamingIncluded": 1,
+          "anonymousDriverTariff": 1,
+          "ambiguousMatchesPriced": 1,
+          "datasetApi": 1,
+          "datasetId": 1,
+          "resourceId": 1,
+          "resourceModified": 1,
+          "headers": 1,
+          "officialInventory": 1,
+          "mapApi": 1,
+          "tariffApi": 1,
+          "tileDegrees": 1,
+          "matchRadiusMeters": 1,
+          "maxWorkers": 1,
+          "officialStations": 1,
+          "officialPoints": 1,
+          "mapTiles": 1,
+          "publicDirectLocations": 1,
+          "matchedStations": 1,
+          "ambiguousStations": 1,
+          "unmatchedStations": 1,
+          "uniqueTariffGroupsRequested": 1,
+          "uniqueTariffGroupsWithTariff": 1,
+          "stationsWithTariff": 1,
+          "pointsWithTariff": 1,
+          "timeChangingPricedPoints": 1,
+          "dc28d4d4-631e-4864-b468-ecb0376776f8": 1,
+          "802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4": 1,
+          "a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6": 1,
+          "b4184f1e-cbf2-4fc2-aae8-d5a0ecb4761b": 1,
+          "ac0e668f-f60d-4ac5-aaa0-fae2108bffd5": 1
+        },
+        "identifierLikeKeys": {
+          "idPdcItinerance": 4464,
+          "tariffId": 2305,
+          "appEvseId": 2196,
+          "appEvseIdentifier": 2196,
+          "tariffGroupId": 2196,
+          "stationKey": 1514,
+          "idStationItinerance": 1514,
+          "locationId": 1466,
+          "locationName": 1466,
+          "stationTariffGroupFallbackPoints": 60,
+          "stations": 1,
+          "datasetId": 1,
+          "resourceId": 1,
+          "officialStations": 1,
+          "publicDirectLocations": 1,
+          "matchedStations": 1,
+          "ambiguousStations": 1,
+          "unmatchedStations": 1,
+          "stationsWithTariff": 1
+        },
+        "pricingLikeKeys": {
+          "tariffId": 2305,
+          "currency": 2305,
+          "flatFeeEur": 2305,
+          "minPriceEur": 2305,
+          "quickPriceType": 2305,
+          "quickPriceEur": 2305,
+          "isTariffChangingInTime": 2305,
+          "tariffGroupId": 2196,
+          "tariff": 2196,
+          "stationTariffGroupFallbackPoints": 60,
+          "generatedAt": 1,
+          "tariffGroups": 1,
+          "anonymousDriverTariff": 1,
+          "ambiguousMatchesPriced": 1,
+          "tariffApi": 1,
+          "uniqueTariffGroupsRequested": 1,
+          "uniqueTariffGroupsWithTariff": 1,
+          "stationsWithTariff": 1,
+          "pointsWithTariff": 1,
+          "timeChangingPricedPoints": 1,
+          "7d0622e2-9ab4-4c52-9b56-4284640dfeea": 1
+        },
+        "pricingSamples": [
+          {
+            "path": "generatedAt",
+            "value": "2026-08-26T00:29:01.355353Z"
+          },
+          {
+            "path": "tariffGroups",
+            "value": "{'dc28d4d4-631e-4864-b468-ecb0376776f8': {'tariffId': 'd18d1f1f-0c25-f208-36c6-a0091af35429', 'name': 'Commune de corbara - Base Tarif', 'currency': 'EUR', 'type': None, 'energyEurPerKwh': 0.4299996, 'timeEurPerHour': None, 'flatFeeEur': No"
+          },
+          {
+            "path": "scope.anonymousDriverTariff",
+            "value": "True"
+          },
+          {
+            "path": "scope.ambiguousMatchesPriced",
+            "value": "False"
+          },
+          {
+            "path": "method.tariffApi",
+            "value": "Bump public GraphQL tariffs.detail hasAnonymous=true"
+          },
+          {
+            "path": "counts.uniqueTariffGroupsRequested",
+            "value": "192"
+          },
+          {
+            "path": "counts.uniqueTariffGroupsWithTariff",
+            "value": "192"
+          },
+          {
+            "path": "counts.stationsWithTariff",
+            "value": "1423"
+          },
+          {
+            "path": "counts.pointsWithTariff",
+            "value": "2113"
+          },
+          {
+            "path": "counts.timeChangingPricedPoints",
+            "value": "681"
+          },
+          {
+            "path": "tariffGroups.7d0622e2-9ab4-4c52-9b56-4284640dfeea",
+            "value": "{'tariffId': '2d37e5dd-585e-ee18-ae23-fd8cd03edbcb', 'name': 'Bump - Super U Beaune la Rolande - Payter Tarif', 'currency': 'EUR', 'type': 'AD_HOC_PAYMENT', 'energyEurPerKwh': 0.5900004, 'timeEurPerHour': None, 'flatFeeEur': None, 'minPrice"
+          },
+          {
+            "path": "tariffGroups.dc28d4d4-631e-4864-b468-ecb0376776f8.tariffId",
+            "value": "d18d1f1f-0c25-f208-36c6-a0091af35429"
+          },
+          {
+            "path": "tariffGroups.dc28d4d4-631e-4864-b468-ecb0376776f8.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "tariffGroups.dc28d4d4-631e-4864-b468-ecb0376776f8.quickPriceType",
+            "value": "ENERGY"
+          },
+          {
+            "path": "tariffGroups.dc28d4d4-631e-4864-b468-ecb0376776f8.quickPriceEur",
+            "value": "0.4299996"
+          },
+          {
+            "path": "tariffGroups.dc28d4d4-631e-4864-b468-ecb0376776f8.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "tariffGroups.802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4.tariffId",
+            "value": "eb59ef4f-30d7-8c01-4b78-ab23555db515"
+          },
+          {
+            "path": "tariffGroups.802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "tariffGroups.802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4.minPriceEur",
+            "value": "0.5"
+          },
+          {
+            "path": "tariffGroups.802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4.quickPriceType",
+            "value": "ENERGY"
+          },
+          {
+            "path": "tariffGroups.802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4.quickPriceEur",
+            "value": "0.6"
+          },
+          {
+            "path": "tariffGroups.802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "tariffGroups.a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6.tariffId",
+            "value": "92cb5535-ce14-8327-a02a-ddf898c7b742"
+          },
+          {
+            "path": "tariffGroups.a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "tariffGroups.a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6.minPriceEur",
+            "value": "0.5"
+          },
+          {
+            "path": "tariffGroups.a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6.quickPriceType",
+            "value": "ENERGY"
+          },
+          {
+            "path": "tariffGroups.a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6.quickPriceEur",
+            "value": "0.5900004"
+          },
+          {
+            "path": "tariffGroups.a3ad7853-5c2f-4d3a-84a3-f6e2f74aebf6.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "tariffGroups.b4184f1e-cbf2-4fc2-aae8-d5a0ecb4761b.tariffId",
+            "value": "2d991793-c260-a3a8-11ae-b64291ae6189"
+          },
+          {
+            "path": "tariffGroups.b4184f1e-cbf2-4fc2-aae8-d5a0ecb4761b.currency",
+            "value": "EUR"
+          }
+        ]
+      },
+      "exactIrveValueCount": 100,
+      "exactIrveMatchesSample": [
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP6838",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP6837",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4940",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPETMP5671",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP7440",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPETMP9665",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPETMP9054",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8621",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1482",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9086",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3011",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7839",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7773",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6749",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6764",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3383",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9224",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9990",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1639",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2955",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1492",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6152",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3643",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3265",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1513",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2396",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3939",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9637",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7398",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3672",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3402",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9602",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4446",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6962",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9934",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7266",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4254",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4507",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6194",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6166",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6801",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0390",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0391",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0392",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0393",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0399",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0398",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0396",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0395",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0394",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1872",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4604",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1365",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7441",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1228",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1229",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1219",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1230",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1221",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1220",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4107",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4106",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9454",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7406",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3412",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2783",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5118",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8525",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3823",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8746",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3716",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2932",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8334",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1626",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7553",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9024",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8459",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5802",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7797",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2435",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2240",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4404",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5717",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8895",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2672",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9586",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6464",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1810",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2557",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2902",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1499",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9851",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8096",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4703",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4748",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2844",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5979",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3955",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2242",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7813",
+          "field": "idPdcItinerance"
+        }
+      ]
+    },
+    "tariffsTcc": {
+      "source": "data-lab/data/national/bump_direct_tariffs_tcc_france.json.gz",
+      "exists": true,
+      "profile": {
+        "topKeys": {
+          "kind": 5613,
+          "amountEur": 3254,
+          "idPdcItinerance": 2252,
+          "powerKw": 2252,
+          "status": 2252,
+          "rankable": 2252,
+          "appEvseId": 2180,
+          "tariffGroupId": 2180,
+          "tariffId": 2097,
+          "tariffName": 2097,
+          "components": 2097,
+          "sourceText": 2097,
+          "currency": 2097,
+          "energyEurPerKwh": 2097,
+          "timeEurPerHour": 2097,
+          "flatFeeEur": 2097,
+          "minPriceEur": 2097,
+          "parkingText": 2097,
+          "isTariffChangingInTime": 2097,
+          "quick": 2097,
+          "short": 2097,
+          "long": 2097,
+          "rules": 2074,
+          "eurPerKwh": 1686,
+          "stationId": 1514,
+          "name": 1514,
+          "address": 1514,
+          "latitude": 1506,
+          "longitude": 1506,
+          "matchStatus": 1506,
+          "locationId": 1506,
+          "points": 1506,
+          "conditions": 1219,
+          "value": 654,
+          "eurPerMinute": 27,
+          "graceMinutes": 21,
+          "start": 16,
+          "end": 16,
+          "bands": 8,
+          "afterMinutes": 6,
+          "excludedForeignStations": 2,
+          "schemaVersion": 1,
+          "dataset": 1,
+          "operator": 1,
+          "country": 1,
+          "sourceGeneratedAt": 1,
+          "scope": 1,
+          "counts": 1,
+          "variableParseFailures": 1,
+          "stations": 1,
+          "directCpoOnly": 1,
+          "roamingIncluded": 1,
+          "anonymousDriverFacingTariff": 1,
+          "foreignStationsExcluded": 1,
+          "unresolvedCasesNeverRankable": 1,
+          "franceStations": 1,
+          "francePoints": 1,
+          "excludedForeignPoints": 1,
+          "rankablePoints": 1,
+          "rankableCoveragePct": 1,
+          "unresolvedPoints": 1,
+          "distinctResolvedTariffGroups": 1,
+          "distinctRulePatterns": 1,
+          "rankable_static": 1,
+          "unresolved_evse_mapping": 1,
+          "unresolved_station_match": 1,
+          "rankable_rule_based": 1,
+          "unresolved_no_numeric_price": 1,
+          "stations_with_rankable_point": 1,
+          "stations_with_unresolved_point": 1,
+          "stations_unmatched_station": 1
+        },
+        "identifierLikeKeys": {
+          "idPdcItinerance": 2252,
+          "appEvseId": 2180,
+          "tariffGroupId": 2180,
+          "tariffId": 2097,
+          "stationId": 1514,
+          "locationId": 1506,
+          "excludedForeignStations": 2,
+          "stations": 1,
+          "foreignStationsExcluded": 1,
+          "franceStations": 1,
+          "unresolved_evse_mapping": 1,
+          "unresolved_station_match": 1,
+          "stations_with_rankable_point": 1,
+          "stations_with_unresolved_point": 1,
+          "stations_unmatched_station": 1
+        },
+        "pricingLikeKeys": {
+          "amountEur": 3254,
+          "tariffGroupId": 2180,
+          "tariffId": 2097,
+          "tariffName": 2097,
+          "currency": 2097,
+          "flatFeeEur": 2097,
+          "minPriceEur": 2097,
+          "isTariffChangingInTime": 2097,
+          "sourceGeneratedAt": 1,
+          "anonymousDriverFacingTariff": 1,
+          "distinctResolvedTariffGroups": 1,
+          "unresolved_no_numeric_price": 1
+        },
+        "pricingSamples": [
+          {
+            "path": "sourceGeneratedAt",
+            "value": "2026-08-26T00:29:01.355353Z"
+          },
+          {
+            "path": "scope.anonymousDriverFacingTariff",
+            "value": "True"
+          },
+          {
+            "path": "counts.distinctResolvedTariffGroups",
+            "value": "191"
+          },
+          {
+            "path": "counts.unresolved_no_numeric_price",
+            "value": "23"
+          },
+          {
+            "path": "stations[0].points[0].tariffGroupId",
+            "value": "802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4"
+          },
+          {
+            "path": "stations[0].points[0].tariffId",
+            "value": "eb59ef4f-30d7-8c01-4b78-ab23555db515"
+          },
+          {
+            "path": "stations[0].points[0].tariffName",
+            "value": "Cyrnea Volvo Ajaccio - Payter Tarif"
+          },
+          {
+            "path": "stations[0].points[0].components.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "stations[0].points[0].components.minPriceEur",
+            "value": "0.5"
+          },
+          {
+            "path": "stations[0].points[0].components.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "stations[0].points[0].rules[0].amountEur",
+            "value": "0.5"
+          },
+          {
+            "path": "stations[0].points[1].tariffGroupId",
+            "value": "802d6d29-7e0d-4b62-b6a2-af2cd90b1ac4"
+          },
+          {
+            "path": "stations[0].points[1].tariffId",
+            "value": "eb59ef4f-30d7-8c01-4b78-ab23555db515"
+          },
+          {
+            "path": "stations[0].points[1].tariffName",
+            "value": "Cyrnea Volvo Ajaccio - Payter Tarif"
+          },
+          {
+            "path": "stations[0].points[1].components.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "stations[0].points[1].components.minPriceEur",
+            "value": "0.5"
+          },
+          {
+            "path": "stations[0].points[1].components.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "stations[0].points[1].rules[0].amountEur",
+            "value": "0.5"
+          },
+          {
+            "path": "stations[1].points[0].tariffGroupId",
+            "value": "dc28d4d4-631e-4864-b468-ecb0376776f8"
+          },
+          {
+            "path": "stations[1].points[0].tariffId",
+            "value": "d18d1f1f-0c25-f208-36c6-a0091af35429"
+          },
+          {
+            "path": "stations[1].points[0].tariffName",
+            "value": "Commune de corbara - Base Tarif"
+          },
+          {
+            "path": "stations[1].points[0].components.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "stations[1].points[0].components.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "stations[1].points[1].tariffGroupId",
+            "value": "dc28d4d4-631e-4864-b468-ecb0376776f8"
+          },
+          {
+            "path": "stations[1].points[1].tariffId",
+            "value": "d18d1f1f-0c25-f208-36c6-a0091af35429"
+          },
+          {
+            "path": "stations[1].points[1].tariffName",
+            "value": "Commune de corbara - Base Tarif"
+          },
+          {
+            "path": "stations[1].points[1].components.currency",
+            "value": "EUR"
+          },
+          {
+            "path": "stations[1].points[1].components.isTariffChangingInTime",
+            "value": "False"
+          },
+          {
+            "path": "stations[1].points[2].tariffGroupId",
+            "value": "dc28d4d4-631e-4864-b468-ecb0376776f8"
+          },
+          {
+            "path": "stations[1].points[2].tariffId",
+            "value": "d18d1f1f-0c25-f208-36c6-a0091af35429"
+          }
+        ]
+      },
+      "exactIrveValueCount": 100,
+      "exactIrveMatchesSample": [
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP6838",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP6837",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4940",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPETMP5671",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP7440",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPETMP9665",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPETMP9054",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8621",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1482",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9086",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3011",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7839",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7773",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6749",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6764",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3383",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9224",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9990",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1639",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2955",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1492",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6152",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3643",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3265",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1513",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2396",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3939",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9637",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7398",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3672",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3402",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9602",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4446",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6962",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9934",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7266",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4254",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4507",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6194",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6166",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6801",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0390",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0391",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0392",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0393",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0399",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0398",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0396",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0395",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP0394",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1872",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4604",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1365",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7441",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1228",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1229",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1219",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1230",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1221",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP1220",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4107",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPEBMP4106",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9454",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7406",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3412",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2783",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5118",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8525",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3823",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8746",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3716",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2932",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8334",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1626",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7553",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9024",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8459",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5802",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7797",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2435",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2240",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4404",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5717",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8895",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2672",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9586",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE6464",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1810",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2557",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2902",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE1499",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE9851",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE8096",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4703",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE4748",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2844",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE5979",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE3955",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE2242",
+          "field": "idPdcItinerance"
+        },
+        {
+          "kind": "pdc",
+          "value": "FRBMPE7813",
+          "field": "idPdcItinerance"
+        }
+      ]
+    }
+  },
+  "next": "Compile the published exact Bump banded tariff semantics; keep any unrecognized band shape fail-closed."
+}
