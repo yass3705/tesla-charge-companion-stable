@@ -3,39 +3,39 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 34679
+      "total": 35666
     },
     "format": {
-      "count": 34679,
+      "count": 35666,
       "pct": 100.0,
-      "total": 34679
+      "total": 35666
     },
     "maxAmperage": {
-      "count": 34679,
+      "count": 35666,
       "pct": 100.0,
-      "total": 34679
+      "total": 35666
     },
     "maxElectricPower": {
-      "count": 34679,
+      "count": 35666,
       "pct": 100.0,
-      "total": 34679
+      "total": 35666
     },
     "maxVoltage": {
-      "count": 34679,
+      "count": 35666,
       "pct": 100.0,
-      "total": 34679
+      "total": 35666
     },
     "powerType": {
-      "count": 34679,
+      "count": 35666,
       "pct": 100.0,
-      "total": 34679
+      "total": 35666
     },
     "standard": {
-      "count": 34679,
+      "count": 35666,
       "pct": 100.0,
-      "total": 34679
+      "total": 35666
     },
-    "total": 34679
+    "total": 35666
   },
   "country": "ES",
   "cpos": {
@@ -161,10 +161,10 @@
         "partyId": "AYA"
       },
       {
-        "connectors": 567,
+        "connectors": 1554,
         "cpoName": "Etecnic Movilidad Electrica, SRL",
-        "evses": 523,
-        "locations": 205,
+        "evses": 1438,
+        "locations": 582,
         "partyId": "ETE"
       },
       {
@@ -362,45 +362,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 30941
+      "total": 31856
     },
     "identifier": {
-      "count": 30935,
+      "count": 31850,
       "pct": 99.98,
-      "total": 30941
+      "total": 31856
     },
-    "total": 30941
+    "total": 31856
   },
-  "generatedAt": "2026-09-06T03:32:05.960666Z",
+  "generatedAt": "2026-09-06T04:12:56.260836Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 10192,
+      "count": 10569,
       "pct": 100.0,
-      "total": 10192
+      "total": 10569
     },
     "coordinates": {
-      "count": 10192,
+      "count": 10569,
       "pct": 100.0,
-      "total": 10192
+      "total": 10569
     },
     "cpoIdentity": {
-      "count": 10192,
+      "count": 10569,
       "pct": 100.0,
-      "total": 10192
+      "total": 10569
     },
     "withEvses": {
-      "count": 10192,
+      "count": 10569,
       "pct": 100.0,
-      "total": 10192
+      "total": 10569
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 10192,
-    "nextPage": 110,
-    "registryCoveragePct": 69.95,
+    "locationsStored": 10569,
+    "nextPage": 114,
+    "registryCoveragePct": 72.54,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
