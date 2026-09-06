@@ -84,3 +84,5 @@ def build(src,out,cross,alias_path,u):
 def main():
  p=argparse.ArgumentParser();p.add_argument('--source');p.add_argument('--url',default=URL);p.add_argument('--out',default='build/germany-static');p.add_argument('--crosswalk',default='build/germany-crosswalk.json');p.add_argument('--aliases',default='data/v9/germany-operator-aliases.json');a=p.parse_args();src=Path(a.source) if a.source else dl(a.url);build(src,a.out,a.crosswalk,a.aliases,a.url)
 if __name__=='__main__':main()
+
+# CI retrigger marker: verify the corrected 2026-09-01 BNetzA source on the PR runner.
