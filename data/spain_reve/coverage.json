@@ -3,49 +3,49 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 36883
+      "total": 38289
     },
     "format": {
-      "count": 36883,
+      "count": 38289,
       "pct": 100.0,
-      "total": 36883
+      "total": 38289
     },
     "maxAmperage": {
-      "count": 36883,
+      "count": 38289,
       "pct": 100.0,
-      "total": 36883
+      "total": 38289
     },
     "maxElectricPower": {
-      "count": 36883,
+      "count": 38289,
       "pct": 100.0,
-      "total": 36883
+      "total": 38289
     },
     "maxVoltage": {
-      "count": 36883,
+      "count": 38289,
       "pct": 100.0,
-      "total": 36883
+      "total": 38289
     },
     "powerType": {
-      "count": 36883,
+      "count": 38289,
       "pct": 100.0,
-      "total": 36883
+      "total": 38289
     },
     "standard": {
-      "count": 36883,
+      "count": 38289,
       "pct": 100.0,
-      "total": 36883
+      "total": 38289
     },
-    "total": 36883
+    "total": 38289
   },
   "country": "ES",
   "cpos": {
-    "distinct": 45,
+    "distinct": 47,
     "items": [
       {
-        "connectors": 929,
+        "connectors": 1768,
         "cpoName": "(ZUNDER) Grupo Easychargar SA",
-        "evses": 929,
-        "locations": 226,
+        "evses": 1768,
+        "locations": 439,
         "partyId": "ZUN"
       },
       {
@@ -61,6 +61,13 @@
         "evses": 33,
         "locations": 1,
         "partyId": "ALL"
+      },
+      {
+        "connectors": 16,
+        "cpoName": "ATENCO ENERGIA, SL",
+        "evses": 16,
+        "locations": 3,
+        "partyId": "CAN"
       },
       {
         "connectors": 10,
@@ -84,10 +91,10 @@
         "partyId": "CRF"
       },
       {
-        "connectors": 8,
+        "connectors": 105,
         "cpoName": "CHARG-ELECTRA SPAIN SL",
-        "evses": 8,
-        "locations": 1,
+        "evses": 105,
+        "locations": 14,
         "partyId": "ELC"
       },
       {
@@ -140,10 +147,10 @@
         "partyId": "ESX"
       },
       {
-        "connectors": 6,
+        "connectors": 48,
         "cpoName": "Energía Distribuida del Norte S.A.",
-        "evses": 6,
-        "locations": 3,
+        "evses": 48,
+        "locations": 24,
         "partyId": "CEL"
       },
       {
@@ -259,6 +266,13 @@
         "partyId": "NTG"
       },
       {
+        "connectors": 59,
+        "cpoName": "OESTE SOLUCIONES ENERGETICAS, S.L.",
+        "evses": 59,
+        "locations": 28,
+        "partyId": "OSE"
+      },
+      {
         "connectors": 94,
         "cpoName": "PAVAPARK MOVILIDAD SL",
         "evses": 94,
@@ -301,10 +315,10 @@
         "partyId": "AEQ"
       },
       {
-        "connectors": 20,
+        "connectors": 373,
         "cpoName": "REMO SUSTAINABLE MOBILITY S.L",
-        "evses": 20,
-        "locations": 7,
+        "evses": 373,
+        "locations": 102,
         "partyId": "RSM"
       },
       {
@@ -362,45 +376,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 33060
+      "total": 34466
     },
     "identifier": {
-      "count": 33054,
+      "count": 34460,
       "pct": 99.98,
-      "total": 33060
+      "total": 34466
     },
-    "total": 33060
+    "total": 34466
   },
-  "generatedAt": "2026-09-06T05:44:17.279068Z",
+  "generatedAt": "2026-09-06T07:06:41.321315Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 10950,
+      "count": 11323,
       "pct": 100.0,
-      "total": 10950
+      "total": 11323
     },
     "coordinates": {
-      "count": 10950,
+      "count": 11323,
       "pct": 100.0,
-      "total": 10950
+      "total": 11323
     },
     "cpoIdentity": {
-      "count": 10950,
+      "count": 11323,
       "pct": 100.0,
-      "total": 10950
+      "total": 11323
     },
     "withEvses": {
-      "count": 10950,
+      "count": 11323,
       "pct": 100.0,
-      "total": 10950
+      "total": 11323
     }
   },
   "schemaVersion": 1,
   "snapshot": {
     "complete": false,
-    "locationsStored": 10950,
-    "nextPage": 118,
-    "registryCoveragePct": 75.15,
+    "locationsStored": 11323,
+    "nextPage": 122,
+    "registryCoveragePct": 77.71,
     "registryTotalCount": 14570,
     "totalPages": 146
   },
