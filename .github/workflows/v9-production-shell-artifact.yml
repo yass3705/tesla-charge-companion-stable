@@ -143,3 +143,38 @@ jobs:
             site/v9-production-shell
             site/v9-production-runtime
           retention-days: 7
+
+      - name: Smoke live isolated Pages payload
+        shell: bash
+        env:
+          BASE_URL: https://yass3705.github.io/tesla-charge-companion-stable
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          fetch() {
+            curl --fail --silent --show-error --location \
+              --retry 12 --retry-delay 5 --retry-all-errors \
+              --connect-timeout 10 --max-time 30 \
+              "$1" -o "$2"
+          }
+
+          fetch "$BASE_URL/" "$tmp/root.html"
+          fetch "$BASE_URL/v9-production-shell/" "$tmp/shell.html"
+          fetch "$BASE_URL/v9-production-shell/shell-config.json" "$tmp/shell-config.json"
+          fetch "$BASE_URL/v9-production-shell/bridge.js" "$tmp/bridge.js"
+          fetch "$BASE_URL/v9-production-runtime/assets/v9/runtime-engine.js" "$tmp/runtime-engine.js"
+          fetch "$BASE_URL/v9-production-runtime/assets/v9/browser-loaders.js" "$tmp/browser-loaders.js"
+          fetch "$BASE_URL/v9-production-runtime/data/v9/source-registry.json" "$tmp/source-registry.json"
+
+          grep -q '<meta name="tcc-build" content="7310">' "$tmp/root.html"
+          grep -q 'location.replace(CONTROL_FALLBACK)' "$tmp/shell.html"
+          grep -q '8d2c20b7c76004389edd8f4a3b80d6b314900ba0' "$tmp/shell-config.json"
+          grep -q 'sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697' "$tmp/shell-config.json"
+          grep -q '"runtimeBase": "v9-production-runtime"' "$tmp/shell-config.json"
+          grep -q '"mode": "shadow"' "$tmp/shell-config.json"
+          node --check "$tmp/bridge.js"
+          node --check "$tmp/runtime-engine.js"
+          node --check "$tmp/browser-loaders.js"
+          node -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); if(!Array.isArray(x.sources)||!x.sources.length) process.exit(1); console.log('live registry sources',x.sources.length)" "$tmp/source-registry.json"
+          echo 'PASS: live Pages serves stable root plus isolated shadow shell and exact pinned V9 runtime.'
