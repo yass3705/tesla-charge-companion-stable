@@ -14,27 +14,47 @@
       "path": "docs/spain-cpo-progress-batches/2026-09-07-run11.json",
       "commit": "f94a77c5d587d0f234502636fcb295c4ffcff480",
       "newNominativeDecisions": 10
+    },
+    {
+      "path": "docs/spain-cpo-progress-batches/2026-09-07-run12.json",
+      "commit": "fe5d7b6e18170e598f7a54125ab1e055c87f1201",
+      "newNominativeDecisions": 8
     }
   ],
   "current": {
     "historicalWorkQueueLabels": 618,
-    "minimumTraversed": 128,
-    "maximumNeverTraversed": 490,
+    "minimumTraversed": 136,
+    "maximumNeverTraversed": 482,
     "sourceValidated": 14,
     "partial": 3,
-    "active": 33,
-    "setAside": 71,
+    "active": 37,
+    "setAside": 75,
     "platformExcluded": 3,
     "supersededAlias": 4,
-    "total": 128
+    "total": 136
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false
   },
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-07T22:49:36.770835Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "nextTariffPage": 17,
+    "tariffPagesCollected": 16,
+    "tariffRowsStored": 1600,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 12,
+    "statusPagesCollected": 11,
+    "statusRowsStored": 1047,
+    "statusTotalPages": 447
+  },
   "coherenceCheck": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
   "runtimePublishReady": false,
   "pr50MustRemainDraft": true,
-  "updatedAt": "2026-09-07T21:42:00Z"
+  "updatedAt": "2026-09-07T22:55:00Z"
 }
