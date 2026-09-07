@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "canonicalModel": "base snapshot plus append-only nominative deltas",
+  "baseSnapshot": {
+    "path": "docs/spain-cpo-progress-2026-09.json",
+    "commit": "bd43b9097bdd380ef34885db2e0a2e59fed33a79",
+    "minimumTraversed": 118,
+    "persistedNominativeDecisionsSinceReconstruction": 20
+  },
+  "deltas": [
+    {
+      "path": "docs/spain-cpo-progress-batches/2026-09-07-run11.json",
+      "commit": "f94a77c5d587d0f234502636fcb295c4ffcff480",
+      "newNominativeDecisions": 10
+    }
+  ],
+  "current": {
+    "historicalWorkQueueLabels": 618,
+    "minimumTraversed": 128,
+    "maximumNeverTraversed": 490,
+    "sourceValidated": 14,
+    "partial": 3,
+    "active": 33,
+    "setAside": 71,
+    "platformExcluded": 3,
+    "supersededAlias": 4,
+    "total": 128
+  },
+  "legacyUncertainty": {
+    "unreconstructedHistoricalNominativeDecisions": 98,
+    "documented": true,
+    "syntheticEntriesCreated": false
+  },
+  "coherenceCheck": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+  "runtimePublishReady": false,
+  "pr50MustRemainDraft": true,
+  "updatedAt": "2026-09-07T21:42:00Z"
+}
