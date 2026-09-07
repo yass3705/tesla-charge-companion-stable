@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Gießen",
+  "aliases": ["Stadtwerke Gießen AG", "Stadtwerke Giessen AG", "SWG Gießen", "SWG Giessen", "E-Tanken"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial-deferred",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentAccessModel": "The current official SWG E-Tanken page states that all SWG charging points and connected partners are available through the E-Tanken app; current prices are displayed per connected charging point in the app. Registration creates an electromobility contract and payment is by SEPA direct debit.",
+    "source": "https://www.stadtwerke-giessen.de/de/nahverkehr-e-mobilitaet/e-mobilitaet/e-tanken"
+  },
+  "historicalDirectEvidenceRejected": "Older third-party records describe a spontaneous web/QR tariff, but the current official SWG page does not publish a numeric 2026 direct/ad-hoc matrix. Historical values are therefore not reused.",
+  "decision": "No network-wide direct price is assigned. Current official evidence explicitly points to point-specific prices in the app, so exact pricing requires station/EVSE-level extraction. Defer deeper app/backend resolution until after breadth-first traversal.",
+  "nextAfterTraversal": "Enumerate SWG-owned EVSEs from BNetzA/Mobilithek and capture current E-Tanken prices per point through public/guest surfaces if available without authentication bypass."
+}
