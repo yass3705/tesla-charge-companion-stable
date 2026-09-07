@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Göppingen",
+  "aliases": ["Stadtwerke Goeppingen", "SWG Göppingen", "SWG Goeppingen", "Energieversorgung Filstal / Stadtwerke Göppingen"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentPublicTariffMatrixFound": false,
+    "operatorSource": "https://evf.de/unternehmen/news/details/968403.mehr-ladepunkte-fuer-elektrofahrzeuge-an-den-barbarossa-thermen.html",
+    "operatorEvidence": "Stadtwerke Göppingen states on 2026-06-10 that the Barbarossa-Thermen public AC chargers were modernized with Team Emobility GmbH, support direct credit/debit-card payment without registration, TEcharge and roaming cards, and that Team Emobility performs technical operation.",
+    "backendTariffSource": "https://team-emobility.de/fahrstrom/",
+    "backendTariffEvidence": "Team Emobility currently publishes 0.50 EUR/kWh AC and 0.60 EUR/kWh DC for public TE charge points; the legacy DE*360 ad-hoc table also lists 0.50 EUR/kWh AC / 0.60 EUR/kWh DC plus a 0.50 EUR start fee and 0.02 EUR/min from 15 minutes after full charge."
+  },
+  "pricingEvidence": {
+    "networkWideCurrentAdHocMatrixPublished": false,
+    "exactCurrentStationPriceFound": false,
+    "candidateTechnicalOperatorTariffFound": true,
+    "inferenceApplied": false,
+    "reasonNotPromoted": "The official Stadtwerke Göppingen announcement proves Team Emobility technical operation and direct-card access, but does not explicitly bind the published TE tariff table or a DE*360/DE*TEH identifier to the specific Stadtwerke-owned EVSEs."
+  },
+  "decision": "Keep partial/fail-closed. Do not attach Team Emobility's generic public-TE tariff to all Stadtwerke Göppingen stations until a station/EVSE QR checkout, eMI3 identifier or operator-controlled payload proves the linkage.",
+  "neededToClose": "Capture an official QR/direct-payment checkout or backend payload for one current Stadtwerke Göppingen EVSE showing its exact tariff and operator identifier, then determine whether that tariff scope is station-specific or network-wide."
+}
