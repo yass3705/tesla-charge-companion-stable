@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Esslingen am Neckar",
+  "aliases": ["Stadtwerke Esslingen am Neckar GmbH & Co. KG", "Stadtwerke Esslingen", "SWE Esslingen"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial-deferred",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentOperatorPage": "The current SWE e-mobility pages confirm that Stadtwerke Esslingen plans, installs and operates charging infrastructure, including public-space charging, but do not publish a current 2026 universal public charging tariff.",
+    "operatorSource": "https://www.swe.de/de/e-loesungen/index-e-mobilitaet.php",
+    "stationSpecificHistoricalEvidence": "The municipality of Deizisau documented a public SWE-operated two-point 22 kW installation opened 2025-03-28 with SWE Lade-App or QR ad-hoc access at 0.55 EUR/kWh plus 0.08 EUR/min after four hours. This is retained only as station-specific 2025 evidence and is not treated as a current 2026 network tariff.",
+    "stationSource": "https://www.deizisau.de/site/Deizisau-Internet/get/params_E-420586408_Dattachment/23721823/Amtsblatt_KW14.pdf"
+  },
+  "decision": "Operator identity and public ad-hoc capability are confirmed, but no authoritative current 2026 station/EVSE tariff matrix or universal tariff was exposed. Do not extrapolate the 2025 Deizisau value to other SWE-operated stations. Defer until after breadth-first traversal; next step is representative SWE QR checkout / current station-level resolution.",
+  "nextAfterTraversal": "Resolve current SWE-operated EVSE IDs from BNetzA/Mobilithek and query public QR/direct checkout per station where available."
+}
