@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Ansbacher Bäder und Verkehrs GmbH",
+  "aliases": ["ABuV", "Stadtwerke Ansbach charging network", "StwAN public charging"],
+  "status": "partial",
+  "deferred": true,
+  "officialTariffUrl": "https://www.stwan.de/Privatkunden/Strom/Elektromobilitaet/Tarife.html",
+  "officialOwnershipEvidence": "https://www.stwan.de/Kopfnavigation/Unternehmen/Presse/Pressemeldungen/Stadtwerke-Kunden-koennen-an-neuer-Schnellladesaeule-sparen.html",
+  "ownership": {
+    "physicalCpoSince": "2025-01-01",
+    "physicalCpo": "Ansbacher Bäder und Verkehrs GmbH",
+    "emsp": "Stadtwerke Ansbach GmbH",
+    "note": "Official Stadtwerke Ansbach publication states ABuV took over operation of the charging infrastructure from January 2025 while Stadtwerke Ansbach remains e-mobility provider."
+  },
+  "currentOfficialPricing": {
+    "effectiveFrom": "2026-09-01",
+    "newLvPlusApp": {
+      "normalAcPerKwh": 0.55,
+      "normalDcPerKwh": 0.68,
+      "blockingFeeAc": {"pricePerMinute": 0.10, "afterMinutes": 240, "suspendedFrom": "20:00", "suspendedUntil": "08:00"},
+      "blockingFeeDc": {"pricePerMinute": 0.10, "afterMinutes": 60},
+      "specialCase": "50 kW DC station billed under AC price model"
+    },
+    "currency": "EUR"
+  },
+  "directPayment": {
+    "status": "unresolved-current-transition",
+    "reason": "The current official tariff page no longer exposes a numeric ad-hoc column for the new LVPlus model. A station-level third-party observation still shows 0.70 EUR/kWh at DE*LVP*E22141*001/002, but that is discovery evidence only and is not promoted to a CPO fallback."
+  },
+  "policy": "Do not attach Stadtwerke Ansbach eMSP prices to ABuV physical stations as a direct-payment fallback. Preserve ABuV as physical CPO and require a current official ad-hoc checkout/payload or station-level operator source before promotion."
+}
