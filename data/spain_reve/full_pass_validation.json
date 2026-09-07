@@ -1,0 +1,29 @@
+{
+  "country": "ES",
+  "duplicateEvseIds": 129,
+  "duplicateLocationKeys": 0,
+  "evseIdsObserved": 42174,
+  "gates": {
+    "coordinatesStructurallyValid": true,
+    "locationKeyDuplicatesZero": true,
+    "nationalPassComplete": true,
+    "pageCoverage146of146": true,
+    "registryCountReconciled": false,
+    "snapshotReadable": true
+  },
+  "generatedAt": "2026-09-07T10:00:51.481337Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "invalidCoordinates": 0,
+  "locationsMissingCoordinates": 0,
+  "locationsStored": 13648,
+  "malformedLocations": 0,
+  "note": "Validation is offline against the collected snapshot; it performs zero REVE API requests.",
+  "pagesCompleted": 146,
+  "publishReady": false,
+  "registryCoveragePct": 93.68,
+  "registryGap": 921,
+  "registryTotalCount": 14569,
+  "schemaVersion": 1,
+  "source": "REVE",
+  "totalPages": 146
+}
