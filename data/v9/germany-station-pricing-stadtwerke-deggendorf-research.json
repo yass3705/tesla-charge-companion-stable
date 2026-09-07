@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "STADTWERKE DEGGENDORF GmbH",
+  "aliases": ["Stadtwerke Deggendorf", "SW Deggendorf", "Ladeverbund+ Deggendorf"],
+  "status": "complete",
+  "sourceUrl": "https://www.stadtwerke-deggendorf.de/mobilit%C3%A4t/%C3%B6ffentliche-ladepunkte",
+  "directPayment": {
+    "channel": "QR ad-hoc / LVPlus",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "prices": {
+      "AC": 0.70,
+      "DC": 0.85
+    },
+    "blockingFee": {
+      "pricePerMinute": 0.05,
+      "scope": "selected locations only",
+      "trigger": "after charging has completed while the vehicle continues to block the charge point",
+      "afterMinutes": null
+    }
+  },
+  "scope": "Official current Stadtwerke Deggendorf page publishes ad-hoc tariffs of 0.70 EUR/kWh AC and 0.85 EUR/kWh DC for spontaneous QR charging without registration. A 0.05 EUR/min blocking fee applies only at selected locations; no unsupported time threshold is inferred.",
+  "policy": "Keep LVPlus registered normal/customer tariffs and roaming conditions separate from direct ad-hoc CPO pricing."
+}
