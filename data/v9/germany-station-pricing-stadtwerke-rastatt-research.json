@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Rastatt Service GmbH",
+  "aliases": ["Stadtwerke Rastatt", "Stadtwerke Rastatt Service", "Rastatt E-Mobil"],
+  "status": "complete",
+  "sourceUrl": "https://www.stadtwerke-rastatt.de/media/docs/tarife-produkte/e-mobilitaet/Preisblatt-Ladestrom-Stadtwerke-Rastatt-Service-GmbH.pdf",
+  "supportingSourceUrl": "https://www.stadtwerke-rastatt.de/de/tarife-produkte/e-mobilitaet/oeffentliche-ladesaeulen.php",
+  "effectiveFrom": "2025-12-01",
+  "directPayment": {
+    "channel": "QR ad-hoc with credit card",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "startFee": 1.00,
+    "pricesPerKwh": {"AC": 0.46, "DC": 0.46},
+    "blockingFee": {
+      "pricePerMinute": 0.05,
+      "afterMinutes": 240,
+      "maxChargeHours": 4,
+      "capPerSession": 12.00,
+      "timeRules": [
+        {"start": "00:00", "end": "10:00", "pricePerMinute": 0.0},
+        {"start": "10:00", "end": "24:00", "pricePerMinute": 0.05}
+      ]
+    }
+  },
+  "scope": "Official current price sheet, price status from 1 December 2025, for Stadtwerke Rastatt Service own AC and DC stations. Ad-hoc access is explicitly available by QR code and credit card without a Stadtwerke contract.",
+  "policy": "Do not propagate the Rastatt customer tariff to roaming-partner CPOs. Preserve the published 00:00-10:00 blocking-fee exemption and 12 EUR cap; do not model the credit-card payment flow as an extra tariff cost."
+}
