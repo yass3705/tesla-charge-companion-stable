@@ -1,0 +1,67 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 34,
+  "forwardSliceStatus": {
+    "complete": 5,
+    "partial": 29,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Göppingen",
+      "aliases": ["Stadtwerke Goeppingen", "SWG Göppingen", "SWG Goeppingen", "Energieversorgung Filstal / Stadtwerke Göppingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official 2026 evidence confirms direct-card access and Team Emobility technical operation at current Stadtwerke Göppingen chargers, and Team Emobility publishes its own public-point tariff, but no operator-controlled station/EVSE payload explicitly binds that tariff to the Stadtwerke-owned EVSEs."
+    },
+    {
+      "name": "Stadtwerke Bietigheim-Bissingen GmbH",
+      "aliases": ["Stadtwerke Bietigheim-Bissingen", "SWBB", "SW·BB", "Energie Service Bietigheim-Bissingen GmbH"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official AGB confirms QR ad-hoc charging and tariff selection before session, but the current numeric direct tariff is not exposed in the accessible public documentation."
+    },
+    {
+      "name": "Stadtwerke Backnang GmbH",
+      "aliases": ["Stadtwerke Backnang", "SWBK", "SwBK"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "A municipal source documents one Stadtwerke Backnang AC charger as free, but this is station-specific and cannot establish a network-wide ad-hoc tariff or cover other BNetzA EVSEs."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical":"Stadtwerke Göppingen","aliases":["Stadtwerke Goeppingen","SWG Göppingen","SWG Goeppingen","Energieversorgung Filstal / Stadtwerke Göppingen"],"technicalOperator":"Team Emobility GmbH"},
+    {"canonical":"Stadtwerke Bietigheim-Bissingen GmbH","aliases":["Stadtwerke Bietigheim-Bissingen","SWBB","SW·BB","Energie Service Bietigheim-Bissingen GmbH"]},
+    {"canonical":"Stadtwerke Backnang GmbH","aliases":["Stadtwerke Backnang","SWBK","SwBK"]}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-goeppingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-bietigheim-bissingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-backnang-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "sharedTechnicalOperatorTariffPromotedWithoutEvseLink": false,
+    "stationSpecificFreeTariffGeneralized": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue branch-aware BNetzA first-pass queue; prioritize operators with station/EVSE-level QR or official public tariff endpoints"]
+}
