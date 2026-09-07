@@ -1,0 +1,69 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 40,
+  "forwardSliceStatus": {
+    "complete": 9,
+    "partial": 31,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes. Nominal unvisited count inside this forward denominator is 551, not a certified historical-global remaining count."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Heidenheim AG - Unternehmensgruppe",
+      "aliases": ["Stadtwerke Heidenheim", "HellensteinStrom mobil"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official 2026 no-card tariff publishes 0.59 EUR/kWh AC and 0.69 EUR/kWh DC plus 0.10 EUR/min after 240 minutes capped at 12 EUR/session; official operator instructions independently confirm QR ad-hoc activation and credit-card payment."
+    },
+    {
+      "name": "Stadtwerke Velbert GmbH",
+      "aliases": ["Stadtwerke Velbert", "ladeBERT"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official FAQ proves contract-free QR payment via PayPal or credit card, but the reviewed official pages do not publish the numeric ad-hoc price. Published ladeBERT values are contractual/eMSP conditions and remain separate."
+    },
+    {
+      "name": "Haller Mobilität & Wärme GmbH",
+      "aliases": ["Haller Mobilität und Wärme GmbH", "HMW", "Stadtwerke Schwäbisch Hall", "Stadtwerke Hall"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official e-mobility page publishes contract-free direct charging at 0.57 EUR/kWh across the operator's stated 25 charging stations. Public charging assets are held by subsidiary Haller Mobilität & Wärme while Stadtwerke Schwäbisch Hall continues billing/marketing."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical":"Stadtwerke Heidenheim AG - Unternehmensgruppe","aliases":["Stadtwerke Heidenheim","HellensteinStrom mobil"]},
+    {"canonical":"Stadtwerke Velbert GmbH","aliases":["Stadtwerke Velbert","ladeBERT"]},
+    {"canonical":"Haller Mobilität & Wärme GmbH","aliases":["Haller Mobilität und Wärme GmbH","HMW","Stadtwerke Schwäbisch Hall","Stadtwerke Hall"]}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-heidenheim-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-heidenheim-extension.json",
+    "data/v9/germany-station-pricing-stadtwerke-velbert-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-schwaebisch-hall-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-schwaebisch-hall-extension.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "thirdPartyRoamingPromotedToPhysicalCpo": false,
+    "paymentPreauthorizationModeledAsCost": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue branch-aware BNetzA first-pass queue; prioritize untreated operators exposing official QR/direct-payment prices or station-level public tariff endpoints"]
+}
