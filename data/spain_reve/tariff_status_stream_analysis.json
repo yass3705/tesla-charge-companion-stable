@@ -1,0 +1,1417 @@
+{
+  "country": "ES",
+  "gates": {
+    "allRequiredOperatorsHaveStatusSample": false,
+    "allRequiredOperatorsHaveTariffSample": false,
+    "operationalStatusBooleanPreserved": true,
+    "runtimePublishReady": false,
+    "stateCountsMatchStores": true,
+    "statusJoinRateAtLeast90Pct": true,
+    "statusSchemaObserved": true,
+    "tariffJoinRateAtLeast90Pct": true,
+    "tariffSchemaObserved": true
+  },
+  "generatedAt": "2026-09-07T14:39:10.760736Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "lastLiveRun": {
+    "generatedAt": "2026-09-07T14:39:08.298032Z",
+    "plan": null,
+    "requestsAttempted": null,
+    "requestsSucceeded": null
+  },
+  "networkRequests": 0,
+  "nextLivePlan": {
+    "hardRequestLimit": 5,
+    "statusPages": [
+      4,
+      5
+    ],
+    "tariffPages": [
+      5,
+      6,
+      7
+    ]
+  },
+  "note": "Observed stream rows are samples from collected pages, not operator-wide tariff declarations. Full tariff structures, restrictions and raw boolean operational_status remain authoritative; no sampled price is extrapolated to a CPO or to runtime.",
+  "operationalStatus": {
+    "matchBasis": {
+      "internal_evse_id": 288
+    },
+    "matchPct": 100.0,
+    "matchedToSnapshot": 288,
+    "nonBooleanRows": 0,
+    "pageCoveragePct": 0.671,
+    "pagesCollected": [
+      1,
+      2,
+      3
+    ],
+    "representativeSamples": {
+      "<unmatched>": [
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Torreblanca",
+            "internalEvseId": "00c1f6f8-2296-4b96-8eda-9a588a4bea3f",
+            "locationId": "c74b6e44-d148-42c9-b82d-d7dc3c5bdc4c",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE8JW5812",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "evseId": "ESAEQE8JW5812",
+          "internalId": "00c1f6f8-2296-4b96-8eda-9a588a4bea3f",
+          "lastOperationalStatusUpdated": "2026-09-07T10:43:30.625Z",
+          "matchBasis": "internal_evse_id",
+          "operationalStatus": true
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Madrid",
+            "internalEvseId": "01217496-0f78-422f-a48f-f8c65f3e2084",
+            "locationId": "fb119b72-cb7f-4876-b9e8-a1169b578a1f",
+            "locationName": "Plaza de la Lealtad, 3 28014 Madrid ESP",
+            "partyId": "GIC",
+            "publicEvseId": "ES*GIC*E31002",
+            "rawCpoName": "GESTION INTELIGENTE DE CARGAS S.L."
+          },
+          "evseId": "ES*GIC*E31002",
+          "internalId": "01217496-0f78-422f-a48f-f8c65f3e2084",
+          "lastOperationalStatusUpdated": "2025-11-05T16:17:33.434Z",
+          "matchBasis": "internal_evse_id",
+          "operationalStatus": true
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Salamanca",
+            "internalEvseId": "0148d1ba-d6a7-4e1e-825a-4331e2059833",
+            "locationId": "9231b964-609d-444e-9e15-248593b403d0",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQER2R8R21",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "evseId": "ESAEQER2R8R21",
+          "internalId": "0148d1ba-d6a7-4e1e-825a-4331e2059833",
+          "lastOperationalStatusUpdated": "2026-09-07T01:59:50.680Z",
+          "matchBasis": "internal_evse_id",
+          "operationalStatus": true
+        }
+      ]
+    },
+    "rowsStored": 288,
+    "statusValues": {
+      "FALSE": 1,
+      "TRUE": 287
+    },
+    "targetOperatorRows": {},
+    "totalPages": 447,
+    "unmatchedRows": 0
+  },
+  "requiredOperatorCoverage": [
+    {
+      "canonical": "Iberdrola | bp pulse",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 84
+    },
+    {
+      "canonical": "Endesa X Way",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 36
+    },
+    {
+      "canonical": "Repsol",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 56
+    },
+    {
+      "canonical": "Wenea",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 13
+    },
+    {
+      "canonical": "Zunder",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 20
+    },
+    {
+      "canonical": "Moeve",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 5
+    },
+    {
+      "canonical": "Powerdot",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 7
+    },
+    {
+      "canonical": "Eranovum",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 10
+    },
+    {
+      "canonical": "Electra",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": false,
+      "tariffRowsObserved": 0
+    },
+    {
+      "canonical": "Atlante",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": true,
+      "tariffRowsObserved": 2
+    },
+    {
+      "canonical": "IONITY",
+      "statusObserved": false,
+      "statusRowsObserved": 0,
+      "tariffObserved": false,
+      "tariffRowsObserved": 0
+    }
+  ],
+  "schemaVersion": 1,
+  "snapshot": {
+    "duplicateConnectorIdKeys": 0,
+    "duplicateInternalEvseIdKeys": 0,
+    "duplicatePublicEvseIdKeys": 129,
+    "evseObjectsObserved": 42180,
+    "locations": 13648,
+    "uniqueConnectorIds": 46894,
+    "uniqueInternalEvseIds": 42174,
+    "uniquePublicEvseIds": 42045
+  },
+  "source": "REVE",
+  "state": {
+    "complete": false,
+    "country": "ES",
+    "integrationStatus": "PRE_INTEGRATION_ONLY",
+    "nextStatusPage": 4,
+    "nextTariffPage": 5,
+    "schemaVersion": 1,
+    "source": "REVE",
+    "statusPagesCollected": [
+      1,
+      2,
+      3
+    ],
+    "statusRowsStored": 288,
+    "statusTotalPages": 447,
+    "tariffPagesCollected": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "tariffRowsStored": 400,
+    "tariffTotalPages": 468,
+    "updatedAt": "2026-09-07T14:39:08.259775Z"
+  },
+  "tariffs": {
+    "ambiguousConnectorKeysSeen": 0,
+    "complexRows": 252,
+    "componentOccurrences": {
+      "CONGESTION_TIME": 20,
+      "ENERGY": 898,
+      "FLAT": 245,
+      "PARKING_TIME": 205,
+      "TIME": 28
+    },
+    "currenciesByRow": {
+      "EUR": 400
+    },
+    "matchBasis": {
+      "connector_id": 374
+    },
+    "matchPct": 93.5,
+    "matchedToSnapshot": 374,
+    "pageCoveragePct": 0.855,
+    "pagesCollected": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "representativeSamples": {
+      "<unmatched>": [
+        {
+          "connectorId": "0004c863-0a9b-4727-8256-b703df768bfc",
+          "context": null,
+          "evseReference": "65a1653e-b302-43da-9f48-19a520ac9159",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "matchBasis": null,
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0009df11-f2de-42e7-95f4-e76d02d0619a",
+          "context": {
+            "canonicalOperator": null,
+            "city": "San Fernando",
+            "internalEvseId": "4d0c1e40-ac20-4ee5-be62-ffd28d938360",
+            "locationId": "68db0ee0-9d74-47b9-aa42-40f181d930f8",
+            "locationName": "ACCIONA - Cádiz - Centro Comercial Bahía Sur (San Fernando)",
+            "partyId": "ARE",
+            "publicEvseId": "ES*ARE*E28FP9RS30XKSDE4AVUHS",
+            "rawCpoName": "ACCIONA Recarga"
+          },
+          "evseReference": "4d0c1e40-ac20-4ee5-be62-ffd28d938360",
+          "lastTariffUpdated": "2025-12-04T10:06:58.239Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 2,
+            "componentTypes": [
+              "ENERGY",
+              "TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000d8045-87fd-4fb5-be88-30c380a089d0",
+          "context": {
+            "canonicalOperator": null,
+            "city": "Barcelona",
+            "internalEvseId": "531fdc2a-b9d4-4636-849f-e39d61552923",
+            "locationId": "d77373b0-dd31-43d6-9f5a-b313e2885e13",
+            "locationName": "Mapfre CUBS Sant Cugat (CUT1)",
+            "partyId": "ETE",
+            "publicEvseId": "ES*ETE*E449910",
+            "rawCpoName": "Etecnic Movilidad Electrica, SRL"
+          },
+          "evseReference": "531fdc2a-b9d4-4636-849f-e39d61552923",
+          "lastTariffUpdated": "2026-05-28T08:07:23.573Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Atlante": [
+        {
+          "connectorId": "00bd9d55-1a51-47dd-bac7-769d588afc5b",
+          "context": {
+            "canonicalOperator": "Atlante",
+            "city": "Barcelona",
+            "internalEvseId": "502c3e2d-cf19-48e5-b001-734cea001fc9",
+            "locationId": "53522156-d99d-489d-a4b8-447b6e6e160d",
+            "locationName": "Atlante - Marina Vela Capitania",
+            "partyId": "ATE",
+            "publicEvseId": "ES*ATE*E20122*2",
+            "rawCpoName": "Atlante Iberia S.L."
+          },
+          "evseReference": "502c3e2d-cf19-48e5-b001-734cea001fc9",
+          "lastTariffUpdated": "2026-02-18T17:09:02.510Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "01f3a26e-f576-47ca-842e-d02864d21d6a",
+          "context": {
+            "canonicalOperator": "Atlante",
+            "city": "Ciudad Real",
+            "internalEvseId": "13c117f2-0293-4496-bbe8-9044f3279720",
+            "locationId": "75c278cc-dd11-49da-9533-7f54b9b414ee",
+            "locationName": "Atlante - Aldi CIudad Real Sur",
+            "partyId": "ATE",
+            "publicEvseId": "ES*ATE*E20337*1",
+            "rawCpoName": "Atlante Iberia S.L."
+          },
+          "evseReference": "13c117f2-0293-4496-bbe8-9044f3279720",
+          "lastTariffUpdated": "2026-02-18T17:09:02.510Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Endesa X Way": [
+        {
+          "connectorId": "000dadd9-725c-433f-9722-c89a339a41e8",
+          "context": {
+            "canonicalOperator": "Endesa X Way",
+            "city": "Ledesma",
+            "internalEvseId": "c1e318b0-4e4e-4927-b0a1-66b82c55fb30",
+            "locationId": "e10322d4-f71e-4a99-943c-a9288b33ad73",
+            "locationName": "22XP22T3KKJAK00160",
+            "partyId": "ESX",
+            "publicEvseId": "ES*ESX*E22XP22T3KKJAK00160*2",
+            "rawCpoName": "ENDESA X WAY, S.L."
+          },
+          "evseReference": "c1e318b0-4e4e-4927-b0a1-66b82c55fb30",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00257017-2e90-4173-b6f3-e9880aa248ad",
+          "context": {
+            "canonicalOperator": "Endesa X Way",
+            "city": "Barcelona",
+            "internalEvseId": "f35193b1-a8bf-4e89-92e7-6aef5d56b68e",
+            "locationId": "bae42bf3-75ac-44be-844c-9d46b04159de",
+            "locationName": "12008000990009",
+            "partyId": "ESX",
+            "publicEvseId": "ES*ESX*E12008000990009*1",
+            "rawCpoName": "ENDESA X WAY, S.L."
+          },
+          "evseReference": "f35193b1-a8bf-4e89-92e7-6aef5d56b68e",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0030334a-d649-4a86-a65f-a567210d7b9f",
+          "context": {
+            "canonicalOperator": "Endesa X Way",
+            "city": "Las Palmas de Gran Canaria",
+            "internalEvseId": "0785ae17-2b19-413c-83c6-6bc0fa5326ea",
+            "locationId": "102b117c-eeec-4d6a-a4c5-e3201fdb2747",
+            "locationName": "61945052640016",
+            "partyId": "ESX",
+            "publicEvseId": "ES*ESX*E61945052640016*3",
+            "rawCpoName": "ENDESA X WAY, S.L."
+          },
+          "evseReference": "0785ae17-2b19-413c-83c6-6bc0fa5326ea",
+          "lastTariffUpdated": "2026-07-31T12:00:57.671Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Eranovum": [
+        {
+          "connectorId": "0017561b-82a2-4cd0-b15f-e08cd0e821fc",
+          "context": {
+            "canonicalOperator": "Eranovum",
+            "city": "Petrer",
+            "internalEvseId": "1d569694-6fcf-45b4-bb0e-dcdfbf66d10c",
+            "locationId": "97ca82d7-52b8-4f5e-920a-97176d52639f",
+            "locationName": "Supermercado Consum Petrer",
+            "partyId": "ERA",
+            "publicEvseId": "ES*ERA*E256522*2",
+            "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+          },
+          "evseReference": "1d569694-6fcf-45b4-bb0e-dcdfbf66d10c",
+          "lastTariffUpdated": "2025-06-23T13:15:26.599Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00509002-5048-4e22-9661-a3fed11f615d",
+          "context": {
+            "canonicalOperator": "Eranovum",
+            "city": "El Puerto de Santa María",
+            "internalEvseId": "88874a69-ec38-45da-bee7-5542bd5b8267",
+            "locationId": "c69b8076-c8e8-4e65-9919-3625ae4547c3",
+            "locationName": "Restaurante Bar Jamón",
+            "partyId": "ERA",
+            "publicEvseId": "ES*ERA*E253021*1",
+            "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+          },
+          "evseReference": "88874a69-ec38-45da-bee7-5542bd5b8267",
+          "lastTariffUpdated": "2025-06-23T13:15:26.599Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "011fe2ec-2d9e-4811-9f37-42b793ee8d55",
+          "context": {
+            "canonicalOperator": "Eranovum",
+            "city": "Sevilla",
+            "internalEvseId": "940a5387-ea0e-469d-abda-8649225cd019",
+            "locationId": "f923fcfb-0907-48e7-b42c-026ed54fe062",
+            "locationName": "Sevilla - Calle Penibética",
+            "partyId": "ERA",
+            "publicEvseId": "ES*ERA*E254601*1",
+            "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+          },
+          "evseReference": "940a5387-ea0e-469d-abda-8649225cd019",
+          "lastTariffUpdated": "2026-01-07T09:12:34.502Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 3,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 3,
+            "restrictionKeys": [
+              "end_time",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Iberdrola | bp pulse": [
+        {
+          "connectorId": "000272da-498b-4223-b0aa-acf8962c41b6",
+          "context": {
+            "canonicalOperator": "Iberdrola | bp pulse",
+            "city": "BENICARLO",
+            "internalEvseId": "a4def383-9e38-4f28-b35f-07579389c045",
+            "locationId": "61f3b335-802a-49c2-893e-beb046e89e44",
+            "locationName": "E-CS-Benicarlo-004",
+            "partyId": "IBD",
+            "publicEvseId": "ES*IBD*E144768*2",
+            "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+          },
+          "evseReference": "a4def383-9e38-4f28-b35f-07579389c045",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0004459b-77e5-4cc6-a8ca-43fee142a9c3",
+          "context": {
+            "canonicalOperator": "Iberdrola | bp pulse",
+            "city": "GRANADA",
+            "internalEvseId": "a767302c-5156-4c81-9710-85452a71207b",
+            "locationId": "8cea80a4-bd4d-4126-af43-fad16ac4887b",
+            "locationName": "E-GR-Granada-008",
+            "partyId": "IBD",
+            "publicEvseId": "ES*IBD*E144002*1",
+            "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+          },
+          "evseReference": "a767302c-5156-4c81-9710-85452a71207b",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00133e2b-aa5d-4545-8326-05e6061aa39c",
+          "context": {
+            "canonicalOperator": "Iberdrola | bp pulse",
+            "city": "ESPOT",
+            "internalEvseId": "81e01918-726e-4603-ad0c-c494eae0e119",
+            "locationId": "41848bfb-130c-42b4-8218-5fea7248cdd2",
+            "locationName": "L-Espot-001",
+            "partyId": "IBD",
+            "publicEvseId": "ES*IBD*E137904*2",
+            "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+          },
+          "evseReference": "81e01918-726e-4603-ad0c-c494eae0e119",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Moeve": [
+        {
+          "connectorId": "00046b92-f172-4560-a948-ea12a5bd58ab",
+          "context": {
+            "canonicalOperator": "Moeve",
+            "city": "Ameyugo",
+            "internalEvseId": "65ea8b40-fdbe-4044-9cdb-94f3cdfc0a74",
+            "locationId": "01b04054-4d64-476a-baec-eaa9a95ebfa0",
+            "locationName": "MOEVE-ES317160-AMEYUGO I",
+            "partyId": "MOE",
+            "publicEvseId": "ES*MOE*E62522016340020*02",
+            "rawCpoName": "MOEVE COMMERCIAL, SAU"
+          },
+          "evseReference": "65ea8b40-fdbe-4044-9cdb-94f3cdfc0a74",
+          "lastTariffUpdated": "2026-06-01T13:28:02.355Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00223c72-1ff9-43a6-af67-3df53adb18c4",
+          "context": {
+            "canonicalOperator": "Moeve",
+            "city": "Benicarló",
+            "internalEvseId": "fc456c07-d577-4a14-967b-9106bab222e5",
+            "locationId": "3de81b9c-74ab-4c11-b33e-b0c7cd0f55b6",
+            "locationName": "CEPSA-ES315370-BENICARLO II",
+            "partyId": "MOE",
+            "publicEvseId": "ES*MOE*EHYC22BZ3245A*02",
+            "rawCpoName": "MOEVE COMMERCIAL, SAU"
+          },
+          "evseReference": "fc456c07-d577-4a14-967b-9106bab222e5",
+          "lastTariffUpdated": "2025-11-21T08:32:46.918Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "008ee6d1-9b8d-4d45-8b9d-fbc94b43da12",
+          "context": {
+            "canonicalOperator": "Moeve",
+            "city": "A Coruña",
+            "internalEvseId": "b6e3277d-4ba4-4e8b-b9bd-01490e25fe90",
+            "locationId": "78b6b898-48db-458e-9f8a-5f90890899a6",
+            "locationName": "MOEVE-ES135660-GREGORIO HERNANDEZ",
+            "partyId": "MOE",
+            "publicEvseId": "ES*MOE*EHYC22BZ3233A*01",
+            "rawCpoName": "MOEVE COMMERCIAL, SAU"
+          },
+          "evseReference": "b6e3277d-4ba4-4e8b-b9bd-01490e25fe90",
+          "lastTariffUpdated": "2025-11-21T08:32:46.918Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Powerdot": [
+        {
+          "connectorId": "003217d0-e6f3-4b91-8a54-679338d9ea8a",
+          "context": {
+            "canonicalOperator": "Powerdot",
+            "city": "Comunidad Valenciana",
+            "internalEvseId": "a5c7dc57-6b6c-4cf3-a1d1-0cb906bace47",
+            "locationId": "798f728a-bf0d-41ee-88e8-2e24a2154d19",
+            "locationName": "Centro Comercial MN4 - Alfafar",
+            "partyId": "PWH",
+            "publicEvseId": "ES*PWH*EMN4*VAL*KEM0011*4",
+            "rawCpoName": "Punto Recargas SL"
+          },
+          "evseReference": "a5c7dc57-6b6c-4cf3-a1d1-0cb906bace47",
+          "lastTariffUpdated": "2025-05-23T16:38:56.714Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "005b58b9-28b3-4b76-848c-3f96435750fd",
+          "context": {
+            "canonicalOperator": "Powerdot",
+            "city": "Jerez de la Frontera",
+            "internalEvseId": "a3649eb3-36e4-4a59-b07c-1ace4053fb0f",
+            "locationId": "2d78c16e-da34-44be-a58d-07a50a73d7dc",
+            "locationName": "Ibis - Jerez de la Frontera",
+            "partyId": "PWH",
+            "publicEvseId": "ES*PWH*EIBI*JER*KEM0023*3",
+            "rawCpoName": "Punto Recargas SL"
+          },
+          "evseReference": "a3649eb3-36e4-4a59-b07c-1ace4053fb0f",
+          "lastTariffUpdated": "2026-04-07T12:10:48.679Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00b07e7d-4993-4251-87bd-e47c0d80fe30",
+          "context": {
+            "canonicalOperator": "Powerdot",
+            "city": "Gavà",
+            "internalEvseId": "8d2bf545-4274-4bb8-b3e4-8bf962d3c239",
+            "locationId": "354ac2d5-9983-46d7-a4ee-fdf5a838889d",
+            "locationName": "Centro Comercial Barnasud - Gavà",
+            "partyId": "PWH",
+            "publicEvseId": "ES*PWH*EES*CBR*BAR*ALF0047*1",
+            "rawCpoName": "Punto Recargas SL"
+          },
+          "evseReference": "8d2bf545-4274-4bb8-b3e4-8bf962d3c239",
+          "lastTariffUpdated": "2026-04-07T12:09:29.386Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Repsol": [
+        {
+          "connectorId": "000ddec5-7c16-4eb6-98ec-c54ea6bdeb9f",
+          "context": {
+            "canonicalOperator": "Repsol",
+            "city": "Galdakao",
+            "internalEvseId": "c6462a20-5c05-437a-9182-b6417b9ef9f9",
+            "locationId": "ca09938d-d2de-48c5-bccf-1782e9dfc816",
+            "locationName": "Repsol, Hospital Galdakao, túnel trabajadores",
+            "partyId": "REP",
+            "publicEvseId": "ES*REP*E3350*1",
+            "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+          },
+          "evseReference": "c6462a20-5c05-437a-9182-b6417b9ef9f9",
+          "lastTariffUpdated": "2025-12-01T00:00:03.599Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000e1ecf-aa4a-4719-ae24-55e14a727c6b",
+          "context": {
+            "canonicalOperator": "Repsol",
+            "city": "Monforte de Lemos",
+            "internalEvseId": "9964933b-5b4b-4ed3-a32d-1e8e88e9fcde",
+            "locationId": "38296838-6237-4e15-87a7-f8c3ee84db76",
+            "locationName": "Repsol ES, Combustibles As Fontes S.L.",
+            "partyId": "REP",
+            "publicEvseId": "ES*REP*E16067*1",
+            "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+          },
+          "evseReference": "9964933b-5b4b-4ed3-a32d-1e8e88e9fcde",
+          "lastTariffUpdated": "2025-12-01T00:00:03.492Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000f497a-2884-4493-8086-16ee43b2d7f7",
+          "context": {
+            "canonicalOperator": "Repsol",
+            "city": "Madrid",
+            "internalEvseId": "7632a756-910b-4130-9872-20a9432a027b",
+            "locationId": "f4397c04-cac1-48b1-bde1-f903c7f43ccf",
+            "locationName": "Repsol ES, G. El Pilar",
+            "partyId": "REP",
+            "publicEvseId": "ES*REP*E13611*1",
+            "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+          },
+          "evseReference": "7632a756-910b-4130-9872-20a9432a027b",
+          "lastTariffUpdated": "2025-12-01T00:00:03.492Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Wenea": [
+        {
+          "connectorId": "004cbd7f-63bb-47e3-899e-50419bf9d279",
+          "context": {
+            "canonicalOperator": "Wenea",
+            "city": "Sevilla",
+            "internalEvseId": "a25a5ba9-4d68-40ae-b5be-c89c9ae179a4",
+            "locationId": "1b8a2e31-886f-4774-8445-b43f12c023f1",
+            "locationName": "C.E.I.P. Híspalis. Sevilla",
+            "partyId": "WEN",
+            "publicEvseId": "ES*WEN*ESEVCEIPHISPALIS1*2",
+            "rawCpoName": "Wenea Services Spain, S.L."
+          },
+          "evseReference": "a25a5ba9-4d68-40ae-b5be-c89c9ae179a4",
+          "lastTariffUpdated": "2026-05-25T12:08:31.525Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "006c7116-c6b6-4ac9-946d-77c093d29f5f",
+          "context": {
+            "canonicalOperator": "Wenea",
+            "city": "Fuentes de Oñoro",
+            "internalEvseId": "d91dccec-43f3-44ed-b91f-3a6e082a41c6",
+            "locationId": "e7f7b9fe-eeaa-4431-b067-fccaad285879",
+            "locationName": "E.S. Pedresina",
+            "partyId": "WEN",
+            "publicEvseId": "ES*WEN*EPEDRESINA5*2",
+            "rawCpoName": "Wenea Services Spain, S.L."
+          },
+          "evseReference": "d91dccec-43f3-44ed-b91f-3a6e082a41c6",
+          "lastTariffUpdated": "2026-05-25T14:00:44.367Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00ae7db7-2353-4917-a7ad-f10ecd257cb5",
+          "context": {
+            "canonicalOperator": "Wenea",
+            "city": "Mérida",
+            "internalEvseId": "c5eb0a98-2546-482d-adbf-254470aa77ab",
+            "locationId": "7b8e5c61-c2c2-4b68-ad2d-11c7cfb29a5d",
+            "locationName": "WS Mérida",
+            "partyId": "WEN",
+            "publicEvseId": "ES*WEN*EWSMERIDA08BA*1",
+            "rawCpoName": "Wenea Services Spain, S.L."
+          },
+          "evseReference": "c5eb0a98-2546-482d-adbf-254470aa77ab",
+          "lastTariffUpdated": "2026-05-25T14:00:44.367Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "Zunder": [
+        {
+          "connectorId": "000a1483-52f2-42b7-915e-86db44ba2f6b",
+          "context": {
+            "canonicalOperator": "Zunder",
+            "city": "Vitoria-Gasteiz",
+            "internalEvseId": "f7dee41a-56cb-402f-a2ad-b6b71c56d734",
+            "locationId": "460bd63f-5a1e-481a-aa76-72bbb5909fe1",
+            "locationName": "Vitoria-Gasteiz - Calle Juan Gris",
+            "partyId": "ZUN",
+            "publicEvseId": "ES*ZUN*E0114ER2",
+            "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+          },
+          "evseReference": "f7dee41a-56cb-402f-a2ad-b6b71c56d734",
+          "lastTariffUpdated": "2025-03-05T10:55:02.828Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0017ca47-900b-4f0d-8d23-030218dd06f7",
+          "context": {
+            "canonicalOperator": "Zunder",
+            "city": "Motilla del Palancar",
+            "internalEvseId": "c5780a39-20f2-4916-b717-b3e9b5db4a93",
+            "locationId": "f632a1ce-155d-4630-9131-833d5c6b52bd",
+            "locationName": "La Gaviota - Motilla del Palancar 2",
+            "partyId": "ZUN",
+            "publicEvseId": "ES*ZUN*E1604ER05",
+            "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+          },
+          "evseReference": "c5780a39-20f2-4916-b717-b3e9b5db4a93",
+          "lastTariffUpdated": "2026-06-08T06:34:23.940Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0022cbfe-1f18-45e1-a466-d06a1f8d3cce",
+          "context": {
+            "canonicalOperator": "Zunder",
+            "city": "Castejón",
+            "internalEvseId": "affd6ad0-6e85-45d2-8aaf-0fe11c7b9bdc",
+            "locationId": "033afacb-d8bc-47ac-8ea5-511d040f9d53",
+            "locationName": "Hotel Luze El Villa - Castejón",
+            "partyId": "ZUN",
+            "publicEvseId": "ES*ZUN*E3107ER18",
+            "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+          },
+          "evseReference": "affd6ad0-6e85-45d2-8aaf-0fe11c7b9bdc",
+          "lastTariffUpdated": "2025-03-05T10:55:02.828Z",
+          "matchBasis": "connector_id",
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ]
+    },
+    "restrictionOccurrences": {
+      "day_of_week": 413,
+      "end_date": 141,
+      "end_time": 531,
+      "max_duration": 170,
+      "max_kwh": 1,
+      "max_power": 369,
+      "min_congestion_threshold": 20,
+      "min_duration": 94,
+      "min_kwh": 3,
+      "min_vehicle_soc": 20,
+      "reservation": 121,
+      "start_date": 163,
+      "start_time": 531
+    },
+    "rowsStored": 400,
+    "simpleEnergyOnlyRows": 148,
+    "targetOperatorRows": {
+      "Atlante": 2,
+      "Endesa X Way": 36,
+      "Eranovum": 10,
+      "Iberdrola | bp pulse": 84,
+      "Moeve": 5,
+      "Powerdot": 7,
+      "Repsol": 56,
+      "Wenea": 13,
+      "Zunder": 20
+    },
+    "temporalRows": {
+      "allExpired": 18,
+      "hasActiveOrUnbounded": 382
+    },
+    "totalPages": 468,
+    "unmatchedRows": 26
+  }
+}
