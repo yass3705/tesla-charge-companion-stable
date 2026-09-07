@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Trossingen GmbH",
+  "aliases": ["Stadtwerke Trossingen", "SWT Trossingen"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentPublicTariffMatrixFound": false,
+    "searchScope": "Operator website/public web documentation and current station-level discovery were checked for ad-hoc/QR pricing; no authoritative current numeric direct tariff was exposed in the sources accessible without authentication."
+  },
+  "identityEvidence": {
+    "operatorStationEvidence": "Current station directories identify multiple public 22 kW AC locations in Trossingen as operated by Stadtwerke Trossingen GmbH, including Litschlesstr., Hangenstr., Achauerstr., Tuninger Str., Im Tal and Ernst-Haller-Str.",
+    "directPaymentDiscovery": "At least the Efka-Carre station is currently reported as supporting ad-hoc direct payment, but the price is unknown; third-party data is retained only as a discovery lead."
+  },
+  "pricingEvidence": {
+    "networkWideCurrentAdHocMatrixPublished": false,
+    "exactCurrentStationPriceFound": false,
+    "inferenceApplied": false
+  },
+  "decision": "Keep partial/fail-closed. The operator and public charging footprint are established, but no current authoritative station/EVSE direct-price payload was obtainable in this pass.",
+  "neededToClose": "Obtain an operator-controlled QR/direct-payment checkout for a current Stadtwerke Trossingen EVSE, or a current official tariff sheet/API payload with station/EVSE linkage."
+}
