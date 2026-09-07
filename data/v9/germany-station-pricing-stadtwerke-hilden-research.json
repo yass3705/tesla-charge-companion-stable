@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Hilden GmbH",
+  "aliases": ["Stadtwerke Hilden", "hildenMobil"],
+  "status": "complete",
+  "sourceUrl": "https://stadtwerke-hilden.de/hildenmobil/",
+  "directPayment": {
+    "channel": "Ladeapp für Spontanlader",
+    "registrationRequired": false,
+    "sessionFee": 1.0,
+    "currency": "EUR",
+    "pricePerKwh": 0.5,
+    "connectorKinds": ["AC", "DC"],
+    "blockingFee": {
+      "pricePerMinute": 0.1,
+      "afterMinutes": 240,
+      "activeWindow": {"start": "07:00", "end": "22:00"}
+    }
+  },
+  "scope": "Official spontaneous-charging tariff published together with Stadtwerke Hilden's own public charging locations; external roaming is explicitly excluded from the spontaneous-lader column.",
+  "policy": "Do not propagate Stadtwerke Hilden card roaming prices to third-party CPOs."
+}
