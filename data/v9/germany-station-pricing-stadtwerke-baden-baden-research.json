@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Baden-Baden",
+  "aliases": ["Stadtwerke Baden-Baden", "SW Baden-Baden", "e-Mobilität Baden-Baden"],
+  "status": "partial",
+  "sourceUrl": "https://www.stadtwerke-baden-baden.de/de/mobilitaet-freizeit/e-mobilitaet/oeffentliche-ladestationen.php",
+  "supportingSourceUrl": "https://www.stadtwerke-baden-baden.de/media/docs/mobilitaet-freizeit/elektromobilitaet/Preisblatt_Stand_Maerz_2022.pdf",
+  "directPayment": {
+    "channel": "QR/NFC ad-hoc public checkout",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "currentNumericTariffVerified": false
+  },
+  "historicalOfficialPriceSheet": {
+    "effectiveFrom": "2023-02-01",
+    "adHoc": {
+      "startFee": 1.50,
+      "pricesPerKwh": {"AC": 0.63, "DC": 0.77},
+      "blockingFee": {"pricePerMinute": 0.05, "ACAfterMinutes": 61, "DCAfterMinutes": 1}
+    },
+    "useFor2026": false
+  },
+  "scope": "Current official operator page confirms ad-hoc charging without registration via QR/NFC and links a price sheet, but the accessible numeric sheet states an effective date of 1 February 2023. That value is retained only as historical evidence and is not promoted to a 2026 tariff.",
+  "policy": "Fail closed for current numeric pricing until an official current price sheet or station-level checkout payload is obtained. Do not assume e-laden member tariffs are uniform across operators."
+}
