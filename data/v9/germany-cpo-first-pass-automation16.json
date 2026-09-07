@@ -1,0 +1,67 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 31,
+  "forwardSliceStatus": {
+    "complete": 5,
+    "partial": 26,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Technische Werke Schussental GmbH & Co. KG",
+      "aliases": ["TWS", "Technische Werke Schussental", "TWS Ravensburg", "TWS Weingarten"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official current sources confirm roughly 150 TWS charging points and ad-hoc use by QR/card, but explicitly direct users to the individual station for the ad-hoc price; no public current network-wide numeric direct-price matrix was exposed."
+    },
+    {
+      "name": "Stadtwerke Trossingen GmbH",
+      "aliases": ["Stadtwerke Trossingen", "SWT Trossingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current public stations and ad-hoc availability are discoverable, but no authoritative current numeric direct tariff or operator-controlled checkout payload was exposed in this pass."
+    },
+    {
+      "name": "Stadtwerke Tuttlingen GmbH",
+      "aliases": ["Stadtwerke Tuttlingen", "SWT Tuttlingen", "swt Tuttlingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "No authoritative current public-EVSE ad-hoc tariff was found. Household/grid E-Mobilitaet electricity tariffs were explicitly rejected as unrelated to public charging-station prices."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical":"Technische Werke Schussental GmbH & Co. KG","aliases":["TWS","Technische Werke Schussental","TWS Ravensburg","TWS Weingarten"],"observedPrefix":"DE*TWS"},
+    {"canonical":"Stadtwerke Trossingen GmbH","aliases":["Stadtwerke Trossingen","SWT Trossingen"]},
+    {"canonical":"Stadtwerke Tuttlingen GmbH","aliases":["Stadtwerke Tuttlingen","SWT Tuttlingen","swt Tuttlingen"]}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-tws-ravensburg-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-trossingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-tuttlingen-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "selectionIndexFalseNegativeDetectedAndCorrected": true,
+    "selectionIndexFalseNegativeDetails": "Initial code-search candidates fairEnergie, Stadtwerke Konstanz and SWLB were rejected before counting after cross-checking PR changed filenames, which showed existing direct-offer evidence for all three on germany-v9-preintegration.",
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue corrected BNetzA first-pass queue using branch/PR-aware evidence rather than default-branch code search alone"]
+}
