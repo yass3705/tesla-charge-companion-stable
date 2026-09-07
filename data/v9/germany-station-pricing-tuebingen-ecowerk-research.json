@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "ecowerk e-charge GmbH",
+  "aliases": ["Stadtwerke Tübingen charging network", "TüStrom Ladestation", "Lade TüStrom"],
+  "status": "partial",
+  "deferred": true,
+  "sourceUrl": "https://www.swtue.de/fileadmin/user_upload/4Unternehmen/TueWelt/2026_04_TueWelt_web.pdf",
+  "supportingSourceUrl": "https://www.swtue.de/unternehmen/aktuell/neuigkeiten/detail/sparen-beim-stromtanken-in-tuebingen-grosse-rabattaktion-mit-der-lade-tuestrom-app-am-wochenende.html",
+  "ownership": {
+    "physicalCpo": "ecowerk e-charge GmbH",
+    "parentBrand": "Stadtwerke Tübingen",
+    "evidence": "Official Stadtwerke publications identify the public TüStrom stations as operated by the Stadtwerke subsidiary ecowerk e-charge GmbH."
+  },
+  "currentPublishedAppPricing": {
+    "currency": "EUR",
+    "acPerKwh": 0.42,
+    "dcPerKwh": 0.58,
+    "context": "March/April 2026 Stadtwerke customer magazine describes public AC and DC charging prices and refers to the Lade TüStrom app."
+  },
+  "directPayment": {
+    "status": "not-proven-universal",
+    "reason": "The current official publication gives public/app charging prices but does not establish that the same numeric tariff is the contract-free QR/card price at every ecowerk EVSE, nor does it publish station-specific direct-payment payloads."
+  },
+  "policy": "Keep the 0.42/0.58 EUR/kWh Lade TüStrom price as verified first-party app/eMSP evidence, but do not promote it to a universal physical-CPO ad-hoc fallback until an official QR/card checkout or station-level direct-payment source is available."
+}
