@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Villingen-Schwenningen GmbH",
+  "aliases": ["SVS", "Stadtwerke Villingen-Schwenningen", "SVS Energie"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "complete-tariff",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "operatorSource": "https://www.svs-energie.de/privat-geschaeftskunden/energiedienstleistungen/e-mobilitaet/",
+    "effectiveFrom": "2025-10-01",
+    "networkScope": "SVS-operated public charging stations in the Villingen-Schwenningen region; ladenetz and roaming prices remain separate.",
+    "directPayment": "SVS ladeapp spontaneous/direct payment by QR/mobile app, credit card, no contract.",
+    "ac": {"pricePerKwhEur": 0.62, "blockingFee": {"pricePerMinuteEur": 0.05, "afterMinutes": 240, "activeWindow": "06:00-20:00", "suspendedWindow": "20:01-05:59"}},
+    "dc": {"pricePerKwhEur": 0.72, "blockingFee": {"pricePerMinuteEur": 0.10, "afterMinutes": 45}}
+  },
+  "identityEvidence": {
+    "observedSharedEvsePrefix": "DE*RLA",
+    "sampleEvseIds": ["DE*RLA*ESVS000901"],
+    "policy": "DE*RLA is recorded only as station-level identity evidence and is not promoted to an exclusive SVS alias because it is a shared backend/roaming prefix."
+  },
+  "decision": "Current official SVS page publishes exact own-station direct-payment AC/DC energy and blocking prices. Contract-card and roaming tariffs remain separate; no shared-prefix ownership extrapolation is made."
+}
