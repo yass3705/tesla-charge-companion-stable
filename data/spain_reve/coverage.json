@@ -3,43 +3,43 @@
     "embeddedTariffReference": {
       "count": 0,
       "pct": 0.0,
-      "total": 46745
+      "total": 46894
     },
     "format": {
-      "count": 46745,
+      "count": 46894,
       "pct": 100.0,
-      "total": 46745
+      "total": 46894
     },
     "maxAmperage": {
-      "count": 46745,
+      "count": 46894,
       "pct": 100.0,
-      "total": 46745
+      "total": 46894
     },
     "maxElectricPower": {
-      "count": 46745,
+      "count": 46894,
       "pct": 100.0,
-      "total": 46745
+      "total": 46894
     },
     "maxVoltage": {
-      "count": 46745,
+      "count": 46894,
       "pct": 100.0,
-      "total": 46745
+      "total": 46894
     },
     "powerType": {
-      "count": 46745,
+      "count": 46894,
       "pct": 100.0,
-      "total": 46745
+      "total": 46894
     },
     "standard": {
-      "count": 46745,
+      "count": 46894,
       "pct": 100.0,
-      "total": 46745
+      "total": 46894
     },
-    "total": 46745
+    "total": 46894
   },
   "country": "ES",
   "cpos": {
-    "distinct": 135,
+    "distinct": 148,
     "items": [
       {
         "connectors": 1768,
@@ -68,6 +68,13 @@
         "evses": 6,
         "locations": 6,
         "partyId": "INC"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "AJUNTAMENT D'OS DE BALAGUER",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "256"
       },
       {
         "connectors": 6,
@@ -308,6 +315,20 @@
         "partyId": "CH1"
       },
       {
+        "connectors": 3,
+        "cpoName": "Club Nàutic l'Escala",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "68C"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "COMPAÑIA GENERAL NAFTE, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "B86"
+      },
+      {
         "connectors": 6,
         "cpoName": "Comunidad de Bienes Aparcamientos Primero de Mayo",
         "evses": 6,
@@ -483,11 +504,25 @@
         "partyId": "ESX"
       },
       {
+        "connectors": 83,
+        "cpoName": "ENERGEA CONSULTING Y ASESORES SL",
+        "evses": 42,
+        "locations": 33,
+        "partyId": "ENE"
+      },
+      {
         "connectors": 48,
         "cpoName": "Energía Distribuida del Norte S.A.",
         "evses": 48,
         "locations": 24,
         "partyId": "CEL"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "EPRESA ENERGIA SA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "EPR"
       },
       {
         "connectors": 1156,
@@ -504,6 +539,13 @@
         "partyId": "AYA"
       },
       {
+        "connectors": 1,
+        "cpoName": "ESTACION DE SERVICIO LAPIDO SLU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "357"
+      },
+      {
         "connectors": 2,
         "cpoName": "ESTACION DE SERVICIO LOW COST 2015, S.L.",
         "evses": 1,
@@ -518,11 +560,32 @@
         "partyId": "VIL"
       },
       {
+        "connectors": 9,
+        "cpoName": "ESTACION SERVICIO JAIME I, S.A.",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "JA1"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ESTACIONAMIENTOS LUCENSES SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "271"
+      },
+      {
         "connectors": 1925,
         "cpoName": "Etecnic Movilidad Electrica, SRL",
         "evses": 1796,
         "locations": 759,
         "partyId": "ETE"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "EXPLOTACIONES INDUSTRIALES LOS RODEOS,S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "220"
       },
       {
         "connectors": 2,
@@ -544,6 +607,13 @@
         "evses": 406,
         "locations": 223,
         "partyId": "FEN"
+      },
+      {
+        "connectors": 23,
+        "cpoName": "FERROVIAL CONSTRUCCIÓN S.A.",
+        "evses": 12,
+        "locations": 10,
+        "partyId": "FES"
       },
       {
         "connectors": 1,
@@ -658,6 +728,13 @@
         "partyId": "914"
       },
       {
+        "connectors": 4,
+        "cpoName": "Ingenieria de Recarga SLU",
+        "evses": 3,
+        "locations": 2,
+        "partyId": "686"
+      },
+      {
         "connectors": 8,
         "cpoName": "INMOMEDIC 09, S.L.U.",
         "evses": 4,
@@ -733,6 +810,13 @@
         "evses": 1,
         "locations": 1,
         "partyId": "010"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "LCG"
       },
       {
         "connectors": 861,
@@ -831,6 +915,13 @@
         "evses": 387,
         "locations": 194,
         "partyId": "PLE"
+      },
+      {
+        "connectors": 8,
+        "cpoName": "PORSAMADRID, S.L.",
+        "evses": 8,
+        "locations": 8,
+        "partyId": "920"
       },
       {
         "connectors": 2,
@@ -992,45 +1083,45 @@
     "embeddedStatus": {
       "count": 0,
       "pct": 0.0,
-      "total": 42100
+      "total": 42180
     },
     "identifier": {
-      "count": 42094,
+      "count": 42174,
       "pct": 99.99,
-      "total": 42100
+      "total": 42180
     },
-    "total": 42100
+    "total": 42180
   },
-  "generatedAt": "2026-09-06T23:27:48.963207Z",
+  "generatedAt": "2026-09-07T00:40:56.525286Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "locations": {
     "addressAndCity": {
-      "count": 13580,
+      "count": 13648,
       "pct": 100.0,
-      "total": 13580
+      "total": 13648
     },
     "coordinates": {
-      "count": 13580,
+      "count": 13648,
       "pct": 100.0,
-      "total": 13580
+      "total": 13648
     },
     "cpoIdentity": {
-      "count": 13580,
+      "count": 13648,
       "pct": 100.0,
-      "total": 13580
+      "total": 13648
     },
     "withEvses": {
-      "count": 13580,
+      "count": 13648,
       "pct": 100.0,
-      "total": 13580
+      "total": 13648
     }
   },
   "schemaVersion": 1,
   "snapshot": {
-    "complete": false,
-    "locationsStored": 13580,
-    "nextPage": 146,
-    "registryCoveragePct": 93.21,
+    "complete": true,
+    "locationsStored": 13648,
+    "nextPage": 147,
+    "registryCoveragePct": 93.68,
     "registryTotalCount": 14569,
     "totalPages": 146
   },
