@@ -23,29 +23,35 @@ def aliases():
 
 def treated(alias_map):
  names=set()
+ def add_name(n):
+  if n: names.add(alias_map.get(norm(n),n))
  for p in glob.glob('data/v9/germany-direct-offers*.json'):
   try:d=load_json(p)
   except:continue
   for o in d.get('directOffers',[]):
-   for n in o.get('operatorAliases',[]): names.add(alias_map.get(norm(n),n))
-   for n in o.get('networkAliases',[]): names.add(alias_map.get(norm(n),n))
+   for n in o.get('operatorAliases',[]): add_name(n)
+   for n in o.get('networkAliases',[]): add_name(n)
  for p in glob.glob('data/v9/germany-station-pricing*.json'):
   try:d=load_json(p)
   except:continue
-  for e in d.get('entries',[]):
-   n=e.get('operator')
-   if n:names.add(alias_map.get(norm(n),n))
+  # First-pass research files use a top-level operator even when they have no station entries yet.
+  add_name(d.get('operator'))
+  for e in d.get('entries',[]): add_name(e.get('operator'))
  collectors=Path('data/v9/germany-station-pricing-collectors.json')
  if collectors.exists():
   for c in load_json(collectors).get('collectors',[]):
-   if c.get('status')=='active_validated' and c.get('operator'):
-    n=c['operator'];names.add(alias_map.get(norm(n),n))
+   if c.get('status')=='active_validated': add_name(c.get('operator'))
  for p in glob.glob('data/v9/germany-cpo-deferred-pricing*.json'):
   try:d=load_json(p)
   except:continue
-  for e in d.get('cpos',[]):
-   n=e.get('operator')
-   if n:names.add(alias_map.get(norm(n),n))
+  for e in d.get('cpos',[]): add_name(e.get('operator') or e.get('name'))
+ # Breadth-first checkpoints are also authoritative evidence that a first pass occurred.
+ for pattern in ('data/v9/germany-cpo-first-pass*.json','data/v9/germany-first-pass*.json'):
+  for p in glob.glob(pattern):
+   try:d=load_json(p)
+   except:continue
+   for e in d.get('newFirstPasses',[]): add_name(e.get('operator') or e.get('name'))
+   for e in d.get('cpos',[]): add_name(e.get('operator') or e.get('name'))
  return {norm(x) for x in names if x}
 
 def fetch_rows():
