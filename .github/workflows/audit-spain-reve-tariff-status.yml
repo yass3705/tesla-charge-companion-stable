@@ -7,8 +7,10 @@ on:
     paths:
       - ".github/workflows/audit-spain-reve-tariff-status.yml"
       - "scripts/reve_es_tariff_status_audit.py"
+      - "scripts/reve_es_live_probe_audit.py"
       - "data/spain_reve/reve_locations_raw.json.gz"
       - "data/spain_reve/operator_aliases_es.json"
+      - "data/spain_reve/live_tariff_status_probe.json"
 
 permissions:
   contents: write
@@ -30,14 +32,17 @@ jobs:
       - name: Build offline candidates
         run: python scripts/reve_es_tariff_status_audit.py
 
-      - name: Commit audit report
+      - name: Analyze live probe offline
+        run: python scripts/reve_es_live_probe_audit.py
+
+      - name: Commit audit reports
         shell: bash
         run: |
-          git add data/spain_reve/tariff_status_candidates.json
+          git add data/spain_reve/tariff_status_candidates.json data/spain_reve/live_tariff_status_analysis.json
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "audit(es): record REVE tariff/status candidates"
+          git commit -m "audit(es): record REVE tariff/status analysis"
           git push
 
       - name: Enforce candidate gate
@@ -50,4 +55,10 @@ jobs:
           if not r.get('allRequiredOperatorsMatched'):
               missing=[x['canonical'] for x in r.get('requiredOperators',[]) if not x.get('matched')]
               raise SystemExit('Required CPO candidates missing: '+', '.join(missing))
+          a=json.loads(Path('data/spain_reve/live_tariff_status_analysis.json').read_text())
+          gates=a.get('gates',{})
+          required=['probeTransportValidated','tariffSchemaValidated','statusSchemaValidated','threeRepresentativeStatusChecksValidated']
+          failed=[g for g in required if not gates.get(g)]
+          if failed:
+              raise SystemExit('Live probe analysis gates failed: '+', '.join(failed))
           PY
