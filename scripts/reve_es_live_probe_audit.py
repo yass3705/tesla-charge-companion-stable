@@ -3,7 +3,8 @@
 
 This script performs zero network calls. It joins the sampled live tariff/status
 objects back to the completed /locations snapshot using both REVE internal UUIDs
-and public EVSE IDs, then emits a compact integration-readiness report.
+and public EVSE IDs, preserves boolean operational_status values exactly, and
+emits a compact integration-readiness report.
 """
 from __future__ import annotations
 
@@ -12,6 +13,7 @@ import json
 import re
 import unicodedata
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -104,6 +106,54 @@ def tariff_shape(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def parse_dt(value: Any) -> datetime | None:
+    if not value:
+        return None
+    try:
+        text = str(value).replace("Z", "+00:00")
+        dt = datetime.fromisoformat(text)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except (TypeError, ValueError):
+        return None
+
+
+def tariff_temporal_state(row: dict[str, Any], reference_time: datetime) -> dict[str, Any]:
+    tariffs = row.get("tariffs") or []
+    states: list[str] = []
+    for tariff in tariffs if isinstance(tariffs, list) else []:
+        if not isinstance(tariff, dict):
+            continue
+        start = parse_dt(tariff.get("start_date_time"))
+        end = parse_dt(tariff.get("end_date_time"))
+        if start and reference_time < start:
+            states.append("FUTURE")
+        elif end and reference_time > end:
+            states.append("EXPIRED")
+        else:
+            states.append("ACTIVE_OR_UNBOUNDED")
+    return {
+        "states": states,
+        "allExpired": bool(states) and all(x == "EXPIRED" for x in states),
+        "hasActiveOrUnbounded": any(x == "ACTIVE_OR_UNBOUNDED" for x in states),
+        "hasFuture": any(x == "FUTURE" for x in states),
+    }
+
+
+def operational_status_key(row: dict[str, Any]) -> tuple[str, Any]:
+    """Preserve REVE's boolean operational_status; never collapse False to missing."""
+    if "operational_status" in row and row.get("operational_status") is not None:
+        value = row.get("operational_status")
+        if isinstance(value, bool):
+            return ("TRUE" if value else "FALSE"), value
+        return str(value).upper(), value
+    if "status" in row and row.get("status") is not None:
+        value = row.get("status")
+        return str(value).upper(), value
+    return "<MISSING>", None
+
+
 def main() -> int:
     aliases_doc = json.loads(ALIASES.read_text(encoding="utf-8"))
     alias_map = {x["canonical"]: list(x.get("aliases") or []) for x in aliases_doc.get("operators", [])}
@@ -111,12 +161,18 @@ def main() -> int:
     with gzip.open(SNAPSHOT, "rt", encoding="utf-8") as f:
         snap = json.load(f)
 
+    probe_time = parse_dt(probe.get("generatedAt")) or datetime.now(timezone.utc)
     locations_raw = snap.get("locations", {})
     locations = list(locations_raw.values()) if isinstance(locations_raw, dict) else list(locations_raw or [])
 
     by_internal: dict[str, dict[str, Any]] = {}
     by_public: dict[str, dict[str, Any]] = {}
+    internal_occurrences = Counter()
+    public_occurrences = Counter()
     snapshot_evse_count = 0
+    evses_missing_internal_id = 0
+    evses_missing_public_id = 0
+
     for loc in locations:
         if not isinstance(loc, dict):
             continue
@@ -134,13 +190,23 @@ def main() -> int:
             if not isinstance(evse, dict):
                 continue
             snapshot_evse_count += 1
+            internal_id = evse.get("id")
+            public_id = evse.get("evse_id")
             context = dict(context_base)
-            context["internalEvseId"] = evse.get("id")
-            context["publicEvseId"] = evse.get("evse_id")
-            if evse.get("id"):
-                by_internal[str(evse.get("id"))] = context
-            if evse.get("evse_id"):
-                by_public[str(evse.get("evse_id"))] = context
+            context["internalEvseId"] = internal_id
+            context["publicEvseId"] = public_id
+            if internal_id:
+                key = str(internal_id)
+                internal_occurrences[key] += 1
+                by_internal[key] = context
+            else:
+                evses_missing_internal_id += 1
+            if public_id:
+                key = str(public_id)
+                public_occurrences[key] += 1
+                by_public[key] = context
+            else:
+                evses_missing_public_id += 1
 
     tariffs_req = request_by_kind(probe, "tariffs_page") or {}
     tariff_rows = tariffs_req.get("payload") or []
@@ -152,6 +218,7 @@ def main() -> int:
     simple_energy_only = 0
     complex_tariffs = 0
     tariff_samples: list[dict[str, Any]] = []
+    unmatched_tariff_rows: list[dict[str, Any]] = []
 
     for row in tariff_rows if isinstance(tariff_rows, list) else []:
         if not isinstance(row, dict):
@@ -159,6 +226,7 @@ def main() -> int:
         evse_ref = str(row.get("evse_id") or "")
         context = by_internal.get(evse_ref) or by_public.get(evse_ref)
         shape = tariff_shape(row)
+        temporal = tariff_temporal_state(row, probe_time)
         for t in shape["componentTypes"]:
             component_types[t] += 1
         for k in shape["restrictionKeys"]:
@@ -173,6 +241,14 @@ def main() -> int:
             tariff_match_count += 1
             if context.get("canonicalOperator"):
                 tariff_operator_counts[str(context["canonicalOperator"])] += 1
+        else:
+            unmatched_tariff_rows.append({
+                "connectorId": row.get("connector_id"),
+                "evseReference": row.get("evse_id"),
+                "lastTariffUpdated": row.get("last_tariff_updated"),
+                "shape": shape,
+                "temporal": temporal,
+            })
         if len(tariff_samples) < 12:
             tariff_samples.append({
                 "connectorId": row.get("connector_id"),
@@ -180,6 +256,7 @@ def main() -> int:
                 "matchedSnapshot": bool(context),
                 "context": context,
                 "shape": shape,
+                "temporal": temporal,
                 "lastTariffUpdated": row.get("last_tariff_updated"),
             })
 
@@ -189,11 +266,15 @@ def main() -> int:
     status_match_count = 0
     status_operator_counts = Counter()
     status_samples: list[dict[str, Any]] = []
+    status_is_boolean = True
+
     for row in status_rows if isinstance(status_rows, list) else []:
         if not isinstance(row, dict):
             continue
-        status = str(row.get("status") or row.get("operational_status") or "<missing>").upper()
-        status_values[status] += 1
+        status_key, raw_status_value = operational_status_key(row)
+        status_values[status_key] += 1
+        if raw_status_value is not None and not isinstance(raw_status_value, bool):
+            status_is_boolean = False
         refs = [row.get("id"), row.get("evse_id")]
         context = None
         for ref in refs:
@@ -209,6 +290,7 @@ def main() -> int:
         if len(status_samples) < 12:
             status_samples.append({
                 "raw": row,
+                "normalizedOperationalStatusKey": status_key,
                 "matchedSnapshot": bool(context),
                 "context": context,
             })
@@ -232,8 +314,11 @@ def main() -> int:
     live_tariff_total = int(tariff_headers.get("total-count", 0) or 0)
     live_status_total = int(status_headers.get("total-count", 0) or 0)
 
+    duplicate_internal_keys = sum(1 for count in internal_occurrences.values() if count > 1)
+    duplicate_public_keys = sum(1 for count in public_occurrences.values() if count > 1)
+
     report = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "country": "ES",
         "source": "REVE",
         "integrationStatus": "PRE_INTEGRATION_ONLY",
@@ -242,7 +327,15 @@ def main() -> int:
         "probeComplete": probe.get("probeComplete") is True,
         "snapshot": {
             "locations": len(locations),
-            "evsesObservedInLocations": snapshot_evse_count,
+            "evseObjectsObserved": snapshot_evse_count,
+            "evsesWithInternalId": sum(internal_occurrences.values()),
+            "evsesWithPublicId": sum(public_occurrences.values()),
+            "uniqueInternalEvseIds": len(internal_occurrences),
+            "uniquePublicEvseIds": len(public_occurrences),
+            "evsesMissingInternalId": evses_missing_internal_id,
+            "evsesMissingPublicId": evses_missing_public_id,
+            "duplicateInternalIdKeys": duplicate_internal_keys,
+            "duplicatePublicIdKeys": duplicate_public_keys,
         },
         "liveFeeds": {
             "tariffs": {
@@ -251,6 +344,8 @@ def main() -> int:
                 "sampleRows": len(tariff_rows) if isinstance(tariff_rows, list) else 0,
                 "sampleMatchedToLocationSnapshot": tariff_match_count,
                 "sampleMatchPct": round(100 * tariff_match_count / len(tariff_rows), 2) if tariff_rows else 0.0,
+                "unmatchedSampleRows": len(unmatched_tariff_rows),
+                "unmatchedRows": unmatched_tariff_rows,
                 "targetOperatorRows": dict(tariff_operator_counts),
                 "componentTypes": dict(component_types),
                 "restrictionKeys": dict(restriction_keys),
@@ -265,6 +360,7 @@ def main() -> int:
                 "sampleRows": len(status_rows) if isinstance(status_rows, list) else 0,
                 "sampleMatchedToLocationSnapshot": status_match_count,
                 "sampleMatchPct": round(100 * status_match_count / len(status_rows), 2) if status_rows else 0.0,
+                "isBooleanFieldInSample": status_is_boolean,
                 "statusValues": dict(status_values),
                 "targetOperatorRows": dict(status_operator_counts),
                 "samples": status_samples,
@@ -272,24 +368,29 @@ def main() -> int:
         },
         "targetedStatusChecks": targeted_statuses,
         "diagnostics": {
-            "liveStatusMinusSnapshotEvseCount": live_status_total - snapshot_evse_count,
-            "note": "Live /evses/operational_status total-count is not assumed equivalent to EVSEs embedded in the paginated /locations snapshot; the difference remains diagnostic until lifecycle/duplication semantics are reconciled.",
+            "liveStatusMinusSnapshotEvseObjects": live_status_total - snapshot_evse_count,
+            "evseCountReconciliation": "42,180 EVSE objects are present in /locations; identifier coverage and duplicate-key counts are reported separately so 42,174 identifiers are not mistaken for the object total.",
+            "operationalStatusSemantics": "The bulk /evses/operational_status feed exposes a boolean operational_status. It is preserved raw here. This audit does not yet equate false with a TCC display status; targeted /evses/{evse_id}/status returns the separate OCPI-style availability state.",
+            "note": "Live /evses/operational_status total-count is not assumed equivalent to EVSE objects embedded in the paginated /locations snapshot; the difference remains diagnostic until lifecycle/duplication semantics are reconciled.",
         },
         "gates": {
             "probeTransportValidated": probe.get("probeComplete") is True,
             "tariffSchemaValidated": bool(tariff_rows),
             "statusSchemaValidated": bool(status_rows),
+            "operationalStatusBooleanPreserved": status_is_boolean and "<MISSING>" not in status_values,
             "threeRepresentativeStatusChecksValidated": len(targeted_statuses) == 3 and all(x.get("httpStatus") == 200 and x.get("status") for x in targeted_statuses),
+            "evseObjectVsIdentifierCountReconciled": snapshot_evse_count == sum(internal_occurrences.values()) + evses_missing_internal_id,
             "runtimePublishReady": False,
         },
-        "nextGate": "Continue tariff/status pagination under the 5-requests/hour REVE budget, preserve complex tariff components/restrictions, and reconcile live EVSE lifecycle counts before runtime publication.",
+        "nextGate": "Continue tariff/status pagination under the 5-requests/hour REVE budget, preserve complex tariff components/restrictions, investigate unmatched tariff lifecycle rows, and cross-check the remaining representative CPOs before runtime publication.",
     }
     OUTPUT.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
-        "tariffs": report["liveFeeds"]["tariffs"],
+        "snapshot": report["snapshot"],
+        "tariffs": {k: v for k, v in report["liveFeeds"]["tariffs"].items() if k not in {"samples", "unmatchedRows"}},
         "operationalStatus": {k: v for k, v in report["liveFeeds"]["operationalStatus"].items() if k != "samples"},
         "targetedStatusChecks": targeted_statuses,
-        "diagnostics": report["diagnostics"],
+        "gates": report["gates"],
     }, ensure_ascii=False, indent=2))
     return 0
 
