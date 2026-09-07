@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Bayreuth Holding GmbH",
+  "aliases": ["Stadtwerke Bayreuth", "SW Bayreuth"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "complete-tariff",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "operatorSource": "https://www.stadtwerke-bayreuth.de/energie-wasser/elektromobilitaet/laden-unterwegs",
+    "networkScope": "Stadtwerke Bayreuth charging stations inside LadeverbundPlus; prices outside LadeverbundPlus remain separate.",
+    "directPayment": "Ad-hoc charging without app registration by scanning the QR code at the charging point.",
+    "ac": {"pricePerKwhEur": 0.70, "blockingFee": {"pricePerMinuteEur": 0.05, "afterMinutes": 240, "activeWindow": "08:00-20:00"}},
+    "dc": {"pricePerKwhEur": 0.85, "blockingFee": {"pricePerMinuteEur": 0.10, "afterMinutes": 45, "activeWindow": "all-day"}}
+  },
+  "identityEvidence": {
+    "observedSharedEvsePrefix": "DE*LVP",
+    "sampleEvseIds": ["DE*LVP*E22775*001", "DE*LVP*E22775*002"],
+    "policy": "DE*LVP is a LadeverbundPlus shared prefix and is not promoted to an exclusive Stadtwerke Bayreuth alias; samples are used only to corroborate physical operator identity."
+  },
+  "decision": "Current official operator page supplies exact ad-hoc AC/DC energy and blocking prices for its LadeverbundPlus stations. Registered normal/customer tariffs and third-party roaming remain distinct."
+}
