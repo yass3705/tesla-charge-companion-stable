@@ -1,10 +1,14 @@
 {
   "country": "ES",
   "diagnostics": {
-    "liveStatusMinusSnapshotEvseCount": 2426,
-    "note": "Live /evses/operational_status total-count is not assumed equivalent to EVSEs embedded in the paginated /locations snapshot; the difference remains diagnostic until lifecycle/duplication semantics are reconciled."
+    "evseCountReconciliation": "42,180 EVSE objects are present in /locations; identifier coverage and duplicate-key counts are reported separately so 42,174 identifiers are not mistaken for the object total.",
+    "liveStatusMinusSnapshotEvseObjects": 2426,
+    "note": "Live /evses/operational_status total-count is not assumed equivalent to EVSE objects embedded in the paginated /locations snapshot; the difference remains diagnostic until lifecycle/duplication semantics are reconciled.",
+    "operationalStatusSemantics": "The bulk /evses/operational_status feed exposes a boolean operational_status. It is preserved raw here. This audit does not yet equate false with a TCC display status; targeted /evses/{evse_id}/status returns the separate OCPI-style availability state."
   },
   "gates": {
+    "evseObjectVsIdentifierCountReconciled": true,
+    "operationalStatusBooleanPreserved": true,
     "probeTransportValidated": true,
     "runtimePublishReady": false,
     "statusSchemaValidated": true,
@@ -14,6 +18,7 @@
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "liveFeeds": {
     "operationalStatus": {
+      "isBooleanFieldInSample": true,
       "sampleMatchPct": 100.0,
       "sampleMatchedToLocationSnapshot": 100,
       "sampleRows": 100,
@@ -30,6 +35,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQEGRP3F11",
             "id": "b7cb0aa9-27c0-4a34-9ee2-c96a241c022b",
@@ -49,6 +55,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQEGRP3F12",
             "id": "977373b7-e138-4020-8f72-84ec980be68e",
@@ -68,6 +75,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQEGH4W411",
             "id": "223b0721-cfa8-4b6f-b208-9a11ee791148",
@@ -87,6 +95,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQE3X76H22",
             "id": "221c950c-6b23-4f89-b495-4276a678a1f8",
@@ -106,6 +115,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQE3X76H21",
             "id": "35f16260-e636-438b-b8b9-23a1ada4f701",
@@ -125,6 +135,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQEJH56M21",
             "id": "9cad721f-209b-4399-b93c-9faab3e72158",
@@ -144,6 +155,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQE47XJ911",
             "id": "9011d9ce-9dbb-4e38-ba0f-be80dca8dd24",
@@ -163,6 +175,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQE47XJ912",
             "id": "7335f173-cb7b-4453-98a7-e59a615a3f7f",
@@ -182,6 +195,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQE2GM2W12",
             "id": "03fb98f0-9540-421b-ba3c-b867810b6575",
@@ -201,6 +215,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQE2GM2W11",
             "id": "e5d08d33-0e4f-4a5d-8f55-c06fa4fc82c4",
@@ -220,6 +235,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQEWX29V31",
             "id": "11001c52-4483-457f-9468-42e3c1ef457a",
@@ -239,6 +255,7 @@
             "rawCpoName": "QWELLO España SL"
           },
           "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
           "raw": {
             "evse_id": "ESAEQEX4F6H121",
             "id": "905a4935-c952-4f28-b7a5-5364fc04f618",
@@ -248,7 +265,7 @@
         }
       ],
       "statusValues": {
-        "<MISSING>": 1,
+        "FALSE": 1,
         "TRUE": 99
       },
       "targetOperatorRows": {},
@@ -317,6 +334,14 @@
             ],
             "simpleEnergyOnly": false,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -352,6 +377,14 @@
             ],
             "simpleEnergyOnly": false,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -381,6 +414,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": true,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -406,6 +447,14 @@
             ],
             "simpleEnergyOnly": false,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -436,6 +485,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": false,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -465,6 +522,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": true,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -494,6 +559,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": true,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -528,6 +601,14 @@
             ],
             "simpleEnergyOnly": false,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -557,6 +638,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": true,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -586,6 +675,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": true,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -619,6 +716,14 @@
             ],
             "simpleEnergyOnly": false,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         },
         {
@@ -648,6 +753,14 @@
             "restrictionKeys": [],
             "simpleEnergyOnly": true,
             "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
           }
         }
       ],
@@ -663,17 +776,311 @@
         "Zunder": 5
       },
       "totalCount": 46773,
-      "totalPages": 468
+      "totalPages": 468,
+      "unmatchedRows": [
+        {
+          "connectorId": "0004c863-0a9b-4727-8256-b703df768bfc",
+          "evseReference": "65a1653e-b302-43da-9f48-19a520ac9159",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00303954-f75b-4141-b16c-3ef3303984d5",
+          "evseReference": "ec70f99d-6665-4b1e-aa28-a3c4a2895f55",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00332ae1-505f-4937-9d08-9f93a3f530a5",
+          "evseReference": "882ab065-f2e6-4bc9-91bc-7870f7051ff4",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "005c439f-30bd-4e2d-9d07-f138109dc665",
+          "evseReference": "c3d50c73-d7f2-4bd1-99a8-104c233f8705",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 3,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 3,
+            "restrictionKeys": [
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0064f6bd-1d15-437a-a693-a4585b6b1e7c",
+          "evseReference": "a0f84f04-80ef-4191-a375-6105eaa4ef1e",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "007ab1b7-7540-456e-845d-3030004bbda4",
+          "evseReference": "aece86f4-8ce2-4e22-bc93-03ca9daf9bee",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "007f7ffe-da61-416b-8542-cb977698f0d2",
+          "evseReference": "03b657c0-d930-4cfa-a75e-ba64b2d931bb",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0085a5d3-dd41-49ee-aa5b-40690ae53dc9",
+          "evseReference": "e85361bd-d314-41b3-a01b-69810d32bd91",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00919cf3-0bbe-4e18-952c-2efb8c55b743",
+          "evseReference": "ad450d06-29e8-4bdd-9073-977ab80582d4",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "unmatchedSampleRows": 9
     }
   },
   "networkRequests": 0,
-  "nextGate": "Continue tariff/status pagination under the 5-requests/hour REVE budget, preserve complex tariff components/restrictions, and reconcile live EVSE lifecycle counts before runtime publication.",
+  "nextGate": "Continue tariff/status pagination under the 5-requests/hour REVE budget, preserve complex tariff components/restrictions, investigate unmatched tariff lifecycle rows, and cross-check the remaining representative CPOs before runtime publication.",
   "probeComplete": true,
   "probeGeneratedAt": "2026-09-07T12:23:49.189094Z",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "snapshot": {
-    "evsesObservedInLocations": 42180,
-    "locations": 13648
+    "duplicateInternalIdKeys": 0,
+    "duplicatePublicIdKeys": 129,
+    "evseObjectsObserved": 42180,
+    "evsesMissingInternalId": 6,
+    "evsesMissingPublicId": 6,
+    "evsesWithInternalId": 42174,
+    "evsesWithPublicId": 42174,
+    "locations": 13648,
+    "uniqueInternalEvseIds": 42174,
+    "uniquePublicEvseIds": 42045
   },
   "source": "REVE",
   "targetedStatusChecks": [
