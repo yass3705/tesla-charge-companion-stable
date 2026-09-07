@@ -1,0 +1,66 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 28,
+  "forwardSliceStatus": {
+    "complete": 5,
+    "partial": 23,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Villingen-Schwenningen GmbH",
+      "aliases": ["SVS", "Stadtwerke Villingen-Schwenningen", "SVS Energie"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official SVS page publishes direct ladeapp pricing on own stations: AC 0.62 EUR/kWh with 0.05 EUR/min blocking from minute 241 during 06:00-20:00, and DC 0.72 EUR/kWh with 0.10 EUR/min from minute 46."
+    },
+    {
+      "name": "Stadtwerke Bayreuth Holding GmbH",
+      "aliases": ["Stadtwerke Bayreuth", "SW Bayreuth"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator page publishes QR ad-hoc pricing on own LadeverbundPlus stations: AC 0.70 EUR/kWh with 0.05 EUR/min from minute 241 during 08:00-20:00; DC 0.85 EUR/kWh with 0.10 EUR/min from minute 46 all day."
+    },
+    {
+      "name": "STWB Stadtwerke Bamberg GmbH",
+      "aliases": ["Stadtwerke Bamberg", "Stadtwerke Bamberg GmbH", "Stadtwerke Bamberg Verkehrs- und Park GmbH", "STWB"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official current page states 0.62 EUR/kWh ad-hoc by QR and names sites with/without blocking fees, but does not publish the exact ad-hoc blocking amount at affected facilities; current station-level discovery also shows 0.70 EUR/kWh on some DE*LVP EVSEs. No third-party value is promoted over the operator source."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical":"Stadtwerke Villingen-Schwenningen GmbH","aliases":["SVS","Stadtwerke Villingen-Schwenningen","SVS Energie"],"sharedPrefix":"DE*RLA"},
+    {"canonical":"Stadtwerke Bayreuth Holding GmbH","aliases":["Stadtwerke Bayreuth","SW Bayreuth"],"sharedPrefix":"DE*LVP"},
+    {"canonical":"STWB Stadtwerke Bamberg GmbH","aliases":["Stadtwerke Bamberg","Stadtwerke Bamberg GmbH","Stadtwerke Bamberg Verkehrs- und Park GmbH","STWB"],"sharedPrefix":"DE*LVP"}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-villingen-schwenningen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-bayreuth-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-bamberg-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "sharedPrefixMisclassifiedAsExclusive": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue corrected BNetzA first-pass queue with operators absent from direct-offer, research, deferred and first-pass evidence"]
+}
