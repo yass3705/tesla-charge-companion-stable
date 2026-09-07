@@ -1,0 +1,63 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 19,
+  "forwardSliceStatus": {
+    "complete": 1,
+    "partial": 18,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Sindelfingen GmbH",
+      "aliases": ["Stadtwerke Sindelfingen", "SWS Sindelfingen"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator page publishes direct payment at 0.56 EUR/kWh for public stations up to 22 kW, no activation fee, plus 0.05 EUR/min blocking fee starting 30 minutes after charging has ended. Third-party roaming remains excluded."
+    },
+    {
+      "name": "SWP Stadtwerke Pforzheim GmbH & Co. KG",
+      "aliases": ["SWP Stadtwerke Pforzheim", "Stadtwerke Pforzheim"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "DE*SPF station identity is supported, but the current official site exposes app operation without a current 2026 universal direct-payment tariff. Older official 0.39 EUR/kWh and current third-party station observations around 0.48 EUR/kWh are not extrapolated."
+    },
+    {
+      "name": "Stadtwerke Aalen GmbH",
+      "aliases": ["Stadtwerke Aalen", "SW Aalen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current station-level sources show ad-hoc capability and 0.35 EUR/kWh on some shared-prefix DE*BDO EVSEs, but no current official operator-wide tariff or exclusive eMI3 prefix is established."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-sindelfingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-pforzheim-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-aalen-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "sharedPrefixMisclassifiedAsExclusive": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": [
+    "next unseen CPOs after PR #69 changed-file anti-duplicate check"
+  ]
+}
