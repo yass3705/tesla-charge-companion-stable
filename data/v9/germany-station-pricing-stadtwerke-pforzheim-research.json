@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "SWP Stadtwerke Pforzheim GmbH & Co. KG",
+  "aliases": ["SWP Stadtwerke Pforzheim", "SWP Stadtwerke Pforzheim GmbH&Co.KG", "Stadtwerke Pforzheim"],
+  "emi3Evidence": ["DE*SPF"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial-deferred",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "operatorPage": "https://www.stadtwerke-pforzheim.de/energieloesungen/elektromobilitaet/oeffentliches-laden/",
+    "operatorStatement": "SWP operates most public charging stations in Pforzheim and activates/payment through the SWP Autostrom app.",
+    "officialPriceLead": "A SWP press page states an Autostrom-app price of 0.39 EUR/kWh, but the publication predates the current 2026 verification and does not establish a universal direct/ad-hoc tariff for every station.",
+    "officialPriceSource": "https://www.stadtwerke-pforzheim.de/presse/artikel/einweihung-e-ladesaeulen/"
+  },
+  "stationEvidence": {
+    "prefix": "DE*SPF",
+    "examples": ["DE*SPF*E10074*001", "DE*SPF*E10074*002", "DE*SPF*E10055*001", "DE*SPF*E10055*002"],
+    "observation": "Current third-party station sources show SWP-operated DE*SPF EVSEs and station-level direct-payment values around 0.48 EUR/kWh on some AC points. These are discovery evidence only and are not promoted to a network tariff."
+  },
+  "decision": "Operator identity and DE*SPF station mapping are supported, but the current 2026 universal direct-payment tariff is not authoritatively published. Keep station-level values separate and defer network pricing until a current SWP checkout/app or QR/public backend exposes exact per-EVSE prices."
+}
