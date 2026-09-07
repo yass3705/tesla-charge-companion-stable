@@ -1,0 +1,40 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Balingen",
+  "aliases": ["Stadtwerke Balingen Eigenbetrieb", "SW Balingen"],
+  "firstPassDate": "2026-09-07",
+  "status": "partial",
+  "deferred": true,
+  "operatorEvidence": {
+    "officialNetworkPage": "https://www.stadtwerke.balingen.de/de/Mobilitaet/Oeffentliche-Ladeinfrastruktur/",
+    "summary": "Official page says Stadtwerke Balingen operate 38 charging points in the city, including AC and higher-power sites."
+  },
+  "pricingEvidence": [
+    {
+      "scope": "older AC QR system",
+      "source": "https://www.stadtwerke.balingen.de/de/Home/Aktuelles/Pressemeldungen/Pressemitteilungen/E-Ladesaeulen-offiziell-eingeweiht.html",
+      "published": "2019-07-25",
+      "directPayment": true,
+      "activation": "QR to emobility.community",
+      "pricingType": "time tariff",
+      "historicalOnly": true,
+      "note": "Too old for a 2026 fallback and therefore retained as discovery evidence only."
+    },
+    {
+      "scope": "current DC sites Wasserwiesen / Heinzlenstraße",
+      "source": "Mobilithek/BNetzA-derived station observations via Automatenwegweiser",
+      "observedEurPerKwh": 0.65,
+      "observedPayment": ["credit card", "debit card", "website"],
+      "evseExamples": ["DE*SMA*EDE7003673*001DC", "DE*SMA*EDE7003673*002DC", "DE*SMA*EDE8414218*001DC"],
+      "note": "Station-level observation only. DE*SMA identifies the technical/payment operator context and is not treated as an exclusive Stadtwerke Balingen prefix."
+    }
+  ],
+  "emi3": {
+    "exclusivePrefixEstablished": false,
+    "observedSharedOrBackendPrefix": "DE*SMA",
+    "note": "Do not alias DE*SMA exclusively to Stadtwerke Balingen."
+  },
+  "classificationReason": "The CPO/network is official and current station-level evidence exposes 0.65 EUR/kWh on some DC sites, but no official 2026 network-wide direct-price matrix was found and older QR time tariffs cannot be assumed current.",
+  "unblockNeeds": ["official current direct-payment price sheet", "or station/EVSE-level checkout coverage for every active Stadtwerke Balingen site"],
+  "policy": "fail-closed; station samples are not generalized"
+}
