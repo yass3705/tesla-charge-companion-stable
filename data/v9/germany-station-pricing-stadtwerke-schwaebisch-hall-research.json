@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Haller Mobilität & Wärme GmbH",
+  "aliases": ["Haller Mobilität und Wärme GmbH", "HMW", "Stadtwerke Schwäbisch Hall", "Stadtwerke Hall"],
+  "status": "complete",
+  "sourceUrl": "https://stadtwerke-hall.de/tarife-angebote/mobilitaet-hallkarte/elektromobilitaet",
+  "supportingSourceUrl": "https://stadtwerke-hall.de/hmw",
+  "directPayment": {
+    "channel": "Charge it easy direct charging / app or QR",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "pricePerKwh": 0.57,
+    "connectorKinds": ["AC"]
+  },
+  "scope": "Current official e-mobility page states 0.57 EUR/kWh for contract-free direct charging at the operator's 25 charging stations. Public charging assets were transferred to subsidiary Haller Mobilität & Wärme GmbH from 2025 while Stadtwerke Schwäbisch Hall continues billing/marketing.",
+  "policy": "Do not mix HallKarte 0.49 EUR/kWh, short-term parking-card 0.60 EUR/kWh, parking fees, or roaming prices with the direct-payment CPO tariff."
+}
