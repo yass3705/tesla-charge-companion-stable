@@ -1,0 +1,43 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Waiblingen GmbH",
+  "aliases": ["Stadtwerke Waiblingen", "SWW Waiblingen"],
+  "firstPassDate": "2026-09-07",
+  "status": "partial",
+  "deferred": true,
+  "operatorEvidence": {
+    "officialNetworkPage": "https://www.stadtwerke-waiblingen.de/laden-von-unterwegs.html",
+    "summary": "Official page confirms a public Stadtwerke Waiblingen charging network, operated technically by subsidiary Nachhaltige Energielösungen Waiblingen GmbH, and direct payment without contract through eCharge+."
+  },
+  "pricingEvidence": [
+    {
+      "scope": "official network",
+      "source": "https://www.stadtwerke-waiblingen.de/laden-von-unterwegs.html",
+      "directPayment": true,
+      "activation": "eCharge+ direct payment without contract",
+      "pricePublishedOnPage": false,
+      "note": "Official page confirms ad-hoc/direct access but does not publish the direct tariff."
+    },
+    {
+      "scope": "Schorndorfer Straße 67 station",
+      "source": "GoingElectric station observation",
+      "observedAdHocEurPerKwh": 0.45,
+      "directPayment": true,
+      "note": "Useful station-level discovery evidence only; not generalized."
+    },
+    {
+      "scope": "Erbachstraße 12 station",
+      "source": "GoingElectric station observation",
+      "observedAdHocEurPerKwh": 0.49,
+      "directPayment": true,
+      "note": "Different observed station price demonstrates that a single network fallback would be unsafe without official scope/versioning."
+    }
+  ],
+  "emi3": {
+    "exclusivePrefixEstablished": false,
+    "note": "No authoritative exclusive eMI3 prefix established during first pass."
+  },
+  "classificationReason": "Official direct payment exists but its price is not published on the operator page; station observations differ (0.45 vs 0.49 EUR/kWh), so no network-wide tariff is inferred.",
+  "unblockNeeds": ["current eCharge+ checkout data for each SW Waiblingen EVSE", "or an official station-level/direct-payment price list"],
+  "policy": "fail-closed; differing station observations prevent fallback extrapolation"
+}
