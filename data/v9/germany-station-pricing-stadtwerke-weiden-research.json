@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Weiden i.d.OPf.",
+  "aliases": ["Stadtwerke Weiden", "SW Weiden"],
+  "status": "partial",
+  "deferred": true,
+  "sourceUrl": "https://www.stadtwerke-weiden.de/energiezukunft/elektromobilitaet.html",
+  "effectiveFrom": "2026-01-01",
+  "officialStationScope": [
+    "Parkdeck Naabwiesen, Leibnizstr. 20, 92637 Weiden",
+    "Tiefgarage Allee, Bürgermeister-Prechtl-Str. 26, 92637 Weiden",
+    "Neues Rathaus Weiden, Dr.-Pfleger-Str. 15, 92637 Weiden",
+    "IHK Weiden, Brenner-Schäffer-Str. 26, 92637 Weiden"
+  ],
+  "directPayment": {
+    "channel": "NFC-capable bank card, Apple Pay or Google Pay",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "pricesPerKwh": {"AC": 0.52}
+  },
+  "customerOffer": {
+    "channel": "ChargePoint app",
+    "pricePerKwhAc": 0.39,
+    "eligibility": "Stadtwerke Weiden electricity customers",
+    "technicalExclusion": "Existing Eisstadion/Gaswerkstr charging points are excluded from the discounted customer offer for technical reasons."
+  },
+  "scope": "Official 2026 page ties the tariff table to the newly installed public 22 kW stations listed on the page. It does not prove a single network-wide ad-hoc tariff for every older Stadtwerke Weiden EVSE.",
+  "policy": "Retain 0.52 EUR/kWh as verified direct pricing for the listed AC stations only. Do not generalize it to older EVSEs; third-party station observations showing different direct prices remain discovery evidence only."
+}
