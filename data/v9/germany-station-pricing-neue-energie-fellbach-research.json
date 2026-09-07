@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Neue Energie Fellbach GmbH",
+  "aliases": ["NEF", "Neue Energie Fellbach", "Stadtwerke Fellbach charging network", "SWF Ladeinfrastruktur"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "complete-tariff",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "operatorSource": "https://www.stadtwerke-fellbach.de/oelis",
+    "adHocPriceSheet": "https://www.stadtwerke-fellbach.de/de/E-Mobilitaet1/Oeffentliche-Ladeinfrastruktur/Preisblatt-NEF-ad-hoc-2026.pdf",
+    "networkScope": "Charging stations operated by Neue Energie Fellbach GmbH, the 100% Stadtwerke Fellbach subsidiary that took over the public charging infrastructure.",
+    "directPayment": "Official 2026 price sheet explicitly covers spontaneous charging without a charging contract.",
+    "ac": {"pricePerKwhEur": 0.54, "startFeeEur": 1.0, "blockingFee":{"afterMinutes":241,"pricePerMinuteEur":0.10}},
+    "dc": {"pricePerKwhEur": 0.64, "startFeeEur": 1.0, "blockingFee":{"afterMinutes":91,"pricePerMinuteEur":0.20}},
+    "effectiveFrom": "2026-01-12"
+  },
+  "identityEvidence": {
+    "observedEvsePrefix": "DE*FEL",
+    "sampleEvseIds": ["DE*FEL*ENEF10023*001", "DE*FEL*ENEF10023*002"],
+    "policy": "Prefix is recorded as supporting station identity; no broader ownership inference beyond verified NEF stations."
+  },
+  "decision": "Current official ad-hoc price sheet supplies exact AC/DC direct prices, session start fee and blocking rules for NEF-operated stations. Contract/customer prices and roaming remain separate."
+}
