@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Passau GmbH",
+  "aliases": ["Stadtwerke Passau", "SWP Passau"],
+  "status": "complete",
+  "sourceUrl": "https://www.stadtwerke-passau.de/e-mobilitaet",
+  "directPayment": {
+    "channel": "webbasierte Ladelösung / QR",
+    "registrationRequired": false,
+    "pricePerKwh": 0.65,
+    "currency": "EUR",
+    "connectorKinds": ["AC"],
+    "activationFee": 0,
+    "monthlyFee": 0,
+    "blockingFee": null
+  },
+  "scope": "Official current SWP page states 0.65 EUR/kWh for all SWP AC charging stations, paid by credit card, with no activation fee, base fee, minute tariff or other additional costs.",
+  "policy": "Do not propagate SWP/EnBW or other roaming-card prices to third-party CPOs."
+}
