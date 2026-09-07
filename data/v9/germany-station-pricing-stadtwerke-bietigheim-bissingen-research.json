@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Bietigheim-Bissingen GmbH",
+  "aliases": ["Stadtwerke Bietigheim-Bissingen", "SWBB", "SW·BB", "Energie Service Bietigheim-Bissingen GmbH"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentPublicTariffMatrixFound": false,
+    "networkEvidenceSource": "https://www.sw-bb.de/_Resources/Persistent/8/1/5/d/815db1b80322f03318456602c0d3e844991c167f/2024-04-08%20Pressemitteilung%20Stadtwerke%20Bietigheim-Bissingen%20Ladenetz.pdf",
+    "networkEvidence": "SWBB documents its own public charging infrastructure and multiple AC/HPC locations in Bietigheim-Bissingen, Oberriexingen and Sersheim.",
+    "adhocEvidenceSource": "https://www.sw-bb.de/_Resources/Persistent/9/e/8/6/9e862c4c65fd1242df57513db5b20491ed779ab7/AGB_SWBB-Ladekarte.pdf",
+    "adhocEvidence": "The current published AGB explicitly supports ad-hoc charging by scanning the QR code on the charger, entering card details, selecting a tariff before charging, and receiving a PDF invoice afterwards. A 50 EUR card reservation is a temporary authorization, not a charging fee.",
+    "legalOperatorEvidenceSource": "https://www.sw-bb.de/_Resources/Persistent/7/4/1/f/741f7c84c713f2503005aca9d097e8c54c94b05c/agb-esbb.pdf",
+    "legalOperatorEvidence": "Energie Service Bietigheim-Bissingen GmbH is documented as operating EV charging infrastructure and enabling ad-hoc and roaming use, creating a legal/operator alias that must not be mistaken for a separate physical-network tariff without station linkage."
+  },
+  "pricingEvidence": {
+    "networkWideCurrentAdHocMatrixPublished": false,
+    "exactCurrentStationPriceFound": false,
+    "inferenceApplied": false,
+    "reasonNotPromoted": "The official AGB confirms that the customer selects a tariff during QR self-registration but does not expose the current numeric ad-hoc tariff sheet publicly in the accessible source set."
+  },
+  "decision": "Keep partial/fail-closed. Ad-hoc availability is authoritative, but no current numeric 2026 direct price is attached to a station/EVSE in the public documents reviewed.",
+  "neededToClose": "Obtain the current SWBB/ESBB QR self-registration tariff payload or an official current Preisblatt with explicit ad-hoc values and scope, preferably tied to an EVSE or station class."
+}
