@@ -1,0 +1,69 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 49,
+  "forwardSliceStatus": {
+    "complete": 14,
+    "partial": 35,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 542,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Ansbacher Bäder und Verkehrs GmbH",
+      "aliases": ["ABuV", "Stadtwerke Ansbach charging network", "StwAN public charging"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Physical CPO ownership moved to ABuV in January 2025. Current official LVPlus pricing effective September 2026 exposes app normal prices and blocking fees, but no current numeric ad-hoc column; station-level 0.70 EUR/kWh evidence is not generalized."
+    },
+    {
+      "name": "Stadtwerke Weiden i.d.OPf.",
+      "aliases": ["Stadtwerke Weiden", "SW Weiden"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official 2026 page verifies 0.52 EUR/kWh contract-free NFC/card/mobile-wallet AC pricing for four named new stations, but older Stadtwerke Weiden EVSEs are not proven to share the same direct tariff."
+    },
+    {
+      "name": "ecowerk e-charge GmbH",
+      "aliases": ["Stadtwerke Tübingen charging network", "TüStrom Ladestation", "Lade TüStrom"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official 2026 Stadtwerke publication gives public Lade TüStrom app prices of 0.42 EUR/kWh AC and 0.58 EUR/kWh DC and identifies ecowerk as physical operator, but a universal contract-free QR/card price is not proven."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical": "Ansbacher Bäder und Verkehrs GmbH", "aliases": ["ABuV", "Stadtwerke Ansbach charging network", "StwAN public charging"], "note": "Stadtwerke Ansbach remains eMSP; ABuV is physical CPO since 2025-01-01."},
+    {"canonical": "Stadtwerke Weiden i.d.OPf.", "aliases": ["Stadtwerke Weiden", "SW Weiden"]},
+    {"canonical": "ecowerk e-charge GmbH", "aliases": ["Stadtwerke Tübingen charging network", "TüStrom Ladestation", "Lade TüStrom"], "note": "ecowerk e-charge GmbH is the Stadtwerke Tübingen subsidiary operating the public charging infrastructure."}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-ansbach-abuv-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-weiden-research.json",
+    "data/v9/germany-station-pricing-tuebingen-ecowerk-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "thirdPartyRoamingPromotedToPhysicalCpo": false,
+    "emspPricePromotedToAdhocWithoutProof": false,
+    "ownershipTransitionIgnored": false,
+    "sharedNetworkTariffPropagatedAcrossCpos": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact historical-global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue branch-aware BNetzA first-pass queue; prioritize current official direct-payment sources; defer Ansbach ad-hoc until a current LVPlus direct checkout is exposed; scope Weiden tariff to proven stations only; keep Tübingen app tariff separate from ad-hoc"]
+}
