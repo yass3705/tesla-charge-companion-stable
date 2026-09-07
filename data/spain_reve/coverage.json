@@ -1,0 +1,1133 @@
+{
+  "connectors": {
+    "embeddedTariffReference": {
+      "count": 0,
+      "pct": 0.0,
+      "total": 46894
+    },
+    "format": {
+      "count": 46894,
+      "pct": 100.0,
+      "total": 46894
+    },
+    "maxAmperage": {
+      "count": 46894,
+      "pct": 100.0,
+      "total": 46894
+    },
+    "maxElectricPower": {
+      "count": 46894,
+      "pct": 100.0,
+      "total": 46894
+    },
+    "maxVoltage": {
+      "count": 46894,
+      "pct": 100.0,
+      "total": 46894
+    },
+    "powerType": {
+      "count": 46894,
+      "pct": 100.0,
+      "total": 46894
+    },
+    "standard": {
+      "count": 46894,
+      "pct": 100.0,
+      "total": 46894
+    },
+    "total": 46894
+  },
+  "country": "ES",
+  "cpos": {
+    "distinct": 148,
+    "items": [
+      {
+        "connectors": 1768,
+        "cpoName": "(ZUNDER) Grupo Easychargar SA",
+        "evses": 1768,
+        "locations": 439,
+        "partyId": "ZUN"
+      },
+      {
+        "connectors": 1713,
+        "cpoName": "ACCIONA Recarga",
+        "evses": 1542,
+        "locations": 421,
+        "partyId": "ARE"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ADURIZ ENERGIA SLU",
+        "evses": 9,
+        "locations": 2,
+        "partyId": "ADU"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "AJUNTAMENT D'INCA",
+        "evses": 6,
+        "locations": 6,
+        "partyId": "INC"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "AJUNTAMENT D'OS DE BALAGUER",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "256"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "AJUNTAMENT DE BUNYOLA",
+        "evses": 6,
+        "locations": 4,
+        "partyId": "814"
+      },
+      {
+        "connectors": 25,
+        "cpoName": "AJUNTAMENT DE CALVIÀ",
+        "evses": 25,
+        "locations": 25,
+        "partyId": "CAL"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "AJUNTAMENT DE COSTITX",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "9A8"
+      },
+      {
+        "connectors": 24,
+        "cpoName": "AJUNTAMENT DE SANT LLUIS",
+        "evses": 24,
+        "locations": 24,
+        "partyId": "710"
+      },
+      {
+        "connectors": 12,
+        "cpoName": "AJUNTAMENT DE SANTA MARIA DEL CAMI",
+        "evses": 6,
+        "locations": 6,
+        "partyId": "056"
+      },
+      {
+        "connectors": 28,
+        "cpoName": "AJUNTAMENT DES CASTELL",
+        "evses": 12,
+        "locations": 12,
+        "partyId": "CAS"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "ALGUPIBE, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "927"
+      },
+      {
+        "connectors": 33,
+        "cpoName": "Allego Spain S.L.U",
+        "evses": 33,
+        "locations": 1,
+        "partyId": "ALL"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "ANARGO 2002 SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "ARG"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "ARETE MACENAS HOTELES, S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "MCN"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "ARTEALCA SL",
+        "evses": 4,
+        "locations": 1,
+        "partyId": "BEX"
+      },
+      {
+        "connectors": 16,
+        "cpoName": "ATENCO ENERGIA, SL",
+        "evses": 16,
+        "locations": 3,
+        "partyId": "CAN"
+      },
+      {
+        "connectors": 377,
+        "cpoName": "Atlante Iberia S.L.",
+        "evses": 377,
+        "locations": 104,
+        "partyId": "ATE"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "AUTOCARES DIPESA SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "DIP"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "AUTOMOVILES ARTAL, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "928"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Autos Pisa SL",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "925"
+      },
+      {
+        "connectors": 25,
+        "cpoName": "AYUNTAMIENTO DE FELANITX",
+        "evses": 13,
+        "locations": 13,
+        "partyId": "FEL"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "AYUNTAMIENTO DE FONZ",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "FZ4"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "AYUNTAMIENTO DE GUADALIX DE LA SIERRA",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "GDS"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "ayuntamiento de Navas del Rey",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "099"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Ayuntamiento de Urkabustaiz",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "054"
+      },
+      {
+        "connectors": 7,
+        "cpoName": "Baix Ebre Innova SL",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "259"
+      },
+      {
+        "connectors": 93,
+        "cpoName": "BARCELONA DE SERVEIS MUNICIPALS, SA",
+        "evses": 93,
+        "locations": 41,
+        "partyId": "BSM"
+      },
+      {
+        "connectors": 5,
+        "cpoName": "Barter Mobility S.L.",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "BGO"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "BEASAINGO UDALA",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "BEA"
+      },
+      {
+        "connectors": 417,
+        "cpoName": "BONPREU, S.A.U.",
+        "evses": 357,
+        "locations": 61,
+        "partyId": "BEM"
+      },
+      {
+        "connectors": 12,
+        "cpoName": "C.C. LAS RAMBLAS CENTRO S.L.",
+        "evses": 12,
+        "locations": 1,
+        "partyId": "CCR"
+      },
+      {
+        "connectors": 114,
+        "cpoName": "CENTROS COMERCIALES CARREFOUR SA",
+        "evses": 56,
+        "locations": 54,
+        "partyId": "CRF"
+      },
+      {
+        "connectors": 105,
+        "cpoName": "CHARG-ELECTRA SPAIN SL",
+        "evses": 105,
+        "locations": 14,
+        "partyId": "ELC"
+      },
+      {
+        "connectors": 13,
+        "cpoName": "Chargepoint",
+        "evses": 13,
+        "locations": 5,
+        "partyId": "CPI"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "CHARGEVITE ENERGY SLU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "CHV"
+      },
+      {
+        "connectors": 62,
+        "cpoName": "Charging Together Norte SL",
+        "evses": 62,
+        "locations": 8,
+        "partyId": "CHT"
+      },
+      {
+        "connectors": 2337,
+        "cpoName": "CHARGING TOGETHER SL",
+        "evses": 2094,
+        "locations": 511,
+        "partyId": "FCT"
+      },
+      {
+        "connectors": 16,
+        "cpoName": "CHELMONTE, SL",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "CH1"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "Club Nàutic l'Escala",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "68C"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "COMPAÑIA GENERAL NAFTE, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "B86"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "Comunidad de Bienes Aparcamientos Primero de Mayo",
+        "evses": 6,
+        "locations": 1,
+        "partyId": "CBM"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "CONCELLO DE VEDRA",
+        "evses": 4,
+        "locations": 2,
+        "partyId": "VDR"
+      },
+      {
+        "connectors": 126,
+        "cpoName": "Consejo Insular de la Energía de Gran Canaria",
+        "evses": 102,
+        "locations": 56,
+        "partyId": "MGC"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "Consell Insular de Menorca",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "CM3"
+      },
+      {
+        "connectors": 18,
+        "cpoName": "COSENTINO INDUSTRIAL, S.A.U.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "CSN"
+      },
+      {
+        "connectors": 118,
+        "cpoName": "COSTCO WHOLESALE SPAIN SLU",
+        "evses": 59,
+        "locations": 10,
+        "partyId": "071"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "COVES ENERGY SOLUTIONS SL",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "CES"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Darsen Motor S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "912"
+      },
+      {
+        "connectors": 54,
+        "cpoName": "Diputación Foral de Gipuzkoa",
+        "evses": 54,
+        "locations": 22,
+        "partyId": "200"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "DIRAN S.A.",
+        "evses": 3,
+        "locations": 1,
+        "partyId": "DIR"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Ditec Automoviles Barcelona S.L.U.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "916"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "Ditec Hanstein SA",
+        "evses": 4,
+        "locations": 4,
+        "partyId": "924"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "DORSOL, SAU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "DRS"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "DRIVECO ESPAÑA S.L.",
+        "evses": 6,
+        "locations": 2,
+        "partyId": "DRV"
+      },
+      {
+        "connectors": 8,
+        "cpoName": "EDISON NEXT SPAIN SLU",
+        "evses": 8,
+        "locations": 4,
+        "partyId": "EDX"
+      },
+      {
+        "connectors": 1651,
+        "cpoName": "EDP CLIENTES SAU",
+        "evses": 1584,
+        "locations": 456,
+        "partyId": "GFX"
+      },
+      {
+        "connectors": 10,
+        "cpoName": "EFICIENCIA Y SERVICIOS RENOVABLES SL",
+        "evses": 5,
+        "locations": 2,
+        "partyId": "SER"
+      },
+      {
+        "connectors": 99,
+        "cpoName": "ELECSUM FOTOVOLTAICA, S.L.U.",
+        "evses": 84,
+        "locations": 15,
+        "partyId": "EL5"
+      },
+      {
+        "connectors": 55,
+        "cpoName": "Electrica Sollerense SA",
+        "evses": 55,
+        "locations": 13,
+        "partyId": "SOL"
+      },
+      {
+        "connectors": 1709,
+        "cpoName": "ELECTROMAPS SL",
+        "evses": 1709,
+        "locations": 543,
+        "partyId": "EMP"
+      },
+      {
+        "connectors": 219,
+        "cpoName": "EMAYA, S.A.",
+        "evses": 110,
+        "locations": 110,
+        "partyId": "EMA"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "Emerix Systems S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "MRX"
+      },
+      {
+        "connectors": 190,
+        "cpoName": "Emovili Fast, S.L.",
+        "evses": 190,
+        "locations": 47,
+        "partyId": "EMO"
+      },
+      {
+        "connectors": 277,
+        "cpoName": "Empresa Municipal de Transportes de Madrid, S. A.",
+        "evses": 277,
+        "locations": 24,
+        "partyId": "EMT"
+      },
+      {
+        "connectors": 4928,
+        "cpoName": "ENDESA X WAY, S.L.",
+        "evses": 4927,
+        "locations": 2565,
+        "partyId": "ESX"
+      },
+      {
+        "connectors": 83,
+        "cpoName": "ENERGEA CONSULTING Y ASESORES SL",
+        "evses": 42,
+        "locations": 33,
+        "partyId": "ENE"
+      },
+      {
+        "connectors": 48,
+        "cpoName": "Energía Distribuida del Norte S.A.",
+        "evses": 48,
+        "locations": 24,
+        "partyId": "CEL"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "EPRESA ENERGIA SA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "EPR"
+      },
+      {
+        "connectors": 1156,
+        "cpoName": "ERANOVUM E-MOBILITY, S.L.",
+        "evses": 1156,
+        "locations": 334,
+        "partyId": "ERA"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "ESTACION DE SERVICIO AYALA S.L.",
+        "evses": 3,
+        "locations": 1,
+        "partyId": "AYA"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "ESTACION DE SERVICIO LAPIDO SLU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "357"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "ESTACION DE SERVICIO LOW COST 2015, S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "728"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "ESTACION DE SERVICIO VILLAROSA S.A.",
+        "evses": 3,
+        "locations": 1,
+        "partyId": "VIL"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ESTACION SERVICIO JAIME I, S.A.",
+        "evses": 3,
+        "locations": 3,
+        "partyId": "JA1"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ESTACIONAMIENTOS LUCENSES SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "271"
+      },
+      {
+        "connectors": 1925,
+        "cpoName": "Etecnic Movilidad Electrica, SRL",
+        "evses": 1796,
+        "locations": 759,
+        "partyId": "ETE"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "EXPLOTACIONES INDUSTRIALES LOS RODEOS,S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "220"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Explotaciones IOndustriales Sur de Tenerife SL",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "275"
+      },
+      {
+        "connectors": 20,
+        "cpoName": "FASTNED ESPAÑA, S.L.",
+        "evses": 16,
+        "locations": 2,
+        "partyId": "FAS"
+      },
+      {
+        "connectors": 466,
+        "cpoName": "FENIE ENERGIA, SA",
+        "evses": 406,
+        "locations": 223,
+        "partyId": "FEN"
+      },
+      {
+        "connectors": 23,
+        "cpoName": "FERROVIAL CONSTRUCCIÓN S.A.",
+        "evses": 12,
+        "locations": 10,
+        "partyId": "FES"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "FERVI, SL.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "333"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "FUNDACIO BALEAR D'INNOVACIÓ I TECNOLOGIA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "FB1"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "FUNDACION PAIDEIA GALIZA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "910"
+      },
+      {
+        "connectors": 12,
+        "cpoName": "Gaia Green Tech S.L.",
+        "evses": 4,
+        "locations": 4,
+        "partyId": "GAI"
+      },
+      {
+        "connectors": 767,
+        "cpoName": "Galp Energía España, S.A.U.",
+        "evses": 762,
+        "locations": 400,
+        "partyId": "DLP"
+      },
+      {
+        "connectors": 65,
+        "cpoName": "GESTION INTELIGENTE DE CARGAS S.L.",
+        "evses": 63,
+        "locations": 21,
+        "partyId": "GIC"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Girona Motor SA",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "918"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "GRUP SUPECO MAXOR SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "GSM"
+      },
+      {
+        "connectors": 22,
+        "cpoName": "H2PLT,S.A.",
+        "evses": 22,
+        "locations": 1,
+        "partyId": "H2P"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "HERNAZOS GESTIÓN S.L",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "HDT"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "HOTEL CIUDAD DE ALCAÑIZ SA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "A44"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "HOTEL PEDRO I DE ARAGON SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "B22"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "HOTEL PUENTE DE LA TOJA S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "PLT"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "HOTELES SOL DEL SUR, SA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "HSS"
+      },
+      {
+        "connectors": 9463,
+        "cpoName": "IBERDROLA CLIENTES S.A.U",
+        "evses": 8475,
+        "locations": 2288,
+        "partyId": "IBD"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Ibérica de Tecnología y Servicios de Automoción, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "914"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "Ingenieria de Recarga SLU",
+        "evses": 3,
+        "locations": 2,
+        "partyId": "686"
+      },
+      {
+        "connectors": 8,
+        "cpoName": "INMOMEDIC 09, S.L.U.",
+        "evses": 4,
+        "locations": 1,
+        "partyId": "I09"
+      },
+      {
+        "connectors": 36,
+        "cpoName": "InstaVolt ES",
+        "evses": 19,
+        "locations": 4,
+        "partyId": "ICP"
+      },
+      {
+        "connectors": 10,
+        "cpoName": "Inversiones Pascual",
+        "evses": 5,
+        "locations": 5,
+        "partyId": "HVR"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "INVESMORAZO S.L",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "IPM"
+      },
+      {
+        "connectors": 15,
+        "cpoName": "ION SMART ENERGY 2000 SL",
+        "evses": 15,
+        "locations": 8,
+        "partyId": "CRE"
+      },
+      {
+        "connectors": 172,
+        "cpoName": "IONITY GmbH Sucursal en España",
+        "evses": 172,
+        "locations": 43,
+        "partyId": "IOY"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "J. REDONDO, S.L.",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "JR1"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "ALT"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Jarada Motor, S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "919"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "JARDINES LA TEJERA, S.A.U.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "TJR"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "LAG OLEIROS SLU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "010"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "LCG"
+      },
+      {
+        "connectors": 861,
+        "cpoName": "MAKSU ESPAÑA SL",
+        "evses": 861,
+        "locations": 109,
+        "partyId": "EPK"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Marbella Premium SL",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "922"
+      },
+      {
+        "connectors": 4,
+        "cpoName": "MED PLAYA MANAGEMENT, SLU",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "MPM"
+      },
+      {
+        "connectors": 252,
+        "cpoName": "MOEVE COMMERCIAL, SAU",
+        "evses": 252,
+        "locations": 120,
+        "partyId": "MOE"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Motor Box Mallorca SL",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "915"
+      },
+      {
+        "connectors": 12,
+        "cpoName": "Moya Estaciones Electricas SL",
+        "evses": 12,
+        "locations": 1,
+        "partyId": "MOY"
+      },
+      {
+        "connectors": 126,
+        "cpoName": "Naturgy Nuevas Energías, SLU",
+        "evses": 115,
+        "locations": 30,
+        "partyId": "NTG"
+      },
+      {
+        "connectors": 59,
+        "cpoName": "OESTE SOLUCIONES ENERGETICAS, S.L.",
+        "evses": 59,
+        "locations": 28,
+        "partyId": "OSE"
+      },
+      {
+        "connectors": 10,
+        "cpoName": "PARKING MOGAN SA",
+        "evses": 10,
+        "locations": 1,
+        "partyId": "PMO"
+      },
+      {
+        "connectors": 94,
+        "cpoName": "PAVAPARK MOVILIDAD SL",
+        "evses": 94,
+        "locations": 41,
+        "partyId": "PAV"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "PETREM DISTRIBUCIO SA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "PTM"
+      },
+      {
+        "connectors": 6,
+        "cpoName": "PETRO PALOL, S.L.",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "843"
+      },
+      {
+        "connectors": 30,
+        "cpoName": "PLENOIL CANARIAS, S.L.U.",
+        "evses": 30,
+        "locations": 15,
+        "partyId": "PLC"
+      },
+      {
+        "connectors": 387,
+        "cpoName": "PLENOIL, S.L.",
+        "evses": 387,
+        "locations": 194,
+        "partyId": "PLE"
+      },
+      {
+        "connectors": 8,
+        "cpoName": "PORSAMADRID, S.L.",
+        "evses": 8,
+        "locations": 8,
+        "partyId": "920"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Porsatecnic S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "926"
+      },
+      {
+        "connectors": 47,
+        "cpoName": "Powergo Public SL",
+        "evses": 47,
+        "locations": 11,
+        "partyId": "PGO"
+      },
+      {
+        "connectors": 116,
+        "cpoName": "Prio Recharge Sl.",
+        "evses": 116,
+        "locations": 57,
+        "partyId": "PRR"
+      },
+      {
+        "connectors": 1191,
+        "cpoName": "Punto Recargas SL",
+        "evses": 1181,
+        "locations": 137,
+        "partyId": "PWH"
+      },
+      {
+        "connectors": 597,
+        "cpoName": "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
+        "evses": 597,
+        "locations": 59,
+        "partyId": "IPK"
+      },
+      {
+        "connectors": 234,
+        "cpoName": "QWELLO España SL",
+        "evses": 188,
+        "locations": 117,
+        "partyId": "AEQ"
+      },
+      {
+        "connectors": 423,
+        "cpoName": "REMO SUSTAINABLE MOBILITY S.L",
+        "evses": 423,
+        "locations": 120,
+        "partyId": "RSM"
+      },
+      {
+        "connectors": 7061,
+        "cpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA",
+        "evses": 4779,
+        "locations": 1926,
+        "partyId": "REP"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "SCL AGROPIENSO F22009468",
+        "evses": 2,
+        "locations": 1,
+        "partyId": "F22"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "SERVEIS FERROVIARIS DE MALLORCA",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "SFM"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "SERVICIOS PUENTE LIÑARES SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "SPL"
+      },
+      {
+        "connectors": 1,
+        "cpoName": "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "TX1"
+      },
+      {
+        "connectors": 1248,
+        "cpoName": "Tesla Spain SLU",
+        "evses": 1159,
+        "locations": 103,
+        "partyId": "TSL"
+      },
+      {
+        "connectors": 56,
+        "cpoName": "The F Charging Espana S.L.U.",
+        "evses": 56,
+        "locations": 14,
+        "partyId": "PWY"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Torrecillas Serna, S.A.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "923"
+      },
+      {
+        "connectors": 1013,
+        "cpoName": "Totalenergies Marketing España, S.A.U.",
+        "evses": 1006,
+        "locations": 258,
+        "partyId": "TCB"
+      },
+      {
+        "connectors": 3,
+        "cpoName": "TRANSPORTES PENADES E HIJOS SL",
+        "evses": 1,
+        "locations": 1,
+        "partyId": "B05"
+      },
+      {
+        "connectors": 2,
+        "cpoName": "Tuwyncar Sport S.L.",
+        "evses": 2,
+        "locations": 2,
+        "partyId": "913"
+      },
+      {
+        "connectors": 14,
+        "cpoName": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+        "evses": 7,
+        "locations": 5,
+        "partyId": "UMH"
+      },
+      {
+        "connectors": 1672,
+        "cpoName": "Wenea Services Spain, S.L.",
+        "evses": 1636,
+        "locations": 319,
+        "partyId": "WEN"
+      },
+      {
+        "connectors": 202,
+        "cpoName": "ZERO CARBON EMOBILITY, S.L.",
+        "evses": 202,
+        "locations": 81,
+        "partyId": "ZCN"
+      },
+      {
+        "connectors": 9,
+        "cpoName": "ZOILO RIOS, S.A.",
+        "evses": 7,
+        "locations": 3,
+        "partyId": "001"
+      }
+    ]
+  },
+  "evses": {
+    "embeddedStatus": {
+      "count": 0,
+      "pct": 0.0,
+      "total": 42180
+    },
+    "identifier": {
+      "count": 42174,
+      "pct": 99.99,
+      "total": 42180
+    },
+    "total": 42180
+  },
+  "generatedAt": "2026-09-07T00:40:56.525286Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "locations": {
+    "addressAndCity": {
+      "count": 13648,
+      "pct": 100.0,
+      "total": 13648
+    },
+    "coordinates": {
+      "count": 13648,
+      "pct": 100.0,
+      "total": 13648
+    },
+    "cpoIdentity": {
+      "count": 13648,
+      "pct": 100.0,
+      "total": 13648
+    },
+    "withEvses": {
+      "count": 13648,
+      "pct": 100.0,
+      "total": 13648
+    }
+  },
+  "schemaVersion": 1,
+  "snapshot": {
+    "complete": true,
+    "locationsStored": 13648,
+    "nextPage": 147,
+    "registryCoveragePct": 93.68,
+    "registryTotalCount": 14569,
+    "totalPages": 146
+  },
+  "source": "REVE",
+  "tariffs": {
+    "connectorTariffEndpointCollected": false,
+    "note": "Dedicated /connectors/tariffs collection is audited separately; no tariff is inferred from missing location fields."
+  }
+}
