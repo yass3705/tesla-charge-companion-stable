@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Heidenheim AG - Unternehmensgruppe",
+  "aliases": ["Stadtwerke Heidenheim", "HellensteinStrom mobil"],
+  "status": "complete",
+  "sourceUrl": "https://www.stadtwerke-heidenheim.de/ladekonditionen-hellensteinstrom-mobil.html",
+  "supportingSourceUrl": "https://www.stadtwerke-heidenheim.de/geschaeftskunden/gewerbe/mobilitaet/hellensteinstrom-mobil.html",
+  "directPayment": {
+    "channel": "QR ad-hoc with credit card",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "pricesPerKwh": {"AC": 0.59, "DC": 0.69},
+    "blockingFee": {"pricePerMinute": 0.10, "afterMinutes": 240, "capPerSession": 12.0}
+  },
+  "scope": "Official 2026 tariff for customers without a HellensteinStrom mobil charging card, paired with the official ad-hoc QR/card flow at Stadtwerke Heidenheim charging stations.",
+  "policy": "Do not propagate HellensteinStrom mobil card prices or ladenetz roaming conditions to third-party CPOs. Temporary credit-card security reservations are not tariff costs."
+}
