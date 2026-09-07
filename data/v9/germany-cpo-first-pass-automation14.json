@@ -1,0 +1,63 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 25,
+  "forwardSliceStatus": {
+    "complete": 3,
+    "partial": 22,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Neue Energie Fellbach GmbH",
+      "aliases": ["NEF", "Neue Energie Fellbach", "Stadtwerke Fellbach charging network"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official 2026 ad-hoc price sheet for NEF-operated stations gives AC 0.54 EUR/kWh + 1.00 EUR start + 0.10 EUR/min from minute 241, and DC 0.64 EUR/kWh + 1.00 EUR start + 0.20 EUR/min from minute 91."
+    },
+    {
+      "name": "Stadtwerke Schorndorf Mobil GmbH",
+      "aliases": ["Stadtwerke Schorndorf Mobil", "Stadtwerke Schorndorf", "Schorndorf Mobil"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official direct card-terminal pricing is exact for named terminal-equipped sites (AC 0.59 EUR/kWh + 0.10 EUR/min after 240 min; DC 0.69 EUR/kWh + 0.20 EUR/min after 60 min), but is not extrapolated to every operator EVSE."
+    },
+    {
+      "name": "Stadtwerke Mühlacker GmbH",
+      "aliases": ["Stadtwerke Mühlacker", "SWM Mühlacker", "SWM Muehlacker"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official SWM Ladeapp page publishes ad-hoc QR/credit-card pricing effective 2026-03-01: AC 0.65 EUR/kWh and DC 0.75 EUR/kWh, each with 0.20 EUR/min time fee after 5h AC / 3h DC capped at 24 EUR."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-neue-energie-fellbach-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-schorndorf-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-muehlacker-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "sharedPrefixMisclassifiedAsExclusive": false,
+    "auditBugDetectedAndFixed": true,
+    "auditBugDetail": "audit_germany_cpo_progress_v9.py previously ignored top-level operator fields in first-pass research files and ignored breadth-first checkpoint files, which could incorrectly return recently investigated CPOs to the untreated queue. The audit now counts both sources.",
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok_after_safe_fix"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["run corrected BNetzA progress audit and select highest-ranked genuinely unseen CPOs"]
+}
