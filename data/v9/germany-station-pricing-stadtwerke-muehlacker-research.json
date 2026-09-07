@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Mühlacker GmbH",
+  "aliases": ["Stadtwerke Mühlacker", "SWM Mühlacker", "SWM Muehlacker"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "complete-tariff",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "source": "https://stadtwerke-muehlacker.de/sw/produkte/mobilitaet/e-mobilitaet-ladeapp.php",
+    "directPayment": "Official SWM Ladeapp page states ad-hoc charging from 2026-03-01 via QR code with credit-card payment.",
+    "ac": {"pricePerKwhEur":0.65,"blockingFee":{"afterMinutes":300,"pricePerMinuteEur":0.20,"capPerSessionEur":24.0}},
+    "dc": {"pricePerKwhEur":0.75,"blockingFee":{"afterMinutes":180,"pricePerMinuteEur":0.20,"capPerSessionEur":24.0}},
+    "effectiveFrom": "2026-03-01",
+    "publishedScope": "Ad-hoc tariff shown by Stadtwerke Mühlacker for the ladenetz.de network in its own charging app."
+  },
+  "decision": "The current official page publishes exact QR/card ad-hoc AC/DC prices and time fees. This closes the tariff first pass for the SWM direct ad-hoc product; physical-CPO attachment must still use verified operator identity and must not propagate the tariff to unrelated ladenetz.de CPOs."
+}
