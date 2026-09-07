@@ -1,0 +1,70 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 46,
+  "forwardSliceStatus": {
+    "complete": 14,
+    "partial": 32,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 545,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Ettlingen GmbH",
+      "aliases": ["Stadtwerke Ettlingen", "SWE Ettlingen", "SWE e-laden"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official SWE price sheet valid from 1 April 2026 publishes ad-hoc QR/card pricing: 1.50 EUR start fee, 0.57 EUR/kWh AC, 0.77 EUR/kWh DC and 0.05 EUR/min after 60 minutes."
+    },
+    {
+      "name": "Stadtwerke Rastatt Service GmbH",
+      "aliases": ["Stadtwerke Rastatt", "Stadtwerke Rastatt Service", "Rastatt E-Mobil"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official price sheet effective 1 December 2025 publishes ad-hoc AC/DC at 1.00 EUR start fee plus 0.46 EUR/kWh and 0.05 EUR/min after 240 minutes, capped at 12 EUR; the time fee is suspended from 00:00 to 10:00."
+    },
+    {
+      "name": "Stadtwerke Baden-Baden",
+      "aliases": ["SW Baden-Baden", "e-Mobilität Baden-Baden"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official page confirms QR/NFC ad-hoc access but the numeric price sheet exposed by that page is still dated effective 1 February 2023. Historical values are retained only as evidence and are not used as a 2026 tariff without a current sheet or station checkout payload."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical": "Stadtwerke Ettlingen GmbH", "aliases": ["Stadtwerke Ettlingen", "SWE Ettlingen", "SWE e-laden"]},
+    {"canonical": "Stadtwerke Rastatt Service GmbH", "aliases": ["Stadtwerke Rastatt", "Stadtwerke Rastatt Service", "Rastatt E-Mobil"]},
+    {"canonical": "Stadtwerke Baden-Baden", "aliases": ["SW Baden-Baden", "e-Mobilität Baden-Baden"]}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-ettlingen-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-ettlingen-extension.json",
+    "data/v9/germany-station-pricing-stadtwerke-rastatt-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-rastatt-extension.json",
+    "data/v9/germany-station-pricing-stadtwerke-baden-baden-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "thirdPartyRoamingPromotedToPhysicalCpo": false,
+    "staleOfficialTariffPromotedToCurrent": false,
+    "sharedNetworkTariffPropagatedAcrossCpos": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact historical-global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue branch-aware BNetzA first-pass queue; prioritize operators with current QR/direct official price sheets; keep Baden-Baden deferred until current numeric proof appears"]
+}
