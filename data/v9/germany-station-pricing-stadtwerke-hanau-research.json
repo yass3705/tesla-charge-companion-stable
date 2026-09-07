@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Hanau",
+  "aliases": ["Stadtwerke Hanau GmbH", "Stadtwerke Hanau Gesellschaft mit beschränkter Haftung", "SWH Hanau"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial-deferred",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "contractTariff": "The current official Stadtwerke Hanau charging-card page publishes 4.49 EUR/month per active card, 0.29 EUR per charging session and 0.34 EUR/kWh AC at Stadtwerke Hanau charging points. AC charging in the ladenetz partner network is 0.52 EUR/kWh and DC is 0.65 EUR/kWh. Blocking is 0.10 EUR/min after 8 hours AC or 1 hour DC.",
+    "source": "https://stadtwerke-hanau.de/energiedienstleistungen/ladekarte"
+  },
+  "directPaymentFinding": "The official page currently documents the RFID contract tariff but does not expose a separate current numeric QR/card ad-hoc tariff for Stadtwerke Hanau physical stations. Third-party current directories confirm the operator has public AC stations, but are not used to promote the contract tariff to ad-hoc pricing.",
+  "decision": "Keep the exact official card/contract offer separate from physical CPO direct payment. No ad-hoc fallback is created. Defer representative station QR/direct checkout and authoritative EVSE namespace mapping until after breadth-first traversal.",
+  "nextAfterTraversal": "Identify Stadtwerke Hanau physical EVSE IDs through BNetzA/Mobilithek and resolve any public direct-payment checkout values station by station."
+}
