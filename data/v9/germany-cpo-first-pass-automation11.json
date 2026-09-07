@@ -1,0 +1,69 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "trackingCorrection": {
+    "actualGermanyPr": 69,
+    "actualGermanyBranch": "germany-v9-preintegration",
+    "incorrectRecentReference": "PR #73 / feature/germany-national-base",
+    "resolution": "Discard the incorrect PR/branch reference and continue exclusively from PR #69 repository state. Repository history proves automation10 checkpoint at 10 reliable new first passes, followed by the Flensburg/Emden/Aschaffenburg +3 checkpoint; this run adds +3, yielding 16 repository-certified forward first passes since the freeze. Historical global seen/591 remains uncertified."
+  },
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 16,
+  "forwardSliceStatus": {
+    "complete": 0,
+    "partial": 16,
+    "blocked": 0,
+    "note": "This is only the repository-certified forward first-pass slice since the frozen checkpoint, not the full historical 591-CPO state."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Esslingen am Neckar GmbH & Co. KG",
+      "aliases": ["Stadtwerke Esslingen", "SWE Esslingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official SWE pages confirm public charging operations but expose no current 2026 universal tariff. A municipality source documents a 2025 station-specific QR/app price of 0.55 EUR/kWh plus 0.08 EUR/min after 4h; it is not extrapolated to 2026 or the network."
+    },
+    {
+      "name": "Stadtwerke Hanau GmbH",
+      "aliases": ["Stadtwerke Hanau Gesellschaft mit beschränkter Haftung", "SWH Hanau"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official contract card tariff is exact (0.34 EUR/kWh AC on own points, 4.49 EUR/month, 0.29 EUR/session, blocking 0.10 EUR/min after 8h AC / 1h DC), but no separate current numeric ad-hoc tariff was exposed. Contract pricing is not promoted to QR/direct payment."
+    },
+    {
+      "name": "Stadtwerke Gießen AG",
+      "aliases": ["Stadtwerke Giessen AG", "SWG Gießen", "SWG Giessen", "E-Tanken"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official E-Tanken page explicitly states that current prices are shown per connected charge point in the app and payment follows registration/SEPA. No current public numeric 2026 station matrix was exposed; historical spontaneous-charge values are rejected."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-esslingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-hanau-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-giessen-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "prReferenceCorrected": true,
+    "counterReconciledFromRepositoryHistory": true,
+    "result": "ok_with_tracking_correction"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Historical canonical snapshots remain contradictory. Operational denominator remains 591, but a full historical treated/remaining numerator is not asserted until a future permitted canonical reconciliation exists.",
+  "nextQueue": [
+    "next unseen CPOs after PR #69 changed-file anti-duplicate check"
+  ]
+}
