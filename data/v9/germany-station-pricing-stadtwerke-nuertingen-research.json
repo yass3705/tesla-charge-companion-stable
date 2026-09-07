@@ -1,0 +1,46 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Nürtingen GmbH",
+  "aliases": ["Stadtwerke Nürtingen", "SWN Nürtingen", "SW Nürtingen"],
+  "firstPassDate": "2026-09-07",
+  "status": "partial",
+  "deferred": true,
+  "operatorEvidence": {
+    "officialNetworkPage": "https://www.sw-nuertingen.de/neue-energiewelt/e-mobilitaet/e-tankstellen",
+    "summary": "Official SWN page states more than 40 charging points at 16 locations and allows ad-hoc activation via Ladepay QR with PayPal or credit card."
+  },
+  "pricingEvidence": [
+    {
+      "scope": "new charging park announced by Stadtwerke Nürtingen / Nürtingen Beteiligung GmbH",
+      "source": "https://www.sw-nuertingen.de/unternehmen/aktuelles",
+      "directPayment": true,
+      "activation": ["QR code", "payment terminal"],
+      "acEurPerKwh": 0.39,
+      "dcEurPerKwh": 0.46,
+      "parkingOrChargingLimit": "maximum 4 hours",
+      "note": "Official current announcement explicitly labels these as ad-hoc prices."
+    },
+    {
+      "scope": "legacy/current SWN public network",
+      "source": "https://www.sw-nuertingen.de/neue-energiewelt/e-mobilitaet/e-tankstellen",
+      "directPayment": true,
+      "activation": ["Ladepay QR", "PayPal", "credit card"],
+      "pricePublishedForDirectPayment": false,
+      "contractCardReferenceOnly": {
+        "acEurPerKwh": 0.33,
+        "dcEurPerKwh": 0.42,
+        "blockingEurPerMinuteAfter240Min": 0.10,
+        "blockingDailyCapEur": 12.0,
+        "blockingWindow": "08:00-22:00"
+      },
+      "note": "Card tariff is not promoted to ad-hoc. New charging-park prices are not extrapolated to all legacy SWN stations."
+    }
+  ],
+  "emi3": {
+    "exclusivePrefixEstablished": false,
+    "note": "No authoritative exclusive eMI3 mapping established during first pass."
+  },
+  "classificationReason": "Exact current ad-hoc prices are official for the new charging park, but the official legacy SWN network page exposes ad-hoc payment without publishing its direct price. A network-wide fallback would therefore be an unsupported extrapolation.",
+  "unblockNeeds": ["station/EVSE-level Ladepay checkout price for legacy SWN points", "or an official statement that the new 0.39/0.46 EUR/kWh ad-hoc matrix applies to every SWN-operated station"],
+  "policy": "fail-closed; no tariff extrapolation"
+}
