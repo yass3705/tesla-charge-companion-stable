@@ -1,0 +1,70 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 37,
+  "forwardSliceStatus": {
+    "complete": 7,
+    "partial": 30,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Hilden GmbH",
+      "aliases": ["Stadtwerke Hilden", "hildenMobil"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official current page publishes spontaneous charging at 0.50 EUR/kWh for AC/DC plus 1.00 EUR start fee and 0.10 EUR/min blocking after 240 minutes during 07:00-22:00; external roaming prices are explicitly separate."
+    },
+    {
+      "name": "Stadtwerke Langenfeld GmbH",
+      "aliases": ["Stadtwerke Langenfeld", "SWL Langenfeld"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official page publishes own-network ad-hoc AC at 0.72 EUR/kWh plus 0.75 EUR session fee and blocking rules, but no numeric DC ad-hoc kWh price; DC remains fail-closed."
+    },
+    {
+      "name": "Stadtwerke Kleve",
+      "aliases": ["Stadtwerke Kleve GmbH", "Klever Versorgungsbetriebe"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official current page publishes spontaneous charging at 0.49 EUR/kWh AC and 0.59 EUR/kWh DC plus 0.90 EUR start fee. QR/app/card/PayPal access is documented; 75/49 EUR reservations are temporary payment authorizations, not tariff costs."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical":"Stadtwerke Hilden GmbH","aliases":["Stadtwerke Hilden","hildenMobil"]},
+    {"canonical":"Stadtwerke Langenfeld GmbH","aliases":["Stadtwerke Langenfeld","SWL Langenfeld"]},
+    {"canonical":"Stadtwerke Kleve","aliases":["Stadtwerke Kleve GmbH","Klever Versorgungsbetriebe"]}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-hilden-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-langenfeld-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-kleve-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-hilden-extension.json",
+    "data/v9/germany-direct-offers-stadtwerke-langenfeld-extension.json",
+    "data/v9/germany-direct-offers-stadtwerke-kleve-extension.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "thirdPartyRoamingPromotedToPhysicalCpo": false,
+    "paymentPreauthorizationModeledAsCost": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue branch-aware BNetzA first-pass queue; prioritize untreated operators with official direct-payment tariffs or station/EVSE-level public tariff endpoints"]
+}
