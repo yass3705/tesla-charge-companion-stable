@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "source": "REVE + official/public CPO research",
+  "updatedAt": "2026-09-07T19:41:00Z",
+  "inventory": {
+    "historicalWorkQueueLabels": 618,
+    "authoritativeCurrentDistinctReveCpos": 148,
+    "note": "618 is retained only as the historical first-pass work queue. The current completed REVE /locations snapshot reports 148 distinct CPO identities; aliases/platforms/duplicates remain to be reconciled."
+  },
+  "canonicalReconstruction": {
+    "attemptedOnceThisRun": true,
+    "complete": false,
+    "reason": "No complete nominative 618-label canonical file was found on the current GitHub branches/default branches inspected. Prior automation reports establish a minimum of 98 historical first-pass decisions, but their full nominative list could not be reconstructed safely from repository evidence in this run.",
+    "safeFallback": "Preserve the 618-label historical queue, record the 98 prior decisions as an unreconstructed historical count, and continue only with newly evidenced nominative decisions without inventing names or statuses."
+  },
+  "firstPass": {
+    "historicalDecisionsBeforeThisRunMinimum": 98,
+    "newNominativeDecisionsThisRun": 10,
+    "minimumTraversed": 108,
+    "maximumNeverTraversed": 510,
+    "kpiInterpretation": "minimum traversed; not an authoritative CPO denominator"
+  },
+  "countsForNewlyRecordedBatch": {
+    "sourceValidated": 0,
+    "partial": 0,
+    "active": 3,
+    "setAside": 7,
+    "supersededAlias": 0,
+    "platformExcluded": 0,
+    "total": 10
+  },
+  "newDecisions": [
+    {
+      "canonicalName": "H2PLT S.A.",
+      "labels": ["H2PLT,S.A."],
+      "partyId": "H2P",
+      "status": "active",
+      "model": "station-level/direct via WattBrews or card",
+      "evidence": ["https://www.h2plt.eu/", "https://www.h2plt.eu/politica-de-privacidad-app-wattbrews"],
+      "coverageKnown": "REVE snapshot: 1 location, 22 EVSE, 22 connectors",
+      "blockingReason": "Official source confirms H2PLT-operated charging network and payment via card/WattBrews but does not publish a numeric direct tariff. A third-party 0.49 EUR/kWh value was found and deliberately not promoted.",
+      "resumeCondition": "Official/app/QR numeric tariff or REVE connector-tariff rows mapped deterministically to H2PLT connectors.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "HERNAZOS GESTIÓN S.L",
+      "labels": ["HERNAZOS GESTIÓN S.L"],
+      "partyId": "HDT",
+      "status": "setAside",
+      "model": "unknown/site-level",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 1 connector",
+      "blockingReason": "No official/public direct tariff authority located in the first-pass search.",
+      "resumeCondition": "New official site/QR/app/REVE tariff evidence.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "HOTEL CIUDAD DE ALCAÑIZ SA",
+      "labels": ["HOTEL CIUDAD DE ALCAÑIZ SA"],
+      "partyId": "A44",
+      "status": "setAside",
+      "model": "hotel/site-level",
+      "evidence": ["https://www.gargallo-hotels.com/teruel/hotel-ciudad-de-alcaniz/faq"],
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 2 connectors",
+      "blockingReason": "Official hotel FAQ confirms paid EV charging but gives no numeric charging tariff. Third-party price values were not promoted.",
+      "resumeCondition": "Official hotel/app/QR numeric tariff or REVE tariff mapping.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "HOTEL PEDRO I DE ARAGON SL",
+      "labels": ["HOTEL PEDRO I DE ARAGON SL"],
+      "partyId": "B22",
+      "status": "setAside",
+      "model": "hotel/site-level",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 2 connectors",
+      "blockingReason": "No official numeric EV-charging tariff located; third-party price values were not promoted.",
+      "resumeCondition": "Official hotel/app/QR numeric tariff or REVE tariff mapping.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "HOTEL PUENTE DE LA TOJA S.L.",
+      "labels": ["HOTEL PUENTE DE LA TOJA S.L."],
+      "partyId": "PLT",
+      "status": "setAside",
+      "model": "hotel/site-level",
+      "evidence": ["https://hotelpuentedelatoja.com/parking/"],
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 1 connector",
+      "blockingReason": "Official hotel page confirms EV charging but explicitly asks customers to request availability/tariff; no public numeric charging tariff is published.",
+      "resumeCondition": "Published official tariff, QR/app price, or REVE tariff mapping.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "HOTELES SOL DEL SUR, SA",
+      "labels": ["HOTELES SOL DEL SUR, SA"],
+      "partyId": "HSS",
+      "status": "setAside",
+      "model": "hotel/site-level",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 2 connectors",
+      "blockingReason": "No official/public direct numeric charging tariff found in the first-pass search.",
+      "resumeCondition": "Official hotel/app/QR numeric tariff or REVE tariff mapping.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "Iberdrola | bp pulse",
+      "labels": ["IBERDROLA CLIENTES S.A.U", "IBERDROLA CLIENTES"],
+      "partyId": "IBD",
+      "status": "active",
+      "model": "station/connector-level direct tariff",
+      "evidence": ["https://www.iberdrola.es/"],
+      "coverageKnown": "REVE snapshot: 2,288 locations, 8,475 EVSE, 9,463 connectors",
+      "blockingReason": "Large operator with station/connector-dependent pricing. REVE tariff pagination is active and is the preferred deterministic mapping path; no network-wide price is extrapolated.",
+      "resumeCondition": "Continue REVE connector-tariff pagination and deterministic connector mapping after quota windows.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "Ibérica de Tecnología y Servicios de Automoción, S.L.",
+      "labels": ["Ibérica de Tecnología y Servicios de Automoción, S.L."],
+      "partyId": "914",
+      "status": "setAside",
+      "model": "site-level/unknown",
+      "coverageKnown": "REVE snapshot: 2 locations, 2 EVSE, 2 connectors",
+      "blockingReason": "No official/public direct numeric charging tariff located in the first-pass search.",
+      "resumeCondition": "New official site/QR/app/REVE tariff evidence.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "Ingenieria de Recarga SLU / Més Energia Mobilitat Elèctrica",
+      "labels": ["Ingenieria de Recarga SLU"],
+      "partyId": "686",
+      "status": "active",
+      "model": "managed station-level charging/billing",
+      "evidence": ["https://mesenergia.cat/es/", "https://mesenergia.cat/es/contacte/"],
+      "coverageKnown": "REVE snapshot: 2 locations, 3 EVSE, 4 connectors",
+      "blockingReason": "Official source confirms operation/maintenance and management of energy charging/billing for installations, but no uniform public numeric tariff is published.",
+      "resumeCondition": "Deterministic site/connector tariff from official QR/app/REVE mapping.",
+      "lastInvestigated": "2026-09-07"
+    },
+    {
+      "canonicalName": "INMOMEDIC 09, S.L.U.",
+      "labels": ["INMOMEDIC 09, S.L.U."],
+      "partyId": "I09",
+      "status": "setAside",
+      "model": "parking/site-level",
+      "evidence": ["https://immomedic.med.es/"],
+      "coverageKnown": "REVE snapshot: 1 location, 4 EVSE, 8 connectors",
+      "blockingReason": "Official parking site publishes parking products but no public numeric EV-charging tariff was located. Parking prices are not treated as charging prices.",
+      "resumeCondition": "Official charging tariff, QR/app price, or REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-07"
+    }
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "lastSuccessfulBatchGeneratedAt": "2026-09-07T18:49:24.713866Z",
+    "lastBatchRequestsAttempted": 5,
+    "lastBatchRequestsSucceeded": 5,
+    "lastBatchHad429": false,
+    "lastBatchUsedLocationsEndpoint": false,
+    "nextTariffPage": 11,
+    "tariffPagesCollected": 10,
+    "tariffRowsStored": 1000,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 8,
+    "statusPagesCollected": 7,
+    "statusRowsStored": 681,
+    "statusTotalPages": 447,
+    "newBatchLaunchedThisRun": false,
+    "reasonNoNewBatch": "Less than one real hour had elapsed since the last successful live REVE batch when checked."
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "newBatchCountsDeriveExactlyFromNewDecisions": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noThirdPartyTariffPromoted": true,
+    "noStationTariffExtrapolatedToNetwork": true
+  }
+}
