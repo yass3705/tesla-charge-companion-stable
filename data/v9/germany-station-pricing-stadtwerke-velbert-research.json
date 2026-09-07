@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Velbert GmbH",
+  "aliases": ["Stadtwerke Velbert", "ladeBERT"],
+  "status": "partial",
+  "sourceUrl": "https://www.stadtwerke-velbert.de/privatkunden/e-mobilitaet/unterwegs-laden",
+  "supportingSourceUrl": "https://www.stadtwerke-velbert.de/privatkunden/e-mobilitaet/faq",
+  "directPayment": {
+    "available": true,
+    "channel": "QR direct payment with PayPal or credit card",
+    "registrationRequired": false,
+    "priceStatus": "not publicly numeric on official pages reviewed"
+  },
+  "contractOffer": {
+    "name": "ladeBERT",
+    "monthlyFee": 3.90,
+    "currency": "EUR",
+    "ladenetz": {"AC": 0.48, "DC": 0.58, "blockingFeePerMinute": 0.10, "blockingAfterMinutes": 240},
+    "outsideLadenetz": {"AC": 0.48, "DC": 0.88, "blockingFeePerMinute": 0.10, "blockingAfterMinutes": 120}
+  },
+  "scope": "Official pages prove contract-free QR payment but do not publish a numeric ad-hoc price. ladeBERT values are eMSP/roaming tariff conditions and are not promoted to a physical-CPO direct tariff.",
+  "policy": "Keep direct payment fail-closed until an official checkout payload, station-level tariff, or official numeric ad-hoc price is captured."
+}
