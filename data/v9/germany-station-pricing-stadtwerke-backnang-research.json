@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Backnang GmbH",
+  "aliases": ["Stadtwerke Backnang", "SWBK", "SwBK"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentPublicTariffMatrixFound": false,
+    "operatorWebsite": "https://www.swbk.de/",
+    "currentContext": "The current Stadtwerke Backnang site documents ongoing e-mobility activity but does not publish a current public charging tariff matrix in the accessible e-mobility content reviewed.",
+    "municipalStationEvidence": "https://www.stadtmarketing-backnang.de/site/Backnang-Stadtmarketing/node/20392030/zmdetail_523236797073/StadtwerkeBacknang.html?nodeID=523236797073",
+    "municipalEvidence": "The municipality lists a Stadtwerke Backnang AC Type 2 charging point at the utility location as free during stated opening hours. This is retained as exact station-level evidence only and is not generalized to any wider SWBK public network."
+  },
+  "pricingEvidence": {
+    "networkWideCurrentAdHocMatrixPublished": false,
+    "exactCurrentStationPriceFound": true,
+    "stationLevelPrice": "free",
+    "stationLevelScopeOnly": true,
+    "inferenceApplied": false,
+    "reasonNotPromoted": "The available exact free-price evidence is tied to one municipal listing/location and does not establish a network-wide ad-hoc policy or cover other Backnang public charging infrastructure."
+  },
+  "decision": "Keep partial/fail-closed. Preserve the free station only as station-level evidence and do not create a global SWBK fallback.",
+  "neededToClose": "Identify the current BNetzA EVSE(s) operated by Stadtwerke Backnang and obtain operator-controlled QR/direct-payment pricing or an official tariff sheet defining the scope beyond the single free utility-site charger."
+}
