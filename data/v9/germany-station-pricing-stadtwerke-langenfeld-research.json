@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Langenfeld GmbH",
+  "aliases": ["Stadtwerke Langenfeld", "SWL Langenfeld"],
+  "status": "complete",
+  "sourceUrl": "https://www.stw-langenfeld.de/mobilitaet/",
+  "validFrom": "2025-10-01",
+  "directPayment": {
+    "channel": "QR ad-hoc / app",
+    "registrationRequired": false,
+    "paymentMethods": ["Visa", "Mastercard"],
+    "sessionFee": 0.75,
+    "currency": "EUR",
+    "ac": {"pricePerKwh": 0.72, "blockingFee": {"pricePerMinute": 0.1, "afterMinutes": 180, "activeWindow": {"start": "06:00", "end": "21:00"}}},
+    "dc": {"pricePerKwh": null, "blockingFee": {"pricePerMinute": 0.1, "afterMinutes": 90, "activeWindow": {"start": "06:00", "end": "21:00"}}}
+  },
+  "scope": "Official page explicitly labels 0.72 EUR/kWh as Ad-hoc (per App) for own AC chargers. No numeric DC ad-hoc kWh price is published, so DC energy pricing remains fail-closed.",
+  "policy": "Do not infer DC ad-hoc price from card, ladenetz or roaming tariffs."
+}
