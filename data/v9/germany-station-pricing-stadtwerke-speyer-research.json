@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Speyer GmbH",
+  "aliases": ["Stadtwerke Speyer", "SWS", "VBS Ladestationen"],
+  "status": "complete",
+  "sourceUrl": "https://www.stadtwerke-speyer.de/e-mobilitaet",
+  "directPayment": {
+    "channel": "eCharge+ / credit card / PayPal",
+    "registrationRequired": false,
+    "pricePerKwh": 0.64,
+    "currency": "EUR",
+    "sessionFee": 0,
+    "blockingFee": null
+  },
+  "scope": "Official current SWS page publishes a Standard-Tarif of 0.64 EUR/kWh for all e-mobilists at public VBS charging stations, with spontaneous payment by credit card or PayPal, no start fee and no blocking fee.",
+  "policy": "Keep the 0.47 EUR/kWh MeinSpeyer AUTOSTROM customer tariff separate; do not propagate eCharge+ prices from unrelated operators."
+}
