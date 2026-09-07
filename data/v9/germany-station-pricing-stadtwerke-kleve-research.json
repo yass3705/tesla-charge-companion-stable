@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Kleve",
+  "aliases": ["Stadtwerke Kleve GmbH", "Klever Versorgungsbetriebe"],
+  "status": "complete",
+  "sourceUrl": "https://www.stadtwerke-kleve.de/privatkunden/service/elektromobilitaet",
+  "directPayment": {
+    "channel": "QR/app spontaneous charging; NFC terminal at two fast-charging sites",
+    "registrationRequired": false,
+    "paymentMethods": ["credit_card", "PayPal", "girocard_at_supported_NFC_sites"],
+    "sessionFee": 0.9,
+    "currency": "EUR",
+    "ac": {"pricePerKwh": 0.49},
+    "dc": {"pricePerKwh": 0.59},
+    "preauthorization": {"appOrQr": 75.0, "nfcTerminal": 49.0, "isCost": false}
+  },
+  "scope": "Official spontaneous-charging tariff at Stadtwerke Kleve charging points.",
+  "policy": "The 75/49 EUR card reservations are temporary preauthorizations and must never be modeled as charging fees."
+}
