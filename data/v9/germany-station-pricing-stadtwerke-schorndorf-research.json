@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Schorndorf Mobil GmbH",
+  "aliases": ["Stadtwerke Schorndorf Mobil", "Stadtwerke Schorndorf", "Schorndorf Mobil"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "deferred": true,
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "source": "https://stadtwerke-schorndorf.de/elektromobilitaet/ladetarife/",
+    "contractTariff": {"acPricePerKwhEur":0.48,"dcPricePerKwhEur":0.69},
+    "directTerminalPricing": {
+      "ac": {"pricePerKwhEur":0.59,"blockingFee":{"afterMinutes":240,"pricePerMinuteEur":0.10}},
+      "dc": {"pricePerKwhEur":0.69,"blockingFee":{"afterMinutes":60,"pricePerMinuteEur":0.20}},
+      "paymentMethods":["debit_card","credit_card"],
+      "siteScope": {
+        "ac":["An der Mauer"],
+        "dc":["An der Mauer","Bantel","Forscherfabrik","Media Markt"]
+      }
+    }
+  },
+  "decision": "Exact direct terminal prices are verified only for the named terminal-equipped sites. They are not extrapolated to every Schorndorf Mobil EVSE. The operator-wide RFID tariff remains a separate contract tariff."
+}
