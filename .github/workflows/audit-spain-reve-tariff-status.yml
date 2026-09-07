@@ -8,6 +8,7 @@ on:
       - ".github/workflows/audit-spain-reve-tariff-status.yml"
       - "scripts/reve_es_tariff_status_audit.py"
       - "scripts/reve_es_live_probe_audit.py"
+      - "scripts/reve_es_stream_collect.py"
       - "data/spain_reve/reve_locations_raw.json.gz"
       - "data/spain_reve/operator_aliases_es.json"
       - "data/spain_reve/live_tariff_status_probe.json"
@@ -35,17 +36,26 @@ jobs:
       - name: Analyze live probe offline
         run: python scripts/reve_es_live_probe_audit.py
 
-      - name: Commit audit reports
+      - name: Seed persistent streams from paid page-1 probe
+        run: python scripts/reve_es_stream_collect.py --seed-probe
+
+      - name: Commit audit and stream seed
         shell: bash
         run: |
-          git add data/spain_reve/tariff_status_candidates.json data/spain_reve/live_tariff_status_analysis.json
+          git add \
+            data/spain_reve/tariff_status_candidates.json \
+            data/spain_reve/live_tariff_status_analysis.json \
+            data/spain_reve/tariff_status_stream_state.json \
+            data/spain_reve/tariff_status_stream_last_run.json \
+            data/spain_reve/reve_connector_tariffs_raw.json.gz \
+            data/spain_reve/reve_operational_status_raw.json.gz
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "audit(es): record REVE tariff/status analysis"
+          git commit -m "audit(es): record REVE tariff/status analysis and seed"
           git push
 
-      - name: Enforce candidate gate
+      - name: Enforce offline gates
         shell: bash
         run: |
           python - <<'PY'
@@ -57,8 +67,15 @@ jobs:
               raise SystemExit('Required CPO candidates missing: '+', '.join(missing))
           a=json.loads(Path('data/spain_reve/live_tariff_status_analysis.json').read_text())
           gates=a.get('gates',{})
-          required=['probeTransportValidated','tariffSchemaValidated','statusSchemaValidated','threeRepresentativeStatusChecksValidated']
+          required=[
+              'probeTransportValidated','tariffSchemaValidated','statusSchemaValidated',
+              'operationalStatusBooleanPreserved','threeRepresentativeStatusChecksValidated',
+              'evseObjectVsIdentifierCountReconciled'
+          ]
           failed=[g for g in required if not gates.get(g)]
           if failed:
               raise SystemExit('Live probe analysis gates failed: '+', '.join(failed))
+          s=json.loads(Path('data/spain_reve/tariff_status_stream_state.json').read_text())
+          if s.get('nextTariffPage',0) < 2 or s.get('nextStatusPage',0) < 2:
+              raise SystemExit('Stream seed did not preserve paid page 1')
           PY
