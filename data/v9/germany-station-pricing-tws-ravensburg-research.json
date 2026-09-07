@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Technische Werke Schussental GmbH & Co. KG",
+  "aliases": ["TWS", "Technische Werke Schussental", "TWS Ravensburg", "TWS Weingarten"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "operatorSource": "https://www.tws.de/ladekarte",
+    "currentNetworkEvidence": "TWS states it operates about 150 public charging points in Ravensburg, Weingarten and the surrounding Schussental area and that its infrastructure can also be used without a TWS charging card.",
+    "directPaymentEvidence": [
+      "https://www.tws.de/de/Wer-wir-sind/Presse/TWS-Meldungen/TWS-baut-Ladeangebot-aus.html",
+      "https://www.ravensburg.de/rv/wirtschaft-planen-bauen/energie-umwelt/mobilitaetstag.php"
+    ],
+    "directPayment": "Official/current sources confirm ad-hoc activation by QR code and, depending on site, credit/debit card; TWS/Ravensburg explicitly says ad-hoc prices without a charging-card contract are shown at the individual charging station."
+  },
+  "identityEvidence": {
+    "observedEvsePrefix": "DE*TWS",
+    "sampleEvseIds": ["DE*TWS*E000401"],
+    "policy": "Observed station identity is retained as supporting evidence; no tariff is inferred from the prefix."
+  },
+  "pricingEvidence": {
+    "networkWideCurrentAdHocMatrixPublished": false,
+    "stationSpecificPricingRequired": true,
+    "thirdPartyDiscovery": "Current discovery data for sample DE*TWS EVSEs confirms ad-hoc availability but does not expose the direct price; no value is promoted."
+  },
+  "decision": "Keep partial/fail-closed. Ad-hoc is officially confirmed but exact current direct price is explicitly station-specific and not exposed in the public operator pages checked.",
+  "neededToClose": "Capture operator-controlled QR/direct-payment payloads or tariff screens for the current DE*TWS EVSE population (at minimum representative AC and DC families), then attach exact prices at station/EVSE scope."
+}
