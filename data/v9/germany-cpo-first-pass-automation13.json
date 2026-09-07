@@ -1,0 +1,63 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 22,
+  "forwardSliceStatus": {
+    "complete": 1,
+    "partial": 21,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Nürtingen GmbH",
+      "aliases": ["Stadtwerke Nürtingen", "SWN Nürtingen", "SW Nürtingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official current sources confirm ad-hoc QR/payment-terminal pricing of 0.39 EUR/kWh AC and 0.46 EUR/kWh DC for the new charging park, while the legacy SWN network confirms Ladepay ad-hoc access but publishes only the customer-card matrix. The new park tariff is not extrapolated network-wide."
+    },
+    {
+      "name": "Stadtwerke Balingen",
+      "aliases": ["Stadtwerke Balingen Eigenbetrieb", "SW Balingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official network page confirms 38 operated charging points. Current station-level observations show 0.65 EUR/kWh at some DC sites, but the old QR time tariff is historical and no official 2026 universal direct matrix was found. Shared/backend prefix DE*SMA is not made exclusive."
+    },
+    {
+      "name": "Stadtwerke Waiblingen GmbH",
+      "aliases": ["Stadtwerke Waiblingen", "SWW Waiblingen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official page confirms public stations and direct payment without contract through eCharge+, but does not publish the ad-hoc price. Current station observations differ at 0.45 and 0.49 EUR/kWh, so no network fallback is inferred."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-nuertingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-balingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-waiblingen-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "sharedPrefixMisclassifiedAsExclusive": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": [
+    "next unseen CPOs after PR #69 changed-file anti-duplicate check"
+  ]
+}
