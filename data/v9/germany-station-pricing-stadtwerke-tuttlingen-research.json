@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Tuttlingen GmbH",
+  "aliases": ["Stadtwerke Tuttlingen", "SWT Tuttlingen", "swt Tuttlingen"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "currentPublicTariffMatrixFound": false,
+    "searchScope": "Official Stadtwerke Tuttlingen public documentation and current public web/station discovery were checked for public-charging ad-hoc/QR pricing. Search results exposing household or controlled-home e-mobility electricity tariffs were explicitly rejected as unrelated to public EVSE pricing."
+  },
+  "pricingEvidence": {
+    "networkWideCurrentAdHocMatrixPublished": false,
+    "exactCurrentStationPriceFound": false,
+    "inferenceApplied": false,
+    "rejectedEvidence": "Domestic electricity/E-Mobilitaet supply tariffs and grid tariff sheets are not used as charging-station prices."
+  },
+  "decision": "Keep partial/fail-closed. No authoritative current public station/EVSE ad-hoc price was obtained in this pass, and unrelated household electricity prices were not substituted.",
+  "neededToClose": "Obtain a current Stadtwerke Tuttlingen public EVSE identifier plus its operator-controlled QR/direct-payment checkout or a current official public-charging tariff/API payload linked to that EVSE."
+}
