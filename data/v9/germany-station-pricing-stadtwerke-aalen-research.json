@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Aalen GmbH",
+  "aliases": ["Stadtwerke Aalen", "SW Aalen"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "partial-deferred",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "municipalOperatorSource": "https://www.aalen.de/stadtwerke-aalen-gmbh.1502.25.htm",
+    "operatorIdentity": "The City of Aalen confirms Stadtwerke Aalen GmbH & Co. KG as the municipal utility; no current official public-charging tariff matrix was exposed in this pass."
+  },
+  "stationEvidence": {
+    "sharedBackendPrefix": "DE*BDO",
+    "examples": ["DE*BDO*E051518777*1", "DE*BDO*E342548221*1", "DE*BDO*E517048515*1", "DE*BDO*E716266027*1"],
+    "observedPricePerKwhEur": 0.35,
+    "observation": "Current station-level discovery sources report 0.35 EUR/kWh on several Stadtwerke Aalen AC EVSEs, but DE*BDO is a backend/shared prefix and the value is not an official operator-wide price. Other current station sources still report the direct-payment price as unknown, so no universal fallback is created."
+  },
+  "decision": "Keep Aalen partial and deferred. The operator is established and ad-hoc capability exists at public stations, but a current authoritative per-station checkout or official network price is missing. Do not extrapolate the 0.35 EUR/kWh observations and do not treat DE*BDO as an exclusive Stadtwerke Aalen prefix."
+}
