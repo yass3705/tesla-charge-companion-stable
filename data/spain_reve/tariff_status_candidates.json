@@ -1,7 +1,7 @@
 {
-  "allRequiredOperatorsMatched": false,
+  "allRequiredOperatorsMatched": true,
   "country": "ES",
-  "generatedAt": "2026-09-07T10:55:26.551640Z",
+  "generatedAt": "2026-09-07T11:50:15.771304Z",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "networkRequests": 0,
   "nextGate": "Controlled live REVE tariff/status probe (<=5 requests/hour) using candidates above.",
@@ -669,15 +669,106 @@
       ]
     },
     {
-      "candidates": [],
+      "candidates": [
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "8e288e7f-4a35-44ba-82cc-fa118f628cef",
+              "maxElectricPowerW": 22080,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*ALF0030*2",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        },
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "de0785d5-41fc-4072-b51a-8fd58833cac8",
+              "maxElectricPowerW": 22080,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*ALF0026*2",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        },
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "f9847baf-1af8-4e77-95c2-38c7203affc1",
+              "maxElectricPowerW": 22080,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*ALF0030*1",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        },
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "fd3889f8-3a2d-47a2-a7ab-4d1bb46e8818",
+              "maxElectricPowerW": 100000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*KEM0028*2",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        }
+      ],
       "canonical": "Powerdot",
-      "connectors": 0,
+      "connectors": 1191,
       "embeddedStatuses": {},
-      "evses": 0,
-      "locations": 0,
-      "matched": false,
-      "partyIds": [],
-      "rawCpoNames": []
+      "evses": 1181,
+      "locations": 137,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 137,
+          "value": "PWH"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 137,
+          "value": "Punto Recargas SL"
+        }
+      ]
     },
     {
       "candidates": [
@@ -1137,10 +1228,6 @@
       "value": "PLENOIL, S.L."
     },
     {
-      "locations": 137,
-      "value": "Punto Recargas SL"
-    },
-    {
       "locations": 120,
       "value": "REMO SUSTAINABLE MOBILITY S.L"
     },
@@ -1179,6 +1266,10 @@
     {
       "locations": 56,
       "value": "Consejo Insular de la Energía de Gran Canaria"
+    },
+    {
+      "locations": 54,
+      "value": "CENTROS COMERCIALES CARREFOUR SA"
     }
   ]
 }
