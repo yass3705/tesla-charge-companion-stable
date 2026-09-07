@@ -1,0 +1,73 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-07",
+  "operationalTotalKnownCpos": 591,
+  "canonicalRebuildAttemptedAgain": false,
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 43,
+  "forwardSliceStatus": {
+    "complete": 12,
+    "partial": 31,
+    "blocked": 0,
+    "note": "Repository-certified forward first-pass slice only; historical global seen/591 remains uncertified because earlier snapshots use conflicting universes. Nominal unvisited count inside this forward denominator is 548, not a certified historical-global remaining count."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Passau GmbH",
+      "aliases": ["Stadtwerke Passau", "SWP Passau"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official current SWP page publishes 0.65 EUR/kWh for all SWP AC charging stations via QR/web direct payment by credit card, with no activation/base/minute or other additional fees."
+    },
+    {
+      "name": "Stadtwerke Speyer GmbH",
+      "aliases": ["Stadtwerke Speyer", "SWS", "VBS Ladestationen"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official current page publishes Standard-Tarif 0.64 EUR/kWh for spontaneous charging at public VBS stations by credit card or PayPal, with no start or blocking fee."
+    },
+    {
+      "name": "STADTWERKE DEGGENDORF GmbH",
+      "aliases": ["Stadtwerke Deggendorf", "SW Deggendorf", "Ladeverbund+ Deggendorf"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official current public-charging page publishes ad-hoc QR prices of 0.70 EUR/kWh AC and 0.85 EUR/kWh DC. A 0.05 EUR/min blocking fee is only stated for selected locations; no unsupported universal threshold is encoded."
+    }
+  ],
+  "aliasesResolved": [
+    {"canonical":"Stadtwerke Passau GmbH","aliases":["Stadtwerke Passau","SWP Passau"]},
+    {"canonical":"Stadtwerke Speyer GmbH","aliases":["Stadtwerke Speyer","SWS","VBS Ladestationen"]},
+    {"canonical":"STADTWERKE DEGGENDORF GmbH","aliases":["Stadtwerke Deggendorf","SW Deggendorf","Ladeverbund+ Deggendorf"]},
+    {"canonical":"Energie Südbayern (ESB)","formerOperatorAlias":"Stadtwerke Landshut","effectiveDate":"2025-01-01","note":"Official SWL notice confirms transfer of 42 charge points at 19 locations to ESB; Landshut is removed from the current-CPO queue for those assets."}
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-passau-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-passau-extension.json",
+    "data/v9/germany-station-pricing-stadtwerke-speyer-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-speyer-extension.json",
+    "data/v9/germany-station-pricing-stadtwerke-deggendorf-research.json",
+    "data/v9/germany-direct-offers-stadtwerke-deggendorf-extension.json",
+    "data/v9/germany-station-pricing-stadtwerke-landshut-ownership-transition.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "canonicalRebuildRetried": false,
+    "globalTariffInferredFromSamples": false,
+    "thirdPartyRoamingPromotedToPhysicalCpo": false,
+    "paymentPreauthorizationModeledAsCost": false,
+    "staleCurrentCpoIdentityCorrected": true,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. Exact global treated/remaining numerator is not asserted until the historical 568/591 overlap can be reconciled without double counting.",
+  "nextQueue": ["continue branch-aware BNetzA first-pass queue; skip transferred Stadtwerke Landshut assets and resolve them under ESB"]
+}
