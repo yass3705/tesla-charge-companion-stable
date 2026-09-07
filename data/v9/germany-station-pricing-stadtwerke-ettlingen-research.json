@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "preIntegrationOnly": true,
+  "verifiedAt": "2026-09-07",
+  "operator": "Stadtwerke Ettlingen GmbH",
+  "aliases": ["Stadtwerke Ettlingen", "SWE Ettlingen", "SWE e-laden"],
+  "status": "complete",
+  "sourceUrl": "https://www.sw-ettlingen.de/de/Rerenzierter-Inhalt/Content/22-SWE-Preisblatt-Ladestationen-01-04-2026.pdf",
+  "supportingSourceUrl": "https://www.sw-ettlingen.de/de/Strom/Elektromobilitaet/",
+  "effectiveFrom": "2026-04-01",
+  "directPayment": {
+    "channel": "QR ad-hoc with mandatory credit card",
+    "registrationRequired": false,
+    "currency": "EUR",
+    "startFee": 1.50,
+    "pricesPerKwh": {"AC": 0.57, "DC": 0.77},
+    "blockingFee": {"pricePerMinute": 0.05, "afterMinutes": 60}
+  },
+  "scope": "Official SWE price sheet valid from 1 April 2026. Ad-hoc is a distinct tariff for customers without an account, activated from the QR code at the charging station and paid by credit card.",
+  "policy": "Keep SWE e-laden customer prices and roaming prices separate from the direct ad-hoc CPO tariff. Do not propagate this tariff to other e-laden member CPOs without operator-specific proof."
+}
