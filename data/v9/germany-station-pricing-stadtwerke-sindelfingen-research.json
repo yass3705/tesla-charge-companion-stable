@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "country": "DE",
+  "operator": "Stadtwerke Sindelfingen GmbH",
+  "aliases": ["Stadtwerke Sindelfingen", "SWS Sindelfingen"],
+  "phase": "first-pass-all-cpos",
+  "verifiedAt": "2026-09-07",
+  "status": "complete-tariff",
+  "pricingPolicy": "fail_closed",
+  "officialEvidence": {
+    "operatorSource": "https://www.stadtwerke-sindelfingen.de/privatkunden/mobilitaet/elektromobilitaet/oeffentliche-ladesaeulen/",
+    "networkScope": "All public Stadtwerke Sindelfingen charging stations listed by the operator, up to 22 kW AC.",
+    "directPayment": "Charge it easy app and online direct payment by credit card are explicitly supported without an activation fee.",
+    "pricePerKwhEur": 0.56,
+    "activationFeeEur": 0,
+    "blockingFee": {
+      "pricePerMinuteEur": 0.05,
+      "trigger": "30 minutes after charging has ended"
+    },
+    "publishedFreshness": "Current official page; companion business-customer page marks the station price list Stand: Juli 2026."
+  },
+  "decision": "The current official operator page publishes the direct-payment tariff and blocking-fee rule for the operator's public stations. Third-party roaming tariffs remain excluded. This closes the tariff first pass; an eMI3 prefix must not be invented where no exclusive authoritative mapping is available."
+}
