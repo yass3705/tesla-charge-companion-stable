@@ -1,0 +1,20 @@
+{
+  "country": "DE",
+  "operator": "Erlanger Stadtwerke AG",
+  "aliases": ["Stadtwerke Erlangen", "ESTW", "ESTW Erlangen"],
+  "checkedAt": "2026-09-08",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "methodsReported": ["app", "RFID", "SMS"],
+    "numericAdhocPrice": null,
+    "note": "Current station discovery confirms ad-hoc charging but does not provide an exact contract-free price."
+  },
+  "reason": "No current official ESTW e-mobility tariff surface found in this pass that publishes an exact ad-hoc amount or station-level checkout. Third-party station data confirms ad-hoc availability but lists the direct price as unknown, so no tariff is inferred.",
+  "sources": [
+    "https://www.estw.de/preise",
+    "https://www.goingelectric.de/stromtankstellen/Deutschland/Erlangen/Kurt-Eisner-Platz-Schuhstrasse-44/900/"
+  ],
+  "nextEvidenceNeeded": "Current ESTW direct-payment page, SMS tariff disclosure, QR checkout, or public station backend response containing the exact EVSE-level ad-hoc amount and components."
+}
