@@ -10,65 +10,51 @@
     "persistedNominativeDecisionsSinceReconstruction": 20
   },
   "deltas": [
-    {
-      "path": "docs/spain-cpo-progress-batches/2026-09-07-run11.json",
-      "commit": "f94a77c5d587d0f234502636fcb295c4ffcff480",
-      "newNominativeDecisions": 10
-    },
-    {
-      "path": "docs/spain-cpo-progress-batches/2026-09-07-run12.json",
-      "commit": "fe5d7b6e18170e598f7a54125ab1e055c87f1201",
-      "newNominativeDecisions": 8
-    },
-    {
-      "path": "docs/spain-cpo-progress-batches/2026-09-08-run13.json",
-      "commit": "4a633ea027af24e370a9879fd33b8a98dc81c4fa",
-      "newNominativeDecisions": 10
-    },
-    {
-      "path": "docs/spain-cpo-progress-batches/2026-09-08-run14.json",
-      "commit": "e39f773705bc43bd67d6e0619335ced2410e1744",
-      "newNominativeDecisions": 10
-    }
+    {"path":"docs/spain-cpo-progress-batches/2026-09-07-run11.json","commit":"f94a77c5d587d0f234502636fcb295c4ffcff480","newNominativeDecisions":10},
+    {"path":"docs/spain-cpo-progress-batches/2026-09-07-run12.json","commit":"fe5d7b6e18170e598f7a54125ab1e055c87f1201","newNominativeDecisions":8},
+    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run13.json","commit":"4a633ea027af24e370a9879fd33b8a98dc81c4fa","newNominativeDecisions":10},
+    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run14.json","commit":"e39f773705bc43bd67d6e0619335ced2410e1744","newNominativeDecisions":10},
+    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run15.json","commit":"a0fc00fa41614f9c8a9c9ce7f75b73ea26ccfcd3","newNominativeDecisions":10}
   ],
   "current": {
     "historicalWorkQueueLabels": 618,
-    "minimumTraversed": 156,
-    "maximumNeverTraversed": 462,
+    "minimumTraversed": 166,
+    "maximumNeverTraversed": 452,
     "sourceValidated": 16,
     "partial": 4,
     "active": 46,
     "setAside": 83,
     "platformExcluded": 3,
-    "supersededAlias": 4,
-    "total": 156
+    "supersededAlias": 14,
+    "total": 166
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
-    "syntheticEntriesCreated": false
+    "syntheticEntriesCreated": false,
+    "note": "The post-reconstruction alias batch uses only explicit repository alias mappings and does not reconstruct or synthesize the missing first-98 nominative ledger."
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-08T01:39:54.514880Z",
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T02:44:15.530781Z",
     "batchLaunchedThisRun": true,
     "workflowRunId": 34167974789,
-    "workflowRunAttempt": 2,
+    "workflowRunAttempt": 3,
     "requestsAttemptedThisRun": 5,
     "requestsSucceededThisRun": 5,
     "locationsRequestsThisRun": 0,
     "http429Count": 0,
-    "nextTariffPage": 20,
-    "tariffPagesCollected": 19,
-    "tariffRowsStored": 1900,
+    "nextTariffPage": 23,
+    "tariffPagesCollected": 22,
+    "tariffRowsStored": 2200,
     "tariffTotalPages": 468,
-    "nextStatusPage": 14,
-    "statusPagesCollected": 13,
-    "statusRowsStored": 1210,
+    "nextStatusPage": 16,
+    "statusPagesCollected": 15,
+    "statusRowsStored": 1410,
     "statusTotalPages": 447
   },
   "coherenceCheck": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
   "runtimePublishReady": false,
   "pr50MustRemainDraft": true,
-  "updatedAt": "2026-09-08T01:45:00Z"
+  "updatedAt": "2026-09-08T02:47:00Z"
 }
