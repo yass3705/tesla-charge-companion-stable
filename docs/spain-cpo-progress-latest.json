@@ -24,19 +24,24 @@
       "path": "docs/spain-cpo-progress-batches/2026-09-08-run13.json",
       "commit": "4a633ea027af24e370a9879fd33b8a98dc81c4fa",
       "newNominativeDecisions": 10
+    },
+    {
+      "path": "docs/spain-cpo-progress-batches/2026-09-08-run14.json",
+      "commit": "e39f773705bc43bd67d6e0619335ced2410e1744",
+      "newNominativeDecisions": 10
     }
   ],
   "current": {
     "historicalWorkQueueLabels": 618,
-    "minimumTraversed": 146,
-    "maximumNeverTraversed": 472,
-    "sourceValidated": 15,
-    "partial": 3,
-    "active": 43,
-    "setAside": 78,
+    "minimumTraversed": 156,
+    "maximumNeverTraversed": 462,
+    "sourceValidated": 16,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
     "platformExcluded": 3,
     "supersededAlias": 4,
-    "total": 146
+    "total": 156
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -45,21 +50,25 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-07T22:49:36.770835Z",
-    "batchLaunchedThisRun": false,
-    "requestsAttemptedThisRun": 0,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T01:39:54.514880Z",
+    "batchLaunchedThisRun": true,
+    "workflowRunId": 34167974789,
+    "workflowRunAttempt": 2,
+    "requestsAttemptedThisRun": 5,
+    "requestsSucceededThisRun": 5,
     "locationsRequestsThisRun": 0,
-    "nextTariffPage": 17,
-    "tariffPagesCollected": 16,
-    "tariffRowsStored": 1600,
+    "http429Count": 0,
+    "nextTariffPage": 20,
+    "tariffPagesCollected": 19,
+    "tariffRowsStored": 1900,
     "tariffTotalPages": 468,
-    "nextStatusPage": 12,
-    "statusPagesCollected": 11,
-    "statusRowsStored": 1047,
+    "nextStatusPage": 14,
+    "statusPagesCollected": 13,
+    "statusRowsStored": 1210,
     "statusTotalPages": 447
   },
   "coherenceCheck": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
   "runtimePublishReady": false,
   "pr50MustRemainDraft": true,
-  "updatedAt": "2026-09-07T23:37:00Z"
+  "updatedAt": "2026-09-08T01:45:00Z"
 }
