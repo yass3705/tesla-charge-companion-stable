@@ -48,20 +48,20 @@
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-08T08:40:19.005576Z",
-    "batchLaunchedInLatestCpoRun": false,
-    "requestsAttemptedInLatestCpoRun": 0,
-    "requestsSucceededInLatestCpoRun": 0,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T10:46:16.742374Z",
+    "batchLaunchedInLatestCpoRun": true,
+    "requestsAttemptedInLatestCpoRun": 5,
+    "requestsSucceededInLatestCpoRun": 5,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
-    "nextTariffPage": 32,
-    "tariffPagesCollected": 31,
-    "tariffRowsStored": 3100,
-    "tariffTotalPages": 462,
-    "nextStatusPage": 22,
-    "statusPagesCollected": 21,
-    "statusRowsStored": 2010,
-    "statusTotalPages": 447
+    "nextTariffPage": 35,
+    "tariffPagesCollected": 34,
+    "tariffRowsStored": 3400,
+    "tariffTotalPages": 461,
+    "nextStatusPage": 24,
+    "statusPagesCollected": 23,
+    "statusRowsStored": 2181,
+    "statusTotalPages": 446
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -83,5 +83,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T10:42:00Z"
+  "updatedAt": "2026-09-08T10:47:00Z"
 }
