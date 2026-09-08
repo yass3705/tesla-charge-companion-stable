@@ -2,50 +2,52 @@
   "schemaVersion": 1,
   "country": "ES",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
-  "canonicalModel": "base snapshot plus append-only nominative deltas",
-  "baseSnapshot": {
-    "path": "docs/spain-cpo-progress-2026-09.json",
-    "commit": "bd43b9097bdd380ef34885db2e0a2e59fed33a79",
-    "minimumTraversed": 118,
-    "persistedNominativeDecisionsSinceReconstruction": 20
+  "historicalWorkQueue": {
+    "labels": 618,
+    "authoritativeCpoDenominator": false,
+    "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
-  "deltas": [
-    {"path":"docs/spain-cpo-progress-batches/2026-09-07-run11.json","commit":"f94a77c5d587d0f234502636fcb295c4ffcff480","newNominativeDecisions":10},
-    {"path":"docs/spain-cpo-progress-batches/2026-09-07-run12.json","commit":"fe5d7b6e18170e598f7a54125ab1e055c87f1201","newNominativeDecisions":8},
-    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run13.json","commit":"4a633ea027af24e370a9879fd33b8a98dc81c4fa","newNominativeDecisions":10},
-    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run14.json","commit":"e39f773705bc43bd67d6e0619335ced2410e1744","newNominativeDecisions":10},
-    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run15.json","commit":"a0fc00fa41614f9c8a9c9ce7f75b73ea26ccfcd3","newNominativeDecisions":10},
-    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run16.json","commit":"d6499f80e0b4072846497a45dd366c806404ae88","newNominativeDecisions":10},
-    {"path":"docs/spain-cpo-progress-batches/2026-09-08-run17.json","commit":"a9a4153318ba6c10be35980f32cbb161c4e95e22","newNominativeDecisions":4}
-  ],
-  "current": {
-    "historicalWorkQueueLabels": 618,
-    "minimumTraversed": 180,
-    "maximumNeverTraversed": 438,
-    "sourceValidated": 16,
+  "firstPass": {
+    "minimumTraversed": 190,
+    "maximumNeverTraversed": 428,
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 17,
     "partial": 4,
     "active": 46,
     "setAside": 83,
     "platformExcluded": 3,
-    "supersededAlias": 28,
-    "total": 180
+    "supersededAlias": 37,
+    "total": 190
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The post-reconstruction alias batches use only explicit repository alias mappings and current REVE identity evidence where available; they do not reconstruct or synthesize the missing first-98 nominative ledger."
+    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. New decisions are append-only and nominative."
   },
+  "baseSnapshot": {
+    "path": "docs/spain-cpo-progress-2026-09.json",
+    "minimumTraversed": 118
+  },
+  "deltas": [
+    "docs/spain-cpo-progress-batches/2026-09-08-run11.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run12.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run13.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run14.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run15.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run16.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run17.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+  ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T04:45:45.473246Z",
-    "batchLaunchedThisRun": true,
-    "workflowRunId": 34167974789,
-    "workflowRunAttempt": 4,
-    "requestsAttemptedThisRun": 5,
-    "requestsSucceededThisRun": 5,
-    "locationsRequestsThisRun": 0,
-    "http429Count": 0,
+    "batchLaunchedInLatestCpoRun": false,
+    "requestsAttemptedInLatestCpoRun": 0,
+    "locationsRequestsInLatestCpoRun": 0,
+    "http429CountInLatestCpoRun": 0,
     "nextTariffPage": 26,
     "tariffPagesCollected": 25,
     "tariffRowsStored": 2500,
@@ -55,8 +57,22 @@
     "statusRowsStored": 1610,
     "statusTotalPages": 447
   },
-  "coherenceCheck": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-  "runtimePublishReady": false,
-  "pr50MustRemainDraft": true,
-  "updatedAt": "2026-09-08T04:47:00Z"
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 190,
+    "firstPassMinimumTraversed": 190,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true
+  },
+  "updatedAt": "2026-09-08T05:39:22Z"
 }
