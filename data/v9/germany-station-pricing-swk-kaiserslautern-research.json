@@ -1,0 +1,26 @@
+{
+  "country": "DE",
+  "operator": "SWK Stadtwerke Kaiserslautern Versorgungs-AG",
+  "aliases": ["Stadtwerke Kaiserslautern", "SWK Kaiserslautern", "SWK E-Mobility"],
+  "checkedAt": "2026-09-08",
+  "status": "partial",
+  "deferred": true,
+  "officialTariff": {
+    "type": "SWK Ladekarte contract tariff",
+    "validFrom": "2025-09-01",
+    "ownNetworkGeneralAcEurPerKwh": 0.57,
+    "ownNetworkGeneralDcEurPerKwh": 0.67,
+    "note": "Official values are tied to the SWK Ladekarte and are not promoted to contract-free ad-hoc."
+  },
+  "stationDiscoveryEvidence": {
+    "observedAdhocEurPerKwh": [0.60, 0.67],
+    "note": "GoingElectric currently reports 0.60 EUR/kWh on multiple SWK/ladenetz AC EVSEs and 0.60-0.67 EUR/kWh at a mixed AC/HPC SWK site. This is discovery evidence only."
+  },
+  "reason": "The official SWK surface publishes current Ladekarte prices but does not expose a current universal numeric ad-hoc tariff. Station-level aggregator observations are not generalized to the CPO network.",
+  "sources": [
+    "https://www.swk-kl.de/e-mobilitaet/ladekarte",
+    "https://www.goingelectric.de/stromtankstellen/Deutschland/Kaiserslautern/Hallesche-Strasse-Hallesche-Strasse-2/72191/",
+    "https://www.goingelectric.de/stromtankstellen/Deutschland/Kaiserslautern/SWK-Stadtwerke-Karcherstrasse-28/70295/"
+  ],
+  "nextEvidenceNeeded": "Official direct-payment/QR checkout or station API payload tying the ad-hoc amount and any blocking component to SWK EVSEs."
+}
