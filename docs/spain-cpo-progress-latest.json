@@ -8,24 +8,24 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 285,
-    "maximumNeverTraversed": 333,
+    "minimumTraversed": 295,
+    "maximumNeverTraversed": 323,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 24,
     "partial": 8,
-    "active": 68,
-    "setAside": 121,
+    "active": 71,
+    "setAside": 128,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 285
+    "total": 295
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. Run25 performed the requested one-shot reconstruction retry; no new GitHub nominative evidence was found, so the gap remains explicit."
+    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. Run25 performed the requested one-shot reconstruction retry; no new GitHub nominative evidence was found, so the gap remains explicit and was not retried in run31."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -51,25 +51,34 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run27.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run28.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run29.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run30.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-08T16:46:24.233485Z",
-    "batchLaunchedInLatestCpoRun": false,
-    "requestsAttemptedInLatestCpoRun": 0,
-    "requestsSucceededInLatestCpoRun": 0,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T18:49:37.110648Z",
+    "batchLaunchedInLatestCpoRun": true,
+    "requestsAttemptedInLatestCpoRun": 5,
+    "requestsSucceededInLatestCpoRun": 5,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
-    "nextTariffPage": 44,
-    "tariffPagesCollected": 43,
-    "tariffRowsStored": 4288,
+    "tariffPagesInLatestBatch": [44,45,46],
+    "tariffNewRowsInLatestBatch": 299,
+    "tariffUpdatedRowsInLatestBatch": 0,
+    "tariffUnchangedOrDeduplicatedInLatestBatch": 1,
+    "nextTariffPage": 47,
+    "tariffPagesCollected": 46,
+    "tariffRowsStored": 4587,
     "tariffTotalPages": 462,
-    "nextStatusPage": 30,
-    "statusPagesCollected": 29,
-    "statusRowsStored": 2681,
+    "statusPagesInLatestBatch": [30,31],
+    "statusNewRowsInLatestBatch": 193,
+    "statusUpdatedRowsInLatestBatch": 4,
+    "statusUnchangedOrDeduplicatedInLatestBatch": 3,
+    "nextStatusPage": 32,
+    "statusPagesCollected": 31,
+    "statusRowsStored": 2874,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "No live REVE request was made because less than one real hour had elapsed since the previous successful batch when the gate was checked. Work continued on never-traversed CPO labels."
+    "latestCpoRunDecision": "Exactly one eligible live batch was consumed. Because connector workflow_dispatch and rerun of a prior dispatch run were unavailable, a single targeted temporary push sentinel was used as last resort; the workflow was restored to dispatch-only before the sentinel was deleted, preventing a second collection trigger."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -80,8 +89,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 285,
-    "firstPassMinimumTraversed": 285,
+    "continuityCountSum": 295,
+    "firstPassMinimumTraversed": 295,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -91,5 +100,7 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T17:37:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-08-run31.json",
+  "investigationCurrent": "Continue first-pass alphabetic queue after H2PLT,S.A.; do not reopen active/setAside cases until all 618 derived labels have received a first-pass decision.",
+  "updatedAt": "2026-09-08T18:55:00Z"
 }
