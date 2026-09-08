@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 217,
-    "maximumNeverTraversed": 401,
+    "minimumTraversed": 222,
+    "maximumNeverTraversed": 396,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 18,
+    "sourceValidated": 20,
     "partial": 5,
     "active": 47,
-    "setAside": 85,
+    "setAside": 88,
     "platformExcluded": 3,
     "supersededAlias": 59,
-    "total": 217
+    "total": 222
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -43,7 +43,8 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run19.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run20.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run21.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run22.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run23.json"
   ],
   "reveTariffStatus": {
     "complete": false,
@@ -71,8 +72,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 217,
-    "firstPassMinimumTraversed": 217,
+    "continuityCountSum": 222,
+    "firstPassMinimumTraversed": 222,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -82,5 +83,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T09:39:00Z"
+  "updatedAt": "2026-09-08T10:42:00Z"
 }
