@@ -1,0 +1,54 @@
+name: Temp Spain REVE tariff/status once
+
+on:
+  push:
+    branches:
+      - spain-reve-preintegration
+    paths:
+      - .github/reve-stream-once-20260908-1042.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-spain-reve-tariff-status
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: spain-reve-preintegration
+      - name: Collect next tariff/status pages
+        env:
+          REVE_API_KEY: ${{ secrets.REVE_API_KEY }}
+        run: python scripts/reve_es_stream_collect.py --collect
+      - name: Verify hard request budget and endpoints
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('data/spain_reve/tariff_status_stream_last_run.json').read_text())
+          attempted=r.get('requestsAttempted',0)
+          succeeded=r.get('requestsSucceeded',0)
+          reqs=r.get('requests',[])
+          if attempted > 5: raise SystemExit(f'Hard REVE budget violated: {attempted}')
+          if attempted != succeeded: raise SystemExit(f'REVE stream batch incomplete: {succeeded}/{attempted}')
+          bad=[x.get('endpoint') for x in reqs if x.get('endpoint') not in ('/connectors/tariffs','/evses/operational_status')]
+          if bad: raise SystemExit(f'Unexpected endpoint(s): {bad}')
+          if any(x.get('status') == 429 for x in reqs): raise SystemExit('HTTP 429 encountered')
+          PY
+      - name: Commit stream progress
+        shell: bash
+        run: |
+          git add data/spain_reve/tariff_status_stream_state.json data/spain_reve/tariff_status_stream_last_run.json data/spain_reve/reve_connector_tariffs_raw.json.gz data/spain_reve/reve_operational_status_raw.json.gz
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "collect(es): advance REVE tariff/status streams"
+          git push
