@@ -1,0 +1,76 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation25.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 61,
+  "forwardSliceStatus": {
+    "complete": 16,
+    "partial": 45,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 530,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Bio-Energie Pirmasens",
+      "aliases": ["Bio-Energie Pirmasens GmbH"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official station page explicitly lists seven Bio-Energie Pirmasens AC locations and repeats the same exact ad-hoc tariff at each: 1.50 EUR/session + 0.51 EUR/kWh."
+    },
+    {
+      "name": "AÜW",
+      "aliases": ["Allgäuer Überlandwerk GmbH", "AllgäuStrom StromTankstellen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official 2026 ad-hoc tariff matrix is exact, but AC tariff-zone assignment is station-specific and only exposed through the charging-point QR flow; zone I and II differ in blocking-fee semantics."
+    },
+    {
+      "name": "Stadtwerke Emden",
+      "aliases": ["Stadtwerke Emden GmbH", "SWE"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official QR/web ad-hoc access is proven, but official terms explicitly state that ad-hoc prices may vary by charging point and are displayed in the app/web payment flow."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-pirmasens-research.json",
+    "data/v9/germany-station-pricing-auew-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-emden-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "Bio-Energie Pirmasens", "aliases": ["Bio-Energie Pirmasens GmbH"]},
+    {"canonical": "AÜW", "aliases": ["Allgäuer Überlandwerk GmbH", "AllgäuStrom StromTankstellen"]},
+    {"canonical": "Stadtwerke Emden", "aliases": ["Stadtwerke Emden GmbH", "SWE"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 61/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep AÜW deferred until an EVSE-to-AC-tariff-zone mapping is proven",
+    "keep Stadtwerke Emden deferred until EVSE-level QR/web checkout prices are captured",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
