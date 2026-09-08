@@ -1,0 +1,32 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Emden",
+  "aliases": ["Stadtwerke Emden GmbH", "SWE"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "methodsReported": ["QR", "web", "credit card", "PayPal"],
+    "stationCountReported": 19,
+    "note": "Current official FAQ confirms QR-based spontaneous charging and payment without a charging card. The official contract terms state that ad-hoc prices are shown in the app or web payment flow and may vary by charging point. No network-wide ad-hoc price is therefore inferred."
+  },
+  "contractTariffDiscovery": {
+    "product": "STROMTANKEN BI UNS",
+    "oneTimeCardFeeEur": 9.90,
+    "monthlyBaseEur": 0.0,
+    "acEurPerKwh": 0.54,
+    "dcEurPerKwh": 0.64,
+    "eligibleEnergyCustomerAcEurPerKwh": 0.48,
+    "eligibleEnergyCustomerDcEurPerKwh": 0.58,
+    "note": "Official charging-card tariff is preserved as a separate contract product and is not promoted to ad-hoc."
+  },
+  "reason": "Official sources prove ad-hoc QR/web payment but explicitly say ad-hoc prices may differ by charging point. Exact EVSE-level checkout prices are not publicly enumerated on the current site.",
+  "sources": [
+    "https://stadtwerke-emden.de/strom/elektromobilitaet",
+    "https://stadtwerke-emden.de/service/fragen-antworten",
+    "https://stadtwerke-emden.de/strom/elektromobilitaet/ladekarte-bestellen",
+    "https://stadtwerke-emden.de/fileadmin/Medien/Dokumente/Downloads/Produkte/Strom/Elektromobilitaet/Vertrag_SWE_Ladekarte.pdf"
+  ],
+  "nextEvidenceNeeded": "Public QR/web checkout or backend response mapping each Stadtwerke Emden EVSE to its current ad-hoc price."
+}
