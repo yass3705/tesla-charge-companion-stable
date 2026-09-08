@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 274,
-    "maximumNeverTraversed": 344,
+    "minimumTraversed": 285,
+    "maximumNeverTraversed": 333,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 24,
     "partial": 8,
-    "active": 65,
-    "setAside": 113,
+    "active": 68,
+    "setAside": 121,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 274
+    "total": 285
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -50,14 +50,15 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run26.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run27.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run28.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run29.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run29.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T16:46:24.233485Z",
-    "batchLaunchedInLatestCpoRun": true,
-    "requestsAttemptedInLatestCpoRun": 5,
-    "requestsSucceededInLatestCpoRun": 5,
+    "batchLaunchedInLatestCpoRun": false,
+    "requestsAttemptedInLatestCpoRun": 0,
+    "requestsSucceededInLatestCpoRun": 0,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
     "nextTariffPage": 44,
@@ -68,7 +69,7 @@
     "statusPagesCollected": 29,
     "statusRowsStored": 2681,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "Exactly one live REVE batch was executed from persistent cursors: tariffs pages 41-43 and status pages 28-29; 5/5 requests succeeded with HTTP 200, no 429 and no /locations request. The hourly live quota is consumed for this window."
+    "latestCpoRunDecision": "No live REVE request was made because less than one real hour had elapsed since the previous successful batch when the gate was checked. Work continued on never-traversed CPO labels."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -79,8 +80,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 274,
-    "firstPassMinimumTraversed": 274,
+    "continuityCountSum": 285,
+    "firstPassMinimumTraversed": 285,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -90,5 +91,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T16:50:00Z"
+  "updatedAt": "2026-09-08T17:37:00Z"
 }
