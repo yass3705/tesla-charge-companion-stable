@@ -8,8 +8,8 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 194,
-    "maximumNeverTraversed": 424,
+    "minimumTraversed": 204,
+    "maximumNeverTraversed": 414,
     "firstPassComplete": false
   },
   "counts": {
@@ -18,8 +18,8 @@
     "active": 46,
     "setAside": 83,
     "platformExcluded": 3,
-    "supersededAlias": 41,
-    "total": 194
+    "supersededAlias": 51,
+    "total": 204
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -40,14 +40,15 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run16.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run17.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run18.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run19.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run19.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T06:42:48.221999Z",
-    "batchLaunchedInLatestCpoRun": true,
-    "requestsAttemptedInLatestCpoRun": 5,
-    "requestsSucceededInLatestCpoRun": 5,
+    "batchLaunchedInLatestCpoRun": false,
+    "requestsAttemptedInLatestCpoRun": 0,
+    "requestsSucceededInLatestCpoRun": 0,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
     "nextTariffPage": 29,
@@ -68,8 +69,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 194,
-    "firstPassMinimumTraversed": 194,
+    "continuityCountSum": 204,
+    "firstPassMinimumTraversed": 204,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -78,5 +79,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T06:45:30Z"
+  "updatedAt": "2026-09-08T07:42:18Z"
 }
