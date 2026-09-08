@@ -1,0 +1,29 @@
+{
+  "country": "DE",
+  "operator": "Bio-Energie Pirmasens",
+  "aliases": ["Bio-Energie Pirmasens GmbH"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Seven explicitly listed 22 kW AC locations on the current official Stadtwerke Pirmasens charging page",
+    "stations": ["Münzplatz", "Oberer Schloßplatz", "Medicenter", "Tiefbauamt", "Emils Hotel", "Johanna Stein", "PLUB"],
+    "priceEurPerKwh": 0.51,
+    "activationEurPerSession": 1.5,
+    "vatIncluded": true,
+    "validFrom": "2024-05-01",
+    "note": "The current official page states that these charging stations belong to Bio-Energie Pirmasens GmbH and repeats the same ad-hoc tariff for every listed location. No DC tariff is inferred because the listed stations are AC 22 kW."
+  },
+  "contractTariffDiscovery": {
+    "monthlyBaseEur": 5.0,
+    "priceEurPerKwh": 0.43,
+    "validFrom": "2024-05-01",
+    "note": "Preserved as a separate charging-card product; not substituted for ad-hoc."
+  },
+  "reason": "Current official station-level page provides an explicit ad-hoc tariff for every listed Bio-Energie Pirmasens charging location; no extrapolation beyond those stations is required.",
+  "sources": [
+    "https://www.stadtwerke-pirmasens.de/ladepunkte"
+  ],
+  "nextEvidenceNeeded": null
+}
