@@ -1,0 +1,27 @@
+{
+  "country": "DE",
+  "operator": "AÜW",
+  "aliases": ["Allgäuer Überlandwerk GmbH", "AllgäuStrom StromTankstellen"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "methodsReported": ["QR", "web", "Visa", "Mastercard"],
+    "validFrom": "2026-04-13",
+    "preauthorizationEur": 50.0,
+    "preauthorizationIsCost": false,
+    "tariffMatrix": {
+      "acTariffZoneI": {"activationEurPerSession": 1.0, "priceEurPerKwh": 0.51, "blockingEurPerMinute": 0.05, "blockingAfterMinutes": 180, "blockingWindow": "07:00-22:00"},
+      "acTariffZoneII": {"activationEurPerSession": 1.0, "priceEurPerKwh": 0.51, "blockingFee": null},
+      "dcUpTo50Kw": {"activationEurPerSession": 0.0, "priceEurPerKwh": 0.57, "blockingEurPerMinute": 0.06, "blockingAfterMinutes": 180, "blockingWindow": "07:00-22:00"},
+      "dcOver50Kw": {"activationEurPerSession": 0.0, "priceEurPerKwh": 0.66, "blockingEurPerMinute": 0.10, "blockingAfterMinutes": 45}
+    },
+    "note": "Official AÜW page publishes the current ad-hoc matrix and states that the applicable tariff zone for a charging point is shown after scanning that station's QR code. AC zones share the same energy price but differ in blocking-fee semantics."
+  },
+  "reason": "Exact current tariff matrix is official, but a complete public EVSE-to-tariff-zone mapping was not found. Keep station-level attachment fail-closed until each AC EVSE can be assigned to zone I or II without inference.",
+  "sources": [
+    "https://auew.de/gewerbekunden/e-mobilitaet/allgaeustrom-stromtankstellen/"
+  ],
+  "nextEvidenceNeeded": "Official/public station or EVSE export, webapp/backend response, or QR checkout evidence mapping each AÜW AC EVSE to tariff zone I or II."
+}
