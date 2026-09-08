@@ -1,0 +1,68 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-08",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation23.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 55,
+  "forwardSliceStatus": {
+    "complete": 15,
+    "partial": 40,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 536,
+    "note": "Repository-certified forward first-pass slice only."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Leipziger Stadtwerke",
+      "aliases": ["Stadtwerke Leipzig", "L-Strom.drive", "L-Charge"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official FAQ proves ad-hoc QR charging; current official 2026 tariff page publishes contract/roaming prices but no numeric ad-hoc amount. Third-party 0.65/0.75 EUR/kWh lead is not promoted without primary evidence."
+    },
+    {
+      "name": "SWK Stadtwerke Kaiserslautern Versorgungs-AG",
+      "aliases": ["Stadtwerke Kaiserslautern", "SWK Kaiserslautern", "SWK E-Mobility"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official surface publishes Ladekarte prices only. Station-level sources show contract-free direct prices around 0.60-0.67 EUR/kWh, but no primary CPO-wide ad-hoc matrix was found, so values remain discovery-only."
+    },
+    {
+      "name": "Erlanger Stadtwerke AG",
+      "aliases": ["Stadtwerke Erlangen", "ESTW", "ESTW Erlangen"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Ad-hoc availability is confirmed at ESTW stations, but no exact current direct-payment amount was found on an official ESTW surface or public checkout/backend."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-leipziger-stadtwerke-research.json",
+    "data/v9/germany-station-pricing-swk-kaiserslautern-research.json",
+    "data/v9/germany-station-pricing-estw-erlangen-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is 55/591; older conflicting global universes remain excluded until nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Leipzig, Kaiserslautern and Erlangen deferred until primary direct-payment evidence appears",
+    "continue nominative ledger reconciliation from committed checkpoints without changing the certified forward counters"
+  ]
+}
