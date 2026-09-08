@@ -8,24 +8,24 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 303,
-    "maximumNeverTraversed": 315,
+    "minimumTraversed": 311,
+    "maximumNeverTraversed": 307,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 24,
+    "sourceValidated": 25,
     "partial": 8,
-    "active": 72,
-    "setAside": 135,
+    "active": 75,
+    "setAside": 139,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 303
+    "total": 311
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. Run25 performed the requested one-shot reconstruction retry; no new GitHub nominative evidence was found, so the gap remains explicit and was not retried in run32."
+    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. Run25 performed the requested one-shot reconstruction retry; no new GitHub nominative evidence was found, so the gap remains explicit and is not retried without new evidence."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -53,16 +53,19 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run29.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run30.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run31.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run32.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run33.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T18:49:37.110648Z",
-    "batchLaunchedInLatestCpoRun": false,
-    "requestsAttemptedInLatestCpoRun": 0,
-    "requestsSucceededInLatestCpoRun": 0,
-    "locationsRequestsInLatestCpoRun": 0,
-    "http429CountInLatestCpoRun": 0,
+    "batchTriggerAttemptedInLatestCpoRun": true,
+    "batchConfirmedCompletedInLatestCpoRun": false,
+    "requestsAttemptedObservedInLatestCpoRun": 0,
+    "requestsSucceededObservedInLatestCpoRun": 0,
+    "locationsRequestsObservedInLatestCpoRun": 0,
+    "http429ObservedInLatestCpoRun": 0,
+    "quotaWindowConservativelyConsumed": true,
     "nextTariffPage": 47,
     "tariffPagesCollected": 46,
     "tariffRowsStored": 4587,
@@ -71,7 +74,7 @@
     "statusPagesCollected": 31,
     "statusRowsStored": 2874,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "No live REVE request was made because less than one real hour had elapsed since the previous successful batch when the gate was checked. Work continued on never-traversed CPO labels."
+    "latestCpoRunDecision": "More than one real hour had elapsed, so a single temporary targeted trigger was emitted because direct workflow_dispatch/runs listing is unavailable through the connector. The collector workflow was restored to dispatch-only and the sentinel removed. No newer last_run/state has materialized yet; to eliminate any double-batch risk, no second trigger will be emitted in this hourly window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -82,18 +85,18 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 303,
-    "firstPassMinimumTraversed": 303,
+    "continuityCountSum": 311,
+    "firstPassMinimumTraversed": 311,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
     "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
     "directCpoAndEmspPricingSeparated": true,
-    "reveRequestBudgetRespected": true,
-    "locationsEndpointUnused": true
+    "reveRequestBudgetRespectedByObservedState": true,
+    "locationsEndpointUnusedByObservedState": true
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-08-run32.json",
-  "investigationCurrent": "Continue first-pass alphabetic queue after INMOMEDIC 09, S.L.U.; do not reopen active/setAside cases until all 618 derived labels have received a first-pass decision.",
-  "updatedAt": "2026-09-08T19:38:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-08-run33.json",
+  "investigationCurrent": "Continue first-pass queue after Naturgy Nuevas Energías, SLU; next current-REVE identities begin with OESTE SOLUCIONES ENERGETICAS, PARKING MOGAN, PAVAPARK MOVILIDAD, PETREM DISTRIBUCIO and PETRO PALOL. Do not reopen active/setAside cases before first-pass completion.",
+  "updatedAt": "2026-09-08T20:52:00Z"
 }
