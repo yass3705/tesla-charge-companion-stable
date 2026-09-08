@@ -1,0 +1,34 @@
+{
+  "country": "DE",
+  "canonicalCpo": "Stadtwerke Marburg GmbH",
+  "aliases": ["Stadtwerke Marburg", "SWMR"],
+  "status": "complete",
+  "pricingScope": "official public charging stations of Stadtwerke Marburg",
+  "effectiveFrom": "2026-01-01",
+  "directPayment": {
+    "adHoc": true,
+    "energyEurPerKwh": 0.50,
+    "sessionFeeEur": 1.00,
+    "blockingFee": {
+      "eurPerMinute": 0.05,
+      "trigger": "60 minutes after charging has ended",
+      "timeWindow": "08:00-18:00"
+    }
+  },
+  "contractCard": {
+    "energyEurPerKwh": 0.36,
+    "cardFeeEur": 0.00
+  },
+  "failClosedNotes": [
+    "No AC/DC distinction is invented because the official 2026 price sheet publishes a single ad-hoc energy price.",
+    "The blocking fee trigger is after charging has ended, not after session start."
+  ],
+  "sources": [
+    {
+      "type": "official-price-sheet",
+      "url": "https://www.stadtwerke-marburg.de/fileadmin/user_upload/Seiteninhalte/Erdgas-_und_Elektromobilit%C3%A4t/Preisblatt_E-Lades%C3%A4ulen.pdf",
+      "checked": "2026-09-08",
+      "evidence": "Official sheet says prices valid from 2026-01-01; ad-hoc 0.50 EUR/kWh, 1.00 EUR start fee, 0.05 EUR/min blocking fee from 60 min after end of charging between 08:00 and 18:00."
+    }
+  ]
+}
