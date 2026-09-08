@@ -1,0 +1,66 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-08",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation22.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 52,
+  "forwardSliceStatus": {
+    "complete": 15,
+    "partial": 37,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 539,
+    "note": "Repository-certified forward first-pass slice only. This checkpoint corrects the automation state back to the actual Germany branch rather than unrelated PR metadata."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Marburg GmbH",
+      "aliases": ["Stadtwerke Marburg", "SWMR"],
+      "status": "complete",
+      "reason": "Official price sheet valid from 2026-01-01 publishes exact ad-hoc price 0.50 EUR/kWh, 1.00 EUR session fee, and 0.05 EUR/min blocking fee from 60 minutes after charging ends between 08:00 and 18:00."
+    },
+    {
+      "name": "Aschaffenburger Versorgungs-GmbH",
+      "aliases": ["Stadtwerke Aschaffenburg", "AVG", "AVG Aschaffenburg"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official 2026 page confirms dedicated ad-hoc QR/app/card pricing and AC/DC blocking thresholds, but numeric price tables are image-only in the accessible surface; no amount inferred."
+    },
+    {
+      "name": "Stadtwerke Görlitz AG",
+      "aliases": ["Stadtwerke Görlitz", "SWG Görlitz", "SWG"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official page links an ad-hoc sheet labelled valid from 2022 while publishing separate newer contract prices. Historic ad-hoc amount is not promoted to 2026 without current checkout evidence."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-marburg-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-aschaffenburg-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-goerlitz-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "historicTariffPromotedWithoutCurrentEvidence": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "prReferenceCorrection": "Germany work is PR #69 / germany-v9-preintegration. PR #73 is Morocco EVOne and must not be used for Germany state.",
+    "result": "ok_with_pr_mergeability_followup"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The certified forward slice is 52/591; older conflicting global universes remain excluded until reconciled nominatively.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize official current ad-hoc/direct-payment tariff surfaces",
+    "inspect Germany PR mergeability/base divergence separately without risky merge or production promotion"
+  ]
+}
