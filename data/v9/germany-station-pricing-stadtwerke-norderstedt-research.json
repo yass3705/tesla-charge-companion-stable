@@ -1,0 +1,24 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Norderstedt",
+  "aliases": ["Stadtwerke Norderstedt GmbH", "TuWatt+2Go", "m8mit Norderstedt"],
+  "checkedAt": "2026-09-08",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "methodsReported": ["SMS", "web", "app", "Giro-e"],
+    "officialPublishedPrices": {
+      "smsDcEurPerKwh": 0.7718,
+      "giroEAcEurPerKwh": 0.47,
+      "giroEDcEurPerKwh": 0.66,
+      "giroEActivationEurPerSession": 0.35
+    },
+    "note": "Official page confirms several contract-free payment methods, but does not publish a complete current tariff mapping for every method/EVSE. SMS has a numeric DC price; Giro-e is described as currently available at DC fast chargers although the tariff table also displays AC and DC values. Web/app prices are not numerically disclosed on the same official surface."
+  },
+  "reason": "Do not generalize one payment-method tariff to every Norderstedt EVSE. Exact direct-payment numbers exist for specific modes, but the public official surface is not sufficient to map all stations/EVSEs and methods fail-closed.",
+  "sources": [
+    "https://www.stadtwerke-norderstedt.de/e-mobilitaet/bezahlmoeglichkeiten"
+  ],
+  "nextEvidenceNeeded": "Official station/EVSE payment-method matrix or public checkout/backend response tying each EVSE to the applicable SMS/web/app/Giro-e tariff."
+}
