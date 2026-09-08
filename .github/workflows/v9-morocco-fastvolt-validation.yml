@@ -1,0 +1,38 @@
+name: V9 Morocco FastVolt public validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-fastvolt-adapter']
+    paths:
+      - 'assets/v9/adapters/morocco-fastvolt.js'
+      - 'tests/v9-morocco-fastvolt.test.cjs'
+      - '.github/workflows/v9-morocco-fastvolt-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit-test adapter invariants
+        run: node tests/v9-morocco-fastvolt.test.cjs
+      - name: Fetch sanitized public FastVolt inventory
+        run: curl --fail --silent --show-error --location 'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/fastvolt/latest-public-map-inventory.json' -o /tmp/fastvolt.json
+      - name: Validate current public production inventory
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const F=require('./assets/v9/adapters/morocco-fastvolt.js');
+          const d=JSON.parse(fs.readFileSync('/tmp/fastvolt.json','utf8'));
+          const v=F.validateDataset(d);
+          if(!v.ok)throw new Error(JSON.stringify(v));
+          const rows=F.normalizeDataset(d);
+          const al=rows.find(x=>x.sourceStationId==='W00057');
+          if(!al||al.evses[0].connectors.length!==6)throw new Error('Al Boustane verified override missing');
+          if(al.status.state!=='unknown')throw new Error('public map state leaked into live status');
+          console.log(JSON.stringify({ok:true,raw:v.rawCount,production:v.productionCount,alBoustaneConnectors:al.evses[0].connectors.length},null,2));
+          NODE
