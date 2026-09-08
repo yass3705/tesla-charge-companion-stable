@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 262,
-    "maximumNeverTraversed": 356,
+    "minimumTraversed": 270,
+    "maximumNeverTraversed": 348,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 23,
     "partial": 8,
-    "active": 57,
-    "setAside": 110,
+    "active": 62,
+    "setAside": 113,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 262
+    "total": 270
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -48,14 +48,14 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run24.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run25.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run26.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run27.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T14:49:06.734700Z",
-    "batchLaunchedInLatestCpoRun": true,
-    "requestsAttemptedInLatestCpoRun": 5,
-    "requestsSucceededInLatestCpoRun": 5,
+    "batchLaunchedInLatestCpoRun": false,
+    "requestsAttemptedInLatestCpoRun": 0,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
     "nextTariffPage": 41,
@@ -66,7 +66,7 @@
     "statusPagesCollected": 27,
     "statusRowsStored": 2517,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "Exactly one eligible live REVE batch was executed by rerunning the last successful targeted collector job; hard request budget and endpoint restrictions passed."
+    "latestCpoRunDecision": "No live REVE call: less than one real hour had elapsed since the latest successful live batch; first-pass CPO work continued off-REVE."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -77,8 +77,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 262,
-    "firstPassMinimumTraversed": 262,
+    "continuityCountSum": 270,
+    "firstPassMinimumTraversed": 270,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -88,5 +88,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T14:52:00Z"
+  "updatedAt": "2026-09-08T15:42:00Z"
 }
