@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 270,
-    "maximumNeverTraversed": 348,
+    "minimumTraversed": 274,
+    "maximumNeverTraversed": 344,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 23,
+    "sourceValidated": 24,
     "partial": 8,
-    "active": 62,
+    "active": 65,
     "setAside": 113,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 270
+    "total": 274
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -49,24 +49,26 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run25.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run26.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run27.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run28.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run29.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-08T14:49:06.734700Z",
-    "batchLaunchedInLatestCpoRun": false,
-    "requestsAttemptedInLatestCpoRun": 0,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T16:46:24.233485Z",
+    "batchLaunchedInLatestCpoRun": true,
+    "requestsAttemptedInLatestCpoRun": 5,
+    "requestsSucceededInLatestCpoRun": 5,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
-    "nextTariffPage": 41,
-    "tariffPagesCollected": 40,
-    "tariffRowsStored": 3988,
+    "nextTariffPage": 44,
+    "tariffPagesCollected": 43,
+    "tariffRowsStored": 4288,
     "tariffTotalPages": 462,
-    "nextStatusPage": 28,
-    "statusPagesCollected": 27,
-    "statusRowsStored": 2517,
+    "nextStatusPage": 30,
+    "statusPagesCollected": 29,
+    "statusRowsStored": 2681,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "No live REVE call: less than one real hour had elapsed since the latest successful live batch; first-pass CPO work continued off-REVE."
+    "latestCpoRunDecision": "Exactly one live REVE batch was executed from persistent cursors: tariffs pages 41-43 and status pages 28-29; 5/5 requests succeeded with HTTP 200, no 429 and no /locations request. The hourly live quota is consumed for this window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -77,8 +79,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 270,
-    "firstPassMinimumTraversed": 270,
+    "continuityCountSum": 274,
+    "firstPassMinimumTraversed": 274,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -88,5 +90,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T15:42:00Z"
+  "updatedAt": "2026-09-08T16:50:00Z"
 }
