@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 325,
-    "maximumNeverTraversed": 293,
+    "minimumTraversed": 331,
+    "maximumNeverTraversed": 287,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 25,
+    "sourceValidated": 26,
     "partial": 8,
-    "active": 83,
-    "setAside": 145,
+    "active": 84,
+    "setAside": 149,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 325
+    "total": 331
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -56,26 +56,27 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run32.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run33.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run34.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run35.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run35.json",
+    "docs/spain-cpo-progress-batches/2026-09-09-run36.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-08T21:43:27.486815Z",
-    "batchConfirmedCompletedInLatestCpoRun": false,
-    "requestsAttemptedObservedInLatestCpoRun": 0,
-    "requestsSucceededObservedInLatestCpoRun": 0,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T23:39:11.610436Z",
+    "batchConfirmedCompletedInLatestCpoRun": true,
+    "requestsAttemptedObservedInLatestCpoRun": 5,
+    "requestsSucceededObservedInLatestCpoRun": 5,
     "locationsRequestsObservedInLatestCpoRun": 0,
     "http429ObservedInLatestCpoRun": 0,
     "quotaWindowConservativelyConsumed": true,
-    "nextTariffPage": 50,
-    "tariffPagesCollected": 49,
-    "tariffRowsStored": 4887,
+    "nextTariffPage": 53,
+    "tariffPagesCollected": 52,
+    "tariffRowsStored": 5187,
     "tariffTotalPages": 462,
-    "nextStatusPage": 34,
-    "statusPagesCollected": 33,
-    "statusRowsStored": 3074,
+    "nextStatusPage": 36,
+    "statusPagesCollected": 35,
+    "statusRowsStored": 3274,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "Less than one real hour had elapsed since the successful 2026-09-08T21:43:27.486815Z batch when this run started, so no REVE live request was made. The collector remains workflow_dispatch-only and /locations remains disabled."
+    "latestCpoRunDecision": "Exactly one live REVE batch was triggered after more than one real hour had elapsed. It completed 5/5 HTTP-200 requests: tariff pages 50-52 and status pages 34-35, with no /locations request and no HTTP 429. The temporary push trigger was removed and the collector restored to workflow_dispatch-only."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -86,8 +87,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 325,
-    "firstPassMinimumTraversed": 325,
+    "continuityCountSum": 331,
+    "firstPassMinimumTraversed": 331,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -98,7 +99,7 @@
     "locationsEndpointUnusedByObservedState": true,
     "mandatoryCadenceCheckPerformed": true
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-08-run35.json",
-  "investigationCurrent": "Continue first-pass queue immediately after QWELLO España SL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
-  "updatedAt": "2026-09-08T22:39:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run36.json",
+  "investigationCurrent": "Continue first-pass queue after SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS; next current-REVE identities include Tesla Spain SLU, The F Charging Espana S.L.U., Torrecillas Serna S.A., Totalenergies Marketing España S.A.U. and TRANSPORTES PENADES E HIJOS SL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
+  "updatedAt": "2026-09-08T23:50:00Z"
 }
