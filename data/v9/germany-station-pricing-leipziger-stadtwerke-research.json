@@ -1,0 +1,25 @@
+{
+  "country": "DE",
+  "operator": "Leipziger Stadtwerke",
+  "aliases": ["Stadtwerke Leipzig", "L-Strom.drive", "L-Charge"],
+  "checkedAt": "2026-09-08",
+  "status": "partial",
+  "deferred": true,
+  "directPayment": {
+    "supported": true,
+    "method": "dedicated ad-hoc QR code to emobility.l.de/e-mobility-frontend/adhoc"
+  },
+  "officialCurrentContractPrices": {
+    "validFrom": "2026-01-01",
+    "acRegularEurPerKwh": 0.54,
+    "dcRegularEurPerKwh": 0.64,
+    "note": "These are L-Strom.drive regular contract prices and are not promoted to ad-hoc."
+  },
+  "reason": "Official FAQ proves contract-free ad-hoc QR charging, while the current official 2026 tariff page exposes L-Strom.drive contract/roaming prices but no numeric ad-hoc amount. A third-party report points to 0.65 EUR/kWh AC and 0.75 EUR/kWh DC ad-hoc, but this is discovery evidence only and is not promoted without a current primary tariff/checkout.",
+  "sources": [
+    "https://kundenservice-stadtwerke.l.de/hc/de/articles/360022109880-Wie-starte-ich-einen-Ladevorgang",
+    "https://www.l.de/stadtwerke/privatkunden/e-mobilitaet/unterwegs-laden/",
+    "https://www.electrive.net/2025/11/06/leipziger-stadtwerke-senken-preis-fuer-ladestrom-um-rund-zehn-prozent/"
+  ],
+  "nextEvidenceNeeded": "Current official ad-hoc checkout or price sheet showing the numeric AC/DC direct-payment tariff and any time/session components."
+}
