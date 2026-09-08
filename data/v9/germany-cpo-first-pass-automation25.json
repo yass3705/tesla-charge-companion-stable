@@ -1,0 +1,71 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-08",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation24.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 58,
+  "forwardSliceStatus": {
+    "complete": 15,
+    "partial": 43,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 533,
+    "note": "Repository-certified forward first-pass slice only. Dachau and Schweinfurt have exact primary direct-payment tariffs, but remain partial until all tariff components can be represented safely in the verified runtime schema."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Norderstedt",
+      "aliases": ["Stadtwerke Norderstedt GmbH", "TuWatt+2Go", "m8mit Norderstedt"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official contract-free SMS and Giro-e prices are published, but the current official surface does not provide a complete EVSE/payment-method tariff mapping for SMS/web/app/Giro-e."
+    },
+    {
+      "name": "Stadtwerke Dachau",
+      "aliases": ["Stadtwerke Dachau GmbH", "SWD Dachau", "SWD"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Exact official smartphone direct-payment AC/DC prices and blocking fees are known, but minimum-turnover components cannot be represented safely by the verified current direct-offer schema."
+    },
+    {
+      "name": "Stadtwerke Schweinfurt",
+      "aliases": ["Stadtwerke Schweinfurt GmbH", "SW Schweinfurt", "charge-it-easy Schweinfurt"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Exact official standard charge-it-easy price is known and no-registration credit-card payment is proven, but minimum-transaction rounding and post-full-charge blocking semantics cannot be represented safely by the verified current direct-offer schema."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-norderstedt-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-dachau-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-schweinfurt-research.json"
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is 58/591; previously reported larger counters are excluded until nominative reconciliation proves them from committed repository evidence.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Norderstedt deferred until an EVSE/payment-method matrix or checkout evidence appears",
+    "keep Dachau and Schweinfurt tariff evidence preserved but runtime-deferred until minimum/post-charge semantics are represented safely",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
