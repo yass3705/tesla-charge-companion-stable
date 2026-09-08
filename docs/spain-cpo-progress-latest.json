@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 212,
-    "maximumNeverTraversed": 406,
+    "minimumTraversed": 217,
+    "maximumNeverTraversed": 401,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 17,
-    "partial": 4,
-    "active": 46,
-    "setAside": 83,
+    "sourceValidated": 18,
+    "partial": 5,
+    "active": 47,
+    "setAside": 85,
     "platformExcluded": 3,
     "supersededAlias": 59,
-    "total": 212
+    "total": 217
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -42,14 +42,15 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run18.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run19.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run20.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run21.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T08:40:19.005576Z",
-    "batchLaunchedInLatestCpoRun": true,
-    "requestsAttemptedInLatestCpoRun": 5,
-    "requestsSucceededInLatestCpoRun": 5,
+    "batchLaunchedInLatestCpoRun": false,
+    "requestsAttemptedInLatestCpoRun": 0,
+    "requestsSucceededInLatestCpoRun": 0,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
     "nextTariffPage": 32,
@@ -70,15 +71,16 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 212,
-    "firstPassMinimumTraversed": 212,
+    "continuityCountSum": 217,
+    "firstPassMinimumTraversed": 217,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
     "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T08:41:00Z"
+  "updatedAt": "2026-09-08T09:39:00Z"
 }
