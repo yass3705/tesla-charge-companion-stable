@@ -1,0 +1,24 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Schweinfurt",
+  "aliases": ["Stadtwerke Schweinfurt GmbH", "SW Schweinfurt", "charge-it-easy Schweinfurt"],
+  "checkedAt": "2026-09-08",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "methodsReported": ["charge-it-easy app", "credit card"],
+    "officialPublishedPrices": {
+      "standardEurPerKwh": 0.55,
+      "blockingEurPer30MinutesAfterFullCharge": 0.50,
+      "minimumBilledTransactionEur": 0.50
+    },
+    "note": "Official pages confirm charge-it-easy can be used without registration and paid by Visa, Mastercard or American Express. The standard tariff is 0.55 EUR/kWh. A charge-it-easy transaction below 0.50 EUR is rounded up to 0.50 EUR, and the published blocking fee is 0.50 EUR per 30 minutes after full charge."
+  },
+  "reason": "Exact primary pricing is known, but the current verified TCC direct-offer schema does not safely encode both minimum-transaction rounding and a blocking fee triggered specifically after full charge. No lossy runtime offer is emitted.",
+  "sources": [
+    "https://www.stadtwerke-sw.de/mobilitaet/e-mobilitaet",
+    "https://www.stadtwerke-sw.de/mobilitaet/e-mobilitaet/ladeinformationen-auf-einen-blick"
+  ],
+  "nextEvidenceNeeded": "Verified TCC semantics for minimum billed transaction and post-full-charge blocking, or an explicit schema-extension decision before runtime integration."
+}
