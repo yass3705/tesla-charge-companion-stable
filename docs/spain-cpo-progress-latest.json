@@ -8,24 +8,24 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 232,
-    "maximumNeverTraversed": 386,
+    "minimumTraversed": 242,
+    "maximumNeverTraversed": 376,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 21,
-    "partial": 5,
-    "active": 49,
-    "setAside": 95,
+    "sourceValidated": 22,
+    "partial": 6,
+    "active": 52,
+    "setAside": 100,
     "platformExcluded": 3,
     "supersededAlias": 59,
-    "total": 232
+    "total": 242
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. New decisions are append-only and nominative."
+    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. Run25 performed the requested one-shot reconstruction retry; no new GitHub nominative evidence was found, so the gap remains explicit."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -45,25 +45,26 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run21.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run22.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run23.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run24.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulBatchGeneratedAt": "2026-09-08T10:46:16.742374Z",
-    "batchLaunchedInLatestCpoRun": false,
-    "requestsAttemptedInLatestCpoRun": 0,
-    "requestsSucceededInLatestCpoRun": 0,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T12:46:10.909369Z",
+    "batchLaunchedInLatestCpoRun": true,
+    "requestsAttemptedInLatestCpoRun": 5,
+    "requestsSucceededInLatestCpoRun": 5,
     "locationsRequestsInLatestCpoRun": 0,
     "http429CountInLatestCpoRun": 0,
-    "nextTariffPage": 35,
-    "tariffPagesCollected": 34,
-    "tariffRowsStored": 3400,
-    "tariffTotalPages": 461,
-    "nextStatusPage": 24,
-    "statusPagesCollected": 23,
-    "statusRowsStored": 2181,
-    "statusTotalPages": 446,
-    "latestCpoRunDecision": "No live REVE request: less than one real hour had elapsed since the successful 10:46:16Z batch."
+    "nextTariffPage": 38,
+    "tariffPagesCollected": 37,
+    "tariffRowsStored": 3690,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 26,
+    "statusPagesCollected": 25,
+    "statusRowsStored": 2372,
+    "statusTotalPages": 447,
+    "latestCpoRunDecision": "Exactly one eligible live REVE batch was executed by rerunning the last successful targeted collector job; hard request budget and endpoint restrictions passed."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -74,8 +75,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 232,
-    "firstPassMinimumTraversed": 232,
+    "continuityCountSum": 242,
+    "firstPassMinimumTraversed": 242,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -85,5 +86,5 @@
     "reveRequestBudgetRespected": true,
     "locationsEndpointUnused": true
   },
-  "updatedAt": "2026-09-08T11:42:00Z"
+  "updatedAt": "2026-09-08T12:47:00Z"
 }
