@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 316,
-    "maximumNeverTraversed": 302,
+    "minimumTraversed": 325,
+    "maximumNeverTraversed": 293,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 25,
     "partial": 8,
-    "active": 78,
-    "setAside": 141,
+    "active": 83,
+    "setAside": 145,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 316
+    "total": 325
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -55,14 +55,15 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run31.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run32.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run33.json",
-    "docs/spain-cpo-progress-batches/2026-09-08-run34.json"
+    "docs/spain-cpo-progress-batches/2026-09-08-run34.json",
+    "docs/spain-cpo-progress-batches/2026-09-08-run35.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T21:43:27.486815Z",
-    "batchConfirmedCompletedInLatestCpoRun": true,
-    "requestsAttemptedObservedInLatestCpoRun": 5,
-    "requestsSucceededObservedInLatestCpoRun": 5,
+    "batchConfirmedCompletedInLatestCpoRun": false,
+    "requestsAttemptedObservedInLatestCpoRun": 0,
+    "requestsSucceededObservedInLatestCpoRun": 0,
     "locationsRequestsObservedInLatestCpoRun": 0,
     "http429ObservedInLatestCpoRun": 0,
     "quotaWindowConservativelyConsumed": true,
@@ -74,7 +75,7 @@
     "statusPagesCollected": 33,
     "statusRowsStored": 3074,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "More than one real hour had elapsed since the previous successful batch. Exactly one temporary targeted workflow trigger was emitted and immediately restored to workflow_dispatch-only. The resulting batch completed with 5/5 HTTP 200 requests, no /locations call and no 429."
+    "latestCpoRunDecision": "Less than one real hour had elapsed since the successful 2026-09-08T21:43:27.486815Z batch when this run started, so no REVE live request was made. The collector remains workflow_dispatch-only and /locations remains disabled."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -85,8 +86,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 316,
-    "firstPassMinimumTraversed": 316,
+    "continuityCountSum": 325,
+    "firstPassMinimumTraversed": 325,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -97,7 +98,7 @@
     "locationsEndpointUnusedByObservedState": true,
     "mandatoryCadenceCheckPerformed": true
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-08-run34.json",
-  "investigationCurrent": "Continue first-pass queue immediately after PETRO PALOL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
-  "updatedAt": "2026-09-08T21:46:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-08-run35.json",
+  "investigationCurrent": "Continue first-pass queue immediately after QWELLO España SL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
+  "updatedAt": "2026-09-08T22:39:00Z"
 }
