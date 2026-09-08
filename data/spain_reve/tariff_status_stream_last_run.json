@@ -1,39 +1,39 @@
 {
-  "generatedAt": "2026-09-08T02:44:15.530781Z",
+  "generatedAt": "2026-09-08T04:45:45.473246Z",
   "hardRequestLimit": 5,
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "mode": "collect",
   "plan": [
     [
       "tariffs",
-      20
+      23
     ],
     [
       "tariffs",
-      21
+      24
     ],
     [
       "tariffs",
-      22
+      25
     ],
     [
       "status",
-      14
+      16
     ],
     [
       "status",
-      15
+      17
     ]
   ],
   "requests": [
     {
       "endpoint": "/connectors/tariffs",
       "headers": {
-        "total-count": "46794",
+        "total-count": "46796",
         "total-pages": "468"
       },
       "newRows": 100,
-      "page": 20,
+      "page": 23,
       "rowsReceived": 100,
       "status": 200,
       "stream": "tariffs",
@@ -42,11 +42,11 @@
     {
       "endpoint": "/connectors/tariffs",
       "headers": {
-        "total-count": "46794",
+        "total-count": "46796",
         "total-pages": "468"
       },
       "newRows": 100,
-      "page": 21,
+      "page": 24,
       "rowsReceived": 100,
       "status": 200,
       "stream": "tariffs",
@@ -55,11 +55,11 @@
     {
       "endpoint": "/connectors/tariffs",
       "headers": {
-        "total-count": "46794",
+        "total-count": "46796",
         "total-pages": "468"
       },
       "newRows": 100,
-      "page": 22,
+      "page": 25,
       "rowsReceived": 100,
       "status": 200,
       "stream": "tariffs",
@@ -72,7 +72,7 @@
         "total-pages": "447"
       },
       "newRows": 100,
-      "page": 14,
+      "page": 16,
       "rowsReceived": 100,
       "status": 200,
       "stream": "status",
@@ -85,7 +85,7 @@
         "total-pages": "447"
       },
       "newRows": 100,
-      "page": 15,
+      "page": 17,
       "rowsReceived": 100,
       "status": 200,
       "stream": "status",
@@ -98,8 +98,8 @@
     "complete": false,
     "country": "ES",
     "integrationStatus": "PRE_INTEGRATION_ONLY",
-    "nextStatusPage": 16,
-    "nextTariffPage": 23,
+    "nextStatusPage": 18,
+    "nextTariffPage": 26,
     "schemaVersion": 1,
     "source": "REVE",
     "statusPagesCollected": [
@@ -117,9 +117,11 @@
       12,
       13,
       14,
-      15
+      15,
+      16,
+      17
     ],
-    "statusRowsStored": 1410,
+    "statusRowsStored": 1610,
     "statusTotalPages": 447,
     "tariffPagesCollected": [
       1,
@@ -143,10 +145,13 @@
       19,
       20,
       21,
-      22
+      22,
+      23,
+      24,
+      25
     ],
-    "tariffRowsStored": 2200,
+    "tariffRowsStored": 2500,
     "tariffTotalPages": 468,
-    "updatedAt": "2026-09-08T02:44:24.117127Z"
+    "updatedAt": "2026-09-08T04:45:54.442051Z"
   }
 }
