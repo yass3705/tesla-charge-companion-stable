@@ -1,0 +1,38 @@
+{
+  "country": "DE",
+  "canonicalCpo": "Stadtwerke Görlitz AG",
+  "aliases": ["Stadtwerke Görlitz", "SWG Görlitz", "SWG"],
+  "status": "partial",
+  "deferred": true,
+  "networkEvidence": "Current official page lists SWG public stations in Görlitz and the surrounding region and identifies m8mit/app/card access.",
+  "contractProducts": {
+    "basis": {
+      "monthlyFeeEur": 3.99,
+      "energyFromEurPerKwh": 0.55
+    },
+    "premium": {
+      "monthlyFeeEur": 7.49,
+      "energyFromEurPerKwh": 0.60
+    }
+  },
+  "directPayment": {
+    "adHocDocumentPublished": true,
+    "currentNumericTariffCertified": false
+  },
+  "reason": "The current official e-mobility page still links an ad-hoc price sheet labelled valid from 2022, while the page separately publishes 2025 contract tariffs. Without a current numeric ad-hoc document or station checkout, the 2022 direct price is not promoted to 2026.",
+  "nextEvidenceNeeded": "Current SWG ad-hoc checkout, updated price sheet, or station-level m8mit/direct-payment payload showing the 2026 amount.",
+  "sources": [
+    {
+      "type": "official-current-page",
+      "url": "https://www.stadtwerke-goerlitz.de/produkte/elektromobilitaet",
+      "checked": "2026-09-08",
+      "evidence": "Current page lists SWG stations and contract products and links a separate ad-hoc sheet labelled valid from 2022."
+    },
+    {
+      "type": "official-contract-price-sheet",
+      "url": "https://www.stadtwerke-goerlitz.de/fileadmin/docs/pdf/privatkunden/Emobilitaet/Preisblatt_Ladestrom_01012025_Anp082025.pdf",
+      "checked": "2026-09-08",
+      "evidence": "Contract-card pricing only; not used as ad-hoc pricing."
+    }
+  ]
+}
