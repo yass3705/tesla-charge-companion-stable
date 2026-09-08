@@ -1,0 +1,30 @@
+{
+  "country": "DE",
+  "canonicalCpo": "Aschaffenburger Versorgungs-GmbH",
+  "aliases": ["Stadtwerke Aschaffenburg", "AVG", "AVG Aschaffenburg"],
+  "status": "partial",
+  "deferred": true,
+  "ownershipEvidence": "Current official Stadtwerke Aschaffenburg page states AVG operates the public charging infrastructure and lists 23 public locations / 34 stations / 68 charge points.",
+  "directPayment": {
+    "adHoc": true,
+    "methods": ["QR code", "app", "credit card"],
+    "effectiveTariffChange": "2026-06-01",
+    "numericPriceCaptured": false
+  },
+  "blockingFeeRules": {
+    "acThresholdMinutes": 240,
+    "dcThresholdMinutes": 90,
+    "activeTimeWindow": "08:00-22:00",
+    "numericFeeCaptured": false
+  },
+  "reason": "The current official 2026 page explicitly confirms a dedicated ad-hoc tariff and blocking-fee thresholds, but the numeric price tables are rendered only as images and are not exposed in the accessible text payload. No amount is inferred from surrounding statements.",
+  "nextEvidenceNeeded": "Read the current official tariff image asset or a station checkout/QR payload that exposes the numeric ad-hoc AC/DC price and blocking-fee amount.",
+  "sources": [
+    {
+      "type": "official-current-page",
+      "url": "https://www.stwab.de/emobil",
+      "checked": "2026-09-08",
+      "evidence": "Current page documents ad-hoc charging via QR/app/credit card from 2026-06-01 and blocking thresholds of 240 min AC / 90 min DC, active 08:00-22:00; numeric tables are images."
+    }
+  ]
+}
