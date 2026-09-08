@@ -1,0 +1,28 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Dachau",
+  "aliases": ["Stadtwerke Dachau GmbH", "SWD Dachau", "SWD"],
+  "checkedAt": "2026-09-08",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "methodsReported": ["smartphone", "direct-payment app"],
+    "officialPublishedPrices": {
+      "acEurPerKwh": 0.65,
+      "acBlockingAfterMinutes": 120,
+      "acBlockingEurPerMinute": 0.18,
+      "acMinimumTurnoverEur": 4.58,
+      "dcEurPerKwh": 0.94,
+      "dcBlockingAfterMinutes": 45,
+      "dcBlockingEurPerMinute": 0.36,
+      "dcMinimumTurnoverEur": 4.70
+    },
+    "note": "The official page publishes exact smartphone direct-payment prices. The current TCC direct-offer schema has no verified field/semantics for minimum turnover, so no runtime offer is emitted rather than silently dropping a price component."
+  },
+  "reason": "Primary evidence is sufficient for the tariff itself, but safe runtime integration is deferred because minimum-turnover semantics are not currently represented by the verified Germany direct-offer model.",
+  "sources": [
+    "https://www.stadtwerke-dachau.de/tarife-angebote/e-mobilitaet/ladekarte-und-preise"
+  ],
+  "nextEvidenceNeeded": "Either a verified existing TCC field for minimum-turnover/minimum-session-charge semantics, or an explicit architecture decision to extend the pricing schema before emitting this direct offer."
+}
