@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 43,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversedBefore": 341,
+    "minimumTraversedAfter": 341,
+    "maximumNeverTraversed": 277,
+    "newLabelsTraversed": [],
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "antiStagnation": {
+    "current148CpoSnapshotAlreadyFullyFirstPassCovered": true,
+    "historical618QueueStillAuthoritativeOnlyAsWorkQueue": true,
+    "oneShotCanonicalReconstructionAlreadyCompleted": true,
+    "newProvableNeverTraversedHistoricalLabelsRecoveredThisRun": 0,
+    "setAsideReauditedWithoutNewEvidence": false,
+    "repeatedInvestigationAboveTwoRunsWithoutNewLead": false,
+    "decision": "No historic label was fabricated and no active/setAside case was reopened. Continue only with concrete newly recoverable never-traversed historical labels until FIRST PASS COMPLETE."
+  },
+  "reveTariffStatus": {
+    "liveBatchIssuedThisRun": true,
+    "triggerMethod": "rerun failed jobs of existing workflow run; workflow file left workflow_dispatch-only",
+    "workflowRunId": 34331017329,
+    "workflowRunAttempt": 2,
+    "workflowConclusion": "success",
+    "generatedAt": "2026-09-09T11:47:52.390577Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429": 0,
+    "tariffPagesCollectedThisBatch": [56, 57, 58],
+    "tariffNewRowsThisBatch": 300,
+    "tariffUpdatedRowsThisBatch": 0,
+    "statusPagesCollectedThisBatch": [38, 39],
+    "statusNewRowsThisBatch": 186,
+    "statusUpdatedRowsThisBatch": 12,
+    "tariffPagesCollected": 58,
+    "nextTariffPage": 59,
+    "tariffRowsStored": 5787,
+    "tariffTotalPages": 461,
+    "statusPagesCollected": 39,
+    "nextStatusPage": 40,
+    "statusRowsStored": 3660,
+    "statusTotalPages": 447
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "countsDeriveExactly": true,
+    "legacyUncertaintyStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "revePersistentStateCrossChecked": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "canonicalReveStateWasStaleAndSafeCorrectionRequired": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "investigationCurrent": "No new provable never-traversed historical label recovered. Current 148-CPO snapshot remains fully first-pass covered. Priority remains recovery of concrete unseen historical labels only; no blocked/active re-audit before FIRST PASS COMPLETE."
+}
