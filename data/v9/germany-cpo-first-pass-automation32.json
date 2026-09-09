@@ -1,0 +1,78 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation31.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 79,
+  "forwardSliceStatus": {
+    "complete": 26,
+    "partial": 53,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 512,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Neu-Isenburg",
+      "aliases": ["Stadtwerke Neu-Isenburg GmbH", "SWNI", "isySTROM_mobil"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official public-charging page links the official ad-hoc tariff sheet: 0.56 EUR/kWh AC plus 0.10 EUR/min from minute 241; 0.70 EUR/kWh DC plus 0.10 EUR/min from minute 91."
+    },
+    {
+      "name": "ensev",
+      "aliases": ["ensev GmbH", "Stadtwerke Bad Nauheim", "Stadtwerke Bad Nauheim GmbH", "SWBN"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official ensev page publishes the Bad Nauheim ad-hoc tariff for AC up to 22 kW and DC up to 150 kW: 0.57 EUR/kWh plus 3.00 EUR start fee per session, activated by QR/browser and credit card."
+    },
+    {
+      "name": "Stadtwerke Dreieich",
+      "aliases": ["Stadtwerke Dreieich GmbH", "SWD Dreieich", "SWD Ladekarte"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "No current official direct-payment price was found. The numeric official charging sheet located is a stale 2022 registered Ladekarte tariff and is not promoted to 2026 ad-hoc pricing."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-neu-isenburg-research.json",
+    "data/v9/germany-station-pricing-ensev-bad-nauheim-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-dreieich-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "Stadtwerke Neu-Isenburg", "aliases": ["Stadtwerke Neu-Isenburg GmbH", "SWNI", "isySTROM_mobil"]},
+    {"canonical": "ensev", "aliases": ["ensev GmbH", "Stadtwerke Bad Nauheim", "Stadtwerke Bad Nauheim GmbH", "SWBN"]},
+    {"canonical": "Stadtwerke Dreieich", "aliases": ["Stadtwerke Dreieich GmbH", "SWD Dreieich", "SWD Ladekarte"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "staleHistoricalAdhocPromotedToCurrent": false,
+    "conflictingOfficialValidityPromotedToCurrent": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "arithmetic": "26 + 53 + 0 = 79; 591 - 79 = 512",
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 79/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Stadtwerke Dreieich deferred until a current official EVSE/direct-payment price mapping is available",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
