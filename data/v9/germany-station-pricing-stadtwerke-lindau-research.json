@@ -1,0 +1,33 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Lindau",
+  "aliases": ["Stadtwerke Lindau (B) GmbH & Co. KG", "SWLi", "SW Lindau"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current official Stadtwerke Lindau public-charging page; ad-hoc prices explicitly stated as valid from 2025-04-01",
+    "adhoc": {
+      "acPriceEurPerKwh": 0.49,
+      "acStartFeeEur": 0.55,
+      "dcPriceEurPerKwh": 0.65,
+      "vatIncluded": true
+    },
+    "blockingFees": {
+      "ac": {"priceEurPerMinute": 0.02, "startsAfterMinutes": 180},
+      "dc": {"priceEurPerMinute": 0.02, "startsAfterMinutes": 45}
+    },
+    "payment": {
+      "registrationRequired": false,
+      "channels": ["qr", "credit_card", "paypal"],
+      "cardBrandsPublished": ["Visa", "Mastercard", "American Express"]
+    },
+    "note": "The official page separately publishes registered AllgäuStrom app/card prices and ad-hoc prices. Only the explicitly labelled ad-hoc matrix is retained here."
+  },
+  "reason": "Current official operator surface explicitly publishes exact ad-hoc AC/DC energy prices, the AC start fee, blocking-fee thresholds and direct-payment channels, so no station or roaming extrapolation is required for the published SWLi public-charging tariff class.",
+  "sources": [
+    "https://www.sw-lindau.de/de/privatkunden/e-mob/laden-per-karte-oder-app/"
+  ],
+  "nextEvidenceNeeded": null
+}
