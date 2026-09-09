@@ -1,0 +1,34 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Bad Homburg",
+  "aliases": ["Stadtwerke Bad Homburg v. d. Höhe", "Stadtwerke Bad Homburg", "E Tanken Bad Homburg"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Official Stadtwerke Bad Homburg charging tariff sheet effective from 2025-03-01; no later official replacement was found during the 2026-09-09 audit.",
+    "adhoc": {
+      "ac": {
+        "priceEurPerKwh": 0.52,
+        "startFeeEur": 1.0,
+        "blockingFeeEurPerMinute": 0.06,
+        "blockingFeeStartsAfterMinutes": 240,
+        "blockingFeeSuspendedLocalTime": "00:00-08:00"
+      },
+      "dc": {
+        "priceEurPerKwh": 0.85,
+        "startFeeEur": 1.0,
+        "blockingFeeEurPerMinute": 0.15,
+        "blockingFeeStartsAfterMinutes": 120
+      },
+      "vatIncluded": true
+    },
+    "note": "The tariff sheet explicitly distinguishes registered E Tanken app customers from Ad-Hoc-Laden without registration; only the ad-hoc row is certified here."
+  },
+  "reason": "The operator's official tariff sheet explicitly publishes AC and DC ad-hoc prices, start fees and blocking rules. The sheet is effective from 2025-03-01 and no successor tariff was located on the official site as of this audit.",
+  "sources": [
+    "https://www.stadtwerke-bad-homburg.de/stadtwerke/e-tanken/%C3%9Cbersicht%20Ladestrompreise%20zum%2001.03.2025.pdf"
+  ],
+  "nextEvidenceNeeded": null
+}
