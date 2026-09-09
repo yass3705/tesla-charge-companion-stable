@@ -1,0 +1,20 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Dreieich",
+  "aliases": ["Stadtwerke Dreieich GmbH", "SWD Dreieich", "SWD Ladekarte"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": null,
+    "scope": "Current official electromobility page checked 2026-09-09; it promotes home charging and general e-mobility but does not publish a current public direct-payment tariff.",
+    "adhoc": null,
+    "note": "An official historic tariff sheet valid from 2022-05-03 publishes SWD Ladekarte prices, including 0.47 EUR/kWh AC plus 0.10 EUR/min from the 240th minute, but this is a registered-card product and is stale. It is not promoted to 2026 ad-hoc pricing."
+  },
+  "reason": "No current official direct-payment/QR price surface was located. The only numeric official charging sheet found is a 2022 Ladekarte tariff and cannot be extrapolated to current ad-hoc charging.",
+  "sources": [
+    "https://www.stadtwerke-dreieich.de/tarife-und-produkte/elektromobilitaet",
+    "https://www.stadtwerke-dreieich.de/fileadmin/user_upload/Stadtwerke/PDF_und_Dokumente/Tarife_Produkte/Elektromobilitaet/Neues_Preisblatt_Ladetarife_SWD.pdf"
+  ],
+  "nextEvidenceNeeded": "Current official EVSE QR/direct-payment checkout, current public ad-hoc tariff sheet, or authoritative station-level mapping proving exact current price per EVSE."
+}
