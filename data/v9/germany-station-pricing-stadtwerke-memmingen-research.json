@@ -1,0 +1,29 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Memmingen",
+  "aliases": ["Stadtwerke Memmingen MM", "SW Memmingen", "MM Standard"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current official Stadtwerke Memmingen e-mobility page",
+    "registeredOwnNetworkTariff": {
+      "acPriceEurPerKwh": 0.52,
+      "dcPriceEurPerKwh": 0.69,
+      "monthlyFeePerActiveCardEur": 3.70,
+      "oneTimeCardFeeEur": 5.00
+    },
+    "adhoc": {
+      "confirmed": true,
+      "mechanism": "Ladenetz app plus credit card without Stadtwerke Memmingen charging card",
+      "numericTariffVerified": false
+    },
+    "note": "The official page confirms that visitors without the operator card can charge using the Ladenetz app and a credit card, but the displayed numeric matrix is the MM Standard/card tariff. It is not promoted to ad-hoc without an explicit checkout/app price binding."
+  },
+  "reason": "Exact own-network MM Standard prices are official, and ad-hoc access is official, but the public page does not prove that the MM Standard numeric tariff is the price charged to a no-card visitor. Fail closed until a current Ladenetz checkout or station-level direct-payment tariff is captured.",
+  "sources": [
+    "https://stadtwerke-memmingen.de/e-mobilitaet"
+  ],
+  "nextEvidenceNeeded": "Capture a current Ladenetz app/web checkout for at least one Stadtwerke Memmingen EVSE, or an official page explicitly binding the ad-hoc visitor flow to the MM Standard own-network prices."
+}
