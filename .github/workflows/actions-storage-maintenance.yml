@@ -20,14 +20,36 @@ concurrency:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
+      - name: Remove rebuildable Actions caches
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          deleted=0
+          while true; do
+            ids="$(gh api "repos/${GITHUB_REPOSITORY}/actions/caches?per_page=100" --jq '.actions_caches[].id' || true)"
+            [[ -z "$ids" ]] && break
+            progress=0
+            while read -r id; do
+              [[ -z "$id" ]] && continue
+              if gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/caches/$id" >/dev/null 2>&1; then
+                deleted=$((deleted+1))
+                progress=$((progress+1))
+              fi
+            done <<< "$ids"
+            [[ "$progress" -eq 0 ]] && break
+          done
+          echo "Deleted rebuildable caches: $deleted"
+
       - name: Remove obsolete Actions runs while preserving live references
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
-          MAX_DELETES: "650"
+          MAX_DELETES: "2000"
         run: |
           python3 - <<'PY'
           import json, os, time, urllib.error, urllib.request
@@ -36,7 +58,7 @@ jobs:
 
           repo = os.environ['REPOSITORY']
           token = os.environ['GH_TOKEN']
-          max_deletes = int(os.environ.get('MAX_DELETES', '650'))
+          max_deletes = int(os.environ.get('MAX_DELETES', '2000'))
           base = f'https://api.github.com/repos/{repo}/'
           headers = {
               'Authorization': f'Bearer {token}',
@@ -75,8 +97,8 @@ jobs:
           artifacts = paginate('actions/artifacts', 'artifacts', 20)
           live_artifacts = [a for a in artifacts if not a.get('expired')]
 
-          # Keep the newest live artifact for every exact artifact name, plus artifacts from
-          # the last 12 hours so an in-flight handoff/canary cannot be broken by cleanup.
+          # Protect the newest live artifact for every exact artifact name and every artifact
+          # from the last 12 hours so country handoffs and the current V9 canary stay intact.
           newest_by_name = {}
           keep = set()
           artifacts_by_run = defaultdict(list)
@@ -121,7 +143,7 @@ jobs:
           page = 2  # preserve newest 100 completed runs globally for diagnostics/canary.
           empty_passes = 0
 
-          while len(deleted) < max_deletes and page <= 30:
+          while len(deleted) < max_deletes and page <= 40:
               data = request('GET', f'actions/runs?status=completed&per_page=100&page={page}') or {}
               runs = data.get('workflow_runs') or []
               if not runs:
@@ -147,7 +169,7 @@ jobs:
               if progress:
                   page = 2
                   empty_passes = 0
-                  time.sleep(0.2)
+                  time.sleep(0.15)
               else:
                   page += 1
                   empty_passes += 1
