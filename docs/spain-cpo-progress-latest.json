@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 331,
-    "maximumNeverTraversed": 287,
+    "minimumTraversed": 336,
+    "maximumNeverTraversed": 282,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 26,
     "partial": 8,
-    "active": 84,
-    "setAside": 149,
+    "active": 86,
+    "setAside": 152,
     "platformExcluded": 3,
     "supersededAlias": 61,
-    "total": 331
+    "total": 336
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -57,14 +57,15 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run33.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run34.json",
     "docs/spain-cpo-progress-batches/2026-09-08-run35.json",
-    "docs/spain-cpo-progress-batches/2026-09-09-run36.json"
+    "docs/spain-cpo-progress-batches/2026-09-09-run36.json",
+    "docs/spain-cpo-progress-batches/2026-09-09-run37.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T23:39:11.610436Z",
-    "batchConfirmedCompletedInLatestCpoRun": true,
-    "requestsAttemptedObservedInLatestCpoRun": 5,
-    "requestsSucceededObservedInLatestCpoRun": 5,
+    "batchConfirmedCompletedInLatestCpoRun": false,
+    "requestsAttemptedObservedInLatestCpoRun": 0,
+    "requestsSucceededObservedInLatestCpoRun": 0,
     "locationsRequestsObservedInLatestCpoRun": 0,
     "http429ObservedInLatestCpoRun": 0,
     "quotaWindowConservativelyConsumed": true,
@@ -76,7 +77,7 @@
     "statusPagesCollected": 35,
     "statusRowsStored": 3274,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "Exactly one live REVE batch was triggered after more than one real hour had elapsed. It completed 5/5 HTTP-200 requests: tariff pages 50-52 and status pages 34-35, with no /locations request and no HTTP 429. The temporary push trigger was removed and the collector restored to workflow_dispatch-only."
+    "latestCpoRunDecision": "More than one real hour had elapsed. Exactly one targeted temporary trigger was issued because direct workflow_dispatch was unavailable and no dispatch run existed. The collector was restored immediately to workflow_dispatch-only and the sentinel removed. The new REVE last_run had not yet materialized when this state was written, so this quota window is conservatively considered consumed and no second batch is permitted."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -87,8 +88,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 331,
-    "firstPassMinimumTraversed": 331,
+    "continuityCountSum": 336,
+    "firstPassMinimumTraversed": 336,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -97,9 +98,9 @@
     "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
-    "mandatoryCadenceCheckPerformed": true
+    "mandatoryCadenceCheckPerformed": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run36.json",
-  "investigationCurrent": "Continue first-pass queue after SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS; next current-REVE identities include Tesla Spain SLU, The F Charging Espana S.L.U., Torrecillas Serna S.A., Totalenergies Marketing España S.A.U. and TRANSPORTES PENADES E HIJOS SL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
-  "updatedAt": "2026-09-08T23:50:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run37.json",
+  "investigationCurrent": "Continue first-pass queue immediately after TRANSPORTES PENADES E HIJOS SL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
+  "updatedAt": "2026-09-09T00:49:00Z"
 }
