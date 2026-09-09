@@ -1,0 +1,78 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation29.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 73,
+  "forwardSliceStatus": {
+    "complete": 22,
+    "partial": 51,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 518,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Traunstein",
+      "aliases": ["Stadtwerke Traunstein GmbH & Co. KG", "SW Traunstein", "Stadtwerke Traunstein ladenetz"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator page states all listed public charging points have the same access methods and explicitly publishes 0.49 EUR/kWh gross for QR/web-app ad-hoc charging."
+    },
+    {
+      "name": "Ladelösungen Fürstenfeldbruck",
+      "aliases": ["Ladelösungen Fürstenfeldbruck GmbH", "Stadtwerke Fürstenfeldbruck eMobility", "FFBemobil", "Ladelösungen FFB"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official 2026 operator tariff page explicitly publishes contract-free QR/credit-card ad-hoc prices of 0.49 EUR/kWh AC and 0.69 EUR/kWh DC."
+    },
+    {
+      "name": "Stadtwerke Trostberg",
+      "aliases": ["Stadtwerke Trostberg Stromversorgung GmbH", "SW Trostberg", "Stadtwerke Trostberg ladenetz"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current operator page says its linked price sheet is valid through 31.12.2026, while the linked PDF itself says validity ends 31.12.2025; 0.59 EUR/kWh is therefore retained as evidence but not certified as current."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-traunstein-research.json",
+    "data/v9/germany-station-pricing-ladeloesungen-ffb-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-trostberg-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "Stadtwerke Traunstein", "aliases": ["Stadtwerke Traunstein GmbH & Co. KG", "SW Traunstein", "Stadtwerke Traunstein ladenetz"]},
+    {"canonical": "Ladelösungen Fürstenfeldbruck", "aliases": ["Ladelösungen Fürstenfeldbruck GmbH", "Stadtwerke Fürstenfeldbruck eMobility", "FFBemobil", "Ladelösungen FFB"]},
+    {"canonical": "Stadtwerke Trostberg", "aliases": ["Stadtwerke Trostberg Stromversorgung GmbH", "SW Trostberg", "Stadtwerke Trostberg ladenetz"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "staleHistoricalAdhocPromotedToCurrent": false,
+    "conflictingOfficialValidityPromotedToCurrent": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "arithmetic": "22 + 51 + 0 = 73; 591 - 73 = 518",
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 73/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Stadtwerke Trostberg deferred until an internally 2026-valid official tariff sheet or a current public EVSE checkout confirms the price",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
