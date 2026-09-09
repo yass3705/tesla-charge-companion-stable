@@ -1,0 +1,37 @@
+{
+  "country": "DE",
+  "operator": "Freisinger Stadtwerke",
+  "aliases": ["Freisinger Stadtwerke Versorgungs-GmbH", "Stadtwerke Freising", "Freisinger Stadtwerke", "charge it easy Freising"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Official Freisinger Stadtwerke location-level public charging page, tariff status 2025-05-01 and still current on the operator site",
+    "stationClasses": [
+      {
+        "class": "freely_accessible_public_points",
+        "energyPriceEurPerKwh": 0.39,
+        "timePriceEurPerHour": 1.20,
+        "timeBilling": "per-minute",
+        "payment": "charge it easy app",
+        "personalRegistrationRequired": false
+      },
+      {
+        "class": "public_parking_garages",
+        "energyPriceEurPerKwh": 0.49,
+        "timePriceAfterHours": 24,
+        "timePriceEurPerHour": 1.20,
+        "timeBilling": "per-minute",
+        "parkingFeesAdditional": true,
+        "payment": "charge it easy app"
+      }
+    ],
+    "note": "The operator page enumerates the public locations and repeats the applicable class tariff at station level. Third-party roaming prices are explicitly excluded."
+  },
+  "reason": "The current official operator surface publishes exact own-network public tariffs and maps them to each listed station class; several station descriptions explicitly state that no personal-data registration is required, so no roaming or station extrapolation is needed.",
+  "sources": [
+    "https://www.freisinger-stadtwerke.de/Stromtankstellen"
+  ],
+  "nextEvidenceNeeded": null
+}
