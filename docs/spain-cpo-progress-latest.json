@@ -62,38 +62,27 @@
     "docs/spain-cpo-progress-batches/2026-09-09-run38.json",
     "docs/spain-cpo-progress-batches/2026-09-09-run39.json",
     "docs/spain-cpo-progress-batches/2026-09-09-run40.json",
-    "docs/spain-cpo-progress-batches/2026-09-09-run41.json"
+    "docs/spain-cpo-progress-batches/2026-09-09-run41.json",
+    "docs/spain-cpo-progress-batches/2026-09-09-run42.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-08T23:39:11.610436Z",
-    "latestLiveBatchTriggerIssuedAt": "2026-09-09T05:37:26Z",
-    "latestLiveWorkflowRunId": 34315725084,
-    "latestLiveBatchCompleted": true,
-    "latestLiveBatchPersistenceSucceeded": false,
-    "requestsAttemptedObservedInLatestCpoRun": 5,
-    "requestsSucceededObservedInLatestCpoRun": 5,
-    "locationsRequestsObservedInLatestCpoRun": 0,
-    "http429ObservedInLatestCpoRun": 0,
-    "quotaWindowConservativelyConsumed": true,
-    "persistentNextTariffPage": 53,
-    "persistentTariffPagesCollected": 52,
-    "persistentTariffRowsStored": 5187,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-09T06:44:24.076632Z",
+    "latestPersistedStateUpdatedAt": "2026-09-09T06:44:31.806854Z",
+    "latestLiveBatchPersistenceSucceeded": true,
+    "requestsAttemptedObservedInLatestPersistedBatch": 5,
+    "requestsSucceededObservedInLatestPersistedBatch": 5,
+    "locationsRequestsObservedInLatestPersistedBatch": 0,
+    "http429ObservedInLatestPersistedBatch": 0,
+    "persistentNextTariffPage": 56,
+    "persistentTariffPagesCollected": 55,
+    "persistentTariffRowsStored": 5487,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 36,
-    "persistentStatusPagesCollected": 35,
-    "persistentStatusRowsStored": 3274,
+    "persistentNextStatusPage": 38,
+    "persistentStatusPagesCollected": 37,
+    "persistentStatusRowsStored": 3474,
     "statusTotalPages": 447,
-    "observedRunnerStateNotPersisted": {
-      "nextTariffPage": 56,
-      "tariffPagesCollected": 55,
-      "tariffRowsStored": 5487,
-      "nextStatusPage": 38,
-      "statusPagesCollected": 37,
-      "statusRowsStored": 3474,
-      "runnerCommit": "ba76fc3"
-    },
-    "latestCpoRunDecision": "Exactly one live batch was executed. Collection and hard-budget verification succeeded 5/5, with tariffs pages 53-55 and status pages 36-37 observed on the runner, no /locations and no HTTP 429. The final git push failed non-fast-forward because the branch advanced after trigger. No second batch was launched. Raw runner files were not persisted, so persistent cursors remain 53/36 and must be recovery-refetched in a future eligible hourly window rather than skipped manually."
+    "latestCpoRunDecision": "No live REVE request was issued in run42 because less than one real hour had elapsed since the successful persisted batch generated at 06:44:24Z. Persistent GitHub state was cross-checked and the stale canonical REVE subsection was corrected to match cursors 56/38 and stored row counts 5487/3474."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -115,7 +104,8 @@
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
     "mandatoryCadenceCheckPerformed": true,
-    "checkForcedByTwoRunsWithoutNominativeProgress": true
+    "checkForcedByTwoRunsWithoutNominativeProgress": true,
+    "staleCanonicalReveStateCorrected": true
   },
   "oneTimeCanonicalReconstructionAttempt": {
     "completed": true,
@@ -125,7 +115,7 @@
     "historicalLegacyTreatedCollapsedCount": 263,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run41.json",
-  "investigationCurrent": "Current 148-CPO REVE snapshot remains first-pass covered through ZOILO RIOS, S.A. Targeted recovery from the stored snapshot and inspected GitHub history found no additional label that can safely be proven to belong to the historical 618-label queue without fabrication. Continue only with concrete newly recoverable never-traversed historical labels; do not reopen active/setAside cases before first-pass completion.",
-  "updatedAt": "2026-09-09T05:46:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run42.json",
+  "investigationCurrent": "Current 148-CPO REVE snapshot remains first-pass covered through ZOILO RIOS, S.A. No additional label can currently be proven to belong to the historical 618-label queue without fabrication. Continue only with concrete newly recoverable never-traversed historical labels; do not reopen active/setAside cases before first-pass completion.",
+  "updatedAt": "2026-09-09T07:40:00Z"
 }
