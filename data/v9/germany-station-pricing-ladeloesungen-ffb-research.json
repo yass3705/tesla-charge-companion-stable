@@ -1,0 +1,25 @@
+{
+  "country": "DE",
+  "operator": "Ladelösungen Fürstenfeldbruck",
+  "aliases": ["Ladelösungen Fürstenfeldbruck GmbH", "Stadtwerke Fürstenfeldbruck eMobility", "FFBemobil", "Ladelösungen FFB"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current operator-owned public charging infrastructure in Fürstenfeldbruck and the surrounding region",
+    "adhoc": {
+      "qrCreditCard": {"acPriceEurPerKwh": 0.49, "dcPriceEurPerKwh": 0.69, "contractRequired": false},
+      "vatIncluded": true
+    },
+    "note": "The current 2026 operator tariff page explicitly separates card-contract pricing from simple ad-hoc charging by QR and credit card without a charging contract. The ad-hoc tariff is 0.49 EUR/kWh AC and 0.69 EUR/kWh DC."
+  },
+  "ownershipAliasNote": "The current charging operator is Ladelösungen Fürstenfeldbruck GmbH, presented by Stadtwerke Fürstenfeldbruck as its e-mobility subsidiary/operating company. Legacy FFBemobil/Stadtwerke Fürstenfeldbruck charging references are retained as aliases rather than counted as a second CPO.",
+  "reason": "Current official operator page publishes exact 2026 direct-payment AC/DC prices and explicitly states QR plus credit-card access without contract binding.",
+  "sources": [
+    "https://www.ladeloesungen-ffb.de/de/oeffentliches-laden/preise",
+    "https://www.ladeloesungen-ffb.de/de/oeffentliches-laden/lademap",
+    "https://www.stadtwerke-ffb.de/de/news/a/presse/2025-05-ladeloesungen-ffb-ladekarte"
+  ],
+  "nextEvidenceNeeded": null
+}
