@@ -1,0 +1,24 @@
+{
+  "country": "DE",
+  "operator": "VWEW-energie",
+  "aliases": ["Vereinigte Wertach-Elektrizitätswerke GmbH", "VWEW", "VWEW Energie", "VWEW-energie Kaufbeuren"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current official VWEW public charging tariff page for publicly accessible VWEW charging stations",
+    "adhoc": {
+      "qr": {"acPriceEurPerKwh": 0.49, "dcPriceEurPerKwh": 0.58, "occupancyFeeEurPerHour": 2.50, "occupancyBillingIncrementMinutes": 15},
+      "interchargeDirect": {"acPriceEurPerKwh": 0.49, "dcPriceEurPerKwh": 0.58, "occupancyFeeEurPerHour": 2.50, "occupancyBillingIncrementMinutes": 15, "paymentChannels": ["credit_card", "paypal"]},
+      "vatIncluded": true
+    },
+    "note": "The current official HTML page is authoritative for this first pass. A still-indexed 01/2025 PDF lists 0.39 EUR/kWh AC for QR/intercharge direct, so that older PDF is retained only as historical evidence and is not promoted over the current page."
+  },
+  "reason": "Current official operator page explicitly labels QR-code and intercharge direct prices without VWEW card and gives AC/DC energy prices plus occupancy price, so the direct public tariff can be captured without station or roaming extrapolation.",
+  "sources": [
+    "https://vwew-energie.de/ladetarife",
+    "https://vwew-energie.de/files/cto_layout/downloads/E-mobilit%C3%A4t/Ladetarife-Ladekarte/Ladekarte/20250101_Preisblatt_VWEW-Lades%C3%A4ulen_01.2025.pdf"
+  ],
+  "nextEvidenceNeeded": null
+}
