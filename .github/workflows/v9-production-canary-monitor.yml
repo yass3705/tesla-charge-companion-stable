@@ -3,6 +3,7 @@ name: V9 production canary monitor
 on:
   schedule:
     - cron: '17 * * * *'
+    - cron: '47 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -37,6 +38,29 @@ jobs:
           SAMPLE_SIZE: '10000'
           RESULT_PATH: v9-canary-monitor-result.json
         run: node scripts/v9-production-canary-monitor.cjs
+
+      - name: Annotate observation provenance
+        if: always()
+        shell: bash
+        run: |
+          if [ -f v9-canary-monitor-result.json ]; then
+            node - <<'NODE'
+          const fs = require('fs');
+          const file = 'v9-canary-monitor-result.json';
+          const result = JSON.parse(fs.readFileSync(file, 'utf8'));
+          result.github = {
+            eventName: process.env.GITHUB_EVENT_NAME || null,
+            runId: process.env.GITHUB_RUN_ID || null,
+            runNumber: process.env.GITHUB_RUN_NUMBER || null,
+            runAttempt: process.env.GITHUB_RUN_ATTEMPT || null,
+            workflow: process.env.GITHUB_WORKFLOW || null,
+            ref: process.env.GITHUB_REF || null,
+            sha: process.env.GITHUB_SHA || null,
+          };
+          result.naturalScheduledObservation = result.github.eventName === 'schedule';
+          fs.writeFileSync(file, `${JSON.stringify(result, null, 2)}\n`);
+          NODE
+          fi
 
       - name: Publish observation summary
         if: always()
