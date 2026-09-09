@@ -1,0 +1,32 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Bad Tölz",
+  "aliases": ["Stadtwerke Bad Tölz GmbH", "SW Bad Tölz", "TÖLZLadestrom", "TOL"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Public Stadtwerke Bad Tölz charging network; current operator page confirms own-network registered tariff while current public station evidence confirms ad-hoc capability",
+    "registeredOwnNetworkTariff": {
+      "acPriceEurPerKwh": 0.40,
+      "dcPriceEurPerKwh": 0.50,
+      "acBlockingFeeEurPerMinute": 0.10,
+      "acBlockingStartsAfterMinutes": 240,
+      "acBlockingWindow": "07:00-20:00",
+      "dcBlockingFeeEurPerMinute": 0.10,
+      "dcBlockingStartsAfterMinutes": 120
+    },
+    "adhoc": {
+      "exactCurrentPriceKnown": false,
+      "paymentEvidence": ["qr", "credit_card"],
+      "note": "A 2023 City of Bad Tölz publication documented then-current ad-hoc at 0.69 EUR/kWh plus 0.58 EUR/session, but this is stale and is not promoted to 2026. Current station directories confirm ad-hoc direct payment but do not expose a current numeric checkout price."
+    }
+  },
+  "reason": "Current exact direct/ad-hoc price is not available from an authoritative 2026 surface. The operator's 0.40/0.50 EUR/kWh matrix is a TÖLZLadestrom customer/card tariff and cannot be substituted for visitor direct payment.",
+  "sources": [
+    "https://stw-toelz.de/emobilitaet",
+    "https://stadt.bad-toelz.de/aktuelles-info/presseportal/presse-archiv/294/neue-e-ladesaeulen-fuer-bad-toelz"
+  ],
+  "nextEvidenceNeeded": "Capture a current Stadtwerke Bad Tölz QR/ladecloud checkout for a representative DE*TOL EVSE, or an official current ad-hoc tariff sheet explicitly binding visitor direct payment to the network."
+}
