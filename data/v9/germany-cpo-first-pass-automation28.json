@@ -1,0 +1,77 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation27.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 67,
+  "forwardSliceStatus": {
+    "complete": 18,
+    "partial": 49,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 524,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Lindau",
+      "aliases": ["Stadtwerke Lindau (B) GmbH & Co. KG", "SWLi", "SW Lindau"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator page explicitly publishes ad-hoc AC/DC energy prices, AC start fee, direct-payment methods and exact blocking-fee thresholds."
+    },
+    {
+      "name": "Stadtwerke Memmingen",
+      "aliases": ["Stadtwerke Memmingen MM", "SW Memmingen", "MM Standard"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official page confirms ad-hoc/no-card access and exact MM Standard own-network prices, but does not prove that the registered/card matrix is the visitor direct-payment price."
+    },
+    {
+      "name": "Stadtwerke Kulmbach",
+      "aliases": ["Eigenbetrieb Stadtwerke Kulmbach", "SW Kulmbach"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official surface lists public charging locations but no numeric direct tariff; Mobilithek-derived EVSE observations at 0.40 EUR/kWh remain station-level discovery only because operator-role authority is ambiguous."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-lindau-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-memmingen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-kulmbach-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "Stadtwerke Lindau", "aliases": ["Stadtwerke Lindau (B) GmbH & Co. KG", "SWLi", "SW Lindau"]},
+    {"canonical": "Stadtwerke Memmingen", "aliases": ["Stadtwerke Memmingen MM", "SW Memmingen", "MM Standard"]},
+    {"canonical": "Stadtwerke Kulmbach", "aliases": ["Eigenbetrieb Stadtwerke Kulmbach", "SW Kulmbach"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "arithmetic": "18 + 49 + 0 = 67; 591 - 67 = 524",
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 67/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Stadtwerke Memmingen deferred until a current Ladenetz visitor checkout or explicit official ad-hoc price binding is captured",
+    "keep Stadtwerke Kulmbach deferred until official QR/checkout or authoritative AFIR/Mobilithek operator-role plus tariff binding is available",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
