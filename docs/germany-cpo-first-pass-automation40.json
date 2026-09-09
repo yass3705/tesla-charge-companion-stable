@@ -1,0 +1,72 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-09",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation39.json",
+  "baseline": {"treated": 120, "complete": 40, "partial_deferred": 80, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Wesel GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Wesel", "SWW Wesel", "SWW Ladekarte"],
+      "evidence": "Current official public-charging page explicitly separates ad-hoc charging from the Stadtwerke Wesel contract card. Ad-hoc: AC 0.50 EUR/kWh plus 0.05 EUR/min after 240 min during 08:00-18:00; DC 0.59 EUR/kWh plus 0.20 EUR/min after 120 min. QR/app direct payment is documented.",
+      "source": "https://stadtwerke-wesel.de/elektromobilitaet/ladekarten",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.50, "adhoc_dc_eur_per_kwh": 0.59, "ac_blocking_eur_per_min": 0.05, "ac_blocking_after_min": 240, "ac_blocking_window": "08:00-18:00", "dc_blocking_eur_per_min": 0.20, "dc_blocking_after_min": 120}
+    },
+    {
+      "canonical_name": "medl GmbH",
+      "status": "complete",
+      "aliases": ["medl", "medl-eTanke", "medl Mülheim"],
+      "evidence": "Current official medl-eTanke page publishes Direct Payment at 0.44 EUR/kWh, no start fee and no blocking fee, specifically for medl-eTanke units equipped with a display. The page explicitly warns that non-display units can have different QR/app prices, so the tariff is scoped only to display-equipped medl EVSEs and is not generalized beyond that subset.",
+      "source": "https://www.medl.de/e-mobilitaet/medl-etanke/",
+      "tariff": {"scope": "display-equipped medl-eTanke EVSEs", "direct_eur_per_kwh": 0.44, "start_fee_eur": 0.0, "blocking_fee_eur_per_min": 0.0}
+    },
+    {
+      "canonical_name": "Stadtwerke Dinslaken GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Dinslaken", "SD Ladekarte", "DINmobil"],
+      "evidence": "Current official public-charging page has a dedicated Ad-hoc section: AC 0.77 EUR/kWh, DC 0.87 EUR/kWh, DC start fee 5.00 EUR, plus 0.10 EUR/min blocking after 240 min AC or 120 min DC capped at 12 EUR per session. QR/app direct payment is explicitly documented.",
+      "source": "https://www.stadtwerke-dinslaken.de/produkte/e-mobilitaet/oeffentliches-laden/",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.77, "adhoc_dc_eur_per_kwh": 0.87, "dc_start_fee_eur": 5.0, "blocking_eur_per_min": 0.10, "ac_blocking_after_min": 240, "dc_blocking_after_min": 120, "blocking_cap_eur": 12.0}
+    },
+    {
+      "canonical_name": "Stadtwerke Herne AG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Herne", "SWH Herne"],
+      "evidence": "Official current Stadtwerke Herne material confirms that the utility built and operates a public charging network in Herne (historically 69 public charge points and continuing expansion), but the current public website surfaces wallbox/business charging solutions rather than a numeric ad-hoc/public tariff. No current exact direct-payment price was established in this first pass.",
+      "source": "https://www.stadtwerke-herne.de/privatkunden/kundenmagazin/elektromobilitaet-in-herne",
+      "reason": "public CPO activity confirmed, but no current official numeric ad-hoc tariff or station-level public checkout matrix surfaced"
+    },
+    {
+      "canonical_name": "Hertener Stadtwerke GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Hertener Stadtwerke", "HSW Herten"],
+      "evidence": "Official February 2026 material confirms Hertener Stadtwerke maintain a public network of 43 charge points at 19 locations. Current station-level direct-payment discovery shows materially different prices by EVSE/type (for example AC around 0.62 EUR/kWh and DC around 0.80 EUR/kWh on sampled locations), while no current official network-wide numeric ad-hoc matrix was found. The station observations are therefore not generalized.",
+      "source": "https://www.hertener-stadtwerke.de/ueber-uns/aktuelles/aktuelles/aktuelle-news/artikel/elektromobilitaet-ladestrom-abnahme-steigt-in-herten-auch-2025-deutlich",
+      "reason": "operator and public network confirmed; station-level direct prices vary and no current official universal/direct matrix was established"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Wesel GmbH", "aliases": ["Stadtwerke Wesel", "SWW Wesel", "SWW Ladekarte"]},
+    {"canonical": "medl GmbH", "aliases": ["medl", "medl-eTanke", "medl Mülheim"]},
+    {"canonical": "Stadtwerke Dinslaken GmbH", "aliases": ["Stadtwerke Dinslaken", "SD Ladekarte", "DINmobil"]},
+    {"canonical": "Stadtwerke Herne AG", "aliases": ["Stadtwerke Herne", "SWH Herne"]},
+    {"canonical": "Hertener Stadtwerke GmbH", "aliases": ["Hertener Stadtwerke", "HSW Herten"]}
+  ],
+  "counters_after_pass": {"treated": 125, "complete": 43, "partial_deferred": 82, "blocked": 0, "remaining": 466, "total": 591},
+  "coherence": {
+    "arithmetic": "43 + 82 + 0 = 125; 591 - 125 = 466",
+    "duplicate_alias_check": "passed: these five canonical names are absent from the committed changed-file operator/research inventory used for branch-aware selection; aliases are not counted separately",
+    "deferred_reaudit_check": "passed: no previously deferred identity was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "global_tariff_inference_check": "passed: medl is explicitly scoped to display-equipped EVSEs; Hertener station samples are not generalized",
+    "contract_to_adhoc_promotion_check": "passed",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue first-pass queue with canonical identities absent from committed Germany research/operator files",
+    "prefer official direct/ad-hoc price surfaces; retain EVSE-specific values only when their exact applicability is verifiable",
+    "do not revisit Stadtwerke Herne or Hertener Stadtwerke until the full first-pass traversal is complete or new official tariff evidence appears"
+  ]
+}
