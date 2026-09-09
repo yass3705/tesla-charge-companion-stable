@@ -1,0 +1,78 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation30.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 76,
+  "forwardSliceStatus": {
+    "complete": 24,
+    "partial": 52,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 515,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Langen",
+      "aliases": ["Stadtwerke Langen GmbH", "SW Langen", "LMS Stadtwerke Langen"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator page explicitly publishes the contract-free ad-hoc price effective 2026-06-01 for its own public AC stations: 0.68 EUR/kWh plus 0.04 EUR/min blocking after 240 minutes."
+    },
+    {
+      "name": "Stadtwerke Bad Homburg",
+      "aliases": ["Stadtwerke Bad Homburg v. d. Höhe", "Stadtwerke Bad Homburg", "E Tanken Bad Homburg"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Official operator tariff sheet effective from 2025-03-01 explicitly separates unregistered ad-hoc charging and publishes exact AC/DC energy, start and blocking charges; no later official successor was located."
+    },
+    {
+      "name": "Stadtwerke Mühlheim am Main",
+      "aliases": ["Stadtwerke Mühlheim", "Stadtwerke Muehlheim", "m.charge Mühlheim", "m.charge"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current official page still links only the m.charge registered-card tariff. Because the sheet mixes Ladenetz, roaming and high-price-provider pricing, none of its values are promoted to direct station-level ad-hoc pricing without an EVSE checkout or explicit operator mapping."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-langen-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-bad-homburg-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-muehlheim-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "Stadtwerke Langen", "aliases": ["Stadtwerke Langen GmbH", "SW Langen", "LMS Stadtwerke Langen"]},
+    {"canonical": "Stadtwerke Bad Homburg", "aliases": ["Stadtwerke Bad Homburg v. d. Höhe", "Stadtwerke Bad Homburg", "E Tanken Bad Homburg"]},
+    {"canonical": "Stadtwerke Mühlheim am Main", "aliases": ["Stadtwerke Mühlheim", "Stadtwerke Muehlheim", "m.charge Mühlheim", "m.charge"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "staleHistoricalAdhocPromotedToCurrent": false,
+    "conflictingOfficialValidityPromotedToCurrent": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "arithmetic": "24 + 52 + 0 = 76; 591 - 76 = 515",
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 76/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Stadtwerke Mühlheim am Main deferred until an official EVSE/direct-payment price mapping is available",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
