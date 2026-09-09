@@ -1,0 +1,29 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Amberg",
+  "aliases": ["Stadtwerke Amberg Versorgungs GmbH", "Stadtwerke Amberg Bäder und Park GmbH", "SWA-E-Charge", "SWA-E-Charge Load"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "officialSurface": "SWA-E-Charge Load",
+    "pricePublication": "Current prices are explicitly delegated to the SWA-E-Charge app on the official operator page.",
+    "stationLevelDiscoveryOnly": {
+      "observedDcPriceEurPerKwh": 0.93,
+      "observedBlockingPriceEurPerMinute": 0.11,
+      "observedBlockingStartsAfterMinutes": 45,
+      "sampleEvseIds": ["DE*SAM*E0000002*001", "DE*SAM*E0000001*001", "DE*SAM*E0000097*001", "DE*SAM*E0000096*001"],
+      "authority": "third-party discovery evidence only; not promoted to official network pricing"
+    },
+    "note": "The operator confirms app/card based public charging and states that current prices are shown in its app. Third-party station pages expose exact values for several 300 kW EVSEs, but those values are retained only as discovery leads because no current official public tariff matrix or EVSE checkout was found."
+  },
+  "reason": "Official operator surface confirms the charging product but does not publish numeric current prices outside the app. Available station-level third-party values cannot safely be generalized or promoted as official tariff truth.",
+  "sources": [
+    "https://www.stadtwerke-amberg.de/swa-e-charge-load",
+    "https://www.stadtwerke-amberg.de/news-detail/neue-schnellladesaeule-in-der-marienstrasse",
+    "https://app.pumpapp.co/de/ladestation-stadtwerke-amberg-baeder-und-park-gmbh-am-anschuss-amberg/cbfeee76-c00b-11ef-9c49-3f42f6714ebf",
+    "https://app.pumpapp.co/de/ladestation-stadtwerke-amberg-baeder-und-park-gmbh-emailfabrikstrasse-amberg/c748f451-644a-11f0-a3ed-5fbc70f48762"
+  ],
+  "nextEvidenceNeeded": "Capture the official SWA-E-Charge app or public checkout/API response for representative EVSEs and prove whether tariff rules are network-wide or station-specific before attaching any numeric fallback."
+}
