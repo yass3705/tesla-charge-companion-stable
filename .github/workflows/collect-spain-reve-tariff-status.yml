@@ -2,6 +2,11 @@ name: Collect Spain REVE tariff/status streams
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - spain-reve-preintegration
+    paths:
+      - .github/reve-stream-trigger
 
 permissions:
   contents: write
@@ -50,6 +55,6 @@ jobs:
             data/spain_reve/reve_operational_status_raw.json.gz
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
           git commit -m "collect(es): advance REVE tariff/status streams"
           git push
