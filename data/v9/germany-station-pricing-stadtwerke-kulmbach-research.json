@@ -1,0 +1,33 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Kulmbach",
+  "aliases": ["Eigenbetrieb Stadtwerke Kulmbach", "SW Kulmbach"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Official Stadtwerke Kulmbach public-station listing plus station-level Mobilithek/Eco-Movement discovery",
+    "officialSurface": {
+      "publicStationsConfirmed": true,
+      "numericTariffPublished": false
+    },
+    "stationLevelDiscovery": {
+      "examples": [
+        {"evseId": "DE*BEM*E0010042", "connectorKind": "AC", "maxPowerKw": 22, "observedAdhocPriceEurPerKwh": 0.40},
+        {"evseId": "DE*BEM*E0010043", "connectorKind": "AC", "maxPowerKw": 22, "observedAdhocPriceEurPerKwh": 0.40},
+        {"evseId": "DE*BEM*E0010044", "connectorKind": "AC", "maxPowerKw": 22, "observedAdhocPriceEurPerKwh": 0.40},
+        {"evseId": "DE*BEM*E0010045", "connectorKind": "AC", "maxPowerKw": 22, "observedAdhocPriceEurPerKwh": 0.40}
+      ],
+      "authority": "discovery_only",
+      "note": "Mobilithek-derived station surfaces report 0.40 EUR/kWh on these EVSEs, but some records identify energielösung GmbH as technical operator while the Stadtwerke site presents the public locations. Ownership/price authority is therefore not generalized to the full Stadtwerke Kulmbach network."
+    }
+  },
+  "reason": "The official operator site confirms public charging locations but publishes no current direct-payment tariff. Station-level open-data discovery is useful evidence for specific EVSEs but is not sufficient to establish a network-wide Stadtwerke Kulmbach tariff or resolve the technical-operator relationship without an authoritative checkout/source binding.",
+  "sources": [
+    "https://wallboxen.stadtwerke-kulmbach.de/",
+    "https://www.kulmbach.de/verwaltung/einheiten/11629/stadtwerke-kulmbach.html",
+    "https://adhocladen.de/betreiber/stadtwerke-kulmbach/"
+  ],
+  "nextEvidenceNeeded": "Obtain an official QR/direct-payment checkout for a Stadtwerke Kulmbach EVSE, or an AFIR/Mobilithek record that includes authoritative tariff and operator-role fields sufficient to bind price to each EVSE without network extrapolation."
+}
