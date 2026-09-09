@@ -1,0 +1,28 @@
+{
+  "country": "DE",
+  "operator": "ensev",
+  "aliases": ["ensev GmbH", "Stadtwerke Bad Nauheim", "Stadtwerke Bad Nauheim GmbH", "SWBN"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current official ensev public-charging page for Bad Nauheim, checked 2026-09-09.",
+    "adhoc": {
+      "acDc": {
+        "priceEurPerKwh": 0.57,
+        "startFeeEur": 3.00,
+        "powerScope": "AC up to 22 kW / DC up to 150 kW"
+      },
+      "vatIncluded": true,
+      "payment": ["smartphone_qr", "credit_card"]
+    },
+    "note": "Official operator page explicitly states the ad-hoc tariff applies to AC standard charging up to 22 kW and DC fast charging up to 150 kW. No start/blocking fee is stated for the registered 0.53 EUR/kWh tariff; the ad-hoc row separately states 0.57 EUR/kWh plus 3.00 EUR start fee."
+  },
+  "reason": "Current official operator page publishes an exact network ad-hoc tariff and explicitly describes QR/browser credit-card activation for ensev stations.",
+  "sources": [
+    "https://www.ensev.de/",
+    "https://www.stadtwerke-bad-nauheim.de/stadtwerke/news/ladepark-am-taubenbaum-jetzt-auch-samstags-geoffnet-kp9r5wjwxa"
+  ],
+  "nextEvidenceNeeded": null
+}
