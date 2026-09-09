@@ -1,0 +1,25 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Langen",
+  "aliases": ["Stadtwerke Langen GmbH", "SW Langen", "LMS Stadtwerke Langen"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current official Stadtwerke Langen public charging page; the operator lists its own public Type 2 AC stations and a dedicated ad-hoc tariff effective 2026-06-01.",
+    "adhoc": {
+      "acPriceEurPerKwh": 0.68,
+      "monthlyFeeEur": 0.0,
+      "blockingFeeEurPerMinute": 0.04,
+      "blockingFeeStartsAfterMinutes": 240,
+      "vatIncluded": true
+    },
+    "note": "The official page explicitly separates registered charging-card pricing from ad-hoc charging. No DC tariff is fabricated because the operator's public-station section on this page is explicitly AC Type 2."
+  },
+  "reason": "Current official operator page explicitly publishes the contract-free ad-hoc price and blocking fee effective 2026-06-01 for its own public AC charging stations.",
+  "sources": [
+    "https://stadtwerke-langen.de/mobilitaet/"
+  ],
+  "nextEvidenceNeeded": null
+}
