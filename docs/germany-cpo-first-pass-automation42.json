@@ -1,0 +1,73 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-09",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation41.json",
+  "baseline": {"treated": 130, "complete": 43, "partial_deferred": 87, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Westfalen Weser Ladeservice GmbH",
+      "status": "complete",
+      "aliases": ["Westfalen Weser", "WWL", "Westfalen Weser Ladeservice"],
+      "evidence": "Current official Westfalen Weser direct-access page explicitly supports ad-hoc QR, Girocard and terminal payment without prior registration. The same official page publishes the direct tariff: AC normal charging EUR 0.35 per start plus EUR 0.55/kWh and EUR 0.00/h; DC fast charging EUR 0.35 per start plus EUR 0.67/kWh and EUR 0.00/h. The contractual counterparty is explicitly Westfalen Weser Ladeservice GmbH.",
+      "source": "https://www.westfalenweser.com/e-mobilitaet/ladezugang",
+      "tariff": {"adhoc_ac_start_fee_eur": 0.35, "adhoc_ac_eur_per_kwh": 0.55, "adhoc_ac_time_fee_eur_per_hour": 0.0, "adhoc_dc_start_fee_eur": 0.35, "adhoc_dc_eur_per_kwh": 0.67, "adhoc_dc_time_fee_eur_per_hour": 0.0}
+    },
+    {
+      "canonical_name": "Stadtwerke Winsen (Luhe) GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Winsen", "STW Winsen", "LuheStrom"],
+      "evidence": "Current official E-Mobility FAQ explicitly states that charging at Stadtwerke Winsen stations without contract by SMS or QR code costs EUR 0.60/kWh. The same FAQ separately lists card pricing and warns that prices at foreign stations can differ, so the direct tariff is scoped only to own stations.",
+      "source": "https://www.stw-winsen.de/de/Produkte/E-Mobilitaet/E-Mobilitaet_798.html",
+      "tariff": {"adhoc_eur_per_kwh": 0.60, "activation": ["SMS", "QR"]}
+    },
+    {
+      "canonical_name": "Stadtwerke Celle GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Celle", "Cell-E-Mobil"],
+      "evidence": "Current official Cell-E-Mobil page confirms the operator's public charging network and advertises a tariff 'from EUR 0.40/kWh' without publishing an exact direct-payment matrix. Current Mobilithek/DATEX-II-derived station data for sampled Stadtwerke Celle AC EVSEs shows direct payment around EUR 0.56/kWh plus EUR 1.00 start fee, but this station-level value is not generalized because the official current page does not establish its network-wide scope and other Celle sites have different operator attribution.",
+      "source": "https://stadtwerke-celle.de/produkte/elektromobilitaet/e-laden/",
+      "reason": "official public CPO and lower-bound tariff confirmed; exact current direct/ad-hoc matrix is not published and station-level open-data observations are not generalized"
+    },
+    {
+      "canonical_name": "Osnabrücker Parkstätten-Betriebsgesellschaft mbH (OPG)",
+      "status": "partial_deferred",
+      "aliases": ["OPG", "Osnabrücker Parkstätten-Betriebsgesellschaft", "Stadtwerke Osnabrück OPG"],
+      "evidence": "Current Stadtwerke Osnabrück pages confirm OPG as the Stadtwerke subsidiary operating roughly 150 public charging points in Osnabrück and the region, including newly commissioned DC sites in 2025-2026. The current public pages promote the OPG E-LadeCard and direct charging infrastructure but do not publish a numeric current contract-free station/EVSE tariff. Station aggregators confirm ad-hoc availability at sampled sites but no reliable official numeric direct matrix was established.",
+      "source": "https://www.stadtwerke-osnabrueck.de/mobilitaet/parken",
+      "reason": "operator identity and public network are official; no current official numeric ad-hoc/direct-payment tariff matrix established in first pass"
+    },
+    {
+      "canonical_name": "Stadtwerke Wolfenbüttel GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Wolfenbüttel", "SW Wolfenbüttel", "Stadtwerke WF"],
+      "evidence": "Current official Stadtwerke Wolfenbüttel material confirms the utility has built and operated public charging infrastructure in Wolfenbüttel and continues to offer e-mobility services, but the 2026 web surface exposes home/business charging solutions rather than a numeric public ad-hoc tariff. Current station-level discovery reports values around EUR 0.49/kWh AC and EUR 0.64/kWh DC on sampled sites, but operator/backend attribution includes legacy partners and the values are not generalized.",
+      "source": "https://www.stadtwerke-wf.de/unternehmen/engagement/engagement-Umweltprojekte.html",
+      "reason": "public charging activity confirmed but no current official numeric direct/ad-hoc matrix; sampled third-party values have legacy operator/backend attribution risk"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Westfalen Weser Ladeservice GmbH", "aliases": ["Westfalen Weser", "WWL", "Westfalen Weser Ladeservice"], "note": "kept distinct from Westfalen AG & Co. KG / Westfalen Service Card"},
+    {"canonical": "Stadtwerke Winsen (Luhe) GmbH", "aliases": ["Stadtwerke Winsen", "STW Winsen", "LuheStrom"]},
+    {"canonical": "Stadtwerke Celle GmbH", "aliases": ["Stadtwerke Celle", "Cell-E-Mobil"]},
+    {"canonical": "Osnabrücker Parkstätten-Betriebsgesellschaft mbH (OPG)", "aliases": ["OPG", "Osnabrücker Parkstätten-Betriebsgesellschaft", "Stadtwerke Osnabrück OPG"]},
+    {"canonical": "Stadtwerke Wolfenbüttel GmbH", "aliases": ["Stadtwerke Wolfenbüttel", "SW Wolfenbüttel", "Stadtwerke WF"]}
+  ],
+  "counters_after_pass": {"treated": 135, "complete": 45, "partial_deferred": 90, "blocked": 0, "remaining": 456, "total": 591},
+  "coherence": {
+    "arithmetic": "45 + 90 + 0 = 135; 591 - 135 = 456",
+    "checkpoint_chain_check": "passed against committed checkpoint automation41 baseline; this checkpoint intentionally ignores unpersisted conversational counters",
+    "duplicate_alias_check": "passed for this batch; Westfalen Weser Ladeservice is explicitly distinct from Westfalen AG & Co. KG and aliases are not counted separately",
+    "deferred_reaudit_check": "passed: no identity deferred in automation41 is revisited here",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: OPG card offers and Stadtwerke Celle 'from' pricing are not promoted to universal direct tariffs",
+    "station_level_inference_check": "passed: Celle and Wolfenbüttel third-party/open-data station values are retained only as evidence and not generalized",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue first-pass queue with canonical identities absent from committed Germany checkpoints and PR research inventory",
+    "prioritize Lower Saxony / northern municipal CPOs with official direct-payment surfaces",
+    "do not revisit Celle, OPG Osnabrück or Wolfenbüttel until first-pass traversal is complete or new official checkout evidence appears"
+  ]
+}
