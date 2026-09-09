@@ -1,0 +1,62 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "baseline": {"treated": 107, "complete": 35, "partial_deferred": 72, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Münster GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Münster", "SW Münster", "Momente Card charging"],
+      "evidence": "Official 2026 public-charging page explicitly publishes credit-card/ad-hoc pricing valid from 01.04.2026 on Stadtwerke Münster stations: AC EUR 0.47/kWh plus EUR 0.05/min after 240 minutes; DC EUR 0.52/kWh plus EUR 0.05/min after 60 minutes. At car parks and Park & Ride locations, the AC time component starts only after 480 minutes. Time charges are waived between 22:00 and 06:00 while elapsed time continues to count. QR/card checkout is documented.",
+      "source": "https://www.stadtwerke-muenster.de/unterwegs/e-mobilitaet/elektroauto-laden",
+      "tariff": {"valid_from":"2026-04-01","adhoc_ac_eur_per_kwh":0.47,"adhoc_dc_eur_per_kwh":0.52,"blocking_eur_per_min":0.05,"ac_blocking_after_min":240,"ac_blocking_after_min_parkhaus_pr":480,"dc_blocking_after_min":60,"blocking_free_window":"22:00-06:00"}
+    },
+    {
+      "canonical_name": "SWB Energie und Wasser / Stadtwerke Bonn",
+      "status": "complete",
+      "aliases": ["Stadtwerke Bonn", "SWB Energie und Wasser", "SWB Bonn"],
+      "evidence": "Official current public-charging page explicitly applies the published prices to both SWB eCharge and smartphone direct payment: AC and DC up to 50 kW EUR 0.49/kWh plus EUR 0.10/min from minute 241 between 08:00 and 22:00; DC above 50 kW EUR 0.56/kWh plus EUR 0.10/min from minute 61. Ad-hoc QR/short-link payment supports Apple Pay, Google Pay and PayPal without prior registration.",
+      "source": "https://www.stadtwerke-bonn.de/fuer-unternehmen/produkte/e-mobility/elektrotankstellen/",
+      "tariff": {"published_valid_from":"2024-04-01","adhoc_ac_dc50_eur_per_kwh":0.49,"adhoc_dc_gt50_eur_per_kwh":0.56,"blocking_eur_per_min":0.10,"ac_dc50_blocking_after_min":240,"ac_dc50_blocking_window":"08:00-22:00","dc_gt50_blocking_after_min":60}
+    },
+    {
+      "canonical_name": "Stadtwerke Bochum Holding GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Bochum", "Stadtwerkedrive Bochum"],
+      "evidence": "Official current FAQ confirms ad-hoc QR charging with PayPal or credit card and documents the Stadtwerkedrive contract tariff at EUR 0.50/kWh AC/DC (night AC EUR 0.40/kWh) with blocking fees. The operator explicitly warns that ad-hoc prices can differ from its own card tariff, so the card tariff was not promoted to direct payment.",
+      "source": "https://www.stadtwerke-bochum.de/faq/faq-detail/elektromobilitaet-17",
+      "reason": "ad-hoc access proven, but exact current ad-hoc checkout price not published on official web surface"
+    },
+    {
+      "canonical_name": "Stadtwerke Solingen GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Solingen", "SWS Solingen"],
+      "evidence": "Official current station page lists the Solingen charging estate and states that current AC/DC per-kWh prices are displayed only in the Stadtwerke Solingen Lade-App. Registered customers have the EUR 0.49 session start fee waived and there is no basic monthly fee. No numeric current station tariff is published on the web page.",
+      "source": "https://www.stadtwerke-solingen.de/privat-gewerbekunden/elektromobilitaet/ladesaeulen-in-solingen/",
+      "reason": "numeric current AC/DC price is app-only"
+    },
+    {
+      "canonical_name": "EWR GmbH / Stadtwerke Remscheid Verbund",
+      "status": "partial_deferred",
+      "aliases": ["EWR Remscheid", "Stadtwerke Remscheid", "Stadtwerke Remscheid Verbund", "SR", "PSR"],
+      "evidence": "Official August 2026 material confirms EWR, SR and PSR operate the public AC network in Remscheid and introduces a customer-only 'Laden wie Zuhause' tariff using ChargePoint, currently illustrated at EUR 0.32/kWh for EWR*STROM Natur plus customers. This is explicitly conditional on the household electricity contract and ChargePoint account; no universal ad-hoc tariff was established.",
+      "source": "https://www.ewr-remscheid.de/laden/",
+      "reason": "verified customer-specific price exists, but no universal direct/ad-hoc price proven"
+    },
+    {
+      "canonical_name": "STAWAG – Stadt- und Städteregionswerke Aachen AG",
+      "status": "partial_deferred",
+      "aliases": ["STAWAG", "Stadtwerke Aachen", "STAWAG Aachen"],
+      "evidence": "Official current material confirms STAWAG operates more than 700 publicly usable charging points in the Aachen region and offers STAWAG/Basis contract tariffs via its charging card and app. The current web surface does not expose a numeric universal direct-payment/ad-hoc tariff; prices depend on tariff, charge type and operator.",
+      "source": "https://store.stawag.de/elektromobilitaet/unterwegs-laden",
+      "reason": "operator/network confirmed; no numeric universal current direct-payment tariff exposed in first pass"
+    }
+  ],
+  "counters_after_pass": {"treated": 113, "complete": 37, "partial_deferred": 76, "blocked": 0, "remaining": 478, "total": 591},
+  "coherence": {
+    "arithmetic": "37 + 76 + 0 = 113; 591 - 113 = 478",
+    "policy": "First-pass coverage prioritized; four unresolved operators were deferred immediately after reasonable official-source investigation.",
+    "duplicate_check": "The six canonical identities were not present in checkpoints automation33-37; aliases are not counted separately. No previously deferred CPO was re-audited."
+  }
+}
