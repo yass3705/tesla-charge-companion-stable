@@ -1,0 +1,22 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Traunstein",
+  "aliases": ["Stadtwerke Traunstein GmbH & Co. KG", "SW Traunstein", "Stadtwerke Traunstein ladenetz"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "All public charging points explicitly listed by Stadtwerke Traunstein on the current operator page; all are Type 2 AC points and the page states they have the same access methods.",
+    "adhoc": {
+      "webAppQr": {"acPriceEurPerKwh": 0.49, "paymentMode": "online_direct_payment"},
+      "vatIncluded": true
+    },
+    "note": "The operator explicitly states that the ladeapp web app is reached through the QR code on the charging station and gives the gross ad-hoc price of 0.49 EUR/kWh. Contract/RFID prices remain governed by the card issuer and are not promoted into the direct tariff."
+  },
+  "reason": "Current official operator page publishes one exact ad-hoc price and states that all listed public charging points share the same access options, so no station-level extrapolation is required.",
+  "sources": [
+    "https://www.sw-traunstein.de/produkte-preise/strom/elektromobilitaet"
+  ],
+  "nextEvidenceNeeded": null
+}
