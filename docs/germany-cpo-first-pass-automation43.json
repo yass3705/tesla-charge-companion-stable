@@ -1,0 +1,63 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-09",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation42.json",
+  "baseline": {"treated": 135, "complete": 45, "partial_deferred": 90, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Elmshorn",
+      "status": "complete",
+      "aliases": ["Stadtwerke Elmshorn GmbH", "SW Elmshorn"],
+      "evidence": "Current official Stadtwerke Elmshorn charging page explicitly publishes spontaneous charging without contract: AC up to 22 kW at EUR 0.59/kWh and DC at EUR 0.69/kWh. Ad-hoc activation is available by QR code/m8mit or SMS, with multiple payment methods including Mastercard, PayPal, Visa and direct debit. Contract tariffs are separately listed and not conflated with ad-hoc.",
+      "source": "https://www.stadtwerke-elmshorn.de/ladekarte",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.59, "adhoc_dc_eur_per_kwh": 0.69, "activation": ["QR", "m8mit", "SMS"]}
+    },
+    {
+      "canonical_name": "Stadtwerke Wedel GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Wedel", "STW Wedel", "Elblicht Ladestrom"],
+      "evidence": "Current official e-mobility page explicitly distinguishes Adhoc Laden from the Stadtwerke Wedel card and publishes the direct price as EUR 0.59/kWh plus EUR 3.00 start fee. The page also confirms a public network of numerous stations and spontaneous charging as an alternative to charging cards.",
+      "source": "https://www.stadtwerke-wedel.de/emobilitaet",
+      "tariff": {"adhoc_eur_per_kwh": 0.59, "start_fee_eur": 3.00}
+    },
+    {
+      "canonical_name": "Stadtwerke Buxtehude GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Buxtehude", "SWB Buxtehude", "SWB-Ladestrom"],
+      "evidence": "Current official e-mobility page confirms the own public charging network and publishes SWB-Ladestrom prices from 01.02.2025: EUR 0.51/kWh AC and EUR 0.63/kWh DC, with a card setup fee and a monthly base fee for non-SWB electricity customers. Because the official numeric table is explicitly tied to the SWB-Ladestrom contractual card product and current station discovery confirms direct payment exists but does not expose a reliable numeric checkout price, the contract values are not promoted to ad-hoc.",
+      "source": "https://www.stadtwerke-buxtehude.de/leistungen/elektromobilitaet-auto-2",
+      "reason": "official own-network contract tariff is current, but exact contract-free direct-payment price is not published; no extrapolation from the card tariff"
+    },
+    {
+      "canonical_name": "Stadtwerke Uetersen GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Uetersen", "SWUe", "SWUe-Ladekarte"],
+      "evidence": "Current official charging page publishes the Ladestrom contract at EUR 0.49/kWh AC and EUR 0.59/kWh DC with a 10 Cent/kWh customer advantage, while the downloadable public-charging price sheet available on the official surface is dated 01.07.2022. Current station discovery confirms ad-hoc activation is possible at Uetersen sites, but no current official 2026 numeric direct-payment tariff matrix was established. Historic or contractual values are therefore not promoted to ad-hoc.",
+      "source": "https://www.stadtwerkeuetersen.de/de/Referenzierter-Inhalt/Tarif-und-Wallboxen.html",
+      "reason": "current official contract tariff found and ad-hoc access exists, but current official direct-payment price is missing; 2022 price sheet is stale for 2026 direct pricing"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Elmshorn", "aliases": ["Stadtwerke Elmshorn GmbH", "SW Elmshorn"]},
+    {"canonical": "Stadtwerke Wedel GmbH", "aliases": ["Stadtwerke Wedel", "STW Wedel", "Elblicht Ladestrom"]},
+    {"canonical": "Stadtwerke Buxtehude GmbH", "aliases": ["Stadtwerke Buxtehude", "SWB Buxtehude", "SWB-Ladestrom"]},
+    {"canonical": "Stadtwerke Uetersen GmbH", "aliases": ["Stadtwerke Uetersen", "SWUe", "SWUe-Ladekarte"]}
+  ],
+  "counters_after_pass": {"treated": 139, "complete": 47, "partial_deferred": 92, "blocked": 0, "remaining": 452, "total": 591},
+  "coherence": {
+    "arithmetic": "47 + 92 + 0 = 139; 591 - 139 = 452",
+    "duplicate_alias_check": "passed for this batch; aliases are not counted separately",
+    "deferred_reaudit_check": "passed: no partial/deferred identity from automation42 is revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: Buxtehude and Uetersen card tariffs are not promoted to direct payment",
+    "stale_tariff_check": "passed: Uetersen 2022 public-charging sheet is retained as historical evidence only",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue northern Germany first-pass with canonical identities absent from committed checkpoint chain",
+    "prioritize operators exposing current direct prices in official HTML or public checkout",
+    "defer Buxtehude and Uetersen until a current official ad-hoc numeric checkout is exposed"
+  ]
+}
