@@ -1,0 +1,29 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Mühlheim am Main",
+  "aliases": ["Stadtwerke Mühlheim", "Stadtwerke Muehlheim", "m.charge Mühlheim", "m.charge"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": null,
+    "scope": "Current official operator e-mobility page and its still-linked m.charge tariff sheet.",
+    "registeredCardEvidence": {
+      "tariffName": "m.charge",
+      "effectiveFrom": "2023-11-20",
+      "ladenetzAcPriceEurPerKwh": 0.48,
+      "ladenetzDcPriceEurPerKwh": 0.58,
+      "blockingFeeEurPerMinute": 0.10,
+      "acBlockingFeeStartsAfterMinutes": 180,
+      "dcBlockingFeeStartsAfterMinutes": 120,
+      "cardOrderFeeEur": 10.0
+    },
+    "note": "The current official page explicitly labels the linked values as m.charge charging-card tariffs. The sheet also mixes Ladenetz, roaming and high-price-provider categories, so these values are not promoted to a station-level ad-hoc tariff for the operator's own EVSEs."
+  },
+  "reason": "A current official e-mobility page exists and still links the 2023 m.charge card tariff, but no current public direct-payment/ad-hoc price or EVSE-level checkout was found. Contract/card values are retained only as evidence and are not extrapolated.",
+  "sources": [
+    "https://www.stadtwerke-muehlheim.de/de/E-Mobilitaet/m.charge-Ladekarte/",
+    "https://www.stadtwerke-muehlheim.de/de/E-Mobilitaet/m.charge-Ladekarte/m.charge-Ladekarte/Preisblatt-m.charge-2023-11-20.pdf"
+  ],
+  "nextEvidenceNeeded": "A current official ad-hoc/direct-payment checkout tied to a Stadtwerke Mühlheim EVSE, or an operator tariff sheet explicitly mapping its own stations to the applicable direct price."
+}
