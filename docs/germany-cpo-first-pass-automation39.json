@@ -1,0 +1,71 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "baseline": {"treated": 113, "complete": 37, "partial_deferred": 76, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Neuss Energie und Wasser GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Neuss", "SWN Neuss", "neuss|strom Ladekarte"],
+      "evidence": "Official current Ladekarte page publishes the tariff effective 01.09.2026 and explicitly separates Ad Hoc-Laden from contract cards. Direct ad-hoc charging is EUR 0.79/kWh. The same page separately lists contract-card prices, so no contract tariff is promoted to ad-hoc.",
+      "source": "https://www.stadtwerke-neuss.de/elektromobilitaet/ladekarte",
+      "tariff": {"valid_from": "2026-09-01", "adhoc_eur_per_kwh": 0.79}
+    },
+    {
+      "canonical_name": "Stadtwerke Ratingen GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Ratingen", "SWR Ratingen"],
+      "evidence": "Official public-station page explicitly publishes contract-free ad-hoc prices effective 01.04.2026: AC EUR 0.53/kWh plus EUR 0.05/min from minute 241, with the AC standing fee free from 22:00-06:00; DC EUR 0.59/kWh plus EUR 0.05/min from minute 61 and a maximum DC standing fee of EUR 12 per session. Ad-hoc starts by QR and credit card.",
+      "source": "https://www.stadtwerke-ratingen.de/mobilitaet/oeffentliche-ladestationen",
+      "tariff": {"valid_from":"2026-04-01","adhoc_ac_eur_per_kwh":0.53,"adhoc_dc_eur_per_kwh":0.59,"blocking_eur_per_min":0.05,"ac_blocking_after_min":240,"ac_blocking_free_window":"22:00-06:00","dc_blocking_after_min":60,"dc_max_standing_fee_eur":12.00}
+    },
+    {
+      "canonical_name": "Stadtwerke Hilden GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Hilden", "hildenMobil"],
+      "evidence": "Official current hildenMobil price table has a dedicated 'Ladeapp für Spontanlader' column: EUR 1.00 start fee, EUR 0.50/kWh, and EUR 0.10/min blocking after 240 minutes for both normal AC and DC fast charging. The table separately distinguishes customer and standard card tariffs and says roaming outside Ladenetz is not included for spontaneous users.",
+      "source": "https://stadtwerke-hilden.de/hildenmobil/",
+      "tariff": {"spontaneous_start_fee_eur":1.00,"spontaneous_eur_per_kwh":0.50,"blocking_eur_per_min":0.10,"blocking_after_min":240}
+    },
+    {
+      "canonical_name": "Energieversorgung Leverkusen GmbH & Co. KG (EVL)",
+      "status": "partial_deferred",
+      "aliases": ["EVL", "Energieversorgung Leverkusen"],
+      "evidence": "Official current help center confirms that since March 2026 EVL stations support direct payment by QR through Backend Success/Stripe and use a EUR 50 temporary payment reservation. Current station-level discovery sources consistently expose EUR 0.49/kWh on sampled EVL AC EVSEs, but disagree on whether a EUR 0.49 start fee also applies. Because the official page does not publish the numeric checkout tariff, the secondary value is not promoted to a universal EVL tariff.",
+      "source": "https://evl-leverkusen.de/hilfecenter/elektromobilitaet/",
+      "reason": "direct-payment channel is official, but current numeric checkout terms are not published and station-level secondary sources conflict on the start fee"
+    },
+    {
+      "canonical_name": "SWK ENERGIE GmbH (Krefeld)",
+      "status": "partial_deferred",
+      "aliases": ["SWK Energie", "Stadtwerke Krefeld", "SWK Krefeld"],
+      "evidence": "Current Mobilithek/DATEX-II-derived station data and multiple station-level discovery pages show sampled SWK ENERGIE Krefeld EVSEs at EUR 0.59/kWh AC with a EUR 0.10/min blocking fee, while the public SWK website confirms the e-mobility/charging activity but does not expose a current network-wide direct tariff. The observed station values are therefore retained only as station-level evidence and not generalized across the CPO.",
+      "source": "https://www.swk.de/privatkunden/de/mobilitaet/sharing-und-emobility",
+      "reason": "station-level direct prices found via Mobilithek-derived/secondary data, but no official universal SWK CPO tariff proven in first pass"
+    },
+    {
+      "canonical_name": "Stadtwerke Essen AG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Essen", "SWE Essen"],
+      "evidence": "Multiple current station-level discovery pages identify Stadtwerke Essen AG AC EVSEs with direct payment around EUR 0.61/kWh, but the first-pass official-site search did not expose a current public network tariff or checkout matrix. The third-party station price is not generalized to the CPO.",
+      "source": "https://www.stadtwerke-essen.de/",
+      "reason": "station-level direct price leads exist, but no current official numeric network-wide ad-hoc tariff established"
+    },
+    {
+      "canonical_name": "Stadtwerke Düren GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Düren", "SWD Düren"],
+      "evidence": "Current station-level discovery data shows sampled Stadtwerke Düren AC EVSEs at EUR 0.54/kWh direct payment, including several nearby operator sites with the same observed price. A current official CPO tariff matrix was not surfaced in the first pass, so the observed station values are not generalized.",
+      "source": "https://www.stadtwerke-dueren.de/",
+      "reason": "station-level direct price evidence found, but no current official universal ad-hoc tariff established"
+    }
+  ],
+  "counters_after_pass": {"treated": 120, "complete": 40, "partial_deferred": 80, "blocked": 0, "remaining": 471, "total": 591},
+  "coherence": {
+    "arithmetic": "40 + 80 + 0 = 120; 591 - 120 = 471",
+    "policy": "First-pass coverage remains the priority. Four unresolved operators were deferred after a reasonable current-source pass; no previous deferred case was revisited.",
+    "duplicate_check": "The seven canonical identities are absent from explicit checkpoints automation35-38 and from the named recent-pass set used for batch selection. SWK Krefeld is kept distinct from SWK Kaiserslautern; EVL Leverkusen is kept distinct from similarly named EWR entities. Aliases are not counted separately.",
+    "source_policy": "Official CPO evidence is authoritative for complete classifications. Mobilithek-derived and aggregator station-level values are retained only as discovery/partial evidence unless the operator or a verifiable public checkout establishes the exact applicable tariff."
+  }
+}
