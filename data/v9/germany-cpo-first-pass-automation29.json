@@ -1,0 +1,79 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation28.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 70,
+  "forwardSliceStatus": {
+    "complete": 20,
+    "partial": 50,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 521,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "VWEW-energie",
+      "aliases": ["Vereinigte Wertach-Elektrizitätswerke GmbH", "VWEW", "VWEW Energie", "VWEW-energie Kaufbeuren"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator tariff page explicitly publishes direct QR and intercharge direct AC/DC prices plus occupancy pricing for publicly accessible VWEW stations."
+    },
+    {
+      "name": "Stadtwerke Bad Tölz",
+      "aliases": ["Stadtwerke Bad Tölz GmbH", "SW Bad Tölz", "TÖLZLadestrom", "TOL"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current operator page publishes registered/customer own-network prices, while current ad-hoc numeric checkout is not publicly exposed; the 2023 city ad-hoc price is stale and was not promoted."
+    },
+    {
+      "name": "Freisinger Stadtwerke",
+      "aliases": ["Freisinger Stadtwerke Versorgungs-GmbH", "Stadtwerke Freising", "charge it easy Freising"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official station page publishes exact charge-it-easy tariffs and maps the two tariff classes to listed public locations, including no-personal-registration evidence on public points."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-vwew-energie-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-bad-toelz-research.json",
+    "data/v9/germany-station-pricing-freisinger-stadtwerke-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "VWEW-energie", "aliases": ["Vereinigte Wertach-Elektrizitätswerke GmbH", "VWEW", "VWEW Energie", "VWEW-energie Kaufbeuren"]},
+    {"canonical": "Stadtwerke Bad Tölz", "aliases": ["Stadtwerke Bad Tölz GmbH", "SW Bad Tölz", "TÖLZLadestrom", "TOL"]},
+    {"canonical": "Freisinger Stadtwerke", "aliases": ["Freisinger Stadtwerke Versorgungs-GmbH", "Stadtwerke Freising", "charge it easy Freising"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "branchCandidateAlreadyPresentSkipped": ["Stadtwerke Bayreuth"],
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "staleHistoricalAdhocPromotedToCurrent": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "arithmetic": "20 + 50 + 0 = 70; 591 - 70 = 521",
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 70/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Stadtwerke Bad Tölz deferred until a current DE*TOL QR/ladecloud checkout or official current ad-hoc tariff sheet is captured",
+    "skip Stadtwerke Bayreuth as already represented by an existing Germany PR research file rather than counting it as a new first pass",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
