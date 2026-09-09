@@ -1,0 +1,22 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Trostberg",
+  "aliases": ["Stadtwerke Trostberg Stromversorgung GmbH", "SW Trostberg", "Stadtwerke Trostberg ladenetz"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Four public Stadtwerke Trostberg charging stations listed on the current operator page",
+    "channels": ["ladeapp_web_qr", "ec_card", "credit_card"],
+    "numericTariffCandidate": {"priceEurPerKwh": 0.59, "sourceDocumentLabel": "Preisblatt Elektroladesäule"},
+    "promotedToCurrentTariff": false,
+    "note": "The current official electromobility page says the linked price sheet is valid from 01.01.2025 through 31.12.2026, but the linked PDF text itself says valid only from 01.01.2025 through 31.12.2025. Because the validity metadata conflicts, the 0.59 EUR/kWh ad-hoc value is retained as evidence but not promoted as a certified current 2026 tariff."
+  },
+  "reason": "Official current page confirms direct payment channels and links a tariff sheet, but the page and PDF disagree on the tariff validity end date. Fail-closed until a 2026-consistent official tariff sheet or live QR checkout confirms the numeric price.",
+  "sources": [
+    "https://stadtwerke-trostberg.de/strom/elektromobilitaet/",
+    "https://stadtwerke-trostberg.de/wp-content/uploads/2024/11/Preisblatt-Ladesaeulen_0101-311225-1.pdf"
+  ],
+  "nextEvidenceNeeded": "A current official PDF whose internal validity covers 2026, or a public QR/ladeapp checkout from a Stadtwerke Trostberg EVSE showing the current direct price."
+}
