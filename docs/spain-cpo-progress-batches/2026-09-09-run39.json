@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-09-run39",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "newNominativeDecisions": 0,
+    "note": "The current stored 148-CPO REVE snapshot remains fully first-pass covered through ZOILO RIOS, S.A. No recoverable never-traversed historical derived label was evidenced in current GitHub state, so no identity was fabricated and no active/setAside case was re-audited."
+  },
+  "inventoryEvidence": {
+    "historicalWorkQueueLabels": 618,
+    "authoritativeCpoDenominator": false,
+    "currentDistinctReveCpos": 148,
+    "canonicalReconstructionRetried": false,
+    "canonicalReconstructionReason": "The prior one-shot reconstruction failure remains authoritative. This run found no new recoverable historical nominative source beyond the already traversed current snapshot."
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 341,
+    "maximumNeverTraversed": 277,
+    "firstPassComplete": false
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "batchTriggerIssued": true,
+    "triggerCommit": "dfc3a56a90d0064902c9839451dc8c9f9f97c019",
+    "triggerIssuedAtUtc": "2026-09-09T03:42:43Z",
+    "batchConfirmedCompleted": false,
+    "previousSuccessfulGeneratedAt": "2026-09-08T23:39:11.610436Z",
+    "requestsAttemptedObserved": 0,
+    "requestsSucceededObserved": 0,
+    "http429CountObserved": 0,
+    "locationsRequestsObserved": 0,
+    "quotaWindowConservativelyConsumed": true,
+    "stateObserved": {
+      "nextTariffPage": 53,
+      "tariffPagesCollected": 52,
+      "tariffRowsStored": 5187,
+      "tariffTotalPages": 462,
+      "nextStatusPage": 36,
+      "statusPagesCollected": 35,
+      "statusRowsStored": 3274,
+      "statusTotalPages": 447
+    },
+    "decision": "More than one real hour had elapsed since the preceding one-shot trigger. Exactly one new targeted temporary push trigger was issued. The workflow was immediately restored to workflow_dispatch-only and the sentinel removed. The new last_run had not materialized after repeated checks, therefore no second live trigger is permitted in this quota window."
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true,
+    "workflowRestoredDispatchOnly": true,
+    "oneShotSentinelRemoved": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "mandatoryCadenceCheckPerformed": false,
+    "continuityCountSum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "locationsEndpointUnusedByObservedState": true
+  },
+  "investigationCurrent": "Continue only from newly recoverable never-traversed historical derived labels. If a second consecutive run still has no nominative progress, perform the mandatory coherence control immediately, while preserving the no-fabrication rule.",
+  "updatedAt": "2026-09-09T03:44:00Z"
+}
