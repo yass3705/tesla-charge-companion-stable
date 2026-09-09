@@ -1,0 +1,77 @@
+{
+  "country": "DE",
+  "project": "Tesla Charge Companion V9",
+  "checkpointDate": "2026-09-09",
+  "operationalTotalKnownCpos": 591,
+  "sourceCheckpoint": "data/v9/germany-cpo-first-pass-automation26.json",
+  "policy": {
+    "priority": "first-pass coverage before deep re-audit",
+    "deferRepeatedUnresolvedUntilTraverseComplete": true,
+    "noTariffInferenceOrExtrapolation": true,
+    "branchAwareSelection": true,
+    "lossyRuntimeTariffEncodingForbidden": true
+  },
+  "newCposThisRun": 3,
+  "reliableNewCposSinceCanonicalFreeze": 64,
+  "forwardSliceStatus": {
+    "complete": 17,
+    "partial": 47,
+    "blocked": 0,
+    "nominalUnvisitedInsideForwardDenominator": 527,
+    "note": "Repository-certified forward first-pass slice only. Previously reported larger counters remain excluded until nominative reconciliation proves them from committed repository evidence."
+  },
+  "newFirstPasses": [
+    {
+      "name": "Stadtwerke Schwabach",
+      "aliases": ["Stadtwerke Schwabach GmbH", "SW Schwabach"],
+      "status": "complete",
+      "deferred": false,
+      "reason": "Current official operator page explicitly publishes ad-hoc charging at 0.70 EUR/kWh AC and 0.85 EUR/kWh DC plus exact blocking-fee rules."
+    },
+    {
+      "name": "Stadtwerke Amberg",
+      "aliases": ["Stadtwerke Amberg Versorgungs GmbH", "Stadtwerke Amberg Bäder und Park GmbH", "SWA-E-Charge", "SWA-E-Charge Load"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Official SWA-E-Charge surface confirms public charging but delegates current prices to its app; third-party EVSE prices remain discovery-only and are not generalized."
+    },
+    {
+      "name": "Stadtwerke Neumarkt",
+      "aliases": ["Stadtwerke Neumarkt i.d.OPf.", "SWN Neumarkt", "SWN"],
+      "status": "partial",
+      "deferred": true,
+      "reason": "Current post-1-September-2026 official page publishes registered LadeVerbundPlus tariffs and blocking fees but no numeric ad-hoc row; an older official migration page is insufficient to prove current direct-payment prices."
+    }
+  ],
+  "filesAdded": [
+    "data/v9/germany-station-pricing-stadtwerke-schwabach-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-amberg-research.json",
+    "data/v9/germany-station-pricing-stadtwerke-neumarkt-research.json"
+  ],
+  "aliasesResolved": [
+    {"canonical": "Stadtwerke Schwabach", "aliases": ["Stadtwerke Schwabach GmbH", "SW Schwabach"]},
+    {"canonical": "Stadtwerke Amberg", "aliases": ["Stadtwerke Amberg Versorgungs GmbH", "Stadtwerke Amberg Bäder und Park GmbH", "SWA-E-Charge", "SWA-E-Charge Load"]},
+    {"canonical": "Stadtwerke Neumarkt", "aliases": ["Stadtwerke Neumarkt i.d.OPf.", "SWN Neumarkt", "SWN"]}
+  ],
+  "coherence": {
+    "duplicateFirstPassDetected": false,
+    "deferredCpoReauditedWithoutNewEvidence": false,
+    "identicalInvestigationRepeatedMoreThanTwice": false,
+    "globalTariffInferredFromSamples": false,
+    "contractTariffPromotedToAdhocWithoutProof": false,
+    "thirdPartyStationPriceGeneralizedToNetwork": false,
+    "lossyTariffComponentDropped": false,
+    "counterReconciledFromPreviousRepositoryCheckpoint": true,
+    "arithmetic": "17 + 47 + 0 = 64; 591 - 64 = 527",
+    "result": "ok"
+  },
+  "globalSeenCountCertified": false,
+  "globalSeenCountNote": "Operational denominator remains 591. The repository-certified forward first-pass slice is now 64/591; larger historical counters remain excluded pending nominative reconciliation.",
+  "nextQueue": [
+    "continue branch-aware first-pass queue with identities absent from Germany PR research files",
+    "prioritize current official ad-hoc/direct-payment tariff surfaces",
+    "keep Stadtwerke Amberg deferred until official app/checkout pricing is captured",
+    "keep Stadtwerke Neumarkt deferred until post-migration ad-hoc checkout pricing is captured",
+    "continue nominative ledger reconciliation from committed checkpoints without changing certified forward counters"
+  ]
+}
