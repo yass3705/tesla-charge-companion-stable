@@ -1,0 +1,85 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "baseline": {
+    "treated": 79,
+    "complete": 26,
+    "partial_deferred": 53,
+    "blocked": 0,
+    "total": 591
+  },
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Passau GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Passau", "SWP"],
+      "evidence": "Official current e-mobility page states ad-hoc QR/web charging at all SWP AC stations at EUR 0.65/kWh, no activation or base fee, credit-card billing; page also states one tariff for all stations.",
+      "source": "https://www.stadtwerke-passau.de/e-mobilitaet",
+      "tariff": {"scope": "all SWP AC charging stations", "energy_eur_per_kwh": 0.65, "activation_fee_eur": 0, "base_fee_eur": 0},
+      "note": "Official page labels price valid from 2023-03-01 and remains current on page crawled 2026-09-09."
+    },
+    {
+      "canonical_name": "STADTWERKE DEGGENDORF GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Deggendorf", "SW Deggendorf"],
+      "evidence": "Official public charging page explicitly defines QR ad-hoc tariff as EUR 0.70/kWh AC and EUR 0.85/kWh DC. Selected locations may apply EUR 0.05/min blocking fee after charging has completed.",
+      "source": "https://www.stadtwerke-deggendorf.de/mobilit%C3%A4t/%C3%B6ffentliche-ladepunkte",
+      "tariff": {"ac_eur_per_kwh": 0.70, "dc_eur_per_kwh": 0.85, "blocking_selected_sites_eur_per_min": 0.05},
+      "note": "Do not substitute the Sep-2026 registered-app customer prices for ad-hoc."
+    },
+    {
+      "canonical_name": "Stadtwerke Hanau GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Hanau", "SWH Hanau"],
+      "evidence": "Official current page publishes Ladekarte contract prices, including EUR 0.34/kWh AC at own Hanau points, but no verified current ad-hoc/direct tariff was found in this first pass.",
+      "source": "https://stadtwerke-hanau.de/energiedienstleistungen/ladekarte",
+      "reason": "contract tariff cannot be promoted to ad-hoc without equivalence evidence"
+    },
+    {
+      "canonical_name": "Energieversorgung Offenbach AG",
+      "status": "partial_deferred",
+      "aliases": ["EVO", "EVO AG", "Energieversorgung Offenbach"],
+      "evidence": "Official EVO pages confirm public charging operation and unregistered/card/app access at several sites, but no current exact station/EVSE ad-hoc numeric tariff was found in this first pass.",
+      "source": "https://www.evo-ag.de/wir-in-offenbach/ueber-uns/news/details/neue-e-ladesaeule-fuer-mainflingen",
+      "reason": "numeric current ad-hoc price missing"
+    },
+    {
+      "canonical_name": "Stadtwerke Aschaffenburg",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Aschaffenburg", "AVG Aschaffenburg"],
+      "evidence": "Official current page confirms a distinct ad-hoc tariff from 2026-06-01 via QR/app/credit card and occupancy fees, but the numeric tariff table is image-only in the indexed page and was not safely machine-verifiable in this first pass.",
+      "source": "https://www.stwab.de/emobil",
+      "reason": "exact numeric ad-hoc values not available in retrievable text"
+    },
+    {
+      "canonical_name": "Stadtwerke Gießen AG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Gießen", "SWG Gießen"],
+      "evidence": "Official source confirms SWG operation, billing and maintenance of public charging points, but no current exact direct/ad-hoc numeric tariff was found in this first pass.",
+      "source": "https://www.stadtwerke-giessen.de/de/acht-neue-ladepunkte-fuer-e-autos",
+      "reason": "current direct tariff not established"
+    },
+    {
+      "canonical_name": "Stadtwerke Rosenheim GmbH & Co. KG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Rosenheim", "SWRO"],
+      "evidence": "Official current page confirms Stadtwerke-operated public AC stations and access including a one-time card without contractual relationship at at least one site, but no exact current numeric ad-hoc price was found in this first pass.",
+      "source": "https://www.swro.de/de/elektromobilitaet",
+      "reason": "numeric direct tariff missing"
+    }
+  ],
+  "counters_after_pass": {
+    "treated": 86,
+    "complete": 28,
+    "partial_deferred": 58,
+    "blocked": 0,
+    "remaining": 505,
+    "total": 591
+  },
+  "coherence": {
+    "arithmetic": "28 + 58 + 0 = 86; 591 - 86 = 505",
+    "duplicate_check": "No obvious duplicate among the seven identities added in this pass against the known first-pass list.",
+    "policy": "No deferred CPO was re-audited; unresolved cases were immediately deferred to maximize first-pass coverage."
+  }
+}
