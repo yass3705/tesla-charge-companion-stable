@@ -1,0 +1,73 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-09",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation40.json",
+  "baseline": {"treated": 125, "complete": 43, "partial_deferred": 82, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Lemgo GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Lemgo", "SW Lemgo"],
+      "evidence": "Official current Stromladen page confirms the Stadtwerke Lemgo public network and publishes only customer-card prices: EUR 0.38/kWh at own listed stations and EUR 0.42/kWh at listed partner points. A June 2026 official release confirms new 150 kW DC stations and roaming access but does not publish a direct/ad-hoc price. Current station-level discovery shows direct-payment prices varying by EVSE/type (sampled AC around EUR 0.59/kWh and DC up to around EUR 0.84/kWh), so these values are retained only as discovery evidence and are not generalized.",
+      "source": "https://www.stadtwerke-lemgo.de/stromladen",
+      "reason": "public CPO and contract prices confirmed; current exact direct/ad-hoc tariff is station-dependent and not published as an official matrix"
+    },
+    {
+      "canonical_name": "Stadtwerke Bad Oeynhausen AöR",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Bad Oeynhausen", "SW Bad Oeynhausen"],
+      "evidence": "Current municipal material confirms Stadtwerke-built public charging infrastructure in Bad Oeynhausen. Historical official material documents Plugsurfing access at Stadtwerke stations. Current station-level discovery shows sampled Stadtwerke/Westfalen-Weser-area AC direct prices around EUR 0.64/kWh, while some Stadtwerke-labelled EVSEs expose no numeric price and operator attribution can differ by location. No current official station/EVSE ad-hoc matrix was established.",
+      "source": "https://www.stadtwerke-badoeynhausen.de/de/Kopfnavigation/Presse/Pressemitteilungen/Pressearchiv-2017/Stadtwerke-foerdern-E-Mobilitaet-zwei-Stromladesaeulen-im-Parkhaus-Sueltebusch.html",
+      "reason": "public charging activity confirmed, but current operator attribution and direct prices are not consistently exposed across EVSEs; no official current tariff matrix found"
+    },
+    {
+      "canonical_name": "Stadtwerke Bad Salzuflen GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Bad Salzuflen", "STWBS"],
+      "evidence": "Official current e-mobility page publishes the StromLaden contract product at EUR 0.4295/kWh AC and EUR 0.4890/kWh DC plus EUR 4.76/month, used through eCharge+. Multiple current station-level direct-payment sources consistently show EUR 0.70/kWh on sampled Stadtwerke Bad Salzuflen AC EVSEs with QR/mobile/NFC payment. Because the official web page does not establish that EUR 0.70/kWh is the complete network-wide ad-hoc matrix, the station observations are not generalized.",
+      "source": "https://www.stwbs.de/elektromobilitaet",
+      "reason": "official contract tariff differs from observed direct price; current station-level ad-hoc evidence exists but no official universal direct tariff matrix is published"
+    },
+    {
+      "canonical_name": "Stadtwerke Lübbecke GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Lübbecke", "LübbeckeStrom eMobil"],
+      "evidence": "Official current page publishes only the contractual LübbeckeStrom eMobil product, valid from 01.06.2024 at EUR 0.3059/kWh plus EUR 2.49/month. Current station-level discovery consistently shows EUR 0.49/kWh direct payment on multiple Stadtwerke Lübbecke AC sites in Lübbecke and Minden. The contract price was not promoted to ad-hoc and the repeated station-level EUR 0.49 value was not generalized without an official/current checkout matrix.",
+      "source": "https://www.stadtwerke-luebbecke.de/de/E-Mobilitaet/LuebbeckeStrom-eMobil/",
+      "reason": "direct station-level price evidence is consistent but official web surface exposes only a contract tariff; universal ad-hoc applicability not proven"
+    },
+    {
+      "canonical_name": "Stadtwerke Rinteln GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Rinteln", "SW Rinteln"],
+      "evidence": "Official current e-mobility page confirms Stadtwerke Rinteln operate the public network and explicitly support ad-hoc charging without registration using RFID, PayPal, credit card or contract. It does not publish a numeric charging price. Current station-level discovery shows EUR 0.50/kWh direct payment on many sampled AC EVSEs, while another current operator summary reports EUR 0.53/kWh for a DC site. These are retained as EVSE-level leads only.",
+      "source": "https://www.stadtwerke-rinteln.de/strom/elektromobilitaet",
+      "reason": "official ad-hoc access is proven but no official numeric tariff matrix is published; current station-level prices vary by EVSE/type"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Lemgo GmbH", "aliases": ["Stadtwerke Lemgo", "SW Lemgo"]},
+    {"canonical": "Stadtwerke Bad Oeynhausen AöR", "aliases": ["Stadtwerke Bad Oeynhausen", "SW Bad Oeynhausen"]},
+    {"canonical": "Stadtwerke Bad Salzuflen GmbH", "aliases": ["Stadtwerke Bad Salzuflen", "STWBS"]},
+    {"canonical": "Stadtwerke Lübbecke GmbH", "aliases": ["Stadtwerke Lübbecke", "LübbeckeStrom eMobil"]},
+    {"canonical": "Stadtwerke Rinteln GmbH", "aliases": ["Stadtwerke Rinteln", "SW Rinteln"]}
+  ],
+  "counters_after_pass": {"treated": 130, "complete": 43, "partial_deferred": 87, "blocked": 0, "remaining": 461, "total": 591},
+  "coherence": {
+    "arithmetic": "43 + 87 + 0 = 130; 591 - 130 = 461",
+    "checkpoint_chain_check": "passed: automation33 through automation40 were reviewed for the selected identities; none of these five canonical names appears in that committed checkpoint chain",
+    "duplicate_alias_check": "passed for this batch; aliases are not counted separately",
+    "deferred_reaudit_check": "passed: no previously deferred identity from automation33-40 was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: Lemgo, Bad Salzuflen and Lübbecke contract/customer prices were not promoted to ad-hoc",
+    "station_level_inference_check": "passed: direct EVSE prices from discovery sources were retained only as evidence and not generalized when official scope was missing",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue first-pass queue with canonical identities absent from committed Germany research/operator files and checkpoints",
+    "prioritize remaining Ostwestfalen-Lippe / Lower Saxony municipal CPOs with official public charging surfaces",
+    "do not revisit the five partial_deferred identities in this checkpoint until full first-pass traversal is complete or new official tariff evidence appears"
+  ]
+}
