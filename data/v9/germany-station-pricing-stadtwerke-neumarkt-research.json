@@ -1,0 +1,41 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Neumarkt",
+  "aliases": ["Stadtwerke Neumarkt i.d.OPf.", "SWN Neumarkt", "SWN"],
+  "checkedAt": "2026-09-09",
+  "status": "partial",
+  "deferred": true,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "currentOfficialTariffsFrom": "2026-09-01",
+    "registeredLadeVerbundPlus": {
+      "acPriceEurPerKwh": 0.55,
+      "dcPriceEurPerKwh": 0.68,
+      "dc50KwUsesAcPriceModel": true
+    },
+    "blockingFees": {
+      "ac": {
+        "priceEurPerMinute": 0.10,
+        "startsAfterMinutes": 240,
+        "nightExemption": "20:00-08:00"
+      },
+      "dc": {
+        "priceEurPerMinute": 0.10,
+        "startsAfterMinutes": 60
+      }
+    },
+    "legacyOrTransitionAdhocEvidence": {
+      "acPriceEurPerKwh": 0.70,
+      "dcPriceEurPerKwh": 0.85,
+      "note": "An official migration/copy page still exposes these ad-hoc values, but the current post-1-September-2026 tariff page no longer lists an ad-hoc row and instead states that the applicable price is shown before charging in the app or at the charge point. These values are therefore not promoted as current ad-hoc truth."
+    },
+    "note": "The current official page provides exact registered LadeVerbundPlus prices and blocking fees after the September 2026 migration, but does not provide a current numeric ad-hoc tariff row."
+  },
+  "reason": "Post-migration current official pricing omits a numeric ad-hoc price while explicitly making the pre-session app/charge-point display authoritative. The older official copy/migration surface is insufficient to prove that 0.70/0.85 EUR/kWh remains the current direct-payment tariff.",
+  "sources": [
+    "https://swneumarkt.de/e-mobilitaet/oeffentliches-laden/",
+    "https://swneumarkt.de/e-mobilitaet/oeffentliches-laden-kopie/",
+    "https://swneumarkt.de/oeffentliches-laden-noch-einfacher/"
+  ],
+  "nextEvidenceNeeded": "Capture a current post-1-September-2026 ad-hoc QR/charge-point checkout or official backend response for SWN EVSEs and verify whether the direct tariff is uniform across AC/DC classes."
+}
