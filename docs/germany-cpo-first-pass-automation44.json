@@ -1,0 +1,82 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-10",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation43.json",
+  "baseline": {"treated": 139, "complete": 47, "partial_deferred": 92, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Lübeck Energie GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Lübeck", "SWL", "SWHL Energie"],
+      "evidence": "Current official Stadtwerke Lübeck charging page explicitly publishes contract-free direct charging: AC EUR 0.55/kWh plus EUR 0.10/min from minute 241, DC EUR 0.65/kWh plus EUR 0.10/min from minute 181. The standing-time surcharge is suspended from 20:00 to 08:00. Direct payment is supported by Girocard, QR code and, at equipped sites, debit/credit-card terminal.",
+      "source": "https://www.swhl.de/energie/emobil/ladesaeulen-luebeck/",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.55, "adhoc_dc_eur_per_kwh": 0.65, "ac_blocking_eur_per_min": 0.10, "ac_blocking_from_min": 241, "dc_blocking_eur_per_min": 0.10, "dc_blocking_from_min": 181, "blocking_exempt_local_time": "20:00-08:00"}
+    },
+    {
+      "canonical_name": "Stadtwerke Schwerin GmbH",
+      "status": "complete",
+      "aliases": ["SWS", "Stadtwerke Schwerin"],
+      "evidence": "Current official e-mobility page publishes direct payment via m8mit for its documented DC fast-charging offer: EUR 0.702/kWh gross, plus EUR 0.10/min blocking after 4 hours capped at EUR 12. QR activation and direct payment by SMS/credit card/PayPal are documented. Scope is restricted to the official DC offer; no AC tariff is inferred.",
+      "source": "https://www.stadtwerke-schwerin.de/e-mobilitaet",
+      "tariff": {"adhoc_dc_eur_per_kwh": 0.702, "blocking_eur_per_min": 0.10, "blocking_from_min": 240, "blocking_cap_eur": 12.0}
+    },
+    {
+      "canonical_name": "Stadtwerke Kiel AG",
+      "status": "complete",
+      "aliases": ["Stadtwerke Kiel", "SW Kiel", "Stromfahrer"],
+      "evidence": "Current official public-charging page publishes exact spontaneous direct-payment tariffs. AC direct payment by QR is EUR 0.48/kWh with FairUse EUR 0.05/min from minute 181 during 08:00-20:00; start fee is zero except Preetz AC sites where EUR 0.70/session applies. DC direct payment by QR is EUR 0.58/kWh with FairUse EUR 0.10/min from minute 60 around the clock; start fee is zero. App/card roaming tariffs remain separate.",
+      "source": "https://www.stadtwerke-kiel.de/e-mobilitaet/laden-in-der-kiel-region",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.48, "adhoc_dc_eur_per_kwh": 0.58, "ac_fairuse_eur_per_min": 0.05, "ac_fairuse_from_min": 181, "dc_fairuse_eur_per_min": 0.10, "dc_fairuse_from_min": 60, "preetz_ac_start_fee_eur": 0.70}
+    },
+    {
+      "canonical_name": "Stadtwerke Flensburg GmbH",
+      "status": "partial_deferred",
+      "aliases": ["SWFL", "Stadtwerke Flensburg"],
+      "evidence": "Current official tariff sheet effective 2026-02-01 publishes the Flensburg charging-card product at EUR 0.39/kWh AC and EUR 0.49/kWh DC plus EUR 0.10/min after 240 minutes capped at EUR 12. The official FAQ states prices with other providers depend on that provider. Current station-level discovery shows contract-free prices can differ, so the card tariff is not promoted to ad-hoc.",
+      "source": "https://www.stadtwerke-flensburg.de/produkte/e-mobilitaet/ladekarte",
+      "reason": "current own-network card tariff is exact, but no authoritative operator-wide contract-free direct-payment matrix was established"
+    },
+    {
+      "canonical_name": "SWN Stadtwerke Neumünster GmbH",
+      "status": "partial_deferred",
+      "aliases": ["SWN Neumünster", "Stadtwerke Neumünster", "DE*NMS"],
+      "evidence": "BNetzA-derived current station discovery confirms SWN as the dominant local CPO and station-level direct prices are exposed on sampled EVSEs, including EUR 0.72/kWh AC with EUR 0.11/min after 180 minutes and EUR 0.86/kWh DC with EUR 0.14/min after 45 minutes. No current first-party operator-wide direct tariff matrix was located, so sampled EVSE prices are not generalized.",
+      "source": "https://app.pumpapp.co/de/ladestation-swn-stadtwerke-neumunster-bismarckstrasse-51-neumunster/b7e099b9-fc17-11ec-9996-c1fe9b1cbae4",
+      "reason": "exact station-level prices exist but current official universal direct-payment tariff scope is unproven"
+    },
+    {
+      "canonical_name": "Stadtwerke Rostock AG",
+      "status": "partial_deferred",
+      "aliases": ["SWRAG", "Stadtwerke Rostock", "OSTSEE-STROM MOBIL"],
+      "evidence": "Current official OSTSEE-STROM MOBIL offer is EUR 0.38/kWh normal and EUR 0.48/kWh fast charging plus EUR 4.99/month, but eligibility requires being a Stadtwerke Rostock electricity customer. External station-level sources indicate a separate guest/ad-hoc layer with different prices. Contract values are therefore not promoted to anonymous direct payment.",
+      "source": "https://www.swrag.de/privatkunden/oekomobilitaet/ostsee-strom-mobil",
+      "reason": "official numeric tariff is customer-contract-only; exact current anonymous direct-payment matrix is not established first-party"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Lübeck Energie GmbH", "aliases": ["Stadtwerke Lübeck", "SWL", "SWHL Energie"]},
+    {"canonical": "Stadtwerke Schwerin GmbH", "aliases": ["SWS", "Stadtwerke Schwerin"]},
+    {"canonical": "Stadtwerke Kiel AG", "aliases": ["Stadtwerke Kiel", "SW Kiel", "Stromfahrer"]},
+    {"canonical": "Stadtwerke Flensburg GmbH", "aliases": ["SWFL", "Stadtwerke Flensburg"]},
+    {"canonical": "SWN Stadtwerke Neumünster GmbH", "aliases": ["SWN Neumünster", "Stadtwerke Neumünster", "DE*NMS"]},
+    {"canonical": "Stadtwerke Rostock AG", "aliases": ["SWRAG", "Stadtwerke Rostock", "OSTSEE-STROM MOBIL"]}
+  ],
+  "counters_after_pass": {"treated": 145, "complete": 50, "partial_deferred": 95, "blocked": 0, "remaining": 446, "total": 591},
+  "coherence": {
+    "arithmetic": "50 + 95 + 0 = 145; 591 - 145 = 446",
+    "checkpoint_chain_check": "passed against committed automation43; unpersisted conversational counters were discarded",
+    "duplicate_alias_check": "passed for this batch; aliases are not counted separately",
+    "deferred_reaudit_check": "passed: no identity deferred in automation43 was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: Flensburg and Rostock contract tariffs remain contract-only",
+    "station_level_inference_check": "passed: Neumünster sampled EVSE tariffs are not generalized",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue Schleswig-Holstein / Mecklenburg-Vorpommern and northern municipal CPOs absent from committed checkpoint chain",
+    "prioritize official direct-payment HTML, QR checkout and station/EVSE-specific public tariff surfaces",
+    "defer Flensburg, Neumünster and Rostock until authoritative direct-payment scope is available"
+  ]
+}
