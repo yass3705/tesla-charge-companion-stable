@@ -1,0 +1,62 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "baseline": {"treated": 91, "complete": 31, "partial_deferred": 60, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Bamberg Energie- und Wasserversorgungs GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Bamberg", "STWB Bamberg"],
+      "evidence": "Current official public-network page confirms spontaneous ad-hoc charging at all stations by QR code and publishes EUR 0.62/kWh ad-hoc without registration. It also states that an additional fee applies after four hours in parking garages and underground garages, with exceptions for P+R and Quartierstarif, but the current numeric amount of that fee is not exposed on the page used in this first pass.",
+      "source": "https://www.stadtwerke-bamberg.de/e-laden",
+      "reason": "energy price exact, but full current time-fee matrix not established in first pass"
+    },
+    {
+      "canonical_name": "SÜC Energie und H2O GmbH",
+      "status": "partial_deferred",
+      "aliases": ["SÜC Coburg", "SUEC Coburg", "SÜC"],
+      "evidence": "Current official e-mobility page confirms SÜC operates a sizeable AC/DC/HPC public network and offers its own charging card. A 2025 official release confirms card/app access and forthcoming card payment at a DC site. A 2024 official magazine documents blocking-fee rules but not a current 2026 direct energy-price matrix. No 2026 universal ad-hoc energy price was inferred.",
+      "source": "https://www.suec.de/emobilitaet",
+      "reason": "current exact ad-hoc energy price not established in first pass"
+    },
+    {
+      "canonical_name": "Stadtwerke Hof Energie+Wasser GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Hof", "SWH Hof"],
+      "evidence": "Official current Stadtwerke Hof site exposes electricity and e-mobility-related products but the first-pass search did not surface a current public direct/ad-hoc charging price table for its charging stations. Household and wallbox electricity tariffs were explicitly not reused as public charging prices.",
+      "source": "https://www.stadtwerke-hof.de/",
+      "reason": "current exact public direct/ad-hoc charging tariff not found in first pass"
+    },
+    {
+      "canonical_name": "Stadtwerke Ansbach GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Ansbach", "STWAN"],
+      "evidence": "Official current charging tariff table explicitly distinguishes ad-hoc charging within LadeVerbundPlus: AC EUR 0.70/kWh and DC EUR 0.86/kWh, VAT included. The same official site documents QR/RFID/app access context; no tariff outside LadeVerbundPlus is asserted for ad-hoc.",
+      "source": "https://www.stwan.de/Privatkunden/Strom/Elektromobilitaet/Tarife.html",
+      "tariff": {"adhoc_lvplus_ac_eur_per_kwh": 0.70, "adhoc_lvplus_dc_eur_per_kwh": 0.86}
+    },
+    {
+      "canonical_name": "Stadtwerke Straubing GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Straubing", "LADESTROM.Straubing"],
+      "evidence": "Official public charging contract found for the operator publishes an AC contract tariff of EUR 0.3499/kWh and an AC blocking price, but it is a 2024 contract product and explicitly says station-specific current prices/times may vary. No current 2026 ad-hoc/direct tariff matrix was established, so the contract values were not promoted to direct charging.",
+      "source": "https://www.stadtwerke-straubing.de/fileserver/ar040032/filesdb/LADESTROM_Straubing_Vertragsexemplar_Endkunde_2024.pdf",
+      "reason": "only older contractual charging price found; current direct/ad-hoc tariff unresolved"
+    },
+    {
+      "canonical_name": "Stadtwerke Forchheim GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Forchheim", "SW Forchheim"],
+      "evidence": "Official page updated September 2026 publishes blocking fees (AC EUR 0.10/min after 240 min between 08:00-20:00; DC EUR 0.10/min after 60 min; none in parking garages) and says the price for each charge point is shown in the LadeVerbundPlus app. Because the numeric energy price is point-specific/app-displayed rather than published universally, no national/site-wide ad-hoc energy price was inferred.",
+      "source": "https://www.stadtwerke-forchheim.de/unsere-leistungen/mobilitaet/stadtwerke-kunden-tanken-preiswerter/",
+      "reason": "current energy price is charge-point-specific in app; no universal numeric direct price established"
+    }
+  ],
+  "counters_after_pass": {"treated": 97, "complete": 32, "partial_deferred": 65, "blocked": 0, "remaining": 494, "total": 591},
+  "coherence": {
+    "arithmetic": "32 + 65 + 0 = 97; 591 - 97 = 494",
+    "policy": "First-pass coverage prioritized. Five unresolved operators were deferred immediately after reasonable official-source investigation; no fine-tuning of prior deferred cases was performed.",
+    "duplicate_check": "REWAG was deliberately not counted despite fresh official evidence because it is already present in prior German research history. Bayreuth was also skipped as previously researched. The six entries counted here were selected as new first-pass identities against the latest explicit checkpoint and known prior list."
+  }
+}
