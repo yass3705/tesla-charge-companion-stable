@@ -1,0 +1,54 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "baseline": {"treated": 102, "complete": 34, "partial_deferred": 68, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Energie SaarLorLux AG",
+      "status": "complete",
+      "aliases": ["Energie SaarLorLux", "ESLL", "Saarbrücken public charging"],
+      "evidence": "Official current public-charging and FAQ pages state that all Energie SaarLorLux public charging stations allow ad-hoc charging and publish one network-wide ad-hoc AC tariff: EUR 0.47/kWh plus EUR 0.50 per session. Blocking fee is EUR 0.50 per 15 minutes, billed per minute, starting 31 minutes after charging ends. The site still labels these prices valid from 01.04.2023 and presents them as current.",
+      "source": "https://www.energie-saarlorlux.com/privatkunden/elektromobilitaet/laden-unterwegs/",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.47, "session_fee_eur": 0.50, "blocking_eur_per_15min": 0.50, "blocking_start_after_charge_end_min": 31}
+    },
+    {
+      "canonical_name": "Stadtwerke Trier (SWT)",
+      "status": "partial_deferred",
+      "aliases": ["SWT Trier", "Stadtwerke Trier"],
+      "evidence": "Current 2026 sources confirm SWT operates a large public network and that SWT customers can charge at household-tariff conditions via Portazon. Public fast-charging at the SWT Ruwerer Straße park is documented at a general price of EUR 0.5914/kWh with EC/credit-card payment, but an official current network-wide ad-hoc matrix covering all SWT AC/DC EVSEs was not established in this first pass.",
+      "source": "https://www.swt.de/elektromobilitaet",
+      "reason": "station-level/general fast-charge price found, but no official current network-wide direct tariff matrix proven"
+    },
+    {
+      "canonical_name": "Stadtwerke Neuwied GmbH",
+      "status": "partial_deferred",
+      "aliases": ["SWN Neuwied", "Stadtwerke Neuwied"],
+      "evidence": "Official SWN web search surfaces current e-carsharing products but no public numeric tariff page for SWN-operated public EV charging in the first-pass search. No third-party tariff was promoted to the CPO.",
+      "source": "https://www.swn-neuwied.de/",
+      "reason": "current public EV charging tariff not established from official source in first pass"
+    },
+    {
+      "canonical_name": "Unternehmensgruppe Kreuznacher Stadtwerke",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Bad Kreuznach", "Kreuznacher Stadtwerke"],
+      "evidence": "Official public-charging page confirms more than 50 charging points, direct QR/browser payment via ePowerDirect with credit card or PayPal, and that prices consist of a per-kWh amount plus a flat usage fee. The operator explicitly says current prices are shown in eCharge+ before the session; no numeric current network-wide tariff is published on the page.",
+      "source": "https://www.kreuznacherstadtwerke.de/parken-mobil-und-digital/oeffentliche-ladestationen",
+      "reason": "direct access proven but numeric price remains app/checkout-only"
+    },
+    {
+      "canonical_name": "Stadtwerke Andernach GmbH",
+      "status": "partial_deferred",
+      "aliases": ["SWA Andernach", "Stadtwerke Andernach"],
+      "evidence": "Official pages confirm multiple public EV charging locations operated by Stadtwerke Andernach, including parking facilities, hall pool and Rheinhafen. The first-pass official search did not expose a current numeric ad-hoc charging price or a public checkout tariff for these EVSEs.",
+      "source": "https://www.stadtwerke-andernach.de/aktuelles/stadtwerke-andernach-erweitern-ihr-service-angebot-fuer-elektromobilitaet-im-rheinhafen/",
+      "reason": "operator and public stations confirmed; exact current direct tariff not established"
+    }
+  ],
+  "counters_after_pass": {"treated": 107, "complete": 35, "partial_deferred": 72, "blocked": 0, "remaining": 484, "total": 591},
+  "coherence": {
+    "arithmetic": "35 + 72 + 0 = 107; 591 - 107 = 484",
+    "policy": "First-pass coverage prioritized. Four unresolved operators were deferred immediately after reasonable official-source investigation; no previously deferred operator was revisited.",
+    "duplicate_check": "The five identities were selected as new relative to explicit recent checkpoints and known prior German research history; aliases were not counted separately."
+  }
+}
