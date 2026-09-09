@@ -25,7 +25,7 @@
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. The requested one-shot reconstruction attempt remains authoritative; run38 used newly exposed stored-snapshot tail identities as new evidence to advance the queue without pretending that the historical 618-label nominative gap is fully reconstructed."
+    "note": "The historical minimum continuity count is retained because the complete nominative list for the earliest 98 decisions could not be safely reconstructed from GitHub state. The requested one-shot reconstruction attempt remains authoritative; no new recoverable historical nominative source was found in run39."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -59,11 +59,14 @@
     "docs/spain-cpo-progress-batches/2026-09-08-run35.json",
     "docs/spain-cpo-progress-batches/2026-09-09-run36.json",
     "docs/spain-cpo-progress-batches/2026-09-09-run37.json",
-    "docs/spain-cpo-progress-batches/2026-09-09-run38.json"
+    "docs/spain-cpo-progress-batches/2026-09-09-run38.json",
+    "docs/spain-cpo-progress-batches/2026-09-09-run39.json"
   ],
   "reveTariffStatus": {
     "complete": false,
     "latestSuccessfulBatchGeneratedAt": "2026-09-08T23:39:11.610436Z",
+    "batchTriggerIssuedAt": "2026-09-09T03:42:43Z",
+    "batchTriggerCommit": "dfc3a56a90d0064902c9839451dc8c9f9f97c019",
     "batchConfirmedCompletedInLatestCpoRun": false,
     "requestsAttemptedObservedInLatestCpoRun": 0,
     "requestsSucceededObservedInLatestCpoRun": 0,
@@ -78,7 +81,7 @@
     "statusPagesCollected": 35,
     "statusRowsStored": 3274,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "More than one real hour had elapsed. Exactly one targeted temporary trigger was issued because direct workflow_dispatch was unavailable. The collector was restored immediately to workflow_dispatch-only. The resulting new REVE last_run had not yet materialized when the nominative state was written, so the quota window is conservatively consumed and no second batch is permitted."
+    "latestCpoRunDecision": "Exactly one targeted temporary trigger was issued after more than one real hour had elapsed since the previous trigger. The collector was restored immediately to workflow_dispatch-only and the sentinel removed. The resulting new REVE last_run had not materialized after repeated checks, so this quota window is conservatively consumed and no second batch is permitted."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -99,9 +102,10 @@
     "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
-    "mandatoryCadenceCheckPerformed": true
+    "mandatoryCadenceCheckPerformed": false,
+    "nextRunMustForceCheckIfNoNominativeProgress": true
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run38.json",
-  "investigationCurrent": "Current 148-CPO REVE snapshot is now first-pass covered through ZOILO RIOS, S.A. Continue only with recoverable never-traversed historical derived labels from the 618-label work queue; do not reopen active/setAside cases before first-pass completion.",
-  "updatedAt": "2026-09-09T01:53:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-09-run39.json",
+  "investigationCurrent": "Current 148-CPO REVE snapshot remains first-pass covered through ZOILO RIOS, S.A. Continue only with newly recoverable never-traversed historical derived labels from the 618-label work queue; do not reopen active/setAside cases before first-pass completion. If the next execution again has no nominative progress, perform the mandatory coherence control immediately.",
+  "updatedAt": "2026-09-09T03:44:00Z"
 }
