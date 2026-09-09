@@ -1,0 +1,54 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "baseline": {"treated": 97, "complete": 32, "partial_deferred": 65, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Weiden i.d.OPf. AöR",
+      "status": "complete",
+      "aliases": ["Stadtwerke Weiden", "SW Weiden"],
+      "evidence": "Official current e-mobility page publishes the public ad-hoc AC tariff from 01.01.2026 at EUR 0.52/kWh, payable by NFC credit card, Apple Pay, Google Pay and similar contactless methods. The same table separately identifies the discounted customer tariff, so no contract tariff is mixed into ad-hoc.",
+      "source": "https://www.stadtwerke-weiden.de/energiezukunft/elektromobilitaet.html",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.52}
+    },
+    {
+      "canonical_name": "Stadtwerke Speyer GmbH / Verkehrsbetriebe Speyer",
+      "status": "complete",
+      "aliases": ["Stadtwerke Speyer", "SWS Speyer", "VBS Speyer"],
+      "evidence": "Official public charging page states that non-SWS electricity customers charge at the Standard-Tarif by spontaneous payment with credit card or PayPal and publishes EUR 0.64/kWh. The page separately lists the MeinSpeyer customer tariff at EUR 0.47/kWh and no start/blocking fee, so the standard spontaneous tariff remains distinguishable.",
+      "source": "https://www.stadtwerke-speyer.de/e-mobilitaet",
+      "tariff": {"adhoc_standard_eur_per_kwh": 0.64}
+    },
+    {
+      "canonical_name": "Mainzer Stadtwerke AG",
+      "status": "partial_deferred",
+      "aliases": ["Mainzer Stadtwerke", "Mainzer Energie"],
+      "evidence": "Official 2025 network publication confirms more than 160 charging points and that all Mainzer Stadtwerke stations support ad-hoc charging by QR code with credit card or PayPal, as well as eCharge+ access. No current 2026 numeric ad-hoc price table was found in the first-pass official search, so no price was inferred from roaming or app-only context.",
+      "source": "https://www.mainzer-stadtwerke.de/aktuelles/aktuelle-meldungen/2025/03/ladepunkte-e-autos",
+      "reason": "ad-hoc access confirmed; current numeric direct price not publicly established in first pass"
+    },
+    {
+      "canonical_name": "SWK Stadtwerke Kaiserslautern Versorgungs-AG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Kaiserslautern", "SWK Kaiserslautern", "SWK"],
+      "evidence": "Official current charging-card page publishes card tariffs valid from 01.09.2025, including specific SWK/Ladestationen Südwest card prices and time fees, but these are contractual Ladekarte values rather than a proven public ad-hoc/direct tariff. The public e-mobility pages reviewed did not expose a current universal direct-payment tariff for SWK-operated EVSEs.",
+      "source": "https://www.swk-kl.de/businesses/e-mobilitaet/ladekarte",
+      "reason": "only contractual Ladekarte pricing established; no current universal ad-hoc tariff proven"
+    },
+    {
+      "canonical_name": "EWR AG",
+      "status": "partial_deferred",
+      "aliases": ["EWR Worms", "EWR Rheinhessen"],
+      "evidence": "Official current public-charging pages route users to the EWR Ladekarte/Ladenetz App or e-Charge+ for public charging and describe fixed contract pricing, but the first-pass official search did not surface a numeric ad-hoc/direct-pay tariff for EWR-operated charging stations. No card tariff was promoted to ad-hoc.",
+      "source": "https://www.ewr.de/unterwegs-laden",
+      "reason": "public charging access confirmed but exact current direct/ad-hoc station tariff not established"
+    }
+  ],
+  "counters_after_pass": {"treated": 102, "complete": 34, "partial_deferred": 68, "blocked": 0, "remaining": 489, "total": 591},
+  "coherence": {
+    "arithmetic": "34 + 68 + 0 = 102; 591 - 102 = 489",
+    "policy": "First-pass coverage prioritized. Three unresolved operators were deferred immediately after reasonable official-source investigation; no prior deferred case was re-audited.",
+    "duplicate_check": "The five entries in this pass were selected as new identities relative to the latest explicit checkpoint and known prior German research history. No aliases were counted as separate CPOs."
+  }
+}
