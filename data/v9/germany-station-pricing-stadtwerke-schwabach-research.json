@@ -1,0 +1,35 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Schwabach",
+  "aliases": ["Stadtwerke Schwabach GmbH", "SW Schwabach"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Current official Stadtwerke Schwabach public-charging tariff page for LadeVerbundPlus charging points",
+    "adhoc": {
+      "acPriceEurPerKwh": 0.70,
+      "dcPriceEurPerKwh": 0.85,
+      "vatIncluded": true
+    },
+    "blockingFees": {
+      "ac": {
+        "priceEurPerMinute": 0.05,
+        "startsAfterMinutes": 240,
+        "activeWindow": "08:00-20:00"
+      },
+      "dc": {
+        "priceEurPerMinute": 0.10,
+        "startsAfterMinutes": 45,
+        "activeWindow": "00:00-24:00"
+      }
+    },
+    "note": "The current official page explicitly labels 0.70 EUR/kWh AC and 0.85 EUR/kWh DC as Ad-hoc-Laden and publishes the blocking-fee matrix. Roaming and registered LadeVerbundPlus tariffs remain separate products."
+  },
+  "reason": "Current official operator page provides exact ad-hoc AC/DC energy prices and exact blocking-fee rules for the operator's LadeVerbundPlus charging surface, so no station-level extrapolation is required for this published tariff class.",
+  "sources": [
+    "https://www.stadtwerke-schwabach.de/Produkte/Elektromobilitaet/Oeffentlich-laden/"
+  ],
+  "nextEvidenceNeeded": null
+}
