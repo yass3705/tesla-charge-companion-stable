@@ -1,0 +1,35 @@
+{
+  "country": "DE",
+  "operator": "Stadtwerke Neu-Isenburg",
+  "aliases": ["Stadtwerke Neu-Isenburg GmbH", "SWNI", "isySTROM_mobil"],
+  "checkedAt": "2026-09-09",
+  "status": "complete",
+  "deferred": false,
+  "directPaymentDiscovery": {
+    "supported": true,
+    "scope": "Official SWNI public charging page and official ad-hoc tariff sheet, valid from 2025-04-01, still linked as the current price sheet on the operator page as of 2026-09-09.",
+    "adhoc": {
+      "ac": {
+        "priceEurPerKwh": 0.56,
+        "blockingFeeEurPerMinute": 0.10,
+        "blockingFeeStartsAfterMinutes": 240,
+        "maxPowerKw": 22
+      },
+      "dc": {
+        "priceEurPerKwh": 0.70,
+        "blockingFeeEurPerMinute": 0.10,
+        "blockingFeeStartsAfterMinutes": 90,
+        "maxPowerKw": 150
+      },
+      "vatIncluded": true,
+      "payment": ["credit_card", "ad_hoc_app"]
+    },
+    "note": "The official station page explicitly directs users to the linked current tariff sheet and confirms credit-card ad-hoc charging at SWNI AC/DC stations."
+  },
+  "reason": "Exact contract-free AC/DC ad-hoc pricing and blocking rules are published in an official operator tariff sheet and linked from the current public charging page.",
+  "sources": [
+    "https://www.swni.de/de/E-Mobilitaet/Oeffentliche-Ladestationen/",
+    "https://www.swni.de/de/E-Mobilitaet/-isySTROM-mobil-Ladekarte/Preisblatt-isySTROM-mobil-Adhoc-Laden-ab-01.04.2025.pdf"
+  ],
+  "nextEvidenceNeeded": null
+}
