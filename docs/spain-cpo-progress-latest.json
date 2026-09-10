@@ -77,29 +77,30 @@
     "docs/spain-cpo-progress-batches/2026-09-10-run53.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run54.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run55.json",
-    "docs/spain-cpo-progress-batches/2026-09-10-run56.json"
+    "docs/spain-cpo-progress-batches/2026-09-10-run56.json",
+    "docs/spain-cpo-progress-batches/2026-09-10-run57.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T09:43:49.646314Z",
-    "latestPersistedStateUpdatedAt": "2026-09-10T09:43:56.640644Z",
-    "latestObservedLiveBatchAt": "2026-09-10T09:43:49.646314Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T11:42:06.104004Z",
+    "latestPersistedStateUpdatedAt": "2026-09-10T11:42:14.014036Z",
+    "latestObservedLiveBatchAt": "2026-09-10T11:42:06.104004Z",
     "latestObservedLiveBatchWorkflowRunId": 34446412330,
-    "latestObservedLiveBatchRerunJobId": 102822508608,
+    "latestObservedLiveBatchRunAttempt": 4,
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 86,
-    "persistentTariffPagesCollected": 85,
-    "persistentTariffRowsStored": 8166,
+    "persistentNextTariffPage": 89,
+    "persistentTariffPagesCollected": 88,
+    "persistentTariffRowsStored": 8427,
     "tariffTotalPages": 461,
-    "persistentNextStatusPage": 58,
-    "persistentStatusPagesCollected": 57,
-    "persistentStatusRowsStored": 4936,
+    "persistentNextStatusPage": 60,
+    "persistentStatusPagesCollected": 59,
+    "persistentStatusRowsStored": 5126,
     "statusTotalPages": 448,
-    "latestCpoRunDecision": "No live REVE batch this run: less than one real hour had elapsed since the persisted batch generated at 2026-09-10T09:43:49.646314Z. Continue CPO first-pass work without consuming quota."
+    "latestCpoRunDecision": "One live REVE batch was permitted after more than one real hour. Exactly five calls were consumed and persisted; no second batch is allowed in this hourly window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -116,15 +117,13 @@
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "run52DuplicateCanonicalIdentitiesCorrected": true,
-    "run52AliasCorrection": "Five shorter labels in run52 map to canonical identities already traversed in run11. They remain five historical labels traversed, but are now classified as supersededAlias instead of creating duplicate CPO-category counts.",
     "noSetAsideReauditWithoutNewEvidence": true,
     "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
     "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
-    "mandatoryCadenceCheckPerformed": true,
-    "checkForcedByTwoRunsWithoutNominativeProgress": true,
+    "mandatoryCadenceCheckPerformed": false,
     "failedPushStateDistinguishedFromPersistentState": true
   },
   "oneTimeCanonicalReconstructionAttempt": {
@@ -135,7 +134,7 @@
     "historicalLegacyTreatedCollapsedCount": 263,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run56.json",
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run57.json",
   "investigationCurrent": "Current 148-CPO REVE snapshot is already first-pass covered. Continue mining preserved historical identity cues for genuinely never-traversed labels. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-10T10:41:00Z"
+  "updatedAt": "2026-09-10T11:43:00Z"
 }
