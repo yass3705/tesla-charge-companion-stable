@@ -73,28 +73,29 @@
     "docs/spain-cpo-progress-batches/2026-09-10-run49.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run50.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run51.json",
-    "docs/spain-cpo-progress-batches/2026-09-10-run52.json"
+    "docs/spain-cpo-progress-batches/2026-09-10-run52.json",
+    "docs/spain-cpo-progress-batches/2026-09-10-run53.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T04:43:38.752276Z",
-    "latestPersistedStateUpdatedAt": "2026-09-10T04:43:46.686429Z",
-    "latestObservedLiveBatchAt": "2026-09-10T04:43:38.752276Z",
-    "latestObservedLiveBatchWorkflowRunId": 34413690845,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T06:42:30.165244Z",
+    "latestPersistedStateUpdatedAt": "2026-09-10T06:42:37.333024Z",
+    "latestObservedLiveBatchAt": "2026-09-10T06:42:30.165244Z",
+    "latestObservedLiveBatchWorkflowRunId": 34446412330,
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 77,
-    "persistentTariffPagesCollected": 76,
-    "persistentTariffRowsStored": 7380,
+    "persistentNextTariffPage": 80,
+    "persistentTariffPagesCollected": 79,
+    "persistentTariffRowsStored": 7643,
     "tariffTotalPages": 461,
-    "persistentNextStatusPage": 52,
-    "persistentStatusPagesCollected": 51,
-    "persistentStatusRowsStored": 4412,
+    "persistentNextStatusPage": 54,
+    "persistentStatusPagesCollected": 53,
+    "persistentStatusRowsStored": 4612,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "No live REVE batch launched in run52 because less than one real hour had elapsed since the previous successful live batch. Continue CPO first-pass work without consuming REVE quota."
+    "latestCpoRunDecision": "Exactly one live REVE batch was launched after the one-hour window elapsed. It completed successfully with 5/5 requests, no /locations calls and no 429. The temporary targeted push trigger and sentinel were removed after persistence."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -128,7 +129,7 @@
     "historicalLegacyTreatedCollapsedCount": 263,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run52.json",
-  "investigationCurrent": "Five recoverable historical labels received first-pass decisions in run52. Continue mining preserved historical next-identity cues for further never-traversed labels; do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-10T05:42:14Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run53.json",
+  "investigationCurrent": "No additional concrete never-traversed historical label was recoverable without fabrication in run53. Continue mining preserved historical identity cues and append only evidenced nominative decisions; do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T06:44:00Z"
 }
