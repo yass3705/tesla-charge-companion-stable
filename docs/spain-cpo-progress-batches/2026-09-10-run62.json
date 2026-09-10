@@ -1,0 +1,50 @@
+{
+  "run": 62,
+  "country": "ES",
+  "recordedAt": "2026-09-10T19:40:00Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "runtimePublishReady": false,
+  "firstPass": {
+    "inventoryBase": 618,
+    "processedTotal": 346,
+    "remainingAtMost": 272,
+    "sourceValidated": 28,
+    "partial": 8,
+    "setAside": 154,
+    "active": 87,
+    "supersededAlias": 66,
+    "excludedPlatform": 3,
+    "newNominativeDecisions": 0,
+    "firstPassComplete": false,
+    "note": "Frozen historical 618-label nominative snapshot remains incomplete in durable GitHub history. No synthetic identities were created and no setAside case was re-audited without new evidence."
+  },
+  "coherenceCheck": {
+    "status": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_REVE_REPORTING_CORRECTION",
+    "categorySum": 346,
+    "processedTotal": 346,
+    "consistent": true,
+    "blockedReaudits": 0,
+    "correction": "Fresh persistent REVE last-run data corrects the prior narrative totals for the batch covering tariff pages 95-97 and status pages 64-65: tariffs newRows=278 and updatedRows=2, status newRows=185 and updatedRows=3; resulting stored totals are tariffRowsStored=9259 and statusRowsStored=5707. Previous prose figures 291/4, 198/2 and stored 9272/5720 were not supported by the persisted JSON and must not be reused."
+  },
+  "reve": {
+    "lastPersistedBatchGeneratedAt": "2026-09-10T17:41:50.303321Z",
+    "lastPersistedBatchUpdatedAt": "2026-09-10T17:41:58.016651Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "tariffPages": [95, 96, 97],
+    "statusPages": [64, 65],
+    "tariffNewRows": 278,
+    "tariffUpdatedRows": 2,
+    "statusNewRows": 185,
+    "statusUpdatedRows": 3,
+    "nextTariffPage": 98,
+    "nextStatusPage": 66,
+    "tariffRowsStored": 9259,
+    "statusRowsStored": 5707,
+    "locationsRequests": 0,
+    "http429": 0,
+    "newLiveBatchLaunchedThisRun": false,
+    "guardReason": "The persisted batch is older than one hour and streams remain incomplete, but the GitHub connector could not resolve the Actions run/job endpoint needed to prove that no target batch is already queued/in-progress (the previously recorded run id returned 404). To preserve the hard rule against overlapping/double live batches, no REVE live request was launched in run62. This is a connector-observability guard, not quota consumption."
+  },
+  "currentInvestigation": "Continue first-pass work only from labels that can be tied safely to the frozen 618 snapshot; the unreconstructed remainder is not fabricated from the drifted current registry."
+}
