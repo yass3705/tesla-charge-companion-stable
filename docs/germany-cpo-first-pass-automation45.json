@@ -1,0 +1,82 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-10",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation44.json",
+  "baseline": {"treated": 145, "complete": 50, "partial_deferred": 95, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Stralsund GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Stralsund", "SWS Stralsund"],
+      "evidence": "Current official Stadtwerke Stralsund charging-tariff page explicitly publishes anonymous AdHoc charging without registration by QR code: EUR 0.52/kWh AC up to 22 kW and EUR 0.62/kWh DC up to 210 kW, no monthly fee, plus EUR 0.10/min blocking fee from 120 minutes after charging ends. AC connectors at the Bergen/Toom fast-charging locations are billed at the DC price. Roaming remains separate.",
+      "source": "https://www.stadtwerke-stralsund.de/ladekarte",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.52, "adhoc_dc_eur_per_kwh": 0.62, "blocking_eur_per_min": 0.10, "blocking_from_min_after_charge_end": 120, "monthly_fee_eur": 0.0, "special_case": "AC connectors at Bergen/Toom fast chargers billed at DC price"}
+    },
+    {
+      "canonical_name": "Stadtwerke Greifswald GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Greifswald", "SW Greifswald"],
+      "evidence": "Multiple current station-level public records consistently expose anonymous direct payment at sampled Stadtwerke Greifswald AC EVSEs at EUR 0.50/kWh plus EUR 0.10/min after 240 minutes. The evidence is station-level and current, but no first-party operator-wide 2026 tariff matrix was located, so sampled values are not generalized to the complete CPO network.",
+      "source": "https://www.ladeguru.de/ladestation/lichtblick-emobility-gmbh/17491-greifswald/42064",
+      "reason": "exact direct-payment prices are verified on multiple sampled EVSEs, but operator-wide tariff scope is not established first-party"
+    },
+    {
+      "canonical_name": "Stadtwerke SH GmbH & Co. KG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke SH", "Stadtwerke Rendsburg", "Stadtwerke Eckernförde", "Schleswiger Stadtwerke"],
+      "evidence": "Current official Stadtwerke SH material confirms own public charging infrastructure and an E-Mobilitätskarte discount. The Parkhaus am Noor page states card charging there at EUR 0.45/kWh versus EUR 0.50/kWh at the operator's other charging stations. Independent current station-level records show direct/ad-hoc prices can differ by location and power class, including EUR 0.57/kWh and EUR 0.77/kWh, therefore the card/site figure is not promoted to a universal ad-hoc tariff.",
+      "source": "https://www.stadtwerke-sh.de/eckernfoerde/parkhaus-am-noor-eckernfoerde",
+      "reason": "official prices found are card/site-specific while current direct-payment station prices vary; no universal operator-wide ad-hoc matrix proven"
+    },
+    {
+      "canonical_name": "Stadtwerke Husum GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Husum", "SWH Husum"],
+      "evidence": "Stadtwerke Husum officially documents its public fast-charging infrastructure. Current station-level direct-payment data for operator EVSE DE*HUS*EHU086*01/*02 expose EUR 0.74/kWh and EUR 0.10/min after 240 minutes. No current first-party operator-wide AC/DC direct-payment matrix was located, so the sampled DC value is retained only as station-level evidence.",
+      "source": "https://app.pumpapp.co/de/ladestation-stadtwerke-husum-gmbh-nordseestrasse-14-husum/e9fe984f-b75e-11ef-9c17-196f65d4106e",
+      "reason": "exact sampled DC EVSE tariff available, but first-party network-wide direct-payment tariff scope remains unproven"
+    },
+    {
+      "canonical_name": "Neubrandenburger Stadtwerke GmbH",
+      "status": "partial_deferred",
+      "aliases": ["neu.sw", "Neubrandenburger Stadtwerke"],
+      "evidence": "Current first-party neu.sw surfaces confirm electromobility products but the indexed current material is focused on private wallboxes and household energy products. No authoritative 2026 public-charging ad-hoc price matrix or public QR checkout tariff was established during this pass.",
+      "source": "https://www.neu-sw.de/energieloesungen/wallbox",
+      "reason": "public CPO tariff could not be verified from an authoritative current first-party or station-level checkout surface"
+    },
+    {
+      "canonical_name": "Stadtwerke Wismar GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Wismar", "SW Wismar"],
+      "evidence": "Current official Stadtwerke Wismar material confirms an electromobility section and multiple charging-hardware types in its network, but the indexed 2026 first-party pages do not expose an authoritative public direct-payment price matrix. Household product WismarStromMobil is not treated as public charging and is not promoted to ad-hoc.",
+      "source": "https://www.stadtwerke-wismar.de/Geschaeftskunden",
+      "reason": "public direct-payment tariff is not exposed in current first-party indexed material; household electricity prices are out of scope"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Stralsund GmbH", "aliases": ["Stadtwerke Stralsund", "SWS Stralsund"]},
+    {"canonical": "Stadtwerke Greifswald GmbH", "aliases": ["Stadtwerke Greifswald", "SW Greifswald"]},
+    {"canonical": "Stadtwerke SH GmbH & Co. KG", "aliases": ["Stadtwerke SH", "Stadtwerke Rendsburg", "Stadtwerke Eckernförde", "Schleswiger Stadtwerke"]},
+    {"canonical": "Stadtwerke Husum GmbH", "aliases": ["Stadtwerke Husum", "SWH Husum"]},
+    {"canonical": "Neubrandenburger Stadtwerke GmbH", "aliases": ["neu.sw", "Neubrandenburger Stadtwerke"]},
+    {"canonical": "Stadtwerke Wismar GmbH", "aliases": ["Stadtwerke Wismar", "SW Wismar"]}
+  ],
+  "counters_after_pass": {"treated": 151, "complete": 51, "partial_deferred": 100, "blocked": 0, "remaining": 440, "total": 591},
+  "coherence": {
+    "arithmetic": "51 + 100 + 0 = 151; 591 - 151 = 440",
+    "checkpoint_chain_check": "passed against committed automation44",
+    "duplicate_alias_check": "passed within this batch; municipal labels Rendsburg/Eckernfoerde/Schleswig are normalized under Stadtwerke SH and not counted separately",
+    "deferred_reaudit_check": "passed: no identity deferred in automation44 was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: Stadtwerke SH card/site prices and household electricity products are not promoted to anonymous charging",
+    "station_level_inference_check": "passed: Greifswald and Husum EVSE prices are not generalized operator-wide",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue Mecklenburg-Vorpommern, Schleswig-Holstein and northern Lower Saxony CPOs absent from committed checkpoint chain",
+    "prioritize official direct-payment HTML, QR checkout, AFIR/Mobilithek and station/EVSE-specific tariff surfaces",
+    "defer Greifswald, Stadtwerke SH, Husum, neu.sw and Wismar until stronger authoritative direct-payment scope is available"
+  ]
+}
