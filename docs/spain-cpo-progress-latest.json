@@ -8,24 +8,24 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 341,
-    "maximumNeverTraversed": 277,
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 28,
+    "sourceValidated": 29,
     "partial": 8,
     "active": 87,
-    "setAside": 154,
-    "platformExcluded": 3,
+    "setAside": 157,
+    "platformExcluded": 4,
     "supersededAlias": 61,
-    "total": 341
+    "total": 346
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The one-shot reconstruction was completed in run40. GitHub history confirms that commit 2b984109a830db91780fdc29e8a20965a20de1d2 had already collapsed 263 earlier decisions into a non-nominative legacyTreated count; no complete historical nominative source could be recovered safely. The 341-decision continuity floor and 618-label historical queue are therefore preserved without fabricated entries."
+    "note": "The one-shot reconstruction was completed in run40. GitHub history confirms that commit 2b984109a830db91780fdc29e8a20965a20de1d2 had already collapsed earlier decisions into a non-nominative legacy count; no complete historical nominative source could be recovered safely. Preserve the 618-label historical queue and append only newly evidenced nominative decisions."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -72,7 +72,8 @@
     "docs/spain-cpo-progress-batches/2026-09-09-run48.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run49.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run50.json",
-    "docs/spain-cpo-progress-batches/2026-09-10-run51.json"
+    "docs/spain-cpo-progress-batches/2026-09-10-run51.json",
+    "docs/spain-cpo-progress-batches/2026-09-10-run52.json"
   ],
   "reveTariffStatus": {
     "complete": false,
@@ -93,7 +94,7 @@
     "persistentStatusPagesCollected": 51,
     "persistentStatusRowsStored": 4412,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "Exactly one eligible live batch was launched by rerunning the last successful collector job from persistent cursors 74/50. It completed and persisted successfully: tariff pages 74-76 and status pages 50-51. Five of five REVE requests succeeded, no /locations request was made and no HTTP 429 occurred. Do not launch another batch in this hourly window."
+    "latestCpoRunDecision": "No live REVE batch launched in run52 because less than one real hour had elapsed since the previous successful live batch. Continue CPO first-pass work without consuming REVE quota."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -105,8 +106,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 341,
-    "firstPassMinimumTraversed": 341,
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "noSetAsideReauditWithoutNewEvidence": true,
@@ -116,7 +117,7 @@
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
     "mandatoryCadenceCheckPerformed": true,
-    "checkForcedByTwoRunsWithoutNominativeProgress": true,
+    "checkForcedByTwoRunsWithoutNominativeProgress": false,
     "failedPushStateDistinguishedFromPersistentState": true
   },
   "oneTimeCanonicalReconstructionAttempt": {
@@ -127,7 +128,7 @@
     "historicalLegacyTreatedCollapsedCount": 263,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run51.json",
-  "investigationCurrent": "Current REVE nominative snapshot remains first-pass covered. No additional never-traversed historical label can currently be proven from the preserved canonical/history without fabrication. Continue only with concrete newly recoverable historical labels; do not reopen active/setAside cases before FIRST PASS COMPLETE.",
-  "updatedAt": "2026-09-10T04:44:30Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run52.json",
+  "investigationCurrent": "Five recoverable historical labels received first-pass decisions in run52. Continue mining preserved historical next-identity cues for further never-traversed labels; do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T05:42:14Z"
 }
