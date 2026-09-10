@@ -25,7 +25,7 @@
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The one-shot reconstruction was completed in run40. GitHub history confirms that commit 2b984109a830db91780fdc29e8a20965a20de1d2 had already collapsed earlier decisions into a non-nominative legacy count; no complete historical nominative source could be recovered safely. Preserve the 618-label historical queue and append only newly evidenced nominative decisions."
+    "note": "The one-shot reconstruction was completed in run40. A latest-tree/history reconstruction was attempted again in run61 under the explicit next-execution instruction and confirmed that the full frozen 618-label nominative snapshot is not preserved. Preserve 618 and append only genuinely evidenced historical identities."
   },
   "inventorySourceObservation": {
     "source": "https://observatorio.electrips.es/infraestructura",
@@ -89,28 +89,29 @@
     "docs/spain-cpo-progress-batches/2026-09-10-run57.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run58.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run59.json",
-    "docs/spain-cpo-progress-batches/2026-09-10-run60.json"
+    "docs/spain-cpo-progress-batches/2026-09-10-run60.json",
+    "docs/spain-cpo-progress-batches/2026-09-10-run61.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T15:39:43.586251Z",
-    "latestPersistedStateUpdatedAt": "2026-09-10T15:39:54.942097Z",
-    "latestObservedLiveBatchAt": "2026-09-10T15:39:43.586251Z",
-    "latestObservedLiveBatchWorkflowRunId": 34446412330,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T17:41:50.654528Z",
+    "latestPersistedStateUpdatedAt": "2026-09-10T17:41:50.654528Z",
+    "latestObservedLiveBatchAt": "2026-09-10T17:41:50.654528Z",
+    "latestObservedLiveBatchWorkflowRunId": null,
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 95,
-    "persistentTariffPagesCollected": 94,
-    "persistentTariffRowsStored": 8981,
-    "tariffTotalPages": 462,
-    "persistentNextStatusPage": 64,
-    "persistentStatusPagesCollected": 63,
-    "persistentStatusRowsStored": 5522,
+    "persistentNextTariffPage": 98,
+    "persistentTariffPagesCollected": 97,
+    "persistentTariffRowsStored": 9272,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 66,
+    "persistentStatusPagesCollected": 65,
+    "persistentStatusRowsStored": 5720,
     "statusTotalPages": 448,
-    "latestCpoRunDecision": "Exactly one live REVE batch was executed in run60 after more than one real hour had elapsed. The batch used 5/5 successful requests, no /locations request and no HTTP 429. No second batch is permitted in the same hourly window."
+    "latestCpoRunDecision": "The previously queued live batch completed and persisted at 17:41:50Z with 5/5 successful requests, tariffs pages 95-97 and statuses pages 64-65, no /locations and no HTTP 429. Run61 launched no additional batch because less than one real hour had elapsed."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -137,17 +138,19 @@
     "mandatoryCadenceCheckPerformed": true,
     "mandatoryCadenceTrigger": "at least two executions without nominative progress",
     "failedPushStateDistinguishedFromPersistentState": true,
-    "deltaHistoryCompleteThroughRun60": true
+    "deltaHistoryCompleteThroughRun61": true
   },
   "oneTimeCanonicalReconstructionAttempt": {
     "completed": true,
-    "result": "INCOMPLETE_HISTORICAL_NOMINATIVE_RECOVERY",
+    "result": "INCOMPLETE_HISTORICAL_NOMINATIVE_RECOVERY_CONFIRMED_RUN61",
     "historicalReconciliationCommit": "2b984109a830db91780fdc29e8a20965a20de1d2",
     "historicalExplicitListSize": 36,
     "historicalLegacyTreatedCollapsedCount": 263,
+    "latestBranchTreeRechecked": true,
+    "fullFrozen618NominativeSnapshotFound": false,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run60.json",
-  "investigationCurrent": "Continue mining preserved historical identity cues for genuinely never-traversed labels in the frozen 618-label snapshot. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-10T15:41:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run61.json",
+  "investigationCurrent": "Continue mining genuinely preserved historical identity cues for never-traversed labels in the frozen 618-label snapshot. Do not infer historical membership merely from the current 633-label ElecTrips mirror and do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T18:37:00Z"
 }
