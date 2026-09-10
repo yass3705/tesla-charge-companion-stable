@@ -1,0 +1,87 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-10",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation45.json",
+  "baseline": {"treated": 151, "complete": 51, "partial_deferred": 100, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Sonektro GmbH",
+      "status": "complete",
+      "aliases": ["Sonektro"],
+      "legacy_scope_aliases": ["Stadtwerke Quickborn public charging sites transferred 2025-01-01"],
+      "evidence": "Current first-party Sonektro public-station page publishes anonymous ad-hoc charging without prior registration by QR code at EUR 0.52/kWh AC and EUR 0.58/kWh DC. The Quickborn legacy stations are explicitly listed under Sonektro operation from 2025-01-01. Individual Quickborn AC station pages confirm EUR 0.52/kWh with no start fee and no blocking fee.",
+      "source": "https://sonektro.de/oeffentliche-ladesaeulen/",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.52, "adhoc_dc_eur_per_kwh": 0.58, "registration_required": false},
+      "operator_transition": {"from": "Stadtwerke Quickborn GmbH", "to": "Sonektro GmbH", "effective": "2025-01-01", "scope": "former Stadtwerke Quickborn public charging infrastructure only"}
+    },
+    {
+      "canonical_name": "Energie und Wasser Wahlstedt/Bad Segeberg GmbH & Co. KG",
+      "status": "complete",
+      "aliases": ["ews", "EW Segeberg", "Energie und Wasser Wahlstedt/Bad Segeberg"],
+      "evidence": "Current official public-charging page publishes own-station pricing effective 2026-03-21: EUR 0.65/kWh AC and EUR 0.82/kWh DC. Current tariff material also states a EUR 0.42 start fee per session and EUR 1/hour from four hours; electricity/gas customers receive a 15% discount on the ad-hoc price with the ews card. Roaming prices remain provider-specific.",
+      "source": "https://www.sw-badsegeberg.de/strom/ladetarif-e-fahrzeuge-1",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.65, "adhoc_dc_eur_per_kwh": 0.82, "start_fee_eur": 0.42, "time_fee_eur_per_hour": 1.0, "time_fee_from_min": 240, "customer_card_discount_percent": 15}
+    },
+    {
+      "canonical_name": "Stadtwerke Steinburg GmbH",
+      "status": "complete",
+      "aliases": ["Eure Stadtwerke Steinburg", "Stadtwerke Steinburg Verbund"],
+      "host_brand_scope": ["Stadtwerke Itzehoe", "Stadtwerke Glückstadt", "Stadtwerke Wilster", "Stadtwerke Brunsbüttel"],
+      "evidence": "Current first-party Stadtwerke Steinburg page identifies Stadtwerke Steinburg as regional operator of 86 active charging points and publishes exact own-network app/card pricing: EUR 0.47/kWh AC, EUR 0.59/kWh DC, no start fee, AC blocking EUR 0.05/min from 240 minutes capped at EUR 15, DC blocking EUR 0.10/min from 60 minutes capped at EUR 15. Host municipal utilities explicitly state that Stadtwerke Steinburg is the operator; they are not counted as separate physical CPO identities for this network.",
+      "source": "https://stadtwerke-steinburg.de/ladenetz/",
+      "tariff": {"own_network_ac_eur_per_kwh": 0.47, "own_network_dc_eur_per_kwh": 0.59, "start_fee_eur": 0.0, "ac_blocking_eur_per_min": 0.05, "ac_blocking_from_min": 240, "ac_blocking_cap_eur": 15.0, "dc_blocking_eur_per_min": 0.10, "dc_blocking_from_min": 60, "dc_blocking_cap_eur": 15.0},
+      "policy": "Roaming tariff remains eMSP-layer only; site-specific blocking exceptions remain fail-closed where published as possible."
+    },
+    {
+      "canonical_name": "Stadtwerke Stade GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Stade", "Stade public charging"],
+      "evidence": "Current official Stadtwerke Stade page confirms public direct browser checkout through the ladenetz map, with EVSE selection and payment by PayPal or credit card. Current station-level discovery surfaces repeatedly show EUR 0.49/kWh AC and EUR 0.64/kWh DC, including a EUR 0.10/min blocking component after 240 minutes at a sampled site. Because the official first-party page delegates the exact amount to the per-EVSE map/checkout and no authoritative operator-wide static 2026 matrix was located, these station-level values are not generalized.",
+      "source": "https://www.stadtwerke-stade.de/dienstleistungen/elektromobilitaet",
+      "reason": "direct public checkout is first-party confirmed, but exact current price is delegated to EVSE-level ladenetz checkout; sampled values are not promoted network-wide"
+    },
+    {
+      "canonical_name": "VersorgungsBetriebe Elbe GmbH",
+      "status": "partial_deferred",
+      "aliases": ["VB Elbe", "Versorgungsbetriebe Elbe", "VBE"],
+      "evidence": "Current official electromobility page publishes a contract RFID tariff of EUR 0.4999/kWh for customers with an electricity contract and EUR 0.70/kWh without one. Current station-level anonymous direct-payment records expose lower, site/power-specific values, including EUR 0.42/kWh at sampled AC EVSEs and EUR 0.54/kWh at sampled 150 kW sites. The contract tariff is therefore not promoted to anonymous ad-hoc, and sampled direct prices are not generalized across the operator.",
+      "source": "https://www.versorgungsbetriebe-elbe.de/e-mobilitaet",
+      "reason": "official contract tariff and anonymous station-level direct tariffs are distinct; no first-party operator-wide ad-hoc matrix established"
+    },
+    {
+      "canonical_name": "Stadtwerke Neustrelitz GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Neustrelitz", "SW Neustrelitz"],
+      "evidence": "Current station records confirm public EVSEs with ad-hoc capability (e.g. DE*LEA*E5550*01/*02) but the ad-hoc price remains unpublished/unknown. Current first-party 2026 material found during this pass concerns household and home-charging electricity tariffs rather than public charging. No exact anonymous direct-payment matrix is therefore asserted.",
+      "source": "https://www.goingelectric.de/stromtankstellen/Deutschland/Neustrelitz/Stadtwerke-Neustrelitz-Sievertstrasse-1/106379/",
+      "reason": "ad-hoc capability is confirmed but exact public charging price is not exposed in current authoritative material"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Sonektro GmbH", "aliases": ["Sonektro"], "note": "former Stadtwerke Quickborn public sites transferred to Sonektro on 2025-01-01; this is a scoped operator transition, not a global corporate alias"},
+    {"canonical": "Energie und Wasser Wahlstedt/Bad Segeberg GmbH & Co. KG", "aliases": ["ews", "EW Segeberg"]},
+    {"canonical": "Stadtwerke Steinburg GmbH", "aliases": ["Eure Stadtwerke Steinburg", "Stadtwerke Steinburg Verbund"], "host_labels_not_separate_cpos": ["Stadtwerke Itzehoe", "Stadtwerke Glückstadt", "Stadtwerke Wilster", "Stadtwerke Brunsbüttel"]},
+    {"canonical": "Stadtwerke Stade GmbH", "aliases": ["Stadtwerke Stade"]},
+    {"canonical": "VersorgungsBetriebe Elbe GmbH", "aliases": ["VB Elbe", "VBE"]},
+    {"canonical": "Stadtwerke Neustrelitz GmbH", "aliases": ["SW Neustrelitz"]}
+  ],
+  "counters_after_pass": {"treated": 157, "complete": 54, "partial_deferred": 103, "blocked": 0, "remaining": 434, "total": 591},
+  "coherence": {
+    "arithmetic": "54 + 103 + 0 = 157; 591 - 157 = 434",
+    "checkpoint_chain_check": "passed against committed automation45",
+    "duplicate_alias_check": "passed for this batch; Quickborn legacy sites are a scoped ownership transition to Sonektro, while Itzehoe/Glueckstadt/Wilster/Brunsbuettel are host/verbund labels under the physical CPO Stadtwerke Steinburg and are not counted as separate CPOs for those sites",
+    "deferred_reaudit_check": "passed: no identity deferred in automation45 was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: VB Elbe RFID contract prices and Stadtwerke Steinburg app/card prices retain their channel semantics",
+    "station_level_inference_check": "passed: Stade and VB Elbe sampled EVSE prices are not generalized",
+    "operator_ownership_check": "corrected: former Stadtwerke Quickborn public charging infrastructure is attributed to Sonektro from 2025-01-01",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue northern Lower Saxony / Schleswig-Holstein / Mecklenburg-Vorpommern CPO identities absent from the committed checkpoint chain",
+    "prioritize direct public QR checkout and exact per-EVSE tariff surfaces for Stade, VB Elbe and comparable municipal networks",
+    "do not re-audit Stade, VB Elbe or Neustrelitz without new authoritative evidence"
+  ]
+}
