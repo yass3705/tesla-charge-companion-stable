@@ -1,0 +1,84 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-10",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation47.json",
+  "baseline": {"treated": 164, "complete": 55, "partial_deferred": 109, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Neuruppin GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Neuruppin", "SWN Neuruppin", "RuppinStrom kWh mobil"],
+      "evidence": "Current first-party electromobility page publishes exact prices on SWN-owned charging stations: SWN card EUR 0.49/kWh AC and EUR 0.59/kWh DC with EUR 4.50/month; ladeapp EUR 0.55/kWh AC and EUR 0.65/kWh DC. Other providers explicitly use their own tariffs. No additional fee is inferred.",
+      "source": "https://www.swn.de/pv-und-e-mobilitaet/e-mobilitaet.html",
+      "tariff": {"customer_card_ac_eur_per_kwh": 0.49, "customer_card_dc_eur_per_kwh": 0.59, "customer_card_monthly_eur": 4.50, "ladeapp_ac_eur_per_kwh": 0.55, "ladeapp_dc_eur_per_kwh": 0.65},
+      "policy": "Own-network prices are kept distinct from roaming and third-party-card tariffs."
+    },
+    {
+      "canonical_name": "StWB Stadtwerke Brandenburg an der Havel GmbH & Co. KG",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Brandenburg", "StWB", "Stadtwerke Brandenburg an der Havel"],
+      "evidence": "Current first-party pages confirm StWB operates public charging stations. The tariff page and 2025 official price-change notice publish customer-card/flex pricing, including EUR 0.33/kWh AC on StWB/ladenetz for the subscription tariff and EUR 0.43/kWh AC for Flex without monthly fee, plus a blocking fee of EUR 0.10/min after 240 minutes, max EUR 10, suspended 19:00-09:00. Anonymous station checkout equivalence is not established, so these values are not promoted as universal ad-hoc pricing.",
+      "source": "https://www.stwb.de/ladekarte/",
+      "reason": "exact own-network contract/flex prices are first-party, but anonymous direct-payment semantics and per-EVSE applicability are not fully established"
+    },
+    {
+      "canonical_name": "Stadtwerke Schwedt GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Schwedt", "SDT E-MOBILITÄT", "Stadtwerke Schwedt E-Mobilität"],
+      "evidence": "Current first-party page confirms more than 30 own public stations, up to 22 kW, and states SDT E-MOBILITÄT customers pay around EUR 0.44/kWh. Anonymous ad-hoc charging by app and credit card is explicitly supported, but a separate start fee applies and its current amount is only shown dynamically in the app. Because the energy price is stated as 'around' 44 cents and the start fee is dynamic, no exact universal ad-hoc tariff is encoded.",
+      "source": "https://stadtwerke-schwedt.de/strom/natuerlich-elektrisch/ladekarte-beantragen.html",
+      "reason": "first-party CPO and ad-hoc access confirmed, but exact current ad-hoc start fee and authoritative exact energy amount are not statically published"
+    },
+    {
+      "canonical_name": "Stadtwerke Prenzlau GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Prenzlau", "SW Prenzlau"],
+      "evidence": "Multiple current regional tourism station pages identify Stadtwerke Prenzlau GmbH as provider for its public 22 kW Type-2 stations and consistently publish EUR 4.99 per charging session with payment by QR code or charging card, including Geschwister-Scholl-Straße, Friedrichstraße, McDonald's/Schwedter Straße, Sonnenkap and Markt Lychen. The value is strong station-level evidence but is not currently exposed on a retrievable first-party Stadtwerke tariff surface, so it is not generalized beyond the verified stations.",
+      "source": "https://www.prenzlau-tourismus.de/pois/stromtankstelle-geschwister-scholl-strasse-prenzlau/",
+      "reason": "exact EUR 4.99/session is consistently verified station-level, but lacks a current retrievable first-party network-wide tariff statement"
+    },
+    {
+      "canonical_name": "Energie & Mobilität Oranienburg GmbH",
+      "status": "partial_deferred",
+      "aliases": ["e-MOBI", "e-MOBI Oranienburg", "Stadtwerke Oranienburg e-MOBI"],
+      "evidence": "Stadtwerke Oranienburg's 2025 customer magazine documents e-MOBI as its new subsidiary created to operate and expand public charging infrastructure, with 15 normal and fast chargers at ten Oranienburg/Lehnitz locations. Current station-level discovery records consistently expose direct card payment at EUR 0.55/kWh plus EUR 1.00 start fee on AC 22 kW sites and EUR 0.65/kWh plus EUR 1.00 start fee on a 150 kW DC site. These values remain discovery evidence because no current first-party e-MOBI tariff table was found.",
+      "source": "https://stadtwerke-oranienburg.de/wp-content/uploads/Kundenmagazin/Magazin/Kundenmagazin-Fruehling-2025-Stadtwerke-Oranienburg.pdf",
+      "reason": "physical operator identity is first-party confirmed; exact AC/DC direct prices are only station-level discovery evidence, not a current authoritative tariff matrix"
+    },
+    {
+      "canonical_name": "Barnimer Energiebeteiligungsgesellschaft mbH",
+      "status": "partial_deferred",
+      "aliases": ["BEBG", "BEBG mbH", "Ladenetz Barnim", "Kreiswerke Barnim charging network"],
+      "evidence": "Current Ladenetz Barnim AGB valid from 2025-10-01 explicitly names Barnimer Energiebeteiligungsgesellschaft mbH, a wholly owned Kreiswerke Barnim subsidiary, as owner and Ladepunktbetreiber. Direct anonymous charging is supported by EVSE-specific QR/short URL and credit card. The current public tariff page valid 2026-01-01 publishes the emobility RFID-card tariff at EUR 0.49/kWh plus EUR 0.05/min from minute 241 between 06:00-22:00, capped at EUR 12, but the AGB states direct charging uses the tariff published at the station; no universal anonymous direct amount is given. Stadtwerke Bernau is only the green-electricity supplier and is not collapsed into this CPO.",
+      "source": "https://ladenetz-barnim.de/downloads/allgemeine_geschaeftsbedingunge_20251121.pdf",
+      "reason": "CPO identity and anonymous QR/card access are authoritative; exact direct tariff is station-published while the retrievable 2026 price table is for RFID-card customers"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Neuruppin GmbH", "aliases": ["Stadtwerke Neuruppin", "SWN Neuruppin", "RuppinStrom kWh mobil"]},
+    {"canonical": "StWB Stadtwerke Brandenburg an der Havel GmbH & Co. KG", "aliases": ["Stadtwerke Brandenburg", "StWB"]},
+    {"canonical": "Stadtwerke Schwedt GmbH", "aliases": ["Stadtwerke Schwedt", "SDT E-MOBILITÄT"]},
+    {"canonical": "Stadtwerke Prenzlau GmbH", "aliases": ["Stadtwerke Prenzlau", "SW Prenzlau"]},
+    {"canonical": "Energie & Mobilität Oranienburg GmbH", "aliases": ["e-MOBI", "e-MOBI Oranienburg"], "note": "Stadtwerke Oranienburg parent relationship is not treated as a physical-CPO alias outside e-MOBI scope"},
+    {"canonical": "Barnimer Energiebeteiligungsgesellschaft mbH", "aliases": ["BEBG", "Ladenetz Barnim"], "note": "Kreiswerke Barnim is the parent/site publisher; Stadtwerke Bernau only supplies green electricity and is not the CPO"}
+  ],
+  "counters_after_pass": {"treated": 170, "complete": 56, "partial_deferred": 114, "blocked": 0, "remaining": 421, "total": 591},
+  "coherence": {
+    "arithmetic": "56 + 114 + 0 = 170; 591 - 170 = 421",
+    "checkpoint_chain_check": "passed against committed automation47 (164/591)",
+    "duplicate_alias_check": "passed for this batch against the full current PR patch; Stadtwerke Frankfurt (Oder) was discovered as already integrated and explicitly excluded from this batch",
+    "deferred_reaudit_check": "passed: no identity deferred in automation47 was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: Brandenburg, Schwedt and Barnim contract/card values are not promoted to anonymous checkout without evidence",
+    "station_level_inference_check": "passed: Prenzlau EUR 4.99/session and e-MOBI AC/DC values remain station-level scoped rather than network-wide defaults",
+    "operator_identity_check": "passed: BEBG is separated from Stadtwerke Bernau; e-MOBI is separated from its Stadtwerke Oranienburg parent where physical-operation scope requires it",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue first-pass coverage across previously unseen Brandenburg / Sachsen-Anhalt / northern Lower Saxony municipal CPO identities",
+    "prioritize first-party QR/direct-payment tariff tables and EVSE-specific checkout surfaces",
+    "do not re-audit the five partial identities from this pass until new authoritative tariff evidence appears"
+  ]
+}
