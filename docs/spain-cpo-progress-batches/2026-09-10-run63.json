@@ -1,0 +1,60 @@
+{
+  "run": 63,
+  "country": "ES",
+  "recordedAt": "2026-09-10T20:39:00Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "runtimePublishReady": false,
+  "firstPass": {
+    "inventoryBase": 618,
+    "processedTotal": 346,
+    "remainingAtMost": 272,
+    "sourceValidated": 28,
+    "partial": 8,
+    "setAside": 154,
+    "active": 87,
+    "supersededAlias": 66,
+    "excludedPlatform": 3,
+    "newNominativeDecisions": 0,
+    "firstPassComplete": false,
+    "note": "Frozen historical 618-label nominative snapshot remains incomplete in durable GitHub history. No synthetic identities were created and no setAside case was re-audited without new evidence."
+  },
+  "coherenceCheck": {
+    "status": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_CANONICAL_POINTER_REPAIR",
+    "categorySum": 346,
+    "processedTotal": 346,
+    "consistent": true,
+    "blockedReaudits": 0,
+    "correction": "docs/spain-cpo-progress-latest.json was still pointing to run61 although run62 existed on the branch. Its REVE stored totals also retained superseded prose values 9272/5720. Persistent stream files are authoritative for current collection state and confirm 9259 tariff rows and 5707 status rows, next pages 98/66. Run63 repairs the canonical pointer and reporting state without changing nominative first-pass counts."
+  },
+  "reve": {
+    "lastPersistedBatchGeneratedAt": "2026-09-10T17:41:50.303321Z",
+    "lastPersistedStateUpdatedAt": "2026-09-10T17:41:58.016651Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "tariffPages": [95, 96, 97],
+    "statusPages": [64, 65],
+    "tariffNewRows": 278,
+    "tariffUpdatedRows": 2,
+    "statusNewRows": 185,
+    "statusUpdatedRows": 3,
+    "nextTariffPage": 98,
+    "nextStatusPage": 66,
+    "tariffPagesCollected": 97,
+    "statusPagesCollected": 65,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448,
+    "tariffRowsStored": 9259,
+    "statusRowsStored": 5707,
+    "locationsRequests": 0,
+    "http429": 0,
+    "newLiveBatchLaunchedThisRun": false,
+    "guardReason": "More than one hour has elapsed since the last persisted live batch, but the GitHub Actions connector view could not identify the target Collect Spain REVE tariff/status streams workflow among the observable current runs. Because absence of an already queued/in-progress target batch cannot be proven, run63 fails closed and consumes no REVE quota."
+  },
+  "canonicalRepair": {
+    "staleLatestPreviouslyPointedThroughRun": 61,
+    "run62Exists": true,
+    "latestPointerRepairRequired": true,
+    "persistentStreamStateUsedAsAuthority": true
+  },
+  "currentInvestigation": "Continue first-pass work only from labels that can be tied safely to the frozen 618 snapshot; do not fabricate membership from the drifted current registry."
+}
