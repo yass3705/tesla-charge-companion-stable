@@ -1,0 +1,93 @@
+{
+  "country": "DE",
+  "scope": "Tesla Charge Companion V9 German CPO first-pass",
+  "mode": "first-pass-exhaustive-before-fine-tuning",
+  "checkpoint_date": "2026-09-10",
+  "source_checkpoint": "docs/germany-cpo-first-pass-automation46.json",
+  "baseline": {"treated": 157, "complete": 54, "partial_deferred": 103, "blocked": 0, "total": 591},
+  "this_pass": [
+    {
+      "canonical_name": "Stadtwerke Barth GmbH",
+      "status": "complete",
+      "aliases": ["Stadtwerke Barth", "SW Barth"],
+      "evidence": "Current first-party public charging page explicitly identifies Stadtwerke Barth as CPO and publishes anonymous ad-hoc charging without contract by QR/card at EUR 0.50/kWh AC. Customer Premium-Ladekarte price is EUR 0.43/kWh with EUR 2.50/month from 2026-07-01. Blocking fee is EUR 0.10/min after 360 minutes from session start between 09:00 and 18:00. Third-party roaming prices remain variable and separate.",
+      "source": "https://stadtwerke-barth.de/privatkunden/service/elektro-tankstellen/",
+      "tariff": {"adhoc_ac_eur_per_kwh": 0.50, "customer_card_eur_per_kwh": 0.43, "customer_card_monthly_eur": 2.50, "blocking_eur_per_min": 0.10, "blocking_from_min": 360, "blocking_window": "09:00-18:00", "registration_required_for_adhoc": false},
+      "policy": "Cooperation with Stadtwerke Stralsund for backend/card acceptance is not treated as an operator alias; Barth remains the physical CPO for its published sites."
+    },
+    {
+      "canonical_name": "Stadtwerke Ribnitz-Damgarten GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Ribnitz-Damgarten", "SWRD", "Bernsteinstrom public charging"],
+      "evidence": "Current first-party page confirms 10 public 22 kW AC charge points commissioned since March 2024 and offers Direct Payment without contract, eCharge+ and RFID. Multiple current station-level records attribute the EVSEs to Stadtwerke Ribnitz-Damgarten and expose EUR 0.77/kWh direct payment, but the first-party page does not publish that numeric amount in retrievable text; therefore the sampled value is not promoted network-wide.",
+      "source": "https://www.stadtwerke-rd.de/e-mobilitaet/",
+      "reason": "ad-hoc and physical CPO ownership are first-party confirmed; exact current numeric direct tariff is only corroborated station-level, not authoritatively published network-wide"
+    },
+    {
+      "canonical_name": "Stadtwerke Güstrow GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Güstrow", "SWGÜ", "SWGU"],
+      "evidence": "The dedicated m8mit tenant identifies Stadtwerke Güstrow GmbH as Ladepunktbetreiber and lists current EVSEs DE*GCB*E5600 through E5603. The same public tenant confirms spontaneous charging by app/QR/SMS with Apple Pay, Google Pay, PayPal, credit card or mobile-phone billing. Tariff fields are dynamically loaded and no exact numeric price is exposed in retrievable authoritative text. Household/private-wallbox E-Mobil electricity prices were explicitly excluded.",
+      "source": "https://swgu.m8mit.de/stations",
+      "reason": "operator, EVSEs and anonymous payment are verified, but exact current per-EVSE tariff is dynamically loaded and not safely retrievable"
+    },
+    {
+      "canonical_name": "Stadtwerke Parchim GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Parchim", "SWP Parchim"],
+      "evidence": "The dedicated m8mit tenant lists DE*MSU*EPCH*WW10 at Ostring 5 with two 22 kW connectors and explicitly names Stadtwerke Parchim GmbH as Ladepunktbetreiber. Public spontaneous charging is supported by app/QR/SMS with common direct payment methods. Tariff fields are dynamically loaded; a current discovery source reports EUR 0.40/kWh at a Parchim site, but because that value is not exposed by the authoritative tenant in retrievable text it is not promoted as operator-wide pricing.",
+      "source": "https://pch.m8mit.de/stations",
+      "reason": "exact authoritative dynamic tariff not retrievable; third-party EUR 0.40/kWh remains discovery evidence only"
+    },
+    {
+      "canonical_name": "Stadtwerke Grevesmühlen GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Grevesmühlen", "SW Grevesmühlen", "Stadtwerke GVM"],
+      "evidence": "Current first-party e-mobility page lists the utility's own public charging locations at August-Bebel-Straße 4, Grüner Weg 27, Am Bahnhof 1 and Klützer Straße 27, including AC and DC equipment. The official site does not publish a current public charging price. A current station record at Klützer Straße reports contract/RFID-only access and no ad-hoc price, so no tariff is inferred from roaming products.",
+      "source": "https://www.stadtwerke-gvm.de/de/strom/emobilitaet.html",
+      "reason": "physical CPO scope is first-party documented but no current exact own-network direct tariff is published"
+    },
+    {
+      "canonical_name": "Stadtwerke Waren GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Waren", "SW Waren", "Stadtwerke Waren Müritz"],
+      "evidence": "Current station directories identify public charge points in Waren (Müritz) under Stadtwerke Waren GmbH / Stadtwerke Waren. The current first-party website documents charging-infrastructure grid services but does not expose a public CPO tariff or direct-payment matrix. Domestic electricity and grid-control tariffs were excluded from public-charging pricing.",
+      "source": "https://stadtwerke-waren.de/ladeeinrichtung-fuer-e-mobil/",
+      "reason": "public stations are discoverable under the operator identity, but current authoritative public-charging tariff/payment semantics are missing"
+    },
+    {
+      "canonical_name": "Stadtwerke Pasewalk GmbH",
+      "status": "partial_deferred",
+      "aliases": ["Stadtwerke Pasewalk", "SW Pasewalk"],
+      "evidence": "Current station-level registry material attributes a public AC/DC charging installation at An den Stadtwerken 2, Pasewalk to Stadtwerke Pasewalk GmbH. The current first-party site and Infocenter publish 2026 energy/network material but no public-charging tariff matrix or current direct-payment conditions. Household, business and network electricity tariffs were excluded.",
+      "source": "https://www.stadtwerke-pasewalk.de/",
+      "reason": "CPO identity is supported by station records, but no current exact authoritative public-charging tariff or checkout surface was found"
+    }
+  ],
+  "aliases_resolved": [
+    {"canonical": "Stadtwerke Barth GmbH", "aliases": ["Stadtwerke Barth", "SW Barth"], "note": "Stralsund cooperation is backend/card interoperability, not a physical-CPO alias"},
+    {"canonical": "Stadtwerke Ribnitz-Damgarten GmbH", "aliases": ["Stadtwerke Ribnitz-Damgarten", "SWRD"]},
+    {"canonical": "Stadtwerke Güstrow GmbH", "aliases": ["Stadtwerke Güstrow", "SWGU"]},
+    {"canonical": "Stadtwerke Parchim GmbH", "aliases": ["Stadtwerke Parchim", "SWP Parchim"]},
+    {"canonical": "Stadtwerke Grevesmühlen GmbH", "aliases": ["Stadtwerke Grevesmühlen", "Stadtwerke GVM"]},
+    {"canonical": "Stadtwerke Waren GmbH", "aliases": ["Stadtwerke Waren", "Stadtwerke Waren Müritz"]},
+    {"canonical": "Stadtwerke Pasewalk GmbH", "aliases": ["Stadtwerke Pasewalk", "SW Pasewalk"]}
+  ],
+  "counters_after_pass": {"treated": 164, "complete": 55, "partial_deferred": 109, "blocked": 0, "remaining": 427, "total": 591},
+  "coherence": {
+    "arithmetic": "55 + 109 + 0 = 164; 591 - 164 = 427",
+    "checkpoint_chain_check": "passed against committed automation46 (157/591)",
+    "duplicate_alias_check": "passed for this batch against the current PR patch/checkpoint surface; Barth-Stralsund cooperation is explicitly not collapsed into one CPO",
+    "deferred_reaudit_check": "passed: no identity deferred in automation46 was revisited",
+    "repeated_investigation_gt2_runs_check": "passed",
+    "contract_to_adhoc_promotion_check": "passed: household/grid tariffs and roaming/customer-card products are kept separate from anonymous direct charging",
+    "station_level_inference_check": "passed: Ribnitz-Damgarten EUR 0.77/kWh and Parchim EUR 0.40/kWh discovery values are not generalized without authoritative network-wide evidence",
+    "dynamic_checkout_check": "Güstrow and Parchim dynamic m8mit tariff placeholders are treated fail-closed rather than guessed",
+    "result": "ok"
+  },
+  "next_queue": [
+    "continue first-pass coverage across previously unseen Mecklenburg-Vorpommern / Brandenburg / northern Lower Saxony municipal CPO identities",
+    "prioritize operators with first-party QR/direct-payment tariff tables or dedicated public checkout tenants",
+    "do not re-audit Ribnitz-Damgarten, Güstrow, Parchim, Grevesmühlen, Waren or Pasewalk until new authoritative tariff evidence appears"
+  ]
+}
