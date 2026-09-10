@@ -70,28 +70,29 @@
     "docs/spain-cpo-progress-batches/2026-09-09-run46.json",
     "docs/spain-cpo-progress-batches/2026-09-09-run47.json",
     "docs/spain-cpo-progress-batches/2026-09-09-run48.json",
-    "docs/spain-cpo-progress-batches/2026-09-10-run49.json"
+    "docs/spain-cpo-progress-batches/2026-09-10-run49.json",
+    "docs/spain-cpo-progress-batches/2026-09-10-run50.json"
   ],
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T00:42:23.493147Z",
-    "latestPersistedStateUpdatedAt": "2026-09-10T00:42:31.002124Z",
-    "latestObservedLiveBatchAt": "2026-09-10T00:42:23.493147Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T02:43:11.721086Z",
+    "latestPersistedStateUpdatedAt": "2026-09-10T02:43:19.270111Z",
+    "latestObservedLiveBatchAt": "2026-09-10T02:43:11.721086Z",
     "latestObservedLiveBatchWorkflowRunId": 34413690845,
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 71,
-    "persistentTariffPagesCollected": 70,
-    "persistentTariffRowsStored": 6853,
+    "persistentNextTariffPage": 74,
+    "persistentTariffPagesCollected": 73,
+    "persistentTariffRowsStored": 7128,
     "tariffTotalPages": 461,
-    "persistentNextStatusPage": 48,
-    "persistentStatusPagesCollected": 47,
-    "persistentStatusRowsStored": 4235,
+    "persistentNextStatusPage": 50,
+    "persistentStatusPagesCollected": 49,
+    "persistentStatusRowsStored": 4264,
     "statusTotalPages": 447,
-    "latestCpoRunDecision": "Exactly one eligible live batch was launched by rerunning the last successful collector job from persistent cursors 68/46. It completed and persisted successfully: tariff pages 68-70 and status pages 46-47. Five of five REVE requests succeeded, no /locations request was made and no HTTP 429 occurred. Do not launch another batch in this hourly window."
+    "latestCpoRunDecision": "Exactly one eligible live batch was launched by rerunning the last successful collector job from persistent cursors 71/48. It completed and persisted successfully: tariff pages 71-73 and status pages 48-49. Five of five REVE requests succeeded, no /locations request was made and no HTTP 429 occurred. Do not launch another batch in this hourly window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -125,7 +126,7 @@
     "historicalLegacyTreatedCollapsedCount": 263,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run49.json",
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run50.json",
   "investigationCurrent": "Current REVE nominative snapshot remains first-pass covered. No additional never-traversed historical label can currently be proven from the preserved canonical/history without fabrication. Continue only with concrete newly recoverable historical labels; do not reopen active/setAside cases before FIRST PASS COMPLETE.",
-  "updatedAt": "2026-09-10T00:44:00Z"
+  "updatedAt": "2026-09-10T02:44:00Z"
 }
