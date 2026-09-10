@@ -49,22 +49,25 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T17:41:50.303321Z",
-    "latestPersistedStateUpdatedAt": "2026-09-10T17:41:58.016651Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-10T20:43:55.846544Z",
+    "latestPersistedStateUpdatedAt": "2026-09-10T20:44:04.017725Z",
+    "latestObservedWorkflowRunId": 34446412330,
+    "latestObservedWorkflowAttempt": 8,
+    "latestObservedJobId": 103041874417,
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 98,
-    "persistentTariffPagesCollected": 97,
-    "persistentTariffRowsStored": 9259,
+    "persistentNextTariffPage": 101,
+    "persistentTariffPagesCollected": 100,
+    "persistentTariffRowsStored": 9534,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 66,
-    "persistentStatusPagesCollected": 65,
-    "persistentStatusRowsStored": 5707,
+    "persistentNextStatusPage": 68,
+    "persistentStatusPagesCollected": 67,
+    "persistentStatusRowsStored": 5897,
     "statusTotalPages": 448,
-    "latestCpoRunDecision": "Run63 launched no REVE live batch. More than one hour had elapsed, but the observable GitHub Actions run list did not identify the target tariff/status workflow, so absence of an already queued/in-progress target batch could not be proven. Fail closed; no quota consumed."
+    "latestCpoRunDecision": "Exactly one eligible REVE batch was rerun after proving the previous target job completed successfully and more than one hour had elapsed. Attempt 8 completed successfully with tariffs pages 98-100 and statuses pages 66-67, exactly 5/5 HTTP 200 requests, no /locations and no HTTP 429. No second batch is permitted in this hourly window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -104,6 +107,6 @@
     "syntheticEntriesCreated": false
   },
   "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run63.json",
-  "investigationCurrent": "Continue mining genuinely preserved historical identity cues for never-traversed labels in the frozen 618-label snapshot. Do not infer historical membership merely from the current 633-label ElecTrips mirror and do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-10T20:39:00Z"
+  "investigationCurrent": "Current REVE nominative snapshot is already first-pass covered. Continue mining genuinely preserved historical identity cues for never-traversed labels in the frozen 618-label snapshot. Do not infer historical membership merely from the current 633-label ElecTrips mirror and do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T20:44:15Z"
 }
