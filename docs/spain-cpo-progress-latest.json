@@ -27,6 +27,14 @@
     "syntheticEntriesCreated": false,
     "note": "The one-shot reconstruction was completed in run40. GitHub history confirms that commit 2b984109a830db91780fdc29e8a20965a20de1d2 had already collapsed earlier decisions into a non-nominative legacy count; no complete historical nominative source could be recovered safely. Preserve the 618-label historical queue and append only newly evidenced nominative decisions."
   },
+  "inventorySourceObservation": {
+    "source": "https://observatorio.electrips.es/infraestructura",
+    "historicalSnapshotLabels": 618,
+    "historicalSourceBasisThrough": "2026-08-18",
+    "currentObservedSourceDate": "2026-09-07",
+    "currentObservedOperatorLabels": 633,
+    "decision": "Keep 618 frozen as the historical first-pass queue. The mutable live mirror may assist identity recovery only and must not redefine the queue or serve as tariff authority."
+  },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
     "minimumTraversed": 118
@@ -79,7 +87,8 @@
     "docs/spain-cpo-progress-batches/2026-09-10-run55.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run56.json",
     "docs/spain-cpo-progress-batches/2026-09-10-run57.json",
-    "docs/spain-cpo-progress-batches/2026-09-10-run58.json"
+    "docs/spain-cpo-progress-batches/2026-09-10-run58.json",
+    "docs/spain-cpo-progress-batches/2026-09-10-run59.json"
   ],
   "reveTariffStatus": {
     "complete": false,
@@ -100,7 +109,7 @@
     "persistentStatusPagesCollected": 61,
     "persistentStatusRowsStored": 5324,
     "statusTotalPages": 448,
-    "latestCpoRunDecision": "One live REVE batch was permitted after more than one real hour. Exactly five calls were consumed and persisted; no second batch is allowed in this hourly window."
+    "latestCpoRunDecision": "No live REVE batch permitted in run59 because less than one real hour had elapsed since the last successful persisted batch when the execution began. Continue CPO identity work without consuming REVE quota."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -111,19 +120,22 @@
     "locationsCollectionMustNotRestart": true
   },
   "coherenceCheck": {
-    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AFTER_ALIAS_CORRECTION",
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_FROZEN_618_SNAPSHOT",
     "continuityCountSum": 346,
     "firstPassMinimumTraversed": 346,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "run52DuplicateCanonicalIdentitiesCorrected": true,
+    "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
+    "currentMirrorObservedOperatorLabels": 633,
     "noSetAsideReauditWithoutNewEvidence": true,
     "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
     "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
-    "mandatoryCadenceCheckPerformed": false,
+    "mandatoryCadenceCheckPerformed": true,
+    "mandatoryCadenceTrigger": "at least two executions without nominative progress",
     "failedPushStateDistinguishedFromPersistentState": true
   },
   "oneTimeCanonicalReconstructionAttempt": {
@@ -134,7 +146,7 @@
     "historicalLegacyTreatedCollapsedCount": 263,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run58.json",
-  "investigationCurrent": "Current REVE snapshot identities are already first-pass covered. Continue mining preserved historical identity cues for genuinely never-traversed labels. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-10T13:46:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-10-run59.json",
+  "investigationCurrent": "Continue mining preserved historical identity cues for genuinely never-traversed labels in the frozen 618-label snapshot. The live ElecTrips/REVE-derived mirror now reports 633 operators and is not allowed to expand or redefine that historical queue. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T14:43:00Z"
 }
