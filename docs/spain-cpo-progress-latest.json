@@ -8,32 +8,32 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 346,
-    "maximumNeverTraversed": 272,
+    "minimumTraversed": 351,
+    "maximumNeverTraversed": 267,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 28,
     "partial": 8,
-    "active": 87,
-    "setAside": 154,
+    "active": 88,
+    "setAside": 157,
     "platformExcluded": 3,
-    "supersededAlias": 66,
-    "total": 346
+    "supersededAlias": 67,
+    "total": 351
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The full frozen 618-label nominative snapshot is not preserved in the inspected durable GitHub state. Run71 found no new safely attributable frozen-snapshot identity; mutable current registry labels were not backfilled synthetically."
+    "note": "The full frozen 618-label nominative snapshot is not preserved in durable GitHub state. Current-REVE replacement-queue identities are explicitly provenance-tagged and are never presented as proven members of the lost frozen snapshot."
   },
   "inventorySourceObservation": {
-    "source": "https://observatorio.electrips.es/infraestructura",
     "historicalSnapshotLabels": 618,
     "historicalSourceBasisThrough": "2026-08-18",
-    "currentObservedSourceDate": "2026-09-07",
     "currentObservedOperatorLabels": 633,
-    "decision": "Keep 618 frozen as the historical first-pass queue. The mutable live mirror may assist identity recovery only and must not redefine the queue or serve as tariff authority."
+    "currentDurableReveDistinctCpos": 148,
+    "currentDurableReveCoverageBlob": "4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+    "decision": "Keep 618 frozen as historical KPI denominator. Use immutable current REVE coverage only as an explicitly reconstructed replacement identity queue, not as proof of historical-618 membership or as tariff authority."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -42,36 +42,42 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 71,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run71.json",
+    "latestRun": 72,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run72.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
+  "reconstructionPersistence": {
+    "oneTimeHistoricalRecoveryCompleted": true,
+    "fullFrozen618NominativeSnapshotFound": false,
+    "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
+    "fallbackManifestCommit": "c81475ad04ea9a632ab42e450dae4c4b8dbd502f",
+    "historicalReconciliationCommit": "2b984109a830db91780fdc29e8a20965a20de1d2",
+    "replacementQueueRule": "Continue from genuinely new immutable current-REVE identities with reconstructedCurrentReve provenance while retaining continuity aggregates for unreconstructable historical identities.",
+    "criticalCountryProgressPersistedInGit": true,
+    "actionsArtifactsMayNotBeSoleCanonicalStore": true
+  },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T10:38:59.428275Z",
-    "latestPersistedStateUpdatedAt": "2026-09-11T10:39:08.496862Z",
-    "latestObservedWorkflowRunId": 34446412330,
-    "latestObservedWorkflowAttempt": 15,
-    "latestObservedJobId": 103233598840,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T11:41:25.292146Z",
+    "latestPersistedStateUpdatedAt": "2026-09-11T11:41:32.924509Z",
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 122,
-    "persistentTariffPagesCollected": 121,
-    "persistentTariffRowsStored": 11335,
+    "persistentNextTariffPage": 125,
+    "persistentTariffPagesCollected": 124,
+    "persistentTariffRowsStored": 11597,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 82,
-    "persistentStatusPagesCollected": 81,
-    "persistentStatusRowsStored": 7066,
+    "persistentNextStatusPage": 84,
+    "persistentStatusPagesCollected": 83,
+    "persistentStatusRowsStored": 7150,
     "statusTotalPages": 448,
-    "latestCpoRunDecision": "Run71 executed exactly one eligible REVE batch from persistent cursors: tariff pages 119-121 and status pages 80-81; 5/5 requests succeeded, no /locations request and no HTTP 429."
+    "currentRunDecision": "No REVE live call: less than one real hour had elapsed since the 2026-09-11T11:41:25Z successful batch. Continued non-REVE first-pass CPO work instead."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
-    "pr50ObservedDraft": true,
     "preIntegrationOnly": true,
     "runtimePublishReady": false,
     "locationsCollectionComplete": true,
@@ -79,31 +85,38 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 346,
-    "firstPassMinimumTraversed": 346,
+    "continuityCountSum": 351,
+    "firstPassMinimumTraversed": 351,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
-    "currentMirrorObservedOperatorLabels": 633,
     "noSetAsideReauditWithoutNewEvidence": true,
     "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
     "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespectedByObservedState": true,
     "locationsEndpointUnusedByObservedState": true,
-    "syntheticHistoricalMembershipCreated": false
+    "syntheticHistoricalMembershipCreated": false,
+    "criticalProgressPersistenceGuardActive": true
   },
-  "oneTimeCanonicalReconstructionAttempt": {
-    "completed": true,
-    "result": "INCOMPLETE_HISTORICAL_NOMINATIVE_RECOVERY_CONFIRMED_RUN64",
-    "historicalReconciliationCommit": "2b984109a830db91780fdc29e8a20965a20de1d2",
-    "historicalExplicitListSize": 36,
-    "historicalLegacyTreatedCollapsedCount": 263,
-    "latestBranchTreeRechecked": true,
-    "fullFrozen618NominativeSnapshotFound": false,
-    "syntheticEntriesCreated": false
+  "newSincePreviousPoint": {
+    "labelsTraversed": [
+      "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+      "MAKSU ESPAÑA SL",
+      "Marbella Premium SL",
+      "MED PLAYA MANAGEMENT, SLU",
+      "MOEVE COMMERCIAL, SAU"
+    ],
+    "newlySourceValidated": [],
+    "newlySetAside": [
+      "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+      "Marbella Premium SL",
+      "MED PLAYA MANAGEMENT, SLU"
+    ],
+    "newlyActive": ["MAKSU ESPAÑA SL / Telpark-Efimob"],
+    "newAliases": ["MOEVE COMMERCIAL, SAU -> Moeve"]
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run71.json",
-  "investigationCurrent": "Continue first-pass recovery only from genuinely preserved historical identity cues. Do not infer historical membership from the mutable 633-label mirror and do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-11T10:39:25Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run72.json",
+  "investigationCurrent": "Continue replacement-queue first pass from Motor Box Mallorca SL, then Moya Estaciones Electricas SL, Naturgy Nuevas Energías SLU, OESTE SOLUCIONES ENERGETICAS SL and PARKING MOGAN SA. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-11T12:39:51Z"
 }
