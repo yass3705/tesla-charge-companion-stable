@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 363,
-    "maximumNeverTraversed": 255,
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 28,
     "partial": 8,
-    "active": 93,
-    "setAside": 163,
+    "active": 94,
+    "setAside": 172,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 363
+    "total": 373
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 74,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run74.json",
+    "latestRun": 75,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run75.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -54,27 +54,28 @@
     "fallbackManifestCommit": "c81475ad04ea9a632ab42e450dae4c4b8dbd502f",
     "historicalReconciliationCommit": "2b984109a830db91780fdc29e8a20965a20de1d2",
     "replacementQueueRule": "Continue from genuinely new immutable current-REVE identities with reconstructedCurrentReve provenance while retaining continuity aggregates for unreconstructable historical identities.",
+    "replacementIdentityQueueExhausted": true,
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T13:41:18.015682Z",
-    "latestPersistedStateUpdatedAt": "2026-09-11T13:41:24.961799Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T15:48:11.810408Z",
+    "latestPersistedStateUpdatedAt": "2026-09-11T15:48:20.879915Z",
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 128,
-    "persistentTariffPagesCollected": 127,
-    "persistentTariffRowsStored": 11849,
+    "persistentNextTariffPage": 131,
+    "persistentTariffPagesCollected": 130,
+    "persistentTariffRowsStored": 12106,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 86,
-    "persistentStatusPagesCollected": 85,
-    "persistentStatusRowsStored": 7326,
-    "statusTotalPages": 448,
-    "currentRunDecision": "No REVE live call: at the initial eligibility check less than one real hour had elapsed since the 2026-09-11T13:41:18Z successful live batch. Continued non-REVE first-pass CPO work instead."
+    "persistentNextStatusPage": 88,
+    "persistentStatusPagesCollected": 87,
+    "persistentStatusRowsStored": 7458,
+    "statusTotalPages": 449,
+    "currentRunDecision": "Exactly one eligible live batch completed from persistent cursors via a temporary targeted trigger because workflow_dispatch was not directly invocable through the connector. The trigger was removed immediately after successful collection. Tariff pages 128-130 and status pages 86-87 completed 5/5 successfully, with no /locations request and no HTTP 429."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -85,8 +86,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 363,
-    "firstPassMinimumTraversed": 363,
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -101,26 +102,33 @@
   },
   "newSincePreviousPoint": {
     "labelsTraversed": [
-      "PETREM DISTRIBUCIO SA",
-      "PETRO PALOL, S.L.",
-      "PORSAMADRID, S.L.",
-      "Porsatecnic S.L.",
-      "Punto Recargas SL",
-      "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
-      "QWELLO España SL"
+      "SCL AGROPIENSO F22009468",
+      "SERVEIS FERROVIARIS DE MALLORCA",
+      "SERVICIOS PUENTE LIÑARES SL",
+      "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+      "Torrecillas Serna, S.A.",
+      "TRANSPORTES PENADES E HIJOS SL",
+      "Tuwyncar Sport S.L.",
+      "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+      "ZERO CARBON EMOBILITY, S.L.",
+      "ZOILO RIOS, S.A."
     ],
     "newlySourceValidated": [],
     "newlySetAside": [
-      "PETREM DISTRIBUCIO SA",
-      "PETRO PALOL, S.L.",
-      "PORSAMADRID, S.L.",
-      "Porsatecnic S.L.",
-      "P‑APP & WEB SERVICIOS DIGITALES S.L.U."
+      "SCL AGROPIENSO F22009468",
+      "SERVEIS FERROVIARIS DE MALLORCA",
+      "SERVICIOS PUENTE LIÑARES SL",
+      "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+      "Torrecillas Serna, S.A.",
+      "TRANSPORTES PENADES E HIJOS SL",
+      "Tuwyncar Sport S.L.",
+      "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+      "ZERO CARBON EMOBILITY, S.L."
     ],
-    "newlyActive": ["QWELLO España SL"],
-    "newAliases": ["Punto Recargas SL -> Powerdot"]
+    "newlyActive": ["ZOILO RIOS, S.A."],
+    "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run74.json",
-  "investigationCurrent": "Continue after QWELLO España SL in immutable current-REVE replacement-queue order, skipping REMO and REPSOL because they were already historically investigated. Process multiple genuinely new identities before revisiting active/setAside cases.",
-  "updatedAt": "2026-09-11T14:39:54Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run75.json",
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue is exhausted through ZOILO RIOS. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-11T15:53:00Z"
 }
