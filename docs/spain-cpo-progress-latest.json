@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 75,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run75.json",
+    "latestRun": 76,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run76.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -60,22 +60,22 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T15:48:11.810408Z",
-    "latestPersistedStateUpdatedAt": "2026-09-11T15:48:20.879915Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T18:38:36.863679Z",
+    "latestPersistedStateUpdatedAt": "2026-09-11T18:38:45.075974Z",
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 131,
-    "persistentTariffPagesCollected": 130,
-    "persistentTariffRowsStored": 12106,
+    "persistentNextTariffPage": 137,
+    "persistentTariffPagesCollected": 136,
+    "persistentTariffRowsStored": 12596,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 88,
-    "persistentStatusPagesCollected": 87,
-    "persistentStatusRowsStored": 7458,
+    "persistentNextStatusPage": 92,
+    "persistentStatusPagesCollected": 91,
+    "persistentStatusRowsStored": 7742,
     "statusTotalPages": 449,
-    "currentRunDecision": "Exactly one eligible live batch completed from persistent cursors via a temporary targeted trigger because workflow_dispatch was not directly invocable through the connector. The trigger was removed immediately after successful collection. Tariff pages 128-130 and status pages 86-87 completed 5/5 successfully, with no /locations request and no HTTP 429."
+    "currentRunDecision": "Exactly one eligible live batch completed from persistent cursors via a temporary targeted trigger because workflow_dispatch was not directly invocable through the connector. The trigger was removed immediately after successful collection. Tariff pages 134-136 and status pages 90-91 completed 5/5 successfully, with no /locations request and no HTTP 429."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -101,34 +101,13 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": [
-      "SCL AGROPIENSO F22009468",
-      "SERVEIS FERROVIARIS DE MALLORCA",
-      "SERVICIOS PUENTE LIÑARES SL",
-      "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
-      "Torrecillas Serna, S.A.",
-      "TRANSPORTES PENADES E HIJOS SL",
-      "Tuwyncar Sport S.L.",
-      "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
-      "ZERO CARBON EMOBILITY, S.L.",
-      "ZOILO RIOS, S.A."
-    ],
+    "labelsTraversed": [],
     "newlySourceValidated": [],
-    "newlySetAside": [
-      "SCL AGROPIENSO F22009468",
-      "SERVEIS FERROVIARIS DE MALLORCA",
-      "SERVICIOS PUENTE LIÑARES SL",
-      "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
-      "Torrecillas Serna, S.A.",
-      "TRANSPORTES PENADES E HIJOS SL",
-      "Tuwyncar Sport S.L.",
-      "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
-      "ZERO CARBON EMOBILITY, S.L."
-    ],
-    "newlyActive": ["ZOILO RIOS, S.A."],
+    "newlySetAside": [],
+    "newlyActive": [],
     "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run75.json",
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue is exhausted through ZOILO RIOS. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-11T15:53:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run76.json",
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue is exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-11T18:40:00Z"
 }
