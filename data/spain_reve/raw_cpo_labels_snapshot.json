@@ -1,0 +1,2108 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "source": "persisted data/spain_reve/reve_locations_raw.json.gz",
+  "sourceBlobSha": "957335b7b96006fe853a3cf61d1ba314a5e88546",
+  "provenance": "currentDurableRawLocationsSnapshot_not_historical618_membership_proof",
+  "distinctRawLabels": 148,
+  "canonicalLabelCount": 148,
+  "deterministicAliasCount": 0,
+  "ambiguousCount": 0,
+  "unmappedCount": 0,
+  "items": [
+    {
+      "label": "(ZUNDER) Grupo Easychargar SA",
+      "partyIds": [
+        "ZUN"
+      ],
+      "canonicalByPartyId": [
+        "(ZUNDER) Grupo Easychargar SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0060e814-7743-4e4f-a76f-eaa21528b183",
+        "$.locations.00a3db72-abd5-4f6b-b845-f71a3e7cf2cf",
+        "$.locations.017c5358-eb20-4da5-af2f-b7e4140f257c"
+      ]
+    },
+    {
+      "label": "ACCIONA Recarga",
+      "partyIds": [
+        "ARE"
+      ],
+      "canonicalByPartyId": [
+        "ACCIONA Recarga"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.008a529c-23c6-463d-abec-02166cbf284b",
+        "$.locations.00f871d8-5291-4292-982d-e1637b599a5c",
+        "$.locations.02cef137-8dac-45b0-b7b4-0f9b87941dbe"
+      ]
+    },
+    {
+      "label": "ADURIZ ENERGIA SLU",
+      "partyIds": [
+        "ADU"
+      ],
+      "canonicalByPartyId": [
+        "ADURIZ ENERGIA SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2e239b85-53fb-467e-98a1-564b8da1591d",
+        "$.locations.c7da3963-1fb2-452f-9583-8e59cb1aea41"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT D'INCA",
+      "partyIds": [
+        "INC"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT D'INCA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.101a133e-6116-458b-98ea-8cdc0b5b63e8",
+        "$.locations.3cb4b7a1-3906-4839-9723-298cad6248f3",
+        "$.locations.7fefcaca-fe50-47e7-bf49-7dcd648b03a5"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT D'OS DE BALAGUER",
+      "partyIds": [
+        "256"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT D'OS DE BALAGUER"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.16943422-810e-4c03-908d-a2941a9414fd",
+        "$.locations.3266b568-f85d-4563-a2ae-05b85fa8fe1e"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE BUNYOLA",
+      "partyIds": [
+        "814"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT DE BUNYOLA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.7bf086b4-ec23-41a9-bd49-66c9f284f5ea",
+        "$.locations.89eebb57-2b81-45b0-bbf2-ea256ed7c44a",
+        "$.locations.b93e795b-a5e0-499f-9e7e-c1a6b8b3095e"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE CALVIÀ",
+      "partyIds": [
+        "CAL"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT DE CALVIÀ"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.037fff8d-098b-40ec-8953-1f6efb0350ae",
+        "$.locations.1035617c-b9f9-47e0-a22f-265d35b90916",
+        "$.locations.1562d24d-37ca-42d9-86a3-063d7f05216a"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE COSTITX",
+      "partyIds": [
+        "9A8"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT DE COSTITX"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.631273dc-b1ac-453f-b218-294b4eb1f4a9"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE SANT LLUIS",
+      "partyIds": [
+        "710"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT DE SANT LLUIS"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.13ef9c90-6ee8-4010-84c5-db7fc9eaffc3",
+        "$.locations.16448efc-a3dd-4d2c-a53f-ae8e609e46fb",
+        "$.locations.29f9123e-948f-4c51-9b21-c5193a4f1507"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE SANTA MARIA DEL CAMI",
+      "partyIds": [
+        "056"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT DE SANTA MARIA DEL CAMI"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.46926c6c-7933-4e1a-9c5a-168a555b9a4e",
+        "$.locations.4895e1b2-b19f-49c1-90e3-05a44730315d",
+        "$.locations.7e895e09-d90f-4e20-97c6-27b4dc54bf87"
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DES CASTELL",
+      "partyIds": [
+        "CAS"
+      ],
+      "canonicalByPartyId": [
+        "AJUNTAMENT DES CASTELL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2d666f49-da44-4ebc-9c26-52ef403f6a02",
+        "$.locations.380be36f-2401-463f-91e4-467170305123",
+        "$.locations.39b08ef8-fe17-42e7-828c-30947969e83c"
+      ]
+    },
+    {
+      "label": "ALGUPIBE, S.L.",
+      "partyIds": [
+        "927"
+      ],
+      "canonicalByPartyId": [
+        "ALGUPIBE, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.401fe2d4-70b8-49d7-9596-ca4bc84cc0f5",
+        "$.locations.85331e02-05b1-4f34-b6ff-25f69db2a762"
+      ]
+    },
+    {
+      "label": "Allego Spain S.L.U",
+      "partyIds": [
+        "ALL"
+      ],
+      "canonicalByPartyId": [
+        "Allego Spain S.L.U"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.601ef142-d59b-4309-9a3a-03517201b889"
+      ]
+    },
+    {
+      "label": "ANARGO 2002 SL",
+      "partyIds": [
+        "ARG"
+      ],
+      "canonicalByPartyId": [
+        "ANARGO 2002 SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.800e68ab-ec77-4f36-b8ca-d22b0f1fa619"
+      ]
+    },
+    {
+      "label": "ARETE MACENAS HOTELES, S.L.",
+      "partyIds": [
+        "MCN"
+      ],
+      "canonicalByPartyId": [
+        "ARETE MACENAS HOTELES, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.de2a9a21-db0b-420a-8556-b9934401d46d"
+      ]
+    },
+    {
+      "label": "ARTEALCA SL",
+      "partyIds": [
+        "BEX"
+      ],
+      "canonicalByPartyId": [
+        "ARTEALCA SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.c8b3fa16-b405-4755-ab84-64ab7ef2dea5"
+      ]
+    },
+    {
+      "label": "ATENCO ENERGIA, SL",
+      "partyIds": [
+        "CAN"
+      ],
+      "canonicalByPartyId": [
+        "ATENCO ENERGIA, SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.170fbf39-1c0b-400e-82fd-2e258bd1a394",
+        "$.locations.2e2d9b29-af87-4b4f-8854-c3db20fb8fd5",
+        "$.locations.c0bcf97f-f5c9-4a86-9768-9221f62d0502"
+      ]
+    },
+    {
+      "label": "Atlante Iberia S.L.",
+      "partyIds": [
+        "ATE"
+      ],
+      "canonicalByPartyId": [
+        "Atlante Iberia S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.06a4efb9-362d-4983-85fa-70f33fb71b5d",
+        "$.locations.0aa34b1d-9eba-4e3f-9460-2ed3dc727d83",
+        "$.locations.0aadc142-594d-4012-8c32-dc1d5bad4c7a"
+      ]
+    },
+    {
+      "label": "AUTOCARES DIPESA SL",
+      "partyIds": [
+        "DIP"
+      ],
+      "canonicalByPartyId": [
+        "AUTOCARES DIPESA SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.f30aeabb-4896-4b6c-a201-e0b2489972c8"
+      ]
+    },
+    {
+      "label": "AUTOMOVILES ARTAL, S.L.",
+      "partyIds": [
+        "928"
+      ],
+      "canonicalByPartyId": [
+        "AUTOMOVILES ARTAL, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.8f95c77c-8b19-4539-849f-50c7151cd814",
+        "$.locations.be8ffa38-2593-4384-9211-b1733ea0d9d5"
+      ]
+    },
+    {
+      "label": "Autos Pisa SL",
+      "partyIds": [
+        "925"
+      ],
+      "canonicalByPartyId": [
+        "Autos Pisa SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.207a2cb2-6b06-46e8-84d3-76e9bf803dd7",
+        "$.locations.a7db9f76-eea6-454f-866c-78115bbf1c84"
+      ]
+    },
+    {
+      "label": "AYUNTAMIENTO DE FELANITX",
+      "partyIds": [
+        "FEL"
+      ],
+      "canonicalByPartyId": [
+        "AYUNTAMIENTO DE FELANITX"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0e60be1c-1154-431f-ab2d-20672e26dd07",
+        "$.locations.16cff88e-d0e5-4d54-8e78-c57407fd1937",
+        "$.locations.1e1f7f00-7ef8-45e7-90f4-ae46898c9c64"
+      ]
+    },
+    {
+      "label": "AYUNTAMIENTO DE FONZ",
+      "partyIds": [
+        "FZ4"
+      ],
+      "canonicalByPartyId": [
+        "AYUNTAMIENTO DE FONZ"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.a3ec5556-ce82-44bf-b62a-ecb2deb36d76"
+      ]
+    },
+    {
+      "label": "AYUNTAMIENTO DE GUADALIX DE LA SIERRA",
+      "partyIds": [
+        "GDS"
+      ],
+      "canonicalByPartyId": [
+        "AYUNTAMIENTO DE GUADALIX DE LA SIERRA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.21d7d1e1-0e12-45d6-ba21-c81eb6b79fa3",
+        "$.locations.2fa5ecc3-e169-440a-80e1-bbcfdc6e9bc9",
+        "$.locations.f36e15cf-0399-4775-9e28-59fd901c6f8e"
+      ]
+    },
+    {
+      "label": "ayuntamiento de Navas del Rey",
+      "partyIds": [
+        "099"
+      ],
+      "canonicalByPartyId": [
+        "ayuntamiento de Navas del Rey"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.136ab104-2f85-48aa-975a-b309b78f5a5a"
+      ]
+    },
+    {
+      "label": "Ayuntamiento de Urkabustaiz",
+      "partyIds": [
+        "054"
+      ],
+      "canonicalByPartyId": [
+        "Ayuntamiento de Urkabustaiz"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.dd94087a-e5b6-4642-87ee-5700b35d62dc"
+      ]
+    },
+    {
+      "label": "Baix Ebre Innova SL",
+      "partyIds": [
+        "259"
+      ],
+      "canonicalByPartyId": [
+        "Baix Ebre Innova SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.9fcce058-e6c4-4c0f-9dfa-47e9779c7f84",
+        "$.locations.c533b332-d08d-4f00-a052-9d3d8f7666af",
+        "$.locations.dc80f605-dbca-4d86-85ee-e953bdffc3a2"
+      ]
+    },
+    {
+      "label": "BARCELONA DE SERVEIS MUNICIPALS, SA",
+      "partyIds": [
+        "BSM"
+      ],
+      "canonicalByPartyId": [
+        "BARCELONA DE SERVEIS MUNICIPALS, SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0c7ef890-0dfe-4758-9095-29eb4c288732",
+        "$.locations.103de83c-6634-470d-b837-558a57476e2c",
+        "$.locations.12978ef5-710c-4f40-a378-65f01342d117"
+      ]
+    },
+    {
+      "label": "Barter Mobility S.L.",
+      "partyIds": [
+        "BGO"
+      ],
+      "canonicalByPartyId": [
+        "Barter Mobility S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.d61cccc6-3989-4c90-908a-184f2f29a7c0"
+      ]
+    },
+    {
+      "label": "BEASAINGO UDALA",
+      "partyIds": [
+        "BEA"
+      ],
+      "canonicalByPartyId": [
+        "BEASAINGO UDALA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.6461c6eb-8b28-40f0-a9eb-543cc6f8c634"
+      ]
+    },
+    {
+      "label": "BONPREU, S.A.U.",
+      "partyIds": [
+        "BEM"
+      ],
+      "canonicalByPartyId": [
+        "BONPREU, S.A.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.00fb1062-a0bc-4445-a8e7-01af3bc371a5",
+        "$.locations.03edc4c6-4043-48be-a5cc-1ecb0a17dd7c",
+        "$.locations.05c6ee49-7049-4d1e-8c0d-95979227e795"
+      ]
+    },
+    {
+      "label": "C.C. LAS RAMBLAS CENTRO S.L.",
+      "partyIds": [
+        "CCR"
+      ],
+      "canonicalByPartyId": [
+        "C.C. LAS RAMBLAS CENTRO S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.52fd965c-d7ea-490f-bfa0-1a8763cbacf9"
+      ]
+    },
+    {
+      "label": "CENTROS COMERCIALES CARREFOUR SA",
+      "partyIds": [
+        "CRF"
+      ],
+      "canonicalByPartyId": [
+        "CENTROS COMERCIALES CARREFOUR SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.02937032-af13-4e97-94ec-1160e2150dcf",
+        "$.locations.0451155e-2dbf-4480-9901-4c3b09e91b19",
+        "$.locations.06526795-027a-4d3f-9261-8d24ebf43d7e"
+      ]
+    },
+    {
+      "label": "CHARG-ELECTRA SPAIN SL",
+      "partyIds": [
+        "ELC"
+      ],
+      "canonicalByPartyId": [
+        "CHARG-ELECTRA SPAIN SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.1b745574-5cd7-4667-beda-29d9528bcb30",
+        "$.locations.2a263060-baac-4de6-ba27-223769b9eb39",
+        "$.locations.3b025e53-a6cd-4b2a-b26c-3b30d2a9869b"
+      ]
+    },
+    {
+      "label": "Chargepoint",
+      "partyIds": [
+        "CPI"
+      ],
+      "canonicalByPartyId": [
+        "Chargepoint"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0e34cdb5-77e5-4cbe-89f8-c2be100170b8",
+        "$.locations.2eeeb68c-c241-459f-bfbf-d6b05ff57a60",
+        "$.locations.3e56a725-cf9c-4f4d-931a-538c1dbba250"
+      ]
+    },
+    {
+      "label": "CHARGEVITE ENERGY SLU",
+      "partyIds": [
+        "CHV"
+      ],
+      "canonicalByPartyId": [
+        "CHARGEVITE ENERGY SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.df123f85-5353-4ad0-b3e4-5ed12d8a005f"
+      ]
+    },
+    {
+      "label": "Charging Together Norte SL",
+      "partyIds": [
+        "CHT"
+      ],
+      "canonicalByPartyId": [
+        "Charging Together Norte SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.36ac78ec-e3db-43a5-9e11-ed5ca845be34",
+        "$.locations.61fbef63-aa22-404d-b549-12e1f4f9bcd1",
+        "$.locations.9139b355-baf4-4d97-9ea4-3482bfbb05b6"
+      ]
+    },
+    {
+      "label": "CHARGING TOGETHER SL",
+      "partyIds": [
+        "FCT"
+      ],
+      "canonicalByPartyId": [
+        "CHARGING TOGETHER SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.005938c8-d051-4347-9e4a-6ff084830f90",
+        "$.locations.019440ec-07fc-475e-8ff0-525e37aa979f",
+        "$.locations.01b40405-cf00-436b-b253-41cb07772055"
+      ]
+    },
+    {
+      "label": "CHELMONTE, SL",
+      "partyIds": [
+        "CH1"
+      ],
+      "canonicalByPartyId": [
+        "CHELMONTE, SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2fbfec81-5928-46ee-947f-e5cf2332de80",
+        "$.locations.bd9c8012-145b-4b4c-a3a1-38715b485a5a",
+        "$.locations.c3860df2-21b5-4e8a-a234-1ada270f26fa"
+      ]
+    },
+    {
+      "label": "Club Nàutic l'Escala",
+      "partyIds": [
+        "68C"
+      ],
+      "canonicalByPartyId": [
+        "Club Nàutic l'Escala"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0fdf9978-5fc7-47e8-8afe-c88b09f2061e",
+        "$.locations.743493ea-3fb8-4d42-b78e-32c1fbf6dfe6",
+        "$.locations.c3749317-9d34-48bb-a890-1edcae1d2955"
+      ]
+    },
+    {
+      "label": "COMPAÑIA GENERAL NAFTE, S.L.",
+      "partyIds": [
+        "B86"
+      ],
+      "canonicalByPartyId": [
+        "COMPAÑIA GENERAL NAFTE, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.5c8ed697-f9a4-4676-bec8-85ff65f228d7",
+        "$.locations.7b1469e9-3d4f-4b4b-b2f6-2e9031a6fb86"
+      ]
+    },
+    {
+      "label": "Comunidad de Bienes Aparcamientos Primero de Mayo",
+      "partyIds": [
+        "CBM"
+      ],
+      "canonicalByPartyId": [
+        "Comunidad de Bienes Aparcamientos Primero de Mayo"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.276d87fd-d5dd-4f2e-bfb2-c94ebb47593e"
+      ]
+    },
+    {
+      "label": "CONCELLO DE VEDRA",
+      "partyIds": [
+        "VDR"
+      ],
+      "canonicalByPartyId": [
+        "CONCELLO DE VEDRA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.5f6e4736-9de9-454d-81e9-6df598a716dd",
+        "$.locations.a4e4c667-8b2c-4039-9026-fcd7fc95c3ee"
+      ]
+    },
+    {
+      "label": "Consejo Insular de la Energía de Gran Canaria",
+      "partyIds": [
+        "MGC"
+      ],
+      "canonicalByPartyId": [
+        "Consejo Insular de la Energía de Gran Canaria"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.021a5850-9f3a-47e4-ab71-74e1edfdbea0",
+        "$.locations.0325f69e-6de6-4f75-a99c-112cb8e24c3f",
+        "$.locations.090a02ab-d593-4726-9d10-7058a902bf3f"
+      ]
+    },
+    {
+      "label": "Consell Insular de Menorca",
+      "partyIds": [
+        "CM3"
+      ],
+      "canonicalByPartyId": [
+        "Consell Insular de Menorca"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.3ddd7c10-8d2b-4971-8b06-81e32196614d",
+        "$.locations.aa57e8c1-be97-4d87-81cf-db808debe3dc",
+        "$.locations.ade4ba4f-cb9c-45fd-9304-b66a0da7143a"
+      ]
+    },
+    {
+      "label": "COSENTINO INDUSTRIAL, S.A.U.",
+      "partyIds": [
+        "CSN"
+      ],
+      "canonicalByPartyId": [
+        "COSENTINO INDUSTRIAL, S.A.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.f8f602b8-30a8-48b9-a7af-f1260ee073a8"
+      ]
+    },
+    {
+      "label": "COSTCO WHOLESALE SPAIN SLU",
+      "partyIds": [
+        "071"
+      ],
+      "canonicalByPartyId": [
+        "COSTCO WHOLESALE SPAIN SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.3898e463-35d3-457f-be98-7eff20f1bc33",
+        "$.locations.4a0ce431-83ac-448f-88d8-84900329977a",
+        "$.locations.5add4d1e-a1a6-48b0-998a-db46723c846e"
+      ]
+    },
+    {
+      "label": "COVES ENERGY SOLUTIONS SL",
+      "partyIds": [
+        "CES"
+      ],
+      "canonicalByPartyId": [
+        "COVES ENERGY SOLUTIONS SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.c085d0ee-19fc-4e16-b2a0-7d936f3fd229",
+        "$.locations.eb975120-a89f-4627-84a7-230d91045441",
+        "$.locations.f18df11f-b40c-41d9-883a-ba8daeecaae3"
+      ]
+    },
+    {
+      "label": "Darsen Motor S.L.",
+      "partyIds": [
+        "912"
+      ],
+      "canonicalByPartyId": [
+        "Darsen Motor S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.e93ca30b-036f-4d8a-930d-4359537944f6",
+        "$.locations.f4ac90e5-1c5d-4092-bb20-0bec3da3c613"
+      ]
+    },
+    {
+      "label": "Diputación Foral de Gipuzkoa",
+      "partyIds": [
+        "200"
+      ],
+      "canonicalByPartyId": [
+        "Diputación Foral de Gipuzkoa"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.050f270e-d8cb-432e-95ae-8c682fb85a3a",
+        "$.locations.0551aaa9-42d3-4e34-b30b-c879e302f6ff",
+        "$.locations.22aad571-8ae1-4396-abc1-116aba893aa7"
+      ]
+    },
+    {
+      "label": "DIRAN S.A.",
+      "partyIds": [
+        "DIR"
+      ],
+      "canonicalByPartyId": [
+        "DIRAN S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.09bb2159-1bc3-40d8-9d92-b71ff6d1cc6f"
+      ]
+    },
+    {
+      "label": "Ditec Automoviles Barcelona S.L.U.",
+      "partyIds": [
+        "916"
+      ],
+      "canonicalByPartyId": [
+        "Ditec Automoviles Barcelona S.L.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.4203079e-a563-4a2f-a70c-e99a9857601c",
+        "$.locations.7290b754-9592-4343-9445-5236769f0f08"
+      ]
+    },
+    {
+      "label": "Ditec Hanstein SA",
+      "partyIds": [
+        "924"
+      ],
+      "canonicalByPartyId": [
+        "Ditec Hanstein SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.495adfa5-cda2-4001-bd64-4b11925176cc",
+        "$.locations.511abada-0a64-4c1a-aae5-0a789eed88e5",
+        "$.locations.5aa272ef-6fa6-4e8f-a4bc-ae3c6e54a318"
+      ]
+    },
+    {
+      "label": "DORSOL, SAU",
+      "partyIds": [
+        "DRS"
+      ],
+      "canonicalByPartyId": [
+        "DORSOL, SAU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.77de6904-cb15-421e-8f2a-55d16f5190b5"
+      ]
+    },
+    {
+      "label": "DRIVECO ESPAÑA S.L.",
+      "partyIds": [
+        "DRV"
+      ],
+      "canonicalByPartyId": [
+        "DRIVECO ESPAÑA S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.930efdc8-397d-4874-a1fb-fa21f12b0a07",
+        "$.locations.968f9a1c-70f2-4399-9aca-785afe4a926b"
+      ]
+    },
+    {
+      "label": "EDISON NEXT SPAIN SLU",
+      "partyIds": [
+        "EDX"
+      ],
+      "canonicalByPartyId": [
+        "EDISON NEXT SPAIN SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0a722433-d8a4-4efa-bd7e-5c2819fd7e8e",
+        "$.locations.7b71350c-0834-46a0-9508-dfb74c935ef3",
+        "$.locations.9ba20ea9-87df-4407-901e-d2233feccd96"
+      ]
+    },
+    {
+      "label": "EDP CLIENTES SAU",
+      "partyIds": [
+        "GFX"
+      ],
+      "canonicalByPartyId": [
+        "EDP CLIENTES SAU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.02fab015-9d53-4123-80fe-9645cc6dfd89",
+        "$.locations.0377eda9-8f4b-4951-b8e4-b287c79848fb",
+        "$.locations.0391b1ab-0623-4693-b3ad-069b0c2ae444"
+      ]
+    },
+    {
+      "label": "EFICIENCIA Y SERVICIOS RENOVABLES SL",
+      "partyIds": [
+        "SER"
+      ],
+      "canonicalByPartyId": [
+        "EFICIENCIA Y SERVICIOS RENOVABLES SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2847c271-3a7a-4537-b8fc-2ded2a55dc32",
+        "$.locations.6f1d074d-072f-4b4f-849b-b52d86d912ee"
+      ]
+    },
+    {
+      "label": "ELECSUM FOTOVOLTAICA, S.L.U.",
+      "partyIds": [
+        "EL5"
+      ],
+      "canonicalByPartyId": [
+        "ELECSUM FOTOVOLTAICA, S.L.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.25481968-e0a1-4167-95b3-31669fb9b33a",
+        "$.locations.3190f3fd-50fa-49f9-929c-7ec463b56e1a",
+        "$.locations.325b7db8-f1d3-47ea-ba31-efd5679b338d"
+      ]
+    },
+    {
+      "label": "Electrica Sollerense SA",
+      "partyIds": [
+        "SOL"
+      ],
+      "canonicalByPartyId": [
+        "Electrica Sollerense SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.16078936-f645-4233-9ed7-4f94cd93a81b",
+        "$.locations.38f6f83d-7acc-4623-b57d-5422c7067d51",
+        "$.locations.5c979254-77d0-4a00-9228-89b5d985b969"
+      ]
+    },
+    {
+      "label": "ELECTROMAPS SL",
+      "partyIds": [
+        "EMP"
+      ],
+      "canonicalByPartyId": [
+        "ELECTROMAPS SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0013a3cf-5523-4391-95d1-775137d6ce23",
+        "$.locations.01229512-803e-401e-86bd-8b1fa75f5fe8",
+        "$.locations.01308310-a9a9-4360-8afd-4ae293fc56bd"
+      ]
+    },
+    {
+      "label": "EMAYA, S.A.",
+      "partyIds": [
+        "EMA"
+      ],
+      "canonicalByPartyId": [
+        "EMAYA, S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.00284519-655e-42da-918f-a9a267f58194",
+        "$.locations.0431d8a8-0254-4822-97e4-ff3054626f51",
+        "$.locations.048065d0-f64f-4b1f-9018-ae519c323b1e"
+      ]
+    },
+    {
+      "label": "Emerix Systems S.L.",
+      "partyIds": [
+        "MRX"
+      ],
+      "canonicalByPartyId": [
+        "Emerix Systems S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.d0507d52-a7a8-4780-9924-b9d5f262cb2a",
+        "$.locations.ebafcc75-8d35-4160-a9c4-976d561b8428"
+      ]
+    },
+    {
+      "label": "Emovili Fast, S.L.",
+      "partyIds": [
+        "EMO"
+      ],
+      "canonicalByPartyId": [
+        "Emovili Fast, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.01fb974a-cf02-43bf-b53f-c958847528f1",
+        "$.locations.122eb8ba-0c22-4e73-b17f-a03c0b9cc752",
+        "$.locations.1a2ffa79-5cae-4538-b341-75483fb8f1b2"
+      ]
+    },
+    {
+      "label": "Empresa Municipal de Transportes de Madrid, S. A.",
+      "partyIds": [
+        "EMT"
+      ],
+      "canonicalByPartyId": [
+        "Empresa Municipal de Transportes de Madrid, S. A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0a730652-c14d-4ead-b3c7-8e8cb7bb26c9",
+        "$.locations.221700e3-961f-44e2-bbae-07eeaeb3845b",
+        "$.locations.285afc5e-225f-4e91-8236-57e0e596a1c4"
+      ]
+    },
+    {
+      "label": "ENDESA X WAY, S.L.",
+      "partyIds": [
+        "ESX"
+      ],
+      "canonicalByPartyId": [
+        "ENDESA X WAY, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.00164897-1f94-444d-a051-b78c2b9ff40a",
+        "$.locations.001bf5a2-fad3-4af8-86a2-998f5942a506",
+        "$.locations.0055b6c6-ddc9-4ed1-b888-2209414fb54f"
+      ]
+    },
+    {
+      "label": "ENERGEA CONSULTING Y ASESORES SL",
+      "partyIds": [
+        "ENE"
+      ],
+      "canonicalByPartyId": [
+        "ENERGEA CONSULTING Y ASESORES SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.07b66938-4905-4f84-9464-1380a89863af",
+        "$.locations.14944744-bf81-4938-8e0c-679078ef60a3",
+        "$.locations.149ac93f-63ee-4722-87cc-3cb432110ada"
+      ]
+    },
+    {
+      "label": "Energía Distribuida del Norte S.A.",
+      "partyIds": [
+        "CEL"
+      ],
+      "canonicalByPartyId": [
+        "Energía Distribuida del Norte S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0256dd72-4785-43ac-b51d-cb59206295d1",
+        "$.locations.05314e2d-a488-4d01-8c92-b704afe6b221",
+        "$.locations.0c046746-61f1-41cb-a2e7-d4ae5ed9579e"
+      ]
+    },
+    {
+      "label": "EPRESA ENERGIA SA",
+      "partyIds": [
+        "EPR"
+      ],
+      "canonicalByPartyId": [
+        "EPRESA ENERGIA SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.ff145c40-fde0-43e1-86dd-4737bd46b0f0"
+      ]
+    },
+    {
+      "label": "ERANOVUM E-MOBILITY, S.L.",
+      "partyIds": [
+        "ERA"
+      ],
+      "canonicalByPartyId": [
+        "ERANOVUM E-MOBILITY, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0038502c-ba6b-42bb-87cb-a6a55ede519a",
+        "$.locations.01301e50-6687-4665-b2ef-93b06f0390bc",
+        "$.locations.017f4f22-f327-479b-b9ac-c2b3fda1a43b"
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO AYALA S.L.",
+      "partyIds": [
+        "AYA"
+      ],
+      "canonicalByPartyId": [
+        "ESTACION DE SERVICIO AYALA S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0f42a0f1-589f-4ded-bd37-a7b8b57a05b3"
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO LAPIDO SLU",
+      "partyIds": [
+        "357"
+      ],
+      "canonicalByPartyId": [
+        "ESTACION DE SERVICIO LAPIDO SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.3bdd3df0-bd55-4169-a292-8f04343ab670"
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO LOW COST 2015, S.L.",
+      "partyIds": [
+        "728"
+      ],
+      "canonicalByPartyId": [
+        "ESTACION DE SERVICIO LOW COST 2015, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.625c23ae-142e-4b01-87f2-7bb355db99d8"
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO VILLAROSA S.A.",
+      "partyIds": [
+        "VIL"
+      ],
+      "canonicalByPartyId": [
+        "ESTACION DE SERVICIO VILLAROSA S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.bf98707f-8ba7-4e2a-8934-3aff07c04a70"
+      ]
+    },
+    {
+      "label": "ESTACION SERVICIO JAIME I, S.A.",
+      "partyIds": [
+        "JA1"
+      ],
+      "canonicalByPartyId": [
+        "ESTACION SERVICIO JAIME I, S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0f2557d6-2c00-4d10-bcfa-d41939e65bec",
+        "$.locations.25ab6ba4-135f-4866-af06-3232145141d0",
+        "$.locations.9910d2e2-3bbd-4e55-8f12-064b6455d2a7"
+      ]
+    },
+    {
+      "label": "ESTACIONAMIENTOS LUCENSES SL",
+      "partyIds": [
+        "271"
+      ],
+      "canonicalByPartyId": [
+        "ESTACIONAMIENTOS LUCENSES SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.086a42a7-1440-450a-a900-c006bc3c6dcc"
+      ]
+    },
+    {
+      "label": "Etecnic Movilidad Electrica, SRL",
+      "partyIds": [
+        "ETE"
+      ],
+      "canonicalByPartyId": [
+        "Etecnic Movilidad Electrica, SRL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.009c07af-0958-40a0-83f1-477d1fcff51b",
+        "$.locations.00aaef25-bf45-4ea9-93f0-dd0e2925945b",
+        "$.locations.00ad689d-a34a-4347-9858-13fd988eaf18"
+      ]
+    },
+    {
+      "label": "EXPLOTACIONES INDUSTRIALES LOS RODEOS,S.L.",
+      "partyIds": [
+        "220"
+      ],
+      "canonicalByPartyId": [
+        "EXPLOTACIONES INDUSTRIALES LOS RODEOS,S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.f2ae57cd-24af-441d-bdd4-6a5948a8c237"
+      ]
+    },
+    {
+      "label": "Explotaciones IOndustriales Sur de Tenerife SL",
+      "partyIds": [
+        "275"
+      ],
+      "canonicalByPartyId": [
+        "Explotaciones IOndustriales Sur de Tenerife SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.5732ce85-b5d0-497c-9ca5-634bb79fcbff"
+      ]
+    },
+    {
+      "label": "FASTNED ESPAÑA, S.L.",
+      "partyIds": [
+        "FAS"
+      ],
+      "canonicalByPartyId": [
+        "FASTNED ESPAÑA, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.47e73508-89b8-42a0-b3ec-15b4d16b49d6",
+        "$.locations.afc5eb6d-54a3-4062-8171-1b250684554a"
+      ]
+    },
+    {
+      "label": "FENIE ENERGIA, SA",
+      "partyIds": [
+        "FEN"
+      ],
+      "canonicalByPartyId": [
+        "FENIE ENERGIA, SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.013a7ad4-cf5f-4bf5-b853-7915c99ef705",
+        "$.locations.01b77712-2147-4b4c-8bdc-10f284fb9b9a",
+        "$.locations.02b7d3bb-85c6-4790-a255-5614e2a66bc2"
+      ]
+    },
+    {
+      "label": "FERROVIAL CONSTRUCCIÓN S.A.",
+      "partyIds": [
+        "FES"
+      ],
+      "canonicalByPartyId": [
+        "FERROVIAL CONSTRUCCIÓN S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0ad39e14-8c1e-490b-b483-c17f757b05be",
+        "$.locations.137e7910-d4e7-4b10-845d-45e1297c5857",
+        "$.locations.13fcfcef-e094-449f-910b-147e053e436f"
+      ]
+    },
+    {
+      "label": "FERVI, SL.",
+      "partyIds": [
+        "333"
+      ],
+      "canonicalByPartyId": [
+        "FERVI, SL."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.fa13ed85-1c7a-4f43-a2e5-d1c409761e9b"
+      ]
+    },
+    {
+      "label": "FUNDACIO BALEAR D'INNOVACIÓ I TECNOLOGIA",
+      "partyIds": [
+        "FB1"
+      ],
+      "canonicalByPartyId": [
+        "FUNDACIO BALEAR D'INNOVACIÓ I TECNOLOGIA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.a825f378-8b61-4c08-9692-8e616b436428"
+      ]
+    },
+    {
+      "label": "FUNDACION PAIDEIA GALIZA",
+      "partyIds": [
+        "910"
+      ],
+      "canonicalByPartyId": [
+        "FUNDACION PAIDEIA GALIZA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.d283b8b8-ff28-4fe3-8ea2-99ec0414b49d"
+      ]
+    },
+    {
+      "label": "Gaia Green Tech S.L.",
+      "partyIds": [
+        "GAI"
+      ],
+      "canonicalByPartyId": [
+        "Gaia Green Tech S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.25f4a116-1f9c-4277-b6d0-fd9efae585a1",
+        "$.locations.41f64fa2-ecad-4930-9414-448a5e07c671",
+        "$.locations.b6cd5143-2437-42d3-81a2-fcc9cc509ed6"
+      ]
+    },
+    {
+      "label": "Galp Energía España, S.A.U.",
+      "partyIds": [
+        "DLP"
+      ],
+      "canonicalByPartyId": [
+        "Galp Energía España, S.A.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0218fc5a-7de5-428f-8972-655e2fcdd132",
+        "$.locations.03a1013d-775f-4dee-bb8b-70c0a7cbd3c1",
+        "$.locations.03c217c7-2559-468d-b531-8cb58dff0c3e"
+      ]
+    },
+    {
+      "label": "GESTION INTELIGENTE DE CARGAS S.L.",
+      "partyIds": [
+        "GIC"
+      ],
+      "canonicalByPartyId": [
+        "GESTION INTELIGENTE DE CARGAS S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.068a6227-b64f-45c1-bb30-cefc1438fd08",
+        "$.locations.0c806344-7ce7-4fa5-b225-1884089a95d7",
+        "$.locations.1bd8e0d9-3b2d-406e-aef1-5ca77b98da29"
+      ]
+    },
+    {
+      "label": "Girona Motor SA",
+      "partyIds": [
+        "918"
+      ],
+      "canonicalByPartyId": [
+        "Girona Motor SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.16aeb68f-16b9-41af-8b8c-00a56a2f04d6",
+        "$.locations.47c273f3-c14b-4db2-a916-99130baf438e"
+      ]
+    },
+    {
+      "label": "GRUP SUPECO MAXOR SL",
+      "partyIds": [
+        "GSM"
+      ],
+      "canonicalByPartyId": [
+        "GRUP SUPECO MAXOR SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.6f72435d-79d8-4ae8-a5ef-4cfc328d0695"
+      ]
+    },
+    {
+      "label": "H2PLT,S.A.",
+      "partyIds": [
+        "H2P"
+      ],
+      "canonicalByPartyId": [
+        "H2PLT,S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.c300f8e4-9d86-41cd-9137-c80e06e68f1e"
+      ]
+    },
+    {
+      "label": "HERNAZOS GESTIÓN S.L",
+      "partyIds": [
+        "HDT"
+      ],
+      "canonicalByPartyId": [
+        "HERNAZOS GESTIÓN S.L"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.8cee7e26-fada-4930-b13a-1ce266f9c895"
+      ]
+    },
+    {
+      "label": "HOTEL CIUDAD DE ALCAÑIZ SA",
+      "partyIds": [
+        "A44"
+      ],
+      "canonicalByPartyId": [
+        "HOTEL CIUDAD DE ALCAÑIZ SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.89f31327-0541-4f14-8930-ac56166526f8"
+      ]
+    },
+    {
+      "label": "HOTEL PEDRO I DE ARAGON SL",
+      "partyIds": [
+        "B22"
+      ],
+      "canonicalByPartyId": [
+        "HOTEL PEDRO I DE ARAGON SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.137bd713-b9df-4cf2-9efc-c4c74b8602d0"
+      ]
+    },
+    {
+      "label": "HOTEL PUENTE DE LA TOJA S.L.",
+      "partyIds": [
+        "PLT"
+      ],
+      "canonicalByPartyId": [
+        "HOTEL PUENTE DE LA TOJA S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.ab63d4d1-39a8-42a1-88ea-c41669c01744"
+      ]
+    },
+    {
+      "label": "HOTELES SOL DEL SUR, SA",
+      "partyIds": [
+        "HSS"
+      ],
+      "canonicalByPartyId": [
+        "HOTELES SOL DEL SUR, SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.e9fcb446-a7b4-4caa-88b4-baf2399bfbe0"
+      ]
+    },
+    {
+      "label": "IBERDROLA CLIENTES S.A.U",
+      "partyIds": [
+        "IBD"
+      ],
+      "canonicalByPartyId": [
+        "IBERDROLA CLIENTES S.A.U"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.002bf62d-c368-4261-972a-89f5a12fd38c",
+        "$.locations.0054a05d-cc2b-49c6-b224-f2cc0f3fcd97",
+        "$.locations.005b13a4-af67-4b17-8213-f1b1ae57ed11"
+      ]
+    },
+    {
+      "label": "Ibérica de Tecnología y Servicios de Automoción, S.L.",
+      "partyIds": [
+        "914"
+      ],
+      "canonicalByPartyId": [
+        "Ibérica de Tecnología y Servicios de Automoción, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.077b5539-1d68-4b44-9e7f-d2f522e176c1",
+        "$.locations.435e7462-8bc0-43d0-9f8e-c1b2d6ef0b6f"
+      ]
+    },
+    {
+      "label": "Ingenieria de Recarga SLU",
+      "partyIds": [
+        "686"
+      ],
+      "canonicalByPartyId": [
+        "Ingenieria de Recarga SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.051122bd-51a6-4a06-867c-bbd5c1a94394",
+        "$.locations.10a1d88a-c755-4dd8-8b70-21d3767b2935"
+      ]
+    },
+    {
+      "label": "INMOMEDIC 09, S.L.U.",
+      "partyIds": [
+        "I09"
+      ],
+      "canonicalByPartyId": [
+        "INMOMEDIC 09, S.L.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.92280f11-8fa4-45bc-a2e6-e0a53e2940c5"
+      ]
+    },
+    {
+      "label": "InstaVolt ES",
+      "partyIds": [
+        "ICP"
+      ],
+      "canonicalByPartyId": [
+        "InstaVolt ES"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.16584f2d-0f29-4786-9046-276332cfe1d9",
+        "$.locations.40ee74fb-ce66-4c65-b114-74c85081ca1f",
+        "$.locations.62ef4f6e-2203-4461-9f63-3d233c105d4e"
+      ]
+    },
+    {
+      "label": "Inversiones Pascual",
+      "partyIds": [
+        "HVR"
+      ],
+      "canonicalByPartyId": [
+        "Inversiones Pascual"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2fa40274-f27b-498c-b93a-520e702cbeb4",
+        "$.locations.3c626c32-e536-47c5-b0fa-f5f57bbba523",
+        "$.locations.5e6a3705-0848-4533-b9d6-9bc478525ff3"
+      ]
+    },
+    {
+      "label": "INVESMORAZO S.L",
+      "partyIds": [
+        "IPM"
+      ],
+      "canonicalByPartyId": [
+        "INVESMORAZO S.L"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.b3082290-9777-434c-906d-f34ac1c5150b"
+      ]
+    },
+    {
+      "label": "ION SMART ENERGY 2000 SL",
+      "partyIds": [
+        "CRE"
+      ],
+      "canonicalByPartyId": [
+        "ION SMART ENERGY 2000 SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0d4fa5fb-71a1-405c-b797-ed65cc557bad",
+        "$.locations.1f6516a3-1ea9-400e-85de-cf26abf465cc",
+        "$.locations.2a86e78e-a525-4496-af63-41face63e7b1"
+      ]
+    },
+    {
+      "label": "IONITY GmbH Sucursal en España",
+      "partyIds": [
+        "IOY"
+      ],
+      "canonicalByPartyId": [
+        "IONITY GmbH Sucursal en España"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.020939ec-211f-443c-8499-01cbc05c6ec0",
+        "$.locations.04aa2477-6d12-4b63-b1f9-2eaa710f6b6d",
+        "$.locations.068cee6d-39ea-40b0-8952-f831c0403aee"
+      ]
+    },
+    {
+      "label": "J. REDONDO, S.L.",
+      "partyIds": [
+        "JR1"
+      ],
+      "canonicalByPartyId": [
+        "J. REDONDO, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.00d76ab2-be25-4cba-821d-7626c10ae6b6"
+      ]
+    },
+    {
+      "label": "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+      "partyIds": [
+        "ALT"
+      ],
+      "canonicalByPartyId": [
+        "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.bf8057fb-3232-4eec-bff5-b29bc66b9c25"
+      ]
+    },
+    {
+      "label": "Jarada Motor, S.L.",
+      "partyIds": [
+        "919"
+      ],
+      "canonicalByPartyId": [
+        "Jarada Motor, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.37350f23-2120-42fa-97a0-b21b78c805a9",
+        "$.locations.6c7bbac7-9b79-4020-9ed7-62029f29c2a2"
+      ]
+    },
+    {
+      "label": "JARDINES LA TEJERA, S.A.U.",
+      "partyIds": [
+        "TJR"
+      ],
+      "canonicalByPartyId": [
+        "JARDINES LA TEJERA, S.A.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.1b20525e-9ee2-4a4d-ba7d-c941f86c454a"
+      ]
+    },
+    {
+      "label": "LAG OLEIROS SLU",
+      "partyIds": [
+        "010"
+      ],
+      "canonicalByPartyId": [
+        "LAG OLEIROS SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.418ffa3b-e724-41d6-9ee8-1d48d17a524d"
+      ]
+    },
+    {
+      "label": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+      "partyIds": [
+        "LCG"
+      ],
+      "canonicalByPartyId": [
+        "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.9f47021e-b7fe-4eda-9a14-c146368137fc"
+      ]
+    },
+    {
+      "label": "MAKSU ESPAÑA SL",
+      "partyIds": [
+        "EPK"
+      ],
+      "canonicalByPartyId": [
+        "MAKSU ESPAÑA SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.066bce24-eebe-4028-babc-8bbfde33f369",
+        "$.locations.07ad4aed-bf5f-43dc-9f7c-deffd216cbe7",
+        "$.locations.0a4f0cf9-1833-4357-8aeb-e5f93ac505cb"
+      ]
+    },
+    {
+      "label": "Marbella Premium SL",
+      "partyIds": [
+        "922"
+      ],
+      "canonicalByPartyId": [
+        "Marbella Premium SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.8e48c4dd-1461-49dc-ac7d-24c6ab55e3c6",
+        "$.locations.f3186544-e8a9-42e4-a504-fa705f9b7b3f"
+      ]
+    },
+    {
+      "label": "MED PLAYA MANAGEMENT, SLU",
+      "partyIds": [
+        "MPM"
+      ],
+      "canonicalByPartyId": [
+        "MED PLAYA MANAGEMENT, SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.6a124994-b202-4a6f-88e4-2273b2da1c6f"
+      ]
+    },
+    {
+      "label": "MOEVE COMMERCIAL, SAU",
+      "partyIds": [
+        "MOE"
+      ],
+      "canonicalByPartyId": [
+        "MOEVE COMMERCIAL, SAU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.010825c0-ed9c-4651-88cf-f0016e892a37",
+        "$.locations.01b04054-4d64-476a-baec-eaa9a95ebfa0",
+        "$.locations.01c52d8f-6f2d-4d6b-ac10-59e0460f6e02"
+      ]
+    },
+    {
+      "label": "Motor Box Mallorca SL",
+      "partyIds": [
+        "915"
+      ],
+      "canonicalByPartyId": [
+        "Motor Box Mallorca SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2b2850c7-5b3f-44fe-a45a-c5ec59beb632",
+        "$.locations.7852c850-3b2d-4cca-a4b8-21cd3b23b10f"
+      ]
+    },
+    {
+      "label": "Moya Estaciones Electricas SL",
+      "partyIds": [
+        "MOY"
+      ],
+      "canonicalByPartyId": [
+        "Moya Estaciones Electricas SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.d6e29b4b-3159-4ede-a272-1a0cbe0ea540"
+      ]
+    },
+    {
+      "label": "Naturgy Nuevas Energías, SLU",
+      "partyIds": [
+        "NTG"
+      ],
+      "canonicalByPartyId": [
+        "Naturgy Nuevas Energías, SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.03934349-84d9-49f8-90ee-ff3d2ba657bf",
+        "$.locations.04b77d61-7c50-4351-b5fb-97e7362061e7",
+        "$.locations.054b47f9-2359-46a8-a3c4-e3d9a8a1fc96"
+      ]
+    },
+    {
+      "label": "OESTE SOLUCIONES ENERGETICAS, S.L.",
+      "partyIds": [
+        "OSE"
+      ],
+      "canonicalByPartyId": [
+        "OESTE SOLUCIONES ENERGETICAS, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.027576c5-b850-4e8e-87ae-c211bf7f048f",
+        "$.locations.0ecd7b57-a46c-4599-961c-273c2c1edc19",
+        "$.locations.16557aca-8afd-4c24-823b-3aae5510f7af"
+      ]
+    },
+    {
+      "label": "PARKING MOGAN SA",
+      "partyIds": [
+        "PMO"
+      ],
+      "canonicalByPartyId": [
+        "PARKING MOGAN SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.baca7482-8747-41d0-b762-14fe729453c6"
+      ]
+    },
+    {
+      "label": "PAVAPARK MOVILIDAD SL",
+      "partyIds": [
+        "PAV"
+      ],
+      "canonicalByPartyId": [
+        "PAVAPARK MOVILIDAD SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0fac9c45-d319-47f0-aa46-25cd7d3a12a1",
+        "$.locations.122f8269-364a-4d37-a030-643712554db5",
+        "$.locations.219c6691-4aca-4548-834c-7fae4c40a450"
+      ]
+    },
+    {
+      "label": "PETREM DISTRIBUCIO SA",
+      "partyIds": [
+        "PTM"
+      ],
+      "canonicalByPartyId": [
+        "PETREM DISTRIBUCIO SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.38ac9836-1272-4bd1-bec7-fa15f4877a27"
+      ]
+    },
+    {
+      "label": "PETRO PALOL, S.L.",
+      "partyIds": [
+        "843"
+      ],
+      "canonicalByPartyId": [
+        "PETRO PALOL, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.2e30164c-2629-4534-89af-0e68dd68968c"
+      ]
+    },
+    {
+      "label": "PLENOIL CANARIAS, S.L.U.",
+      "partyIds": [
+        "PLC"
+      ],
+      "canonicalByPartyId": [
+        "PLENOIL CANARIAS, S.L.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0474d657-ab9d-435b-91d5-c644ec1f7cdd",
+        "$.locations.0e59c660-8a80-419c-b212-e4dbc613f86d",
+        "$.locations.2ac8f44e-b87d-4f5a-9a9b-6145f865b2ee"
+      ]
+    },
+    {
+      "label": "PLENOIL, S.L.",
+      "partyIds": [
+        "PLE"
+      ],
+      "canonicalByPartyId": [
+        "PLENOIL, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.015308d5-2c32-4281-af29-a4f425c558c1",
+        "$.locations.01d07084-1362-4d63-b3d7-c57b2c23a365",
+        "$.locations.02fc38a1-5e98-4e0d-8291-319458e52024"
+      ]
+    },
+    {
+      "label": "PORSAMADRID, S.L.",
+      "partyIds": [
+        "920"
+      ],
+      "canonicalByPartyId": [
+        "PORSAMADRID, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.537e3696-2dd6-41eb-b64c-b573a0136dcc",
+        "$.locations.62fe27af-72a5-4c90-9c4f-0acaae319e67",
+        "$.locations.7b0b8c0b-ebb9-4a06-b0a8-cf021ffb13e8"
+      ]
+    },
+    {
+      "label": "Porsatecnic S.L.",
+      "partyIds": [
+        "926"
+      ],
+      "canonicalByPartyId": [
+        "Porsatecnic S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.1395e698-5f92-4446-9fb2-49eab3ad93e1",
+        "$.locations.fd38fe24-9b43-4de4-be47-e8be98ae7576"
+      ]
+    },
+    {
+      "label": "Powergo Public SL",
+      "partyIds": [
+        "PGO"
+      ],
+      "canonicalByPartyId": [
+        "Powergo Public SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.21cffe6b-22f5-467e-be4a-87f284659493",
+        "$.locations.3a085d1e-7b96-4075-bb9f-6f843cc0f5f2",
+        "$.locations.4b632a2a-d292-4369-880c-962bac65a319"
+      ]
+    },
+    {
+      "label": "Prio Recharge Sl.",
+      "partyIds": [
+        "PRR"
+      ],
+      "canonicalByPartyId": [
+        "Prio Recharge Sl."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.029d99b9-4550-4e68-92de-683fb75395aa",
+        "$.locations.030e45ad-1305-4ce2-b288-0ea394b728d3",
+        "$.locations.04e6e537-df83-4b07-80e1-2cf829cae0e0"
+      ]
+    },
+    {
+      "label": "Punto Recargas SL",
+      "partyIds": [
+        "PWH"
+      ],
+      "canonicalByPartyId": [
+        "Punto Recargas SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0123fc0c-f7ee-49e5-b17d-9507719c01ee",
+        "$.locations.017ef738-b5e9-411e-b492-79c9092efe15",
+        "$.locations.01bbb8b2-ee05-44ec-9e90-4bef28616b23"
+      ]
+    },
+    {
+      "label": "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
+      "partyIds": [
+        "IPK"
+      ],
+      "canonicalByPartyId": [
+        "P‑APP & WEB SERVICIOS DIGITALES S.L.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.06af257c-d81a-4efa-a6c7-b12da16d42f8",
+        "$.locations.07d55471-efd8-4851-a1ab-fa320818a267",
+        "$.locations.0b508857-91e6-4839-bd39-b19a1d130f35"
+      ]
+    },
+    {
+      "label": "QWELLO España SL",
+      "partyIds": [
+        "AEQ"
+      ],
+      "canonicalByPartyId": [
+        "QWELLO España SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.02b74aa0-b363-4019-9697-87478f8d22e1",
+        "$.locations.0443966f-e0a9-4742-8c09-56d9f136e9b4",
+        "$.locations.065ef8f2-2fac-4135-b679-160932f89948"
+      ]
+    },
+    {
+      "label": "REMO SUSTAINABLE MOBILITY S.L",
+      "partyIds": [
+        "RSM"
+      ],
+      "canonicalByPartyId": [
+        "REMO SUSTAINABLE MOBILITY S.L"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.01702d4f-1b5b-4ae4-9223-d888d3548eaf",
+        "$.locations.08081063-c0b8-4cd8-bfd8-fdfb429ba001",
+        "$.locations.089b3dbb-2023-4b9b-b058-c376b238f8c9"
+      ]
+    },
+    {
+      "label": "REPSOL SOLUCIONES ENERGÉTICAS SA",
+      "partyIds": [
+        "REP"
+      ],
+      "canonicalByPartyId": [
+        "REPSOL SOLUCIONES ENERGÉTICAS SA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0008eb32-d6c0-4485-a41f-1d81566db05b",
+        "$.locations.00518e96-7eee-4e50-827a-e82a0c9af445",
+        "$.locations.006e2b3a-9fd4-4ca2-a3f1-fac16242464b"
+      ]
+    },
+    {
+      "label": "SCL AGROPIENSO F22009468",
+      "partyIds": [
+        "F22"
+      ],
+      "canonicalByPartyId": [
+        "SCL AGROPIENSO F22009468"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.9e2192cf-c702-4099-8034-9024bae192cd"
+      ]
+    },
+    {
+      "label": "SERVEIS FERROVIARIS DE MALLORCA",
+      "partyIds": [
+        "SFM"
+      ],
+      "canonicalByPartyId": [
+        "SERVEIS FERROVIARIS DE MALLORCA"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.90150403-af6b-4a3e-9920-ce79984dca77"
+      ]
+    },
+    {
+      "label": "SERVICIOS PUENTE LIÑARES SL",
+      "partyIds": [
+        "SPL"
+      ],
+      "canonicalByPartyId": [
+        "SERVICIOS PUENTE LIÑARES SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.556d2e93-9c98-45c3-b6c5-1c66e33f4ad4"
+      ]
+    },
+    {
+      "label": "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+      "partyIds": [
+        "TX1"
+      ],
+      "canonicalByPartyId": [
+        "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.ae812bc0-9bae-41b0-a338-44992a129bd7"
+      ]
+    },
+    {
+      "label": "Tesla Spain SLU",
+      "partyIds": [
+        "TSL"
+      ],
+      "canonicalByPartyId": [
+        "Tesla Spain SLU"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.0349cb71-8e13-4e7a-9b85-1cc653f1b9a0",
+        "$.locations.06318b00-419c-4eea-a173-596816d4b7c3",
+        "$.locations.07d1c3d2-1bea-47b1-aff1-c731a662f64c"
+      ]
+    },
+    {
+      "label": "The F Charging Espana S.L.U.",
+      "partyIds": [
+        "PWY"
+      ],
+      "canonicalByPartyId": [
+        "The F Charging Espana S.L.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.07ab6e8a-8828-4b60-8c43-1fc1f9d51bf6",
+        "$.locations.261c7069-6e60-4bee-92c6-60ee259e12b8",
+        "$.locations.3092fc3b-c511-46e3-afca-0167fb28b4bf"
+      ]
+    },
+    {
+      "label": "Torrecillas Serna, S.A.",
+      "partyIds": [
+        "923"
+      ],
+      "canonicalByPartyId": [
+        "Torrecillas Serna, S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.dddce2e1-752a-4b54-bd74-efca06d68c12",
+        "$.locations.f2ec15e6-343c-4eed-861a-f7f5da5cbc1e"
+      ]
+    },
+    {
+      "label": "Totalenergies Marketing España, S.A.U.",
+      "partyIds": [
+        "TCB"
+      ],
+      "canonicalByPartyId": [
+        "Totalenergies Marketing España, S.A.U."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.00262546-1919-438c-b762-3872b4dec68b",
+        "$.locations.00e1b922-da35-4bfc-bc3a-08633974678b",
+        "$.locations.034b2795-d9ea-412e-a7e6-4eedd2708874"
+      ]
+    },
+    {
+      "label": "TRANSPORTES PENADES E HIJOS SL",
+      "partyIds": [
+        "B05"
+      ],
+      "canonicalByPartyId": [
+        "TRANSPORTES PENADES E HIJOS SL"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.dff2999a-4053-498b-9632-5d37343ea786"
+      ]
+    },
+    {
+      "label": "Tuwyncar Sport S.L.",
+      "partyIds": [
+        "913"
+      ],
+      "canonicalByPartyId": [
+        "Tuwyncar Sport S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.af050e24-b810-4f14-ba71-0a5c5e41517c",
+        "$.locations.c46e6251-0ba7-4c8e-9e39-be625914b331"
+      ]
+    },
+    {
+      "label": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+      "partyIds": [
+        "UMH"
+      ],
+      "canonicalByPartyId": [
+        "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE"
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.072da587-aaa7-4b1f-b14c-551222c3ba88",
+        "$.locations.22d00179-93e2-4a75-9d4a-59868fdefb2a",
+        "$.locations.465ff9c8-cc50-4fb6-93de-d4c89f8c5011"
+      ]
+    },
+    {
+      "label": "Wenea Services Spain, S.L.",
+      "partyIds": [
+        "WEN"
+      ],
+      "canonicalByPartyId": [
+        "Wenea Services Spain, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.01c20d00-ca80-4dc6-babb-a9f6a891434a",
+        "$.locations.02370a31-491d-404c-948a-153928f5258d",
+        "$.locations.062f9da2-2361-4d4d-92fd-bbdc46c15b5a"
+      ]
+    },
+    {
+      "label": "ZERO CARBON EMOBILITY, S.L.",
+      "partyIds": [
+        "ZCN"
+      ],
+      "canonicalByPartyId": [
+        "ZERO CARBON EMOBILITY, S.L."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.00b75614-bbfb-4182-844b-555633d1bd81",
+        "$.locations.04de422c-8f99-441e-9d3e-a0024f71d9a1",
+        "$.locations.065fbd7c-2d70-4a50-9ddd-b4d1826f9d9c"
+      ]
+    },
+    {
+      "label": "ZOILO RIOS, S.A.",
+      "partyIds": [
+        "001"
+      ],
+      "canonicalByPartyId": [
+        "ZOILO RIOS, S.A."
+      ],
+      "classificationHint": "canonical",
+      "evidencePathSamples": [
+        "$.locations.36349154-2bba-4786-88cf-bb46428047ff",
+        "$.locations.5b1c2ec9-04ba-4675-8f04-ae1df7d4be79",
+        "$.locations.61f226b0-57df-4a8b-b3f0-35467ded55e6"
+      ]
+    }
+  ]
+}
