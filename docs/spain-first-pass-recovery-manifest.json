@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "country": "ES",
   "createdAt": "2026-09-11T12:39:51Z",
+  "updatedAt": "2026-09-11T16:56:00Z",
   "purpose": "Durable replacement manifest for Spain first-pass continuity after the historical frozen 618-label nominative snapshot could not be recovered without invention.",
   "historicalQueue": {
     "legacyWorkLabelCount": 618,
@@ -17,6 +18,14 @@
       "path": "data/spain_reve/coverage.json",
       "blobSha": "4230d6745a66f6de010e5fef20bed21d83b7e8d7",
       "role": "Current REVE nominative identity replacement queue (148 distinct CPO identities at this immutable snapshot); identities from this source must be marked reconstructedCurrentReve, not historical618Recovered."
+    },
+    {
+      "repository": "yass3705/tesla-charge-companion-stable",
+      "branch": "spain-reve-preintegration",
+      "path": "data/spain_reve/raw_cpo_labels_snapshot.json",
+      "blobSha": "ceccd7506262ad2923d601f05e87c209aee9d126",
+      "sourceRawBlobSha": "957335b7b96006fe853a3cf61d1ba314a5e88546",
+      "role": "Offline extraction from the persisted national raw REVE locations snapshot. It proves 148 current raw labels, all mapping one-to-one to the 148 current canonical identities; it does not prove membership in the lost historical 618-label queue."
     },
     {
       "repository": "yass3705/tesla-charge-companion-stable",
@@ -52,6 +61,14 @@
     "supersededAlias": 66,
     "platformExcluded": 3
   },
+  "recoveryInvestigations": [
+    {
+      "date": "2026-09-11",
+      "route": "offline extraction of raw CPO labels from persisted data/spain_reve/reve_locations_raw.json.gz",
+      "result": "closed_without_historical_membership_recovery",
+      "details": "148 distinct raw labels were extracted; all 148 are the same current canonical labels by partyId, with 0 additional aliases, 0 ambiguous labels and 0 unmapped labels. This durable source therefore cannot recover the missing historical frozen-label names and must not increase the 618 first-pass KPI."
+    }
+  ],
   "antiStagnationRule": "Continue assigning first-pass decisions to genuinely new preserved/reconstructed identities. Do not block on exact recovery of the lost frozen snapshot. Do not re-audit setAside entries without new evidence until FIRST PASS COMPLETE.",
   "persistenceGuard": {
     "criticalCountryProgressMustBeCommittedToGit": true,
@@ -62,6 +79,7 @@
       "docs/spain-cpo-progress-2026-09.json",
       "docs/spain-cpo-progress-batches/",
       "data/spain_reve/coverage.json",
+      "data/spain_reve/raw_cpo_labels_snapshot.json",
       "data/spain_reve/operator_aliases_es.json",
       "data/spain_reve/tariff_status_stream_state.json",
       "data/spain_reve/tariff_status_stream_last_run.json"
