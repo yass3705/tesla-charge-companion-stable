@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 351,
-    "maximumNeverTraversed": 267,
+    "minimumTraversed": 356,
+    "maximumNeverTraversed": 262,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 28,
     "partial": 8,
-    "active": 88,
-    "setAside": 157,
+    "active": 92,
+    "setAside": 158,
     "platformExcluded": 3,
     "supersededAlias": 67,
-    "total": 351
+    "total": 356
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 72,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run72.json",
+    "latestRun": 73,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run73.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -59,22 +59,22 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T11:41:25.292146Z",
-    "latestPersistedStateUpdatedAt": "2026-09-11T11:41:32.924509Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T13:41:18.015682Z",
+    "latestPersistedStateUpdatedAt": "2026-09-11T13:41:24.961799Z",
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 125,
-    "persistentTariffPagesCollected": 124,
-    "persistentTariffRowsStored": 11597,
+    "persistentNextTariffPage": 128,
+    "persistentTariffPagesCollected": 127,
+    "persistentTariffRowsStored": 11849,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 84,
-    "persistentStatusPagesCollected": 83,
-    "persistentStatusRowsStored": 7150,
+    "persistentNextStatusPage": 86,
+    "persistentStatusPagesCollected": 85,
+    "persistentStatusRowsStored": 7326,
     "statusTotalPages": 448,
-    "currentRunDecision": "No REVE live call: less than one real hour had elapsed since the 2026-09-11T11:41:25Z successful batch. Continued non-REVE first-pass CPO work instead."
+    "currentRunDecision": "Exactly one eligible live batch completed from persistent cursors: tariff pages 125-127 and status pages 84-85; 5/5 successful, no /locations and no HTTP 429."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -85,8 +85,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 351,
-    "firstPassMinimumTraversed": 351,
+    "continuityCountSum": 356,
+    "firstPassMinimumTraversed": 356,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -101,22 +101,23 @@
   },
   "newSincePreviousPoint": {
     "labelsTraversed": [
-      "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
-      "MAKSU ESPAÑA SL",
-      "Marbella Premium SL",
-      "MED PLAYA MANAGEMENT, SLU",
-      "MOEVE COMMERCIAL, SAU"
+      "Motor Box Mallorca SL",
+      "Moya Estaciones Electricas SL",
+      "Naturgy Nuevas Energías, SLU",
+      "OESTE SOLUCIONES ENERGETICAS, S.L.",
+      "PARKING MOGAN SA"
     ],
     "newlySourceValidated": [],
-    "newlySetAside": [
-      "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
-      "Marbella Premium SL",
-      "MED PLAYA MANAGEMENT, SLU"
+    "newlySetAside": ["Motor Box Mallorca SL"],
+    "newlyActive": [
+      "Moya Estaciones Electricas SL",
+      "Naturgy Nuevas Energías, SLU",
+      "OESTE SOLUCIONES ENERGETICAS, S.L.",
+      "PARKING MOGAN SA"
     ],
-    "newlyActive": ["MAKSU ESPAÑA SL / Telpark-Efimob"],
-    "newAliases": ["MOEVE COMMERCIAL, SAU -> Moeve"]
+    "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run72.json",
-  "investigationCurrent": "Continue replacement-queue first pass from Motor Box Mallorca SL, then Moya Estaciones Electricas SL, Naturgy Nuevas Energías SLU, OESTE SOLUCIONES ENERGETICAS SL and PARKING MOGAN SA. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-11T12:39:51Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run73.json",
+  "investigationCurrent": "Continue immediately after PARKING MOGAN SA in immutable current-REVE replacement-queue order. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-11T13:46:00Z"
 }
