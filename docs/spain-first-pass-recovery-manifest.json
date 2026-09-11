@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "createdAt": "2026-09-11T12:39:51Z",
+  "purpose": "Durable replacement manifest for Spain first-pass continuity after the historical frozen 618-label nominative snapshot could not be recovered without invention.",
+  "historicalQueue": {
+    "legacyWorkLabelCount": 618,
+    "authoritativeCpoDenominator": false,
+    "fullFrozenNominativeSnapshotRecovered": false,
+    "reconstructionAttemptCompleted": true,
+    "rule": "Keep 618 frozen as the historical first-pass KPI denominator; never synthesize historical membership from a mutable live registry."
+  },
+  "durableIdentitySources": [
+    {
+      "repository": "yass3705/tesla-charge-companion-stable",
+      "branch": "spain-reve-preintegration",
+      "path": "data/spain_reve/coverage.json",
+      "blobSha": "4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+      "role": "Current REVE nominative identity replacement queue (148 distinct CPO identities at this immutable snapshot); identities from this source must be marked reconstructedCurrentReve, not historical618Recovered."
+    },
+    {
+      "repository": "yass3705/tesla-charge-companion-stable",
+      "branch": "spain-reve-preintegration",
+      "path": "docs/spain-cpo-progress-2026-09.json",
+      "blobSha": "006cfbfd80988cc441cb4a3d74428c0d98dd3327",
+      "role": "Persisted nominative canonical base plus documented historical continuity aggregates."
+    },
+    {
+      "repository": "yass3705/tesla-charge-companion-stable",
+      "branch": "spain-reve-preintegration",
+      "path": "docs/spain-cpo-progress-batches",
+      "role": "Lossless nominative delta history after the canonical base."
+    },
+    {
+      "repository": "yass3705/tesla-charge-companion-data-lab",
+      "commit": "2b984109a830db91780fdc29e8a20965a20de1d2",
+      "role": "Historical reconciliation evidence already inspected by the one-time recovery attempt."
+    }
+  ],
+  "decisionProvenanceClasses": {
+    "historicalRecovered": "Identity/status explicitly recoverable from immutable historical Git evidence.",
+    "reconstructedCurrentReve": "Identity taken from immutable current REVE coverage snapshot; does not claim membership in the lost frozen 618 list.",
+    "continuityAggregateOnly": "Historical count continuity retained without synthetic nominative attribution."
+  },
+  "continuityAtCreation": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "supersededAlias": 66,
+    "platformExcluded": 3
+  },
+  "antiStagnationRule": "Continue assigning first-pass decisions to genuinely new preserved/reconstructed identities. Do not block on exact recovery of the lost frozen snapshot. Do not re-audit setAside entries without new evidence until FIRST PASS COMPLETE.",
+  "persistenceGuard": {
+    "criticalCountryProgressMustBeCommittedToGit": true,
+    "actionsArtifactsMayBeEvidenceButNeverSoleCanonicalStore": true,
+    "requiredPersistentFiles": [
+      "docs/spain-first-pass-recovery-manifest.json",
+      "docs/spain-cpo-progress-latest.json",
+      "docs/spain-cpo-progress-2026-09.json",
+      "docs/spain-cpo-progress-batches/",
+      "data/spain_reve/coverage.json",
+      "data/spain_reve/operator_aliases_es.json",
+      "data/spain_reve/tariff_status_stream_state.json",
+      "data/spain_reve/tariff_status_stream_last_run.json"
+    ]
+  }
+}
