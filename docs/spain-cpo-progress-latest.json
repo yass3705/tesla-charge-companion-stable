@@ -25,7 +25,7 @@
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
     "syntheticEntriesCreated": false,
-    "note": "The full frozen 618-label nominative snapshot is not preserved in the inspected durable GitHub state. Run69 found no new safely attributable frozen-snapshot identity; mutable current registry labels were not backfilled synthetically."
+    "note": "The full frozen 618-label nominative snapshot is not preserved in the inspected durable GitHub state. Run70 found no new safely attributable frozen-snapshot identity; mutable current registry labels were not backfilled synthetically."
   },
   "inventorySourceObservation": {
     "source": "https://observatorio.electrips.es/infraestructura",
@@ -42,32 +42,32 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 69,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run69.json",
+    "latestRun": 70,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run70.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T05:39:00.278738Z",
-    "latestPersistedStateUpdatedAt": "2026-09-11T05:39:09.380602Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-11T06:41:29.633253Z",
+    "latestPersistedStateUpdatedAt": "2026-09-11T06:41:37.897264Z",
     "latestObservedWorkflowRunId": 34446412330,
-    "latestObservedWorkflowAttempt": 13,
-    "latestObservedJobId": 103160372943,
+    "latestObservedWorkflowAttempt": 14,
+    "latestObservedJobId": 103172877085,
     "latestLiveBatchPersistenceSucceeded": true,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "persistentNextTariffPage": 116,
-    "persistentTariffPagesCollected": 115,
-    "persistentTariffRowsStored": 10836,
+    "persistentNextTariffPage": 119,
+    "persistentTariffPagesCollected": 118,
+    "persistentTariffRowsStored": 11080,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 78,
-    "persistentStatusPagesCollected": 77,
-    "persistentStatusRowsStored": 6711,
+    "persistentNextStatusPage": 80,
+    "persistentStatusPagesCollected": 79,
+    "persistentStatusRowsStored": 6911,
     "statusTotalPages": 448,
-    "latestCpoRunDecision": "Run69 executed exactly one eligible REVE batch from persistent cursors: tariff pages 113-115 and status pages 76-77; 5/5 requests succeeded, no /locations request and no HTTP 429."
+    "latestCpoRunDecision": "Run70 executed exactly one eligible REVE batch from persistent cursors: tariff pages 116-118 and status pages 78-79; 5/5 requests succeeded, no /locations request and no HTTP 429."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -103,7 +103,7 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "syntheticEntriesCreated": false
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run69.json",
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-11-run70.json",
   "investigationCurrent": "Continue first-pass recovery only from genuinely preserved historical identity cues. Do not infer historical membership from the mutable 633-label mirror and do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-11T05:40:20Z"
+  "updatedAt": "2026-09-11T06:42:30Z"
 }
