@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": 80,
+  "updatedAt": "2026-09-12T17:44:00Z",
+  "historicalWorkQueue": {
+    "labels": 618,
+    "authoritativeCpoDenominator": false
+  },
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "newSincePreviousPoint": {
+    "labelsTraversed": [],
+    "newlySourceValidated": [],
+    "newlySetAside": [],
+    "newlyActive": [],
+    "newAliases": []
+  },
+  "reconstructionPersistence": {
+    "oneTimeHistoricalRecoveryCompleted": true,
+    "fullFrozen618NominativeSnapshotFound": false,
+    "replacementIdentityQueueExhausted": true,
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "criticalCountryProgressPersistedInGit": true
+  },
+  "reveTariffStatus": {
+    "streamsComplete": false,
+    "persistentStateBeforeAndAfterFailedPush": {
+      "nextTariffPage": 167,
+      "nextStatusPage": 112,
+      "tariffRowsStored": 15077,
+      "statusRowsStored": 9407
+    },
+    "liveBatchAttemptedAt": "2026-09-12T17:41:08Z",
+    "livePlan": [
+      ["tariffs", 167],
+      ["tariffs", 168],
+      ["tariffs", 169],
+      ["status", 112],
+      ["status", 113]
+    ],
+    "networkCollectionStepSucceeded": true,
+    "hardBudgetVerificationSucceeded": true,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "quotaConsumedForCurrentHour": true,
+    "persistenceSucceeded": false,
+    "persistenceFailureReason": "Concurrent branch advancement caused the final Git push to fail after collection and quota verification completed.",
+    "exactNewUpdatedRowCountsPersisted": false,
+    "secondBatchLaunchedThisHour": false,
+    "nextSafeAction": "Do not repeat live REVE calls in the same hour. At the next eligible window, resume from the still-persisted cursors; deduplication will safely absorb repeated pages if needed."
+  },
+  "workflowRepair": {
+    "temporaryPushTriggerRemoved": true,
+    "workflowDispatchOnlyRestored": true,
+    "triggerSentinelRestored": true,
+    "concurrentPushMitigationAdded": "git pull --rebase origin spain-reve-preintegration before git push"
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_REVE_PERSISTENCE_GAP",
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "replacementQueueExhausted": true,
+    "reveQuotaConsumedDespitePushFailure": true,
+    "noSecondLiveBatchSameHour": true,
+    "criticalProgressPersistenceGuardActive": true
+  },
+  "investigationCurrent": "No genuinely new durable nominative identity is available beyond the exhausted 148-identity current-REVE replacement queue. Continue first-pass advancement only when new durable nominative evidence appears; do not fabricate historical-618 membership or reopen setAside cases without new evidence.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  }
+}

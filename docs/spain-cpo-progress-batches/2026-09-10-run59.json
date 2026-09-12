@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-10-run59",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "newNeverTraversedLabels": 0,
+    "note": "No additional historical 618-snapshot label can be named safely from the persisted repository evidence in this execution. Current REVE snapshot identities are already first-pass covered. No synthetic label was created and no prior active/setAside case was reopened without new evidence."
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "counts": {
+      "sourceValidated": 28,
+      "partial": 8,
+      "active": 87,
+      "setAside": 154,
+      "platformExcluded": 3,
+      "supersededAlias": 66,
+      "total": 346
+    }
+  },
+  "inventorySourceObservation": {
+    "historicalQueueLabelsFrozen": 618,
+    "historicalQueueAuthoritativeCpoDenominator": false,
+    "source": "https://observatorio.electrips.es/infraestructura",
+    "historicalSourceBasis": "REVE-derived operator table; prior repository snapshot recorded 618 labels through 2026-08-18",
+    "currentObservedSourceDate": "2026-09-07",
+    "currentObservedOperatorLabels": 633,
+    "decision": "Do not mutate the historical first-pass queue from 618 to 633. The live mirror is mutable and is used only as an identity-recovery aid; tariffs from the mirror are never promoted as direct CPO tariff authority."
+  },
+  "reveTariffStatus": {
+    "batchLaunched": false,
+    "reason": "Less than one real hour had elapsed since the latest successful persisted REVE batch at 2026-09-10T13:44:15.974933Z when this execution began; no REVE API call was permitted.",
+    "persistentStateUnchanged": {
+      "nextTariffPage": 92,
+      "tariffPagesCollected": 91,
+      "tariffRowsStored": 8694,
+      "tariffTotalPages": 462,
+      "nextStatusPage": 62,
+      "statusPagesCollected": 61,
+      "statusRowsStored": 5324,
+      "statusTotalPages": 448
+    },
+    "locationsCollectionRestarted": false
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedOpen": true,
+    "pr50ObservedDraft": true,
+    "pr50ObservedMerged": false,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_FROZEN_618_SNAPSHOT",
+    "mandatoryCadenceCheckPerformed": true,
+    "trigger": "at least two executions without nominative progress",
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
+    "currentMirrorObservedOperatorLabels": 633,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "investigationCurrent": "Continue recovering genuinely historical 618-snapshot labels from preserved evidence only. The current ElecTrips/REVE mirror has drifted to 633 labels and must not silently expand or redefine the frozen historical queue. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T14:43:00Z"
+}

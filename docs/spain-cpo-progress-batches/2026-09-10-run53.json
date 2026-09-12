@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 53,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "newLabelsTraversed": 0,
+    "newSourceValidated": 0
+  },
+  "counts": {
+    "sourceValidated": 29,
+    "partial": 8,
+    "active": 87,
+    "setAside": 157,
+    "platformExcluded": 4,
+    "supersededAlias": 61,
+    "total": 346
+  },
+  "reveTariffStatus": {
+    "batchGeneratedAt": "2026-09-10T06:42:30.165244Z",
+    "workflowRunId": 34446412330,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPagesCollectedThisBatch": [77, 78, 79],
+    "statusPagesCollectedThisBatch": [52, 53],
+    "tariffNewRows": 263,
+    "tariffUpdatedRows": 0,
+    "statusNewRows": 200,
+    "statusUpdatedRows": 0,
+    "persistentNextTariffPage": 80,
+    "persistentTariffPagesCollected": 79,
+    "persistentTariffRowsStored": 7643,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 54,
+    "persistentStatusPagesCollected": 53,
+    "persistentStatusRowsStored": 4612,
+    "statusTotalPages": 447,
+    "persistenceSucceeded": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 346,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "legacyNominativeGapStillDocumented": true
+  },
+  "investigation": "No additional concrete never-traversed historical label was recoverable from current canonical/history without fabrication in this execution. Continue mining preserved historical identity cues; do not reopen setAside/active cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionMustNotRestart": true,
+    "temporaryPushTriggerRemoved": true
+  },
+  "updatedAt": "2026-09-10T06:44:00Z"
+}
