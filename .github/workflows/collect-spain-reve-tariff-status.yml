@@ -6,7 +6,7 @@ on:
     branches:
       - spain-reve-preintegration
     paths:
-      - data/spain_reve/.trigger_collect
+      - data/spain_reve/trigger_collect.txt
 
 permissions:
   contents: write
