@@ -2,6 +2,11 @@ name: Collect Spain REVE tariff/status streams
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - spain-reve-preintegration
+    paths:
+      - .github/reve-spain-trigger.txt
 
 permissions:
   contents: write
