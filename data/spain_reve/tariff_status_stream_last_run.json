@@ -1,28 +1,28 @@
 {
-  "generatedAt": "2026-09-12T13:43:39.210979Z",
+  "generatedAt": "2026-09-12T15:40:36.103320Z",
   "hardRequestLimit": 5,
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "mode": "collect",
   "plan": [
     [
       "tariffs",
-      161
+      164
     ],
     [
       "tariffs",
-      162
+      165
     ],
     [
       "tariffs",
-      163
+      166
     ],
     [
       "status",
-      108
+      110
     ],
     [
       "status",
-      109
+      111
     ]
   ],
   "requests": [
@@ -32,8 +32,21 @@
         "total-count": "46158",
         "total-pages": "462"
       },
+      "newRows": 78,
+      "page": 164,
+      "rowsReceived": 100,
+      "status": 200,
+      "stream": "tariffs",
+      "updatedRows": 2
+    },
+    {
+      "endpoint": "/connectors/tariffs",
+      "headers": {
+        "total-count": "46158",
+        "total-pages": "462"
+      },
       "newRows": 83,
-      "page": 161,
+      "page": 165,
       "rowsReceived": 100,
       "status": 200,
       "stream": "tariffs",
@@ -44,39 +57,13 @@
       "headers": {
         "total-count": "46158",
         "total-pages": "462"
-      },
-      "newRows": 84,
-      "page": 162,
-      "rowsReceived": 100,
-      "status": 200,
-      "stream": "tariffs",
-      "updatedRows": 0
-    },
-    {
-      "endpoint": "/connectors/tariffs",
-      "headers": {
-        "total-count": "46158",
-        "total-pages": "462"
-      },
-      "newRows": 85,
-      "page": 163,
-      "rowsReceived": 100,
-      "status": 200,
-      "stream": "tariffs",
-      "updatedRows": 0
-    },
-    {
-      "endpoint": "/evses/operational_status",
-      "headers": {
-        "total-count": "44784",
-        "total-pages": "448"
       },
       "newRows": 81,
-      "page": 108,
+      "page": 166,
       "rowsReceived": 100,
       "status": 200,
-      "stream": "status",
-      "updatedRows": 8
+      "stream": "tariffs",
+      "updatedRows": 0
     },
     {
       "endpoint": "/evses/operational_status",
@@ -84,12 +71,25 @@
         "total-count": "44784",
         "total-pages": "448"
       },
-      "newRows": 92,
-      "page": 109,
+      "newRows": 85,
+      "page": 110,
       "rowsReceived": 100,
       "status": 200,
       "stream": "status",
-      "updatedRows": 8
+      "updatedRows": 11
+    },
+    {
+      "endpoint": "/evses/operational_status",
+      "headers": {
+        "total-count": "44784",
+        "total-pages": "448"
+      },
+      "newRows": 77,
+      "page": 111,
+      "rowsReceived": 100,
+      "status": 200,
+      "stream": "status",
+      "updatedRows": 23
     }
   ],
   "requestsAttempted": 5,
@@ -98,8 +98,8 @@
     "complete": false,
     "country": "ES",
     "integrationStatus": "PRE_INTEGRATION_ONLY",
-    "nextStatusPage": 110,
-    "nextTariffPage": 164,
+    "nextStatusPage": 112,
+    "nextTariffPage": 167,
     "schemaVersion": 1,
     "source": "REVE",
     "statusPagesCollected": [
@@ -211,9 +211,11 @@
       106,
       107,
       108,
-      109
+      109,
+      110,
+      111
     ],
-    "statusRowsStored": 9245,
+    "statusRowsStored": 9407,
     "statusTotalPages": 448,
     "tariffPagesCollected": [
       1,
@@ -378,10 +380,13 @@
       160,
       161,
       162,
-      163
+      163,
+      164,
+      165,
+      166
     ],
-    "tariffRowsStored": 14835,
+    "tariffRowsStored": 15077,
     "tariffTotalPages": 462,
-    "updatedAt": "2026-09-12T13:43:46.780709Z"
+    "updatedAt": "2026-09-12T15:40:43.911943Z"
   }
 }
