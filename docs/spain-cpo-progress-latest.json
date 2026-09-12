@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 80,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run80.json",
+    "latestRun": 81,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run81.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -60,37 +60,42 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T15:40:36.103320Z",
-    "latestPersistedStateUpdatedAt": "2026-09-12T15:40:43.911943Z",
-    "latestLiveBatchGeneratedAtApprox": "2026-09-12T17:41:08Z",
-    "latestLiveBatchPersistenceSucceeded": false,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T19:40:32.142499Z",
+    "latestPersistedStateUpdatedAt": "2026-09-12T19:40:42.955537Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
     "latestLiveBatchPlan": [["tariffs",167],["tariffs",168],["tariffs",169],["status",112],["status",113]],
     "latestLiveBatchQuotaConsumed": true,
-    "persistentNextTariffPage": 167,
-    "persistentTariffPagesCollected": 166,
-    "persistentTariffRowsStored": 15077,
+    "latestLiveBatchPersistenceSucceeded": true,
+    "tariffNewRows": 242,
+    "tariffUpdatedRows": 1,
+    "statusNewRows": 158,
+    "statusUpdatedRows": 35,
+    "persistentNextTariffPage": 170,
+    "persistentTariffPagesCollected": 169,
+    "persistentTariffRowsStored": 15319,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 112,
-    "persistentStatusPagesCollected": 111,
-    "persistentStatusRowsStored": 9407,
+    "persistentNextStatusPage": 114,
+    "persistentStatusPagesCollected": 113,
+    "persistentStatusRowsStored": 9565,
     "statusTotalPages": 448,
-    "currentRunDecision": "One eligible live batch executed all five planned REVE calls and passed the hard-budget verification, but its final Git push failed after a concurrent branch advancement. The hourly quota is therefore consumed. Do not launch a second live batch in this window. Persistent cursors remain 167/112; exact new/updated row counts from the unpushed local result are not claimed."
+    "currentRunDecision": "Exactly one eligible live batch completed and persisted. It used five successful tariff/status requests, no /locations request, no HTTP 429, and advanced persistent cursors to tariffs 170 and status 114. Do not launch a second live batch in the same hourly window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
+    "pr50ObservedOpenDraft": true,
     "preIntegrationOnly": true,
     "runtimePublishReady": false,
     "locationsCollectionComplete": true,
     "locationsCollectionMustNotRestart": true,
     "temporaryPushTriggerRemoved": true,
-    "workflowDispatchOnlyRestored": true
+    "workflowDispatchOnlyRestored": true,
+    "temporaryTriggerSentinelDeleted": true
   },
   "coherenceCheck": {
-    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_REVE_PERSISTENCE_GAP",
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
     "continuityCountSum": 373,
     "firstPassMinimumTraversed": 373,
     "countsDeriveExactly": true,
@@ -103,9 +108,10 @@
     "reveRequestBudgetRespectedByObservedRun": true,
     "locationsEndpointUnusedByCollector": true,
     "syntheticHistoricalMembershipCreated": false,
+    "currentReveCoverageStill148DistinctCpos": true,
     "criticalProgressPersistenceGuardActive": true,
-    "secondConsecutiveNoNominalAdvanceCheckCompletedInRun80": true,
-    "reveConcurrentPushMitigationAdded": true
+    "reveConcurrentPushMitigationActive": true,
+    "previousRevePersistenceGapResolved": true
   },
   "newSincePreviousPoint": {
     "labelsTraversed": [],
@@ -114,7 +120,7 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run80.json",
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue is exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-12T17:44:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run81.json",
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. The newly persisted tariff/status pages add stream coverage but no new durable nominative CPO identity. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-12T19:43:00Z"
 }
