@@ -52,4 +52,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
           git commit -m "collect(es): advance REVE tariff/status streams"
+          git pull --rebase origin spain-reve-preintegration
           git push
