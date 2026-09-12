@@ -33,7 +33,7 @@
     "currentObservedOperatorLabels": 633,
     "currentDurableReveDistinctCpos": 148,
     "currentDurableReveCoverageBlob": "4230d6745a66f6de010e5fef20bed21d83b7e8d7",
-    "decision": "Keep 618 frozen as historical KPI denominator. Use immutable current REVE coverage only as an explicitly reconstructed replacement identity queue, not as proof of historical-618 membership or as tariff authority."
+    "decision": "Keep 618 frozen as historical KPI denominator. The observed 633-label registry count is not a durable nominative queue and cannot be used to synthesize historical membership. Use immutable current REVE coverage only as an explicitly reconstructed replacement identity queue, not as proof of historical-618 membership or as tariff authority."
   },
   "baseSnapshot": {
     "path": "docs/spain-cpo-progress-2026-09.json",
@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 81,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run81.json",
+    "latestRun": 82,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run82.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -81,7 +81,7 @@
     "persistentStatusPagesCollected": 113,
     "persistentStatusRowsStored": 9565,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one eligible live batch completed and persisted. It used five successful tariff/status requests, no /locations request, no HTTP 429, and advanced persistent cursors to tariffs 170 and status 114. Do not launch a second live batch in the same hourly window."
+    "currentRunDecision": "No live REVE request was launched because less than one real hour had elapsed since the latest successful persisted batch. Persistent cursors remain tariffs 170 and status 114."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -92,10 +92,11 @@
     "locationsCollectionMustNotRestart": true,
     "temporaryPushTriggerRemoved": true,
     "workflowDispatchOnlyRestored": true,
-    "temporaryTriggerSentinelDeleted": true
+    "temporaryTriggerSentinelDeleted": true,
+    "staleInertTriggerSentinelCorrectionCommit": "e2be5036dd2d855a87fbafab8ba9243d2ec2cbc8"
   },
   "coherenceCheck": {
-    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "result": "PASS_WITH_STALE_SENTINEL_CORRECTED_AND_DOCUMENTED_LEGACY_UNCERTAINTY",
     "continuityCountSum": 373,
     "firstPassMinimumTraversed": 373,
     "countsDeriveExactly": true,
@@ -120,7 +121,7 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run81.json",
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. The newly persisted tariff/status pages add stream coverage but no new durable nominative CPO identity. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-12T19:43:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run82.json",
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. The observed 633 operator-label count is not materialized as a durable nominative queue in the persisted REVE coverage/alias sources and is not used to fabricate historical-618 membership. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-12T20:38:00Z"
 }
