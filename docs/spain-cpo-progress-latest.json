@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 82,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run82.json",
+    "latestRun": 83,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run83.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -60,28 +60,28 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T19:40:32.142499Z",
-    "latestPersistedStateUpdatedAt": "2026-09-12T19:40:42.955537Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T21:38:55.570814Z",
+    "latestPersistedStateUpdatedAt": "2026-09-12T21:39:03.686615Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",167],["tariffs",168],["tariffs",169],["status",112],["status",113]],
+    "latestLiveBatchPlan": [["tariffs",170],["tariffs",171],["tariffs",172],["status",114],["status",115]],
     "latestLiveBatchQuotaConsumed": true,
     "latestLiveBatchPersistenceSucceeded": true,
-    "tariffNewRows": 242,
-    "tariffUpdatedRows": 1,
-    "statusNewRows": 158,
-    "statusUpdatedRows": 35,
-    "persistentNextTariffPage": 170,
-    "persistentTariffPagesCollected": 169,
-    "persistentTariffRowsStored": 15319,
+    "tariffNewRows": 250,
+    "tariffUpdatedRows": 2,
+    "statusNewRows": 179,
+    "statusUpdatedRows": 21,
+    "persistentNextTariffPage": 173,
+    "persistentTariffPagesCollected": 172,
+    "persistentTariffRowsStored": 15569,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 114,
-    "persistentStatusPagesCollected": 113,
-    "persistentStatusRowsStored": 9565,
+    "persistentNextStatusPage": 116,
+    "persistentStatusPagesCollected": 115,
+    "persistentStatusRowsStored": 9744,
     "statusTotalPages": 448,
-    "currentRunDecision": "No live REVE request was launched because less than one real hour had elapsed since the latest successful persisted batch. Persistent cursors remain tariffs 170 and status 114."
+    "currentRunDecision": "Exactly one eligible live REVE batch was launched and persisted. No second batch was launched in the same hourly window."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -96,7 +96,7 @@
     "staleInertTriggerSentinelCorrectionCommit": "e2be5036dd2d855a87fbafab8ba9243d2ec2cbc8"
   },
   "coherenceCheck": {
-    "result": "PASS_WITH_STALE_SENTINEL_CORRECTED_AND_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
     "continuityCountSum": 373,
     "firstPassMinimumTraversed": 373,
     "countsDeriveExactly": true,
@@ -121,7 +121,7 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run82.json",
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. The observed 633 operator-label count is not materialized as a durable nominative queue in the persisted REVE coverage/alias sources and is not used to fabricate historical-618 membership. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-12T20:38:00Z"
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run83.json",
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-12T21:42:00Z"
 }
