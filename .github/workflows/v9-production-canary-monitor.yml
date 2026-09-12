@@ -2,8 +2,7 @@ name: V9 production canary monitor
 
 on:
   schedule:
-    - cron: '17 * * * *'
-    - cron: '47 * * * *'
+    - cron: '7,17,27,37,47,57 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -15,6 +14,7 @@ on:
       - '.github/workflows/v9-production-canary-monitor.yml'
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -27,12 +27,76 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Select one natural observation per UTC hour
+        id: hourly_gate
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -u
+
+          # Push/manual runs are intentional checks and always execute.
+          if [ "${GITHUB_EVENT_NAME}" != "schedule" ]; then
+            echo "should_observe=true" >> "$GITHUB_OUTPUT"
+            echo "reason=${GITHUB_EVENT_NAME}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # GitHub scheduled events are best-effort. We intentionally create
+          # several opportunities per hour, then retain only the first
+          # successful natural observation in each UTC hour.
+          hour_start="$(date -u +%Y-%m-%dT%H:00:00Z)"
+          hour_end="$(date -u -d '+1 hour' +%Y-%m-%dT%H:00:00Z)"
+          api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs"
+
+          if ! curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            --get \
+            --data-urlencode "event=schedule" \
+            --data-urlencode "created=${hour_start}..${hour_end}" \
+            --data-urlencode "per_page=100" \
+            "$api_url" > hourly-runs.json; then
+            echo "GitHub runs API unavailable; fail-open and execute observation."
+            echo "should_observe=true" >> "$GITHUB_OUTPUT"
+            echo "reason=dedupe-api-fail-open" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PRIOR_SUCCESS="$(node - <<'NODE'
+          const fs = require('fs');
+          const payload = JSON.parse(fs.readFileSync('hourly-runs.json', 'utf8'));
+          const currentId = Number(process.env.GITHUB_RUN_ID);
+          const workflow = process.env.GITHUB_WORKFLOW;
+          const found = (payload.workflow_runs || []).some((run) =>
+            Number(run.id) !== currentId &&
+            run.name === workflow &&
+            run.event === 'schedule' &&
+            run.conclusion === 'success'
+          );
+          process.stdout.write(found ? 'true' : 'false');
+          NODE
+          )"
+
+          if [ "$PRIOR_SUCCESS" = "true" ]; then
+            echo "A successful natural observation already exists in this UTC hour; redundant schedule attempt skipped."
+            echo "should_observe=false" >> "$GITHUB_OUTPUT"
+            echo "reason=hour-already-observed" >> "$GITHUB_OUTPUT"
+          else
+            echo "No successful natural observation exists in this UTC hour; execute monitor."
+            echo "should_observe=true" >> "$GITHUB_OUTPUT"
+            echo "reason=first-observation-this-hour" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout current production state
+        if: steps.hourly_gate.outputs.should_observe == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
       - name: Validate live routing, readiness, pins and fail-closed controls
+        if: steps.hourly_gate.outputs.should_observe == 'true'
         env:
           BASE_URL: https://yass3705.github.io/tesla-charge-companion-stable
           SAMPLE_SIZE: '10000'
@@ -40,7 +104,7 @@ jobs:
         run: node scripts/v9-production-canary-monitor.cjs
 
       - name: Annotate observation provenance
-        if: always()
+        if: always() && steps.hourly_gate.outputs.should_observe == 'true'
         shell: bash
         run: |
           if [ -f v9-canary-monitor-result.json ]; then
@@ -67,7 +131,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ -f v9-canary-monitor-result.json ]; then
+          if [ "${{ steps.hourly_gate.outputs.should_observe }}" != "true" ]; then
+            echo '## V9 production canary observation' >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo 'Redundant scheduled attempt skipped because this UTC hour already has a successful natural observation.' >> "$GITHUB_STEP_SUMMARY"
+          elif [ -f v9-canary-monitor-result.json ]; then
             cat v9-canary-monitor-result.json
             {
               echo '## V9 production canary observation'
@@ -81,7 +149,7 @@ jobs:
           fi
 
       - name: Archive observation evidence
-        if: always()
+        if: always() && steps.hourly_gate.outputs.should_observe == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: v9-canary-observation-${{ github.run_id }}
