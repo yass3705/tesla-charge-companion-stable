@@ -1,0 +1,3 @@
+V9 canary external periodic fallback heartbeat
+
+This file is updated only when the external watchdog needs to trigger a fallback canary observation because no successful natural GitHub schedule observation is available for the current UTC hour.
