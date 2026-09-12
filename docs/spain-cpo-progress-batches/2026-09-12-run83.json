@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": 83,
+  "updatedAt": "2026-09-12T21:42:00Z",
+  "historicalWorkQueue": {
+    "labels": 618,
+    "authoritativeCpoDenominator": false
+  },
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "newSincePreviousPoint": {
+    "labelsTraversed": [],
+    "newlySourceValidated": [],
+    "newlySetAside": [],
+    "newlyActive": [],
+    "newAliases": []
+  },
+  "reconstructionPersistence": {
+    "oneTimeHistoricalRecoveryCompleted": true,
+    "fullFrozen618NominativeSnapshotFound": false,
+    "replacementIdentityQueueExhausted": true,
+    "currentDurableReveDistinctCpos": 148,
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "criticalCountryProgressPersistedInGit": true
+  },
+  "reveTariffStatus": {
+    "streamsComplete": false,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T21:38:55.570814Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "plan": [["tariffs",170],["tariffs",171],["tariffs",172],["status",114],["status",115]],
+    "tariffNewRows": 250,
+    "tariffUpdatedRows": 2,
+    "statusNewRows": 179,
+    "statusUpdatedRows": 21,
+    "nextTariffPage": 173,
+    "nextStatusPage": 116,
+    "tariffRowsStored": 15569,
+    "statusRowsStored": 9744,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448,
+    "liveBatchLaunchedThisRun": true,
+    "persistenceSucceeded": true,
+    "decision": "Exactly one eligible live batch was launched from persistent cursors. Five of five requests succeeded; only /connectors/tariffs and /evses/operational_status were used; no /locations request or HTTP 429 occurred. No second batch was launched in the same hourly window."
+  },
+  "workflowCleanup": {
+    "workflowDispatchOnlyConfirmed": true,
+    "temporaryTargetedPushTriggerUsed": true,
+    "temporaryTargetedPushTriggerRemoved": true,
+    "temporaryTriggerSentinelDeleted": true,
+    "accidentalLiveTriggerRisk": false,
+    "concurrentPushMitigationActive": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "replacementQueueExhausted": true,
+    "currentReveCoverageStill148DistinctCpos": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "criticalProgressPersistenceGuardActive": true
+  },
+  "investigationCurrent": "The 148-identity immutable current-REVE replacement queue remains exhausted. No new durable nominative identity was proven this run. Continue only from genuinely new durable nominative evidence; do not fabricate historical-618 membership or reopen setAside cases without new evidence before FIRST PASS COMPLETE.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedOpenDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  }
+}
