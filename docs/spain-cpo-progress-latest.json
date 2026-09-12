@@ -42,8 +42,8 @@
   "deltaHistory": {
     "directory": "docs/spain-cpo-progress-batches",
     "firstRun": 11,
-    "latestRun": 79,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run79.json",
+    "latestRun": 80,
+    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run80.json",
     "run62Present": true,
     "canonicalPointerRepairedInRun63": true
   },
@@ -62,11 +62,14 @@
     "complete": false,
     "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T15:40:36.103320Z",
     "latestPersistedStateUpdatedAt": "2026-09-12T15:40:43.911943Z",
-    "latestLiveBatchPersistenceSucceeded": true,
+    "latestLiveBatchGeneratedAtApprox": "2026-09-12T17:41:08Z",
+    "latestLiveBatchPersistenceSucceeded": false,
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
+    "latestLiveBatchPlan": [["tariffs",167],["tariffs",168],["tariffs",169],["status",112],["status",113]],
+    "latestLiveBatchQuotaConsumed": true,
     "persistentNextTariffPage": 167,
     "persistentTariffPagesCollected": 166,
     "persistentTariffRowsStored": 15077,
@@ -75,17 +78,19 @@
     "persistentStatusPagesCollected": 111,
     "persistentStatusRowsStored": 9407,
     "statusTotalPages": 448,
-    "currentRunDecision": "One eligible live REVE batch was launched in run79 after more than one real hour had elapsed. It collected tariff pages 164-166 and status pages 110-111 using exactly 5 successful requests, with no /locations request and no HTTP 429."
+    "currentRunDecision": "One eligible live batch executed all five planned REVE calls and passed the hard-budget verification, but its final Git push failed after a concurrent branch advancement. The hourly quota is therefore consumed. Do not launch a second live batch in this window. Persistent cursors remain 167/112; exact new/updated row counts from the unpushed local result are not claimed."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
     "preIntegrationOnly": true,
     "runtimePublishReady": false,
     "locationsCollectionComplete": true,
-    "locationsCollectionMustNotRestart": true
+    "locationsCollectionMustNotRestart": true,
+    "temporaryPushTriggerRemoved": true,
+    "workflowDispatchOnlyRestored": true
   },
   "coherenceCheck": {
-    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_REVE_PERSISTENCE_GAP",
     "continuityCountSum": 373,
     "firstPassMinimumTraversed": 373,
     "countsDeriveExactly": true,
@@ -95,11 +100,12 @@
     "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
     "directCpoAndEmspPricingSeparated": true,
-    "reveRequestBudgetRespectedByObservedState": true,
-    "locationsEndpointUnusedByObservedState": true,
+    "reveRequestBudgetRespectedByObservedRun": true,
+    "locationsEndpointUnusedByCollector": true,
     "syntheticHistoricalMembershipCreated": false,
     "criticalProgressPersistenceGuardActive": true,
-    "secondConsecutiveNoNominalAdvanceCheckCompletedInRun79": true
+    "secondConsecutiveNoNominalAdvanceCheckCompletedInRun80": true,
+    "reveConcurrentPushMitigationAdded": true
   },
   "newSincePreviousPoint": {
     "labelsTraversed": [],
@@ -108,7 +114,7 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run79.json",
+  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run80.json",
   "investigationCurrent": "The immutable current-REVE 148-identity replacement queue is exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-12T15:42:00Z"
+  "updatedAt": "2026-09-12T17:44:00Z"
 }
