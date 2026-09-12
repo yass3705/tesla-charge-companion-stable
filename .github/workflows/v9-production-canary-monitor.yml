@@ -12,6 +12,7 @@ on:
       - 'v9-production-runtime/**'
       - 'scripts/v9-production-canary-monitor.cjs'
       - '.github/workflows/v9-production-canary-monitor.yml'
+      - '.github/v9-canary-monitor-heartbeat.txt'
 
 permissions:
   actions: read
@@ -112,6 +113,11 @@ jobs:
           const fs = require('fs');
           const file = 'v9-canary-monitor-result.json';
           const result = JSON.parse(fs.readFileSync(file, 'utf8'));
+          let eventPayload = {};
+          try {
+            eventPayload = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+          } catch (_) {}
+          const headCommitMessage = eventPayload?.head_commit?.message || null;
           result.github = {
             eventName: process.env.GITHUB_EVENT_NAME || null,
             runId: process.env.GITHUB_RUN_ID || null,
@@ -120,8 +126,12 @@ jobs:
             workflow: process.env.GITHUB_WORKFLOW || null,
             ref: process.env.GITHUB_REF || null,
             sha: process.env.GITHUB_SHA || null,
+            headCommitMessage,
           };
           result.naturalScheduledObservation = result.github.eventName === 'schedule';
+          result.externalPeriodicObservation =
+            result.github.eventName === 'push' &&
+            /^ops\(v9\): periodic monitor heartbeat/.test(headCommitMessage || '');
           fs.writeFileSync(file, `${JSON.stringify(result, null, 2)}\n`);
           NODE
           fi
