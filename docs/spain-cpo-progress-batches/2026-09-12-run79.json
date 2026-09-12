@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 79,
+  "date": "2026-09-12",
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "labelsTraversedThisRun": 0,
+    "reasonNoNominalAdvance": "The durable reconstructed current-REVE identity queue remains exhausted and no genuinely new durable nominative evidence was found. No synthetic historical identities were created and no setAside case was re-audited without new evidence."
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "reveTariffStatusObservation": {
+    "liveBatchLaunchedThisRun": true,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-12T15:40:36.103320Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPages": [164, 165, 166],
+    "tariffNewRows": 242,
+    "tariffUpdatedRows": 2,
+    "statusPages": [110, 111],
+    "statusNewRows": 162,
+    "statusUpdatedRows": 34,
+    "nextTariffPage": 167,
+    "nextStatusPage": 112,
+    "tariffRowsStored": 15077,
+    "statusRowsStored": 9407,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448,
+    "complete": false
+  },
+  "persistence": {
+    "criticalProgressPersistedInGit": true,
+    "historical618RecoverySearchNotRepeated": true,
+    "actionsArtifactsMayNotBeSoleCanonicalStore": true,
+    "temporaryWorkflowTriggerRemoved": true,
+    "temporaryTriggerSentinelRemoved": true
+  },
+  "coherence": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "countsDeriveExactly": true,
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "syntheticHistoricalMembershipCreated": false,
+    "setAsideReauditWithoutNewEvidence": false,
+    "replacementIdentityQueueExhausted": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "secondConsecutiveNoNominalAdvanceCheckCompleted": true
+  }
+}
