@@ -44,25 +44,25 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T06:42:58.330821Z",
-    "latestPersistedStateUpdatedAt": "2026-09-13T06:43:04.882328Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T08:41:33.699011Z",
+    "latestPersistedStateUpdatedAt": "2026-09-13T08:41:40.814892Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",179],["tariffs",180],["tariffs",181],["status",120],["status",121]],
-    "persistentNextTariffPage": 182,
-    "persistentTariffPagesCollected": 181,
-    "persistentTariffRowsStored": 16320,
+    "latestLiveBatchPlan": [["tariffs",182],["tariffs",183],["tariffs",184],["status",122],["status",123]],
+    "persistentNextTariffPage": 185,
+    "persistentTariffPagesCollected": 184,
+    "persistentTariffRowsStored": 16570,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 122,
-    "persistentStatusPagesCollected": 121,
-    "persistentStatusRowsStored": 10340,
+    "persistentNextStatusPage": 124,
+    "persistentStatusPagesCollected": 123,
+    "persistentStatusRowsStored": 10533,
     "statusTotalPages": 448,
-    "currentRunDecision": "No new external-API batch was started in this run. More than one real hour had elapsed, but direct workflow_dispatch was unavailable through the connector and the safe temporary path-scoped trigger write was blocked before the trigger file could be created. The workflow was immediately restored to workflow_dispatch-only, so no REVE calls were made and no hourly quota was consumed by this attempted launch."
+    "currentRunDecision": "Exactly one eligible external-API batch was launched through a temporary path-scoped push trigger because direct workflow_dispatch was unavailable through the connector. The collector completed successfully with exactly 5 requests, all HTTP 200, no /locations request and no 429. The workflow was immediately restored to workflow_dispatch-only and the temporary trigger file was deleted, preventing a second accidental batch in the same hourly window."
   },
   "reveWebLead": {
-    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_NORMALIZATION_EVIDENCE_STRENGTHENED",
+    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_GROSS_NET_NORMALIZATION_EVIDENCE",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
@@ -71,7 +71,7 @@
     "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources. Its public documentation also exposes a live side-by-side comparison command against the external API and states that connectorId/evseId are the reliable keys relating normalized prices and availability.",
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
-    "validationGeneratedAt": "2026-09-13T04:40:43.332Z",
+    "validationGeneratedAt": "2026-09-13T08:40:49.754Z",
     "validationMaxPages": 5,
     "validationPerPage": 25,
     "validationDgtStationsLoaded": 12138,
@@ -86,15 +86,10 @@
     "parityRawTariffObjectMismatches": 32,
     "parityPublicEvses": 68,
     "parityOfficialStatusIdMatches": 0,
-    "sampleReveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
-    "sampleOperator": "IBERDROLA CLIENTES S.A.U",
-    "samplePriceCount": 16,
-    "sampleEvseCount": 4,
-    "sampleConnectorCount": 4,
-    "sampleTariffBearingConnectors": 4,
+    "grossNetNormalizationEvidence": "Matched examples strongly indicate the public-map representation is consumer-facing VAT-inclusive/rounded while the external API retains net price components plus vat=21. Examples: 0.8265*1.21≈1.00, 4.956*1.21≈6.00 and 0.566*1.21≈0.68. This explains at least part of the apparent raw/naive semantic mismatches but is not yet proof for all 32 matches.",
     "promoteToTccSource": false,
-    "parityInterpretation": "Raw JSON object inequality is not evidence of price disagreement. External evidence now confirms that a maintained collector normalizes both REVE sources into the same consumer schema and uses connectorId/evseId to relate tariff and availability records. Our own 32 connector-ID overlaps therefore remain useful parity anchors. Exact semantic equality of currency, ENERGY/FLAT/TIME/PARKING_TIME components and OCPI restrictions, plus EVSE identifier mapping, still needs to be demonstrated on our persisted sample before any TCC promotion.",
-    "nextSafeStep": "Implement or run an offline semantic comparator against already-persisted public sample and external tariff/status rows, keyed first by connectorId and then by mapped evseId. Compare currency, price components and restrictions rather than raw objects. Do not run a national public sweep or promote this source yet."
+    "parityInterpretation": "Raw or path-sensitive semantic inequality is not evidence of price disagreement. A VAT-aware component comparator must pair component type, step size, restrictions and dates before deciding equivalence. Public availability also cannot be compared directly to the bulk external operational_status boolean without identifier/semantic mapping.",
+    "nextSafeStep": "Run a VAT-aware component comparator over the bounded connector-ID overlap and resolve EVSE availability against the appropriate external identifier/status representation. Do not run a national public sweep or promote this source yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -124,6 +119,6 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; semantic tariff parity and EVSE status identifier mapping remain the active web checks, now with stronger normalization evidence from the maintained public collector documentation.",
-  "updatedAt": "2026-09-13T07:50:00Z"
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; the active check is now VAT-aware tariff parity plus EVSE status identifier/semantic mapping.",
+  "updatedAt": "2026-09-13T08:52:00Z"
 }
