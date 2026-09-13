@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "assessedAt": "2026-09-13T05:40:00Z",
+  "source": "REVE public web frontend feed",
+  "endpointBase": "https://www.mapareve.es/api/public/v1",
+  "supportStatus": "undocumented_unsupported",
+  "authentication": "none_observed",
+  "documentedRateLimit": null,
+  "observedClientBehavior": {
+    "locationsMethod": "POST",
+    "locationsPath": "/locations",
+    "maxPerPageObserved": 25,
+    "fullSpainApproxPages": 582,
+    "embeddedFields": [
+      "location",
+      "evses.status",
+      "connectors.tariffs",
+      "connectors.power",
+      "connector identifiers"
+    ],
+    "singleLocationRefetch": "GET /locations/{location_id}"
+  },
+  "localProbe": {
+    "maxPages": 5,
+    "matchedStations": 153,
+    "matchedWithPrices": 138,
+    "matchedWithAvailability": 153,
+    "officialParityCandidateStations": 20,
+    "publicConnectors": 71,
+    "officialConnectorIdMatches": 32,
+    "tariffExactMatches": 0,
+    "tariffMismatches": 32,
+    "officialStatusMatches": 0,
+    "interpretation": "The public feed clearly carries TCC-relevant fields, but exact semantic parity with the documented external API is not yet proven. Differences may be normalization/schema rather than price-value disagreement; status identifiers require mapping before any runtime use."
+  },
+  "safetyDecision": {
+    "runtimeUse": false,
+    "nationalSweep": false,
+    "reason": "The endpoint is undocumented/unsupported, may change without notice, automated use may be subject to site terms, and a national sweep would require roughly 582 sequential requests at the observed page-size ceiling.",
+    "nextSafeAction": "Use only small bounded probes and single-location comparisons to understand tariff normalization and EVSE/status identifier mapping. Keep the documented external API as the authoritative ingestion path until parity and policy suitability are demonstrated."
+  },
+  "officialExternalApiStateAtAssessment": {
+    "nextTariffPage": 179,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 120,
+    "statusTotalPages": 448,
+    "lastSuccessfulBatchAt": "2026-09-13T04:40:42Z",
+    "lastBatchRequestsAttempted": 5,
+    "lastBatchRequestsSucceeded": 5,
+    "newBatchStartedThisAssessment": false,
+    "reason": "At assessment time a full real hour had not yet elapsed since the last successful live batch."
+  }
+}
