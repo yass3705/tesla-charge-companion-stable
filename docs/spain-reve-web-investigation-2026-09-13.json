@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "country": "ES",
   "investigation": "REVE public web/frontend data path",
   "date": "2026-09-13",
-  "status": "PROMISING_UNSUPPORTED_LEAD",
+  "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_SEMANTIC_PARITY_PENDING",
   "officialExternalApi": {
     "base": "https://www.mapareve.es/api/external/v1",
     "documented": true,
@@ -13,35 +13,63 @@
   "publicFrontendLead": {
     "base": "https://www.mapareve.es/api/public/v1",
     "officiallyDocumentedByREE": false,
-    "evidenceClass": "independent open-source reverse-engineering report; not yet independently validated from this runtime",
     "reportedAuth": "none",
     "reportedMapUsage": "internal endpoint used by mapareve.es browser map",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
     "reportedPerPageMaximum": 25,
     "reportedPayload": "locations with EVSE status and connector tariffs embedded",
-    "reportedRateLimit": "no documented limit observed by third party",
+    "reportedRateLimit": "no documented rate limit observed; this is not a guarantee or SLA",
     "reportedFullSpainCost": "approximately 582 sequential requests at 25 locations/page for ~14,550 locations",
     "reportedFilters": ["bbox", "cpo_ids", "power_min", "connector_types"],
-    "risks": [
-      "undocumented and unsupported by Red Electrica",
-      "may change or disappear without notice",
-      "automated use outside the browser may be subject to site terms",
-      "high request volume for a full national sweep",
-      "runtime direct access currently receives web protection/403, so no attempt will be made to bypass it"
-    ]
+    "sourceImplementation": "@gasolinaradar/dgt-ev-collector 1.5.1"
+  },
+  "independentSmallSampleValidation": {
+    "validatedInProjectRuntime": true,
+    "evidenceFile": "data/spain_reve/reve_public_web_probe.json",
+    "generatedAt": "2026-09-13T04:40:43.332Z",
+    "maxPages": 5,
+    "perPage": 25,
+    "dgtStationsLoaded": 12138,
+    "matchedStations": 153,
+    "matchedWithPrices": 138,
+    "matchedWithAvailability": 153,
+    "matchedWithReveData": 153,
+    "sampleLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
+    "sampleOperator": "IBERDROLA CLIENTES S.A.U",
+    "sampleEvseCount": 4,
+    "sampleConnectorCount": 4,
+    "sampleTariffBearingConnectors": 4
+  },
+  "officialExternalParity": {
+    "candidateStations": 20,
+    "publicConnectors": 71,
+    "officialConnectorIdMatches": 32,
+    "rawTariffObjectExactMatches": 0,
+    "rawTariffObjectMismatches": 32,
+    "publicEvses": 68,
+    "officialStatusIdMatches": 0,
+    "interpretation": "The existing parity probe is structurally too strict to decide tariff equivalence: it compares the public-map connector tariffs array directly with the external API stored tariff row/array representation. The open-source collector explicitly normalizes both sources to the same consumer output shape, while its public reveData field is only a reduced raw location slice. Therefore 0 raw-object matches is not evidence that the numeric tariffs differ. Connector identity overlap is nevertheless independently proven. EVSE status parity is still unresolved because the current persisted external status keys do not match the identifiers retained in the public reduced slice.",
+    "nextComparison": "Compare semantic tariff components instead of raw JSON objects (currency, energy price, fixed/session/time components and restrictions) for the 32 connector-ID overlaps, and resolve public evse_id/internal-id mapping against the external status records. Reuse persisted samples where possible; avoid a national public sweep."
   },
   "validationDecision": {
     "promoteToTccSource": false,
     "replaceExternalApiCollector": false,
-    "nextSafeStep": "Validate one or a few public /locations responses through an ordinary browser session/network capture or another non-bypassing public request path, compare fields and values against the persisted official external API sample, then decide whether this can be used as an acceleration source with resumable caching and conservative request pacing.",
+    "browserCaptureNeededNow": false,
+    "nextSafeStep": "Build a semantic parity comparison on the already proven connector-ID overlap, then run only a small controlled public sample again if additional raw fields are required. Keep the official external collector as canonical until semantic tariff and status parity is demonstrated.",
     "doNot": [
       "bypass WAF or access controls",
       "multiply IPs or API keys",
-      "run a 582-page sweep before small-sample validation",
+      "run a 582-page national public sweep before semantic parity validation",
       "treat the endpoint as official or stable"
     ]
   },
+  "risks": [
+    "undocumented and unsupported by Red Electrica",
+    "may change or disappear without notice",
+    "automated use outside the browser may be subject to site terms",
+    "high request volume for a full national sweep"
+  ],
   "sourceReferences": [
     {
       "type": "official",
@@ -51,7 +79,8 @@
     {
       "type": "independent-open-source",
       "url": "https://www.npmjs.com/package/@gasolinaradar/dgt-ev-collector",
-      "role": "recent implementation reporting /api/public/v1 behavior and live tests"
+      "role": "implementation describing /api/public/v1 behavior, per_page=25 maximum, embedded tariffs/status, and common normalized output"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-13T06:45:00Z"
 }
