@@ -44,22 +44,22 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T08:41:33.699011Z",
-    "latestPersistedStateUpdatedAt": "2026-09-13T08:41:40.814892Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T10:43:16.082952Z",
+    "latestPersistedStateUpdatedAt": "2026-09-13T10:43:23.811766Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",182],["tariffs",183],["tariffs",184],["status",122],["status",123]],
-    "persistentNextTariffPage": 185,
-    "persistentTariffPagesCollected": 184,
-    "persistentTariffRowsStored": 16570,
+    "latestLiveBatchPlan": [["tariffs",185],["tariffs",186],["tariffs",187],["status",124],["status",125]],
+    "persistentNextTariffPage": 188,
+    "persistentTariffPagesCollected": 187,
+    "persistentTariffRowsStored": 16825,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 124,
-    "persistentStatusPagesCollected": 123,
-    "persistentStatusRowsStored": 10533,
+    "persistentNextStatusPage": 126,
+    "persistentStatusPagesCollected": 125,
+    "persistentStatusRowsStored": 10731,
     "statusTotalPages": 448,
-    "currentRunDecision": "No new external-API batch was launched in this run because the observed current time was still a few seconds short of one full real hour since the last successful live batch generated at 2026-09-13T08:41:33.699011Z. The hourly quota guard was therefore respected and no REVE request was consumed."
+    "currentRunDecision": "Exactly one guarded external-API batch was launched after more than one real hour had elapsed since the prior successful batch. It completed 5/5 requests successfully: tariffs pages 185-187 and status pages 124-125, with no /locations request and no HTTP 429. The temporary path-scoped push trigger was restored to workflow_dispatch-only before the trigger file was removed, preventing a second batch in the same hourly window."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_GROSS_NET_AND_STATUS_MAPPING_EVIDENCE",
@@ -121,5 +121,5 @@
     "newAliases": []
   },
   "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; the active check is VAT-aware tariff parity plus deterministic mapping of public availability.evses[] to the external operational_status identifiers.",
-  "updatedAt": "2026-09-13T09:41:12Z"
+  "updatedAt": "2026-09-13T10:44:30Z"
 }
