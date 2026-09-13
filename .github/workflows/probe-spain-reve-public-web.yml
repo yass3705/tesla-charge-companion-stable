@@ -1,0 +1,83 @@
+name: Probe Spain REVE public web API
+
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths:
+      - data/spain_reve/web_probe_trigger.txt
+
+permissions:
+  contents: write
+
+concurrency:
+  group: probe-spain-reve-public-web
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: spain-reve-preintegration
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Probe one public REVE locations page
+        run: |
+          npm install --no-save @gasolinaradar/dgt-ev-collector@1.5.1
+          node <<'NODE'
+          const fs = require('fs');
+          const pkg = require('@gasolinaradar/dgt-ev-collector');
+          async function main() {
+            const station = {
+              source: 'probe', country: 'ES', sourceStationId: 'probe-madrid',
+              name: 'probe', municipality: 'Madrid', province: 'Madrid',
+              connectors: [],
+              location: { type: 'Point', coordinates: [-3.7038, 40.4168] }
+            };
+            const startedAt = new Date().toISOString();
+            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 1, perPage: 25 };
+            try {
+              const enriched = await pkg.enrichStations([station], {
+                source: 'public', acknowledgeUnsupported: true,
+                maxPages: 1, perPage: 25, thresholdMeters: 2000000,
+                logger: { info(){}, warn(){}, debug(){} }
+              });
+              const r = enriched && enriched[0] ? enriched[0] : {};
+              out.ok = true;
+              out.reveLocationId = r.reveLocationId || null;
+              out.operator = r.operator || null;
+              out.priceCount = Array.isArray(r.prices) ? r.prices.length : 0;
+              out.availabilityPresent = !!r.availability;
+              out.availabilityEvseCount = r.availability && Array.isArray(r.availability.evses) ? r.availability.evses.length : 0;
+              out.reveDataPresent = !!r.reveData;
+              out.reveDataEvseCount = r.reveData && Array.isArray(r.reveData.evses) ? r.reveData.evses.length : 0;
+              const connectors = (r.reveData?.evses || []).flatMap(e => e.connectors || []);
+              out.reveDataConnectorCount = connectors.length;
+              out.connectorFields = [...new Set(connectors.flatMap(c => Object.keys(c)))].sort();
+              out.tariffBearingConnectors = connectors.filter(c => Array.isArray(c.tariffs) && c.tariffs.length).length;
+              out.statusValues = [...new Set((r.reveData?.evses || []).map(e => e.status).filter(Boolean))].sort();
+              out.finishedAt = new Date().toISOString();
+            } catch (e) {
+              out.ok = false;
+              out.errorName = e && e.name ? String(e.name) : null;
+              out.errorMessage = e && e.message ? String(e.message).slice(0,500) : String(e).slice(0,500);
+              out.finishedAt = new Date().toISOString();
+            }
+            fs.writeFileSync('data/spain_reve/reve_public_web_probe.json', JSON.stringify(out, null, 2) + '\n');
+            if (!out.ok) process.exitCode = 2;
+          }
+          main();
+          NODE
+      - name: Commit probe result
+        if: always()
+        run: |
+          git add data/spain_reve/reve_public_web_probe.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git commit -m "test(es): record one-page REVE public web probe"
+          git pull --rebase origin spain-reve-preintegration
+          git push
