@@ -45,22 +45,22 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T21:45:14.390610Z",
-    "latestPersistedStateUpdatedAt": "2026-09-13T21:45:26.150384Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T22:45:52.877171Z",
+    "latestPersistedStateUpdatedAt": "2026-09-13T22:46:01.500799Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",203],["tariffs",204],["tariffs",205],["status",136],["status",137]],
-    "persistentNextTariffPage": 206,
-    "persistentTariffPagesCollected": 205,
-    "persistentTariffRowsStored": 18309,
+    "latestLiveBatchPlan": [["tariffs",206],["tariffs",207],["tariffs",208],["status",138],["status",139]],
+    "persistentNextTariffPage": 209,
+    "persistentTariffPagesCollected": 208,
+    "persistentTariffRowsStored": 18559,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 138,
-    "persistentStatusPagesCollected": 137,
-    "persistentStatusRowsStored": 11891,
+    "persistentNextStatusPage": 140,
+    "persistentStatusPagesCollected": 139,
+    "persistentStatusRowsStored": 12089,
     "statusTotalPages": 448,
-    "currentRunDecision": "At this run's first quota check, less than one real hour had elapsed since the previous successful persisted batch, so no official REVE request was consumed. Recheck before run exit and launch at most one batch only if the one-hour window is then open and no batch is active."
+    "currentRunDecision": "Exactly one official batch was launched after at least one real hour since the previous successful persisted batch. It completed 5/5 requests, with no /locations call and no HTTP 429. The one-shot trigger was disarmed and its marker removed after completion; workflow is workflow_dispatch-only again."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -117,5 +117,5 @@
     "newAliases": []
   },
   "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Six additional reconstructedCurrentReveWeb identities were first-passed in run4 without claiming historical-618 membership.",
-  "updatedAt": "2026-09-13T22:45:00Z"
+  "updatedAt": "2026-09-13T22:47:00Z"
 }
