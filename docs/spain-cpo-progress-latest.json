@@ -32,68 +32,53 @@
     "historicalSourceBasisThrough": "2026-08-18",
     "currentObservedOperatorLabels": 633,
     "currentDurableReveDistinctCpos": 148,
-    "currentDurableReveCoverageBlob": "4230d6745a66f6de010e5fef20bed21d83b7e8d7",
-    "decision": "Keep 618 frozen as historical KPI denominator. The observed 633-label registry count is not a durable nominative queue and cannot be used to synthesize historical membership. Use immutable current REVE coverage only as an explicitly reconstructed replacement identity queue, not as proof of historical-618 membership or as tariff authority."
-  },
-  "baseSnapshot": {
-    "path": "docs/spain-cpo-progress-2026-09.json",
-    "minimumTraversed": 118
-  },
-  "deltaHistory": {
-    "directory": "docs/spain-cpo-progress-batches",
-    "firstRun": 11,
-    "latestRun": 83,
-    "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run83.json",
-    "run62Present": true,
-    "canonicalPointerRepairedInRun63": true
+    "decision": "Keep 618 frozen as historical KPI denominator. Use immutable current REVE coverage only as an explicitly reconstructed replacement identity queue, never as proof of historical-618 membership."
   },
   "reconstructionPersistence": {
     "oneTimeHistoricalRecoveryCompleted": true,
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
-    "fallbackManifestCommit": "c81475ad04ea9a632ab42e450dae4c4b8dbd502f",
-    "historicalReconciliationCommit": "2b984109a830db91780fdc29e8a20965a20de1d2",
-    "replacementQueueRule": "Continue from genuinely new immutable current-REVE identities with reconstructedCurrentReve provenance while retaining continuity aggregates for unreconstructable historical identities.",
     "replacementIdentityQueueExhausted": true,
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T21:38:55.570814Z",
-    "latestPersistedStateUpdatedAt": "2026-09-12T21:39:03.686615Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T23:43:19.780461Z",
+    "latestPersistedStateUpdatedAt": "2026-09-12T23:43:27.452369Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",170],["tariffs",171],["tariffs",172],["status",114],["status",115]],
-    "latestLiveBatchQuotaConsumed": true,
-    "latestLiveBatchPersistenceSucceeded": true,
-    "tariffNewRows": 250,
-    "tariffUpdatedRows": 2,
-    "statusNewRows": 179,
-    "statusUpdatedRows": 21,
-    "persistentNextTariffPage": 173,
-    "persistentTariffPagesCollected": 172,
-    "persistentTariffRowsStored": 15569,
+    "latestLiveBatchPlan": [["tariffs",173],["tariffs",174],["tariffs",175],["status",116],["status",117]],
+    "persistentNextTariffPage": 176,
+    "persistentTariffPagesCollected": 175,
+    "persistentTariffRowsStored": 15815,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 116,
-    "persistentStatusPagesCollected": 115,
-    "persistentStatusRowsStored": 9744,
+    "persistentNextStatusPage": 118,
+    "persistentStatusPagesCollected": 117,
+    "persistentStatusRowsStored": 9941,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one eligible live REVE batch was launched and persisted. No second batch was launched in the same hourly window."
+    "currentRunDecision": "No second REVE external-API batch was launched from this runtime because workflow_dispatch is not available through the connected GitHub action surface. The existing hourly automation remains responsible for the next eligible batch; no quota was consumed here."
+  },
+  "reveWebLead": {
+    "status": "PROMISING_UNSUPPORTED_LEAD",
+    "base": "https://www.mapareve.es/api/public/v1",
+    "reportedLocationsRoute": "POST /locations",
+    "reportedSingleLocationRoute": "GET /locations/{locationId}",
+    "reportedPerPageMaximum": 25,
+    "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
+    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, including per_page 25 maximum and embedded tariffs/status.",
+    "independentRuntimeValidation": false,
+    "promoteToTccSource": false,
+    "nextSafeStep": "Run a one-page ordinary-browser or GitHub-hosted probe and compare the returned location/EVSE/connector fields against persisted official external-API data. Do not perform a national sweep before this sample comparison."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
-    "pr50ObservedOpenDraft": true,
     "preIntegrationOnly": true,
     "runtimePublishReady": false,
     "locationsCollectionComplete": true,
-    "locationsCollectionMustNotRestart": true,
-    "temporaryPushTriggerRemoved": true,
-    "workflowDispatchOnlyRestored": true,
-    "temporaryTriggerSentinelDeleted": true,
-    "staleInertTriggerSentinelCorrectionCommit": "e2be5036dd2d855a87fbafab8ba9243d2ec2cbc8"
+    "locationsCollectionMustNotRestart": true
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
@@ -102,17 +87,12 @@
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
-    "noSetAsideReauditWithoutNewEvidence": true,
-    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
     "noThirdPartyTariffPromoted": true,
-    "directCpoAndEmspPricingSeparated": true,
     "reveRequestBudgetRespectedByObservedRun": true,
-    "locationsEndpointUnusedByCollector": true,
+    "locationsEndpointUnusedByExternalCollector": true,
     "syntheticHistoricalMembershipCreated": false,
     "currentReveCoverageStill148DistinctCpos": true,
-    "criticalProgressPersistenceGuardActive": true,
-    "reveConcurrentPushMitigationActive": true,
-    "previousRevePersistenceGapResolved": true
+    "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
     "labelsTraversed": [],
@@ -121,7 +101,6 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "latestBatch": "docs/spain-cpo-progress-batches/2026-09-12-run83.json",
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership or reopen setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
-  "updatedAt": "2026-09-12T21:42:00Z"
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. In parallel, validate the public web endpoint on a tiny sample before any acceleration decision.",
+  "updatedAt": "2026-09-13T02:45:00Z"
 }
