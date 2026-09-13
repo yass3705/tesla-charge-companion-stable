@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 376,
-    "maximumNeverTraversed": 242,
+    "minimumTraversed": 380,
+    "maximumNeverTraversed": 238,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 28,
-    "partial": 8,
+    "sourceValidated": 30,
+    "partial": 10,
     "active": 94,
     "setAside": 175,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 376
+    "total": 380
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,28 +39,28 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run2.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T18:42:25.154600Z",
-    "latestPersistedStateUpdatedAt": "2026-09-13T18:42:35.067455Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T20:42:14.181954Z",
+    "latestPersistedStateUpdatedAt": "2026-09-13T20:42:23.417065Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",197],["tariffs",198],["tariffs",199],["status",132],["status",133]],
-    "persistentNextTariffPage": 200,
-    "persistentTariffPagesCollected": 199,
-    "persistentTariffRowsStored": 17816,
+    "latestLiveBatchPlan": [["tariffs",200],["tariffs",201],["tariffs",202],["status",134],["status",135]],
+    "persistentNextTariffPage": 203,
+    "persistentTariffPagesCollected": 202,
+    "persistentTariffRowsStored": 18069,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 134,
-    "persistentStatusPagesCollected": 133,
-    "persistentStatusRowsStored": 11495,
+    "persistentNextStatusPage": 136,
+    "persistentStatusPagesCollected": 135,
+    "persistentStatusRowsStored": 11691,
     "statusTotalPages": 448,
-    "currentRunDecision": "No second official batch was launched during this execution because the run began less than one full real hour after the latest successful persisted batch. Durable cursors remain 200 tariffs / 134 status."
+    "currentRunDecision": "Exactly one official batch was launched after more than one real hour since the previous successful persisted batch. It completed 5/5 requests, with no /locations call and no HTTP 429. One-shot trigger was removed and workflow restored to workflow_dispatch only."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -69,7 +69,6 @@
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
     "reportedPerPageMaximum": 25,
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
-    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources. It states that connectorId/evseId are the reliable keys relating normalized prices and availability, and that availability.evses[] is the authoritative per-EVSE status representation.",
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
     "validationGeneratedAt": "2026-09-13T18:41:51.573Z",
@@ -83,9 +82,9 @@
     "validationUniqueReveLocationIds": 1853,
     "validationUniqueOperatorLabels": 166,
     "identityCaveat": "Multiple DGT source stations may map to the same REVE locationId; duplicate locationId counts in the enriched station output must therefore not be interpreted as pagination duplicates without raw-page evidence.",
-    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer"],
+    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu"],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue comparing the 166 observed operator labels against canonical/alias/batch history and first-pass genuinely new identities with reconstructedCurrentReveWeb provenance. Then increase the bounded pagination diagnostic before any national public sweep or runtime promotion."
+    "nextSafeStep": "Continue diffing the remaining observed operator labels against the durable 148-label snapshot and branch history, first-pass genuinely new identities with reconstructedCurrentReveWeb provenance, and only then expand the bounded pagination diagnostic before any national public sweep or runtime promotion."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -96,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 376,
-    "firstPassMinimumTraversed": 376,
+    "continuityCountSum": 380,
+    "firstPassMinimumTraversed": 380,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -110,12 +109,13 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer"],
-    "newlySourceValidated": [],
-    "newlySetAside": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer"],
+    "labelsTraversed": ["AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu"],
+    "newlySourceValidated": ["AJUNTAMENT DE BELLREGUARD", "Ajuntament de Canovelles"],
+    "newlyPartial": ["Ajuntament de Blancafort", "Ajuntament de Cardedeu"],
+    "newlySetAside": [],
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "The validated 100-page public REVE web diagnostic exposed 166 operator labels. Three labels absent from the durable current REVE snapshot, canonical base and branch history were first-passed as provenance-tagged current reconstruction identities and set aside without inventing historical-618 membership. Continue this diff-first workflow before revisiting difficult cases.",
-  "updatedAt": "2026-09-13T19:45:00Z"
+  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. The latest four newly reconstructed identities have been persistently classified without claiming historical-618 membership.",
+  "updatedAt": "2026-09-13T20:47:00Z"
 }
