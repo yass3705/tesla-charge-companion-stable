@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Probe five public REVE location pages against real DGT stations
+      - name: Probe bounded public REVE sample
         run: |
           npm install --no-save @gasolinaradar/dgt-ev-collector@1.5.1
           node <<'NODE'
@@ -93,102 +93,141 @@ jobs:
           }
           main();
           NODE
-      - name: Compare public-map sample semantically with persisted official external API records
+      - name: Compare public sample with persisted external streams
         if: always()
         run: |
           python <<'PY'
-          import gzip, json
+          import gzip, json, math
           from pathlib import Path
 
-          p = Path('data/spain_reve/reve_public_web_probe.json')
-          out = json.loads(p.read_text())
-          with gzip.open('data/spain_reve/reve_connector_tariffs_raw.json.gz','rt',encoding='utf-8') as f:
-              tariffs = json.load(f)
-          with gzip.open('data/spain_reve/reve_operational_status_raw.json.gz','rt',encoding='utf-8') as f:
-              statuses = json.load(f)
+          p=Path('data/spain_reve/reve_public_web_probe.json')
+          out=json.loads(p.read_text())
+          with gzip.open('data/spain_reve/reve_connector_tariffs_raw.json.gz','rt',encoding='utf-8') as f: tariffs=json.load(f)
+          with gzip.open('data/spain_reve/reve_operational_status_raw.json.gz','rt',encoding='utf-8') as f: statuses=json.load(f)
 
-          rep = {
-              'candidateStations': 0, 'publicConnectors': 0, 'officialConnectorMatches': 0,
-              'tariffExactMatches': 0, 'tariffMismatches': 0,
-              'tariffSemanticMatches': 0, 'tariffSemanticMismatches': 0,
-              'publicEvses': 0, 'officialStatusMatches': 0, 'statusExactMatches': 0,
-              'statusMismatches': 0, 'examples': [], 'tariffShapeExamples': []
+          rep={
+            'candidateStations':0,'publicConnectors':0,'officialConnectorMatches':0,
+            'tariffRawExactMatches':0,'tariffRawMismatches':0,
+            'tariffVatAwareComparable':0,'tariffVatAwarePriceMatches':0,'tariffVatAwarePriceMismatches':0,
+            'publicEvses':0,'officialStatusIdentifierMatches':0,'statusExactMatches':0,'statusMismatches':0,
+            'statusIdentifierKinds':{},'examples':[],'tariffExamples':[],'statusExamples':[]
           }
 
-          def canon(v):
-              return json.dumps(v, sort_keys=True, separators=(',',':'), ensure_ascii=False)
+          def canon(v): return json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=False)
+          def r6(x): return round(float(x),6)
 
-          def semantic_scalars(v, prefix=''):
-              out=[]
-              if isinstance(v, dict):
-                  for k,val in v.items():
-                      kl=str(k).lower()
-                      np=f'{prefix}.{kl}' if prefix else kl
-                      if any(tok in kl for tok in ('price','amount','currency','energy','kwh','time','minute','hour','flat','parking','step','vat','tax','min','max','restriction')):
-                          if isinstance(val,(str,int,float,bool)) or val is None:
-                              out.append((np,val))
-                      out.extend(semantic_scalars(val,np))
-              elif isinstance(v,list):
-                  for i,val in enumerate(v):
-                      out.extend(semantic_scalars(val,f'{prefix}[]'))
-              return out
+          def tariff_objects(v):
+            if isinstance(v,list):
+              z=[]
+              for x in v: z.extend(tariff_objects(x))
+              return z
+            if not isinstance(v,dict): return []
+            if isinstance(v.get('tariff'),dict): return [v['tariff']]
+            if 'elements' in v and ('currency' in v or 'id' in v): return [v]
+            z=[]
+            for x in v.values():
+              if isinstance(x,(dict,list)): z.extend(tariff_objects(x))
+            return z
 
-          def semantic_signature(v):
-              vals=[]
-              for path,val in semantic_scalars(v):
-                  if isinstance(val,float):
-                      val=round(val,8)
-                  vals.append((path,val))
-              return sorted(vals, key=lambda x:(x[0], str(x[1])))
+          def components(v, public=False):
+            rows=[]
+            for t in tariff_objects(v):
+              cur=t.get('currency')
+              for el in t.get('elements') or []:
+                restr=el.get('restrictions') or {}
+                for pc in el.get('price_components') or []:
+                  price=pc.get('price')
+                  if not isinstance(price,(int,float)): continue
+                  vat=pc.get('vat')
+                  gross=float(price)
+                  if not public and isinstance(vat,(int,float)):
+                    gross=gross*(1+float(vat)/100)
+                  rows.append({
+                    'type':str(pc.get('type') or '').upper(), 'currency':cur,
+                    'gross':r6(gross), 'raw':r6(price), 'vat':vat,
+                    'step':pc.get('step_size'),
+                    'restrictions':{k:restr.get(k) for k in sorted(restr) if restr.get(k) is not None}
+                  })
+            return rows
+
+          def nonzero_signature(rows):
+            # Public-map values are consumer-facing/gross; external values are net + VAT.
+            return sorted((r['type'],r['currency'],r['gross'],r['step']) for r in rows if abs(r['gross'])>1e-9)
+
+          # Build a permissive identifier index from the persisted official status rows.
+          status_index={}
+          def add_status(identifier, rec, kind):
+            if identifier is None: return
+            s=str(identifier)
+            status_index.setdefault(s,[]).append((rec,kind))
+          status_records=[]
+          if isinstance(statuses,dict):
+            for k,v in statuses.items():
+              if isinstance(v,dict):
+                status_records.append(v); add_status(k,v,'dict_key')
+          elif isinstance(statuses,list): status_records=[v for v in statuses if isinstance(v,dict)]
+          for rec in status_records:
+            for key in ('id','uid','evse_id','evseId','evse_uid','evseUid','connector_id','connectorId'):
+              if key in rec: add_status(rec.get(key),rec,key)
+            evse=rec.get('evse')
+            if isinstance(evse,dict):
+              for key in ('id','uid','evse_id','evseId'):
+                if key in evse: add_status(evse.get(key),rec,'evse.'+key)
+            con=rec.get('connector')
+            if isinstance(con,dict):
+              for key in ('id','uid','connector_id','connectorId'):
+                if key in con: add_status(con.get(key),rec,'connector.'+key)
+
+          def official_status(rec):
+            for key in ('status','operational_status','operationalStatus'):
+              if rec.get(key) is not None: return str(rec.get(key)).upper()
+            return None
 
           for st in out.get('parityCandidates') or []:
-              rep['candidateStations'] += 1
-              ex = {'reveLocationId': st.get('reveLocationId'), 'connectorMatches': 0, 'statusMatches': 0}
-              for ev in st.get('evses') or []:
-                  rep['publicEvses'] += 1
-                  skeys=[]
-                  if ev.get('id'): skeys.append('id:'+str(ev['id']))
-                  if ev.get('evse_id'): skeys.append('evse:'+str(ev['evse_id']))
-                  official = next((statuses[k] for k in skeys if k in statuses), None)
-                  if official is not None:
-                      rep['officialStatusMatches'] += 1; ex['statusMatches'] += 1
-                      if str(official.get('status')) == str(ev.get('status')):
-                          rep['statusExactMatches'] += 1
-                      else:
-                          rep['statusMismatches'] += 1
-                  for c in ev.get('connectors') or []:
-                      rep['publicConnectors'] += 1
-                      cid = c.get('id')
-                      official_t = tariffs.get(str(cid)) if cid else None
-                      if official_t is not None:
-                          rep['officialConnectorMatches'] += 1; ex['connectorMatches'] += 1
-                          public_tariffs = c.get('tariffs') or []
-                          official_tariffs = official_t.get('tariffs') or []
-                          if canon(official_tariffs) == canon(public_tariffs):
-                              rep['tariffExactMatches'] += 1
-                          else:
-                              rep['tariffMismatches'] += 1
-                          psig=semantic_signature(public_tariffs)
-                          osig=semantic_signature(official_tariffs)
-                          if psig == osig and (psig or osig):
-                              rep['tariffSemanticMatches'] += 1
-                          else:
-                              rep['tariffSemanticMismatches'] += 1
-                          if len(rep['tariffShapeExamples']) < 5:
-                              rep['tariffShapeExamples'].append({
-                                  'connectorId': cid,
-                                  'publicSemantic': psig[:80],
-                                  'officialSemantic': osig[:80],
-                                  'publicTopLevelType': type(public_tariffs).__name__,
-                                  'officialTopLevelType': type(official_tariffs).__name__
-                              })
-              if len(rep['examples']) < 5 and (ex['connectorMatches'] or ex['statusMatches']):
-                  rep['examples'].append(ex)
+            rep['candidateStations']+=1
+            ex={'reveLocationId':st.get('reveLocationId'),'connectorMatches':0,'statusIdentifierMatches':0}
+            for ev in st.get('evses') or []:
+              rep['publicEvses']+=1
+              candidates=[]
+              for kind,val in [('evse.id',ev.get('id')),('evse.evse_id',ev.get('evse_id'))]:
+                if val is not None: candidates.append((kind,str(val)))
+              for c in ev.get('connectors') or []:
+                if c.get('id') is not None: candidates.append(('connector.id',str(c.get('id'))))
+              hit=None; hitkind=None; hitid=None
+              for pk,pid in candidates:
+                if pid in status_index:
+                  hit,idxkind=status_index[pid][0]; hitkind=pk+'->'+idxkind; hitid=pid; break
+              if hit is not None:
+                rep['officialStatusIdentifierMatches']+=1; ex['statusIdentifierMatches']+=1
+                rep['statusIdentifierKinds'][hitkind]=rep['statusIdentifierKinds'].get(hitkind,0)+1
+                ps=(str(ev.get('status')).upper() if ev.get('status') is not None else None)
+                os=official_status(hit)
+                if ps==os: rep['statusExactMatches']+=1
+                else: rep['statusMismatches']+=1
+                if len(rep['statusExamples'])<8:
+                  rep['statusExamples'].append({'identifier':hitid,'identifierKind':hitkind,'publicStatus':ps,'officialStatus':os})
+              for c in ev.get('connectors') or []:
+                rep['publicConnectors']+=1
+                cid=c.get('id'); official_t=tariffs.get(str(cid)) if cid else None
+                if official_t is None: continue
+                rep['officialConnectorMatches']+=1; ex['connectorMatches']+=1
+                pub=c.get('tariffs') or []; off=official_t.get('tariffs') or []
+                if canon(pub)==canon(off): rep['tariffRawExactMatches']+=1
+                else: rep['tariffRawMismatches']+=1
+                pc=components(pub,public=True); oc=components(off,public=False)
+                ps=nonzero_signature(pc); os=nonzero_signature(oc)
+                if ps or os:
+                  rep['tariffVatAwareComparable']+=1
+                  if ps==os: rep['tariffVatAwarePriceMatches']+=1
+                  else: rep['tariffVatAwarePriceMismatches']+=1
+                if len(rep['tariffExamples'])<8:
+                  rep['tariffExamples'].append({'connectorId':cid,'publicNonZeroGross':ps,'officialNonZeroGross':os})
+            if len(rep['examples'])<8 and (ex['connectorMatches'] or ex['statusIdentifierMatches']): rep['examples'].append(ex)
 
-          out['officialExternalApiParity'] = rep
-          out.pop('parityCandidates', None)
-          p.write_text(json.dumps(out, indent=2, ensure_ascii=False)+'\n')
-          print(json.dumps(rep, indent=2, ensure_ascii=False))
+          out['officialExternalApiParityV2']=rep
+          out.pop('parityCandidates',None)
+          p.write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n')
+          print(json.dumps(rep,indent=2,ensure_ascii=False))
           PY
       - name: Commit probe result
         if: always()
@@ -197,6 +236,6 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
-          git commit -m "test(es): compare REVE public web with official persisted streams"
+          git commit -m "test(es): validate REVE public VAT/status parity"
           git pull --rebase origin spain-reve-preintegration
           git push
