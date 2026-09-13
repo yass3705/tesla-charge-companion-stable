@@ -44,31 +44,31 @@
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T04:40:42.191245Z",
-    "latestPersistedStateUpdatedAt": "2026-09-13T04:40:49.001939Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T06:42:58.330821Z",
+    "latestPersistedStateUpdatedAt": "2026-09-13T06:43:04.882328Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",176],["tariffs",177],["tariffs",178],["status",118],["status",119]],
-    "persistentNextTariffPage": 179,
-    "persistentTariffPagesCollected": 178,
-    "persistentTariffRowsStored": 16070,
+    "latestLiveBatchPlan": [["tariffs",179],["tariffs",180],["tariffs",181],["status",120],["status",121]],
+    "persistentNextTariffPage": 182,
+    "persistentTariffPagesCollected": 181,
+    "persistentTariffRowsStored": 16320,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 120,
-    "persistentStatusPagesCollected": 119,
-    "persistentStatusRowsStored": 10141,
+    "persistentNextStatusPage": 122,
+    "persistentStatusPagesCollected": 121,
+    "persistentStatusRowsStored": 10340,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one external-API batch was launched through a temporary path-scoped push trigger because workflow_dispatch is unavailable through the connected GitHub action surface. It completed 5/5 with no /locations request. The temporary push trigger and trigger file were removed immediately afterward to prevent accidental duplicate batches."
+    "currentRunDecision": "Exactly one external-API batch was launched after the one-hour guard elapsed. It completed 5/5 with only /connectors/tariffs and /evses/operational_status calls, all HTTP 200, no /locations and no observed 429. The temporary path-scoped push trigger was restored to workflow_dispatch-only before its trigger file was deleted, preventing a duplicate batch in the same window."
   },
   "reveWebLead": {
-    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_PARITY_INCONCLUSIVE",
+    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_SEMANTIC_PARITY_PENDING",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
     "reportedPerPageMaximum": 25,
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
-    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, including per_page 25 maximum and embedded tariffs/status.",
+    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources.",
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
     "validationGeneratedAt": "2026-09-13T04:40:43.332Z",
@@ -82,8 +82,8 @@
     "parityCandidateStations": 20,
     "parityPublicConnectors": 71,
     "parityOfficialConnectorIdMatches": 32,
-    "parityTariffExactObjectMatches": 0,
-    "parityTariffObjectMismatches": 32,
+    "parityRawTariffObjectExactMatches": 0,
+    "parityRawTariffObjectMismatches": 32,
     "parityPublicEvses": 68,
     "parityOfficialStatusIdMatches": 0,
     "sampleReveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
@@ -93,8 +93,8 @@
     "sampleConnectorCount": 4,
     "sampleTariffBearingConnectors": 4,
     "promoteToTccSource": false,
-    "parityInterpretation": "Connector identity overlap is proven, but raw tariff object equality is not. The mismatch may reflect public-vs-external schema/normalization differences and must be inspected semantically before any source promotion. EVSE status identifiers did not map with the current keys, so status parity is not yet established.",
-    "nextSafeStep": "Do not run another immediate public sweep. Inspect tariff-schema differences and EVSE identifier mapping on the persisted sample, then perform a later small controlled parity probe if needed. No national sweep or TCC source promotion yet."
+    "parityInterpretation": "The prior 0/32 raw tariff object equality result is not sufficient to infer price disagreement because the probe compares different raw schema representations. Connector identity overlap is proven. The next parity test must compare semantic tariff components (currency, energy, fixed/session/time components and restrictions), while EVSE status identifier mapping remains unresolved.",
+    "nextSafeStep": "Reuse the persisted connector overlaps for a semantic tariff comparison and resolve EVSE identifier mapping. Only if additional public raw fields are required should another small controlled public sample be run. No national sweep or TCC source promotion yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -124,6 +124,6 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated, but tariff/status parity with the official external API remains unproven and is now the active web investigation.",
-  "updatedAt": "2026-09-13T04:43:00Z"
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; semantic tariff parity and EVSE status identifier mapping are the active web checks.",
+  "updatedAt": "2026-09-13T06:46:00Z"
 }
