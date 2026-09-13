@@ -3,7 +3,7 @@
   "country": "ES",
   "investigation": "REVE public web/frontend data path",
   "date": "2026-09-13",
-  "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_SEMANTIC_PARITY_PENDING",
+  "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_GROSS_NET_NORMALIZATION_EVIDENCE",
   "officialExternalApi": {
     "base": "https://www.mapareve.es/api/external/v1",
     "documented": true,
@@ -27,7 +27,7 @@
   "independentSmallSampleValidation": {
     "validatedInProjectRuntime": true,
     "evidenceFile": "data/spain_reve/reve_public_web_probe.json",
-    "generatedAt": "2026-09-13T04:40:43.332Z",
+    "generatedAt": "2026-09-13T08:40:49.754Z",
     "maxPages": 5,
     "perPage": 25,
     "dgtStationsLoaded": 12138,
@@ -47,16 +47,27 @@
     "officialConnectorIdMatches": 32,
     "rawTariffObjectExactMatches": 0,
     "rawTariffObjectMismatches": 32,
+    "naiveSemanticMatches": 0,
+    "naiveSemanticMismatches": 32,
     "publicEvses": 68,
     "officialStatusIdMatches": 0,
-    "interpretation": "The existing parity probe is structurally too strict to decide tariff equivalence: it compares the public-map connector tariffs array directly with the external API stored tariff row/array representation. The open-source collector explicitly normalizes both sources to the same consumer output shape, while its public reveData field is only a reduced raw location slice. Therefore 0 raw-object matches is not evidence that the numeric tariffs differ. Connector identity overlap is nevertheless independently proven. EVSE status parity is still unresolved because the current persisted external status keys do not match the identifiers retained in the public reduced slice.",
-    "nextComparison": "Compare semantic tariff components instead of raw JSON objects (currency, energy price, fixed/session/time components and restrictions) for the 32 connector-ID overlaps, and resolve public evse_id/internal-id mapping against the external status records. Reuse persisted samples where possible; avoid a national public sweep."
+    "newNormalizationEvidence": {
+      "finding": "At least the inspected matched tariff examples are consistent with the public-map feed exposing VAT-inclusive/consumer-facing rounded prices while the external feed preserves net component prices plus vat=21.",
+      "examples": [
+        {"externalNet": 0.8265, "vatPercent": 21, "computedGross": 0.9999999999999999, "publicObserved": 1.0},
+        {"externalNet": 4.956, "vatPercent": 21, "computedGross": 5.99676, "publicObserved": 6.0},
+        {"externalNet": 0.566, "vatPercent": 21, "computedGross": 0.68486, "publicObserved": 0.68}
+      ],
+      "caveat": "This is strong representation/normalization evidence, not yet proof that every one of the 32 matched connector tariffs is semantically identical. Component pairing, type, step size, dates and restrictions must still be compared after VAT normalization."
+    },
+    "statusInterpretation": "The public reduced slice carries an OCPI-style availability status, whereas the persisted bulk external /evses/operational_status stream exposes a boolean operational_status and different retained keys. Zero direct identifier/status matches therefore does not establish disagreement; identifier and semantic mapping are still required.",
+    "nextComparison": "Implement a VAT-aware component comparator for all 32 connector-ID overlaps: unwrap the public tariff wrapper, pair component type/step/restrictions, compare public observed price to round(external price * (1 + vat/100), consumer precision), and separately compare lifecycle/date restrictions. Resolve EVSE availability against an appropriate external identifier/status representation rather than directly against the bulk boolean feed."
   },
   "validationDecision": {
     "promoteToTccSource": false,
     "replaceExternalApiCollector": false,
     "browserCaptureNeededNow": false,
-    "nextSafeStep": "Build a semantic parity comparison on the already proven connector-ID overlap, then run only a small controlled public sample again if additional raw fields are required. Keep the official external collector as canonical until semantic tariff and status parity is demonstrated.",
+    "nextSafeStep": "Run the VAT-aware semantic comparator over the bounded persisted/sample overlap. Keep the official external collector canonical until tariff equivalence and status mapping are demonstrated systematically.",
     "doNot": [
       "bypass WAF or access controls",
       "multiply IPs or API keys",
@@ -82,5 +93,5 @@
       "role": "implementation describing /api/public/v1 behavior, per_page=25 maximum, embedded tariffs/status, and common normalized output"
     }
   ],
-  "updatedAt": "2026-09-13T06:45:00Z"
+  "updatedAt": "2026-09-13T08:50:00Z"
 }
