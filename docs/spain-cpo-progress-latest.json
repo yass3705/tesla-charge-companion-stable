@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 380,
-    "maximumNeverTraversed": 238,
+    "minimumTraversed": 384,
+    "maximumNeverTraversed": 234,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 30,
-    "partial": 10,
+    "sourceValidated": 31,
+    "partial": 11,
     "active": 94,
-    "setAside": 175,
+    "setAside": 177,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 380
+    "total": 384
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,28 +39,28 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run2.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run3.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T20:42:14.181954Z",
-    "latestPersistedStateUpdatedAt": "2026-09-13T20:42:23.417065Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-13T21:45:14.390610Z",
+    "latestPersistedStateUpdatedAt": "2026-09-13T21:45:26.150384Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",200],["tariffs",201],["tariffs",202],["status",134],["status",135]],
-    "persistentNextTariffPage": 203,
-    "persistentTariffPagesCollected": 202,
-    "persistentTariffRowsStored": 18069,
+    "latestLiveBatchPlan": [["tariffs",203],["tariffs",204],["tariffs",205],["status",136],["status",137]],
+    "persistentNextTariffPage": 206,
+    "persistentTariffPagesCollected": 205,
+    "persistentTariffRowsStored": 18309,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 136,
-    "persistentStatusPagesCollected": 135,
-    "persistentStatusRowsStored": 11691,
+    "persistentNextStatusPage": 138,
+    "persistentStatusPagesCollected": 137,
+    "persistentStatusRowsStored": 11891,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one official batch was launched after more than one real hour since the previous successful persisted batch. It completed 5/5 requests, with no /locations call and no HTTP 429. One-shot trigger was removed and workflow restored to workflow_dispatch only."
+    "currentRunDecision": "Exactly one official batch was launched after at least one real hour since the previous successful persisted batch. It completed 5/5 requests, with no /locations call and no HTTP 429. The one-shot trigger was disarmed and removed after completion; workflow is workflow_dispatch-only again."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -82,7 +82,7 @@
     "validationUniqueReveLocationIds": 1853,
     "validationUniqueOperatorLabels": 166,
     "identityCaveat": "Multiple DGT source stations may map to the same REVE locationId; duplicate locationId counts in the enriched station output must therefore not be interpreted as pagination duplicates without raw-page evidence.",
-    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu"],
+    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu", "Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles"],
     "promoteToTccSource": false,
     "nextSafeStep": "Continue diffing the remaining observed operator labels against the durable 148-label snapshot and branch history, first-pass genuinely new identities with reconstructedCurrentReveWeb provenance, and only then expand the bounded pagination diagnostic before any national public sweep or runtime promotion."
   },
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 380,
-    "firstPassMinimumTraversed": 380,
+    "continuityCountSum": 384,
+    "firstPassMinimumTraversed": 384,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,13 +109,13 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu"],
-    "newlySourceValidated": ["AJUNTAMENT DE BELLREGUARD", "Ajuntament de Canovelles"],
-    "newlyPartial": ["Ajuntament de Blancafort", "Ajuntament de Cardedeu"],
-    "newlySetAside": [],
+    "labelsTraversed": ["Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles"],
+    "newlySourceValidated": ["Ajuntament de Martorelles"],
+    "newlyPartial": ["Ajuntament de Gironella"],
+    "newlySetAside": ["Ajuntament de Casserres", "Ajuntament de La Secuita"],
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. The latest four newly reconstructed identities have been persistently classified without claiming historical-618 membership.",
-  "updatedAt": "2026-09-13T20:47:00Z"
+  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Four additional reconstructedCurrentReveWeb identities were first-passed in run3 without claiming historical-618 membership.",
+  "updatedAt": "2026-09-13T21:49:00Z"
 }
