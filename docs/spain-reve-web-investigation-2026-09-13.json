@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "investigation": "REVE public web/frontend data path",
+  "date": "2026-09-13",
+  "status": "PROMISING_UNSUPPORTED_LEAD",
+  "officialExternalApi": {
+    "base": "https://www.mapareve.es/api/external/v1",
+    "documented": true,
+    "rateLimit": "5 requests/hour",
+    "currentCollectorPolicyUnchanged": true
+  },
+  "publicFrontendLead": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "officiallyDocumentedByREE": false,
+    "evidenceClass": "independent open-source reverse-engineering report; not yet independently validated from this runtime",
+    "reportedAuth": "none",
+    "reportedMapUsage": "internal endpoint used by mapareve.es browser map",
+    "reportedLocationsRoute": "POST /locations",
+    "reportedSingleLocationRoute": "GET /locations/{locationId}",
+    "reportedPerPageMaximum": 25,
+    "reportedPayload": "locations with EVSE status and connector tariffs embedded",
+    "reportedRateLimit": "no documented limit observed by third party",
+    "reportedFullSpainCost": "approximately 582 sequential requests at 25 locations/page for ~14,550 locations",
+    "reportedFilters": ["bbox", "cpo_ids", "power_min", "connector_types"],
+    "risks": [
+      "undocumented and unsupported by Red Electrica",
+      "may change or disappear without notice",
+      "automated use outside the browser may be subject to site terms",
+      "high request volume for a full national sweep",
+      "runtime direct access currently receives web protection/403, so no attempt will be made to bypass it"
+    ]
+  },
+  "validationDecision": {
+    "promoteToTccSource": false,
+    "replaceExternalApiCollector": false,
+    "nextSafeStep": "Validate one or a few public /locations responses through an ordinary browser session/network capture or another non-bypassing public request path, compare fields and values against the persisted official external API sample, then decide whether this can be used as an acceleration source with resumable caching and conservative request pacing.",
+    "doNot": [
+      "bypass WAF or access controls",
+      "multiply IPs or API keys",
+      "run a 582-page sweep before small-sample validation",
+      "treat the endpoint as official or stable"
+    ]
+  },
+  "sourceReferences": [
+    {
+      "type": "official",
+      "url": "https://www.mapareve.es/docs/api/external/v1",
+      "role": "documented external API and 5 requests/hour limit"
+    },
+    {
+      "type": "independent-open-source",
+      "url": "https://www.npmjs.com/package/@gasolinaradar/dgt-ev-collector",
+      "role": "recent implementation reporting /api/public/v1 behavior and live tests"
+    }
+  ]
+}
