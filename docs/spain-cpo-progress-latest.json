@@ -59,16 +59,16 @@
     "persistentStatusPagesCollected": 121,
     "persistentStatusRowsStored": 10340,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one external-API batch was launched after the one-hour guard elapsed. It completed 5/5 with only /connectors/tariffs and /evses/operational_status calls, all HTTP 200, no /locations and no observed 429. The temporary path-scoped push trigger was restored to workflow_dispatch-only before its trigger file was deleted, preventing a duplicate batch in the same window."
+    "currentRunDecision": "No new external-API batch was started in this run. More than one real hour had elapsed, but direct workflow_dispatch was unavailable through the connector and the safe temporary path-scoped trigger write was blocked before the trigger file could be created. The workflow was immediately restored to workflow_dispatch-only, so no REVE calls were made and no hourly quota was consumed by this attempted launch."
   },
   "reveWebLead": {
-    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_SEMANTIC_PARITY_PENDING",
+    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_NORMALIZATION_EVIDENCE_STRENGTHENED",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
     "reportedPerPageMaximum": 25,
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
-    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources.",
+    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources. Its public documentation also exposes a live side-by-side comparison command against the external API and states that connectorId/evseId are the reliable keys relating normalized prices and availability.",
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
     "validationGeneratedAt": "2026-09-13T04:40:43.332Z",
@@ -93,8 +93,8 @@
     "sampleConnectorCount": 4,
     "sampleTariffBearingConnectors": 4,
     "promoteToTccSource": false,
-    "parityInterpretation": "The prior 0/32 raw tariff object equality result is not sufficient to infer price disagreement because the probe compares different raw schema representations. Connector identity overlap is proven. The next parity test must compare semantic tariff components (currency, energy, fixed/session/time components and restrictions), while EVSE status identifier mapping remains unresolved.",
-    "nextSafeStep": "Reuse the persisted connector overlaps for a semantic tariff comparison and resolve EVSE identifier mapping. Only if additional public raw fields are required should another small controlled public sample be run. No national sweep or TCC source promotion yet."
+    "parityInterpretation": "Raw JSON object inequality is not evidence of price disagreement. External evidence now confirms that a maintained collector normalizes both REVE sources into the same consumer schema and uses connectorId/evseId to relate tariff and availability records. Our own 32 connector-ID overlaps therefore remain useful parity anchors. Exact semantic equality of currency, ENERGY/FLAT/TIME/PARKING_TIME components and OCPI restrictions, plus EVSE identifier mapping, still needs to be demonstrated on our persisted sample before any TCC promotion.",
+    "nextSafeStep": "Implement or run an offline semantic comparator against already-persisted public sample and external tariff/status rows, keyed first by connectorId and then by mapped evseId. Compare currency, price components and restrictions rather than raw objects. Do not run a national public sweep or promote this source yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -124,6 +124,6 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; semantic tariff parity and EVSE status identifier mapping are the active web checks.",
-  "updatedAt": "2026-09-13T06:46:00Z"
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; semantic tariff parity and EVSE status identifier mapping remain the active web checks, now with stronger normalization evidence from the maintained public collector documentation.",
+  "updatedAt": "2026-09-13T07:50:00Z"
 }
