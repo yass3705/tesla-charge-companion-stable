@@ -59,19 +59,34 @@
     "persistentStatusPagesCollected": 117,
     "persistentStatusRowsStored": 9941,
     "statusTotalPages": 448,
-    "currentRunDecision": "No second REVE external-API batch was launched from this runtime because workflow_dispatch is not available through the connected GitHub action surface. The existing hourly automation remains responsible for the next eligible batch; no quota was consumed here."
+    "currentRunDecision": "No second REVE external-API batch was launched from this runtime because workflow_dispatch is not available through the connected GitHub action surface. No external-API quota was consumed by the public-web validation."
   },
   "reveWebLead": {
-    "status": "PROMISING_UNSUPPORTED_LEAD",
+    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
     "reportedPerPageMaximum": 25,
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
     "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, including per_page 25 maximum and embedded tariffs/status.",
-    "independentRuntimeValidation": false,
+    "independentRuntimeValidation": true,
+    "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
+    "validationGeneratedAt": "2026-09-13T03:45:10.545Z",
+    "validationMaxPages": 5,
+    "validationPerPage": 25,
+    "validationDgtStationsLoaded": 12138,
+    "validationMatchedStations": 153,
+    "validationMatchedWithPrices": 138,
+    "validationMatchedWithAvailability": 153,
+    "validationMatchedWithReveData": 153,
+    "sampleReveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
+    "sampleOperator": "IBERDROLA CLIENTES S.A.U",
+    "samplePriceCount": 16,
+    "sampleEvseCount": 4,
+    "sampleConnectorCount": 4,
+    "sampleTariffBearingConnectors": 4,
     "promoteToTccSource": false,
-    "nextSafeStep": "Run a one-page ordinary-browser or GitHub-hosted probe and compare the returned location/EVSE/connector fields against persisted official external-API data. Do not perform a national sweep before this sample comparison."
+    "nextSafeStep": "Cross-check a few independently matched locations against persisted official external-API tariff/status records and assess stability/terms before any wider collection. Do not perform a national sweep yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -101,6 +116,6 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. In parallel, validate the public web endpoint on a tiny sample before any acceleration decision.",
-  "updatedAt": "2026-09-13T02:45:00Z"
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is now independently validated on a small sample; next compare it against persisted official external-API records before considering broader use.",
+  "updatedAt": "2026-09-13T03:46:00Z"
 }
