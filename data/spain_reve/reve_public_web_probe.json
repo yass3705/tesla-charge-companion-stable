@@ -1,20 +1,37 @@
 {
-  "startedAt": "2026-09-13T03:43:04.563Z",
+  "startedAt": "2026-09-13T03:44:48.336Z",
   "packageVersion": "1.5.1",
   "source": "public",
-  "maxPages": 1,
+  "maxPages": 5,
   "perPage": 25,
   "ok": true,
-  "reveLocationId": null,
-  "operator": null,
-  "priceCount": 0,
-  "availabilityPresent": false,
-  "availabilityEvseCount": 0,
-  "reveDataPresent": false,
-  "reveDataEvseCount": 0,
-  "reveDataConnectorCount": 0,
-  "connectorFields": [],
-  "tariffBearingConnectors": 0,
-  "statusValues": [],
-  "finishedAt": "2026-09-13T03:43:06.983Z"
+  "dgtStationsLoaded": 12138,
+  "matchedStations": 153,
+  "matchedWithPrices": 138,
+  "matchedWithAvailability": 153,
+  "matchedWithReveData": 153,
+  "sample": {
+    "sourceStationId": "2024000123",
+    "name": "NA-Zizurmayor-001",
+    "reveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
+    "operatorName": "IBERDROLA CLIENTES S.A.U",
+    "priceCount": 16,
+    "availabilityPresent": true,
+    "availabilityStatus": "UNKNOWN",
+    "reveDataEvseCount": 4,
+    "reveDataConnectorCount": 4,
+    "connectorFields": [
+      "format",
+      "id",
+      "max_electric_power",
+      "power_type",
+      "standard",
+      "tariffs"
+    ],
+    "tariffBearingConnectors": 4,
+    "statusValues": [
+      "UNKNOWN"
+    ]
+  },
+  "finishedAt": "2026-09-13T03:45:10.545Z"
 }
