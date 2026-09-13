@@ -32,12 +32,12 @@ jobs:
           const pkg = require('@gasolinaradar/dgt-ev-collector');
           async function main() {
             const startedAt = new Date().toISOString();
-            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 5, perPage: 25 };
+            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 20, perPage: 25 };
             try {
               const stations = await pkg.fetchStations({ logger: { info(){}, warn(){}, debug(){} } });
               const enriched = await pkg.enrichStations(stations, {
                 source: 'public', acknowledgeUnsupported: true,
-                maxPages: 5, perPage: 25, thresholdMeters: 100,
+                maxPages: 20, perPage: 25, thresholdMeters: 100,
                 logger: { info(){}, warn(){}, debug(){} }
               });
               const matched = enriched.filter(r => r && r.reveLocationId);
@@ -151,10 +151,8 @@ jobs:
             return rows
 
           def nonzero_signature(rows):
-            # Public-map values are consumer-facing/gross; external values are net + VAT.
             return sorted((r['type'],r['currency'],r['gross'],r['step']) for r in rows if abs(r['gross'])>1e-9)
 
-          # Build a permissive identifier index from the persisted official status rows.
           status_index={}
           def add_status(identifier, rec, kind):
             if identifier is None: return
