@@ -1,25 +1,25 @@
 {
-  "startedAt": "2026-09-13T15:47:44.959Z",
+  "startedAt": "2026-09-13T16:44:29.194Z",
   "packageVersion": "1.5.1",
   "source": "public",
-  "maxPages": 5,
+  "maxPages": 20,
   "perPage": 25,
   "ok": true,
   "dgtStationsLoaded": 12138,
-  "matchedStations": 153,
-  "matchedWithPrices": 138,
-  "matchedWithAvailability": 153,
-  "matchedWithReveData": 153,
+  "matchedStations": 594,
+  "matchedWithPrices": 526,
+  "matchedWithAvailability": 594,
+  "matchedWithReveData": 594,
   "sample": {
-    "sourceStationId": "2024000123",
-    "name": "NA-Zizurmayor-001",
-    "reveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
-    "operatorName": "IBERDROLA CLIENTES S.A.U",
-    "priceCount": 16,
+    "sourceStationId": "2023002090",
+    "name": "Centro Porsche Asturias CP 2",
+    "reveLocationId": "077b5539-1d68-4b44-9e7f-d2f522e176c1",
+    "operatorName": "Ibérica de Tecnología y Servicios de Automoción, S.L.",
+    "priceCount": 0,
     "availabilityPresent": true,
-    "availabilityStatus": "UNKNOWN",
-    "reveDataEvseCount": 4,
-    "reveDataConnectorCount": 4,
+    "availabilityStatus": "AVAILABLE",
+    "reveDataEvseCount": 1,
+    "reveDataConnectorCount": 1,
     "connectorFields": [
       "format",
       "id",
@@ -28,29 +28,34 @@
       "standard",
       "tariffs"
     ],
-    "tariffBearingConnectors": 4,
+    "tariffBearingConnectors": 0,
     "statusValues": [
-      "UNKNOWN"
+      "AVAILABLE"
     ]
   },
-  "finishedAt": "2026-09-13T15:47:57.657Z",
+  "finishedAt": "2026-09-13T16:45:37.542Z",
   "officialExternalApiParityV2": {
     "candidateStations": 20,
-    "publicConnectors": 71,
-    "officialConnectorMatches": 32,
+    "publicConnectors": 79,
+    "officialConnectorMatches": 30,
     "tariffRawExactMatches": 0,
-    "tariffRawMismatches": 32,
-    "tariffVatAwareComparable": 32,
+    "tariffRawMismatches": 30,
+    "tariffVatAwareComparable": 30,
     "tariffVatAwarePriceMatches": 0,
-    "tariffVatAwarePriceMismatches": 32,
-    "publicEvses": 68,
-    "officialStatusIdentifierMatches": 4,
+    "tariffVatAwarePriceMismatches": 30,
+    "publicEvses": 73,
+    "officialStatusIdentifierMatches": 18,
     "statusExactMatches": 0,
-    "statusMismatches": 4,
+    "statusMismatches": 18,
     "statusIdentifierKinds": {
-      "evse.evse_id->evse_id": 4
+      "evse.evse_id->evse_id": 18
     },
     "examples": [
+      {
+        "reveLocationId": "04400e7a-3934-4a21-be65-8310622fc620",
+        "connectorMatches": 0,
+        "statusIdentifierMatches": 2
+      },
       {
         "reveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
         "connectorMatches": 2,
@@ -72,22 +77,17 @@
         "statusIdentifierMatches": 0
       },
       {
-        "reveLocationId": "017ef738-b5e9-411e-b492-79c9092efe15",
-        "connectorMatches": 1,
-        "statusIdentifierMatches": 1
-      },
-      {
-        "reveLocationId": "0038502c-ba6b-42bb-87cb-a6a55ede519a",
-        "connectorMatches": 1,
+        "reveLocationId": "07ab6e8a-8828-4b60-8c43-1fc1f9d51bf6",
+        "connectorMatches": 7,
         "statusIdentifierMatches": 0
       },
       {
-        "reveLocationId": "017ef738-b5e9-411e-b492-79c9092efe15",
-        "connectorMatches": 1,
-        "statusIdentifierMatches": 1
+        "reveLocationId": "068b3966-a871-4658-9fb2-a5cc4fbd7f79",
+        "connectorMatches": 2,
+        "statusIdentifierMatches": 0
       },
       {
-        "reveLocationId": "017f4f22-f327-479b-b9ac-c2b3fda1a43b",
+        "reveLocationId": "02cef137-8dac-45b0-b7b4-0f9b87941dbe",
         "connectorMatches": 3,
         "statusIdentifierMatches": 0
       }
@@ -352,68 +352,140 @@
         ]
       },
       {
-        "connectorId": "dc78aa9f-44d3-4cd6-9e33-db3b82ca7971",
+        "connectorId": "08ecaf89-e33e-41aa-8a5b-14f8e85f63e3",
         "publicNonZeroGross": [
           [
             "ENERGY",
             "EUR",
-            0.35,
-            1000
+            0.56,
+            1
+          ],
+          [
+            "ENERGY",
+            "EUR",
+            0.56,
+            1
+          ],
+          [
+            "PARKING_TIME",
+            "EUR",
+            5.4,
+            60
           ]
         ],
         "officialNonZeroGross": [
           [
             "ENERGY",
             "EUR",
-            0.29,
-            1000
+            0.559988,
+            1
+          ],
+          [
+            "ENERGY",
+            "EUR",
+            0.559988,
+            1
+          ],
+          [
+            "PARKING_TIME",
+            "EUR",
+            5.399988,
+            60
           ]
         ]
       },
       {
-        "connectorId": "1b6d4ef2-7872-4dcc-bdc9-b891cb69fb73",
+        "connectorId": "5a24d24a-b4c2-4a47-9b07-2d22b311383a",
         "publicNonZeroGross": [
           [
             "ENERGY",
             "EUR",
-            0.4,
+            0.56,
             1
+          ],
+          [
+            "ENERGY",
+            "EUR",
+            0.56,
+            1
+          ],
+          [
+            "PARKING_TIME",
+            "EUR",
+            5.4,
+            60
           ]
         ],
         "officialNonZeroGross": [
           [
             "ENERGY",
             "EUR",
-            0.3993,
+            0.559988,
             1
+          ],
+          [
+            "ENERGY",
+            "EUR",
+            0.559988,
+            1
+          ],
+          [
+            "PARKING_TIME",
+            "EUR",
+            5.399988,
+            60
           ]
         ]
       }
     ],
     "statusExamples": [
       {
-        "identifier": "ES*PWH*EES*CAR*VAL*ALF0003*1",
+        "identifier": "ES*GFX*E01423*1",
         "identifierKind": "evse.evse_id->evse_id",
-        "publicStatus": "AVAILABLE",
-        "officialStatus": "TRUE"
-      },
-      {
-        "identifier": "ES*PWH*EES*CAR*VAL*ALF0003*1",
-        "identifierKind": "evse.evse_id->evse_id",
-        "publicStatus": "AVAILABLE",
-        "officialStatus": "TRUE"
-      },
-      {
-        "identifier": "ES*WEN*EAVIAALCALA1*1",
-        "identifierKind": "evse.evse_id->evse_id",
-        "publicStatus": "AVAILABLE",
-        "officialStatus": "TRUE"
-      },
-      {
-        "identifier": "ES*WEN*EAVIAALCALA1*2",
-        "identifierKind": "evse.evse_id->evse_id",
-        "publicStatus": "OUTOFORDER",
+        "publicStatus": "UNKNOWN",
         "officialStatus": "FALSE"
+      },
+      {
+        "identifier": "ES*GFX*E01423*2",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "UNKNOWN",
+        "officialStatus": "FALSE"
+      },
+      {
+        "identifier": "ES*GIC*E22001",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*GIC*E22002",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*GIC*E22003",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*PWH*EES*CAR*VAL*ALF0003*1",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*PWH*EQ8*MAD*ICH0023*1",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*PWH*EQ8*MAD*ICH0023*2",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
       }
     ]
   }
