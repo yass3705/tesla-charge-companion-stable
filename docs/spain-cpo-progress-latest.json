@@ -59,16 +59,16 @@
     "persistentStatusPagesCollected": 123,
     "persistentStatusRowsStored": 10533,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one eligible external-API batch was launched through a temporary path-scoped push trigger because direct workflow_dispatch was unavailable through the connector. The collector completed successfully with exactly 5 requests, all HTTP 200, no /locations request and no 429. The workflow was immediately restored to workflow_dispatch-only and the temporary trigger file was deleted, preventing a second accidental batch in the same hourly window."
+    "currentRunDecision": "No new external-API batch was launched in this run because the observed current time was still a few seconds short of one full real hour since the last successful live batch generated at 2026-09-13T08:41:33.699011Z. The hourly quota guard was therefore respected and no REVE request was consumed."
   },
   "reveWebLead": {
-    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_GROSS_NET_NORMALIZATION_EVIDENCE",
+    "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_GROSS_NET_AND_STATUS_MAPPING_EVIDENCE",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
     "reportedPerPageMaximum": 25,
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
-    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources. Its public documentation also exposes a live side-by-side comparison command against the external API and states that connectorId/evseId are the reliable keys relating normalized prices and availability.",
+    "thirdPartyEvidence": "@gasolinaradar/dgt-ev-collector 1.5.1 documents live-tested public-map behavior, embedded tariffs/status and the same normalized consumer output shape for public and external sources. It states that connectorId/evseId are the reliable keys relating normalized prices and availability, and that availability.evses[] is the authoritative per-EVSE status representation. Any status merged onto the top-level DGT connectors is only best-effort and may be omitted when type/power matching is ambiguous.",
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
     "validationGeneratedAt": "2026-09-13T08:40:49.754Z",
@@ -87,9 +87,10 @@
     "parityPublicEvses": 68,
     "parityOfficialStatusIdMatches": 0,
     "grossNetNormalizationEvidence": "Matched examples strongly indicate the public-map representation is consumer-facing VAT-inclusive/rounded while the external API retains net price components plus vat=21. Examples: 0.8265*1.21≈1.00, 4.956*1.21≈6.00 and 0.566*1.21≈0.68. This explains at least part of the apparent raw/naive semantic mismatches but is not yet proof for all 32 matches.",
+    "statusMappingEvidence": "The maintained collector explicitly documents availability.evses[] as the authoritative per-EVSE state, with evseId/connectorId as the reliable relation keys. It also warns that top-level connector status is only a best-effort merge from DGT connector type + power and can be absent when ambiguous. Therefore the previous 0 officialStatusIdMatches must not be interpreted as status disagreement; the next comparator must map the public evse_id/connector IDs to the external operational_status identifiers before evaluating state parity.",
     "promoteToTccSource": false,
-    "parityInterpretation": "Raw or path-sensitive semantic inequality is not evidence of price disagreement. A VAT-aware component comparator must pair component type, step size, restrictions and dates before deciding equivalence. Public availability also cannot be compared directly to the bulk external operational_status boolean without identifier/semantic mapping.",
-    "nextSafeStep": "Run a VAT-aware component comparator over the bounded connector-ID overlap and resolve EVSE availability against the appropriate external identifier/status representation. Do not run a national public sweep or promote this source yet."
+    "parityInterpretation": "Raw or path-sensitive semantic inequality is not evidence of price disagreement. A VAT-aware component comparator must pair component type, step size, restrictions and dates before deciding equivalence. For availability, compare the authoritative public availability.evses[] records after deterministic identifier mapping, not the convenience status merged onto DGT connectors.",
+    "nextSafeStep": "Run a bounded offline comparator over the existing sample: tariff parity keyed by connectorId with VAT-aware component normalization, and status parity keyed by mapped evseId/connectorId against external operational_status. Do not run a national public sweep or promote this source yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -119,6 +120,6 @@
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; the active check is now VAT-aware tariff parity plus EVSE status identifier/semantic mapping.",
-  "updatedAt": "2026-09-13T08:52:00Z"
+  "investigationCurrent": "The immutable current-REVE 148-identity replacement queue remains exhausted. Seek only genuinely new durable nominative evidence for unrecovered historical work labels; do not synthesize membership. Public REVE web access is independently validated; the active check is VAT-aware tariff parity plus deterministic mapping of public availability.evses[] to the external operational_status identifiers.",
+  "updatedAt": "2026-09-13T09:41:12Z"
 }
