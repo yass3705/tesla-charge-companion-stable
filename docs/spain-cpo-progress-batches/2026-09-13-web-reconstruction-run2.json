@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "generatedAt": "2026-09-13T20:45:00Z",
+  "source": "REVE public web bounded 100-page identity diagnostic + official/public first-pass research",
+  "historicalQueueRule": {
+    "legacyWorkLabelCount": 618,
+    "historical618MembershipClaimed": false,
+    "note": "These are provenance-tagged current REVE web identities. They increase minimum first-pass traversal continuity but are not presented as recovered members of the lost frozen 618-label snapshot."
+  },
+  "decisions": [
+    {
+      "canonicalName": "AJUNTAMENT DE BELLREGUARD",
+      "labels": ["AJUNTAMENT DE BELLREGUARD"],
+      "status": "sourceValidated",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging managed through Fenie Energia",
+      "evidence": ["REVE public web 100-page identity diagnostic", "https://recarga.fenieenergia.es/punto-recarga/0616", "https://recarga.fenieenergia.es/punto-recarga/0618"],
+      "coverageKnown": "Two current Bellreguard municipal charging locations observed through Fenie Energia, both accessible 24h.",
+      "tariffFinding": "No-cost charging on the two inspected municipal stations.",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if municipal/Fenie charging conditions change.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Blancafort",
+      "labels": ["Ajuntament de Blancafort"],
+      "status": "partial",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging",
+      "evidence": ["REVE public web 100-page identity diagnostic", "https://media.seu-e.cat/acteca/4302900000/2023/13d6c52f-dc63-478e-923b-d1259870f166/13-2023%20Acta%20Ple%20ordinari%20de%2011%20de%20desembre%20de%202023%20.pdf"],
+      "tariffFinding": "Municipal 2023 approval corrected the public charging price to 0.15 EUR/kWh.",
+      "blockingReason": "The numeric tariff is official but the first pass did not establish a newer 2026 publication explicitly confirming that it remains unchanged.",
+      "resumeCondition": "Current ordinance/municipal tariff confirmation or deterministic current REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Canovelles",
+      "labels": ["Ajuntament de Canovelles"],
+      "status": "sourceValidated",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging",
+      "evidence": ["REVE public web 100-page identity diagnostic", "https://www.canovelles.cat/serveis-i-tramits/cataleg-de-serveis/promocio-de-la-mobilitat-sostenible.html"],
+      "tariffFinding": "Municipal sustainable-mobility service lists the EV charging point service cost as free.",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if the municipality changes charging conditions.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Cardedeu",
+      "labels": ["Ajuntament de Cardedeu"],
+      "status": "partial",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging through app/payment flow",
+      "evidence": ["REVE public web 100-page identity diagnostic", "https://www.cardedeu.cat/temes/transicio-energetica/punts-de-recarrega-de-vehicles", "https://www.cardedeu.cat/media/repository/noticies/acordsple/20221124/03_PROPOSTA.pdf"],
+      "coverageKnown": "Municipal page updated 2026-06-09 lists four existing charging areas and seven additional points planned/being connected during 2026.",
+      "tariffFinding": "Charging is paid through the municipal/app flow; a 2025 public report states 0.30 EUR/kWh after a reduction from 0.40, but no current official 2026 numeric tariff was located in this first pass.",
+      "blockingReason": "Current official numeric price still needs confirmation.",
+      "resumeCondition": "Current municipal price publication, app/QR price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    }
+  ],
+  "delta": {
+    "labelsTraversed": 4,
+    "sourceValidated": 2,
+    "partial": 2,
+    "active": 0,
+    "setAside": 0,
+    "platformExcluded": 0,
+    "supersededAlias": 0
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "legacyWorkLabelCountPreserved": true,
+    "publicWebSourcePromotedToRuntime": false
+  }
+}
