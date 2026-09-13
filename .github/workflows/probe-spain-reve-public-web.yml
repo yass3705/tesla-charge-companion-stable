@@ -93,26 +93,54 @@ jobs:
           }
           main();
           NODE
-      - name: Compare public-map sample with persisted official external API records
+      - name: Compare public-map sample semantically with persisted official external API records
         if: always()
         run: |
           python <<'PY'
           import gzip, json
           from pathlib import Path
+
           p = Path('data/spain_reve/reve_public_web_probe.json')
           out = json.loads(p.read_text())
           with gzip.open('data/spain_reve/reve_connector_tariffs_raw.json.gz','rt',encoding='utf-8') as f:
               tariffs = json.load(f)
           with gzip.open('data/spain_reve/reve_operational_status_raw.json.gz','rt',encoding='utf-8') as f:
               statuses = json.load(f)
+
           rep = {
               'candidateStations': 0, 'publicConnectors': 0, 'officialConnectorMatches': 0,
               'tariffExactMatches': 0, 'tariffMismatches': 0,
+              'tariffSemanticMatches': 0, 'tariffSemanticMismatches': 0,
               'publicEvses': 0, 'officialStatusMatches': 0, 'statusExactMatches': 0,
-              'statusMismatches': 0, 'examples': []
+              'statusMismatches': 0, 'examples': [], 'tariffShapeExamples': []
           }
+
           def canon(v):
               return json.dumps(v, sort_keys=True, separators=(',',':'), ensure_ascii=False)
+
+          def semantic_scalars(v, prefix=''):
+              out=[]
+              if isinstance(v, dict):
+                  for k,val in v.items():
+                      kl=str(k).lower()
+                      np=f'{prefix}.{kl}' if prefix else kl
+                      if any(tok in kl for tok in ('price','amount','currency','energy','kwh','time','minute','hour','flat','parking','step','vat','tax','min','max','restriction')):
+                          if isinstance(val,(str,int,float,bool)) or val is None:
+                              out.append((np,val))
+                      out.extend(semantic_scalars(val,np))
+              elif isinstance(v,list):
+                  for i,val in enumerate(v):
+                      out.extend(semantic_scalars(val,f'{prefix}[]'))
+              return out
+
+          def semantic_signature(v):
+              vals=[]
+              for path,val in semantic_scalars(v):
+                  if isinstance(val,float):
+                      val=round(val,8)
+                  vals.append((path,val))
+              return sorted(vals, key=lambda x:(x[0], str(x[1])))
+
           for st in out.get('parityCandidates') or []:
               rep['candidateStations'] += 1
               ex = {'reveLocationId': st.get('reveLocationId'), 'connectorMatches': 0, 'statusMatches': 0}
@@ -134,16 +162,33 @@ jobs:
                       official_t = tariffs.get(str(cid)) if cid else None
                       if official_t is not None:
                           rep['officialConnectorMatches'] += 1; ex['connectorMatches'] += 1
-                          if canon(official_t.get('tariffs') or []) == canon(c.get('tariffs') or []):
+                          public_tariffs = c.get('tariffs') or []
+                          official_tariffs = official_t.get('tariffs') or []
+                          if canon(official_tariffs) == canon(public_tariffs):
                               rep['tariffExactMatches'] += 1
                           else:
                               rep['tariffMismatches'] += 1
+                          psig=semantic_signature(public_tariffs)
+                          osig=semantic_signature(official_tariffs)
+                          if psig == osig and (psig or osig):
+                              rep['tariffSemanticMatches'] += 1
+                          else:
+                              rep['tariffSemanticMismatches'] += 1
+                          if len(rep['tariffShapeExamples']) < 5:
+                              rep['tariffShapeExamples'].append({
+                                  'connectorId': cid,
+                                  'publicSemantic': psig[:80],
+                                  'officialSemantic': osig[:80],
+                                  'publicTopLevelType': type(public_tariffs).__name__,
+                                  'officialTopLevelType': type(official_tariffs).__name__
+                              })
               if len(rep['examples']) < 5 and (ex['connectorMatches'] or ex['statusMatches']):
                   rep['examples'].append(ex)
+
           out['officialExternalApiParity'] = rep
           out.pop('parityCandidates', None)
           p.write_text(json.dumps(out, indent=2, ensure_ascii=False)+'\n')
-          print(json.dumps(rep, indent=2))
+          print(json.dumps(rep, indent=2, ensure_ascii=False))
           PY
       - name: Commit probe result
         if: always()
