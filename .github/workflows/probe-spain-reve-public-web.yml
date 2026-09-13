@@ -32,18 +32,28 @@ jobs:
           const pkg = require('@gasolinaradar/dgt-ev-collector');
           async function main() {
             const startedAt = new Date().toISOString();
-            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 50, perPage: 25 };
+            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 100, perPage: 25 };
             try {
               const stations = await pkg.fetchStations({ logger: { info(){}, warn(){}, debug(){} } });
               const enriched = await pkg.enrichStations(stations, {
                 source: 'public', acknowledgeUnsupported: true,
-                maxPages: 50, perPage: 25, thresholdMeters: 100,
+                maxPages: 100, perPage: 25, thresholdMeters: 100,
                 logger: { info(){}, warn(){}, debug(){} }
               });
               const matched = enriched.filter(r => r && r.reveLocationId);
               const withPrices = matched.filter(r => Array.isArray(r.prices) && r.prices.length);
               const withAvailability = matched.filter(r => !!r.availability);
               const withReveData = matched.filter(r => !!r.reveData);
+              const locationCounts = new Map();
+              const operatorCounts = new Map();
+              for (const r of matched) {
+                const lid = String(r.reveLocationId || '').trim();
+                if (lid) locationCounts.set(lid, (locationCounts.get(lid) || 0) + 1);
+                const op = String(r.operator?.name || '').trim();
+                if (op) operatorCounts.set(op, (operatorCounts.get(op) || 0) + 1);
+              }
+              const duplicateLocationIds = [...locationCounts.entries()].filter(([,n]) => n > 1);
+              const operatorLabels = [...operatorCounts.keys()].sort((a,b) => a.localeCompare(b, 'es'));
               const sample = withReveData[0] || matched[0] || null;
               const evses = sample?.reveData?.evses || [];
               const connectors = evses.flatMap(e => e.connectors || []);
@@ -53,6 +63,13 @@ jobs:
               out.matchedWithPrices = withPrices.length;
               out.matchedWithAvailability = withAvailability.length;
               out.matchedWithReveData = withReveData.length;
+              out.identityDiagnostics = {
+                uniqueReveLocationIds: locationCounts.size,
+                duplicateReveLocationIdCount: duplicateLocationIds.length,
+                duplicateReveLocationMatchCount: duplicateLocationIds.reduce((s,[,n]) => s + (n - 1), 0),
+                uniqueOperatorLabels: operatorLabels.length,
+                operatorLabels
+              };
               out.sample = sample ? {
                 sourceStationId: sample.sourceStationId || null,
                 name: sample.name || null,
@@ -132,6 +149,6 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
-          git commit -m "probe(es): expand bounded REVE public web sample"
+          git commit -m "probe(es): validate 100-page REVE public web identity sample"
           git pull --rebase origin spain-reve-preintegration
           git push
