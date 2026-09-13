@@ -16,7 +16,7 @@ concurrency:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,41 +24,49 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Probe one public REVE locations page
+      - name: Probe five public REVE location pages against real DGT stations
         run: |
           npm install --no-save @gasolinaradar/dgt-ev-collector@1.5.1
           node <<'NODE'
           const fs = require('fs');
           const pkg = require('@gasolinaradar/dgt-ev-collector');
           async function main() {
-            const station = {
-              source: 'probe', country: 'ES', sourceStationId: 'probe-madrid',
-              name: 'probe', municipality: 'Madrid', province: 'Madrid',
-              connectors: [],
-              location: { type: 'Point', coordinates: [-3.7038, 40.4168] }
-            };
             const startedAt = new Date().toISOString();
-            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 1, perPage: 25 };
+            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 5, perPage: 25 };
             try {
-              const enriched = await pkg.enrichStations([station], {
+              const stations = await pkg.fetchStations({ logger: { info(){}, warn(){}, debug(){} } });
+              const enriched = await pkg.enrichStations(stations, {
                 source: 'public', acknowledgeUnsupported: true,
-                maxPages: 1, perPage: 25, thresholdMeters: 2000000,
+                maxPages: 5, perPage: 25, thresholdMeters: 100,
                 logger: { info(){}, warn(){}, debug(){} }
               });
-              const r = enriched && enriched[0] ? enriched[0] : {};
+              const matched = enriched.filter(r => r && r.reveLocationId);
+              const withPrices = matched.filter(r => Array.isArray(r.prices) && r.prices.length);
+              const withAvailability = matched.filter(r => !!r.availability);
+              const withReveData = matched.filter(r => !!r.reveData);
+              const sample = withReveData[0] || matched[0] || null;
+              const evses = sample?.reveData?.evses || [];
+              const connectors = evses.flatMap(e => e.connectors || []);
               out.ok = true;
-              out.reveLocationId = r.reveLocationId || null;
-              out.operator = r.operator || null;
-              out.priceCount = Array.isArray(r.prices) ? r.prices.length : 0;
-              out.availabilityPresent = !!r.availability;
-              out.availabilityEvseCount = r.availability && Array.isArray(r.availability.evses) ? r.availability.evses.length : 0;
-              out.reveDataPresent = !!r.reveData;
-              out.reveDataEvseCount = r.reveData && Array.isArray(r.reveData.evses) ? r.reveData.evses.length : 0;
-              const connectors = (r.reveData?.evses || []).flatMap(e => e.connectors || []);
-              out.reveDataConnectorCount = connectors.length;
-              out.connectorFields = [...new Set(connectors.flatMap(c => Object.keys(c)))].sort();
-              out.tariffBearingConnectors = connectors.filter(c => Array.isArray(c.tariffs) && c.tariffs.length).length;
-              out.statusValues = [...new Set((r.reveData?.evses || []).map(e => e.status).filter(Boolean))].sort();
+              out.dgtStationsLoaded = stations.length;
+              out.matchedStations = matched.length;
+              out.matchedWithPrices = withPrices.length;
+              out.matchedWithAvailability = withAvailability.length;
+              out.matchedWithReveData = withReveData.length;
+              out.sample = sample ? {
+                sourceStationId: sample.sourceStationId || null,
+                name: sample.name || null,
+                reveLocationId: sample.reveLocationId || null,
+                operatorName: sample.operator?.name || null,
+                priceCount: Array.isArray(sample.prices) ? sample.prices.length : 0,
+                availabilityPresent: !!sample.availability,
+                availabilityStatus: sample.availability?.status || null,
+                reveDataEvseCount: evses.length,
+                reveDataConnectorCount: connectors.length,
+                connectorFields: [...new Set(connectors.flatMap(c => Object.keys(c)))].sort(),
+                tariffBearingConnectors: connectors.filter(c => Array.isArray(c.tariffs) && c.tariffs.length).length,
+                statusValues: [...new Set(evses.map(e => e.status).filter(Boolean))].sort()
+              } : null;
               out.finishedAt = new Date().toISOString();
             } catch (e) {
               out.ok = false;
@@ -78,6 +86,6 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
-          git commit -m "test(es): record one-page REVE public web probe"
+          git commit -m "test(es): record REVE public web field validation"
           git pull --rebase origin spain-reve-preintegration
           git push
