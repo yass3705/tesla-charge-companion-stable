@@ -67,6 +67,20 @@ jobs:
                 tariffBearingConnectors: connectors.filter(c => Array.isArray(c.tariffs) && c.tariffs.length).length,
                 statusValues: [...new Set(evses.map(e => e.status).filter(Boolean))].sort()
               } : null;
+              out.parityCandidates = withReveData.slice(0, 20).map(r => ({
+                sourceStationId: r.sourceStationId || null,
+                name: r.name || null,
+                reveLocationId: r.reveLocationId || null,
+                evses: (r.reveData?.evses || []).map(e => ({
+                  id: e.id || null,
+                  evse_id: e.evse_id || e.evseId || null,
+                  status: e.status || null,
+                  connectors: (e.connectors || []).map(c => ({
+                    id: c.id || null,
+                    tariffs: Array.isArray(c.tariffs) ? c.tariffs : []
+                  }))
+                }))
+              }));
               out.finishedAt = new Date().toISOString();
             } catch (e) {
               out.ok = false;
@@ -79,6 +93,58 @@ jobs:
           }
           main();
           NODE
+      - name: Compare public-map sample with persisted official external API records
+        if: always()
+        run: |
+          python <<'PY'
+          import gzip, json
+          from pathlib import Path
+          p = Path('data/spain_reve/reve_public_web_probe.json')
+          out = json.loads(p.read_text())
+          with gzip.open('data/spain_reve/reve_connector_tariffs_raw.json.gz','rt',encoding='utf-8') as f:
+              tariffs = json.load(f)
+          with gzip.open('data/spain_reve/reve_operational_status_raw.json.gz','rt',encoding='utf-8') as f:
+              statuses = json.load(f)
+          rep = {
+              'candidateStations': 0, 'publicConnectors': 0, 'officialConnectorMatches': 0,
+              'tariffExactMatches': 0, 'tariffMismatches': 0,
+              'publicEvses': 0, 'officialStatusMatches': 0, 'statusExactMatches': 0,
+              'statusMismatches': 0, 'examples': []
+          }
+          def canon(v):
+              return json.dumps(v, sort_keys=True, separators=(',',':'), ensure_ascii=False)
+          for st in out.get('parityCandidates') or []:
+              rep['candidateStations'] += 1
+              ex = {'reveLocationId': st.get('reveLocationId'), 'connectorMatches': 0, 'statusMatches': 0}
+              for ev in st.get('evses') or []:
+                  rep['publicEvses'] += 1
+                  skeys=[]
+                  if ev.get('id'): skeys.append('id:'+str(ev['id']))
+                  if ev.get('evse_id'): skeys.append('evse:'+str(ev['evse_id']))
+                  official = next((statuses[k] for k in skeys if k in statuses), None)
+                  if official is not None:
+                      rep['officialStatusMatches'] += 1; ex['statusMatches'] += 1
+                      if str(official.get('status')) == str(ev.get('status')):
+                          rep['statusExactMatches'] += 1
+                      else:
+                          rep['statusMismatches'] += 1
+                  for c in ev.get('connectors') or []:
+                      rep['publicConnectors'] += 1
+                      cid = c.get('id')
+                      official_t = tariffs.get(str(cid)) if cid else None
+                      if official_t is not None:
+                          rep['officialConnectorMatches'] += 1; ex['connectorMatches'] += 1
+                          if canon(official_t.get('tariffs') or []) == canon(c.get('tariffs') or []):
+                              rep['tariffExactMatches'] += 1
+                          else:
+                              rep['tariffMismatches'] += 1
+              if len(rep['examples']) < 5 and (ex['connectorMatches'] or ex['statusMatches']):
+                  rep['examples'].append(ex)
+          out['officialExternalApiParity'] = rep
+          out.pop('parityCandidates', None)
+          p.write_text(json.dumps(out, indent=2, ensure_ascii=False)+'\n')
+          print(json.dumps(rep, indent=2))
+          PY
       - name: Commit probe result
         if: always()
         run: |
@@ -86,6 +152,6 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
-          git commit -m "test(es): record REVE public web field validation"
+          git commit -m "test(es): compare REVE public web with official persisted streams"
           git pull --rebase origin spain-reve-preintegration
           git push
