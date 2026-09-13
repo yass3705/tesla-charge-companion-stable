@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-09-13T08:40:26.011Z",
+  "startedAt": "2026-09-13T11:40:00.279Z",
   "packageVersion": "1.5.1",
   "source": "public",
   "maxPages": 5,
@@ -33,1471 +33,387 @@
       "UNKNOWN"
     ]
   },
-  "finishedAt": "2026-09-13T08:40:49.754Z",
-  "officialExternalApiParity": {
+  "finishedAt": "2026-09-13T11:40:20.744Z",
+  "officialExternalApiParityV2": {
     "candidateStations": 20,
     "publicConnectors": 71,
     "officialConnectorMatches": 32,
-    "tariffExactMatches": 0,
-    "tariffMismatches": 32,
-    "tariffSemanticMatches": 0,
-    "tariffSemanticMismatches": 32,
+    "tariffRawExactMatches": 0,
+    "tariffRawMismatches": 32,
+    "tariffVatAwareComparable": 32,
+    "tariffVatAwarePriceMatches": 0,
+    "tariffVatAwarePriceMismatches": 32,
     "publicEvses": 68,
-    "officialStatusMatches": 0,
+    "officialStatusIdentifierMatches": 4,
     "statusExactMatches": 0,
-    "statusMismatches": 0,
+    "statusMismatches": 4,
+    "statusIdentifierKinds": {
+      "evse.evse_id->evse_id": 4
+    },
     "examples": [
       {
         "reveLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
         "connectorMatches": 2,
-        "statusMatches": 0
+        "statusIdentifierMatches": 0
       },
       {
         "reveLocationId": "0061c55f-2766-449e-85da-a0de899b0a0e",
         "connectorMatches": 1,
-        "statusMatches": 0
+        "statusIdentifierMatches": 0
       },
       {
         "reveLocationId": "022fa111-f6a2-4236-92f0-6e7d375a5056",
         "connectorMatches": 1,
-        "statusMatches": 0
+        "statusIdentifierMatches": 0
       },
       {
         "reveLocationId": "015b4879-da46-4705-b188-40f8b3cb2b4b",
         "connectorMatches": 2,
-        "statusMatches": 0
+        "statusIdentifierMatches": 0
       },
       {
         "reveLocationId": "017ef738-b5e9-411e-b492-79c9092efe15",
         "connectorMatches": 1,
-        "statusMatches": 0
+        "statusIdentifierMatches": 1
+      },
+      {
+        "reveLocationId": "0038502c-ba6b-42bb-87cb-a6a55ede519a",
+        "connectorMatches": 1,
+        "statusIdentifierMatches": 0
+      },
+      {
+        "reveLocationId": "017ef738-b5e9-411e-b492-79c9092efe15",
+        "connectorMatches": 1,
+        "statusIdentifierMatches": 1
+      },
+      {
+        "reveLocationId": "017f4f22-f327-479b-b9ac-c2b3fda1a43b",
+        "connectorMatches": 3,
+        "statusIdentifierMatches": 0
       }
     ],
-    "tariffShapeExamples": [
+    "tariffExamples": [
       {
         "connectorId": "5f354691-8d95-44ca-b765-92d7aab61872",
-        "publicSemantic": [
+        "publicNonZeroGross": [
           [
-            "[].tariff.currency",
-            "EUR"
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0.68
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
+            "ENERGY",
+            "EUR",
+            0.68,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].price",
-            6
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.0,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            6.0,
             60
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].restrictions",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            960
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            960
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
           ]
         ],
-        "officialSemantic": [
+        "officialNonZeroGross": [
           [
-            "[].currency",
-            "EUR"
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.566
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.8265
-          ],
-          [
-            "[].elements[].price_components[].price",
-            4.956
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "ENERGY",
+            "EUR",
+            0.68486,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.000065,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            5.99676,
             60
-          ],
-          [
-            "[].elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            960
-          ],
-          [
-            "[].elements[].restrictions.min_duration",
-            960
-          ],
-          [
-            "[].elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].end_date_time",
-            "2099-02-28T22:59:59.000Z"
-          ],
-          [
-            "[].start_date_time",
-            "2025-02-27T23:00:00.000Z"
           ]
-        ],
-        "publicTopLevelType": "list",
-        "officialTopLevelType": "list"
+        ]
       },
       {
         "connectorId": "1b6c40ef-777d-49a5-aae7-813dc1d70e3b",
-        "publicSemantic": [
+        "publicNonZeroGross": [
           [
-            "[].tariff.currency",
-            "EUR"
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0.68
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
+            "ENERGY",
+            "EUR",
+            0.68,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].price",
-            6
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.0,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            6.0,
             60
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].restrictions",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            960
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            960
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
           ]
         ],
-        "officialSemantic": [
+        "officialNonZeroGross": [
           [
-            "[].currency",
-            "EUR"
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.566
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.8265
-          ],
-          [
-            "[].elements[].price_components[].price",
-            4.956
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "ENERGY",
+            "EUR",
+            0.68486,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.000065,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            5.99676,
             60
-          ],
-          [
-            "[].elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            960
-          ],
-          [
-            "[].elements[].restrictions.min_duration",
-            960
-          ],
-          [
-            "[].elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].end_date_time",
-            "2099-02-28T22:59:59.000Z"
-          ],
-          [
-            "[].start_date_time",
-            "2025-02-27T23:00:00.000Z"
           ]
-        ],
-        "publicTopLevelType": "list",
-        "officialTopLevelType": "list"
+        ]
       },
       {
         "connectorId": "3784a1de-94af-4f8e-9c05-18a18f8b8f4e",
-        "publicSemantic": [
+        "publicNonZeroGross": [
           [
-            "[].tariff.currency",
-            "EUR"
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0.47
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
+            "ENERGY",
+            "EUR",
+            0.47,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].price",
-            3
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.0,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            3.0,
             60
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].restrictions",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            1860
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            1860
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
           ]
         ],
-        "officialSemantic": [
+        "officialNonZeroGross": [
           [
-            "[].currency",
-            "EUR"
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.387
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.8265
-          ],
-          [
-            "[].elements[].price_components[].price",
-            2.478
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "ENERGY",
+            "EUR",
+            0.46827,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.000065,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            2.99838,
             60
-          ],
-          [
-            "[].elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            1860
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].elements[].restrictions.min_duration",
-            1860
-          ],
-          [
-            "[].elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].end_date_time",
-            "2099-02-28T22:59:59.000Z"
-          ],
-          [
-            "[].start_date_time",
-            "2025-02-27T23:00:00.000Z"
           ]
-        ],
-        "publicTopLevelType": "list",
-        "officialTopLevelType": "list"
+        ]
       },
       {
         "connectorId": "4eb06523-2204-4c69-8d99-471c752220b6",
-        "publicSemantic": [
+        "publicNonZeroGross": [
           [
-            "[].tariff.currency",
-            "EUR"
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0.47
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
+            "ENERGY",
+            "EUR",
+            0.47,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].price",
-            3
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.0,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            3.0,
             60
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].restrictions",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            1860
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            1860
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
           ]
         ],
-        "officialSemantic": [
+        "officialNonZeroGross": [
           [
-            "[].currency",
-            "EUR"
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.387
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.8265
-          ],
-          [
-            "[].elements[].price_components[].price",
-            2.478
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "ENERGY",
+            "EUR",
+            0.46827,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.000065,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            2.99838,
             60
-          ],
-          [
-            "[].elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            1860
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].elements[].restrictions.min_duration",
-            1860
-          ],
-          [
-            "[].elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].end_date_time",
-            "2099-02-28T22:59:59.000Z"
-          ],
-          [
-            "[].start_date_time",
-            "2025-02-27T23:00:00.000Z"
           ]
-        ],
-        "publicTopLevelType": "list",
-        "officialTopLevelType": "list"
+        ]
       },
       {
         "connectorId": "0616eba5-25bc-48aa-9843-fb72d1abd3da",
-        "publicSemantic": [
+        "publicNonZeroGross": [
           [
-            "[].tariff.currency",
-            "EUR"
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
-            0.42
-          ],
-          [
-            "[].tariff.elements[].price_components[].price",
+            "ENERGY",
+            "EUR",
+            0.42,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].price",
-            3
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.0,
             1
           ],
           [
-            "[].tariff.elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            3.0,
             60
-          ],
-          [
-            "[].tariff.elements[].price_components[].step_size",
-            60
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].price_components[].vat",
-            21
-          ],
-          [
-            "[].tariff.elements[].restrictions",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.end_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            1860
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.max_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_current",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            1860
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_duration",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_kwh",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.min_power",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
-          ],
-          [
-            "[].tariff.elements[].restrictions.start_time",
-            null
           ]
         ],
-        "officialSemantic": [
+        "officialNonZeroGross": [
           [
-            "[].currency",
-            "EUR"
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.0
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.348
-          ],
-          [
-            "[].elements[].price_components[].price",
-            0.8265
-          ],
-          [
-            "[].elements[].price_components[].price",
-            2.478
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "ENERGY",
+            "EUR",
+            0.42108,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.000065,
             1
           ],
           [
-            "[].elements[].price_components[].step_size",
-            1
-          ],
-          [
-            "[].elements[].price_components[].step_size",
+            "PARKING_TIME",
+            "EUR",
+            2.99838,
             60
+          ]
+        ]
+      },
+      {
+        "connectorId": "6d28f170-a1ad-4476-8e7e-2590e2209a10",
+        "publicNonZeroGross": [
+          [
+            "ENERGY",
+            "EUR",
+            0.42,
+            1
           ],
           [
-            "[].elements[].price_components[].step_size",
+            "FLAT",
+            "EUR",
+            1.0,
+            1
+          ],
+          [
+            "PARKING_TIME",
+            "EUR",
+            3.0,
             60
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].price_components[].vat",
-            21.0
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            1860
-          ],
-          [
-            "[].elements[].restrictions.max_duration",
-            600000
-          ],
-          [
-            "[].elements[].restrictions.min_duration",
-            1860
-          ],
-          [
-            "[].elements[].restrictions.reservation",
-            "RESERVATION_EXPIRES"
-          ],
-          [
-            "[].end_date_time",
-            "2099-02-28T22:59:59.000Z"
-          ],
-          [
-            "[].start_date_time",
-            "2025-02-27T23:00:00.000Z"
           ]
         ],
-        "publicTopLevelType": "list",
-        "officialTopLevelType": "list"
+        "officialNonZeroGross": [
+          [
+            "ENERGY",
+            "EUR",
+            0.42108,
+            1
+          ],
+          [
+            "FLAT",
+            "EUR",
+            1.000065,
+            1
+          ],
+          [
+            "PARKING_TIME",
+            "EUR",
+            2.99838,
+            60
+          ]
+        ]
+      },
+      {
+        "connectorId": "dc78aa9f-44d3-4cd6-9e33-db3b82ca7971",
+        "publicNonZeroGross": [
+          [
+            "ENERGY",
+            "EUR",
+            0.35,
+            1000
+          ]
+        ],
+        "officialNonZeroGross": [
+          [
+            "ENERGY",
+            "EUR",
+            0.29,
+            1000
+          ]
+        ]
+      },
+      {
+        "connectorId": "1b6d4ef2-7872-4dcc-bdc9-b891cb69fb73",
+        "publicNonZeroGross": [
+          [
+            "ENERGY",
+            "EUR",
+            0.4,
+            1
+          ]
+        ],
+        "officialNonZeroGross": [
+          [
+            "ENERGY",
+            "EUR",
+            0.3993,
+            1
+          ]
+        ]
+      }
+    ],
+    "statusExamples": [
+      {
+        "identifier": "ES*PWH*EES*CAR*VAL*ALF0003*1",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*PWH*EES*CAR*VAL*ALF0003*1",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*WEN*EAVIAALCALA1*1",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "AVAILABLE",
+        "officialStatus": "TRUE"
+      },
+      {
+        "identifier": "ES*WEN*EAVIAALCALA1*2",
+        "identifierKind": "evse.evse_id->evse_id",
+        "publicStatus": "OUTOFORDER",
+        "officialStatus": "FALSE"
       }
     ]
   }
