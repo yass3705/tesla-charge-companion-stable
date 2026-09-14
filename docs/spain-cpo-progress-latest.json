@@ -7,8 +7,8 @@
     "authoritativeCpoDenominator": false,
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
-  "firstPass": {"minimumTraversed": 475, "maximumNeverTraversed": 143, "firstPassComplete": false},
-  "counts": {"sourceValidated": 58, "partial": 48, "active": 96, "setAside": 202, "platformExcluded": 3, "supersededAlias": 68, "total": 475},
+  "firstPass": {"minimumTraversed": 480, "maximumNeverTraversed": 138, "firstPassComplete": false},
+  "counts": {"sourceValidated": 59, "partial": 49, "active": 96, "setAside": 205, "platformExcluded": 3, "supersededAlias": 68, "total": 480},
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
@@ -27,7 +27,7 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
@@ -48,7 +48,7 @@
     "persistentStatusPagesCollected": 163,
     "persistentStatusRowsStored": 14298,
     "statusTotalPages": 449,
-    "currentRunDecision": "Exactly one eligible five-request batch was launched after the real one-hour window elapsed. All five requests returned HTTP 200, no /locations request was made, no 429 occurred, state persisted successfully, and the one-shot trigger was disarmed and removed."
+    "currentRunDecision": "No live batch launched in this execution because a full real hour had not yet elapsed since the latest successful persisted batch. No /locations request was made and no second batch was attempted."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_150_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -69,16 +69,16 @@
     "validationMatchedWithReveData": 3857,
     "validationUniqueReveLocationIds": 2787,
     "validationUniqueOperatorLabels": 215,
-    "newReconstructedLabelsFirstPassedCount": 102,
-    "newReconstructedLabelsFirstPassedLatest": ["Consell Insular de Menorca","Ajuntament de Caldes de Malavella","Ajuntament d'Orís","Centro Comercial Plaza Eliptica","COSTCO WHOLESALE SPAIN SLU"],
+    "newReconstructedLabelsFirstPassedCount": 107,
+    "newReconstructedLabelsFirstPassedLatest": ["DIA","Diputación de Badajoz","Diputación Foral de Gipuzkoa","DIRAN S.A.","Ditec Automoviles Barcelona S.L.U."],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue diffing the remaining genuinely new operator labels exposed by the validated 150-page public-web sample against the durable snapshot and prior nominative decisions. Do not claim historical-618 membership and do not resume difficult-case reaudit yet."
+    "nextSafeStep": "Continue diffing the remaining genuinely new operator labels exposed by the validated 150-page public-web sample against durable decisions. Do not claim historical-618 membership and do not resume difficult-case reaudit yet."
   },
   "runtimeSafety": {"pr50MustRemainDraft": true,"preIntegrationOnly": true,"runtimePublishReady": false,"locationsCollectionComplete": true,"locationsCollectionMustNotRestart": true},
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 475,
-    "firstPassMinimumTraversed": 475,
+    "continuityCountSum": 480,
+    "firstPassMinimumTraversed": 480,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -91,14 +91,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell","AYTO ZAMORA","Consell Insular de Menorca","Ajuntament de Caldes de Malavella","Ajuntament d'Orís","Centro Comercial Plaza Eliptica","COSTCO WHOLESALE SPAIN SLU"],
-    "newlySourceValidated": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell","Consell Insular de Menorca"],
-    "newlyPartial": ["AYTO ZAMORA","Ajuntament de Caldes de Malavella","Centro Comercial Plaza Eliptica"],
-    "newlySetAside": ["Ajuntament d'Orís","COSTCO WHOLESALE SPAIN SLU"],
+    "labelsTraversed": ["DIA","Diputación de Badajoz","Diputación Foral de Gipuzkoa","DIRAN S.A.","Ditec Automoviles Barcelona S.L.U."],
+    "newlySourceValidated": ["Diputación de Badajoz"],
+    "newlyPartial": ["Diputación Foral de Gipuzkoa"],
+    "newlySetAside": ["DIA","DIRAN S.A.","Ditec Automoviles Barcelona S.L.U."],
     "newlyActive": [],
     "newAliases": [],
     "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Ten additional genuinely new identities were first-passed across run24 and run25 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
-  "updatedAt": "2026-09-14T20:54:00Z"
+  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Five additional genuinely new identities were first-passed in run26 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T21:48:00Z"
 }
