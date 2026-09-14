@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 434,
-    "maximumNeverTraversed": 184,
+    "minimumTraversed": 439,
+    "maximumNeverTraversed": 179,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 46,
-    "partial": 33,
+    "sourceValidated": 48,
+    "partial": 35,
     "active": 94,
-    "setAside": 190,
+    "setAside": 191,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 434
+    "total": 439
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,7 +39,7 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run16.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run17.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
@@ -60,7 +60,7 @@
     "persistentStatusPagesCollected": 151,
     "persistentStatusRowsStored": 13192,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one eligible five-request batch was launched after more than one real hour had elapsed since the previous successful persisted batch. All five requests returned HTTP 200; no /locations request and no HTTP 429 occurred. The one-shot trigger was disarmed before its marker was removed."
+    "currentRunDecision": "No new external API batch was launched because a full real hour had not yet elapsed since the latest successful persisted batch. No /locations request was made and cursors remain unchanged."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -81,10 +81,10 @@
     "validationMatchedWithReveData": 2686,
     "validationUniqueReveLocationIds": 1853,
     "validationUniqueOperatorLabels": 166,
-    "identityCaveat": "Multiple DGT source stations may map to the same REVE locationId; duplicate locationId counts in the enriched station output must therefore not be interpreted as pagination duplicates without raw-page evidence.",
-    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu", "Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles", "Ajuntament de Pals", "Ajuntament de Sant Celoni", "Ajuntament de Súria", "Ajuntament de Vallgorguina", "Ajuntament de Vilablareix", "Ajuntament Sant Joan de Vilatorrada", "Ajuntament de la Vall d'en Bas", "Ajuntament de Prat de Llobregat", "Ajuntament de Santa Cristina d'Aro", "Almatret", "Cardona", "Caseres", "CIMALSA Castellar del Vallès", "Constanti", "Diputación de Badajoz", "EATIM JESUS POBRE", "Hospitalet de l'Infant", "La Jonquera", "La Llagosta", "La Pobla de Segur", "Llagostera", "Lleida", "Lloret de Mar", "Matadepera", "Móra d'Ebre", "Movilidad Eléctrica Gran Canaria", "Navàs", "NIMA GRUP D'AUTOMOCIO SL", "Nuñez y Navarro", "OPER CANARIOS SL", "Pamplona", "Parking Pozuelo", "Patrimonio Natural CyL", "PAVAPARK MOVILIDAD, S.L.", "Peralada", "Petrolia Conil de la Frontera", "Polinyà", "Port de Roses", "Powerdot Spain", "Premià de Mar", "PUMSA Mataró", "RAMIS GARAU, S.A. MIQUEL RAMIS", "Rasquera", "Real Club Pineda", "Sant Quirze de Besora", "Santa Coloma de Farners", "Santa Eulàlia de Ronçana", "SANTA LUCIA VIVIENDAS SL", "Santa Maria de Palautordera", "Santa Perpètua de Mogoda"],
+    "newReconstructedLabelsFirstPassedCount": 66,
+    "newReconstructedLabelsFirstPassedLatest": ["Santpedor","SUNSET OASIS IBIZA ROSELLO RAUSELL","Tersa","UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE","Vibroaspre, S.A. Vibroaspre Vibroaspre"],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue diffing observed public-web operator labels after Santa Perpètua de Mogoda against the durable 148-label snapshot and branch history, skipping aliases already represented by durable canonical identities; first-pass genuinely new identities before any difficult-case reaudit."
+    "nextSafeStep": "Continue diff-first processing over remaining public-web operator labels, skipping durable aliases already represented by canonical identities; first-pass genuinely new identities before any difficult-case reaudit."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 434,
-    "firstPassMinimumTraversed": 434,
+    "continuityCountSum": 439,
+    "firstPassMinimumTraversed": 439,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,14 +109,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Santa Coloma de Farners", "Santa Eulàlia de Ronçana", "SANTA LUCIA VIVIENDAS SL", "Santa Maria de Palautordera", "Santa Perpètua de Mogoda"],
-    "newlySourceValidated": ["Santa Coloma de Farners", "Santa Eulàlia de Ronçana", "SANTA LUCIA VIVIENDAS SL", "Santa Perpètua de Mogoda"],
-    "newlyPartial": ["Santa Maria de Palautordera"],
-    "newlySetAside": [],
+    "labelsTraversed": ["Santpedor","SUNSET OASIS IBIZA ROSELLO RAUSELL","Tersa","UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE","Vibroaspre, S.A. Vibroaspre Vibroaspre"],
+    "newlySourceValidated": ["UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE","Vibroaspre, S.A. Vibroaspre Vibroaspre"],
+    "newlyPartial": ["Santpedor","Tersa"],
+    "newlySetAside": ["SUNSET OASIS IBIZA ROSELLO RAUSELL"],
     "newlyActive": [],
     "newAliases": [],
     "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Five additional reconstructedCurrentReveWeb identities were first-passed in run16 without claiming historical-618 membership. The public frontend endpoint remains a validated bounded research lead, not a promoted TCC source.",
-  "updatedAt": "2026-09-14T10:46:00Z"
+  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Five additional reconstructedCurrentReveWeb identities were first-passed in run17 without claiming historical-618 membership. The public frontend endpoint remains a validated bounded research lead, not a promoted TCC source.",
+  "updatedAt": "2026-09-14T11:41:30Z"
 }
