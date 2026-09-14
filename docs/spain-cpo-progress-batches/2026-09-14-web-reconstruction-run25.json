@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 150,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 215
+  },
+  "decisions": [
+    {
+      "canonicalName": "Consell Insular de Menorca",
+      "labels": ["Consell Insular de Menorca"],
+      "status": "sourceValidated",
+      "model": "public institutional charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.cime.es/documents/docs/secretaria/SEC270/REV0.pdf"],
+      "coverageKnown": "Official 2025 Consell Executiu agreement establishes the public price for publicly accessible EV chargers owned by the Consell Insular de Menorca.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.25, "vatIncluded": true, "sourceAuthority": "officialInstitution"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if the Consell publishes a later public-price agreement or station-specific override.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Caldes de Malavella",
+      "labels": ["Ajuntament de Caldes de Malavella"],
+      "status": "partial",
+      "model": "municipal public charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://caldesdemalavella.cat/index.php/ca/historico-noticias/4434-els-punts-de-recarrega-de-vehicles-electrics-seran-de-pagament"],
+      "coverageKnown": "Official municipality confirms three double public chargers and paid operation via RFID/EVCharge since July 2024.",
+      "blockingReason": "No current numeric 2026 tariff was found in the official municipal material reviewed, so paid status is not extrapolated into a price.",
+      "resumeCondition": "Current municipal ordinance, EVCharge numeric tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament d'Orís",
+      "labels": ["Ajuntament d'Orís"],
+      "status": "setAside",
+      "model": "municipal/public label",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.oris.cat/"],
+      "coverageKnown": "Exact REVE public-web label is recovered and municipality identity is authoritative.",
+      "blockingReason": "No current official station tariff or sufficiently deterministic public charging page was found in this first-pass search.",
+      "resumeCondition": "Current municipal charging publication, operator/app evidence, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Centro Comercial Plaza Eliptica",
+      "labels": ["Centro Comercial Plaza Eliptica"],
+      "status": "partial",
+      "model": "destination charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://plazaeliptica.com/servicios-para-tu-coche/"],
+      "coverageKnown": "Official shopping-centre site confirms eight semi-fast charging points operated with REMO Mobility and app-based charging.",
+      "blockingReason": "Official site reviewed does not publish a numeric charging tariff.",
+      "resumeCondition": "Current REMO tariff, official centre price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "COSTCO WHOLESALE SPAIN SLU",
+      "labels": ["COSTCO WHOLESALE SPAIN SLU"],
+      "status": "setAside",
+      "model": "retail/destination label",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.costco.es/contact"],
+      "coverageKnown": "Exact legal/operator label is recovered from the REVE public-web sample and Costco Spain current centres are independently confirmed by the official site.",
+      "blockingReason": "No current official Costco Spain EV charging tariff or deterministic station-specific pricing publication was found in the first-pass search.",
+      "resumeCondition": "Official Costco charging publication, station/app evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {"firstPassTraversed": 5, "sourceValidated": 1, "partial": 2, "setAside": 2, "active": 0, "supersededAlias": 0, "platformExcluded": 0},
+  "aggregateAfter": {"minimumTraversed": 475, "maximumNeverTraversed": 143, "sourceValidated": 58, "partial": 48, "setAside": 202, "active": 96, "supersededAlias": 68, "platformExcluded": 3, "total": 475},
+  "webTrackAfter": {"newReconstructedLabelsFirstPassedCount": 102, "endpoint": "https://www.mapareve.es/api/public/v1", "validatedSample": "150x25", "uniqueOperatorLabelsObserved": 215},
+  "coherence": {"syntheticHistoricalMembershipCreated": false, "thirdPartyTariffPromoted": false, "difficultCaseReauditPerformed": false, "legacyDenominatorChanged": false, "check": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "generatedAt": "2026-09-14T20:53:00Z"
+}
