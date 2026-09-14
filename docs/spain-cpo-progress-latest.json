@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 460,
-    "maximumNeverTraversed": 158,
+    "minimumTraversed": 465,
+    "maximumNeverTraversed": 153,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 52,
-    "partial": 43,
+    "sourceValidated": 53,
+    "partial": 45,
     "active": 96,
-    "setAside": 198,
+    "setAside": 200,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 460
+    "total": 465
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,31 +39,31 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run22.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run23.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T17:43:24.546133Z",
-    "latestPersistedStateUpdatedAt": "2026-09-14T17:43:32.207608Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T19:41:01.489505Z",
+    "latestPersistedStateUpdatedAt": "2026-09-14T19:41:10.599690Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",236],["tariffs",237],["tariffs",238],["status",158],["status",159]],
-    "persistentNextTariffPage": 239,
-    "persistentTariffPagesCollected": 238,
-    "persistentTariffRowsStored": 20999,
+    "latestLiveBatchPlan": [["tariffs",239],["tariffs",240],["tariffs",241],["status",160],["status",161]],
+    "persistentNextTariffPage": 242,
+    "persistentTariffPagesCollected": 241,
+    "persistentTariffRowsStored": 21241,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 160,
-    "persistentStatusPagesCollected": 159,
-    "persistentStatusRowsStored": 13917,
+    "persistentNextStatusPage": 162,
+    "persistentStatusPagesCollected": 161,
+    "persistentStatusRowsStored": 14112,
     "statusTotalPages": 449,
-    "currentRunDecision": "Exactly one external API batch was launched after more than one real hour had elapsed since the previous persisted successful batch. It used only /connectors/tariffs and /evses/operational_status, attempted 5 requests, succeeded 5/5, made 0 /locations requests and observed 0 HTTP 429. The one-shot trigger was disarmed immediately afterwards."
+    "currentRunDecision": "Exactly one external API batch was launched after more than one real hour had elapsed since the previous persisted successful batch. It used only /connectors/tariffs and /evses/operational_status, attempted 5 requests, succeeded 5/5, made 0 /locations requests and observed 0 HTTP 429. The one-shot trigger was disarmed and removed immediately afterwards."
   },
   "reveWebLead": {
-    "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_125_PAGE_IDENTITY_SAMPLE_VALIDATED",
+    "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_150_PAGE_IDENTITY_SAMPLE_VALIDATED",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
@@ -71,20 +71,20 @@
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
-    "validationGeneratedAt": "2026-09-14T14:46:32.245Z",
-    "validationMaxPages": 125,
+    "validationGeneratedAt": "2026-09-14T18:44:31.718Z",
+    "validationMaxPages": 150,
     "validationPerPage": 25,
     "validationDgtStationsLoaded": 12138,
-    "validationMatchedStations": 3291,
-    "validationMatchedWithPrices": 2920,
-    "validationMatchedWithAvailability": 3291,
-    "validationMatchedWithReveData": 3291,
-    "validationUniqueReveLocationIds": 2323,
-    "validationUniqueOperatorLabels": 189,
-    "newReconstructedLabelsFirstPassedCount": 87,
-    "newReconstructedLabelsFirstPassedLatest": ["Sallent","PETRO PALOL, S.L.","Porsatecnic S.L.","Ports de la Generalitat","URBAN PADESPORT & COFFEE, S.L"],
+    "validationMatchedStations": 3857,
+    "validationMatchedWithPrices": 3416,
+    "validationMatchedWithAvailability": 3857,
+    "validationMatchedWithReveData": 3857,
+    "validationUniqueReveLocationIds": 2787,
+    "validationUniqueOperatorLabels": 215,
+    "newReconstructedLabelsFirstPassedCount": 92,
+    "newReconstructedLabelsFirstPassedLatest": ["Ajuntament d'Ullastret","Ajuntament de Calaf","Ajuntament de Miralcamp","Ajuntament de Tiana","Ajuntament de Vilabella"],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue diffing the remaining genuinely new operator labels exposed by the validated 125-page public-web sample against the durable 148-label snapshot and prior nominative decisions. Do not claim historical-618 membership and do not resume difficult-case reaudit yet."
+    "nextSafeStep": "Continue diffing the remaining genuinely new operator labels exposed by the validated 150-page public-web sample against the durable snapshot and prior nominative decisions. Do not claim historical-618 membership and do not resume difficult-case reaudit yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 460,
-    "firstPassMinimumTraversed": 460,
+    "continuityCountSum": 465,
+    "firstPassMinimumTraversed": 465,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,14 +109,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Sallent","PETRO PALOL, S.L.","Porsatecnic S.L.","Ports de la Generalitat","URBAN PADESPORT & COFFEE, S.L"],
-    "newlySourceValidated": ["Sallent"],
-    "newlyPartial": ["Ports de la Generalitat"],
-    "newlySetAside": ["PETRO PALOL, S.L.","Porsatecnic S.L.","URBAN PADESPORT & COFFEE, S.L"],
+    "labelsTraversed": ["Ajuntament d'Ullastret","Ajuntament de Calaf","Ajuntament de Miralcamp","Ajuntament de Tiana","Ajuntament de Vilabella"],
+    "newlySourceValidated": ["Ajuntament de Vilabella"],
+    "newlyPartial": ["Ajuntament de Calaf","Ajuntament de Tiana"],
+    "newlySetAside": ["Ajuntament d'Ullastret","Ajuntament de Miralcamp"],
     "newlyActive": [],
     "newAliases": [],
     "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue first-pass reconstruction from the expanded 125-page public-web identity sample. Five additional genuinely new identities were first-passed in run22 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
-  "updatedAt": "2026-09-14T17:49:00Z"
+  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Five additional genuinely new identities were first-passed in run23 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T19:42:00Z"
 }
