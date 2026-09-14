@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 442,
-    "maximumNeverTraversed": 176,
+    "minimumTraversed": 447,
+    "maximumNeverTraversed": 171,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 48,
-    "partial": 37,
+    "sourceValidated": 50,
+    "partial": 39,
     "active": 95,
-    "setAside": 191,
+    "setAside": 192,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 442
+    "total": 447
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,31 +39,31 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run18.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T13:21:44.632244Z",
-    "latestPersistedStateUpdatedAt": "2026-09-14T13:21:56.266420Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T14:42:15.563448Z",
+    "latestPersistedStateUpdatedAt": "2026-09-14T14:42:24.022579Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",227],["tariffs",228],["tariffs",229],["status",152],["status",153]],
-    "persistentNextTariffPage": 230,
-    "persistentTariffPagesCollected": 229,
-    "persistentTariffRowsStored": 20250,
+    "latestLiveBatchPlan": [["tariffs",230],["tariffs",231],["tariffs",232],["status",154],["status",155]],
+    "persistentNextTariffPage": 233,
+    "persistentTariffPagesCollected": 232,
+    "persistentTariffRowsStored": 20492,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 154,
-    "persistentStatusPagesCollected": 153,
-    "persistentStatusRowsStored": 13386,
-    "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one external API batch was launched after the hourly eligibility window had elapsed. Five of five requests succeeded, no /locations request was made and no HTTP 429 was observed. The one-shot trigger was disarmed and removed after persistence."
+    "persistentNextStatusPage": 156,
+    "persistentStatusPagesCollected": 155,
+    "persistentStatusRowsStored": 13570,
+    "statusTotalPages": 449,
+    "currentRunDecision": "No external API batch was launched in this execution because a full real hour had not yet elapsed since the persisted successful batch at 2026-09-14T14:42:15Z. No /locations request was made and no second batch was attempted."
   },
   "reveWebLead": {
-    "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
+    "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_125_PAGE_IDENTITY_SAMPLE_VALIDATED",
     "base": "https://www.mapareve.es/api/public/v1",
     "reportedLocationsRoute": "POST /locations",
     "reportedSingleLocationRoute": "GET /locations/{locationId}",
@@ -71,20 +71,20 @@
     "reportedEmbeddedData": ["EVSE status", "connector tariffs"],
     "independentRuntimeValidation": true,
     "validationEvidence": "data/spain_reve/reve_public_web_probe.json",
-    "validationGeneratedAt": "2026-09-13T18:41:51.573Z",
-    "validationMaxPages": 100,
+    "validationGeneratedAt": "2026-09-14T14:46:32.245Z",
+    "validationMaxPages": 125,
     "validationPerPage": 25,
     "validationDgtStationsLoaded": 12138,
-    "validationMatchedStations": 2686,
-    "validationMatchedWithPrices": 2380,
-    "validationMatchedWithAvailability": 2686,
-    "validationMatchedWithReveData": 2686,
-    "validationUniqueReveLocationIds": 1853,
-    "validationUniqueOperatorLabels": 166,
-    "newReconstructedLabelsFirstPassedCount": 69,
-    "newReconstructedLabelsFirstPassedLatest": ["Torre Inbisa","Tortosa","UMBRELLA e-MOBILITY"],
+    "validationMatchedStations": 3291,
+    "validationMatchedWithPrices": 2920,
+    "validationMatchedWithAvailability": 3291,
+    "validationMatchedWithReveData": 3291,
+    "validationUniqueReveLocationIds": 2323,
+    "validationUniqueOperatorLabels": 189,
+    "newReconstructedLabelsFirstPassedCount": 74,
+    "newReconstructedLabelsFirstPassedLatest": ["Ajuntament de Cunit","Ajuntament de Lliçà d'Amunt","Ajuntament de Rubí","Ayuntamiento de Carrión de los Condes","Bescanó"],
     "promoteToTccSource": false,
-    "nextSafeStep": "The validated 166-label public-web identity sample has been exhausted for genuinely new names after filtering aliases already represented in the durable 148-label snapshot. Continue nominative reconstruction from other persisted/current evidence sources before any difficult-case reaudit; preserve historical-618 uncertainty."
+    "nextSafeStep": "Continue diffing the 23 operator labels newly exposed between the validated 100-page and 125-page public-web samples against the durable 148-label snapshot and prior nominative decisions. First-pass only genuinely new identities; do not claim historical-618 membership and do not resume difficult-case reaudit yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 442,
-    "firstPassMinimumTraversed": 442,
+    "continuityCountSum": 447,
+    "firstPassMinimumTraversed": 447,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,14 +109,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Torre Inbisa","Tortosa","UMBRELLA e-MOBILITY"],
-    "newlySourceValidated": [],
-    "newlyPartial": ["Torre Inbisa","Tortosa"],
-    "newlySetAside": [],
-    "newlyActive": ["UMBRELLA e-MOBILITY"],
+    "labelsTraversed": ["Ajuntament de Cunit","Ajuntament de Lliçà d'Amunt","Ajuntament de Rubí","Ayuntamiento de Carrión de los Condes","Bescanó"],
+    "newlySourceValidated": ["Ajuntament de Lliçà d'Amunt","Ayuntamiento de Carrión de los Condes"],
+    "newlyPartial": ["Ajuntament de Cunit","Ajuntament de Rubí"],
+    "newlySetAside": ["Bescanó"],
+    "newlyActive": [],
     "newAliases": [],
-    "skippedAlreadyCoveredAliases": ["Telpark","Tesla, Inc.","TotalEnergies","Wenea Mobile Energy","Zunder"]
+    "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue first-pass reconstruction from nominatively evidenced sources beyond the now-exhausted validated public-web identity sample. Three additional reconstructedCurrentReveWeb identities were first-passed in run18 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
-  "updatedAt": "2026-09-14T13:28:00Z"
+  "investigationCurrent": "Continue first-pass reconstruction from the newly expanded 125-page public-web identity sample. Five genuinely new identities were first-passed in run19 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T15:38:00Z"
 }
