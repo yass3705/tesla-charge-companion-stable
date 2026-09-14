@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 447,
-    "maximumNeverTraversed": 171,
+    "minimumTraversed": 449,
+    "maximumNeverTraversed": 169,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 50,
+    "sourceValidated": 51,
     "partial": 39,
     "active": 95,
-    "setAside": 192,
+    "setAside": 193,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 447
+    "total": 449
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,7 +39,7 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run20.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
@@ -81,10 +81,10 @@
     "validationMatchedWithReveData": 3291,
     "validationUniqueReveLocationIds": 2323,
     "validationUniqueOperatorLabels": 189,
-    "newReconstructedLabelsFirstPassedCount": 74,
-    "newReconstructedLabelsFirstPassedLatest": ["Ajuntament de Cunit","Ajuntament de Lliçà d'Amunt","Ajuntament de Rubí","Ayuntamiento de Carrión de los Condes","Bescanó"],
+    "newReconstructedLabelsFirstPassedCount": 76,
+    "newReconstructedLabelsFirstPassedLatest": ["Ajuntament de Cunit","Ajuntament de Lliçà d'Amunt","Ajuntament de Rubí","Ayuntamiento de Carrión de los Condes","Bescanó","Empresa Municipal de Transportes de Madrid, S.A.","Fira CCIB"],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue diffing the 23 operator labels newly exposed between the validated 100-page and 125-page public-web samples against the durable 148-label snapshot and prior nominative decisions. First-pass only genuinely new identities; do not claim historical-618 membership and do not resume difficult-case reaudit yet."
+    "nextSafeStep": "Continue diffing operator labels newly exposed between the validated 100-page and 125-page public-web samples against the durable 148-label snapshot and prior nominative decisions. First-pass only genuinely new identities; do not claim historical-618 membership and do not resume difficult-case reaudit yet."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 447,
-    "firstPassMinimumTraversed": 447,
+    "continuityCountSum": 449,
+    "firstPassMinimumTraversed": 449,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,14 +109,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Ajuntament de Cunit","Ajuntament de Lliçà d'Amunt","Ajuntament de Rubí","Ayuntamiento de Carrión de los Condes","Bescanó"],
-    "newlySourceValidated": ["Ajuntament de Lliçà d'Amunt","Ayuntamiento de Carrión de los Condes"],
+    "labelsTraversed": ["Ajuntament de Cunit","Ajuntament de Lliçà d'Amunt","Ajuntament de Rubí","Ayuntamiento de Carrión de los Condes","Bescanó","Empresa Municipal de Transportes de Madrid, S.A.","Fira CCIB"],
+    "newlySourceValidated": ["Ajuntament de Lliçà d'Amunt","Ayuntamiento de Carrión de los Condes","Empresa Municipal de Transportes de Madrid, S.A."],
     "newlyPartial": ["Ajuntament de Cunit","Ajuntament de Rubí"],
-    "newlySetAside": ["Bescanó"],
+    "newlySetAside": ["Bescanó","Fira CCIB"],
     "newlyActive": [],
     "newAliases": [],
     "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue first-pass reconstruction from the newly expanded 125-page public-web identity sample. Five genuinely new identities were first-passed in run19 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
-  "updatedAt": "2026-09-14T15:38:00Z"
+  "investigationCurrent": "Continue first-pass reconstruction from the expanded 125-page public-web identity sample. Seven genuinely new identities were first-passed in run19/run20 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T15:44:00Z"
 }
