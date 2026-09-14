@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 411,
-    "maximumNeverTraversed": 207,
+    "minimumTraversed": 414,
+    "maximumNeverTraversed": 204,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 37,
-    "partial": 26,
+    "sourceValidated": 38,
+    "partial": 27,
     "active": 94,
-    "setAside": 183,
+    "setAside": 184,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 411
+    "total": 414
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,7 +39,7 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run10.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run11.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
@@ -60,7 +60,7 @@
     "persistentStatusPagesCollected": 145,
     "persistentStatusRowsStored": 12662,
     "statusTotalPages": 448,
-    "currentRunDecision": "Exactly one official REVE batch was launched after more than one real hour had elapsed. It used five requests total, only /connectors/tariffs and /evses/operational_status, succeeded 5/5 with no 429, persisted cursors, and the temporary trigger was disarmed and removed before exit."
+    "currentRunDecision": "No official REVE batch was launched: the automation check occurred before one full real hour had elapsed since the last successful persisted batch at 2026-09-14T04:41:13.912657Z. Persistent cursors remain 218/146; no /locations request was made and no second batch was attempted."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -82,7 +82,7 @@
     "validationUniqueReveLocationIds": 1853,
     "validationUniqueOperatorLabels": 166,
     "identityCaveat": "Multiple DGT source stations may map to the same REVE locationId; duplicate locationId counts in the enriched station output must therefore not be interpreted as pagination duplicates without raw-page evidence.",
-    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu", "Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles", "Ajuntament de Pals", "Ajuntament de Sant Celoni", "Ajuntament de Súria", "Ajuntament de Vallgorguina", "Ajuntament de Vilablareix", "Ajuntament Sant Joan de Vilatorrada", "Ajuntament de la Vall d'en Bas", "Ajuntament de Prat de Llobregat", "Ajuntament de Santa Cristina d'Aro", "Almatret", "Cardona", "Caseres", "CIMALSA Castellar del Vallès", "Constanti", "Diputación de Badajoz", "EATIM JESUS POBRE", "Hospitalet de l'Infant", "La Jonquera", "La Llagosta", "La Pobla de Segur", "Llagostera", "Lleida", "Lloret de Mar", "Matadepera", "Móra d'Ebre", "Movilidad Eléctrica Gran Canaria", "Navàs"],
+    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu", "Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles", "Ajuntament de Pals", "Ajuntament de Sant Celoni", "Ajuntament de Súria", "Ajuntament de Vallgorguina", "Ajuntament de Vilablareix", "Ajuntament Sant Joan de Vilatorrada", "Ajuntament de la Vall d'en Bas", "Ajuntament de Prat de Llobregat", "Ajuntament de Santa Cristina d'Aro", "Almatret", "Cardona", "Caseres", "CIMALSA Castellar del Vallès", "Constanti", "Diputación de Badajoz", "EATIM JESUS POBRE", "Hospitalet de l'Infant", "La Jonquera", "La Llagosta", "La Pobla de Segur", "Llagostera", "Lleida", "Lloret de Mar", "Matadepera", "Móra d'Ebre", "Movilidad Eléctrica Gran Canaria", "Navàs", "NIMA GRUP D'AUTOMOCIO SL", "Nuñez y Navarro", "OPER CANARIOS SL"],
     "promoteToTccSource": false,
     "nextSafeStep": "Continue diffing observed public-web operator labels against the durable 148-label snapshot and branch history, first-pass genuinely new identities with reconstructedCurrentReveWeb provenance, and only then expand the bounded pagination diagnostic before any national public sweep or runtime promotion."
   },
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 411,
-    "firstPassMinimumTraversed": 411,
+    "continuityCountSum": 414,
+    "firstPassMinimumTraversed": 414,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,13 +109,13 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Móra d'Ebre", "Movilidad Eléctrica Gran Canaria", "Navàs"],
-    "newlySourceValidated": ["Navàs"],
-    "newlyPartial": ["Móra d'Ebre", "Movilidad Eléctrica Gran Canaria"],
-    "newlySetAside": [],
+    "labelsTraversed": ["NIMA GRUP D'AUTOMOCIO SL", "Nuñez y Navarro", "OPER CANARIOS SL"],
+    "newlySourceValidated": ["OPER CANARIOS SL"],
+    "newlyPartial": ["NIMA GRUP D'AUTOMOCIO SL"],
+    "newlySetAside": ["Nuñez y Navarro"],
     "newlyActive": [],
     "newAliases": []
   },
-  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Three additional reconstructedCurrentReveWeb identities were first-passed in run10 without claiming historical-618 membership.",
-  "updatedAt": "2026-09-14T04:43:00Z"
+  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Three additional reconstructedCurrentReveWeb identities were first-passed in run11 without claiming historical-618 membership.",
+  "updatedAt": "2026-09-14T05:39:00Z"
 }
