@@ -32,12 +32,12 @@ jobs:
           const pkg = require('@gasolinaradar/dgt-ev-collector');
           async function main() {
             const startedAt = new Date().toISOString();
-            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 100, perPage: 25 };
+            let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 125, perPage: 25 };
             try {
               const stations = await pkg.fetchStations({ logger: { info(){}, warn(){}, debug(){} } });
               const enriched = await pkg.enrichStations(stations, {
                 source: 'public', acknowledgeUnsupported: true,
-                maxPages: 100, perPage: 25, thresholdMeters: 100,
+                maxPages: 125, perPage: 25, thresholdMeters: 100,
                 logger: { info(){}, warn(){}, debug(){} }
               });
               const matched = enriched.filter(r => r && r.reveLocationId);
@@ -149,6 +149,6 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
-          git commit -m "probe(es): validate 100-page REVE public web identity sample"
+          git commit -m "probe(es): validate 125-page REVE public web identity sample"
           git pull --rebase origin spain-reve-preintegration
           git push
