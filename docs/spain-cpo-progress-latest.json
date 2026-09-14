@@ -7,8 +7,8 @@
     "authoritativeCpoDenominator": false,
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
-  "firstPass": {"minimumTraversed": 470, "maximumNeverTraversed": 148, "firstPassComplete": false},
-  "counts": {"sourceValidated": 57, "partial": 46, "active": 96, "setAside": 200, "platformExcluded": 3, "supersededAlias": 68, "total": 470},
+  "firstPass": {"minimumTraversed": 475, "maximumNeverTraversed": 143, "firstPassComplete": false},
+  "counts": {"sourceValidated": 58, "partial": 48, "active": 96, "setAside": 202, "platformExcluded": 3, "supersededAlias": 68, "total": 475},
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
@@ -27,28 +27,28 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T19:41:01.489505Z",
-    "latestPersistedStateUpdatedAt": "2026-09-14T19:41:10.599690Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T20:48:45.978079Z",
+    "latestPersistedStateUpdatedAt": "2026-09-14T20:48:55.580721Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",239],["tariffs",240],["tariffs",241],["status",160],["status",161]],
-    "persistentNextTariffPage": 242,
-    "persistentTariffPagesCollected": 241,
-    "persistentTariffRowsStored": 21241,
+    "latestLiveBatchPlan": [["tariffs",242],["tariffs",243],["tariffs",244],["status",162],["status",163]],
+    "persistentNextTariffPage": 245,
+    "persistentTariffPagesCollected": 244,
+    "persistentTariffRowsStored": 21492,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 162,
-    "persistentStatusPagesCollected": 161,
-    "persistentStatusRowsStored": 14112,
+    "persistentNextStatusPage": 164,
+    "persistentStatusPagesCollected": 163,
+    "persistentStatusRowsStored": 14298,
     "statusTotalPages": 449,
-    "currentRunDecision": "At first check the real one-hour window had not yet elapsed, so no premature batch was launched. A single eligible batch may be launched later in this run only after rechecking that no batch is active."
+    "currentRunDecision": "Exactly one eligible five-request batch was launched after the real one-hour window elapsed. All five requests returned HTTP 200, no /locations request was made, no 429 occurred, state persisted successfully, and the one-shot trigger was disarmed and removed."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_150_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -69,16 +69,16 @@
     "validationMatchedWithReveData": 3857,
     "validationUniqueReveLocationIds": 2787,
     "validationUniqueOperatorLabels": 215,
-    "newReconstructedLabelsFirstPassedCount": 97,
-    "newReconstructedLabelsFirstPassedLatest": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell","AYTO ZAMORA"],
+    "newReconstructedLabelsFirstPassedCount": 102,
+    "newReconstructedLabelsFirstPassedLatest": ["Consell Insular de Menorca","Ajuntament de Caldes de Malavella","Ajuntament d'Orís","Centro Comercial Plaza Eliptica","COSTCO WHOLESALE SPAIN SLU"],
     "promoteToTccSource": false,
     "nextSafeStep": "Continue diffing the remaining genuinely new operator labels exposed by the validated 150-page public-web sample against the durable snapshot and prior nominative decisions. Do not claim historical-618 membership and do not resume difficult-case reaudit yet."
   },
   "runtimeSafety": {"pr50MustRemainDraft": true,"preIntegrationOnly": true,"runtimePublishReady": false,"locationsCollectionComplete": true,"locationsCollectionMustNotRestart": true},
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 470,
-    "firstPassMinimumTraversed": 470,
+    "continuityCountSum": 475,
+    "firstPassMinimumTraversed": 475,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -91,14 +91,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell","AYTO ZAMORA"],
-    "newlySourceValidated": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell"],
-    "newlyPartial": ["AYTO ZAMORA"],
-    "newlySetAside": [],
+    "labelsTraversed": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell","AYTO ZAMORA","Consell Insular de Menorca","Ajuntament de Caldes de Malavella","Ajuntament d'Orís","Centro Comercial Plaza Eliptica","COSTCO WHOLESALE SPAIN SLU"],
+    "newlySourceValidated": ["Ajuntament de Santa Margarida de Montbui","Ajuntament de Breda","Ajuntament de Castellvell del Camp","Ajuntament de Taradell","Consell Insular de Menorca"],
+    "newlyPartial": ["AYTO ZAMORA","Ajuntament de Caldes de Malavella","Centro Comercial Plaza Eliptica"],
+    "newlySetAside": ["Ajuntament d'Orís","COSTCO WHOLESALE SPAIN SLU"],
     "newlyActive": [],
     "newAliases": [],
     "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Five additional genuinely new identities were first-passed in run24 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
-  "updatedAt": "2026-09-14T20:47:00Z"
+  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Ten additional genuinely new identities were first-passed across run24 and run25 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T20:54:00Z"
 }
