@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 439,
-    "maximumNeverTraversed": 179,
+    "minimumTraversed": 442,
+    "maximumNeverTraversed": 176,
     "firstPassComplete": false
   },
   "counts": {
     "sourceValidated": 48,
-    "partial": 35,
-    "active": 94,
+    "partial": 37,
+    "active": 95,
     "setAside": 191,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 439
+    "total": 442
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,28 +39,28 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run17.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run18.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T10:43:19.004465Z",
-    "latestPersistedStateUpdatedAt": "2026-09-14T10:43:26.585301Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T13:21:44.632244Z",
+    "latestPersistedStateUpdatedAt": "2026-09-14T13:21:56.266420Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",224],["tariffs",225],["tariffs",226],["status",150],["status",151]],
-    "persistentNextTariffPage": 227,
-    "persistentTariffPagesCollected": 226,
-    "persistentTariffRowsStored": 20014,
+    "latestLiveBatchPlan": [["tariffs",227],["tariffs",228],["tariffs",229],["status",152],["status",153]],
+    "persistentNextTariffPage": 230,
+    "persistentTariffPagesCollected": 229,
+    "persistentTariffRowsStored": 20250,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 152,
-    "persistentStatusPagesCollected": 151,
-    "persistentStatusRowsStored": 13192,
+    "persistentNextStatusPage": 154,
+    "persistentStatusPagesCollected": 153,
+    "persistentStatusRowsStored": 13386,
     "statusTotalPages": 448,
-    "currentRunDecision": "No new external API batch was launched because a full real hour had not yet elapsed since the latest successful persisted batch. No /locations request was made and cursors remain unchanged."
+    "currentRunDecision": "Exactly one external API batch was launched after the hourly eligibility window had elapsed. Five of five requests succeeded, no /locations request was made and no HTTP 429 was observed. The one-shot trigger was disarmed and removed after persistence."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -81,10 +81,10 @@
     "validationMatchedWithReveData": 2686,
     "validationUniqueReveLocationIds": 1853,
     "validationUniqueOperatorLabels": 166,
-    "newReconstructedLabelsFirstPassedCount": 66,
-    "newReconstructedLabelsFirstPassedLatest": ["Santpedor","SUNSET OASIS IBIZA ROSELLO RAUSELL","Tersa","UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE","Vibroaspre, S.A. Vibroaspre Vibroaspre"],
+    "newReconstructedLabelsFirstPassedCount": 69,
+    "newReconstructedLabelsFirstPassedLatest": ["Torre Inbisa","Tortosa","UMBRELLA e-MOBILITY"],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue diff-first processing over remaining public-web operator labels, skipping durable aliases already represented by canonical identities; first-pass genuinely new identities before any difficult-case reaudit."
+    "nextSafeStep": "The validated 166-label public-web identity sample has been exhausted for genuinely new names after filtering aliases already represented in the durable 148-label snapshot. Continue nominative reconstruction from other persisted/current evidence sources before any difficult-case reaudit; preserve historical-618 uncertainty."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 439,
-    "firstPassMinimumTraversed": 439,
+    "continuityCountSum": 442,
+    "firstPassMinimumTraversed": 442,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,14 +109,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Santpedor","SUNSET OASIS IBIZA ROSELLO RAUSELL","Tersa","UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE","Vibroaspre, S.A. Vibroaspre Vibroaspre"],
-    "newlySourceValidated": ["UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE","Vibroaspre, S.A. Vibroaspre Vibroaspre"],
-    "newlyPartial": ["Santpedor","Tersa"],
-    "newlySetAside": ["SUNSET OASIS IBIZA ROSELLO RAUSELL"],
-    "newlyActive": [],
+    "labelsTraversed": ["Torre Inbisa","Tortosa","UMBRELLA e-MOBILITY"],
+    "newlySourceValidated": [],
+    "newlyPartial": ["Torre Inbisa","Tortosa"],
+    "newlySetAside": [],
+    "newlyActive": ["UMBRELLA e-MOBILITY"],
     "newAliases": [],
-    "skippedAlreadyCoveredAliases": []
+    "skippedAlreadyCoveredAliases": ["Telpark","Tesla, Inc.","TotalEnergies","Wenea Mobile Energy","Zunder"]
   },
-  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Five additional reconstructedCurrentReveWeb identities were first-passed in run17 without claiming historical-618 membership. The public frontend endpoint remains a validated bounded research lead, not a promoted TCC source.",
-  "updatedAt": "2026-09-14T11:41:30Z"
+  "investigationCurrent": "Continue first-pass reconstruction from nominatively evidenced sources beyond the now-exhausted validated public-web identity sample. Three additional reconstructedCurrentReveWeb identities were first-passed in run18 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T13:28:00Z"
 }
