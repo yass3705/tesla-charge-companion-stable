@@ -8,18 +8,18 @@
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
   "firstPass": {
-    "minimumTraversed": 422,
-    "maximumNeverTraversed": 196,
+    "minimumTraversed": 425,
+    "maximumNeverTraversed": 193,
     "firstPassComplete": false
   },
   "counts": {
-    "sourceValidated": 39,
-    "partial": 30,
+    "sourceValidated": 41,
+    "partial": 31,
     "active": 94,
     "setAside": 188,
     "platformExcluded": 3,
     "supersededAlias": 68,
-    "total": 422
+    "total": 425
   },
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
@@ -39,28 +39,28 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run13.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run14.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
   "reveTariffStatus": {
     "complete": false,
-    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T06:48:20.165858Z",
-    "latestPersistedStateUpdatedAt": "2026-09-14T06:48:27.382806Z",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-14T08:43:07.075469Z",
+    "latestPersistedStateUpdatedAt": "2026-09-14T08:43:14.506471Z",
     "latestLiveBatchRequestsAttempted": 5,
     "latestLiveBatchRequestsSucceeded": 5,
     "latestLiveBatchLocationsRequests": 0,
     "latestLiveBatchHttp429Observed": 0,
-    "latestLiveBatchPlan": [["tariffs",218],["tariffs",219],["tariffs",220],["status",146],["status",147]],
-    "persistentNextTariffPage": 221,
-    "persistentTariffPagesCollected": 220,
-    "persistentTariffRowsStored": 19533,
+    "latestLiveBatchPlan": [["tariffs",221],["tariffs",222],["tariffs",223],["status",148],["status",149]],
+    "persistentNextTariffPage": 224,
+    "persistentTariffPagesCollected": 223,
+    "persistentTariffRowsStored": 19775,
     "tariffTotalPages": 462,
-    "persistentNextStatusPage": 148,
-    "persistentStatusPagesCollected": 147,
-    "persistentStatusRowsStored": 12840,
+    "persistentNextStatusPage": 150,
+    "persistentStatusPagesCollected": 149,
+    "persistentStatusRowsStored": 12997,
     "statusTotalPages": 448,
-    "currentRunDecision": "No official REVE tariff/status batch was launched in this execution because one full real hour had not yet elapsed since the 2026-09-14T06:48:20.165858Z successful persisted batch. No /locations request was made and the persistent cursors remain tariffs 221 / status 148."
+    "currentRunDecision": "Exactly one official REVE tariff/status batch was launched after more than one real hour had elapsed. It consumed 5/5 requests: tariffs pages 221-223 and status pages 148-149, with HTTP 200 throughout, zero /locations requests and zero HTTP 429. The one-shot trigger was disarmed before its marker was removed, preventing a second batch in the same hourly window."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_100_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -82,9 +82,9 @@
     "validationUniqueReveLocationIds": 1853,
     "validationUniqueOperatorLabels": 166,
     "identityCaveat": "Multiple DGT source stations may map to the same REVE locationId; duplicate locationId counts in the enriched station output must therefore not be interpreted as pagination duplicates without raw-page evidence.",
-    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu", "Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles", "Ajuntament de Pals", "Ajuntament de Sant Celoni", "Ajuntament de Súria", "Ajuntament de Vallgorguina", "Ajuntament de Vilablareix", "Ajuntament Sant Joan de Vilatorrada", "Ajuntament de la Vall d'en Bas", "Ajuntament de Prat de Llobregat", "Ajuntament de Santa Cristina d'Aro", "Almatret", "Cardona", "Caseres", "CIMALSA Castellar del Vallès", "Constanti", "Diputación de Badajoz", "EATIM JESUS POBRE", "Hospitalet de l'Infant", "La Jonquera", "La Llagosta", "La Pobla de Segur", "Llagostera", "Lleida", "Lloret de Mar", "Matadepera", "Móra d'Ebre", "Movilidad Eléctrica Gran Canaria", "Navàs", "NIMA GRUP D'AUTOMOCIO SL", "Nuñez y Navarro", "OPER CANARIOS SL", "Pamplona", "Parking Pozuelo", "Patrimonio Natural CyL", "PAVAPARK MOVILIDAD, S.L.", "Peralada", "Petrolia Conil de la Frontera", "Polinyà", "Port de Roses"],
+    "newReconstructedLabelsFirstPassed": ["Aj. Mollerussa", "Ajuntament Bonrepòs Mirambell", "Ajuntament d'Amer", "AJUNTAMENT DE BELLREGUARD", "Ajuntament de Blancafort", "Ajuntament de Canovelles", "Ajuntament de Cardedeu", "Ajuntament de Casserres", "Ajuntament de Gironella", "Ajuntament de La Secuita", "Ajuntament de Martorelles", "Ajuntament de Pals", "Ajuntament de Sant Celoni", "Ajuntament de Súria", "Ajuntament de Vallgorguina", "Ajuntament de Vilablareix", "Ajuntament Sant Joan de Vilatorrada", "Ajuntament de la Vall d'en Bas", "Ajuntament de Prat de Llobregat", "Ajuntament de Santa Cristina d'Aro", "Almatret", "Cardona", "Caseres", "CIMALSA Castellar del Vallès", "Constanti", "Diputación de Badajoz", "EATIM JESUS POBRE", "Hospitalet de l'Infant", "La Jonquera", "La Llagosta", "La Pobla de Segur", "Llagostera", "Lleida", "Lloret de Mar", "Matadepera", "Móra d'Ebre", "Movilidad Eléctrica Gran Canaria", "Navàs", "NIMA GRUP D'AUTOMOCIO SL", "Nuñez y Navarro", "OPER CANARIOS SL", "Pamplona", "Parking Pozuelo", "Patrimonio Natural CyL", "PAVAPARK MOVILIDAD, S.L.", "Peralada", "Petrolia Conil de la Frontera", "Polinyà", "Port de Roses", "Powerdot Spain", "Premià de Mar", "PUMSA Mataró"],
     "promoteToTccSource": false,
-    "nextSafeStep": "Continue diffing observed public-web operator labels against the durable 148-label snapshot and branch history, first-pass genuinely new identities with reconstructedCurrentReveWeb provenance, and only then expand the bounded pagination diagnostic before any national public sweep or runtime promotion."
+    "nextSafeStep": "Continue diffing observed public-web operator labels against the durable 148-label snapshot and branch history, skipping aliases already represented by durable canonical identities, first-pass genuinely new identities with reconstructedCurrentReveWeb provenance, and only then expand the bounded pagination diagnostic before any national public sweep or runtime promotion."
   },
   "runtimeSafety": {
     "pr50MustRemainDraft": true,
@@ -95,8 +95,8 @@
   },
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 422,
-    "firstPassMinimumTraversed": 422,
+    "continuityCountSum": 425,
+    "firstPassMinimumTraversed": 425,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -109,13 +109,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["Peralada", "Petrolia Conil de la Frontera", "Polinyà", "Port de Roses"],
-    "newlySourceValidated": ["Port de Roses"],
-    "newlyPartial": ["Peralada"],
-    "newlySetAside": ["Petrolia Conil de la Frontera", "Polinyà"],
+    "labelsTraversed": ["Powerdot Spain", "Premià de Mar", "PUMSA Mataró"],
+    "newlySourceValidated": ["Premià de Mar", "PUMSA Mataró"],
+    "newlyPartial": ["Powerdot Spain"],
+    "newlySetAside": [],
     "newlyActive": [],
-    "newAliases": []
+    "newAliases": [],
+    "skippedAlreadyCoveredAliases": ["PowerGo -> Powergo Public SL", "Powy -> The F Charging Espana S.L.U.", "Prio Recharge Sl. -> Prio Recharge Sl.", "Qwello -> QWELLO España SL"]
   },
-  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Four additional reconstructedCurrentReveWeb identities were first-passed in run13 without claiming historical-618 membership.",
-  "updatedAt": "2026-09-14T07:44:00Z"
+  "investigationCurrent": "Continue the diff-first first-pass workflow over REVE web labels absent from the durable 148-label snapshot. Three additional reconstructedCurrentReveWeb identities were first-passed in run14 without claiming historical-618 membership; known alias-equivalent labels were skipped rather than reworked.",
+  "updatedAt": "2026-09-14T08:47:00Z"
 }
