@@ -7,8 +7,8 @@
     "authoritativeCpoDenominator": false,
     "interpretation": "derived REVE label work queue pending alias/platform/dedup reconciliation"
   },
-  "firstPass": {"minimumTraversed": 480, "maximumNeverTraversed": 138, "firstPassComplete": false},
-  "counts": {"sourceValidated": 59, "partial": 49, "active": 96, "setAside": 205, "platformExcluded": 3, "supersededAlias": 68, "total": 480},
+  "firstPass": {"minimumTraversed": 485, "maximumNeverTraversed": 133, "firstPassComplete": false},
+  "counts": {"sourceValidated": 60, "partial": 49, "active": 99, "setAside": 206, "platformExcluded": 3, "supersededAlias": 68, "total": 485},
   "legacyUncertainty": {
     "unreconstructedHistoricalNominativeDecisions": 98,
     "documented": true,
@@ -27,7 +27,7 @@
     "fullFrozen618NominativeSnapshotFound": false,
     "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
     "replacementIdentityQueueExhausted": false,
-    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json",
+    "latestReconstructionBatch": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run27.json",
     "criticalCountryProgressPersistedInGit": true,
     "actionsArtifactsMayNotBeSoleCanonicalStore": true
   },
@@ -48,7 +48,7 @@
     "persistentStatusPagesCollected": 163,
     "persistentStatusRowsStored": 14298,
     "statusTotalPages": 449,
-    "currentRunDecision": "No live batch launched in this execution because a full real hour had not yet elapsed since the latest successful persisted batch. No /locations request was made and no second batch was attempted."
+    "currentRunDecision": "A full real hour had elapsed and one live batch was eligible. The available GitHub connector in this execution exposed workflow read/retry actions but no workflow_dispatch action, so no unsafe substitute trigger was created and no REVE API request was consumed. Next execution must launch exactly one batch from tariff page 245/status page 164 if no newer successful batch exists."
   },
   "reveWebLead": {
     "status": "PUBLIC_ENDPOINT_GO_CONDITIONAL_150_PAGE_IDENTITY_SAMPLE_VALIDATED",
@@ -69,16 +69,16 @@
     "validationMatchedWithReveData": 3857,
     "validationUniqueReveLocationIds": 2787,
     "validationUniqueOperatorLabels": 215,
-    "newReconstructedLabelsFirstPassedCount": 107,
-    "newReconstructedLabelsFirstPassedLatest": ["DIA","Diputación de Badajoz","Diputación Foral de Gipuzkoa","DIRAN S.A.","Ditec Automoviles Barcelona S.L.U."],
+    "newReconstructedLabelsFirstPassedCount": 112,
+    "newReconstructedLabelsFirstPassedLatest": ["EATIM JESUS POBRE","EDISON NEXT SPAIN SLU","EDP Charge","EFICIENCIA Y SERVICIOS RENOVABLES SL","ELECSUM FOTOVOLTAICA, S.L.U."],
     "promoteToTccSource": false,
     "nextSafeStep": "Continue diffing the remaining genuinely new operator labels exposed by the validated 150-page public-web sample against durable decisions. Do not claim historical-618 membership and do not resume difficult-case reaudit yet."
   },
   "runtimeSafety": {"pr50MustRemainDraft": true,"preIntegrationOnly": true,"runtimePublishReady": false,"locationsCollectionComplete": true,"locationsCollectionMustNotRestart": true},
   "coherenceCheck": {
     "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
-    "continuityCountSum": 480,
-    "firstPassMinimumTraversed": 480,
+    "continuityCountSum": 485,
+    "firstPassMinimumTraversed": 485,
     "countsDeriveExactly": true,
     "legacyFirst98ListDerivabilityGapStillDocumented": true,
     "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
@@ -91,14 +91,14 @@
     "criticalProgressPersistenceGuardActive": true
   },
   "newSincePreviousPoint": {
-    "labelsTraversed": ["DIA","Diputación de Badajoz","Diputación Foral de Gipuzkoa","DIRAN S.A.","Ditec Automoviles Barcelona S.L.U."],
-    "newlySourceValidated": ["Diputación de Badajoz"],
-    "newlyPartial": ["Diputación Foral de Gipuzkoa"],
-    "newlySetAside": ["DIA","DIRAN S.A.","Ditec Automoviles Barcelona S.L.U."],
-    "newlyActive": [],
+    "labelsTraversed": ["EATIM JESUS POBRE","EDISON NEXT SPAIN SLU","EDP Charge","EFICIENCIA Y SERVICIOS RENOVABLES SL","ELECSUM FOTOVOLTAICA, S.L.U."],
+    "newlySourceValidated": ["EATIM JESUS POBRE"],
+    "newlyPartial": [],
+    "newlySetAside": ["EFICIENCIA Y SERVICIOS RENOVABLES SL"],
+    "newlyActive": ["EDISON NEXT SPAIN SLU","EDP Charge","ELECSUM FOTOVOLTAICA, S.L.U."],
     "newAliases": [],
     "skippedAlreadyCoveredAliases": []
   },
-  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Five additional genuinely new identities were first-passed in run26 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
-  "updatedAt": "2026-09-14T21:48:00Z"
+  "investigationCurrent": "Continue first-pass reconstruction from the validated 150-page public-web identity sample. Five additional genuinely new identities were first-passed in run27 without claiming historical-618 membership. Do not resume difficult-case reaudit until nominatively recoverable first-pass sources are exhausted.",
+  "updatedAt": "2026-09-14T22:40:00Z"
 }
