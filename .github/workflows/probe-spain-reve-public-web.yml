@@ -16,7 +16,7 @@ concurrency:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,75 +35,18 @@ jobs:
             let out = { startedAt, packageVersion: '1.5.1', source: 'public', maxPages: 600, perPage: 25, mode: 'FULL_CONTROLLED_SWEEP' };
             try {
               const stations = await pkg.fetchStations({ logger: { info(){}, warn(){}, debug(){} } });
-              const enriched = await pkg.enrichStations(stations, {
-                source: 'public', acknowledgeUnsupported: true,
-                maxPages: 600, perPage: 25, thresholdMeters: 100,
-                logger: { info(){}, warn(){}, debug(){} }
-              });
+              const enriched = await pkg.enrichStations(stations, { source: 'public', acknowledgeUnsupported: true, maxPages: 600, perPage: 25, thresholdMeters: 100, logger: { info(){}, warn(){}, debug(){} } });
               const matched = enriched.filter(r => r && r.reveLocationId);
               const withPrices = matched.filter(r => Array.isArray(r.prices) && r.prices.length);
               const withAvailability = matched.filter(r => !!r.availability);
               const withReveData = matched.filter(r => !!r.reveData);
-              const locationCounts = new Map();
-              const operatorCounts = new Map();
-              for (const r of matched) {
-                const lid = String(r.reveLocationId || '').trim();
-                if (lid) locationCounts.set(lid, (locationCounts.get(lid) || 0) + 1);
-                const op = String(r.operator?.name || '').trim();
-                if (op) operatorCounts.set(op, (operatorCounts.get(op) || 0) + 1);
-              }
-              const duplicateLocationIds = [...locationCounts.entries()].filter(([,n]) => n > 1);
-              const operatorLabels = [...operatorCounts.keys()].sort((a,b) => a.localeCompare(b, 'es'));
-              const sample = withReveData[0] || matched[0] || null;
-              const evses = sample?.reveData?.evses || [];
-              const connectors = evses.flatMap(e => e.connectors || []);
-              out.ok = true;
-              out.dgtStationsLoaded = stations.length;
-              out.matchedStations = matched.length;
-              out.matchedWithPrices = withPrices.length;
-              out.matchedWithAvailability = withAvailability.length;
-              out.matchedWithReveData = withReveData.length;
-              out.identityDiagnostics = {
-                uniqueReveLocationIds: locationCounts.size,
-                duplicateReveLocationIdCount: duplicateLocationIds.length,
-                duplicateReveLocationMatchCount: duplicateLocationIds.reduce((s,[,n]) => s + (n - 1), 0),
-                uniqueOperatorLabels: operatorLabels.length,
-                operatorLabels
-              };
-              out.sample = sample ? {
-                sourceStationId: sample.sourceStationId || null,
-                name: sample.name || null,
-                reveLocationId: sample.reveLocationId || null,
-                operatorName: sample.operator?.name || null,
-                priceCount: Array.isArray(sample.prices) ? sample.prices.length : 0,
-                availabilityPresent: !!sample.availability,
-                availabilityStatus: sample.availability?.status || null,
-                reveDataEvseCount: evses.length,
-                reveDataConnectorCount: connectors.length,
-                connectorFields: [...new Set(connectors.flatMap(c => Object.keys(c)))].sort(),
-                tariffBearingConnectors: connectors.filter(c => Array.isArray(c.tariffs) && c.tariffs.length).length,
-                statusValues: [...new Set(evses.map(e => e.status).filter(Boolean))].sort()
-              } : null;
-              out.parityCandidates = withReveData.slice(0, 20).map(r => ({
-                sourceStationId: r.sourceStationId || null,
-                name: r.name || null,
-                reveLocationId: r.reveLocationId || null,
-                evses: (r.reveData?.evses || []).map(e => ({
-                  id: e.id || null,
-                  evse_id: e.evse_id || e.evseId || null,
-                  status: e.status || null,
-                  connectors: (e.connectors || []).map(c => ({ id: c.id || null, tariffs: Array.isArray(c.tariffs) ? c.tariffs : [] }))
-                }))
-              }));
-              out.finishedAt = new Date().toISOString();
-            } catch (e) {
-              out.ok = false;
-              out.errorName = e && e.name ? String(e.name) : null;
-              out.errorMessage = e && e.message ? String(e.message).slice(0,500) : String(e).slice(0,500);
-              out.finishedAt = new Date().toISOString();
-            }
-            fs.writeFileSync('data/spain_reve/reve_public_web_probe.json', JSON.stringify(out, null, 2) + '\n');
-            if (!out.ok) process.exitCode = 2;
+              const locationCounts = new Map(); const operatorCounts = new Map();
+              for (const r of matched) { const lid=String(r.reveLocationId||'').trim(); if(lid) locationCounts.set(lid,(locationCounts.get(lid)||0)+1); const op=String(r.operator?.name||'').trim(); if(op) operatorCounts.set(op,(operatorCounts.get(op)||0)+1); }
+              const duplicateLocationIds=[...locationCounts.entries()].filter(([,n])=>n>1); const operatorLabels=[...operatorCounts.keys()].sort((a,b)=>a.localeCompare(b,'es'));
+              const sample=withReveData[0]||matched[0]||null; const evses=sample?.reveData?.evses||[]; const connectors=evses.flatMap(e=>e.connectors||[]);
+              Object.assign(out,{ok:true,dgtStationsLoaded:stations.length,matchedStations:matched.length,matchedWithPrices:withPrices.length,matchedWithAvailability:withAvailability.length,matchedWithReveData:withReveData.length,identityDiagnostics:{uniqueReveLocationIds:locationCounts.size,duplicateReveLocationIdCount:duplicateLocationIds.length,duplicateReveLocationMatchCount:duplicateLocationIds.reduce((s,[,n])=>s+(n-1),0),uniqueOperatorLabels:operatorLabels.length,operatorLabels},sample:sample?{sourceStationId:sample.sourceStationId||null,name:sample.name||null,reveLocationId:sample.reveLocationId||null,operatorName:sample.operator?.name||null,priceCount:Array.isArray(sample.prices)?sample.prices.length:0,availabilityPresent:!!sample.availability,availabilityStatus:sample.availability?.status||null,reveDataEvseCount:evses.length,reveDataConnectorCount:connectors.length,connectorFields:[...new Set(connectors.flatMap(c=>Object.keys(c)))].sort(),tariffBearingConnectors:connectors.filter(c=>Array.isArray(c.tariffs)&&c.tariffs.length).length,statusValues:[...new Set(evses.map(e=>e.status).filter(Boolean))].sort()}:null,parityCandidates:withReveData.slice(0,20).map(r=>({sourceStationId:r.sourceStationId||null,name:r.name||null,reveLocationId:r.reveLocationId||null,evses:(r.reveData?.evses||[]).map(e=>({id:e.id||null,evse_id:e.evse_id||e.evseId||null,status:e.status||null,connectors:(e.connectors||[]).map(c=>({id:c.id||null,tariffs:Array.isArray(c.tariffs)?c.tariffs:[]}))}))})),finishedAt:new Date().toISOString()});
+            } catch(e) { out.ok=false; out.errorName=e?.name?String(e.name):null; out.errorMessage=e?.message?String(e.message).slice(0,500):String(e).slice(0,500); out.finishedAt=new Date().toISOString(); }
+            fs.writeFileSync('data/spain_reve/reve_public_web_probe.json',JSON.stringify(out,null,2)+'\n'); if(!out.ok) process.exitCode=2;
           }
           main();
           NODE
@@ -111,14 +54,14 @@ jobs:
         if: always()
         run: |
           python <<'PY'
-          import gzip, json
+          import gzip,json
           from pathlib import Path
           p=Path('data/spain_reve/reve_public_web_probe.json')
+          if not p.exists(): raise SystemExit(0)
           out=json.loads(p.read_text())
           with gzip.open('data/spain_reve/reve_connector_tariffs_raw.json.gz','rt',encoding='utf-8') as f: tariffs=json.load(f)
           with gzip.open('data/spain_reve/reve_operational_status_raw.json.gz','rt',encoding='utf-8') as f: statuses=json.load(f)
-          rep={'candidateStations':0,'publicConnectors':0,'officialConnectorMatches':0,'publicEvses':0,'officialStatusIdentifierMatches':0}
-          status_index={}
+          rep={'candidateStations':0,'publicConnectors':0,'officialConnectorMatches':0,'publicEvses':0,'officialStatusIdentifierMatches':0}; status_index={}
           recs=statuses.values() if isinstance(statuses,dict) else statuses if isinstance(statuses,list) else []
           for rec in recs:
             if not isinstance(rec,dict): continue
@@ -136,8 +79,7 @@ jobs:
               for c in ev.get('connectors') or []:
                 rep['publicConnectors']+=1
                 if c.get('id') is not None and str(c.get('id')) in tariffs: rep['officialConnectorMatches']+=1
-          out['officialExternalApiParityV3']=rep
-          p.write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n')
+          out['officialExternalApiParityV3']=rep; p.write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n')
           PY
       - name: Commit full sweep result
         if: always()
