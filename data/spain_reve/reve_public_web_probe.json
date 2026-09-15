@@ -1,158 +1,339 @@
 {
-  "startedAt": "2026-09-14T18:44:31.718Z",
+  "startedAt": "2026-09-15T01:41:30.771Z",
   "packageVersion": "1.5.1",
   "source": "public",
-  "maxPages": 150,
+  "maxPages": 600,
   "perPage": 25,
+  "mode": "FULL_CONTROLLED_SWEEP",
   "ok": true,
   "dgtStationsLoaded": 12138,
-  "matchedStations": 3857,
-  "matchedWithPrices": 3416,
-  "matchedWithAvailability": 3857,
-  "matchedWithReveData": 3857,
+  "matchedStations": 11212,
+  "matchedWithPrices": 10047,
+  "matchedWithAvailability": 11212,
+  "matchedWithReveData": 11212,
   "identityDiagnostics": {
-    "uniqueReveLocationIds": 2787,
-    "duplicateReveLocationIdCount": 599,
-    "duplicateReveLocationMatchCount": 1070,
-    "uniqueOperatorLabels": 215,
+    "uniqueReveLocationIds": 10493,
+    "duplicateReveLocationIdCount": 616,
+    "duplicateReveLocationMatchCount": 719,
+    "uniqueOperatorLabels": 445,
     "operatorLabels": [
       "ACCIONA Recarga",
       "ADURIZ ENERGIA SLU",
+      "Aeroports de la Generalitat",
+      "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
       "Aj. Mollerussa",
+      "Aj. Montcada i Reixac",
       "Ajuntament Bonrepòs Mirambell",
+      "Ajuntament d'Alcanar",
+      "Ajuntament d’Alforja des",
       "Ajuntament d'Amer",
+      "Ajuntament d’Argentona",
       "AJUNTAMENT D'INCA",
       "AJUNTAMENT D'OS DE BALAGUER",
       "Ajuntament d'Ullastret",
+      "Ajuntament de Banyoles",
       "AJUNTAMENT DE BELLREGUARD",
+      "Ajuntament de Bellvís",
+      "Ajuntament de Berga",
       "Ajuntament de Blancafort",
+      "Ajuntament de Bordils",
+      "AJUNTAMENT DE BUNYOLA",
+      "Ajuntament de Cabrera de Mar",
       "Ajuntament de Calaf",
+      "Ajuntament de Calafell",
       "AJUNTAMENT DE CALVIÀ",
+      "Ajuntament de Canet de Mar",
       "Ajuntament de Canovelles",
       "Ajuntament de Cardedeu",
+      "Ajuntament de Carrícola Ajuntament Carricola",
       "Ajuntament de Casserres",
+      "Ajuntament de Corçà",
+      "AJUNTAMENT DE COSTITX",
       "Ajuntament de Cunit",
+      "AJUNTAMENT DE EL MORELL",
+      "Ajuntament de Folgueroles",
+      "Ajuntament de Font-rubi",
       "Ajuntament de Gironella",
+      "Ajuntament de Guardiola de Berguedà",
+      "Ajuntament de Guissona",
+      "Ajuntament de Gurb",
+      "Ajuntament de Juneda",
+      "Ajuntament de l'Albiol",
+      "Ajuntament de l'Espluga de Francolí",
+      "AJUNTAMENT DE L'OLLERIA - -",
       "Ajuntament de La Secuita",
       "Ajuntament de la Vall d'en Bas",
+      "Ajuntament de Les Borges Blanques",
       "Ajuntament de Lliçà d'Amunt",
+      "Ajuntament de Malla",
+      "Ajuntament de Martorell",
       "Ajuntament de Martorelles",
       "Ajuntament de Miralcamp",
+      "Ajuntament de Moià",
+      "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
+      "Ajuntament de Mont-roig del Camp",
+      "Ajuntament de Montferrer",
+      "Ajuntament de Palafolls",
       "Ajuntament de Pals",
+      "Ajuntament de Paüls",
+      "Ajuntament de Pont de Suert",
       "Ajuntament de Prat de Llobregat",
+      "Ajuntament de Renau",
+      "Ajuntament de Riells i Viabrea",
       "Ajuntament de Rubi",
+      "Ajuntament de Saldes",
+      "Ajuntament de Salomó",
+      "Ajuntament de Sant Andreu de Llavaneres",
+      "Ajuntament de Sant Boi de Lluçanès",
       "Ajuntament de Sant Celoni",
+      "Ajuntament de Sant Feliu de Codines",
+      "Ajuntament de Sant Fruitós de Bages",
+      "Ajuntament de Sant Jaume d'Enveja",
+      "Ajuntament de Sant Julià de Cerdanyola",
       "AJUNTAMENT DE SANT LLUIS",
+      "Ajuntament de Santa Coloma de Queralt",
       "Ajuntament de Santa Cristina d'Aro",
+      "Ajuntament de Santa Fe del Penedès",
       "Ajuntament de Santa Margarida de Montbui",
+      "AJUNTAMENT DE SANTA MARIA DEL CAMI",
+      "Ajuntament de Soses",
       "Ajuntament de Súria",
       "Ajuntament de Tiana",
+      "Ajuntament de Torroella de Montgrí",
       "Ajuntament de Vallgorguina",
+      "Ajuntament de Vic",
       "Ajuntament de Vilabella",
       "Ajuntament de Vilablareix",
+      "Ajuntament de Vilada",
+      "Ajuntament de Vinyols i els Arcs",
+      "Ajuntament del Catllar",
+      "Ajuntament del Lloar",
+      "Ajuntament del Pla de Santa Maria",
+      "Ajuntament dels Pallaresos",
       "AJUNTAMENT DES CASTELL",
+      "Ajuntament Lliçà de Vall",
+      "Ajuntament Manlleu",
       "Ajuntament Sant Joan de Vilatorrada",
+      "Ajuntament Sant Julià de Llor i Bonmatí",
+      "Ajuntament Selva del Camp",
+      "Alcover",
       "ALDI",
+      "ALEGRIA HOTELS",
       "ALGUPIBE, S.L.",
+      "Allego",
       "Almatret",
+      "ANARGO 2002 SL",
       "Andrés Rodríguez Brenes",
+      "ANTONIO SALDAÑA MARCO",
       "APARCAMENTS Tarragona",
+      "ARETE MACENAS HOTELES, S.L.",
       "ARSA INVERSIONES SAU",
+      "Artesa de Segre",
       "Ascó",
       "Asociacion Autonoma de Instaladores Electricos y de Telecomunicaciones de Granada",
       "ATENCO ENERGIA SL",
       "Atlante Iberia S.L.",
+      "AUTOCARES DIPESA SL",
+      "AUTOMOVILES ARTAL, S.L.",
       "Autos Pisa SL",
+      "Avinyonet de Puigventos",
+      "Ayto Beriáin",
       "AYTO ZAMORA",
+      "Ayto. Ansoain Ansoain Ansoain",
+      "Ayuntamiento Alcalá de la Selva",
+      "Ayuntamiento cendea de Olza/Oltza Zendea Ayuntamiento Ayuntamiento",
       "Ayuntamiento de Agullent - -",
+      "AYUNTAMIENTO DE ALMOCITA . .",
+      "AYUNTAMIENTO DE ARRONIZ . .",
+      "AYUNTAMIENTO DE AZAGRA Azagra Navarra",
       "AYUNTAMIENTO DE CARRIÓN DE LOS CONDES - -",
+      "Ayuntamiento de Casas Bajas Casas Bajas Casas Bajas",
+      "Ayuntamiento de Espirdo Espirdo Espirdo",
       "AYUNTAMIENTO DE ESTERIBAR Esteribar Navarra",
+      "Ayuntamiento de Falces Falces Falces",
       "AYUNTAMIENTO DE FELANITX",
+      "AYUNTAMIENTO DE FONZ",
+      "AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA",
+      "Ayuntamiento de Garínoain",
+      "Ayuntamiento de Grazalema Grazalema Cádiz",
       "AYUNTAMIENTO DE GUADALIX DE LA SIERRA",
       "Ayuntamiento de Huarte",
       "AYUNTAMIENTO DE LLIBER AYUNTAMIENTO LLIBER",
       "AYUNTAMIENTO DE LOS MONTESINOS . .",
+      "AYUNTAMIENTO DE MERINDAD DE RÍO UBIERNA MERINDAD RÍO UBIERNA",
       "ayuntamiento de Navas del Rey",
+      "AYUNTAMIENTO DE OLOCAU",
+      "AYUNTAMIENTO DE PADULES . .",
+      "Ayuntamiento de Premià",
+      "Ayuntamiento de Ribafrecha - -",
+      "Ayuntamiento de Urkabustaiz",
+      "Ayuntamiento de Viana . .",
+      "AYUNTAMIENTO DE VILLADIEGO BURGOS ESPAÑA",
       "AYUNTAMIENTO DE VILVIESTRE DEL PINAR",
+      "Ayuntamiento de Xeraco Ayuntamiento Ayuntamiento",
+      "Ayuntamiento de Zamora",
+      "Ayuntamiento Getaria",
+      "Ayuntamiento Santo Domingo de la Calzada",
       "AYUNTAMIENTO VALLE DE ARANGUREN",
+      "Badia del Vallés",
+      "Baix Ebre Innova SL",
+      "Balsareny",
+      "Banana Express",
+      "Barter Mobility S.L.",
+      "BEASAINGO UDALA",
+      "Belen Lorefice Gaitan",
+      "Benavent de Segrià",
       "Bescanó",
+      "Bodegas Macias Batle",
       "Bodegas Nodus",
+      "Bolaños",
       "BONPREU, S.A.U.",
+      "Braker Corporation",
       "Breda",
+      "C.C. LAS RAMBLAS CENTRO S.L.",
       "Cabildo Lanzarote",
+      "CADENA MAR S.L. MAR HOTELS",
       "Caldes de Malavella",
+      "Cambrils APARCAM",
+      "Camping l'Amfora",
       "Camping Mas Patoxas",
+      "Capmany",
       "Cardona",
       "CARGADORES LOW COST",
       "Carmen Andres Garcia",
       "Caseres",
+      "Castellolí",
       "Castellvell del Camp",
       "Centro Comercial Plaza Eliptica",
       "CENTROS COMERCIALES CARREFOUR SA",
+      "CHARGEVITE ENERGY SLU",
       "CHARGING TOGETHER SL",
       "CHELMONTE, SL",
       "CIMALSA Castellar del Vallès",
+      "CIMALSA la Selva",
       "Club de Golf el Bosque Chiva",
+      "Club de Golf Gorraiz",
       "Club Nàutic l'Escala",
       "Club Náutico Moraira",
+      "COMPAÑIA GENERAL NAFTE, S.L.",
+      "Complex Comercial Vilafranca",
       "Comunidad de Bienes Aparcamientos Primero de Mayo",
+      "CONCELLO DE VEDRA",
       "Consell Insular de Menorca",
       "Constanti",
       "Consum",
+      "Cooperativa Eléctrica Catralense",
+      "Corbera de Llobregat",
+      "COSENTINO INDUSTRIAL, S.A.U.",
       "COSTCO WHOLESALE SPAIN SLU",
+      "COVES ENERGY SOLUTIONS SL",
+      "Darsen Motor S.L.",
       "DIA",
       "Diputación de Badajoz",
       "Diputación Foral de Gipuzkoa",
       "DIRAN S.A.",
       "Ditec Automoviles Barcelona S.L.U.",
+      "Ditec Hanstein SA",
+      "DORSOL, SAU",
       "EATIM  JESUS POBRE",
       "EDISON NEXT SPAIN SLU",
       "EDP Charge",
       "EFICIENCIA Y SERVICIOS RENOVABLES SL",
+      "El Far d'Empordà",
+      "El Masroig",
+      "El Pont de Vilomara",
       "ELECSUM FOTOVOLTAICA, S.L.U.",
       "Electra",
       "ELECTRICA SOLLERENSE S.A.",
       "ELECTROMAPS SL",
+      "elRetiro",
+      "EMAG S.L ARILLA ALLUE",
       "EMAYA, S.A.",
+      "Emerix Systems S.L.",
       "Emovili Fast, S.L.",
       "EMPRESA MUNICIPAL DE TRANSPORTES DE MADRID, S.A.",
       "ENDESA X WAY, S.L.",
       "Endolla Barcelona",
       "ENERGEA CONSULTING Y ASESORES SL",
       "Energía Distribuida del Norte S.A.",
+      "ENILEC ENILEC ENILEC",
+      "EPRESA ENERGIA SA",
       "Eranovum E-Mobility",
+      "Ernesto Serra Gomez",
+      "Espolla",
+      "Estació Servei Porto Gas",
       "ESTACION DE SERVICIO AYALA S.L.",
       "ESTACION DE SERVICIO LAPIDO SLU",
+      "ESTACION DE SERVICIO LOW COST 2015, S.L.",
+      "ESTACION DE SERVICIO VILLAROSA S.A.",
       "ESTACION SERVICIO JAIME I, S.A.",
       "ESTACIONAMIENTOS LUCENSES SL",
       "ETECNIC",
+      "EUROPA CENTER",
+      "EXPLOTACIONES INDUSTRIALES LOS RODEOS,S.L.",
+      "Explotaciones IOndustriales Sur de Tenerife SL",
+      "Fastned",
+      "Febrer Gasolineras",
+      "Feníe Energía",
       "FENÍE ENERGÍA",
       "Fenie Propietario Propietario",
       "FERROVIAL CONSTRUCCIÓN S.A.",
+      "FERVI, SL.",
       "Fira CCIB",
       "FISERSA",
+      "FLORETTE HORTÍCOLA NAVARRA - MILAGRO",
+      "Fornells de la Selva",
+      "Forumsa",
+      "FUNDACIO BALEAR D'INNOVACIÓ I TECNOLOGIA",
+      "FUNDACION FEMEVAL Fundacion Femeval",
+      "FUNDACION PAIDEIA GALIZA",
       "Gaia Green Tech S.L.",
       "Galp Energía España, S.A.U.",
       "GALP_SPAIN",
+      "Gandesa",
+      "GASOLINERA RAFAL --",
       "GESTION INTELIGENTE DE CARGAS S.L.",
       "Girona Motor SA",
+      "Golf Vistahermosa",
+      "GP TRADE",
+      "GRUP SUPECO MAXOR SL",
+      "Guadalupe Martínez Sánchez",
+      "Guaw",
+      "H2PLT",
       "HCC HOTELS SL",
+      "HERNAZOS GESTIÓN S.L",
+      "Horta de Sant Joan",
+      "Hospital de Toledo",
+      "Hospital Ribera de Covadonga",
       "Hospitalet de l'Infant",
+      "Hotel Amic Horizonte",
       "Hotel Amoros Cala Ratjada",
       "Hotel Bosquemar SL",
+      "HOTEL CIUDAD DE ALCAÑIZ SA",
+      "HOTEL DEL OSO",
       "Hotel OCA Vermar .",
       "HOTEL PEDRO I DE ARAGON SL",
+      "HOTEL PUENTE DE LA TOJA S.L.",
+      "Hotel Spa Atlántico . .",
+      "HOTELES SOL DEL SUR, SA",
       "Iberdrola | bp pulse",
       "IBERDROLA CLIENTES S.A.U",
       "Ibérica de Tecnología y Servicios de Automoción, S.L.",
       "Ingenieria de Recarga SLU",
+      "INMOMEDIC 09, S.L.U.",
       "InstaVolt CPO",
       "Inversiones Pascual",
+      "INVESMORAZO S.L",
       "ION SMART ENERGY 2000 SL",
       "IONITY",
+      "Ivars d'Urgell",
       "J. REDONDO, S.L.",
+      "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
       "Jarada Motor, S.L.",
       "JARDINES LA TEJERA, S.A.U.",
+      "Jesus Vidal Ubeda",
+      "Joncosa de Montmell",
+      "JOSE LUIS DOMINGO VENTURA",
       "La Jonquera",
       "La Llagosta",
       "La Pobla de Segur",
@@ -161,22 +342,45 @@
       "Llagostera",
       "Lleida",
       "Lloret de Mar",
+      "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+      "Lucía María Díaz Soberón",
+      "M.P. PORT ROSES SA",
+      "Manresa",
+      "Marbella Premium SL",
       "Martin Rivera Bua",
       "Matadepera",
+      "MED PLAYA MANAGEMENT, SLU",
+      "Mediterraneo Golf",
       "Moeve",
+      "Montmeló",
       "Móra d'Ebre",
+      "Móra la Nova",
       "Motor Box Mallorca SL",
       "Movilidad Eléctrica Gran Canaria",
+      "Muntaner Batle Sl Muntaner Batle Sl Muntaner Batle Sl",
+      "Mutua Madrileña Inmobiliaria",
+      "NAITEC",
       "NATURGY RECARGA",
+      "Navarcles",
+      "Navarra te recarga",
       "Navàs",
       "NIMA GRUP D'AUTOMOCIO SL",
       "Nuñez y Navarro",
+      "Ocimax P de Mallorca",
       "OESTE SOLUCIONES ENERGETICAS, S.L.",
-      "OPER CANARIOS SL",
+      "Oftalmedic Salva",
       "Orís",
       "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
+      "Palol de Revardit",
       "Pamplona",
+      "Parking Benalmadena Pueblosol",
+      "Parking Garatge 2000",
+      "PARKING LIDER S.A.",
+      "PARKING MOGAN SA",
+      "Parking NN Espronceda",
       "Parking Pozuelo",
+      "Parking TEKNON",
+      "PARKING VAPOR GRAN",
       "Patrimonio Natural CyL",
       "PAVAPARK MOVILIDAD, S.L.",
       "Peralada",
@@ -186,14 +390,17 @@
       "PLENOIL CANARIAS, S.L.U.",
       "PLENOIL, S.L.",
       "Polinyà",
+      "Ponent Energia",
+      "PORSAMADRID, S.L.",
       "Porsatecnic S.L.",
       "Port de Roses",
       "Ports de la Generalitat",
+      "Postventa Propietario Propietario",
       "Powerdot Spain",
-      "PowerGo",
       "Powy",
       "Premià de Mar",
       "Prio Recharge Sl.",
+      "Puig-reig",
       "PUMSA Mataró",
       "Qwello",
       "RAMIS GARAU, S.A. MIQUEL RAMIS",
@@ -203,31 +410,55 @@
       "REPSOL SOLUCIONES ENERGÉTICAS SA",
       "Restaurante El Ninot",
       "Restaurante Peña Mea",
+      "Roda de Ter",
+      "Roses",
       "Sallent",
+      "Salvador Fernandez Labadia",
+      "Sant Julià de Vilatorta",
+      "Sant Pere de Ribes",
       "Sant Quirze de Besora",
       "Sant Vicenç de Castellet",
+      "Santa Barbara",
       "Santa Coloma de Farners",
       "Santa Eulàlia de Ronçana",
       "SANTA LUCIA VIVIENDAS SL",
       "Santa Maria de Palautordera",
       "Santa Perpètua de Mogoda",
       "Santpedor",
+      "SCL AGROPIENSO",
       "Sergio Peinado Gimenez",
+      "SERVEIS FERROVIARIS DE MALLORCA",
+      "Servicios Petroleros Mallorca SL",
+      "SERVICIOS PUENTE LIÑARES SL",
       "SERVICIOS Y APLICACIONES INEL, S.L. Servicio Aplicaciones",
+      "Ses Jardines . .",
+      "Seva",
+      "Siemens",
+      "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+      "Solsona",
       "SUNSET OASIS IBIZA ROSELLO RAUSELL",
       "Taradell",
       "Telpark",
       "Tersa",
       "Tesla, Inc.",
+      "Test REMO",
       "Torelló",
       "Torre Inbisa",
+      "Torrecillas Serna, S.A.",
       "Torrefarrera",
       "Tortosa",
       "TotalEnergies",
+      "TRANSPORTES PENADES E HIJOS SL",
+      "Tuwyncar Sport S.L.",
       "UMBRELLA e-MOBILITY",
       "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
       "URBAN PADESPORT & COFFEE, S.L",
+      "Vallmoll",
+      "Valls",
       "Vibroaspre, S.A. Vibroaspre Vibroaspre",
+      "Vicente Martinez Corcoles",
+      "Vidreres",
+      "Viladrau",
       "Wenea Mobile Energy",
       "ZOILO RIOS, S.A.",
       "Zunder"
@@ -278,15 +509,51 @@
     {
       "sourceStationId": "2023002089",
       "name": "Centro Porsche Baleares CP1",
-      "reveLocationId": "2b2850c7-5b3f-44fe-a45a-c5ec59beb632",
+      "reveLocationId": "7852c850-3b2d-4cca-a4b8-21cd3b23b10f",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*915*EES00025600000020000001",
+          "evse_id": "ES*915*EES00025600000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "70d215b1-de51-45c7-917a-05c1e83930c5",
+              "id": "ae2d0c9d-c376-4a9b-a620-21e61cfb2fd6",
+              "tariffs": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceStationId": "2023002112",
+      "name": "Centro Porsche Alicante estación de carga 2",
+      "reveLocationId": "c46e6251-0ba7-4c8e-9e39-be625914b331",
+      "evses": [
+        {
+          "id": null,
+          "evse_id": "ES*913*EES00012900000020000001",
+          "status": "AVAILABLE",
+          "connectors": [
+            {
+              "id": "fe21656f-7875-465c-9eed-d26c1768dabb",
+              "tariffs": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceStationId": "2023002113",
+      "name": "Centro Porsche Alicante estación de carga 1",
+      "reveLocationId": "af050e24-b810-4f14-ba71-0a5c5e41517c",
+      "evses": [
+        {
+          "id": null,
+          "evse_id": "ES*913*EES00012900000010000001",
+          "status": "AVAILABLE",
+          "connectors": [
+            {
+              "id": "49c3d09b-9852-4292-ae65-366defb79caa",
               "tariffs": []
             }
           ]
@@ -296,15 +563,15 @@
     {
       "sourceStationId": "2023002090",
       "name": "Centro Porsche Asturias CP 2",
-      "reveLocationId": "077b5539-1d68-4b44-9e7f-d2f522e176c1",
+      "reveLocationId": "435e7462-8bc0-43d0-9f8e-c1b2d6ef0b6f",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*914*EES00015000000010000001",
+          "evse_id": "ES*914*EES00015000000020000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "720c7710-42ed-48f9-a891-66284d1c29f1",
+              "id": "08af4f4b-ea7f-441e-97f7-8436900ca754",
               "tariffs": []
             }
           ]
@@ -332,15 +599,15 @@
     {
       "sourceStationId": "2023002100",
       "name": "Centro Porsche Barcelona estación de carga 1",
-      "reveLocationId": "4203079e-a563-4a2f-a70c-e99a9857601c",
+      "reveLocationId": "7290b754-9592-4343-9445-5236769f0f08",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*916*EES00012700000020000001",
+          "evse_id": "ES*916*EES00012700000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "430f3dfd-1ec5-4468-a2ab-ac8e5d214b54",
+              "id": "3d38e6ba-d745-4162-8b7f-6cb349891648",
               "tariffs": []
             }
           ]
@@ -384,17 +651,35 @@
       ]
     },
     {
-      "sourceStationId": "2023002102",
-      "name": "Centro Porsche Girona estación de carga 2",
-      "reveLocationId": "16aeb68f-16b9-41af-8b8c-00a56a2f04d6",
+      "sourceStationId": "2023002119",
+      "name": "Centro Porsche Tenerife CP 1",
+      "reveLocationId": "6c7bbac7-9b79-4020-9ed7-62029f29c2a2",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*918*EES00012500000010000001",
+          "evse_id": "ES*919*EES00038200000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "15486bf9-0762-43d3-899d-e95e2af414de",
+              "id": "72b1714c-7295-42a9-8664-6ab0c563039c",
+              "tariffs": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceStationId": "2023002102",
+      "name": "Centro Porsche Girona estación de carga 2",
+      "reveLocationId": "47c273f3-c14b-4db2-a916-99130baf438e",
+      "evses": [
+        {
+          "id": null,
+          "evse_id": "ES*918*EES00012500000020000001",
+          "status": "AVAILABLE",
+          "connectors": [
+            {
+              "id": "2bf23358-563c-40d7-b697-9b03e4a8c96c",
               "tariffs": []
             }
           ]
@@ -420,17 +705,17 @@
       ]
     },
     {
-      "sourceStationId": "2023002098",
-      "name": "Centro Porsche Valencia CP01",
-      "reveLocationId": "1395e698-5f92-4446-9fb2-49eab3ad93e1",
+      "sourceStationId": "2023002114",
+      "name": "Centro Porsche Marbella Estación de carga 1",
+      "reveLocationId": "f3186544-e8a9-42e4-a504-fa705f9b7b3f",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*926*EES00021300000010000001",
+          "evse_id": "ES*922*EES00017000000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "e827efc6-3372-4ae1-9029-13f3e1a1933d",
+              "id": "36768d5f-a505-4921-94f0-f6522c3da9f9",
               "tariffs": []
             }
           ]
@@ -438,17 +723,17 @@
       ]
     },
     {
-      "sourceStationId": "2023002099",
-      "name": "Centro Porsche Valencia CP02",
-      "reveLocationId": "1395e698-5f92-4446-9fb2-49eab3ad93e1",
+      "sourceStationId": "2023002115",
+      "name": "Centro Porsche Marbella Estación de carga 2",
+      "reveLocationId": "8e48c4dd-1461-49dc-ac7d-24c6ab55e3c6",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*926*EES00021300000010000001",
+          "evse_id": "ES*922*EES00017000000020000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "e827efc6-3372-4ae1-9029-13f3e1a1933d",
+              "id": "be68e6f7-b4e2-49b8-b17a-070163063723",
               "tariffs": []
             }
           ]
@@ -456,151 +741,17 @@
       ]
     },
     {
-      "sourceStationId": "2023002116",
-      "name": "Centro Porsche Zaragoza CP1",
-      "reveLocationId": "17d5672d-251d-4ab3-868a-6c00337ce546",
+      "sourceStationId": "2023002096",
+      "name": "Centro Porsche Murcia estación de carga 1",
+      "reveLocationId": "dddce2e1-752a-4b54-bd74-efca06d68c12",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*ESX*EC6E15BCC22FLZHJBQK*1",
+          "evse_id": "ES*923*EES00013500000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "1168fee1-bb10-4380-aa4d-be82e4285c4d",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.35,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*ESX*EC6E15BCC22FLZHJBQK*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "da911a40-3f5f-442a-a63d-248fb9acb635",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.35,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceStationId": "2023002117",
-      "name": "Centro Porsche Zaragoza CP2",
-      "reveLocationId": "17d5672d-251d-4ab3-868a-6c00337ce546",
-      "evses": [
-        {
-          "id": null,
-          "evse_id": "ES*ESX*EC6E15BCC22FLZHJBQK*1",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "1168fee1-bb10-4380-aa4d-be82e4285c4d",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.35,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*ESX*EC6E15BCC22FLZHJBQK*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "da911a40-3f5f-442a-a63d-248fb9acb635",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.35,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceStationId": "2023002086",
-      "name": "Centro Porsche A Coruña estación de carga 1",
-      "reveLocationId": "418ffa3b-e724-41d6-9ee8-1d48d17a524d",
-      "evses": [
-        {
-          "id": null,
-          "evse_id": "ES*010*E1",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "654d6ddc-dce0-41b9-a80a-770735d42a28",
+              "id": "4ba5d071-b160-40ce-81a8-ea8a7e6a3b07",
               "tariffs": []
             }
           ]
@@ -608,17 +759,17 @@
       ]
     },
     {
-      "sourceStationId": "2023002087",
-      "name": "Centro Porsche A Coruña estación de carga 2",
-      "reveLocationId": "418ffa3b-e724-41d6-9ee8-1d48d17a524d",
+      "sourceStationId": "2023002097",
+      "name": "Centro Porsche Murcia estación de carga 2",
+      "reveLocationId": "f2ec15e6-343c-4eed-861a-f7f5da5cbc1e",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*010*E1",
+          "evse_id": "ES*923*EES00013500000020000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "654d6ddc-dce0-41b9-a80a-770735d42a28",
+              "id": "0bb98844-818c-4122-a4cb-24f65d078ba4",
               "tariffs": []
             }
           ]
@@ -626,1509 +777,84 @@
       ]
     },
     {
-      "sourceStationId": "2024000006",
-      "name": "SA-Salamanca-015",
-      "reveLocationId": "113bb37d-0aab-4040-842f-797c0142145a",
+      "sourceStationId": "2023002092",
+      "name": "Centro Porsche Pamplona estación de carga 2",
+      "reveLocationId": "495adfa5-cda2-4001-bd64-4b11925176cc",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*ESX*E62008004490030*1",
+          "evse_id": "ES*924*EES00012600000020000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "4581413d-5587-4dde-beaf-4d334c6ee9e3",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": "00:00",
-                          "end_time": "06:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 100,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.38,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "23:00",
-                          "end_time": "23:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 22,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.3,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "00:00",
-                          "end_time": "06:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 450,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.48,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "00:00",
-                          "end_time": "06:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 22,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.3,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "23:00",
-                          "end_time": "23:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 450,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.48,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "07:00",
-                          "end_time": "22:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 100,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.45,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "07:00",
-                          "end_time": "22:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 450,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.57,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "07:00",
-                          "end_time": "22:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 22,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.35,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": "23:00",
-                          "end_time": "23:59",
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": 100,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [
-                            "MONDAY",
-                            "TUESDAY",
-                            "WEDNESDAY",
-                            "THURSDAY",
-                            "FRIDAY",
-                            "SATURDAY",
-                            "SUNDAY"
-                          ],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.38,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
+              "id": "6eb8a128-c6b7-4bd6-849c-9628b1073e25",
+              "tariffs": []
             }
           ]
         }
       ]
     },
     {
-      "sourceStationId": "2024000010",
-      "name": "VA-QuintanilladeOnesimo-002",
-      "reveLocationId": "2f472897-7d47-4cca-b685-3e9b80f3c375",
+      "sourceStationId": "2023002093",
+      "name": "Centro Porsche Pamplona estación de carga 1",
+      "reveLocationId": "66dd684e-2764-438a-a685-e1942c78c222",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*IBD*E104218*1",
+          "evse_id": "ES*924*EES00012600000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "7e907357-bfbf-4af1-a5b9-62ab9de5130a",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.42,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*IBD*E104218*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "6886a10f-2644-47e2-b92d-5f8e056c8df3",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.42,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
+              "id": "0f2c3f51-b24a-4606-b00c-9c782d5c206a",
+              "tariffs": []
             }
           ]
         }
       ]
     },
     {
-      "sourceStationId": "2024000014",
-      "name": "O-OVIEDO-023",
-      "reveLocationId": "1c429399-0e9c-4991-a21d-a3e86852bba3",
+      "sourceStationId": "2023002094",
+      "name": "Centro Porsche Bilbao Estación de carga 1",
+      "reveLocationId": "511abada-0a64-4c1a-aae5-0a789eed88e5",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*IBD*E143716*1",
+          "evse_id": "ES*924*EES00021000000010000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "6fc1c044-3b73-4d53-b463-d5b4f8465891",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.47,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*IBD*E143716*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "3087af61-b40e-4a74-9227-5aaf9b6c4198",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.47,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
+              "id": "2e92bd52-e43f-48d9-8389-61ab298b240b",
+              "tariffs": []
             }
           ]
         }
       ]
     },
     {
-      "sourceStationId": "2024000021",
-      "name": "S-Reocin-001",
-      "reveLocationId": "22080f19-69aa-415d-9a19-08f4fa37b123",
+      "sourceStationId": "2023002095",
+      "name": "Centro Porsche Bilbao Estación de carga 2",
+      "reveLocationId": "5aa272ef-6fa6-4e8f-a4bc-ae3c6e54a318",
       "evses": [
         {
           "id": null,
-          "evse_id": "ES*FCT*E149626*1",
+          "evse_id": "ES*924*EES00021000000020000001",
           "status": "AVAILABLE",
           "connectors": [
             {
-              "id": "fba80557-3463-4f9e-bf21-f461627f917e",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.6,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*FCT*E149627*1",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "2c72a4e5-b5cf-4f9a-9893-f0195d9bdb5d",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.6,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*FCT*E149628*1",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "91bae2bf-ea57-44c5-a6e9-c9e4578ab9d9",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.6,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "id": "aebffb81-38df-4544-98e0-d18a49e253d3",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.6,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*FCT*E149628*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "c67170da-ac68-4aec-8a70-a13e08248c51",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.39,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceStationId": "2024000028",
-      "name": "S-Arce-001",
-      "reveLocationId": "288aa068-18d0-4c50-ba86-df07ce4e0acb",
-      "evses": [
-        {
-          "id": null,
-          "evse_id": "ES*IBD*E101083*1",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "db2d8b80-b82e-4112-bb0d-4946ed3c3672",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.47,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*IBD*E101083*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "d58c24a9-b503-4fa8-b81a-57383cf6f8f2",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.47,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*IBD*E101084*1",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "bfb07fd9-876f-420f-9616-2a49a22fe752",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.47,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": null,
-          "evse_id": "ES*IBD*E101084*2",
-          "status": "AVAILABLE",
-          "connectors": [
-            {
-              "id": "d6af1993-f493-4dc4-967c-2b81877b8699",
-              "tariffs": [
-                {
-                  "tariff": {
-                    "currency": "EUR",
-                    "elements": [
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": 1860,
-                          "max_duration": 600000,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 3,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": null,
-                          "day_of_week": [],
-                          "reservation": "RESERVATION_EXPIRES"
-                        },
-                        "price_components": [
-                          {
-                            "type": "FLAT",
-                            "price": 1,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": {
-                          "start_time": null,
-                          "end_time": null,
-                          "start_date": null,
-                          "end_date": null,
-                          "min_kwh": null,
-                          "max_kwh": null,
-                          "min_current": null,
-                          "max_current": null,
-                          "min_power": null,
-                          "max_power": null,
-                          "min_duration": null,
-                          "max_duration": 1860,
-                          "day_of_week": [],
-                          "reservation": null
-                        },
-                        "price_components": [
-                          {
-                            "type": "PARKING_TIME",
-                            "price": 0,
-                            "vat": 21,
-                            "step_size": 60
-                          }
-                        ]
-                      },
-                      {
-                        "restrictions": null,
-                        "price_components": [
-                          {
-                            "type": "ENERGY",
-                            "price": 0.47,
-                            "vat": 21,
-                            "step_size": 1
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
+              "id": "45f95c3f-d493-4a03-a628-ae9f521bfad1",
+              "tariffs": []
             }
           ]
         }
       ]
     }
   ],
-  "finishedAt": "2026-09-14T18:50:36.067Z",
+  "finishedAt": "2026-09-15T02:03:02.666Z",
   "officialExternalApiParityV3": {
     "candidateStations": 20,
-    "publicConnectors": 31,
-    "officialConnectorMatches": 8,
-    "publicEvses": 30,
-    "officialStatusIdentifierMatches": 5
+    "publicConnectors": 20,
+    "officialConnectorMatches": 0,
+    "publicEvses": 20,
+    "officialStatusIdentifierMatches": 2
   }
 }
