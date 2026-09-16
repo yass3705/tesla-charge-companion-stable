@@ -17,13 +17,12 @@ jobs:
           import json,unicodedata,re
           from pathlib import Path
           probe=json.loads(Path('data/spain_reve/reve_public_web_probe.json').read_text())
-          labels=probe.get('operatorLabels',[])
+          labels=probe.get('identityDiagnostics',{}).get('operatorLabels',[])
           base=json.loads(Path('docs/spain-reve-identity-resolution.json').read_text())
           rem=json.loads(Path('docs/spain-reve-remaining-identity-resolution.json').read_text())
           def n(s):
             s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
             return re.sub(r'[^a-z0-9]+',' ',s).strip()
-          # Manual adjudication: conservative; no municipality fuzzy merge.
           manual={
             'Ajuntament de Vilada':('currentIdentityTraversed','distinct_identity'),
             'AYUNTAMIENTO DE PADULES . .':('currentIdentityTraversed','distinct_identity'),
@@ -48,15 +47,13 @@ jobs:
             elif k in unresolved:
               entries.append({'label':lab,'identityFirstPass':True,'classification':'currentIdentityTraversed','resolution':'no_plausible_persisted_historical_match'})
             else:
-              # Includes previous ambiguous labels not keyed exactly; still traversed and retained fail-closed.
               entries.append({'label':lab,'identityFirstPass':True,'classification':'currentIdentityTraversed','resolution':'identity_review_completed_fail_closed'})
-          # hard invariants
           assert len(labels)==445, len(labels)
           assert len(entries)==445
           assert len({n(x['label']) for x in entries})==445
           from collections import Counter
           c=Counter(x['classification'] for x in entries)
-          out={'schemaVersion':1,'country':'ES','mode':'IDENTITY_ONLY_NO_TARIFF','source':'data/spain_reve/reve_public_web_probe.json','sourceOperatorLabels':445,'currentReveInventoryIdentityFirstPassComplete':True,'identityFirstPassCount':445,'counts':dict(c),'historicalLegacyWorkLabelCount':618,'historical618FullyReconstructed':False,'historicalUncertainty':'The current REVE 445-label inventory is fully traversed by identity. This does not prove reconstruction of all historical 618 labels. Legacy 589/618 counter is deprecated because duplicate increments were detected.','tariffResearchPerformed':False,'externalReveQuotaConsumed':False,'runtimePublishReady':False,'entries':entries}
+          out={'schemaVersion':1,'country':'ES','mode':'IDENTITY_ONLY_NO_TARIFF','source':'data/spain_reve/reve_public_web_probe.json#identityDiagnostics.operatorLabels','sourceOperatorLabels':445,'currentReveInventoryIdentityFirstPassComplete':True,'identityFirstPassCount':445,'counts':dict(c),'historicalLegacyWorkLabelCount':618,'historical618FullyReconstructed':False,'historicalUncertainty':'The current REVE 445-label inventory is fully traversed by identity. This does not prove reconstruction of all historical 618 labels. Legacy 589/618 counter is deprecated because duplicate increments were detected.','tariffResearchPerformed':False,'externalReveQuotaConsumed':False,'runtimePublishReady':False,'entries':entries}
           Path('docs/spain-current-reve-445-identity-ledger.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
           batch={'schemaVersion':1,'country':'ES','kind':'coherence-dedup-and-reve445-first-pass','currentReveLabels':445,'identityFirstPassComplete':True,'counts':dict(c),'manualAdjudications':manual,'falsePositiveRejected':'Ajuntament de Paüls != Ajuntament de Pals','legacyCounterDeprecated':True,'runtimePublishReady':False}
           Path('docs/spain-cpo-progress-batches/2026-09-16-coherence-dedup-and-reve445-first-pass.json').write_text(json.dumps(batch,ensure_ascii=False,indent=2)+'\n')
