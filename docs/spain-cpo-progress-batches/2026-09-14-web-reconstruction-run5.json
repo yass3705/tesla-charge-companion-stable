@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "generatedAt": "2026-09-13T23:43:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "sourceProbe": "data/spain_reve/reve_public_web_probe.json",
+  "rule": "First-pass genuinely new REVE-web identities before any re-audit of difficult cases; never infer membership in the lost frozen 618 snapshot.",
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament de la Vall d'en Bas",
+      "labels": ["Ajuntament de la Vall d'en Bas"],
+      "status": "partial",
+      "model": "municipal/site-level",
+      "evidence": [
+        "REVE public web operator label",
+        "https://cido.diba.cat/normativa_local/14222071/ordenances-fiscals-per-a-lany-2023-ajuntament-de-la-vall-den-bas"
+      ],
+      "coverageKnown": "REVE public web exposes the municipality as an operator label. CIDO records a municipal public price for EV charging approved in 2023, but that cited entry is explicitly no longer current.",
+      "blockingReason": "A current 2026 numeric municipal charging tariff was not established in the bounded first pass, so the historical public-price record is not promoted.",
+      "resumeCondition": "Current municipal public-price text, QR/app tariff, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament del Prat de Llobregat",
+      "labels": ["Ajuntament de Prat de Llobregat"],
+      "status": "partial",
+      "model": "municipal/site-level",
+      "evidence": [
+        "REVE public web operator label",
+        "https://www.elprat.cat/ciutat-i-territori/mobilitat"
+      ],
+      "coverageKnown": "The current official municipal mobility page exposes a dedicated public-EV-charging-points service entry.",
+      "blockingReason": "The bounded first pass did not establish a current numeric direct charging tariff from the official municipal page; no value is extrapolated from older metropolitan charging schemes.",
+      "resumeCondition": "Current municipal/AMB tariff page, QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Santa Cristina d'Aro",
+      "labels": ["Ajuntament de Santa Cristina d'Aro"],
+      "status": "setAside",
+      "model": "municipal/site-level",
+      "evidence": [
+        "REVE public web operator label",
+        "https://revistabaixemporda.cat/activada-la-nova-estacio-de-recarrega-de-vehicles-electrics-a-santa-cristina/"
+      ],
+      "coverageKnown": "A public local report documents the municipal fast and semi-fast charging station and states that charging was free when commissioned in 2022.",
+      "blockingReason": "No current 2026 official municipal numeric tariff was established in the bounded first pass; the 2022 free-service statement is too old to promote.",
+      "resumeCondition": "Current municipal tariff/service page, QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14"
+    }
+  ],
+  "delta": {
+    "firstPass": 3,
+    "sourceValidated": 0,
+    "partial": 2,
+    "setAside": 1,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  }
+}

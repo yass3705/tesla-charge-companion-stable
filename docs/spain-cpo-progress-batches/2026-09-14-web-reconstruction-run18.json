@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historical618MembershipClaimed": false,
+  "generatedAt": "2026-09-14T13:27:00Z",
+  "labels": [
+    {
+      "canonicalName": "Torre Inbisa",
+      "status": "partial",
+      "evidence": [
+        "https://icaen.gencat.cat/es/detalls/publicacio/Num-00001.150-Instalacion-general-de-puntos-de-recarga-para-vehiculos-electricos-en-aparcamientos-comunitar",
+        "https://etecnic.es/portfolio/semirrapida/"
+      ],
+      "finding": "Current public institutional/project evidence confirms Torre INBISA has 51 semi-rapid charging points and EVcharge-based management/billing capability. No current authoritative numeric user charging tariff was located in the bounded first-pass search, so no price is promoted.",
+      "resumeCondition": "Official Torre INBISA/EVcharge numeric tariff or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Tortosa",
+      "status": "partial",
+      "evidence": [
+        "https://www2.tortosa.cat/public_files/mob/I-PMUS.pdf"
+      ],
+      "finding": "The current municipal mobility plan documents two public EV charging points, each serving two bays, operating 24 hours with a two-hour parking limit. A third-party listing reports free charging, but because no current official municipal numeric/free tariff authority was located in this pass, that value is not promoted.",
+      "resumeCondition": "Current Tortosa municipal tariff/free-use publication or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "UMBRELLA e-MOBILITY",
+      "status": "active",
+      "evidence": [
+        "https://umbrella-e.com/areas-de-negocio/electromovilidad/",
+        "https://umbrella-e.com/umbrella-e-mobility-pone-en-marcha-su-primera-estacion-hibrida-station-en-la-eliana-valencia/"
+      ],
+      "finding": "Umbrella's current official material confirms an expanding Spanish Station+ network with more than 200 operating charging points, 22-240 kW hardware, live availability, and payment via app, integrated POS or Autocharge. No single authoritative network-wide numeric tariff is published, so station-level pricing must be mapped without extrapolation.",
+      "resumeCondition": "Deterministic station/app/TPV tariff or REVE connector-tariff mapping after the first-pass queue is exhausted."
+    }
+  ],
+  "skippedAlreadyCoveredAliases": [
+    "Telpark",
+    "Tesla, Inc.",
+    "TotalEnergies",
+    "Wenea Mobile Energy",
+    "Zunder"
+  ],
+  "firstPassAfter": {
+    "minimumTraversed": 442,
+    "maximumNeverTraversed": 176,
+    "firstPassComplete": false
+  },
+  "countsAfter": {
+    "sourceValidated": 48,
+    "partial": 37,
+    "active": 95,
+    "setAside": 191,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 442
+  },
+  "reveTariffStatusBatch": {
+    "generatedAt": "2026-09-14T13:21:44.632244Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "plan": [["tariffs",227],["tariffs",228],["tariffs",229],["status",152],["status",153]],
+    "nextTariffPage": 230,
+    "tariffPagesCollected": 229,
+    "tariffRowsStored": 20250,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 154,
+    "statusPagesCollected": 153,
+    "statusRowsStored": 13386,
+    "statusTotalPages": 448,
+    "currentRunDecision": "Exactly one external API batch was launched after more than one real hour had elapsed since the latest successful persisted batch. It used only /connectors/tariffs and /evses/operational_status, respected the 5-request hard cap, returned five HTTP 200 responses, made no /locations request and observed no HTTP 429."
+  },
+  "reveWebLead": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "validatedSamplePages": 100,
+    "perPage": 25,
+    "newReconstructedLabelsFirstPassedThisRun": 3,
+    "endpointStatus": "same public frontend endpoint remains validated; no new public alternative feed or documented safe per-page increase was found in this pass",
+    "nextSafeStep": "The currently observed 166-label public-web sample is now exhausted for genuinely new names after durable-alias filtering. Continue reconstructing nominative labels from other persisted/current sources before any difficult-case reaudit; do not claim historical-618 membership."
+  },
+  "coherence": {
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "countSumMatchesFirstPass": true,
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"
+  }
+}

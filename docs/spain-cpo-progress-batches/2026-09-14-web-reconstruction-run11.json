@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "generatedAt": "2026-09-14T05:39:00Z",
+  "firstPassBefore": 411,
+  "firstPassAfter": 414,
+  "newLabels": [
+    {
+      "label": "NIMA GRUP D'AUTOMOCIO SL",
+      "status": "partial",
+      "evidence": [
+        "https://www.linkedin.com/posts/jaume-nicol%C3%A1s-magri%C3%B1a-906aa397_inaugurem-nova-estaci%C3%B3-de-rec%C3%A0rrega-ultrar%C3%A0pida-activity-6912044191342592000-Yi6B"
+      ],
+      "finding": "Public project evidence from Etecnic identifies NIMA's Audi Vilamobil Tarragona 200 kW charger as operational and accessible via EVcharge, but no deterministic current numeric direct tariff was found in the first pass.",
+      "resumeCondition": "Current official NIMA/EVcharge station tariff or deterministic REVE connector tariff mapping."
+    },
+    {
+      "label": "Nuñez y Navarro",
+      "status": "setAside",
+      "evidence": [
+        "https://www.idealista.com/news/inmobiliario/empresas/2019/12/03/778669-nunez-i-navarro-se-alia-con-nissan-instalara-estaciones-de-recarga-para-coches"
+      ],
+      "finding": "Public evidence confirms EV charging infrastructure across selected Nuñez y Navarro parkings, but no current official/direct numeric charging tariff authority was located in the first pass; parking tariffs are not treated as charging tariffs.",
+      "resumeCondition": "Current official parking/app/QR charging tariff or deterministic REVE connector tariff mapping."
+    },
+    {
+      "label": "OPER CANARIOS SL",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://recarga.fenieenergia.es/punto-recarga/0623"
+      ],
+      "finding": "Current FENIE Energia station page identifies OPER CANARIOS SL as owner, shows last connection 2026-09-11, 50 kW, 24/7 access, and a charging cost of 0.25 EUR/kWh; the AC connector is restricted to station employees.",
+      "resumeCondition": "Revalidate if FENIE changes station 0623 tariff/conditions."
+    }
+  ],
+  "countsDelta": {
+    "sourceValidated": 1,
+    "partial": 1,
+    "active": 0,
+    "setAside": 1,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 3
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "legacyWorkLabelCountPreserved": true,
+    "firstPassPriorityRespected": true
+  }
+}

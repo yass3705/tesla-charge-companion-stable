@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-09-run37",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "note": "Continued with the next never-traversed identities after the run36 boundary. No previously set-aside identity was re-audited."
+  },
+  "newNominativeDecisions": [
+    {
+      "canonicalName": "Tesla Spain SLU",
+      "labels": ["TESLA SPAIN SLU"],
+      "status": "active",
+      "source": ["https://www.tesla.com/es_es/support/charging/supercharging", "https://www.tesla.com/es_es/support/charging/supercharger/fees"],
+      "model": "direct station-level/time-of-use Supercharger pricing",
+      "coverageKnown": "Tesla officially states that the specific Supercharger price and any time-of-use structure are shown per site in the Tesla app/vehicle UI; Spanish congestion fee is separately published at EUR 0.50/min.",
+      "blockingReason": "No safe uniform Spain-wide energy price exists; exhaustive site enumeration would slow the first pass.",
+      "resumeCondition": "After first-pass completion, enumerate Spanish Supercharger site/app prices or map deterministic REVE tariff rows.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "The F Charging España SLU",
+      "labels": ["THE F CHARGING ESPANA S.L.U."],
+      "status": "setAside",
+      "source": ["https://www.informa.es/directorio-empresas/Empresa_THE-F-CHARGING-ESPANA.html"],
+      "model": "EV energy-services operator; direct tariff unresolved",
+      "coverageKnown": "Corporate evidence confirms the Spanish entity's EV energy-services activity, but no authoritative numeric direct charging tariff surfaced in first-pass research.",
+      "blockingReason": "A deeper station/app/backend investigation is required.",
+      "resumeCondition": "New official tariff/app evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Torrecillas Serna S.A.",
+      "labels": ["TORRECILLAS SERNA S.A."],
+      "status": "setAside",
+      "source": ["https://www.todosbiz.es/torrecillas-serna-s-a-968-85-93-46"],
+      "model": "Porsche dealership/site-level charging",
+      "coverageKnown": "Public evidence identifies Torrecillas Serna as the Porsche Murcia dealership operator; no authoritative direct EV charging price was published in the first-pass budget.",
+      "blockingReason": "Station/QR-specific investigation required.",
+      "resumeCondition": "Official dealership/QR/app price or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "TotalEnergies Marketing España",
+      "labels": ["TOTALENERGIES MARKETING ESPAÑA S.A.U."],
+      "status": "active",
+      "source": ["https://services.totalenergies.es/tienes-dudas-cuando-recargas-tu-coche-electrico", "https://services.totalenergies.es/chargeplus"],
+      "model": "direct station/app pricing plus separate Charge+ eMSP profile pricing",
+      "coverageKnown": "TotalEnergies officially supports direct card/app charging, including guest use, and explicitly distinguishes direct charging from eMSP-card pricing. Charge+ Smart provides a 10% discount on TotalEnergies-operated points, but no uniform direct numeric CPO tariff was found.",
+      "blockingReason": "Direct price is station/profile-specific and must not be inferred from eMSP terms.",
+      "resumeCondition": "After first-pass completion, enumerate direct station/app prices or map deterministic REVE tariff rows.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Transportes Penadés e Hijos SL",
+      "labels": ["TRANSPORTES PENADES E HIJOS SL"],
+      "status": "setAside",
+      "source": ["https://transpenades.es/"],
+      "model": "single company/service-station site; direct EV tariff unresolved",
+      "coverageKnown": "Official company material confirms the operator and its service-station activity but exposes no authoritative numeric EV charging tariff.",
+      "blockingReason": "No deterministic direct price without deeper station/QR investigation.",
+      "resumeCondition": "Official station/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    }
+  ],
+  "deltaCounts": {
+    "sourceValidated": 0,
+    "partial": 0,
+    "active": 2,
+    "setAside": 3,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 5
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 336,
+    "maximumNeverTraversed": 282,
+    "firstPassComplete": false
+  },
+  "reveTariffStatus": {
+    "batchTriggerIssued": true,
+    "batchConfirmedCompleted": false,
+    "previousSuccessfulGeneratedAt": "2026-09-08T23:39:11.610436Z",
+    "requestsAttemptedObserved": 0,
+    "requestsSucceededObserved": 0,
+    "http429CountObserved": 0,
+    "locationsRequestsObserved": 0,
+    "quotaWindowConservativelyConsumed": true,
+    "decision": "More than one real hour had elapsed. Exactly one targeted temporary push trigger was issued because workflow_dispatch was not directly invocable and no dispatch run was available. The collector was restored immediately to workflow_dispatch-only and the sentinel removed. No second batch will be launched in this quota window even though the new last_run state had not yet materialized when this run was persisted."
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "mandatoryCadenceCheckPerformed": false,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "countsDeriveExactly": true,
+    "reveRequestBudgetRespectedByObservedState": true,
+    "locationsEndpointUnusedByObservedState": true
+  },
+  "investigationCurrent": "Continue with the next never-traversed labels after TRANSPORTES PENADES E HIJOS SL; do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
+  "updatedAt": "2026-09-09T00:48:00Z"
+}

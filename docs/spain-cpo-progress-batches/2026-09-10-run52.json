@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 52,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "newLabelsTraversed": 5,
+    "newSourceValidated": 1
+  },
+  "counts": {
+    "sourceValidated": 29,
+    "partial": 8,
+    "active": 87,
+    "setAside": 157,
+    "platformExcluded": 4,
+    "supersededAlias": 61,
+    "total": 346
+  },
+  "newNominativeDecisions": [
+    {
+      "canonicalName": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP SL",
+      "labels": ["LOGISTICA DE CARBURANTES PETROLIFEROS GROUP"],
+      "status": "setAside",
+      "model": "site-level/unknown",
+      "evidence": ["https://www.lcgroup.es/"],
+      "coverageKnown": "Historical REVE-derived label recovered from the preserved next-identity queue. Public company evidence confirms fuel/logistics activity but no deterministic official direct EV-charging tariff was located in this first pass.",
+      "blockingReason": "No official/public numeric direct charging tariff authority located with a reasonable first-pass search.",
+      "resumeCondition": "New official site/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-10",
+      "lastChanged": "2026-09-10"
+    },
+    {
+      "canonicalName": "MAKSU ESPAÑA, S.L.",
+      "labels": ["MAKSU ESPAÑA", "MAKSU ESPANA, S.L."],
+      "status": "platformExcluded",
+      "model": "charging/payment application and mobility platform; not proven as direct CPO",
+      "evidence": ["https://apps.apple.com/es/app/efimob/id1465215330", "https://www.telpark.com/fr/centre-juridique/maksu-politique-de-confidentialite/"],
+      "coverageKnown": "MAKSU is identified as developer/provider of Efimob, an app for locating, activating and paying public/private charging sessions, and is part of the Telpark/Empark service stack. No evidence found that this label represents a distinct direct charging-network tariff authority.",
+      "blockingReason": null,
+      "resumeCondition": "Reclassify only if new REVE/official evidence proves MAKSU itself is the contractual CPO for specific EVSEs rather than platform/provider.",
+      "lastInvestigated": "2026-09-10",
+      "lastChanged": "2026-09-10"
+    },
+    {
+      "canonicalName": "Marbella Premium SL",
+      "labels": ["Marbella Premium"],
+      "status": "setAside",
+      "model": "automotive/site-level/unknown",
+      "evidence": ["https://www.pappers.es/company/marbella-premium-sl-1000039979175"],
+      "coverageKnown": "Historical REVE-derived label recovered. Public company evidence identifies Marbella Premium SL as an automotive sales/repair business in Marbella; no deterministic public direct EV-charging price was located in first pass.",
+      "blockingReason": "No official numeric EV charging tariff or proven direct CPO tariff authority found without station-level investigation.",
+      "resumeCondition": "Official site/QR/app price or deterministic REVE EVSE/connector tariff mapping.",
+      "lastInvestigated": "2026-09-10",
+      "lastChanged": "2026-09-10"
+    },
+    {
+      "canonicalName": "MED PLAYA MANAGEMENT SL",
+      "labels": ["MED PLAYA MANAGEMENT"],
+      "status": "setAside",
+      "model": "hotel/site-level charging",
+      "evidence": ["https://www.medplaya.com/"],
+      "coverageKnown": "Historical REVE-derived label recovered. Med Playa Management is a hotel-management/operator entity with multiple properties; no network-wide public numeric direct EV-charging tariff was located and station-by-station hotel enumeration would violate first-pass anti-stagnation priority.",
+      "blockingReason": "Any charging tariff appears property/site-dependent or unpublished; exhaustive hotel enumeration deferred.",
+      "resumeCondition": "Official property tariff, QR/app price, or deterministic REVE connector-tariff mapping after first pass.",
+      "lastInvestigated": "2026-09-10",
+      "lastChanged": "2026-09-10"
+    },
+    {
+      "canonicalName": "MOEVE COMMERCIAL SA",
+      "labels": ["MOEVE COMMERCIAL"],
+      "status": "sourceValidated",
+      "model": "direct network standard ultrafast tariff",
+      "evidence": ["https://www.moeve.es/es/particular/movilidad-electrica/recarga-electrica/tarifas-y-suscripciones", "https://www.moeve.es/es/particular/movilidad-electrica/FAQS"],
+      "coverageKnown": "Official Moeve sources state a single standard direct ultrafast charging tariff of 0.60 EUR/kWh on the Moeve network. Partner/interoperability prices are kept separate and are not transposed to direct CPO pricing.",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if Moeve changes its published standard direct tariff; map REVE aliases/EVSE coverage separately.",
+      "lastInvestigated": "2026-09-10",
+      "lastChanged": "2026-09-10"
+    }
+  ],
+  "reveTariffStatus": {
+    "liveBatchLaunched": false,
+    "reason": "Less than one real hour had elapsed since the last successful persisted live batch generated at 2026-09-10T04:43:38.752276Z when this run checked eligibility.",
+    "persistentNextTariffPage": 77,
+    "persistentTariffPagesCollected": 76,
+    "persistentTariffRowsStored": 7380,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 52,
+    "persistentStatusPagesCollected": 51,
+    "persistentStatusRowsStored": 4412,
+    "statusTotalPages": 447
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 346,
+    "countsDeriveExactly": true,
+    "newRecoveredLabelsAlreadyPresentInCurrentLedger": false,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "legacyNominativeGapStillDocumented": true
+  },
+  "investigation": "Five concrete historical labels were recovered from the preserved next-identity queue and received first-pass decisions. Continue with further historically named labels that can be recovered without fabrication; do not reopen setAside/active cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionMustNotRestart": true
+  },
+  "updatedAt": "2026-09-10T05:42:14Z"
+}

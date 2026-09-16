@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 31,
+  "generatedAt": "2026-09-15T12:37:00Z",
+  "source": "persisted REVE public-web national sweep + official/public first-pass research",
+  "historicalWorkQueueLabels": 618,
+  "historicalMembershipClaimedForNewLabels": false,
+  "firstPassBefore": 500,
+  "firstPassAfter": 505,
+  "maximumNeverTraversed": 113,
+  "decisions": [
+    {"label":"Ajuntament de Canet de Mar","status":"partial","reason":"Official municipality confirms charging service and that the initial free period would later become paid; current 2026 numeric tariff not located in first pass.","evidence":["https://www.canetdemar.cat/22294","https://cido.diba.cat/normativa_local/15514224/reglament-regulador-del-servei-de-carregadors-per-a-vehicles-electrics-io-hibrids-endollables-ajuntament-de-canet-de-mar"]},
+    {"label":"Ajuntament de Canovelles","status":"partial","reason":"Official municipal service page states EV charging is free, but the page is last updated 2020; retained as partial pending current-2026 confirmation rather than extrapolating.","evidence":["https://www.canovelles.cat/serveis-i-tramits/cataleg-de-serveis/promocio-de-la-mobilitat-sostenible.html"]},
+    {"label":"Ajuntament de Cardedeu","status":"setAside","reason":"Official 2026 municipality page confirms current charging locations and expansion, but no current numeric tariff is published there; a 2025 secondary report is not promoted as 2026 tariff authority.","evidence":["https://www.cardedeu.cat/temes/transicio-energetica/punts-de-recarrega-de-vehicles"]},
+    {"label":"Ajuntament de Carrícola Ajuntament Carricola","status":"setAside","reason":"Official municipal electronic seat confirms the municipality identity but no public numeric EV charging tariff authority was located in first pass.","evidence":["https://carricola.sede.dival.es/"]},
+    {"label":"Ajuntament de Casserres","status":"setAside","reason":"No deterministic current official/public numeric charging tariff located in first pass; defer until nominatively recoverable queue is exhausted.","evidence":[]}
+  ],
+  "countsAfter":{"sourceValidated":62,"partial":56,"active":100,"setAside":216,"platformExcluded":3,"supersededAlias":68,"total":505},
+  "coherence":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+  "nextSafeStep":"Continue with the next genuinely new labels from the persisted 445-label national public-web sweep; do not resume difficult-case reaudit yet."
+}

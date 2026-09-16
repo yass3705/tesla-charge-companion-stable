@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T02:47:00Z",
+  "firstPass": {
+    "previousMinimumTraversed": 156,
+    "newNominativeDecisions": 10,
+    "minimumTraversed": 166,
+    "maximumNeverTraversed": 452,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; aliases are resolved without re-auditing canonical CPO tariffs"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 16,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 14,
+    "total": 166
+  },
+  "decisions": [
+    {"canonicalName":"Telpark","label":"MAKSU ESPANA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"alias -> canonical CPO; inherit canonical station-level tariff handling only after identity match","coverageKnown":"Explicit repository alias candidate for Telpark/MAKSU ESPAÑA; no tariff value copied from alias text.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Repsol","label":"REPSOL COMERCIAL DE PRODUCTOS PETROLIFEROS","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run13.json"],"model":"alias -> source-validated Repsol canonical tariff model","coverageKnown":"Explicit repository alias; canonical Repsol direct pricing remains separate from Waylet roaming/eMSP.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Tesla","label":"TESLA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> Tesla Spain canonical station/time-specific model","coverageKnown":"Explicit repository alias; no Spain-wide tariff inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Tesla","label":"TESLA MOTORS","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> Tesla Spain canonical station/time-specific model","coverageKnown":"Explicit repository alias; no tariff value inferred from alias.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"TotalEnergies","label":"TOTAL ENERGIES","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> TotalEnergies canonical direct station-level model","coverageKnown":"Explicit repository alias; direct CPO price remains distinct from eMSP pricing.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"TotalEnergies","label":"TOTALENERGIES","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> TotalEnergies canonical direct station-level model","coverageKnown":"Explicit repository alias; no station price extrapolated nationally.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"TotalEnergies","label":"TOTALENERGIES ELECTRICIDAD Y GAS","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> TotalEnergies canonical direct station-level model","coverageKnown":"Explicit repository alias; direct-vs-roaming separation retained.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Wenea","label":"WENEA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> source-validated Wenea canonical tariff classes","coverageKnown":"Explicit repository alias; standard tariffs and subscriptions remain separate.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Wenea","label":"WENEA URBAN","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> source-validated Wenea canonical tariff classes","coverageKnown":"Explicit repository alias; no separate tariff invented for the alias.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Wenea","label":"WENEA MOBILE ENERGY","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"alias -> source-validated Wenea canonical tariff classes","coverageKnown":"Explicit repository alias; no separate tariff invented for the alias.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T02:44:15.530781Z",
+    "batchLaunchedThisRun": true,
+    "workflowRunId": 34167974789,
+    "workflowRunAttempt": 3,
+    "requestsAttemptedThisRun": 5,
+    "requestsSucceededThisRun": 5,
+    "locationsRequestsThisRun": 0,
+    "http429Count": 0,
+    "tariffPagesCollectedThisRun": [20,21,22],
+    "statusPagesCollectedThisRun": [14,15],
+    "tariffNewRowsThisRun": 300,
+    "tariffUpdatedRowsThisRun": 0,
+    "statusNewRowsThisRun": 200,
+    "statusUpdatedRowsThisRun": 0,
+    "nextTariffPage": 23,
+    "tariffPagesCollected": 22,
+    "tariffRowsStored": 2200,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 16,
+    "statusPagesCollected": 15,
+    "statusRowsStored": 1410,
+    "statusTotalPages": 447
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum":166,
+    "firstPassMinimumTraversed":166,
+    "newBatchCountsDeriveExactly":true,
+    "newLabelsUniqueWithinPersistedPostReconstructionLedger":true,
+    "legacyFirst98ListDerivabilityGapStillDocumented":true,
+    "noSetAsideReauditWithoutNewEvidence":true,
+    "noTariffReauditForAliasResolution":true,
+    "noThirdPartyTariffPromoted":true,
+    "directCpoAndEmspPricingSeparated":true
+  }
+}

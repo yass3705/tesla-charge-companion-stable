@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-14T07:43:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "firstPassBefore": 418,
+  "firstPassAfter": 422,
+  "labels": [
+    {
+      "label": "Peralada",
+      "status": "partial",
+      "reason": "Official municipal sources confirm the public EV-charging network and a 2025 regulatory consultation. A current third-party station record reports free charging, but no current official numeric/zero tariff was located, so the third-party price is not promoted.",
+      "evidence": [
+        "https://peralada.org/consulta-publica-sobre-leleboracio-del-reglament-dus-de-la-xarxa-publica-destacions-de-recarrega-de-vehicles-electrics-a-peralada/"
+      ]
+    },
+    {
+      "label": "Petrolia Conil de la Frontera",
+      "status": "setAside",
+      "reason": "The REVE-web identity is nominative and a current third-party station listing maps the Conil site to REMO Mobility at 0.45 EUR/kWh, but Petrolia's official public site does not currently publish EV charging or a numeric EV tariff. The third-party value is therefore not promoted.",
+      "evidence": [
+        "https://www.petrolia.es/",
+        "https://www.petrolia.es/servicios"
+      ]
+    },
+    {
+      "label": "Polinyà",
+      "status": "setAside",
+      "reason": "The nominative REVE-web label is confirmed as a distinct identity, but current municipal/public research did not establish a public-user charging tariff or a unique official tariff authority for this label. A recent municipal charger reference concerns the municipal brigade fleet and is not substituted for public charging.",
+      "evidence": [
+        "https://www.sostenible.cat/noticia/polinya-millora-leficiencia-energetica-dels-equipaments-municipals"
+      ]
+    },
+    {
+      "label": "Port de Roses",
+      "status": "sourceValidated",
+      "reason": "Current official Roses tourism/municipal information states that the harbour public charging point is free and documents 22 kW semi-fast charging. Port Roses also confirms operating EVcharge-equipped charging stations at the marina. The official zero-price statement is accepted without extrapolating it to unrelated Roses/port stations.",
+      "evidence": [
+        "https://visit.roses.cat/ca/informacions/aparcaments-i-punts-recarrega-cotxes-electrics/punt-recarrega-port.html",
+        "https://portroses.com/ca/mobilitat-sostenible"
+      ]
+    }
+  ],
+  "coherence": {
+    "countDelta": 4,
+    "syntheticHistoricalMembershipCreated": false,
+    "legacyWorkLabelCountUnchanged": true,
+    "firstPassPriorityRespected": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 78,
+  "date": "2026-09-12",
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "labelsTraversedThisRun": 0,
+    "reasonNoNominalAdvance": "The durable reconstructed current-REVE identity queue remains exhausted and no genuinely new durable nominative evidence was found. No synthetic historical identities were created and no setAside case was re-audited without new evidence."
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "reveTariffStatusObservation": {
+    "liveBatchLaunchedThisRun": false,
+    "reason": "Less than one real hour had elapsed at the execution-time eligibility check since the latest successful live batch generated at 2026-09-12T13:43:39.210979Z; quota was therefore not consumed.",
+    "latestSuccessfulBatchGeneratedAt": "2026-09-12T13:43:39.210979Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPages": [161, 162, 163],
+    "tariffNewRows": 252,
+    "tariffUpdatedRows": 0,
+    "statusPages": [108, 109],
+    "statusNewRows": 173,
+    "statusUpdatedRows": 16,
+    "nextTariffPage": 164,
+    "nextStatusPage": 110,
+    "tariffRowsStored": 14835,
+    "statusRowsStored": 9245,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448,
+    "complete": false
+  },
+  "persistence": {
+    "criticalProgressPersistedInGit": true,
+    "historical618RecoverySearchNotRepeated": true,
+    "canonicalPointerResynchronizedToPersistentReveState": true,
+    "actionsArtifactsMayNotBeSoleCanonicalStore": true
+  },
+  "coherence": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "countsDeriveExactly": true,
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "syntheticHistoricalMembershipCreated": false,
+    "setAsideReauditWithoutNewEvidence": false,
+    "replacementIdentityQueueExhausted": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "staleCanonicalRevePointerDetectedAndCorrected": true
+  }
+}

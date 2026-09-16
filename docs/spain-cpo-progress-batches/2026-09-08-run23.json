@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T10:42:00Z",
+  "firstPass": {
+    "previousMinimumTraversed": 217,
+    "newNominativeDecisions": 5,
+    "minimumTraversed": 222,
+    "maximumNeverTraversed": 396,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; prioritize previously unrecorded live REVE labels and stop after deterministic first-pass decision"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 20,
+    "partial": 5,
+    "active": 47,
+    "setAside": 88,
+    "platformExcluded": 3,
+    "supersededAlias": 59,
+    "total": 222
+  },
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament de Calvià",
+      "label": "AJUNTAMENT DE CALVIÀ",
+      "status": "sourceValidated",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://www.calvia.com/es/calvia-al-dia/noticias/el-ayuntamiento-de-calvia-iniciara-el-cobro-del-servicio-de-recarga-de-vehiculos-electricos-a-partir-del-2-de-febrero-de-2026-3"
+      ],
+      "model": "official municipal direct tariff from 2026-02-02: 0.25 EUR/kWh; occupancy charge 3 EUR per hour or fraction after 4 free hours",
+      "coverageKnown": "REVE snapshot: partyId CAL, 25 locations/EVSE/connectors. Municipality states the charging tariff applies to municipally owned stations and is paid through MELIB 2025.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen only on a municipal tariff change or evidence of station exceptions.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament de Costitx",
+      "label": "AJUNTAMENT DE COSTITX",
+      "status": "setAside",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json"
+      ],
+      "model": "no current deterministic official direct charging tariff established in reasonable first-pass search",
+      "coverageKnown": "REVE snapshot: partyId 9A8, 1 location, 1 EVSE, 1 connector. A 2024 secondary report said Costitx was not charging at that time, but this is not promoted as current CPO evidence.",
+      "blockingReason": "Current official municipal tariff/free status not found quickly; ordinance or station-level verification would exceed first-pass budget.",
+      "resumeCondition": "Reopen after FIRST PASS COMPLETE or on current municipal ordinance, MELIB/REVE tariff match, QR/ad-hoc evidence, or explicit official free-price statement.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament de Sant Lluís",
+      "label": "AJUNTAMENT DE SANT LLUIS",
+      "status": "setAside",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json"
+      ],
+      "model": "municipal/MELIB charging infrastructure; no current deterministic official direct tariff found in reasonable first-pass search",
+      "coverageKnown": "REVE snapshot: partyId 710, 24 locations, 24 EVSE, 24 connectors.",
+      "blockingReason": "Current official price did not surface without deeper ordinance/station investigation.",
+      "resumeCondition": "Reopen after FIRST PASS COMPLETE or on official tariff, REVE tariff match, MELIB station evidence, QR/ad-hoc evidence, or operator identification.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament de Santa Maria del Camí",
+      "label": "AJUNTAMENT DE SANTA MARIA DEL CAMI",
+      "status": "sourceValidated",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://ajsantamariadelcami.net/en/node/14220",
+        "https://ajsantamariadelcami.net/sites/cilma_santa_maria/files/Boib.pdf"
+      ],
+      "model": "official municipal direct public price: first three charging hours 0.25 EUR/kWh; from the fourth charging hour the ordinance states 3 EUR per hour/fraction charge; payment via MELIB gateway",
+      "coverageKnown": "REVE snapshot: partyId 056, 6 locations, 6 EVSE, 12 connectors. Municipal ordinance approved 2024-09-14 and municipality links the full BOIB text.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen on ordinance amendment or evidence of station exceptions.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament des Castell",
+      "label": "AJUNTAMENT DES CASTELL",
+      "status": "setAside",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://www.aj-escastell.org/WebEditor/Pagines/File/2025/Recaptaci%C3%B3/Catal%C3%A0.PDF"
+      ],
+      "model": "official 2025 municipal charging rules and app/platform management confirmed, but no deterministic numeric direct tariff safely extracted in first pass",
+      "coverageKnown": "REVE snapshot: partyId CAS, 12 locations, 12 EVSE, 28 connectors. Official municipal material confirms charging operation and a maximum four-hour occupation rule.",
+      "blockingReason": "Numeric tariff requires deeper ordinance/PDF or station-level extraction; third-party Electromaps 0.25 EUR/kWh is not promoted as direct CPO evidence.",
+      "resumeCondition": "Reopen after FIRST PASS COMPLETE or on official numeric tariff, REVE tariff match, MELIB/QR evidence, or operator tariff annex.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    }
+  ],
+  "canonicalReconstruction": {
+    "attemptedPreviously": true,
+    "complete": false,
+    "newEvidenceForRetryThisRun": false,
+    "action": "Preserve documented earliest-98 nominative gap; do not repeat reconstruction without new evidence."
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 222,
+    "firstPassMinimumTraversed": 222,
+    "newBatchCountsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "locationsEndpointUnused": true
+  }
+}

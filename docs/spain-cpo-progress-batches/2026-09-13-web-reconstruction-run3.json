@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "generatedAt": "2026-09-13T21:46:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "sourceProbe": "data/spain_reve/reve_public_web_probe.json",
+  "rule": "First-pass genuinely new REVE-web identities before any re-audit of difficult cases; never infer membership in the lost frozen 618 snapshot.",
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament de Casserres",
+      "labels": ["Ajuntament de Casserres"],
+      "status": "setAside",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label", "https://www.casserres.cat/"],
+      "blockingReason": "Identity is nominatively observed in the public REVE feed, but the bounded official-site search did not locate a current numeric public charging tariff.",
+      "resumeCondition": "Official municipal tariff, payment/app/QR tariff, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Gironella",
+      "labels": ["Ajuntament de Gironella"],
+      "status": "partial",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label", "https://gironella.cat/wp-content/uploads/2023/09/230331_Estat_Execucio.pdf"],
+      "coverageKnown": "Municipal budget execution explicitly contains a vehicle charging point line item; current numeric public charging tariff not located in the bounded first pass.",
+      "blockingReason": "Charging infrastructure is municipally evidenced but current direct tariff remains unresolved.",
+      "resumeCondition": "Current municipal tariff/order, QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de La Secuita",
+      "labels": ["Ajuntament de La Secuita"],
+      "status": "setAside",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label"],
+      "blockingReason": "Identity is nominatively observed in the public REVE feed; no sufficiently authoritative current public numeric charging tariff was located in the bounded first pass.",
+      "resumeCondition": "Official municipal tariff, QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Martorelles",
+      "labels": ["Ajuntament de Martorelles"],
+      "status": "sourceValidated",
+      "model": "municipal direct tariff managed through Etecnic",
+      "evidence": ["https://www.martorelles.cat/informat/noticies/els-carregadors-de-vehicles-electrics-deixaran-de-ser-gratuits-a-partir-de-l1-dagost.html", "https://bop.diba.cat/anuncio/3800228/aprovacio-de-l-acord-regulador-del-preu-public-per-recarrega-de-vehicles-electrics-i-preu-public-per-lacompanyament-de-lhomenatge-a-gent-gran-ajuntament-de-martorelles"],
+      "tariff": "0.25 EUR/kWh + VAT = 0.30 EUR/kWh total; 0.10 EUR/min surcharge from 10 minutes after charging ends while occupying the bay",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate only if the municipality publishes a new tariff.",
+      "lastInvestigated": "2026-09-13"
+    }
+  ],
+  "delta": {
+    "firstPass": 4,
+    "sourceValidated": 1,
+    "partial": 1,
+    "setAside": 2,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  }
+}

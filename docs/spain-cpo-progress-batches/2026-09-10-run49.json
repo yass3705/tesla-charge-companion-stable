@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": 49,
+  "date": "2026-09-10",
+  "firstPass": {
+    "minimumTraversed": 341,
+    "maximumNeverTraversed": 277,
+    "newNominativeDecisions": 0,
+    "firstPassComplete": false,
+    "reasonNoNominativeProgress": "No additional never-traversed historical label can be recovered safely from the preserved canonical/history without fabrication. Current REVE nominative identities remain first-pass covered; no active or setAside entry was reaudited."
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "workflowRunId": 34413690845,
+    "rerunJobId": 102700502673,
+    "generatedAt": "2026-09-10T00:42:23.493147Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPagesCollectedThisBatch": [68, 69, 70],
+    "statusPagesCollectedThisBatch": [46, 47],
+    "tariffNewRows": 241,
+    "tariffUpdatedRows": 3,
+    "statusNewRows": 139,
+    "statusUpdatedRows": 47,
+    "persistentNextTariffPage": 71,
+    "persistentTariffPagesCollected": 70,
+    "persistentTariffRowsStored": 6853,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 48,
+    "persistentStatusPagesCollected": 47,
+    "persistentStatusRowsStored": 4235,
+    "statusTotalPages": 447,
+    "persistenceSucceeded": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "mandatoryCadenceCheckPerformed": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  }
+}
