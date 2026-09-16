@@ -3,37 +3,13 @@
   "country": "ES",
   "integrationStatus": "PRE_INTEGRATION_ONLY",
   "source": "REVE + official/public CPO research",
-  "updatedAt": "2026-09-16T00:40:00Z",
-  "inventory": {
-    "legacyWorkLabelCount": 618,
-    "legacyWorkLabelCountMustRemainUntilReconstructionComplete": true,
-    "nationalReveWebScan": {"endpoint":"/api/public/v1/locations","pages":"1-600 x25","stations":11212,"reveLocationIdsUnique":10493,"operatorLabelsUnique":445,"status":"complete_persisted"}
-  },
-  "canonicalReconstruction": {"complete":false,"rule":"Never manufacture an identity or infer membership in historical 618 from a current REVE label."},
-  "firstPass": {"minimumTraversed":525,"maximumHistoricalUnreconstructedOrNeverTraversed":93,"interpretation":"continuity KPI; current REVE labels are processed nominatively but historical membership remains unproven until reconstruction completes"},
-  "continuityCounts": {"sourceValidated":64,"partial":64,"active":102,"setAside":224,"excludedPlatform":3,"supersededAlias":68,"total":525},
-  "latestBatch": {
-    "newNominativeDecisions":5,
-    "newlyTreated":["Montmeló","Móra d'Ebre","Móra la Nova","Motor Box Mallorca SL","Movilidad Eléctrica Gran Canaria"],
-    "decisions":[
-      {"canonicalName":"Montmeló","status":"partial","reason":"Current municipal page confirms station, EVCharge payment and fiscal ordinance 18; historical 0.35 EUR/kWh from 2021 is not extrapolated to 2026."},
-      {"canonicalName":"Móra d'Ebre","status":"setAside","reason":"Nominative current REVE label; no durable first-party current numeric tariff established in first pass."},
-      {"canonicalName":"Móra la Nova","status":"setAside","reason":"Nominative current REVE label; no durable first-party current numeric tariff established in first pass."},
-      {"canonicalName":"Motor Box Mallorca SL","status":"setAside","reason":"Nominative current REVE label; no durable first-party current numeric EV tariff authority established in first pass."},
-      {"canonicalName":"Movilidad Eléctrica Gran Canaria","status":"partial","reason":"Official 2026 source confirms active network/app and tariffs; official 0.25 EUR/kWh applies to specific new Tafira chargers and is not extrapolated network-wide."}
-    ],
-    "batchFile":"docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run35.json",
-    "nextAction":"Continue with next nominatively recoverable current-REVE labels before any difficult-case reaudit."
-  },
-  "reveTariffStatusCollection": {
-    "complete":false,
-    "lastPersistedKnownBatchGeneratedAt":"2026-09-14T20:48:45.978079Z",
-    "lastPersistedKnownNextTariffPage":245,
-    "lastPersistedKnownNextStatusPage":164,
-    "lastPersistedKnownHad429":false,
-    "locationsEndpointForbiddenForHourlyBatch":true,
-    "note":"A live batch is overdue, but the available GitHub connector exposes no safe workflow_dispatch route. No unsafe trigger substitute was created and no REVE API quota was consumed."
-  },
+  "updatedAt": "2026-09-16T12:38:00Z",
+  "inventory": {"legacyWorkLabelCount":618,"legacyWorkLabelCountMustRemainUntilReconstructionComplete":true,"nationalReveWebScan":{"endpoint":"/api/public/v1/locations","pages":"1-600 x25","stations":11212,"reveLocationIdsUnique":10493,"operatorLabelsUnique":445,"status":"complete_persisted"}},
+  "canonicalReconstruction":{"complete":false,"rule":"Never manufacture an identity or infer membership in historical 618 from a current REVE label."},
+  "firstPass":{"minimumTraversed":534,"maximumHistoricalUnreconstructedOrNeverTraversed":84,"interpretation":"continuity KPI; current REVE labels are processed nominatively but historical membership remains unproven until reconstruction completes"},
+  "continuityCounts":{"sourceValidated":66,"partial":65,"active":104,"setAside":228,"excludedPlatform":3,"supersededAlias":68,"total":534},
+  "latestBatch":{"newNominativeDecisions":4,"newlyTreated":["Navarra te recarga","Navàs","Olost","Palau-solità i Plegamans"],"decisions":[{"canonicalName":"Navarra te recarga","status":"active"},{"canonicalName":"Navàs","status":"sourceValidated"},{"canonicalName":"Olost","status":"partial"},{"canonicalName":"Palau-solità i Plegamans","status":"sourceValidated"}],"batchFile":"docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run37.json","nextAction":"Continue with next nominatively recoverable current-REVE labels before any difficult-case reaudit."},
+  "reveTariffStatusCollection":{"complete":false,"lastPersistedKnownBatchGeneratedAt":"2026-09-14T20:48:45.978079Z","lastPersistedKnownNextTariffPage":245,"lastPersistedKnownNextStatusPage":164,"lastPersistedKnownHad429":false,"locationsEndpointForbiddenForHourlyBatch":true,"note":"A live batch is overdue, but the available GitHub connector exposes no safe workflow_dispatch route. No unsafe trigger substitute was created and no REVE API quota was consumed."},
   "runtimeSafety":{"pr50DraftRequired":true,"preIntegrationOnly":true,"runtimePublishReady":false},
   "coherenceCheck":{"result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY","legacyWorkLabelCountPreserved":true,"noSyntheticHistoricalMembership":true,"noThirdPartyTariffPromoted":true,"noDifficultCaseReauditWhileNewLabelsRemain":true}
 }
