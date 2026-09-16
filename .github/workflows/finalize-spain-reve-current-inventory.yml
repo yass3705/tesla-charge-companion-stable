@@ -16,6 +16,7 @@ jobs:
           python <<'PY'
           import json,unicodedata,re
           from pathlib import Path
+          from collections import Counter,defaultdict
           probe=json.loads(Path('data/spain_reve/reve_public_web_probe.json').read_text())
           labels=probe.get('identityDiagnostics',{}).get('operatorLabels',[])
           base=json.loads(Path('docs/spain-reve-identity-resolution.json').read_text())
@@ -23,18 +24,7 @@ jobs:
           def n(s):
             s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
             return re.sub(r'[^a-z0-9]+',' ',s).strip()
-          manual={
-            'Ajuntament de Vilada':('currentIdentityTraversed','distinct_identity'),
-            'AYUNTAMIENTO DE PADULES . .':('currentIdentityTraversed','distinct_identity'),
-            'Ayuntamiento de Viana . .':('currentIdentityTraversed','distinct_identity'),
-            'Corbera de Llobregat':('currentIdentityTraversed','distinct_identity'),
-            'ELECTRICA SOLLERENSE S.A.':('representedHistorical','Eléctrica Sollerense / U Energia'),
-            'Energía Distribuida del Norte S.A.':('representedHistorical','Energía Distribuida del Norte / Edinor'),
-            'Sant Julià de Vilatorta':('representedHistorical','Ajuntament de Sant Julià de Vilatorta'),
-            'Tersa':('representedHistorical','Tersa'),
-            'Ajuntament de Palafolls':('representedHistorical','Ajuntament de Palafolls'),
-            'Ajuntament de Paüls':('currentIdentityTraversed','distinct_from_Pals')
-          }
+          manual={'Ajuntament de Vilada':('currentIdentityTraversed','distinct_identity'),'AYUNTAMIENTO DE PADULES . .':('currentIdentityTraversed','distinct_identity'),'Ayuntamiento de Viana . .':('currentIdentityTraversed','distinct_identity'),'Corbera de Llobregat':('currentIdentityTraversed','distinct_identity'),'ELECTRICA SOLLERENSE S.A.':('representedHistorical','Eléctrica Sollerense / U Energia'),'Energía Distribuida del Norte S.A.':('representedHistorical','Energía Distribuida del Norte / Edinor'),'Sant Julià de Vilatorta':('representedHistorical','Ajuntament de Sant Julià de Vilatorta'),'Tersa':('representedHistorical','Tersa'),'Ajuntament de Palafolls':('representedHistorical','Ajuntament de Palafolls'),'Ajuntament de Paüls':('currentIdentityTraversed','distinct_from_Pals')}
           resolved={n(x['reveLabel']):x for x in base.get('resolved',[])}
           unresolved=set(n(x) for x in rem.get('noPlausiblePersistedMatchLabels',[]))
           entries=[]
@@ -50,14 +40,16 @@ jobs:
               entries.append({'label':lab,'identityFirstPass':True,'classification':'currentIdentityTraversed','resolution':'identity_review_completed_fail_closed'})
           assert len(labels)==445, len(labels)
           assert len(entries)==445
-          assert len({n(x['label']) for x in entries})==445
-          from collections import Counter
+          assert len(set(labels))==445
+          groups=defaultdict(list)
+          for lab in labels: groups[n(lab)].append(lab)
+          normalizationCollisions=[{'normalized':k,'rawLabels':v} for k,v in groups.items() if len(v)>1]
           c=Counter(x['classification'] for x in entries)
-          out={'schemaVersion':1,'country':'ES','mode':'IDENTITY_ONLY_NO_TARIFF','source':'data/spain_reve/reve_public_web_probe.json#identityDiagnostics.operatorLabels','sourceOperatorLabels':445,'currentReveInventoryIdentityFirstPassComplete':True,'identityFirstPassCount':445,'counts':dict(c),'historicalLegacyWorkLabelCount':618,'historical618FullyReconstructed':False,'historicalUncertainty':'The current REVE 445-label inventory is fully traversed by identity. This does not prove reconstruction of all historical 618 labels. Legacy 589/618 counter is deprecated because duplicate increments were detected.','tariffResearchPerformed':False,'externalReveQuotaConsumed':False,'runtimePublishReady':False,'entries':entries}
+          out={'schemaVersion':2,'country':'ES','mode':'IDENTITY_ONLY_NO_TARIFF','source':'data/spain_reve/reve_public_web_probe.json#identityDiagnostics.operatorLabels','sourceOperatorLabels':445,'rawUniqueLabels':445,'normalizationCollisionGroups':normalizationCollisions,'currentReveInventoryIdentityFirstPassComplete':True,'identityFirstPassCount':445,'counts':dict(c),'historicalLegacyWorkLabelCount':618,'historical618FullyReconstructed':False,'historicalUncertainty':'Current REVE 445 raw labels are fully traversed by identity. Normalization collisions are recorded, never silently merged. This does not prove reconstruction of all historical 618 labels. Legacy 589/618 is deprecated because duplicate increments were detected.','tariffResearchPerformed':False,'externalReveQuotaConsumed':False,'runtimePublishReady':False,'entries':entries}
           Path('docs/spain-current-reve-445-identity-ledger.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
-          batch={'schemaVersion':1,'country':'ES','kind':'coherence-dedup-and-reve445-first-pass','currentReveLabels':445,'identityFirstPassComplete':True,'counts':dict(c),'manualAdjudications':manual,'falsePositiveRejected':'Ajuntament de Paüls != Ajuntament de Pals','legacyCounterDeprecated':True,'runtimePublishReady':False}
+          batch={'schemaVersion':2,'country':'ES','kind':'coherence-dedup-and-reve445-first-pass','currentReveLabels':445,'identityFirstPassComplete':True,'counts':dict(c),'normalizationCollisionGroupCount':len(normalizationCollisions),'normalizationCollisions':normalizationCollisions,'manualAdjudications':manual,'falsePositiveRejected':'Ajuntament de Paüls != Ajuntament de Pals','legacyCounterDeprecated':True,'legacyWorkLabelCount':618,'runtimePublishReady':False}
           Path('docs/spain-cpo-progress-batches/2026-09-16-coherence-dedup-and-reve445-first-pass.json').write_text(json.dumps(batch,ensure_ascii=False,indent=2)+'\n')
-          print(json.dumps(out|{'entries':'omitted'},ensure_ascii=False,indent=2))
+          print(json.dumps({k:out[k] for k in ('sourceOperatorLabels','rawUniqueLabels','identityFirstPassCount','counts')},ensure_ascii=False,indent=2)); print('normalizationCollisionGroups',len(normalizationCollisions))
           PY
       - name: Persist
         run: |
