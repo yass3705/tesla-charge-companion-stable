@@ -8,8 +8,8 @@
     "Ayuntamiento de Viana . .": "distinct_from_Tiana"
   },
   "total": 173,
-  "processed": 7,
-  "remaining": 166,
+  "processed": 15,
+  "remaining": 158,
   "antiStagnation": true,
   "rules": [
     "one reasonable investigation per CPO during first pass",
@@ -95,43 +95,97 @@
     },
     {
       "label": "Ajuntament de Soses",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "origin": "v2_candidateCpo",
+      "source": {
+        "type": "official_municipal_project_page",
+        "url": "https://www.soses.cat/installacio-de-punts-de-recarrega-per-a-vehicles-electrics-a-soses/",
+        "provider": "Ajuntament de Soses / ETECNIC"
+      },
+      "evidence": "Official municipal page confirms a fast public charging point, mobile app/software and ETECNIC management, but does not publish a deterministic current direct/ad-hoc tariff.",
+      "resumeCondition": "Resolve tariff from EVcharge/ETECNIC public guest surface or municipal price ordinance."
     },
     {
       "label": "Ajuntament de Torroella de Montgrí",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "origin": "v2_candidateCpo",
+      "tariff": {
+        "model": "energy",
+        "price": 0.2,
+        "unit": "EUR/kWh",
+        "conditions": "Municipal public charging points; maximum parking/charging time 2h; payment through Electromaps credit."
+      },
+      "source": {
+        "type": "official_municipal_tariff_page",
+        "url": "https://www.torroella-estartit.cat/ca/noticies/4480-els-punts-de-recarrega-de-vehicles-electrics-.html"
+      },
+      "evidence": "Official municipal page states the three municipal charging points became paid at the public price approved in municipal ordinances: 0.20 EUR/kWh."
     },
     {
       "label": "Ajuntament de Vic",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "origin": "v2_candidateCpo",
+      "source": {
+        "type": "official_municipal_mobility_page",
+        "url": "https://www.vic.cat/serveis/territori/mobilitat/mobilitat-en-vehicle-privat/mobilitat-electrica",
+        "provider": "Ajuntament de Vic / EVCharge"
+      },
+      "evidence": "Official current mobility page confirms five municipal charging locations, EVCharge/RFID access and says access is free, but wording does not deterministically establish zero-energy tariff for every current EVSE.",
+      "resumeCondition": "Verify EVCharge current tariff objects or explicit municipal price ordinance before sourceValidated."
     },
     {
       "label": "Ajuntament de Vilada",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "origin": "v2_candidateCpo",
+      "tariff": {
+        "model": "time_of_use_energy",
+        "unit": "EUR/kWh",
+        "withoutSubscription": {
+          "weekday_00_00_07_59": 0.22,
+          "other_times": 0.28
+        },
+        "withSubscription": {
+          "weekday_00_00_07_59": 0.11,
+          "other_times": 0.17,
+          "annualFeeEUR": 50
+        }
+      },
+      "source": {
+        "type": "official_municipal_tariff_page",
+        "url": "https://www.vilada.cat/actualitat/noticies/els-carregadors-de-vehicles-electrics-de-vilada-passen-a-ser-de-pagament-a-partir-del-29-de-desembre.html",
+        "provider": "Ajuntament de Vilada / EVcharge"
+      },
+      "evidence": "Official municipal notice dated 2025-12-15 gives tariffs effective 2025-12-29 for both municipal double chargers and EVcharge access."
     },
     {
       "label": "Ajuntament de Vinyols i els Arcs",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "origin": "v2_candidateCpo",
+      "source": {
+        "type": "official_municipal_station_page",
+        "url": "https://vinyols.altanet.org/noticies/nova-estacio-de-recarrega-electrica",
+        "provider": "Ajuntament de Vinyols i els Arcs / EVcharge"
+      },
+      "evidence": "Official municipal page confirms public EVcharge-managed 22 kW and 50 kW connectors, but publishes no deterministic tariff.",
+      "resumeCondition": "Resolve current EVcharge tariff objects or municipal ordinance."
     },
     {
       "label": "Ajuntament del Catllar",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "origin": "v2_candidateCpo",
+      "reason": "Municipal identity is real, but no deterministic current direct/ad-hoc EV charging tariff was found in a reasonable first-pass search; municipal service pages do not expose one."
     },
     {
       "label": "Ajuntament del Lloar",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "origin": "v2_candidateCpo",
+      "reason": "No deterministic current direct/ad-hoc EV charging tariff found in reasonable first-pass search; retain for post-first-pass audit."
     },
     {
       "label": "Ajuntament del Pla de Santa Maria",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "origin": "v2_candidateCpo",
+      "reason": "Search found charging-infrastructure references but no deterministic current municipal public direct/ad-hoc tariff; retain for post-first-pass audit."
     },
     {
       "label": "Ajuntament dels Pallaresos",
