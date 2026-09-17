@@ -8,8 +8,8 @@
     "Ayuntamiento de Viana . .": "distinct_from_Tiana"
   },
   "total": 173,
-  "processed": 0,
-  "remaining": 173,
+  "processed": 7,
+  "remaining": 166,
   "antiStagnation": true,
   "rules": [
     "one reasonable investigation per CPO during first pass",
@@ -20,37 +20,77 @@
   "entries": [
     {
       "label": "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "setAside",
+      "reason": "No deterministic current direct/ad-hoc tariff found in reasonable first-pass web search; retain for post-first-pass audit.",
       "origin": "v2_candidateCpo"
     },
     {
       "label": "Aj. Montcada i Reixac",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "setAside",
+      "reason": "No deterministic current direct/ad-hoc tariff found in reasonable first-pass web search; retain for post-first-pass audit.",
       "origin": "v2_candidateCpo"
     },
     {
       "label": "Ajuntament d’Alforja des",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "setAside",
+      "reason": "Municipal identity confirmed but no deterministic current EV charging tariff found in reasonable first-pass search.",
       "origin": "v2_candidateCpo"
     },
     {
       "label": "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "free",
+        "price": 0,
+        "unit": "EUR/kWh",
+        "conditions": "Public road; 24h access; max reservation 2h; charger off Thursdays and some municipal holidays."
+      },
+      "source": {
+        "type": "official_cpo_service_page",
+        "url": "https://recarga.fenieenergia.es/punto-recarga/0149",
+        "provider": "FENÍE ENERGÍA",
+        "stationId": "0149",
+        "powerKw": [
+          2.3,
+          7.4
+        ]
+      },
+      "evidence": "Official FENÍE charging page identifies owner as AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL and states charging has no cost.",
       "origin": "v2_candidateCpo"
     },
     {
       "label": "Ajuntament de Sant Jaume d'Enveja",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "partial",
+      "tariff": {
+        "model": "energy",
+        "price": 0.45,
+        "unit": "EUR/kWh"
+      },
+      "source": {
+        "type": "third_party_station_page",
+        "url": "https://www.electromaps.com/en/charging-stations/spain/tarragona/sant-jaume-denveja/sant-jaume-denveja-carrer-del-doctor-espasa-i-jardi",
+        "provider": "Electromaps",
+        "powerKw": 22
+      },
+      "evidence": "Current station listing shows 0.45 EUR/kWh; municipal ordinance existence is independently documented, but exact current direct/ad-hoc municipal mapping was not confirmed from an official tariff text during this pass.",
+      "resumeCondition": "Verify current municipal ordinance/direct payment mapping before sourceValidated.",
       "origin": "v2_candidateCpo"
     },
     {
       "label": "Ajuntament de Sant Julià de Cerdanyola",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "setAside",
+      "reason": "Municipal identity confirmed; no deterministic current EV charging tariff found in reasonable first-pass search.",
       "origin": "v2_candidateCpo"
     },
     {
       "label": "Ajuntament de Santa Fe del Penedès",
-      "queueStatus": "pending_first_pass",
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_regulatory_notice",
+        "url": "https://bop.diba.cat/anunci/3593207/aprovacio-definitiva-de-l-ordenanca-reguladora-de-preus-publics-per-a-la-prestacio-del-servei-de-recarrega-de-vehicles-electrics-als-punts-de-recarrega-de-titularitat-municipal-ajuntament-de-santa-fe-del-penedes"
+      },
+      "evidence": "Official BOPB confirms definitive approval of public prices for municipal EV charging points on 2024-03-01; exact tariff amount was not exposed in indexed text during this pass.",
+      "resumeCondition": "Extract ordinance attachment/text and map exact current amount before sourceValidated.",
       "origin": "v2_candidateCpo"
     },
     {
@@ -886,5 +926,19 @@
       "origin": "v2_candidateCpo"
     }
   ],
-  "runtimePublishReady": false
+  "runtimePublishReady": false,
+  "statusCounts": {
+    "setAside": 4,
+    "sourceValidated": 1,
+    "partial": 2,
+    "pending_first_pass": 166
+  },
+  "lastConsistencyCheck": {
+    "totalEntries": 173,
+    "totalExpected": 173,
+    "processedPlusRemaining": 173,
+    "uniqueLabels": 173,
+    "ok": true
+  },
+  "lastAppliedBatch": "data/spain_reve/first_pass_batch_001.json"
 }
