@@ -8,8 +8,8 @@
     "Ayuntamiento de Viana . .": "distinct_from_Tiana"
   },
   "total": 173,
-  "processed": 15,
-  "remaining": 158,
+  "processed": 36,
+  "remaining": 137,
   "antiStagnation": true,
   "rules": [
     "one reasonable investigation per CPO during first pass",
@@ -22,19 +22,22 @@
       "label": "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
       "queueStatus": "setAside",
       "reason": "No deterministic current direct/ad-hoc tariff found in reasonable first-pass web search; retain for post-first-pass audit.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "Aj. Montcada i Reixac",
       "queueStatus": "setAside",
       "reason": "No deterministic current direct/ad-hoc tariff found in reasonable first-pass web search; retain for post-first-pass audit.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "Ajuntament d’Alforja des",
       "queueStatus": "setAside",
       "reason": "Municipal identity confirmed but no deterministic current EV charging tariff found in reasonable first-pass search.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
@@ -56,7 +59,8 @@
         ]
       },
       "evidence": "Official FENÍE charging page identifies owner as AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL and states charging has no cost.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "Ajuntament de Sant Jaume d'Enveja",
@@ -74,13 +78,15 @@
       },
       "evidence": "Current station listing shows 0.45 EUR/kWh; municipal ordinance existence is independently documented, but exact current direct/ad-hoc municipal mapping was not confirmed from an official tariff text during this pass.",
       "resumeCondition": "Verify current municipal ordinance/direct payment mapping before sourceValidated.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "Ajuntament de Sant Julià de Cerdanyola",
       "queueStatus": "setAside",
       "reason": "Municipal identity confirmed; no deterministic current EV charging tariff found in reasonable first-pass search.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "Ajuntament de Santa Fe del Penedès",
@@ -91,7 +97,8 @@
       },
       "evidence": "Official BOPB confirms definitive approval of public prices for municipal EV charging points on 2024-03-01; exact tariff amount was not exposed in indexed text during this pass.",
       "resumeCondition": "Extract ordinance attachment/text and map exact current amount before sourceValidated.",
-      "origin": "v2_candidateCpo"
+      "origin": "v2_candidateCpo",
+      "decisionSource": "data/spain_reve/first_pass_batch_001.json"
     },
     {
       "label": "Ajuntament de Soses",
@@ -189,108 +196,305 @@
     },
     {
       "label": "Ajuntament dels Pallaresos",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_regulatory_index",
+        "url": "https://cido.diba.cat/normativa_local/17993838/reglament-de-funcionament-del-servei-de-recarrega-de-vehicles-electrics-i-vehicles-hibrids-endollables-ajuntament-dels-pallaresos"
+      },
+      "evidence": "CIDO confirms the municipal EV charging regulation is in force, definitively approved 2024-10-08. A current station listing reports EVcharge and free charging, but no official current tariff amount was deterministically exposed during this pass.",
+      "resumeCondition": "Extract the definitive regulation/price text or current EVcharge tariff object before sourceValidated.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
     },
     {
       "label": "Ajuntament Lliçà de Vall",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "energy",
+        "price": 0.35,
+        "unit": "EUR/kWh",
+        "effectiveFrom": "2024-01-02"
+      },
+      "source": {
+        "type": "official_municipal_tariff_page",
+        "url": "https://www.llissadevall.cat/actualitat/noticies/el-punt-de-recarrega-de-vehicles-electrics-passara-a-ser-de-pagament-a-partir-del-2-de-gener.html",
+        "provider": "Ajuntament de Lliçà de Vall / EVcharge"
+      },
+      "evidence": "Official municipality states its municipally owned charging service became paid on 2024-01-02 at 0.35 EUR/kWh; current municipal service page updated 2025-11-14 confirms two municipal points and EVcharge access.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
     },
     {
       "label": "Ajuntament Manlleu",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_municipal_infrastructure_page",
+        "url": "https://www.manlleu.cat/urbanisme/pla-de-millora-dels-poligons-de-manlleu/pln1/comenca-la-segona-fase-de-les-obres-als-poligons",
+        "provider": "Ajuntament de Manlleu / EVcharge"
+      },
+      "evidence": "Municipal sources establish public municipal charging infrastructure; ETECNIC documents EVcharge management, but no deterministic current direct/ad-hoc tariff was found in this reasonable first pass.",
+      "resumeCondition": "Resolve current EVcharge tariff object or municipal price ordinance.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
     },
     {
       "label": "Ajuntament Sant Julià de Llor i Bonmatí",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_regulatory_index",
+        "url": "https://cido.diba.cat/",
+        "provider": "Ajuntament de Sant Julià del Llor i Bonmatí"
+      },
+      "evidence": "A municipal public EV charging network regulation entered the official publication process in 2025 and is listed as current in public administrative indexes. A station listing historically reports free charging, but no current official tariff amount was deterministically exposed during this pass.",
+      "resumeCondition": "Extract current regulation/price schedule or current backend tariff before sourceValidated.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
     },
     {
       "label": "Ajuntament Selva del Camp",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "tariff": {
+        "model": "energy",
+        "price": 0.25,
+        "unit": "EUR/kWh",
+        "scope": "Raval de Sant Rafael municipal semi-fast station candidate"
+      },
+      "source": {
+        "type": "third_party_station_page",
+        "url": "https://www.electromaps.com/fr/stations-de-recharge/espagne/tarragona/la-selva-del-camp/la-selva-del-camp-semi-rapid-raval-de-sant-rafael",
+        "provider": "EVcharge / ETECNIC"
+      },
+      "evidence": "Current-ish station listing (updated 2025-08-31) reports 0.25 EUR/kWh for the municipal-looking Raval de Sant Rafael EVcharge station; official current municipal tariff text was not found, so this is not sourceValidated.",
+      "resumeCondition": "Confirm municipal ownership and current price from official ordinance or EVcharge tariff object.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
     },
     {
       "label": "Alcover",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "power_class_energy",
+        "unit": "EUR/kWh",
+        "classes": [
+          {
+            "class": "fast",
+            "price": 0.35
+          },
+          {
+            "class": "semi-fast",
+            "price": 0.26
+          }
+        ]
+      },
+      "source": {
+        "type": "official_municipal_tariff_page",
+        "url": "https://www.alcover.cat/mobilitat/",
+        "provider": "Ajuntament d'Alcover / EVCharge"
+      },
+      "evidence": "Current official municipal mobility page publishes 0.35 EUR/kWh for fast charging and 0.26 EUR/kWh for semi-fast charging, including the Portal semi-fast station, with payment through EVCharge. This supersedes the municipality's older 2020 0.25 EUR/kWh launch price.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
     },
     {
       "label": "ALDI",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "evidence": "Current ALDI-labelled stations are observed under multiple actual operators/backends (e.g. REMO Mobility and Atlante) and different station tariffs; ALDI label alone is not a deterministic direct CPO tariff.",
+      "resumeCondition": "Map each REVE ALDI EVSE/location to actual operator/backend before tariff assignment.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17-05.json"
     },
     {
       "label": "ALEGRIA HOTELS",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_operator_faq",
+        "url": "https://www.alegria-hotels.com/es/faqs"
+      },
+      "evidence": "Official ALEGRIA FAQ confirms EV charging at seven named hotels but explicitly directs users to each hotel for applicable tariffs; no network-wide deterministic tariff exists on the public FAQ.",
+      "resumeCondition": "Resolve tariff per hotel/location after first pass.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17-05.json"
     },
     {
       "label": "Andrés Rodríguez Brenes",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "reason": "No deterministic current direct/ad-hoc EV charging tariff or sufficiently attributable official public charging surface recovered in reasonable first-pass search.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17-05.json"
     },
     {
       "label": "ANTONIO SALDAÑA MARCO",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "energy",
+        "price": 0.6,
+        "unit": "EUR/kWh",
+        "maxReservationHours": 2
+      },
+      "source": {
+        "type": "official_cpo_service_page",
+        "url": "https://recarga.fenieenergia.es/punto-recarga/0146",
+        "provider": "FENÍE ENERGÍA",
+        "stationId": "0146"
+      },
+      "evidence": "Official FENÍE page identifies owner ANTONIO SALDAÑA MARCO, public 24h access and charging cost 0.60 EUR/kWh.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17-05.json"
     },
     {
       "label": "APARCAMENTS Tarragona",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_municipal_parking_surface",
+        "url": "https://www.tarragona.cat/mobilitat/aparcar-a-tarragona/aparcaments-tancats-de-tarragona"
+      },
+      "evidence": "Municipal parking operator/infrastructure is identifiable, but first-pass public sources expose parking pricing rather than a deterministic current EV charging energy tariff.",
+      "resumeCondition": "Resolve charging tariff from AMT/MOT charging backend or exact EVSE mapping after first pass.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17-05.json"
     },
     {
       "label": "ARSA INVERSIONES SAU",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "reason": "No deterministic current direct/ad-hoc EV charging tariff or sufficiently attributable official charging surface recovered in reasonable first-pass search.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-first-pass-batch-2026-09-17-05.json"
     },
     {
       "label": "Artesa de Segre",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "evidence": "Official municipal regulation confirms municipal direct service and states it was free when regulation was adopted, but allows later fiscal tariffs. A current 2026 station listing shows 0.35 EUR/kWh, which is not sufficient first-party evidence for sourceValidated.",
+      "source": {
+        "type": "official_municipal_regulation",
+        "url": "https://www.artesadesegre.cat/ajuntament/reglaments-i-normatives/altres-ordenances-i-reglaments/reglament-d2019us-del-servei-de-recarrega-de-vehicles-electrics-i-o-hibrids-endollables-al-municipi-d2019artesa-de-segre"
+      },
+      "candidateTariff": {
+        "price": 0.35,
+        "unit": "EUR/kWh",
+        "sourceType": "third_party_station_page",
+        "url": "https://www.electromaps.com/en/charging-stations/spain/lleida/artesa-de-segre/evcharge-artesa-carrer-del-camp-de-futbol"
+      },
+      "resumeCondition": "Confirm current 0.35 EUR/kWh from municipal ordinance or EVcharge/ETECNIC direct tariff object.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Ascó",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_municipal_service_page",
+        "url": "https://ascoturisme.cat/carregadors-de-vehicles-electrics/"
+      },
+      "evidence": "Official current page confirms two municipal facilities, EVcharge payment and that charges apply under a public price approved 2024-11-07, but does not expose the amount.",
+      "resumeCondition": "Extract the 2024-11-07 public-price decision or current EVcharge tariff object.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Asociacion Autonoma de Instaladores Electricos y de Telecomunicaciones de Granada",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "reason": "No deterministic current direct/ad-hoc charging tariff found in a reasonable first-pass search; retain for post-first-pass audit.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Avinyonet de Puigventos",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_municipal_current_page",
+        "url": "https://www.avinyonetdepuigventos.cat/index.php/ajuntament/noticies/936-setmana-mobilitat-sostenible2026"
+      },
+      "evidence": "Official 2026 municipal page confirms the EV charging point is still maintained. A station listing updated 2025-09-06 reports EVcharge and free charging, but no current first-party tariff text was found.",
+      "candidateTariff": {
+        "model": "free",
+        "price": 0,
+        "unit": "EUR/kWh",
+        "sourceType": "third_party_station_page",
+        "url": "https://www.electromaps.com/en/charging-stations/spain/girona/avinyonet-de-puigventos/ayuntamiento-de-avinyonet-de-puigventos-carrer-progres"
+      },
+      "resumeCondition": "Confirm zero tariff through current EVcharge object or municipal tariff text.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Ayto Beriáin",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "partial",
+      "source": {
+        "type": "official_municipal_usage_guide",
+        "url": "https://www.beriain.es/noticias/guia-recarga-vehiculos-electricos/"
+      },
+      "evidence": "Municipal guide confirms FENÍE Energía network/app/RFID access but does not expose a deterministic current tariff.",
+      "resumeCondition": "Resolve exact Beriáin station on FENÍE public station surface and capture current charging conditions.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Ayto. Ansoain Ansoain Ansoain",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "energy_plus_reservation",
+        "price": 0.25,
+        "unit": "EUR/kWh",
+        "reservationFeeEUR": 1,
+        "maxReservationMinutes": 45
+      },
+      "source": {
+        "type": "official_cpo_service_page",
+        "url": "https://recarga.fenieenergia.es/punto-recarga/0544",
+        "provider": "FENÍE ENERGÍA",
+        "stationId": "0544",
+        "powerKw": 22
+      },
+      "evidence": "Official live FENÍE page identifies owner exactly as Ayto. Ansoain Ansoain Ansoain and states 0.25 EUR/kWh plus 1 EUR reservation, 24h public access.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Ayuntamiento Alcalá de la Selva",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "setAside",
+      "reason": "Tourism authority currently marks the municipal Alcalá de la Selva electrolinera as planned; a separate GALP station exists but cannot be mapped to this municipal REVE identity without proof. No deterministic direct tariff for this label established.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Ayuntamiento cendea de Olza/Oltza Zendea Ayuntamiento Ayuntamiento",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "free",
+        "price": 0,
+        "unit": "EUR/kWh",
+        "maxReservationMinutes": 30
+      },
+      "source": {
+        "type": "official_cpo_service_page",
+        "url": "https://recarga.fenieenergia.es/punto-recarga/0410",
+        "provider": "FENÍE ENERGÍA",
+        "stationId": "0410",
+        "powerKw": 22
+      },
+      "evidence": "Official FENÍE page identifies the exact owner label and states public 24h charging has no cost; maximum reservation duration 30 minutes.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "Ayuntamiento de Agullent - -",
-      "queueStatus": "pending_first_pass",
-      "origin": "v2_candidateCpo"
+      "queueStatus": "sourceValidated",
+      "tariff": {
+        "model": "free",
+        "price": 0,
+        "unit": "EUR/kWh",
+        "maxReservationMinutes": 15
+      },
+      "source": {
+        "type": "official_cpo_service_page",
+        "url": "https://recarga.fenieenergia.es/punto-recarga/0531",
+        "provider": "FENÍE ENERGÍA",
+        "stationId": "0531",
+        "powerKw": 22
+      },
+      "evidence": "Official FENÍE page identifies owner exactly as Ayuntamiento de Agullent - - and states 24h public charging has no cost; maximum reservation duration 15 minutes.",
+      "origin": "v2_candidateCpo",
+      "decisionSource": "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json"
     },
     {
       "label": "AYUNTAMIENTO DE ALMOCITA . .",
@@ -982,17 +1186,28 @@
   ],
   "runtimePublishReady": false,
   "statusCounts": {
-    "setAside": 4,
-    "sourceValidated": 1,
-    "partial": 2,
-    "pending_first_pass": 166
+    "setAside": 11,
+    "sourceValidated": 9,
+    "partial": 16,
+    "pending_first_pass": 137
   },
   "lastConsistencyCheck": {
     "totalEntries": 173,
     "totalExpected": 173,
     "processedPlusRemaining": 173,
     "uniqueLabels": 173,
+    "matchedDecisionLabels": 28,
     "ok": true
   },
-  "lastAppliedBatch": "data/spain_reve/first_pass_batch_001.json"
+  "lastAppliedBatch": "ALL_DURABLE_173_FIRST_PASS_DELTAS",
+  "consolidation": {
+    "sourceFilesScanned": [
+      "data/spain_reve/first_pass_batch_001.json",
+      "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json",
+      "docs/spain-reve-first-pass-batch-2026-09-17-05.json",
+      "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
+    ],
+    "matchedDecisionLabels": 28,
+    "strategy": "latest persisted decision by sorted durable delta path; exact raw queue label only"
+  }
 }
