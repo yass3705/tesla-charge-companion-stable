@@ -17,16 +17,30 @@ jobs:
           from pathlib import Path
           qpath=Path('docs/spain-reve-173-cpo-workqueue.json')
           q=json.loads(qpath.read_text())
+          queue_labels=[e['label'] for e in q['entries']]
+          queue_set=set(queue_labels)
           decisions={}
-          for f in sorted(glob.glob('data/spain_reve/first_pass_batch_*.json')):
-            for d in json.loads(Path(f).read_text()).get('decisions',[]): decisions[d['label']]=d
+          sources={}
+          patterns=['data/spain_reve/first_pass_batch_*.json','docs/spain-reve-first-pass-batch-*.json','docs/spain-reve-173-first-pass-batch-*.json']
+          files=[]
+          for pat in patterns: files.extend(glob.glob(pat))
+          files=sorted(set(files))
+          for f in files:
+            try: obj=json.loads(Path(f).read_text())
+            except Exception: continue
+            for d in obj.get('decisions',[]):
+              label=d.get('label')
+              if label in queue_set and d.get('queueStatus') in {'sourceValidated','partial','setAside','supersededAlias','excludedPlatform'}:
+                decisions[label]=d; sources[label]=f
           changed=[]
           for e in q['entries']:
             d=decisions.get(e['label'])
-            if d and e.get('queueStatus')=='pending_first_pass':
+            if d:
               origin=e.get('origin'); rejected=e.get('rejectedMatch')
+              # Apply latest persisted nominative decision, preserving queue identity metadata.
               e.clear(); e.update(d); e['origin']=origin
               if rejected: e['rejectedMatch']=rejected
+              e['decisionSource']=sources[e['label']]
               changed.append(e['label'])
           processed=sum(e.get('queueStatus')!='pending_first_pass' for e in q['entries'])
           q['processed']=processed; q['remaining']=q['total']-processed
@@ -34,15 +48,18 @@ jobs:
           for e in q['entries']:
             s=e.get('queueStatus'); counts[s]=counts.get(s,0)+1
           q['statusCounts']=counts
-          q['lastConsistencyCheck']={'totalEntries':len(q['entries']),'totalExpected':q['total'],'processedPlusRemaining':q['processed']+q['remaining'],'uniqueLabels':len({e['label'] for e in q['entries']}),'ok':len(q['entries'])==q['total']==q['processed']+q['remaining'] and len({e['label'] for e in q['entries']})==q['total']}
-          q['lastAppliedBatch']='data/spain_reve/first_pass_batch_001.json'
+          q['consolidation']={'sourceFilesScanned':files,'matchedDecisionLabels':len(decisions),'strategy':'latest persisted decision by sorted durable delta path; exact raw queue label only'}
+          q['lastConsistencyCheck']={'totalEntries':len(q['entries']),'totalExpected':q['total'],'processedPlusRemaining':q['processed']+q['remaining'],'uniqueLabels':len(set(queue_labels)),'matchedDecisionLabels':len(decisions),'ok':len(q['entries'])==q['total']==q['processed']+q['remaining'] and len(set(queue_labels))==q['total']}
+          q['lastAppliedBatch']='ALL_DURABLE_173_FIRST_PASS_DELTAS'
           qpath.write_text(json.dumps(q,ensure_ascii=False,indent=2)+'\n')
-          print(json.dumps({'changed':changed,'processed':processed,'remaining':q['remaining'],'counts':counts,'consistency':q['lastConsistencyCheck']},ensure_ascii=False,indent=2))
+          report={'country':'ES','queueTotal':q['total'],'processed':processed,'remaining':q['remaining'],'statusCounts':counts,'matchedDecisionLabels':len(decisions),'sourceFilesScanned':files,'consistency':q['lastConsistencyCheck']}
+          Path('docs/spain-reve-173-consolidation-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(report,ensure_ascii=False,indent=2))
           PY
       - run: |
-          git add docs/spain-reve-173-cpo-workqueue.json
+          git add docs/spain-reve-173-cpo-workqueue.json docs/spain-reve-173-consolidation-report.json
           git config user.name "github-actions[bot]"
           git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
-          git diff --cached --quiet || git commit -m "audit(es): apply CPO first-pass decisions"
+          git diff --cached --quiet || git commit -m "audit(es): consolidate Spain 173 first-pass state"
           git pull --rebase origin spain-reve-preintegration
           git push
