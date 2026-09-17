@@ -1,0 +1,890 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "mode": "CPO_FIRST_PASS",
+  "source": "docs/spain-reve-246-classification-v2.json",
+  "manualAdjudications": {
+    "AYUNTAMIENTO DE PADULES . .": "distinct_from_Pauls",
+    "Ayuntamiento de Viana . .": "distinct_from_Tiana"
+  },
+  "total": 173,
+  "processed": 0,
+  "remaining": 173,
+  "antiStagnation": true,
+  "rules": [
+    "one reasonable investigation per CPO during first pass",
+    "persist exact source and tariff when found",
+    "never invent or extrapolate tariff",
+    "setAside and continue when investigation becomes long or blocked"
+  ],
+  "entries": [
+    {
+      "label": "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Aj. Montcada i Reixac",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament d’Alforja des",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Sant Jaume d'Enveja",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Sant Julià de Cerdanyola",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Santa Fe del Penedès",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Soses",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Torroella de Montgrí",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Vic",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Vilada",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament de Vinyols i els Arcs",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament del Catllar",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament del Lloar",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament del Pla de Santa Maria",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament dels Pallaresos",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament Lliçà de Vall",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament Manlleu",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament Sant Julià de Llor i Bonmatí",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ajuntament Selva del Camp",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Alcover",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ALDI",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ALEGRIA HOTELS",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Andrés Rodríguez Brenes",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ANTONIO SALDAÑA MARCO",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "APARCAMENTS Tarragona",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ARSA INVERSIONES SAU",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Artesa de Segre",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ascó",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Asociacion Autonoma de Instaladores Electricos y de Telecomunicaciones de Granada",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Avinyonet de Puigventos",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayto Beriáin",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayto. Ansoain Ansoain Ansoain",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento Alcalá de la Selva",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento cendea de Olza/Oltza Zendea Ayuntamiento Ayuntamiento",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Agullent - -",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ALMOCITA . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ARRONIZ . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE AZAGRA Azagra Navarra",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Casas Bajas Casas Bajas Casas Bajas",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Espirdo Espirdo Espirdo",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ESTERIBAR Esteribar Navarra",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Falces Falces Falces",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Garínoain",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Grazalema Grazalema Cádiz",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Huarte",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE LLIBER AYUNTAMIENTO LLIBER",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE LOS MONTESINOS . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE MERINDAD DE RÍO UBIERNA MERINDAD RÍO UBIERNA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE OLOCAU",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE PADULES . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "manual_adjudication_distinct",
+      "rejectedMatch": "Ajuntament de Paüls"
+    },
+    {
+      "label": "Ayuntamiento de Premià",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Ribafrecha - -",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Viana . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "manual_adjudication_distinct",
+      "rejectedMatch": "Ajuntament de Tiana"
+    },
+    {
+      "label": "AYUNTAMIENTO DE VILLADIEGO BURGOS ESPAÑA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO DE VILVIESTRE DEL PINAR",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento de Xeraco Ayuntamiento Ayuntamiento",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento Getaria",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ayuntamiento Santo Domingo de la Calzada",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "AYUNTAMIENTO VALLE DE ARANGUREN",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Badia del Vallés",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Balsareny",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Banana Express",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Belen Lorefice Gaitan",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Benavent de Segrià",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Bodegas Macias Batle",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Bodegas Nodus",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Bolaños",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "BONPREU, S.A.U.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Braker Corporation",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Cabildo Lanzarote",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "CADENA MAR S.L. MAR HOTELS",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Cambrils APARCAM",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Camping l'Amfora",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Camping Mas Patoxas",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Capmany",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "CARGADORES LOW COST",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Carmen Andres Garcia",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Castellolí",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "CENTROS COMERCIALES CARREFOUR SA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "CIMALSA la Selva",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Club de Golf el Bosque Chiva",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Club de Golf Gorraiz",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Club Náutico Moraira",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Complex Comercial Vilafranca",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Consum",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Cooperativa Eléctrica Catralense",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Corbera de Llobregat",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "El Far d'Empordà",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "El Masroig",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "El Pont de Vilomara",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "elRetiro",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "EMAG S.L ARILLA ALLUE",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "EMAYA, S.A.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Emerix Systems S.L.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ENERGEA CONSULTING Y ASESORES SL",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ENILEC ENILEC ENILEC",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "EPRESA ENERGIA SA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ernesto Serra Gomez",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Espolla",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Estació Servei Porto Gas",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "EUROPA CENTER",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Febrer Gasolineras",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Fenie Propietario Propietario",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "FISERSA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "FLORETTE HORTÍCOLA NAVARRA - MILAGRO",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Fornells de la Selva",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Forumsa",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "FUNDACION FEMEVAL Fundacion Femeval",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "GALP_SPAIN",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Gandesa",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "GASOLINERA RAFAL --",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Golf Vistahermosa",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "GP TRADE",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Guadalupe Martínez Sánchez",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Guaw",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "HCC HOTELS SL",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Horta de Sant Joan",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hospital de Toledo",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hospital Ribera de Covadonga",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hotel Amic Horizonte",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hotel Amoros Cala Ratjada",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hotel Bosquemar SL",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "HOTEL DEL OSO",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hotel OCA Vermar .",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Hotel Spa Atlántico . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "InstaVolt CPO",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Inversiones Pascual",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "INVESMORAZO S.L",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "ION SMART ENERGY 2000 SL",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ivars d'Urgell",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "J. REDONDO, S.L.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Jarada Motor, S.L.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "JARDINES LA TEJERA, S.A.U.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Jesus Vidal Ubeda",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Joncosa de Montmell",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "JOSE LUIS DOMINGO VENTURA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "LAG OLEIROS SLU",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "LES FONTS DE MARIOLA, S.L.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Lucía María Díaz Soberón",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "M.P. PORT ROSES SA",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Manresa",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Martin Rivera Bua",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Mediterraneo Golf",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ocimax P de Mallorca",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Oftalmedic Salva",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Palol de Revardit",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Parking Benalmadena Pueblosol",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Parking Garatge 2000",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "PARKING LIDER S.A.",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Parking NN Espronceda",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Parking TEKNON",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "PARKING VAPOR GRAN",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ponent Energia",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Postventa Propietario Propietario",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Puig-reig",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Roda de Ter",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Roses",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Salvador Fernandez Labadia",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Sant Pere de Ribes",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Sant Vicenç de Castellet",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Santa Barbara",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Sergio Peinado Gimenez",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Servicios Petroleros Mallorca SL",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Ses Jardines . .",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Siemens",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Test REMO",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Vallmoll",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Vicente Martinez Corcoles",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Vidreres",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    },
+    {
+      "label": "Viladrau",
+      "queueStatus": "pending_first_pass",
+      "origin": "v2_candidateCpo"
+    }
+  ],
+  "runtimePublishReady": false
+}
