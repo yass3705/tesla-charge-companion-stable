@@ -1,0 +1,48 @@
+name: Apply Spain CPO first-pass decisions
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/apply_first_pass_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - run: |
+          python <<'PY'
+          import json,glob
+          from pathlib import Path
+          qpath=Path('docs/spain-reve-173-cpo-workqueue.json')
+          q=json.loads(qpath.read_text())
+          decisions={}
+          for f in sorted(glob.glob('data/spain_reve/first_pass_batch_*.json')):
+            for d in json.loads(Path(f).read_text()).get('decisions',[]): decisions[d['label']]=d
+          changed=[]
+          for e in q['entries']:
+            d=decisions.get(e['label'])
+            if d and e.get('queueStatus')=='pending_first_pass':
+              origin=e.get('origin'); rejected=e.get('rejectedMatch')
+              e.clear(); e.update(d); e['origin']=origin
+              if rejected: e['rejectedMatch']=rejected
+              changed.append(e['label'])
+          processed=sum(e.get('queueStatus')!='pending_first_pass' for e in q['entries'])
+          q['processed']=processed; q['remaining']=q['total']-processed
+          counts={}
+          for e in q['entries']:
+            s=e.get('queueStatus'); counts[s]=counts.get(s,0)+1
+          q['statusCounts']=counts
+          q['lastConsistencyCheck']={'totalEntries':len(q['entries']),'totalExpected':q['total'],'processedPlusRemaining':q['processed']+q['remaining'],'uniqueLabels':len({e['label'] for e in q['entries']}),'ok':len(q['entries'])==q['total']==q['processed']+q['remaining'] and len({e['label'] for e in q['entries']})==q['total']}
+          q['lastAppliedBatch']='data/spain_reve/first_pass_batch_001.json'
+          qpath.write_text(json.dumps(q,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({'changed':changed,'processed':processed,'remaining':q['remaining'],'counts':counts,'consistency':q['lastConsistencyCheck']},ensure_ascii=False,indent=2))
+          PY
+      - run: |
+          git add docs/spain-reve-173-cpo-workqueue.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): apply CPO first-pass decisions"
+          git pull --rebase origin spain-reve-preintegration
+          git push
