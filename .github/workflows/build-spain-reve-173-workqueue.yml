@@ -1,0 +1,39 @@
+name: Build Spain REVE 173 work queue
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/build_173_queue_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - name: Build queue
+        run: |
+          python <<'PY'
+          import json
+          from pathlib import Path
+          src=json.loads(Path('docs/spain-reve-246-classification-v2.json').read_text())
+          out=[]
+          for e in src['entries']:
+            label=e['label']
+            c=e['classification']
+            if c=='candidateCpo':
+              out.append({'label':label,'queueStatus':'pending_first_pass','origin':'v2_candidateCpo'})
+            elif c=='manualReview' and label in {'AYUNTAMIENTO DE PADULES . .','Ayuntamiento de Viana . .'}:
+              out.append({'label':label,'queueStatus':'pending_first_pass','origin':'manual_adjudication_distinct','rejectedMatch':e.get('match')})
+          assert len(out)==173, len(out)
+          q={'schemaVersion':1,'country':'ES','mode':'CPO_FIRST_PASS','source':'docs/spain-reve-246-classification-v2.json','manualAdjudications':{'AYUNTAMIENTO DE PADULES . .':'distinct_from_Pauls','Ayuntamiento de Viana . .':'distinct_from_Tiana'},'total':173,'processed':0,'remaining':173,'antiStagnation':True,'rules':['one reasonable investigation per CPO during first pass','persist exact source and tariff when found','never invent or extrapolate tariff','setAside and continue when investigation becomes long or blocked'],'entries':out,'runtimePublishReady':False}
+          Path('docs/spain-reve-173-cpo-workqueue.json').write_text(json.dumps(q,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Persist
+        run: |
+          git add docs/spain-reve-173-cpo-workqueue.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): persist canonical REVE 173 CPO work queue"
+          git pull --rebase origin spain-reve-preintegration
+          git push
