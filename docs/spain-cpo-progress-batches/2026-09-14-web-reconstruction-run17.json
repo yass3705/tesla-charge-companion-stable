@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historical618MembershipClaimed": false,
+  "generatedAt": "2026-09-14T11:41:30Z",
+  "labels": [
+    {
+      "canonicalName": "Santpedor",
+      "status": "partial",
+      "evidence": ["https://www.santpedor.cat/actualitat/noticies/el-servei-public-de-recarrega-per-a-vehicles-electrics-una-aposta-per-incentivar-la-mobilitat-sostenible.html"],
+      "finding": "The municipality documents the public Cal Llovet 22 kW charging point, 24-hour service and free charging through EV Charge. Because the numeric/free condition is from a 2021 municipal publication and no current 2026 tariff authority was located in this first pass, it is retained as historical official evidence but not promoted as a current deterministic tariff.",
+      "resumeCondition": "Current municipal/EVCharge tariff publication or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "SUNSET OASIS IBIZA ROSELLO RAUSELL",
+      "status": "setAside",
+      "evidence": [],
+      "finding": "The REVE public-web identity is nominatively recoverable, but no authoritative current direct numeric charging tariff or stable official charging page was located in the bounded first-pass search. No third-party price is promoted.",
+      "resumeCondition": "Official property/app/QR charging tariff or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Tersa",
+      "status": "partial",
+      "evidence": ["https://www.tersa.cat/actualitat/grup-tersa-consolida-la-seva-activitat-en-renovables-amb-m%C3%A9s-de-340-instal-lacions-fotovoltaiques-gestionades-el-primer-semestre-de-l-any/"],
+      "finding": "Current 2026 official TERSA material confirms the public company remains active in energy-service management, but the bounded first-pass search did not locate a current public numeric EV-charging tariff attributable to the REVE label. No network-wide price is inferred.",
+      "resumeCondition": "Official TERSA/Barcelona charging tariff authority or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+      "status": "sourceValidated",
+      "evidence": ["https://presupuestoypatrimonio.umh.es/files/2024/11/TOMO-III.pdf"],
+      "finding": "UMH's official tariff annex for use of its EV charging stations states 0.20 EUR/kWh for users across its campuses, billed by the Infrastructure Service, with a three-hour maximum charging period and a 1 EUR penalty for an unused reservation. This is direct institutional tariff authority.",
+      "resumeCondition": "Revalidate against the next UMH annual tariff/budget annex or a newer official charging tariff."
+    },
+    {
+      "canonicalName": "Vibroaspre, S.A. Vibroaspre Vibroaspre",
+      "status": "sourceValidated",
+      "evidence": ["https://recarga.fenieenergia.es/punto-recarga/0632"],
+      "finding": "FENÍE Energía's current point 0632 identifies Vibroaspre as owner, reports two 22 kW bays and a recent connection on 11 September 2026, and publishes a direct charging condition of 0.40 EUR/kWh for the shopping-centre parking charging point. The station opening window is also published.",
+      "resumeCondition": "Periodic FENÍE station-page tariff revalidation."
+    }
+  ],
+  "firstPassAfter": {
+    "minimumTraversed": 439,
+    "maximumNeverTraversed": 179,
+    "firstPassComplete": false
+  },
+  "countsAfter": {
+    "sourceValidated": 48,
+    "partial": 35,
+    "active": 94,
+    "setAside": 191,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 439
+  },
+  "reveTariffStatusBatch": {
+    "generatedAt": "2026-09-14T10:43:19.004465Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "plan": [["tariffs",224],["tariffs",225],["tariffs",226],["status",150],["status",151]],
+    "nextTariffPage": 227,
+    "tariffPagesCollected": 226,
+    "tariffRowsStored": 20014,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 152,
+    "statusPagesCollected": 151,
+    "statusRowsStored": 13192,
+    "statusTotalPages": 448,
+    "currentRunDecision": "No external API batch was launched in this run because a full real hour had not yet elapsed since the latest successful persisted batch at 10:43:19Z. No /locations request was made and the persisted cursors remain unchanged."
+  },
+  "reveWebLead": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "validatedSamplePages": 100,
+    "perPage": 25,
+    "newReconstructedLabelsFirstPassedThisRun": 5,
+    "endpointStatus": "same public frontend endpoint remains validated; this run used it only as an identity lead and did not consume the external API quota",
+    "nextSafeStep": "Continue diff-first processing over remaining public-web labels, checking durable canonical aliases before first-passing genuinely new identities; do not reaudit difficult cases yet."
+  },
+  "coherence": {
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "countSumMatchesFirstPass": true,
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-28",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "purpose": "Cross-border subscription entitlements independent from the country-specific station datasets",
+  "plans": [
+    {
+      "id": "atlante_go",
+      "provider": "Atlante",
+      "label": "Atlante Go",
+      "feeEurPerMonth": 9.99,
+      "countries": {
+        "FR": {
+          "networks": {
+            "Atlante": {"pricePerKwh": 0.29},
+            "Powerdot": {"pricePerKwh": 0.42},
+            "Electra": {"pricePerKwh": 0.49},
+            "Fastned": {"pricePerKwh": 0.49},
+            "IONITY": {"pricePerKwh": 0.49}
+          }
+        },
+        "ES": {
+          "networks": {
+            "Atlante": {"pricePerKwh": 0.29},
+            "Electra": {"pricePerKwh": 0.49},
+            "Fastned": {"pricePerKwh": 0.49},
+            "IONITY": {"pricePerKwh": 0.49}
+          }
+        },
+        "IT": {
+          "networks": {
+            "Atlante": {"pricePerKwh": 0.49},
+            "Electra": {"pricePerKwh": 0.59},
+            "Fastned": {"pricePerKwh": 0.59},
+            "IONITY": {"pricePerKwh": 0.59}
+          }
+        }
+      },
+      "confidence": "high",
+      "sourceNote": "Official myAtlante pages confirm cross-border use in France, Spain and Italy; Powerdot benefit is France-only."
+    },
+    {
+      "id": "zunder_easy",
+      "provider": "Zunder",
+      "label": "Zunder Easy",
+      "feeEurPerMonth": 1.99,
+      "countries": {
+        "FR": {"networks": {"Zunder": {"referencePricePerKwh": 0.51}}},
+        "ES": {"networks": {"Zunder": {"referencePricePerKwh": 0.51}}}
+      },
+      "excludedCountries": ["PT"],
+      "confidence": "high",
+      "sourceNote": "Official Zunder pages state Easy/Pro benefits are exclusive to Zunder network in Spain and France and do not apply in Portugal."
+    },
+    {
+      "id": "zunder_pro",
+      "provider": "Zunder",
+      "label": "Zunder Pro",
+      "feeEurPerMonth": 11.99,
+      "countries": {
+        "FR": {"networks": {"Zunder": {"referencePricePerKwh": 0.39}}},
+        "ES": {"networks": {"Zunder": {"referencePricePerKwh": 0.39}}}
+      },
+      "excludedCountries": ["PT"],
+      "confidence": "high"
+    },
+    {
+      "id": "fastned_gold",
+      "provider": "Fastned",
+      "label": "Fastned Gold Member",
+      "discountPercentFromStandard": 30,
+      "countries": {
+        "BE": {"networks": {"Fastned": {"pricePerKwh": 0.54}}},
+        "CH": {"networks": {"Fastned": {"pricePerKwh": 0.53, "currency": "CHF"}}},
+        "DE": {"networks": {"Fastned": {"pricePerKwh": 0.49}}},
+        "DK": {"networks": {"Fastned": {"pricePerKwh": 2.65, "currency": "DKK"}}},
+        "ES": {"networks": {"Fastned": {"pricePerKwh": 0.41}}},
+        "FR": {"networks": {"Fastned": {"pricePerKwh": 0.43}}},
+        "GB": {"networks": {"Fastned": {"pricePerKwh": 0.55, "currency": "GBP"}}},
+        "IT": {"networks": {"Fastned": {"pricePerKwh": 0.58}}},
+        "NL": {"networks": {"Fastned": {"pricePerKwh": 0.54}}}
+      },
+      "feeByResidenceCountry": true,
+      "confidence": "high",
+      "sourceNote": "Official Fastned tariff page says Gold is valid at all 400+ Fastned locations; charging prices vary by country. Promotional monthly fee currently varies by country and date."
+    },
+    {
+      "id": "ionity_motion",
+      "provider": "IONITY",
+      "label": "IONITY Motion",
+      "countriesMode": "23_EUROPEAN_COUNTRIES_EXCEPT_PORTUGAL",
+      "networks": ["IONITY"],
+      "countrySpecificPrice": true,
+      "feeDependsOnResidenceCountry": true,
+      "confidence": "high",
+      "sourceNote": "Official IONITY support confirms Motion is valid in 23 European countries, currently not Portugal, with charger-country-specific kWh prices."
+    },
+    {
+      "id": "ionity_power",
+      "provider": "IONITY",
+      "label": "IONITY Power",
+      "countriesMode": "23_EUROPEAN_COUNTRIES_EXCEPT_PORTUGAL",
+      "networks": ["IONITY"],
+      "countrySpecificPrice": true,
+      "feeDependsOnResidenceCountry": true,
+      "confidence": "high"
+    },
+    {
+      "id": "wenea_everyday",
+      "provider": "Wenea",
+      "label": "Wenea Everyday",
+      "feeEurPerMonth": 8.99,
+      "feeEurPerYear": 89.90,
+      "countries": {
+        "ES": {"networks": {"Wenea": {"discountPercent": 25}}}
+      },
+      "confidence": "high",
+      "sourceNote": "Official Wenea page limits the discount to more than 900 own-network points in Spain."
+    },
+    {
+      "id": "wenea_mystation",
+      "provider": "Wenea",
+      "label": "Wenea MyStation",
+      "feeEurPerMonth": 16.99,
+      "feeEurPerYear": 169.90,
+      "countries": {
+        "ES": {
+          "networks": {
+            "Wenea": {
+              "assignedStationPricePerKwh": 0.25,
+              "otherEligibleStationsDiscountPercent": 25
+            }
+          }
+        }
+      },
+      "confidence": "high"
+    },
+    {
+      "id": "repsol_mobility_100",
+      "provider": "Repsol",
+      "label": "Repsol Movilidad 100",
+      "countries": {"ES": {"networks": {"Repsol": {"includedKwh": 100, "periodDays": 30, "feeEur": 44.0}}}},
+      "confidence": "high_for_spain_only",
+      "sourceNote": "Official Repsol describes use on its national public charging network; no cross-border entitlement verified."
+    },
+    {
+      "id": "repsol_mobility_150",
+      "provider": "Repsol",
+      "label": "Repsol Movilidad 150",
+      "countries": {"ES": {"networks": {"Repsol": {"includedKwh": 150, "periodDays": 30, "feeEur": 63.0}}}},
+      "confidence": "high_for_spain_only"
+    },
+    {
+      "id": "repsol_mobility_250",
+      "provider": "Repsol",
+      "label": "Repsol Movilidad 250",
+      "countries": {"ES": {"networks": {"Repsol": {"includedKwh": 250, "periodDays": 30, "feeEur": 99.99}}}},
+      "confidence": "high_for_spain_only"
+    }
+  ],
+  "pendingVerification": [
+    "Electra+ Essential/Smart exact cross-border country coverage and current country-specific ChargeLeague rates",
+    "Any TotalEnergies consumer subscription with cross-border public charging benefits",
+    "Freshmile consumer subscription/card benefits outside France",
+    "Endesa consumer discount portability outside Spain",
+    "Moeve consumer subscription/loyalty benefits outside Spain",
+    "Any Electroverse subscription/partner offer with multi-country scope"
+  ],
+  "runtimeRule": "A selected subscription must be evaluated against station country AND canonical network. Never infer eligibility from the subscription provider country. Country-specific prices override generic plan prices."
+}

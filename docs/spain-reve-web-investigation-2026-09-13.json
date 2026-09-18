@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 2,
+  "country": "ES",
+  "investigation": "REVE public web/frontend data path",
+  "date": "2026-09-13",
+  "status": "PUBLIC_ENDPOINT_SMALL_SAMPLE_VALIDATED_GROSS_NET_NORMALIZATION_EVIDENCE",
+  "officialExternalApi": {
+    "base": "https://www.mapareve.es/api/external/v1",
+    "documented": true,
+    "rateLimit": "5 requests/hour",
+    "currentCollectorPolicyUnchanged": true
+  },
+  "publicFrontendLead": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "officiallyDocumentedByREE": false,
+    "reportedAuth": "none",
+    "reportedMapUsage": "internal endpoint used by mapareve.es browser map",
+    "reportedLocationsRoute": "POST /locations",
+    "reportedSingleLocationRoute": "GET /locations/{locationId}",
+    "reportedPerPageMaximum": 25,
+    "reportedPayload": "locations with EVSE status and connector tariffs embedded",
+    "reportedRateLimit": "no documented rate limit observed; this is not a guarantee or SLA",
+    "reportedFullSpainCost": "approximately 582 sequential requests at 25 locations/page for ~14,550 locations",
+    "reportedFilters": ["bbox", "cpo_ids", "power_min", "connector_types"],
+    "sourceImplementation": "@gasolinaradar/dgt-ev-collector 1.5.1"
+  },
+  "independentSmallSampleValidation": {
+    "validatedInProjectRuntime": true,
+    "evidenceFile": "data/spain_reve/reve_public_web_probe.json",
+    "generatedAt": "2026-09-13T08:40:49.754Z",
+    "maxPages": 5,
+    "perPage": 25,
+    "dgtStationsLoaded": 12138,
+    "matchedStations": 153,
+    "matchedWithPrices": 138,
+    "matchedWithAvailability": 153,
+    "matchedWithReveData": 153,
+    "sampleLocationId": "00951ea6-cf93-4cd7-a40d-d58a32be5262",
+    "sampleOperator": "IBERDROLA CLIENTES S.A.U",
+    "sampleEvseCount": 4,
+    "sampleConnectorCount": 4,
+    "sampleTariffBearingConnectors": 4
+  },
+  "officialExternalParity": {
+    "candidateStations": 20,
+    "publicConnectors": 71,
+    "officialConnectorIdMatches": 32,
+    "rawTariffObjectExactMatches": 0,
+    "rawTariffObjectMismatches": 32,
+    "naiveSemanticMatches": 0,
+    "naiveSemanticMismatches": 32,
+    "publicEvses": 68,
+    "officialStatusIdMatches": 0,
+    "newNormalizationEvidence": {
+      "finding": "At least the inspected matched tariff examples are consistent with the public-map feed exposing VAT-inclusive/consumer-facing rounded prices while the external feed preserves net component prices plus vat=21.",
+      "examples": [
+        {"externalNet": 0.8265, "vatPercent": 21, "computedGross": 0.9999999999999999, "publicObserved": 1.0},
+        {"externalNet": 4.956, "vatPercent": 21, "computedGross": 5.99676, "publicObserved": 6.0},
+        {"externalNet": 0.566, "vatPercent": 21, "computedGross": 0.68486, "publicObserved": 0.68}
+      ],
+      "caveat": "This is strong representation/normalization evidence, not yet proof that every one of the 32 matched connector tariffs is semantically identical. Component pairing, type, step size, dates and restrictions must still be compared after VAT normalization."
+    },
+    "statusInterpretation": "The public reduced slice carries an OCPI-style availability status, whereas the persisted bulk external /evses/operational_status stream exposes a boolean operational_status and different retained keys. Zero direct identifier/status matches therefore does not establish disagreement; identifier and semantic mapping are still required.",
+    "nextComparison": "Implement a VAT-aware component comparator for all 32 connector-ID overlaps: unwrap the public tariff wrapper, pair component type/step/restrictions, compare public observed price to round(external price * (1 + vat/100), consumer precision), and separately compare lifecycle/date restrictions. Resolve EVSE availability against an appropriate external identifier/status representation rather than directly against the bulk boolean feed."
+  },
+  "validationDecision": {
+    "promoteToTccSource": false,
+    "replaceExternalApiCollector": false,
+    "browserCaptureNeededNow": false,
+    "nextSafeStep": "Run the VAT-aware semantic comparator over the bounded persisted/sample overlap. Keep the official external collector canonical until tariff equivalence and status mapping are demonstrated systematically.",
+    "doNot": [
+      "bypass WAF or access controls",
+      "multiply IPs or API keys",
+      "run a 582-page national public sweep before semantic parity validation",
+      "treat the endpoint as official or stable"
+    ]
+  },
+  "risks": [
+    "undocumented and unsupported by Red Electrica",
+    "may change or disappear without notice",
+    "automated use outside the browser may be subject to site terms",
+    "high request volume for a full national sweep"
+  ],
+  "sourceReferences": [
+    {
+      "type": "official",
+      "url": "https://www.mapareve.es/docs/api/external/v1",
+      "role": "documented external API and 5 requests/hour limit"
+    },
+    {
+      "type": "independent-open-source",
+      "url": "https://www.npmjs.com/package/@gasolinaradar/dgt-ev-collector",
+      "role": "implementation describing /api/public/v1 behavior, per_page=25 maximum, embedded tariffs/status, and common normalized output"
+    }
+  ],
+  "updatedAt": "2026-09-13T08:50:00Z"
+}

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 40,
+  "kind": "canonical-reconstruction-and-mandatory-coherence",
+  "firstPass": {
+    "startMinimumTraversed": 341,
+    "endMinimumTraversed": 341,
+    "historicalWorkQueueLabels": 618,
+    "maximumNeverTraversed": 277,
+    "newLabels": [],
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "oneTimeCanonicalReconstructionAttempt": {
+    "attempted": true,
+    "result": "INCOMPLETE_HISTORICAL_NOMINATIVE_RECOVERY",
+    "historicalEvidence": {
+      "reconciliationCommit": "2b984109a830db91780fdc29e8a20965a20de1d2",
+      "historicalLedgerPath": "data/spain_cpo_status_v1.json",
+      "historicalExplicitListSize": 36,
+      "historicalLegacyTreatedCollapsedCount": 263,
+      "historicalKnownProgressAtReconciliation": 299,
+      "finding": "The historical reconciliation had already collapsed 263 earlier decisions into a non-nominative legacyTreated count. Branch-history and parent-state inspection did not expose a complete recoverable nominative source for those decisions."
+    },
+    "syntheticEntriesCreated": false,
+    "decision": "Preserve the 618-label historical work queue and current 341-decision continuity floor. Do not invent missing historical labels. Resume first-pass advancement only from concrete newly recoverable historical labels or new authoritative inventory evidence."
+  },
+  "reveTariffStatus": {
+    "liveRequestsThisRun": 0,
+    "reason": "A prior targeted attempt at 2026-09-09T03:42:43Z had conservatively consumed the current hourly quota window and no newer last_run had materialized; no second live batch was permitted.",
+    "stateConfirmed": {
+      "tariffPagesCollected": 52,
+      "nextTariffPage": 53,
+      "tariffRowsStored": 5187,
+      "tariffTotalPages": 462,
+      "statusPagesCollected": 35,
+      "nextStatusPage": 36,
+      "statusRowsStored": 3274,
+      "statusTotalPages": 447
+    },
+    "locationsCollectionRestarted": false
+  },
+  "coherenceCheck": {
+    "performed": true,
+    "trigger": "second consecutive execution without nominative progression",
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "categorySum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "legacyNominativeGapDocumented": true,
+    "syntheticHistoricalEntriesCreated": false,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "locationsCollectionRemainsComplete": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false
+  },
+  "investigationCurrent": "The current 148-CPO REVE snapshot is exhausted through ZOILO RIOS, S.A. The one-shot historical reconstruction did not recover a complete missing nominative inventory. Continue only when concrete never-traversed historical labels become recoverable; do not reopen active/setAside cases before first-pass completion.",
+  "updatedAt": "2026-09-09T04:38:00Z"
+}

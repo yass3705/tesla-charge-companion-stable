@@ -1,0 +1,70 @@
+name: Classify Spain REVE 246
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/classify_246_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - name: Classify current identity traversed queue
+        run: |
+          python <<'PY'
+          import json,re,unicodedata
+          from pathlib import Path
+          def norm(s):
+            s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
+            return re.sub(r'[^a-z0-9]+',' ',s).strip()
+          ledger=json.loads(Path('docs/spain-current-reve-445-identity-ledger.json').read_text())
+          entries=ledger.get('entries') or ledger.get('labels') or ledger.get('inventory') or []
+          # Preserve the ledger's own first-pass classification; only deterministic platform/alias classification here.
+          known_platforms={'tesla','totalenergies','wenea','zunder','repsol','telpark','powergo','powy','prio','qwello'}
+          alias_path=Path('data/spain_reve/operator_aliases_es.json')
+          alias_map={}
+          if alias_path.exists():
+            try:a=json.loads(alias_path.read_text())
+            except:a={}
+            def walk(v):
+              if isinstance(v,dict):
+                can=v.get('canonical') or v.get('canonicalName')
+                als=v.get('aliases')
+                if isinstance(can,str) and isinstance(als,list):
+                  for x in als:
+                    if isinstance(x,str): alias_map[norm(x)]=can
+                for x in v.values(): walk(x)
+              elif isinstance(v,list):
+                for x in v: walk(x)
+            walk(a)
+          queue=[]
+          for e in entries:
+            if not isinstance(e,dict): continue
+            cls=e.get('classification') or e.get('bucket') or e.get('status')
+            if cls!='currentIdentityTraversed': continue
+            label=e.get('reveLabel') or e.get('rawLabel') or e.get('label') or e.get('name')
+            if not label: continue
+            k=norm(label)
+            if k in alias_map:
+              bucket='supersededAlias'; detail=alias_map[k]
+            elif any(p in k for p in known_platforms):
+              bucket='representedPlatform'; detail=next(p for p in known_platforms if p in k)
+            else:
+              bucket='candidateCpo'; detail=None
+            queue.append({'label':label,'classification':bucket,'canonicalOrPlatform':detail,'source':'445-ledger'})
+          counts={}
+          for x in queue: counts[x['classification']]=counts.get(x['classification'],0)+1
+          out={'schemaVersion':1,'country':'ES','mode':'IDENTITY_CLASSIFICATION_NO_TARIFF','inputCurrentIdentityTraversed':len(queue),'counts':counts,'entries':queue,'complete':len(queue)==ledger.get('counts',{}).get('currentIdentityTraversed',246),'runtimePublishReady':False}
+          Path('docs/spain-reve-246-classification.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({'input':len(queue),'counts':counts,'complete':out['complete']},indent=2))
+          PY
+      - name: Persist
+        run: |
+          git add docs/spain-reve-246-classification.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): persist REVE 246 classification"
+          git pull --rebase origin spain-reve-preintegration
+          git push

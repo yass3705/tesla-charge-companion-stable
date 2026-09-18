@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 42,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversedBefore": 341,
+    "minimumTraversedAfter": 341,
+    "maximumNeverTraversed": 277,
+    "newLabelsTraversed": [],
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "antiStagnation": {
+    "current148CpoSnapshotAlreadyFullyFirstPassCovered": true,
+    "historical618QueueStillAuthoritativeOnlyAsWorkQueue": true,
+    "oneShotCanonicalReconstructionAlreadyCompleted": true,
+    "newProvableNeverTraversedHistoricalLabelsRecoveredThisRun": 0,
+    "setAsideReauditedWithoutNewEvidence": false,
+    "repeatedInvestigationAboveTwoRunsWithoutNewLead": false,
+    "decision": "Do not fabricate historical labels and do not reopen active/setAside cases before first-pass completion. Continue only when a concrete never-traversed historical label can be proven from repository evidence."
+  },
+  "reveTariffStatus": {
+    "liveBatchIssuedThisRun": false,
+    "reason": "At run start, less than one real hour had elapsed since the latest successful persisted batch generated at 2026-09-09T06:44:24.076632Z; no REVE request was permitted.",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-09T06:44:24.076632Z",
+    "requestsAttemptedInLatestPersistedBatch": 5,
+    "requestsSucceededInLatestPersistedBatch": 5,
+    "locationsRequestsInLatestPersistedBatch": 0,
+    "http429InLatestPersistedBatch": 0,
+    "tariffPagesCollected": 55,
+    "nextTariffPage": 56,
+    "tariffRowsStored": 5487,
+    "tariffTotalPages": 462,
+    "statusPagesCollected": 37,
+    "nextStatusPage": 38,
+    "statusRowsStored": 3474,
+    "statusTotalPages": 447
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "countsDeriveExactly": true,
+    "legacyUncertaintyStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "revePersistentStateCrossChecked": true,
+    "staleCanonicalReveStateDetected": true,
+    "safeCanonicalCorrectionRequired": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "investigationCurrent": "No new provable never-traversed historical label recovered. Current 148-CPO snapshot remains fully first-pass covered. Priority remains recovery of concrete unseen historical labels only; no blocked/active re-audit before FIRST PASS COMPLETE."
+}

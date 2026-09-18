@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 150,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 215
+  },
+  "decisions": [
+    {
+      "canonicalName": "DIA",
+      "labels": ["DIA"],
+      "status": "setAside",
+      "model": "retail/destination label",
+      "evidence": ["https://www.mapareve.es/api/public/v1"],
+      "coverageKnown": "Exact operator label recovered from the validated REVE public-web sample.",
+      "blockingReason": "No current official DIA Spain public EV-charging tariff or deterministic station-specific charging publication was found in this first-pass search.",
+      "resumeCondition": "Official DIA charging publication, station/app evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Diputación de Badajoz",
+      "labels": ["Diputación de Badajoz"],
+      "status": "sourceValidated",
+      "model": "public provincial charging network / MOVEM",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.movembadajoz.es/"],
+      "coverageKnown": "Current official MOVEM site publishes the provincial public charging network and subscriber tariffs by power tier.",
+      "tariff": {"currency": "EUR", "tiers": [{"maxPowerKw": 22, "energyEurPerKwh": 0.25}, {"maxPowerKw": 50, "energyEurPerKwh": 0.30}], "sourceAuthority": "officialNetwork", "subscriptionScope": true},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if MOVEM changes tariff tiers or station-specific overrides appear.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Diputación Foral de Gipuzkoa",
+      "labels": ["Diputación Foral de Gipuzkoa"],
+      "status": "partial",
+      "model": "public institutional charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://egoitza.gipuzkoa.eus/es/subvenciones/-/laguntza/2026/5/MABE10"],
+      "coverageKnown": "Official Gipuzkoa material confirms current institutional support for public/electric-mobility charging infrastructure; exact REVE operator label is independently recovered from the public-web sample.",
+      "blockingReason": "No current official numeric public charging tariff attributable to this exact REVE label was located in the first-pass official material; third-party reports are not promoted as tariff authority.",
+      "resumeCondition": "Current Diputación tariff publication, operator/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "DIRAN S.A.",
+      "labels": ["DIRAN S.A."],
+      "status": "setAside",
+      "model": "site/operator label",
+      "evidence": ["https://www.mapareve.es/api/public/v1"],
+      "coverageKnown": "Exact operator label recovered from the validated REVE public-web sample.",
+      "blockingReason": "No sufficiently deterministic current official charging site, app or numeric tariff authority was located in this first-pass search.",
+      "resumeCondition": "Official site/app/QR evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ditec Automoviles Barcelona S.L.U.",
+      "labels": ["Ditec Automoviles Barcelona S.L.U."],
+      "status": "setAside",
+      "model": "automotive retail/site-level charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1"],
+      "coverageKnown": "Exact operator label recovered from the validated REVE public-web sample.",
+      "blockingReason": "No current official public numeric charging tariff was found for the Ditec Barcelona charging point; third-party station listings are not promoted as tariff authority.",
+      "resumeCondition": "Official Porsche/Ditec station tariff, QR/app evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {"firstPassTraversed": 5, "sourceValidated": 1, "partial": 1, "setAside": 3, "active": 0, "supersededAlias": 0, "platformExcluded": 0},
+  "aggregateAfter": {"minimumTraversed": 480, "maximumNeverTraversed": 138, "sourceValidated": 59, "partial": 49, "setAside": 205, "active": 96, "supersededAlias": 68, "platformExcluded": 3, "total": 480},
+  "webTrackAfter": {"newReconstructedLabelsFirstPassedCount": 107, "endpoint": "https://www.mapareve.es/api/public/v1", "validatedSample": "150x25", "uniqueOperatorLabelsObserved": 215},
+  "coherence": {"syntheticHistoricalMembershipCreated": false, "thirdPartyTariffPromoted": false, "difficultCaseReauditPerformed": false, "legacyDenominatorChanged": false, "check": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "generatedAt": "2026-09-14T21:47:00Z"
+}

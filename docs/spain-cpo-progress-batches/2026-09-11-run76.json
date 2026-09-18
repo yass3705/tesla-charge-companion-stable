@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 76,
+  "date": "2026-09-11",
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "labelsTraversedThisRun": 0,
+    "reasonNoNominalAdvance": "The durable reconstructed current-REVE identity queue is exhausted and the historical frozen 618-label nominative snapshot remains unrecoverable. No synthetic historical identities were created and no setAside case was re-audited without new evidence."
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "reveTariffStatusBatch": {
+    "generatedAt": "2026-09-11T18:38:36.863679Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPages": [134,135,136],
+    "tariffNewRows": 247,
+    "tariffUpdatedRows": 3,
+    "statusPages": [90,91],
+    "statusNewRows": 155,
+    "statusUpdatedRows": 15,
+    "nextTariffPage": 137,
+    "nextStatusPage": 92,
+    "tariffRowsStored": 12596,
+    "statusRowsStored": 7742
+  },
+  "persistence": {
+    "temporaryTriggerRemoved": true,
+    "workflowReturnedToDispatchOnly": true,
+    "criticalProgressPersistedInGit": true
+  },
+  "coherence": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "countsDeriveExactly": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "setAsideReauditWithoutNewEvidence": false,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  }
+}

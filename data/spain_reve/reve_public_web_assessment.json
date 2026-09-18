@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 2,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "assessedAt": "2026-09-13T17:44:10Z",
+  "source": "REVE public web frontend feed",
+  "endpointBase": "https://www.mapareve.es/api/public/v1",
+  "supportStatus": "undocumented_unsupported",
+  "authentication": "none_observed",
+  "documentedRateLimit": null,
+  "observedClientBehavior": {
+    "locationsMethod": "POST",
+    "locationsPath": "/locations",
+    "maxPerPageObserved": 25,
+    "fullSpainApproxPages": 582,
+    "embeddedFields": [
+      "location",
+      "evses.status",
+      "connectors.tariffs",
+      "connectors.power",
+      "connector identifiers"
+    ],
+    "singleLocationRefetch": "GET /locations/{location_id}"
+  },
+  "boundedProbe": {
+    "maxPages": 50,
+    "perPage": 25,
+    "startedAt": "2026-09-13T17:42:26.082Z",
+    "finishedAt": "2026-09-13T17:44:09.989Z",
+    "ok": true,
+    "dgtStationsLoaded": 12138,
+    "matchedStations": 1458,
+    "matchedWithPrices": 1303,
+    "matchedWithAvailability": 1458,
+    "matchedWithReveData": 1458,
+    "officialExternalApiParityV3": {
+      "candidateStations": 20,
+      "publicConnectors": 66,
+      "officialConnectorMatches": 22,
+      "publicEvses": 57,
+      "officialStatusIdentifierMatches": 3
+    },
+    "interpretation": "The 50-page bounded probe completed successfully and materially strengthens the cadence case. It confirms broad access to TCC-relevant public-web data without any observed error in this sample. It does not by itself prove national pagination completeness, operator identity uniqueness, long-run stability, or historical membership in the legacy 618 inventory."
+  },
+  "cadenceDecision": {
+    "status": "GO_CONDITIONAL",
+    "reason": "A 50-page bounded probe completed successfully in about 104 seconds with 1,458 matched stations, 1,303 carrying prices and all 1,458 carrying availability/REVE data. This is fast enough to justify a larger controlled pagination/identity validation step.",
+    "nationalSweep": false,
+    "nextSafeAction": "Before any full national sweep, persist explicit checks for unique location IDs, duplicate/page overlap, stable operator labels and pagination continuity on a larger but still bounded sample. Current-REVE identities must remain separate from historically proven legacy-618 labels."
+  },
+  "safetyDecision": {
+    "runtimeUse": false,
+    "reason": "The endpoint remains undocumented/unsupported and semantic parity with the documented external API is not complete. Keep the official external API authoritative until coverage, stability and mapping validation are sufficient."
+  },
+  "officialExternalApiStateAtAssessment": {
+    "tariffPagesCollected": 196,
+    "tariffTotalPages": 462,
+    "tariffRowsStored": 17564,
+    "nextTariffPage": 197,
+    "statusPagesCollected": 131,
+    "statusTotalPages": 448,
+    "statusRowsStored": 11330,
+    "nextStatusPage": 132,
+    "lastSuccessfulBatchAt": "2026-09-13T17:42:44.308854Z",
+    "lastBatchRequestsAttempted": 5,
+    "lastBatchRequestsSucceeded": 5
+  }
+}
