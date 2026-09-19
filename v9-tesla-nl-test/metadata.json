@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-19T10:30:29.775644+00:00",
+  "sourceGeneratedAt": "2026-09-18T08:21:38.594Z",
+  "source": "https://suc-tracker.eu/data/europe.json",
+  "sourceSha256": "974c9a69c247b34083ad54353c1fa8a7a18ccb58af75cba48eb8ee4c0b9e4416",
+  "catalogueSha256": "6d17eb1a614af078f8a123803a23cc85145e89f26dda7a74cd5babd0f44ec784",
+  "sourceStationCount": 1780,
+  "exportStationCount": 1184,
+  "countries": [
+    "BE",
+    "CH",
+    "DE",
+    "ES",
+    "FR",
+    "GB",
+    "IT",
+    "LU",
+    "MA",
+    "NL",
+    "PT"
+  ],
+  "byCountry": {
+    "BE": 27,
+    "CH": 39,
+    "DE": 329,
+    "ES": 105,
+    "FR": 280,
+    "GB": 223,
+    "IT": 110,
+    "LU": 1,
+    "MA": 6,
+    "NL": 54,
+    "PT": 10
+  },
+  "priceObservationDates": {
+    "2026-09-18": 1184
+  },
+  "withoutComparableTariff": 2,
+  "accessHoursUnknown": 17,
+  "previousIdsAbsentFromSource": [],
+  "publication": "Independent SuC catalogue only; no TCC production replacement",
+  "accessPolicy": "Previously verified Mac access metadata retained, no new access inferred",
+  "freshness": "checkedAt is a download check; sourceGeneratedAt and sourceObservedAt are the source dates"
+}
