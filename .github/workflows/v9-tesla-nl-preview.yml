@@ -1,0 +1,22 @@
+name: V9 Tesla NL preview package
+on:
+  pull_request:
+    branches: [main]
+    paths: ['v9-tesla-nl-test/**', 'tests/v9-tesla-nl-preview.test.cjs', '.github/workflows/v9-tesla-nl-preview.yml']
+  push:
+    branches: [main, 'test/tesla-nl-preview']
+    paths: ['v9-tesla-nl-test/**', 'tests/v9-tesla-nl-preview.test.cjs', '.github/workflows/v9-tesla-nl-preview.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          node --check v9-tesla-nl-test/app.js
+          node tests/v9-tesla-nl-preview.test.cjs
