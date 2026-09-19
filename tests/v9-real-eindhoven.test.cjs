@@ -19,7 +19,7 @@ function localFetch(url){
 (async()=>{
   const registry=JSON.parse(fs.readFileSync(path.join(root,'data/v9/source-registry.json'),'utf8'));
   const engine=Engine.createEngine({registry,loaders:{
-    'tesla-global':Tesla.createLoader({url:'data/tesla_stations.json',fetchImpl:localFetch}),
+    'tesla-global':Tesla.createLoader({url:registry.sources.find(s=>s.id==='tesla-global').path,supplementUrl:registry.sources.find(s=>s.id==='tesla-global').supplementPath,fetchImpl:localFetch}),
     'netherlands-dotnl':National.createLoader({base:'data/non_tesla_netherlands/',countryCode:'NL',sourceId:'netherlands-dotnl',fetchImpl:localFetch}),
     'netherlands-direct-offers':Direct.createLoader({url:'data/netherlands_direct_tariffs_v1.json',fetchImpl:localFetch})
   }});

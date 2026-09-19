@@ -56,7 +56,7 @@
     for(const source of registry?.sources||[]){
       if(source.active===false)continue;
       if(source.adapter==='tesla-json'&&adapters.teslaJson?.createLoader){
-        loaders[source.id]=adapters.teslaJson.createLoader({url:join(basePath,source.path),fetchImpl});
+        loaders[source.id]=adapters.teslaJson.createLoader({url:join(basePath,source.path),supplementUrl:source.supplementPath?join(basePath,source.supplementPath):null,fetchImpl});
       }else if(source.adapter==='direct-offer-json'&&adapters.directOffers?.createLoader&&source.path){
         loaders[source.id]=adapters.directOffers.createLoader({url:join(basePath,source.path),fetchImpl});
       }else if(source.adapter==='direct-tariff-gzip'&&adapters.legacyDirectTariffs?.createLoader&&source.path){

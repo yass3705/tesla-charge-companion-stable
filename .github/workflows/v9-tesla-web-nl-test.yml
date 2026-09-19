@@ -1,0 +1,36 @@
+name: V9 Tesla web and Netherlands integration
+on:
+  push:
+    branches: ['integration/tesla-web-nl-v9']
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths: ['assets/v9/**', 'data/v9/tesla-web/**', 'data/v9/source-registry.json', 'tests/v9-tesla-web.test.cjs', 'tests/v9-real-eindhoven.test.cjs', 'scripts/v9/**', '.github/workflows/v9-tesla-web-nl-test.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate committed web snapshot and Netherlands composition
+        run: |
+          python3 -m unittest discover -s tests/suc_tracker -p 'test_*.py' -v
+          node tests/v9-tesla-web.test.cjs
+          node tests/v9-real-eindhoven.test.cjs
+          node tests/v9-adapters.test.cjs
+          node tests/v9-browser-loaders.test.cjs
+          node tests/v9-runtime-engine.test.cjs
+      - name: Fresh extraction from SuC Tracker website (no Mac)
+        run: python3 scripts/v9/refresh-tesla-web.py
+      - name: Validate fresh web snapshot in V9
+        run: |
+          node tests/v9-tesla-web.test.cjs
+          node tests/v9-real-eindhoven.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v9-tesla-web-nl-snapshot
+          path: data/v9/tesla-web/
+          retention-days: 14
