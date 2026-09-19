@@ -1,0 +1,22 @@
+name: V9 France SYDER Qovoltis crosswalk audit
+
+on:
+  pull_request:
+    branches:
+      - refactor/unified-data-engine-v9
+    paths:
+      - 'tests/v9-france-qovoltis-syder-crosswalk-audit.cjs'
+      - 'data/v9/france-static/**'
+      - '.github/workflows/v9-france-qovoltis-syder-crosswalk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect exact SYDER identity families in PAN
+        run: node tests/v9-france-qovoltis-syder-crosswalk-audit.cjs
