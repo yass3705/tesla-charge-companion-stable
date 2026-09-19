@@ -1,0 +1,136 @@
+name: V9 Morocco EVGO current freshness audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - '.github/workflows/v9-morocco-evgo-current-freshness-audit.yml'
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+  push:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - '.github/workflows/v9-morocco-evgo-current-freshness-audit.yml'
+      - 'assets/v9/adapters/morocco-public.js'
+      - 'data/v9/source-registry.json'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Audit the EVGO data V9 would consume now
+        run: |
+          node - <<'NODE'
+          const assert = require('assert');
+          const fs = require('fs');
+          const path = require('path');
+          const adapter = require('./assets/v9/adapters/morocco-public.js');
+
+          (async () => {
+            const registry = JSON.parse(fs.readFileSync('data/v9/source-registry.json', 'utf8'));
+            assert.equal(registry.engine, 'tcc-v9-unified-data');
+            assert.equal(registry.rules?.dynamicStatusMustBeFresh, true);
+
+            const source = (registry.sources || []).find(s => s.id === 'morocco-evgo-native');
+            assert(source, 'morocco-evgo-native source missing');
+            assert.equal(source.adapter, 'morocco-public-v1');
+            assert.equal(source.profile, 'evgo');
+            assert.equal(source.active, true);
+
+            const statusUrl = String(source.statusUrl || source.url || '')
+              .replace(/latest-normalized-stations\.json(?:\?.*)?$/, 'latest-status-overlay.json');
+            assert(statusUrl && statusUrl !== source.url, 'EVGO status overlay URL unresolved');
+
+            const overlayResponse = await fetch(statusUrl, {cache: 'no-cache'});
+            assert(overlayResponse.ok, `status overlay unavailable (${overlayResponse.status})`);
+            const overlay = await overlayResponse.json();
+
+            const nowMs = Date.now();
+            const maxMinutes = Number(source.freshnessMaxMinutes ?? 120);
+            const freshness = adapter.evgoOverlayFreshness(overlay, maxMinutes, nowMs);
+            assert(freshness.generatedAt, 'status overlay timestamp missing');
+            assert(Number.isFinite(freshness.ageMinutes), 'status overlay age unavailable');
+
+            const stations = await adapter.createLoader({source, nowMs})();
+            assert.equal(stations.length, 17, 'EVGO station count');
+            const evses = stations.flatMap(s => s.evses || []);
+            assert.equal(evses.length, 43, 'EVGO EVSE count');
+            assert(stations.every(s => Number.isFinite(s.latitude) && Number.isFinite(s.longitude) && s.latitude >= 20 && s.latitude <= 37 && s.longitude >= -18 && s.longitude <= 0), 'all 17 EVGO GPS must be usable in Morocco');
+
+            // Keep V9 provenance dimensions distinct. A site brand is not a CPO,
+            // the app/access network is not the tariff channel, and native status
+            // provenance remains separate from all of them.
+            assert(stations.every(s => s.physicalOperator?.name === 'Nareva Services / EVGO'), 'EVGO physical CPO attribution drift');
+            assert(stations.every(s => s.access?.appSource === 'EVGO' && s.access?.accessNetwork === 'EVGO'), 'EVGO app/access attribution drift');
+            assert(stations.every(s => s.status?.statusSource === 'EVGO native backend cp.evgo.ma'), 'EVGO native status source drift');
+            for (const offer of stations.flatMap(s => s.offers || [])) {
+              assert.equal(offer.metadata?.tariffChannel, 'EVGO native', 'EVGO tariff channel drift');
+            }
+
+            if (freshness.fresh) {
+              assert(stations.every(s => s.status?.freshness === 'fresh'), 'fresh overlay must produce fresh station status');
+              assert(evses.every(e => e.status?.freshness === 'fresh'), 'fresh overlay must produce fresh EVSE status');
+            } else {
+              assert(stations.every(s => s.status?.freshness === 'stale' && s.status?.state === 'unknown'), 'stale station status must fail closed to unknown');
+              assert(evses.every(e => e.status?.freshness === 'stale' && e.status?.state === 'unknown'), 'stale EVSE status must fail closed to unknown');
+            }
+
+            const summary = {
+              schema_version: 1,
+              audited_at: new Date(nowMs).toISOString(),
+              engine: registry.engine,
+              source_id: source.id,
+              inventory_url: source.url,
+              status_url: statusUrl,
+              registry_status_url_explicit: Boolean(source.statusUrl),
+              freshness: {
+                source_generated_at: freshness.generatedAt,
+                age_minutes: Number(freshness.ageMinutes.toFixed(2)),
+                max_minutes: maxMinutes,
+                production_status_fresh: freshness.fresh
+              },
+              validation: {
+                stations: stations.length,
+                evses: evses.length,
+                usable_morocco_gps: stations.length,
+                stale_status_fails_closed_to_unknown: !freshness.fresh ? true : null,
+                modeling_dimensions_kept_separate: [
+                  'cpo_operator',
+                  'site_brand',
+                  'app_source/access_network',
+                  'tariff_channel',
+                  'status_source'
+                ]
+              },
+              policy: {
+                public_sources_only: true,
+                read_only: true,
+                credentials_used: false,
+                account_or_session_data: false,
+                raw_station_payload_persisted: false
+              }
+            };
+
+            const outDir = path.join('artifacts', 'v9-morocco-evgo-current-freshness');
+            fs.mkdirSync(outDir, {recursive: true});
+            fs.writeFileSync(path.join(outDir, 'summary.json'), JSON.stringify(summary, null, 2) + '\n');
+            console.log(JSON.stringify(summary));
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
+
+      - name: Upload sanitized freshness audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: v9-morocco-evgo-current-freshness
+          path: artifacts/v9-morocco-evgo-current-freshness/summary.json
+          if-no-files-found: error
+          retention-days: 3
