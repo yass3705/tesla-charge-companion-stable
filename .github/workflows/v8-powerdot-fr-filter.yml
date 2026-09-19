@@ -25,16 +25,16 @@ jobs:
           p=Path('assets/france-catalog-v8.js')
           s=p.read_text(encoding='utf-8')
           old="""      if(data.chargers.some(entry=>entry?.location?.countryCode!=='FR'))throw new Error('Station Powerdot hors France');
-      if(data.chargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
-      window.TCC_POWERDOT_DIRECT_CATALOG_V1=data;
-      return data;"""
+                if(data.chargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
+                window.TCC_POWERDOT_DIRECT_CATALOG_V1=data;
+                return data;"""
           new="""      const sourceChargers=data.chargers;
-      const frenchChargers=sourceChargers.filter(entry=>entry?.location?.countryCode==='FR');
-      if(frenchChargers.length<2200)throw new Error(`Inventaire Powerdot France incomplet (${frenchChargers.length})`);
-      if(frenchChargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
-      const filtered={...data,chargers:frenchChargers,counts:{...(data.counts||{}),sourceApiSuccessChargers:sourceChargers.length,excludedForeignChargers:sourceChargers.length-frenchChargers.length}};
-      window.TCC_POWERDOT_DIRECT_CATALOG_V1=filtered;
-      return filtered;"""
+                const frenchChargers=sourceChargers.filter(entry=>entry?.location?.countryCode==='FR');
+                if(frenchChargers.length<2200)throw new Error(`Inventaire Powerdot France incomplet (${frenchChargers.length})`);
+                if(frenchChargers.some(entry=>(entry?.charger?.connectors||[]).some(connector=>connector?.tariff?.subscriptionActive===true)))throw new Error('Tarif abonné présent dans la base Powerdot directe');
+                const filtered={...data,chargers:frenchChargers,counts:{...(data.counts||{}),sourceApiSuccessChargers:sourceChargers.length,excludedForeignChargers:sourceChargers.length-frenchChargers.length}};
+                window.TCC_POWERDOT_DIRECT_CATALOG_V1=filtered;
+                return filtered;"""
           if old in s:
               s=s.replace(old,new,1)
           assert "const frenchChargers=sourceChargers.filter(entry=>entry?.location?.countryCode==='FR');" in s
