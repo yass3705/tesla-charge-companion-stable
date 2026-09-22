@@ -1,0 +1,51 @@
+name: V9 Morocco TotalEnergies host validation
+
+on:
+  push:
+    paths:
+      - 'scripts/v9/morocco-totalenergies-host-adapter.cjs'
+      - 'tests/v9-morocco-totalenergies-host-adapter.test.cjs'
+      - '.github/workflows/v9-morocco-totalenergies-host-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit-test adapter invariants
+        run: node tests/v9-morocco-totalenergies-host-adapter.test.cjs
+      - name: Fetch sanitized public evidence
+        run: |
+          curl --fail --silent --show-error --location --max-time 20 \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/official-network-inventory-2026-08-23.json' -o /tmp/official.json
+          curl --fail --silent --show-error --location --max-time 20 \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/al-waha-cpo-attribution.json' -o /tmp/al-waha.json
+          curl --fail --silent --show-error --location --max-time 20 \
+            'https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/official-link-reconciliation-2026-08-30.json' -o /tmp/links.json
+      - name: Validate current public evidence
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const {adaptTotalEnergiesMorocco}=require('./scripts/v9/morocco-totalenergies-host-adapter.cjs');
+          const official=JSON.parse(fs.readFileSync('/tmp/official.json','utf8'));
+          const alWaha=JSON.parse(fs.readFileSync('/tmp/al-waha.json','utf8'));
+          const links=JSON.parse(fs.readFileSync('/tmp/links.json','utf8'));
+          const out=adaptTotalEnergiesMorocco(official,alWaha,links);
+          if (out.summary.officialSourceRows !== 20) throw new Error('expected 20 official rows');
+          if (out.summary.uniqueHostSites !== 18) throw new Error('expected reconciled 18 host sites');
+          if (out.summary.geolocatedHostSites !== 13) throw new Error('expected 13 official-link geolocated hosts');
+          if (!out.summary.hostCountReconciled) throw new Error('host count must reconcile official headline');
+          if (out.production.length !== 1) throw new Error('expected exactly one resolved production station');
+          const s=out.production[0];
+          if (s.physicalOperator !== 'Kilowatt') throw new Error('AL WAHA CPO must remain Kilowatt');
+          if (s.access.siteBrand !== 'TotalEnergies') throw new Error('site brand must remain TotalEnergies');
+          if (s.offers.length !== 0) throw new Error('tariff must remain unresolved');
+          const mazagan=out.diagnostics.find(x=>x.name==='RELAIS MAZAGAN');
+          if (!mazagan || mazagan.latitude!==33.0307941) throw new Error('Mazagan reconciliation missing');
+          if (!out.diagnostics.every(x=>x.physicalOperator===null)) throw new Error('do not infer CPO for unresolved TotalEnergies hosts');
+          console.log(JSON.stringify(out.summary));
+          NODE
