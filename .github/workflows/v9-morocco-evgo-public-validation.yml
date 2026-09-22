@@ -1,0 +1,31 @@
+name: V9 Morocco EVGO public validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-evgo-adapter']
+    paths:
+      - 'assets/v9/adapters/morocco-evgo.js'
+      - 'tests/v9-morocco-evgo-public.test.cjs'
+      - '.github/workflows/v9-morocco-evgo-public-validation.yml'
+  pull_request:
+    branches: ['refactor/unified-data-engine-v9']
+    paths:
+      - 'assets/v9/adapters/morocco-evgo.js'
+      - 'tests/v9-morocco-evgo-public.test.cjs'
+      - '.github/workflows/v9-morocco-evgo-public-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate fresh EVGO public snapshot and V9 preservation contract
+        run: node tests/v9-morocco-evgo-public.test.cjs
