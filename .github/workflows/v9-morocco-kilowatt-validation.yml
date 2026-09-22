@@ -1,0 +1,36 @@
+name: V9 Morocco Kilowatt public validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['feat/morocco-v9-kilowatt-adapter']
+    paths:
+      - 'assets/v9/adapters/morocco-kilowatt.js'
+      - 'tests/v9-morocco-kilowatt.test.cjs'
+      - '.github/workflows/v9-morocco-kilowatt-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit-test adapter invariants
+        run: node tests/v9-morocco-kilowatt.test.cjs
+      - name: Fetch sanitized public Kilowatt inventory
+        run: curl --fail --silent --show-error --location --max-time 20 https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json -o /tmp/kilowatt.json
+      - name: Validate current public production inventory
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const A=require('./assets/v9/adapters/morocco-kilowatt.js');
+          const d=JSON.parse(fs.readFileSync('/tmp/kilowatt.json','utf8'));
+          const v=A.validateDataset(d); if(!v.ok) throw new Error(JSON.stringify(v));
+          const out=A.normalizeDataset(d);
+          if(out.length!==43) throw new Error(`expected 43 normalized stations, got ${out.length}`);
+          if(!out.every(s=>s.offers.length===0)) throw new Error('unresolved tariff must not default to free');
+          console.log(JSON.stringify({ok:true,raw:v.rawCount,production:v.productionCount,normalized:out.length,statusSource:'Kilowatt public web map',tariff:'unresolved'},null,2));
+          NODE
