@@ -132,7 +132,7 @@ async function main() {
 
   const result = {
     ok: true,
-    module: 'tcc-v9-production-canary-monitor',
+    module: 'tcc-v9-production-watchdog',
     startedAt,
     completedAt: new Date().toISOString(),
     activationId: liveControl.activationId || null,
@@ -159,7 +159,7 @@ async function main() {
 main().catch((error) => {
   const result = {
     ok: false,
-    module: 'tcc-v9-production-canary-monitor',
+    module: 'tcc-v9-production-watchdog',
     completedAt: new Date().toISOString(),
     error: error.stack || String(error),
     rollbackSignals: [String(error.message || error)],
