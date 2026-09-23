@@ -12,19 +12,18 @@ on:
       - 'v9-production-runtime/**'
       - 'scripts/v9-production-canary-monitor.cjs'
       - '.github/workflows/v9-production-canary-monitor.yml'
-      - '.github/v9-canary-monitor-heartbeat.txt'
 
 permissions:
   actions: read
   contents: read
 
 concurrency:
-  group: v9-production-canary-monitor
+  group: v9-production-watchdog
   cancel-in-progress: false
 
 jobs:
   observe:
-    name: Observe live canary
+    name: Check live production
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -37,17 +36,17 @@ jobs:
         env:
           BASE_URL: https://yass3705.github.io/tesla-charge-companion-stable
           SAMPLE_SIZE: '10000'
-          RESULT_PATH: v9-canary-monitor-result.json
+          RESULT_PATH: v9-production-watchdog-result.json
         run: node scripts/v9-production-canary-monitor.cjs
 
       - name: Annotate observation provenance
         if: always()
         shell: bash
         run: |
-          if [ -f v9-canary-monitor-result.json ]; then
+          if [ -f v9-production-watchdog-result.json ]; then
             node - <<'NODE'
           const fs = require('fs');
-          const file = 'v9-canary-monitor-result.json';
+          const file = 'v9-production-watchdog-result.json';
           const result = JSON.parse(fs.readFileSync(file, 'utf8'));
           let eventPayload = {};
           try {
@@ -74,14 +73,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ -f v9-canary-monitor-result.json ]; then
-            cat v9-canary-monitor-result.json
+          if [ -f v9-production-watchdog-result.json ]; then
+            cat v9-production-watchdog-result.json
             {
               echo '## V9 production watchdog'
               echo
-              echo '\`\`\`json'
-              cat v9-canary-monitor-result.json
-              echo '\`\`\`'
+              echo '```json'
+              cat v9-production-watchdog-result.json
+              echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
           else
             echo 'No watchdog result file was produced.' >> "$GITHUB_STEP_SUMMARY"
@@ -92,6 +91,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: v9-production-watchdog-${{ github.run_id }}
-          path: v9-canary-monitor-result.json
+          path: v9-production-watchdog-result.json
           if-no-files-found: warn
           retention-days: 14
