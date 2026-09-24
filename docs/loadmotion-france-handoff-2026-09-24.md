@@ -29,6 +29,18 @@ Use `dimensions.*.price` as the resolved user-facing amount. The raw values in `
 
 These are session JWTs and may expire. Missing secrets cause that tenant to be skipped. Expired credentials must fail closed and require secret rotation; never bypass authentication or automate CAPTCHA/email-verification workarounds. Manual `workflow_dispatch` remains available even if the weekly refresh cannot authenticate.
 
+## V9 pricing semantics
+
+The Load Motion compiler must emit the pricing fields understood by the V9 pricing engine rather than the legacy V7 rule names. The normalized mapping is:
+
+- OCPI `ENERGY` / `dimensions.energy` -> `pricePerKwh`.
+- OCPI `FLAT` / `dimensions.flatFee` -> `sessionFeeEur`.
+- OCPI `TIME` / `dimensions.chargingTime` -> `chargingTimePerMinuteEur`; the V9 pricing engine applies it only to actual charging minutes.
+- `dimensions.sessionTime` -> `connectedTimePerMinuteAfterFreeEur` + `connectedTimeFreeMinutes`.
+- OCPI `PARKING_TIME` / `dimensions.parkingTime` -> top-level `pricing.postChargeFee` with `eurPerMinute`, `graceMinutes` and, when the definition is time-windowed, complementary `exemptLocalWindows`.
+
+Do not emit the legacy fields `chargePerMinute`, `afterMinutesRate`, `postChargeRate` or `connectionFee`: the V9 engine does not use those fields. The refresh workflow rejects a compiled snapshot if any of them leaks into the rankable Load Motion offers.
+
 ## TCC integration rules
 
 1. Operator-direct Load Motion tariff wins when the exact station/connector or deterministic network/power/time class is resolved.
