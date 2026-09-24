@@ -101,4 +101,16 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/loadmotion/france/current v9-production-runtime/data/v9/france-loadmotion-offers.json
           git commit -m "data(france): refresh Load Motion direct tariffs"
-          git push
+
+          # Main may advance while this long refresh is running. Rebase only when
+          # the refresh logic itself has not changed; otherwise fail closed and
+          # require a fresh run with the new logic.
+          git fetch origin main
+          changed_since_start="$(git diff --name-only "$GITHUB_SHA"..origin/main || true)"
+          if printf '%s\n' "$changed_since_start" | grep -Eq '^(scripts/loadmotion/|\.github/workflows/loadmotion-france-refresh\.yml$|v9-production-runtime/data/v9/source-registry\.json$)'; then
+            echo "Load Motion refresh logic changed on main while this run was executing; refusing to publish stale-generation output."
+            printf '%s\n' "$changed_since_start"
+            exit 1
+          fi
+          git rebase origin/main
+          git push origin HEAD:main
