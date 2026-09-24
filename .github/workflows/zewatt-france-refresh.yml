@@ -67,7 +67,7 @@ jobs:
       - name: Commit refreshed Ze-Watt snapshot
         shell: bash
         run: |
-          if git diff --quiet -- data/zewatt/france/current; then
+          if [ -z "$(git status --porcelain -- data/zewatt/france/current)" ]; then
             echo "No Ze-Watt data change"
             exit 0
           fi
