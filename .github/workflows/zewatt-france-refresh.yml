@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - 'scripts/zewatt/extract_zewatt_france.mjs'
+      - 'scripts/zewatt/compile_zewatt_v9_offers.mjs'
       - '.github/workflows/zewatt-france-refresh.yml'
 
 permissions:
@@ -64,18 +65,43 @@ jobs:
           mv /tmp/zewatt-refresh/zewatt.json.gz data/zewatt/france/current/zewatt.json.gz
           mv /tmp/zewatt-refresh/summary.json data/zewatt/france/current/summary.json
 
-      - name: Commit refreshed Ze-Watt snapshot
+      - name: Compile V9 Ze-Watt direct offers
+        run: |
+          node scripts/zewatt/compile_zewatt_v9_offers.mjs \
+            --snapshot data/zewatt/france/current/zewatt.json.gz \
+            --out v9-production-runtime/data/v9/france-zewatt-offers.json
+
+      - name: Validate V9 Ze-Watt offers
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p='v9-production-runtime/data/v9/france-zewatt-offers.json';
+          const d=JSON.parse(fs.readFileSync(p,'utf8'));
+          if(d.country!=='FR'||d.mode!=='verified_zewatt_direct') throw new Error('unexpected Ze-Watt payload');
+          if(!Array.isArray(d.directOffers)||d.directOffers.length<30) throw new Error(`Ze-Watt profiles incomplete: ${d.directOffers?.length||0}`);
+          if(d.directOffers.some(x=>!Array.isArray(x.evseIds)||!x.evseIds.length)) throw new Error('Ze-Watt offer without exact EVSE IDs');
+          if(d.directOffers.some(x=>x.metadata?.visitorStripeRequired!==true)) throw new Error('non-guest Ze-Watt context leaked into direct offers');
+          const evses=new Set(d.directOffers.flatMap(x=>x.evseIds||[]));
+          if(evses.size<500) throw new Error(`Ze-Watt exact EVSE coverage incomplete: ${evses.size}`);
+          const raw=JSON.stringify(d.directOffers);
+          for(const field of ['chargePerMinute','afterMinutesRate','postChargeRate','connectionFee']){
+            if(raw.includes(`"${field}"`)) throw new Error(`legacy unsupported pricing field leaked: ${field}`);
+          }
+          console.log(`validated ${d.directOffers.length} Ze-Watt profiles / ${evses.size} exact EVSEs`);
+          NODE
+
+      - name: Commit refreshed Ze-Watt snapshot and V9 offers
         shell: bash
         run: |
-          if [ -z "$(git status --porcelain -- data/zewatt/france/current)" ]; then
+          if [ -z "$(git status --porcelain -- data/zewatt/france/current v9-production-runtime/data/v9/france-zewatt-offers.json)" ]; then
             echo "No Ze-Watt data change"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/zewatt/france/current
-          git commit -m "data(france): refresh Ze-Watt direct snapshot"
+          git add data/zewatt/france/current v9-production-runtime/data/v9/france-zewatt-offers.json
+          git commit -m "data(france): refresh Ze-Watt direct snapshot and V9 offers"
 
           git fetch origin main
           changed_since_start="$(git diff --name-only "$GITHUB_SHA"..origin/main || true)"
