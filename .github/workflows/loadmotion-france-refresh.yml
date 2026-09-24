@@ -75,7 +75,7 @@ jobs:
           const d=JSON.parse(fs.readFileSync(p,'utf8'));
           if(d.country!=='FR'||d.mode!=='verified_loadmotion_direct')throw new Error('unexpected Load Motion payload');
           if(!Array.isArray(d.directOffers)||d.directOffers.length<70)throw new Error(`Load Motion offers incomplete: ${d.directOffers?.length||0}`);
-          if(d.directOffers.some(x=>JSON.stringify(x).includes('No Tariff')))throw new Error('No Tariff leaked into rankable offers');
+          if(d.directOffers.some(x=>JSON.stringify(x).includes('No Tariff')))throw new Error('No Tariff leaked into rankable offers');\n          const legacy=['chargePerMinute','afterMinutesRate','postChargeRate','connectionFee'];\n          const raw=JSON.stringify(d.directOffers);\n          for(const field of legacy)if(raw.includes(`\\\"${field}\\\"`))throw new Error(`legacy unsupported pricing field leaked: ${field}`);
           console.log(`validated ${d.directOffers.length} Load Motion direct offers`);
           NODE
 
