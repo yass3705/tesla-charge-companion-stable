@@ -111,12 +111,7 @@ async function work(){
     if(!r.ok) errors.push({...meta,http:r.status});
     else if(real.length) priced.push({...meta,http:r.status,definitions:real.map(sanitizeDefinition)});
     else if(all.length) fallback.push({...meta,http:r.status,definitions:all.map(sanitizeDefinition)});
-    else {
-      const classified=await classifyEmptyMatching(station.id,cid);
-      if(classified.kind==='fallback') fallback.push({...meta,http:r.status,definitions:classified.definitions,modelStatus:classified.modelStatus});
-      else if(classified.kind==='empty') empty.push({...meta,http:r.status,modelStatus:classified.modelStatus});
-      else errors.push({...meta,http:r.status,modelStatus:classified.modelStatus,classification:classified.kind});
-    }
+    else empty.push({...meta,http:r.status});
     done++; if(done%100===0||done===tasks.length)console.log(`pass1 ${tenant} ${done}/${tasks.length} priced=${priced.length} fallback=${fallback.length} empty=${empty.length} errors=${errors.length}`);
     await sleep(100);
   }
