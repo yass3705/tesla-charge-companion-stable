@@ -49,7 +49,7 @@ jobs:
           LOADMOTION_TOKEN: ${{ secrets.LOADMOTION_REVEO_TOKEN }}
         run: |
           if [ -z "$LOADMOTION_TOKEN" ]; then echo "Reveo token missing: keeping previous snapshot"; exit 0; fi
-          node scripts/loadmotion/extract_loadmotion_france.mjs --tenant reveo --out data/loadmotion/france/current/reveo.json.gz || echo "Reveo refresh failed: keeping previous snapshot"
+          node scripts/loadmotion/extract_loadmotion_france.mjs --tenant reveo --concurrency 2 --out data/loadmotion/france/current/reveo.json.gz || echo "Reveo refresh failed: keeping previous snapshot"
 
       - name: Refresh MobiSDEC
         if: ${{ inputs.tenant == 'all' || inputs.tenant == 'mobisdec' }}
@@ -71,11 +71,23 @@ jobs:
           const fs=require('fs');
           const p='v9-production-runtime/data/v9/france-loadmotion-offers.json';
           const d=JSON.parse(fs.readFileSync(p,'utf8'));
-          if(d.country!=='FR'||d.mode!=='verified_loadmotion_direct')throw new Error('unexpected Load Motion payload');
-          if(!Array.isArray(d.directOffers)||d.directOffers.length<70)throw new Error(`Load Motion offers incomplete: ${d.directOffers?.length||0}`);
-          if(d.directOffers.some(x=>JSON.stringify(x).includes('No Tariff')))throw new Error('No Tariff leaked into rankable offers');
-          const legacy=['chargePerMinute','afterMinutesRate','postChargeRate','connectionFee'];\n          const raw=JSON.stringify(d.directOffers);\n          for(const field of legacy)if(raw.includes(`\\\"${field}\\\"`))throw new Error(`legacy unsupported pricing field leaked: ${field}`);
-          console.log(`validated ${d.directOffers.length} Load Motion direct offers`);
+          if(d.country!=='FR'||d.mode!=='verified_loadmotion_direct') throw new Error('unexpected Load Motion payload');
+          if(!Array.isArray(d.directOffers)||d.directOffers.length<70) throw new Error(`Load Motion offers incomplete: ${d.directOffers?.length||0}`);
+          if(d.directOffers.some(x=>JSON.stringify(x).includes('No Tariff'))) throw new Error('No Tariff leaked into rankable offers');
+          const legacy=['chargePerMinute','afterMinutesRate','postChargeRate','connectionFee'];
+          const raw=JSON.stringify(d.directOffers);
+          for(const field of legacy){
+            if(raw.includes(`"${field}"`)) throw new Error(`legacy unsupported pricing field leaked: ${field}`);
+          }
+          const byTenant={};
+          for(const offer of d.directOffers){
+            const tenant=offer?.metadata?.tenant||'unknown';
+            byTenant[tenant]=(byTenant[tenant]||0)+1;
+          }
+          for(const tenant of ['yes55','loadstations','reveo','mobisdec']){
+            if(!byTenant[tenant]) throw new Error(`missing rankable Load Motion tenant: ${tenant}`);
+          }
+          console.log(`validated ${d.directOffers.length} Load Motion direct offers`,byTenant);
           NODE
 
       - name: Commit refreshed snapshots and V9 offers
