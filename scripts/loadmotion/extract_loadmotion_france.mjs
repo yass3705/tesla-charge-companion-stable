@@ -32,18 +32,36 @@ if(!userId) throw new Error('JWT payload does not contain id');
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function api(urlPath,retry=0){
-  const response=await fetch(base+urlPath,{headers:{Authorization:`Bearer ${token}`,Accept:'application/json'}});
-  if((response.status===429||response.status>=500)&&retry<3){
-    await sleep(1000*(retry+1));
-    return api(urlPath,retry+1);
+  try{
+    const response=await fetch(base+urlPath,{headers:{Authorization:`Bearer ${token}`,Accept:'application/json'}});
+    if((response.status===429||response.status>=500)&&retry<4){
+      await sleep(1000*Math.pow(2,retry));
+      return api(urlPath,retry+1);
+    }
+    const txt=await response.text();
+    let body; try{body=JSON.parse(txt);}catch{body=txt;}
+    return {ok:response.ok,status:response.status,body};
+  }catch(error){
+    if(retry<4){
+      await sleep(1000*Math.pow(2,retry));
+      return api(urlPath,retry+1);
+    }
+    return {ok:false,status:0,body:{networkError:String(error?.message||error)}};
   }
-  const txt=await response.text();
-  let body; try{body=JSON.parse(txt);}catch{body=txt;}
-  return {ok:response.ok,status:response.status,body};
 }
 function connectorId(c){return c?.connectorId??c?.connectorID??c?.id??c?.number??1;}
 function defs(body){return Array.isArray(body)?body:(Array.isArray(body?.pricingDefinitions)?body.pricingDefinitions:[]);}
 function noTariff(d){return String(d?.name||'').trim().toLowerCase()==='no tariff';}
+async function classifyEmptyMatching(stationId,cid){
+  const q=new URLSearchParams({ChargingStationID:stationId,ConnectorID:String(cid),UserID:userId});
+  const model=await api(`/v1/api/pricing-model/resolve?${q}`);
+  const modelDefs=defs(model.body);
+  const explicitNoTariff=modelDefs.filter(noTariff);
+  if(model.ok&&explicitNoTariff.length)return {kind:'fallback',http:model.status,definitions:explicitNoTariff.map(sanitizeDefinition),modelStatus:model.status};
+  if(model.status===404)return {kind:'pricing404',http:model.status,definitions:[],modelStatus:model.status};
+  if(model.ok)return {kind:'empty',http:model.status,definitions:[],modelStatus:model.status};
+  return {kind:'error',http:model.status,definitions:[],modelStatus:model.status};
+}
 function sanitizeDefinition(d){
   return {
     id:d?.id??null, issuer:d?.issuer??null, entityType:d?.entityType??null, name:d?.name??null, description:d?.description??null,
@@ -93,7 +111,12 @@ async function work(){
     if(!r.ok) errors.push({...meta,http:r.status});
     else if(real.length) priced.push({...meta,http:r.status,definitions:real.map(sanitizeDefinition)});
     else if(all.length) fallback.push({...meta,http:r.status,definitions:all.map(sanitizeDefinition)});
-    else empty.push({...meta,http:r.status});
+    else {
+      const classified=await classifyEmptyMatching(station.id,cid);
+      if(classified.kind==='fallback') fallback.push({...meta,http:r.status,definitions:classified.definitions,modelStatus:classified.modelStatus});
+      else if(classified.kind==='empty') empty.push({...meta,http:r.status,modelStatus:classified.modelStatus});
+      else errors.push({...meta,http:r.status,modelStatus:classified.modelStatus,classification:classified.kind});
+    }
     done++; if(done%100===0||done===tasks.length)console.log(`pass1 ${tenant} ${done}/${tasks.length} priced=${priced.length} fallback=${fallback.length} empty=${empty.length} errors=${errors.length}`);
     await sleep(100);
   }
@@ -103,12 +126,25 @@ await Promise.all(Array.from({length:concurrency},()=>work()));
 const recovered=[],persistent=[];
 for(let i=0;i<errors.length;i++){
   const e=errors[i]; await sleep(350);
+  const stationCheck=await api(`/v1/api/charging-stations/${encodeURIComponent(e.station)}`);
+  if(stationCheck.status===404){
+    persistent.push({...e,classification:'station404',stationHttp:404});
+    continue;
+  }
   const q=new URLSearchParams({ChargingStationID:e.station,ConnectorID:String(e.connector),UserID:userId});
   const r=await api(`/v1/api/matching-pricing-definitions/resolve?${q}`);
   const all=defs(r.body), real=all.filter(d=>!noTariff(d));
   if(r.ok&&real.length) recovered.push({...e,http:r.status,definitions:real.map(sanitizeDefinition)});
-  else persistent.push({...e,secondHttp:r.status,secondDefinitions:all.map(sanitizeDefinition)});
-  if((i+1)%50===0||i+1===errors.length)console.log(`pass2 ${tenant} ${i+1}/${errors.length} recovered=${recovered.length}`);
+  else if(r.ok&&all.length) fallback.push({...e,http:r.status,definitions:all.map(sanitizeDefinition),recoveredClassification:true});
+  else if(r.ok){
+    const classified=await classifyEmptyMatching(e.station,e.connector);
+    if(classified.kind==='fallback') fallback.push({...e,http:r.status,definitions:classified.definitions,modelStatus:classified.modelStatus,recoveredClassification:true});
+    else if(classified.kind==='empty') empty.push({...e,http:r.status,modelStatus:classified.modelStatus,recoveredClassification:true});
+    else persistent.push({...e,secondHttp:r.status,modelStatus:classified.modelStatus,classification:classified.kind});
+  } else {
+    persistent.push({...e,secondHttp:r.status,secondDefinitions:all.map(sanitizeDefinition)});
+  }
+  if((i+1)%50===0||i+1===errors.length)console.log(`pass2 ${tenant} ${i+1}/${errors.length} recovered=${recovered.length} fallback=${fallback.length} empty=${empty.length} persistent=${persistent.length}`);
 }
 const output={
   schemaVersion:1, generatedAt:new Date().toISOString(), network:tenant, tenant, host:cfg.host,
