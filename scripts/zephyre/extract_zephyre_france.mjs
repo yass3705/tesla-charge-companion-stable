@@ -40,33 +40,39 @@ async function mapLimit(items,limit,fn){
 async function readCsvRows(response,onRow){
   if(!response.body)throw new Error('IRVE response body unavailable');
   const reader=response.body.getReader(),decoder=new TextDecoder();
-  let carry='',row=[],field='',quoted=false;
-  function process(text,final=false){
-    const stop=final?text.length:Math.max(0,text.length-1);
-    for(let i=0;i<stop;i++){
-      const c=text[i],next=text[i+1];
-      if(quoted){
-        if(c==='"'){
-          if(next==='"'){field+='"';i++;}
-          else quoted=false;
-        }else field+=c;
-      }else{
-        if(c==='"')quoted=true;
-        else if(c===','){row.push(field);field='';}
-        else if(c==='\n'){row.push(field);field='';onRow(row);row=[];}
-        else if(c!=='\r')field+=c;
-      }
-    }
-    return final?'':text.slice(stop);
-  }
+  let buffer='';
   while(true){
-    const {value,done}=await reader.read();if(done)break;
-    const text=carry+decoder.decode(value,{stream:true});
-    carry=process(text,false);
+    const {value,done}=await reader.read();
+    if(done)break;
+    buffer+=decoder.decode(value,{stream:true});
+    let newline;
+    while((newline=buffer.indexOf('\n'))>=0){
+      const line=buffer.slice(0,newline);
+      buffer=buffer.slice(newline+1);
+      if(line)onRow(parseCsvLine(line));
+    }
   }
-  const tail=carry+decoder.decode();
-  process(tail,true);
-  if(field.length||row.length){row.push(field);onRow(row);}
+  buffer+=decoder.decode();
+  if(buffer)onRow(parseCsvLine(buffer));
+}
+
+function parseCsvLine(line){
+  const out=[];let field='',quoted=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(quoted){
+      if(c==='"'){
+        if(line[i+1]==='"'){field+='"';i++;}
+        else quoted=false;
+      }else field+=c;
+    }else{
+      if(c==='"')quoted=true;
+      else if(c===','){out.push(field);field='';}
+      else if(c!=='\r')field+=c;
+    }
+  }
+  out.push(field);
+  return out;
 }
 
 function cleanTariff(tariff){
