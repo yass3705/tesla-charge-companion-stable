@@ -15,9 +15,735 @@
     ],
     "bindingPricingOfferTokenStored": false
   },
-  "directOffers": [],
+  "directOffers": [
+    {
+      "id": "zephyre-direct-profile-01",
+      "selectionId": "zephyre-direct-profile-01",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.11
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*EAC*61531"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 1,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-02",
+      "selectionId": "zephyre-direct-profile-02",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.24
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*EAC*66771"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 1,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-03",
+      "selectionId": "zephyre-direct-profile-03",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.36
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E124764"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 1,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-04",
+      "selectionId": "zephyre-direct-profile-04",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.37
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E129723"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 1,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-05",
+      "selectionId": "zephyre-direct-profile-05",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.42,
+            "chargingTimePerMinuteEur": 0.01
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E77654"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 1,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-06",
+      "selectionId": "zephyre-direct-profile-06",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.42
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E108319",
+        "FR*ZP1*E108337",
+        "FR*ZP1*E108345",
+        "FR*ZP1*E108356",
+        "FR*ZP1*E92044",
+        "FR*ZP1*E97590",
+        "FR*ZP1*E97622",
+        "FR*ZP1*E97648"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 8,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-07",
+      "selectionId": "zephyre-direct-profile-07",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.46
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E129792",
+        "FR*ZP1*E129801"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 2,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-08",
+      "selectionId": "zephyre-direct-profile-08",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.48
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E88452",
+        "FR*ZP1*E89896"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 2,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-09",
+      "selectionId": "zephyre-direct-profile-09",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.54
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*EAC*57277"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 1,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-10",
+      "selectionId": "zephyre-direct-profile-10",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0,
+            "sessionFeeEur": 18
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E00012",
+        "FR*ZP1*E00013",
+        "FR*ZP1*E00014",
+        "FR*ZP1*E00015",
+        "FR*ZP1*E118022",
+        "FR*ZP1*E118280",
+        "FR*ZP1*E118286",
+        "FR*ZP1*E121740",
+        "FR*ZP1*E121744",
+        "FR*ZP1*E121760",
+        "FR*ZP1*E121904",
+        "FR*ZP1*E121909",
+        "FR*ZP1*E124814",
+        "FR*ZP1*E124829",
+        "FR*ZP1*E125364",
+        "FR*ZP1*E126480",
+        "FR*ZP1*E12970687",
+        "FR*ZP1*E129707",
+        "FR*ZP1*E130056",
+        "FR*ZP1*E130075",
+        "FR*ZP1*E130209",
+        "FR*ZP1*E130798",
+        "FR*ZP1*E130808",
+        "FR*ZP1*E131265",
+        "FR*ZP1*E131696",
+        "FR*ZP1*E131909",
+        "FR*ZP1*E131916",
+        "FR*ZP1*E131920",
+        "FR*ZP1*E133869",
+        "FR*ZP1*E133872",
+        "FR*ZP1*E133892",
+        "FR*ZP1*E133905",
+        "FR*ZP1*E133933",
+        "FR*ZP1*E133978",
+        "FR*ZP1*E133987",
+        "FR*ZP1*E133989",
+        "FR*ZP1*E134005",
+        "FR*ZP1*E134009",
+        "FR*ZP1*E134010",
+        "FR*ZP1*E145823",
+        "FR*ZP1*E215796",
+        "FR*ZP1*E37714",
+        "FR*ZP1*E39538",
+        "FR*ZP1*E45602",
+        "FR*ZP1*E50286",
+        "FR*ZP1*E51117",
+        "FR*ZP1*E51219",
+        "FR*ZP1*E78083",
+        "FR*ZP1*E81846",
+        "FR*ZP1*E81910",
+        "FR*ZP1*E81946",
+        "FR*ZP1*E87403",
+        "FR*ZP1*E87443",
+        "FR*ZP1*E87905",
+        "FR*ZP1*E88753",
+        "FR*ZP1*E91696",
+        "FR*ZP1*E91707",
+        "FR*ZP1*E92835",
+        "FR*ZP1*E94884",
+        "FR*ZP1*E97502",
+        "FR*ZP1*E97663",
+        "FR*ZP1*E97684",
+        "FR*ZP1*E97720",
+        "FR*ZP1*E97723",
+        "FR*ZP1*EAC*02071",
+        "FR*ZP1*EAC*02989",
+        "FR*ZP1*EAC*03071",
+        "FR*ZP1*EAC*03072",
+        "FR*ZP1*EAC*05462",
+        "FR*ZP1*EAC*06007",
+        "FR*ZP1*EAC*070811",
+        "FR*ZP1*EAC*10061",
+        "FR*ZP1*EAC*10064",
+        "FR*ZP1*EAC*10065",
+        "FR*ZP1*EAC*11061",
+        "FR*ZP1*EAC*11062",
+        "FR*ZP1*EAC*11063",
+        "FR*ZP1*EAC*13081",
+        "FR*ZP1*EAC*13083",
+        "FR*ZP1*EAC*13084",
+        "FR*ZP1*EAC*16041",
+        "FR*ZP1*EAC*16062",
+        "FR*ZP1*EAC*17062",
+        "FR*ZP1*EAC*17063",
+        "FR*ZP1*EAC*24061",
+        "FR*ZP1*EAC*24062",
+        "FR*ZP1*EAC*25062",
+        "FR*ZP1*EAC*25063",
+        "FR*ZP1*EAC*25091",
+        "FR*ZP1*EAC*26061",
+        "FR*ZP1*EAC*26062",
+        "FR*ZP1*EAC*26063",
+        "FR*ZP1*EAC*26064",
+        "FR*ZP1*EAC*2609",
+        "FR*ZP1*EAC*42388",
+        "FR*ZP1*EAC*42394",
+        "FR*ZP1*EAC*43447",
+        "FR*ZP1*EAC*43448",
+        "FR*ZP1*EAC*54211",
+        "FR*ZP1*EAC*57121",
+        "FR*ZP1*EAC*57701",
+        "FR*ZP1*EAC*61642",
+        "FR*ZP1*EAC*65814",
+        "FR*ZP1*EAC*65920",
+        "FR*ZP1*EAC*65935"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 105,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-11",
+      "selectionId": "zephyre-direct-profile-11",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0,
+            "sessionFeeEur": 24
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E1111",
+        "FR*ZP1*E11112"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 2,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-12",
+      "selectionId": "zephyre-direct-profile-12",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0,
+            "sessionFeeEur": 30
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E128680",
+        "FR*ZP1*E128688"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 2,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-13",
+      "selectionId": "zephyre-direct-profile-13",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0,
+            "chargingTimePerMinuteEur": 0.02
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E112313",
+        "FR*ZP1*E112811",
+        "FR*ZP1*E124791",
+        "FR*ZP1*E66005",
+        "FR*ZP1*E85888",
+        "FR*ZP1*E97538",
+        "FR*ZP1*EAC*38139",
+        "FR*ZP1*EAC*49680",
+        "FR*ZP1*EAC*51386",
+        "FR*ZP1*EAC*52036",
+        "FR*ZP1*EAC*54210"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 11,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-14",
+      "selectionId": "zephyre-direct-profile-14",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0,
+            "chargingTimePerMinuteEur": 0.04
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E77902",
+        "FR*ZP1*E77903"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "exactEvseCount": 2,
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    }
+  ],
   "subscriptionOffers": [],
   "sourceEvidence": {
-    "status": "bootstrap_pending_first_validated_workflow_run"
+    "irveUniqueEvse": 373,
+    "seedCoordinates": 148,
+    "liveDirectEvse": 140,
+    "exactEvseIds": 140,
+    "priceProfiles": 14,
+    "snapshot": "live verified 2026-09-25T20:11:52.551Z"
   }
-}\n
+}
