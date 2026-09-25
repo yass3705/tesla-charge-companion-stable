@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "country": "FR",
+  "generatedAt": "2026-09-25T20:11:52.551Z",
+  "mode": "verified_zephyre_direct",
+  "policy": {
+    "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
+    "exactEvseRequired": true,
+    "directPaymentRequired": true,
+    "nationalConstantAllowed": false,
+    "sameSiteExtrapolationAllowed": false,
+    "fallbackOrder": [
+      "Electra",
+      "Electroverse"
+    ],
+    "bindingPricingOfferTokenStored": false
+  },
+  "directOffers": [],
+  "subscriptionOffers": [],
+  "sourceEvidence": {
+    "status": "bootstrap_pending_first_validated_workflow_run"
+  }
+}\n
