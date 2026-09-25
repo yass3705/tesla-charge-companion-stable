@@ -1,10 +1,17 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-09-25T20:11:52.551Z",
+  "generatedAt": "2026-09-25T20:25:16.915Z",
   "mode": "verified_zephyre_direct",
   "policy": {
     "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
+    "resolver": {
+      "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
+      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260925-034213/consolidation-etalab-schema-irve-statique-v-2.3.1-20260925.csv",
+      "bff": "https://api.services-emobility.com/pay/api",
+      "nearby": "POST /stations/nearby",
+      "detail": "GET /stations/chargepoint/{internalName}"
+    },
     "exactEvseRequired": true,
     "directPaymentRequired": true,
     "nationalConstantAllowed": false,
@@ -53,7 +60,21 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 1,
+        "internalNames": [
+          "LD-4026-2"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.11,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -95,7 +116,21 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 1,
+        "internalNames": [
+          "LB-3384-7"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.24,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -137,7 +172,21 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 1,
+        "internalNames": [
+          "LF-9690-3"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.36,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -179,7 +228,21 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 1,
+        "internalNames": [
+          "LF-9642-5"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.37,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -222,7 +285,29 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 1,
+        "internalNames": [
+          "LG-2150-0"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.42,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          },
+          {
+            "priceUnit": "CHARGING_TIME",
+            "price": 0.01,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -271,7 +356,28 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 8,
+        "internalNames": [
+          "LE-7577-6",
+          "LF-6262-1",
+          "LF-6264-4",
+          "LF-6267-3",
+          "LF-6269-6",
+          "LF-6273-6",
+          "LF-6276-5",
+          "LF-6279-4"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.42,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -314,7 +420,22 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 2,
+        "internalNames": [
+          "LF-9664-4",
+          "LF-9669-6"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.46,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -357,7 +478,22 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 2,
+        "internalNames": [
+          "LA-7171-2",
+          "LB-3403-4"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.48,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -399,7 +535,21 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 1,
+        "internalNames": [
+          "LD-4027-9"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.54,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -459,7 +609,6 @@
         "FR*ZP1*E130056",
         "FR*ZP1*E130075",
         "FR*ZP1*E130209",
-        "FR*ZP1*E130798",
         "FR*ZP1*E130808",
         "FR*ZP1*E131265",
         "FR*ZP1*E131696",
@@ -546,7 +695,124 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
-        "exactEvseCount": 105,
+        "currentType": "AC",
+        "exactEvseCount": 104,
+        "internalNames": [
+          "FR*ZP1*EAC*43447",
+          "FR*ZP1*EAC*43448",
+          "FR*ZP1*EAC*57121",
+          "GARAGE-1",
+          "GARAGE-2",
+          "LB-2935-2",
+          "LB-3197-6",
+          "LB-3383-0",
+          "LB-3391-6",
+          "LB-3409-2",
+          "LB-3419-0",
+          "LD-4002-0",
+          "LD-4004-3",
+          "LD-4008-9",
+          "LD-4010-6",
+          "LE-7536-7",
+          "LE-7539-6",
+          "LE-7541-3",
+          "LE-7543-6",
+          "LE-7545-9",
+          "LE-7551-1",
+          "LF-6259-8",
+          "LF-6263-8",
+          "LF-6277-1",
+          "LF-9639-1",
+          "LF-9644-8",
+          "LF-9647-7",
+          "LF-9651-7",
+          "LF-9662-1",
+          "LF-9665-0",
+          "LF-9667-3",
+          "LF-9670-7",
+          "LF-9674-2",
+          "LF-9680-5",
+          "LF-9684-0",
+          "LF-9688-6",
+          "LF-9689-2",
+          "LF-9693-2",
+          "LF-9694-9",
+          "LF-9697-8",
+          "LF-9699-0",
+          "LF-9700-9",
+          "LF-9701-5",
+          "LF-9707-3",
+          "LF-9709-6",
+          "LF-9710-7",
+          "LF-9711-3",
+          "LF-9713-6",
+          "LF-9714-2",
+          "LF-9715-9",
+          "LF-9716-5",
+          "LF-9717-1",
+          "LF-9719-4",
+          "LG-0231-0",
+          "LG-0232-7",
+          "LG-0233-3",
+          "LG-0235-6",
+          "LG-0237-9",
+          "LG-2142-5",
+          "LG-2166-7",
+          "LG-2170-7",
+          "LG-2171-3",
+          "LG-2173-6",
+          "LG-2181-1",
+          "LG-2184-0",
+          "LG-2189-2",
+          "LG-2190-3",
+          "LG-2195-5",
+          "LG-2198-4",
+          "LG-2200-9",
+          "LG-2201-5",
+          "LG-2205-0",
+          "LI-0123-0",
+          "LI-0134-5",
+          "LI-0298-9",
+          "LI-0341-2",
+          "LI-0345-8",
+          "LI-0347-0",
+          "LI-0357-9",
+          "LI-0359-1",
+          "LI-0361-9",
+          "LI-0363-1",
+          "LI-0366-0",
+          "LI-0371-7",
+          "LI-0372-3",
+          "LI-0374-6",
+          "LI-0377-5",
+          "LI-0378-1",
+          "LI-0543-4",
+          "LI-0545-6",
+          "LI-0546-2",
+          "LI-0547-9",
+          "LI-0549-1",
+          "LI-0550-2",
+          "LI-0552-5",
+          "LI-0553-1",
+          "LI-0554-8",
+          "LI-0555-4",
+          "LI-0556-0",
+          "LI-0557-7",
+          "LI-0558-3",
+          "LI-0561-7",
+          "LI-4238-8",
+          "LI-4239-4"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_SESSION",
+            "price": 18,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -590,7 +856,22 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 2,
+        "internalNames": [
+          "LG-2169-6",
+          "LG-2180-5"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_SESSION",
+            "price": 24,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -634,7 +915,22 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 2,
+        "internalNames": [
+          "LF-9660-9",
+          "LF-9686-3"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_SESSION",
+            "price": 30,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -687,7 +983,31 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 11,
+        "internalNames": [
+          "LB-0639-1",
+          "LB-1090-3",
+          "LB-2659-7",
+          "LB-2930-0",
+          "LF-6271-3",
+          "LF-6274-2",
+          "LF-9633-3",
+          "LF-9698-4",
+          "LG-2144-8",
+          "LG-2151-7",
+          "LI-5203-6"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_TIME",
+            "price": 0.02,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -731,7 +1051,22 @@
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
         "exactEvseCount": 2,
+        "internalNames": [
+          "LA-5724-6",
+          "LA-6524-2"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_TIME",
+            "price": 0.04,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
         "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
         "priceBasis": "ePowerDirect displayed direct price"
       }
@@ -739,11 +1074,46 @@
   ],
   "subscriptionOffers": [],
   "sourceEvidence": {
-    "irveUniqueEvse": 373,
-    "seedCoordinates": 148,
-    "liveDirectEvse": 140,
-    "exactEvseIds": 140,
-    "priceProfiles": 14,
-    "snapshot": "live verified 2026-09-25T20:11:52.551Z"
+    "summary": {
+      "schemaVersion": 1,
+      "generatedAt": "2026-09-25T20:25:16.768Z",
+      "country": "FR",
+      "network": "Zephyre",
+      "partyId": "FR*ZP1",
+      "source": {
+        "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
+        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260925-034213/consolidation-etalab-schema-irve-statique-v-2.3.1-20260925.csv",
+        "bff": "https://api.services-emobility.com/pay/api",
+        "nearby": "POST /stations/nearby",
+        "detail": "GET /stations/chargepoint/{internalName}"
+      },
+      "rawFrZp1Rows": 425,
+      "irveUniqueEvse": 373,
+      "seedCoordinates": 148,
+      "liveDetailStations": 139,
+      "liveDirectEvse": 139,
+      "liveTariffPresent": 139,
+      "directPaymentEnabled": 139,
+      "nearbyErrors": 0,
+      "detailErrors": 0,
+      "unresolvedIrveEvse": 234,
+      "unresolvedByDataset": {
+        "63dccb1307e9b2f213a5130c": 33,
+        "65a5487fa94ead1ffa4562a3": 201
+      },
+      "providers": [
+        "Zephyre"
+      ],
+      "policy": {
+        "directRankable": "exact FR*ZP1 EVSE returned by current ePowerDirect + multitenantDirectPaymentAvailable=true + positive tariff component",
+        "nationalConstantAllowed": false,
+        "sameSiteExtrapolationAllowed": false,
+        "unresolved": "fail_closed_then_Electra_then_Electroverse",
+        "bindingPricingOfferTokenStored": false
+      }
+    },
+    "liveDirectEvse": 139,
+    "exactEvseIds": 139,
+    "priceProfiles": 14
   }
 }
