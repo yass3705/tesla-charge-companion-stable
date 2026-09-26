@@ -1,0 +1,15 @@
+name: REVE V2 pricing engine validation
+on:
+  push:
+    branches: [reve-v2-pricing-engine]
+permissions: { contents: read }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: node tests/reve-v2-pricing-thresholds.test.cjs
+      - run: |
+          for f in tests/*pricing*.test.cjs; do echo "== $f =="; node "$f"; done
