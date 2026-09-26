@@ -139,6 +139,7 @@
         return{
           id:`totalenergies-native:${sid}:${t.kind.toLowerCase()}:${String(t.power).replace(/[^0-9.]+/g,'-')}kw:${String(t.rate).replace(/[^0-9.]+/g,'-')}`,
           provider:'TotalEnergies direct',kind:'direct',countries:['MA'],currency:t.currency,
+          pricingModelId:`total-native-${t.kind.toLowerCase()}-${t.power}kw-${t.rate}-${t.unit}`,
           connectorKinds:[t.kind],minPowerKw:t.power,maxPowerKw:t.power,pricing,
           metadata:{tariffChannel:'Club EV-Charge native',billingUnit:t.unit,nativeRate:t.rate,nativeConnectorIds:t.connectorIds,taxTreatment:'native rate as returned; no additional tax applied'}
         };
