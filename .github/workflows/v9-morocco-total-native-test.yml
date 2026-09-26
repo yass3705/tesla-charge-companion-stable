@@ -68,7 +68,7 @@ jobs:
             const source=registry.sources.find(x=>x.id==='morocco-totalenergies-hosts');
             if(!source)throw new Error(root+': Total source missing');
             if(source.profile!=='totalenergies-native')throw new Error(root+': wrong profile '+source.profile);
-            if(source.freshnessMaxMinutes!==180)throw new Error(root+': wrong freshness');
+            if(source.freshnessMaxMinutes!==1560)throw new Error(root+': wrong freshness');
             if(source.expectedMinStations!==18||source.expectedMinConnectors!==38)throw new Error(root+': wrong floors');
             console.log(root+': OK '+fresh.length+' stations / '+connectorCount+' connectors');
           }
