@@ -30,11 +30,12 @@
     if(text(policy.currency)!=='MAD')throw new Error('Kilowatt tariff manifest currency mismatch');
 
     const free=uniq(manifest?.freeStationIds),unresolved=uniq(manifest?.unresolvedStationIds);
-    if(free.length!==26||unresolved.length!==17)throw new Error(`Kilowatt tariff manifest expected 26/17, got ${free.length}/${unresolved.length}`);
+    if(!free.length)throw new Error('Kilowatt tariff manifest must contain at least one station-specific free tariff');
+    if(free.length+unresolved.length!==43)throw new Error(`Kilowatt tariff manifest expected 43 covered stations, got ${free.length+unresolved.length}`);
     const overlap=free.filter(id=>unresolved.includes(id));
     if(overlap.length)throw new Error(`Kilowatt tariff manifest overlap: ${overlap.join(',')}`);
     if(new Set([...free,...unresolved]).size!==43)throw new Error('Kilowatt tariff manifest must cover exactly 43 production stations');
-    if(Number(summary.productionStations)!==43||Number(summary.free)!==26||Number(summary.unresolved)!==17)throw new Error('Kilowatt tariff manifest summary mismatch');
+    if(Number(summary.productionStations)!==43||Number(summary.free)!==free.length||Number(summary.unresolved)!==unresolved.length)throw new Error('Kilowatt tariff manifest summary mismatch');
 
     return{freeStationIds:free,unresolvedStationIds:unresolved,policy,summary,validatedArtifact:manifest?.validatedArtifact||null};
   }
