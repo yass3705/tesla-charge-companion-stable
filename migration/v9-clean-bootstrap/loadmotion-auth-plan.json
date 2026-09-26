@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-26",
+  "component": "Load Motion France authentication",
+  "apk": "YES55 5.2.0 / com.loadstations.yes55",
+  "findings": {
+    "mobileStorage": "RNEncryptedStorage backed by Android Keystore",
+    "mobileSymbols": [
+      "AutoLogin",
+      "AutoLoginDisabled",
+      "saveUserMobileData",
+      "deleteUserCredentials"
+    ],
+    "refreshTokenDetected": false,
+    "webRefreshTokenDetected": false,
+    "signinRoute": "POST /v1/auth/signin",
+    "signinPayload": [
+      "tenant",
+      "email",
+      "password",
+      "acceptEula"
+    ],
+    "signinVerifiedOn": [
+      "yes55.load-motion.com",
+      "loadstations.load-motion.com",
+      "app.reveocharge.com",
+      "mobisdec.load-motion.com"
+    ],
+    "verificationMethod": "Synthetic invalid email returned application-level 'User with email ... does not exist' on all four hosts, proving the route and payload are processed."
+  },
+  "targetArchitecture": {
+    "preferred": "Generate a fresh JWT at workflow start via /v1/auth/signin using stable credentials stored as GitHub secrets.",
+    "jwtPersistence": "Do not persist generated JWT; use only for the current refresh run.",
+    "fallback": "Keep the last-known-good snapshot if authentication or extraction fails.",
+    "currentJwtSecrets": "Treat LOADMOTION_*_TOKEN only as temporary fallback during migration.",
+    "guestMode": "Not preferred for unattended refresh because guest flow exposes CAPTCHA/email verification."
+  },
+  "unresolved": [
+    "Identify the stable account credentials currently used to create the existing web/session JWTs, or create dedicated read-only Load Motion accounts if supported.",
+    "Validate one real auto-login end-to-end before removing the four JWT fallback secrets."
+  ]
+}
