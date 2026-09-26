@@ -1,0 +1,81 @@
+name: V9 Morocco Total native regression
+
+on:
+  push:
+    paths:
+      - 'v9-production-runtime/assets/v9/adapters/morocco-public.js'
+      - 'v9-test/assets/v9/adapters/morocco-public.js'
+      - 'v9-production-runtime/data/v9/source-registry.json'
+      - 'v9-test/data/v9/source-registry.json'
+      - '.github/workflows/v9-morocco-total-native-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch current Total native overlay
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/latest-native-overlay.json \
+            -o /tmp/total-native.json
+
+      - name: Validate production and test adapters
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const data=JSON.parse(fs.readFileSync('/tmp/total-native.json','utf8'));
+          const allowed=new Set(['available','occupied','out_of_service','unknown']);
+          for(const root of ['v9-production-runtime','v9-test']){
+            const adapter=require('./'+root+'/assets/v9/adapters/morocco-public.js');
+            if(typeof adapter.normalizeTotalNativeDataset!=='function')throw new Error(root+': native normalizer missing');
+            const fresh=adapter.normalizeTotalNativeDataset(data,{
+              sourceId:'morocco-totalenergies-hosts',
+              statusFresh:true,
+              statusGeneratedAt:data.generated_at,
+              minStations:18,
+              minConnectors:38
+            });
+            const connectorCount=fresh.reduce((n,s)=>n+(s.evses||[]).reduce((m,e)=>m+(e.connectors||[]).length,0),0);
+            if(fresh.length<18)throw new Error(root+': station count '+fresh.length);
+            if(connectorCount<38)throw new Error(root+': connector count '+connectorCount);
+            for(const st of fresh){
+              if(!allowed.has(st.status?.state))throw new Error(root+': invalid station state '+st.status?.state);
+              if(!/^MA:totalenergies-host:/.test(st.canonicalId))throw new Error(root+': unstable canonical id '+st.canonicalId);
+            }
+            const stale=adapter.normalizeTotalNativeDataset(data,{
+              sourceId:'morocco-totalenergies-hosts',
+              statusFresh:false,
+              statusGeneratedAt:data.generated_at,
+              minStations:18,
+              minConnectors:38
+            });
+            if(stale.some(st=>st.status?.state!=='unknown'))throw new Error(root+': stale snapshot leaked live status');
+
+            let raw=fs.readFileSync('./'+root+'/data/v9/source-registry.json','utf8').trim();
+            if(raw.endsWith('\\n'))raw=raw.slice(0,-2);
+            const registry=JSON.parse(raw);
+            const source=registry.sources.find(x=>x.id==='morocco-totalenergies-hosts');
+            if(!source)throw new Error(root+': Total source missing');
+            if(source.profile!=='totalenergies-native')throw new Error(root+': wrong profile '+source.profile);
+            if(source.freshnessMaxMinutes!==180)throw new Error(root+': wrong freshness');
+            if(source.expectedMinStations!==18||source.expectedMinConnectors!==38)throw new Error(root+': wrong floors');
+            console.log(root+': OK '+fresh.length+' stations / '+connectorCount+' connectors');
+          }
+          NODE
+
+      - name: Ensure production/test adapter parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp v9-production-runtime/assets/v9/adapters/morocco-public.js v9-test/assets/v9/adapters/morocco-public.js
