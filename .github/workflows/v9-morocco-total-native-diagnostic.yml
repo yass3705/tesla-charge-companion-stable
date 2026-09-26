@@ -1,0 +1,62 @@
+name: V9 Morocco Total native diagnostic
+
+on:
+  push:
+    paths:
+      - '.github/workflows/v9-morocco-total-native-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Diagnose
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/latest-native-overlay.json \
+            -o /tmp/total-native.json
+          node <<'NODE'
+          const fs=require('fs');
+          const report={generatedAt:new Date().toISOString(),roots:{}};
+          const data=JSON.parse(fs.readFileSync('/tmp/total-native.json','utf8'));
+          for(const root of ['v9-production-runtime','v9-test']){
+            const rec={checks:[]};report.roots[root]=rec;
+            try{
+              const adapter=require('./'+root+'/assets/v9/adapters/morocco-public.js');
+              const fresh=adapter.normalizeTotalNativeDataset(data,{sourceId:'morocco-totalenergies-hosts',statusFresh:true,statusGeneratedAt:data.generated_at,minStations:18,minConnectors:38});
+              const stale=adapter.normalizeTotalNativeDataset(data,{sourceId:'morocco-totalenergies-hosts',statusFresh:false,statusGeneratedAt:data.generated_at,minStations:18,minConnectors:38});
+              rec.stationCount=fresh.length;
+              rec.connectorCount=fresh.reduce((n,s)=>n+(s.evses||[]).reduce((m,e)=>m+(e.connectors||[]).length,0),0);
+              rec.freshStationStates={};rec.staleStationStates={};
+              for(const st of fresh)rec.freshStationStates[st.status?.state]=(rec.freshStationStates[st.status?.state]||0)+1;
+              for(const st of stale)rec.staleStationStates[st.status?.state]=(rec.staleStationStates[st.status?.state]||0)+1;
+              rec.staleFreshness=[...new Set(stale.map(st=>st.status?.freshness))];
+              rec.stateDifferences=[];
+              for(let i=0;i<fresh.length;i++)if(stale[i]?.status?.state!==fresh[i]?.status?.state)rec.stateDifferences.push({id:fresh[i]?.canonicalId,fresh:fresh[i]?.status?.state,stale:stale[i]?.status?.state});
+              let raw=fs.readFileSync('./'+root+'/data/v9/source-registry.json','utf8').trim();
+              if(raw.endsWith('\\n'))raw=raw.slice(0,-2);
+              const registry=JSON.parse(raw),source=registry.sources.find(x=>x.id==='morocco-totalenergies-hosts');
+              rec.source={profile:source?.profile,freshnessMaxMinutes:source?.freshnessMaxMinutes,expectedMinStations:source?.expectedMinStations,expectedMinConnectors:source?.expectedMinConnectors};
+              rec.ok=rec.stationCount>=18&&rec.connectorCount>=38&&rec.stateDifferences.length===0&&rec.staleFreshness.length===1&&rec.staleFreshness[0]==='stale'&&source?.profile==='totalenergies-native'&&source?.freshnessMaxMinutes===1560&&source?.expectedMinStations===18&&source?.expectedMinConnectors===38;
+            }catch(e){rec.ok=false;rec.error=String(e&&e.stack||e);}
+          }
+          fs.mkdirSync('v9-test/data/v9',{recursive:true});
+          fs.writeFileSync('v9-test/data/v9/morocco-total-native-diagnostic.json',JSON.stringify(report,null,2)+'\n');
+          NODE
+      - name: Commit diagnostic
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add v9-test/data/v9/morocco-total-native-diagnostic.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "diag(v9): capture Morocco Total native regression state"
+          git pull --rebase origin main
+          git push origin main
