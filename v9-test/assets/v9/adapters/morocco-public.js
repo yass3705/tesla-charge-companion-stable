@@ -102,12 +102,16 @@
         const liveRow=liveByKey.get(`${cpid}|${cid}`),safe=liveRow?.safe_status||{};
         const nativeState=text(safe.ComputedStatusForCpo||safe.ComputedStatus||safe.CpLastReportedStatus||c?.ComputedStatus||c?.CpLastReportedStatus);
         const state=totalNativeConnectorState(nativeState);
+        const connectorKind=(text(c?.ConnectorModelCurrentType||c?.connectorModelCurrentType).toUpperCase()==='DC'||['CCS','CCS2','CHADEMO'].some(x=>text(c?.connectorType||c?.ConnectorModelStandardName).toUpperCase().includes(x)))?'DC':'AC';
+        const connectorPower=number(c?.MaxConnectorPower)??number(c?.ConnectorModelPower)??number(c?.connectorModelPower);
+        const tariffRate=number(c?.rate),tariffUnit=text(c?.tariffType).toLowerCase(),tariffCurrency=text(c?.currencyType).toUpperCase();
         const connector={
           id:`totalenergies:${sid}:${slug(cpid)}:${cid}`,
-          kind:(text(c?.ConnectorModelCurrentType||c?.connectorModelCurrentType).toUpperCase()==='DC'||['CCS','CCS2','CHADEMO'].some(x=>text(c?.connectorType||c?.ConnectorModelStandardName).toUpperCase().includes(x)))?'DC':'AC',
-          powerKw:number(c?.MaxConnectorPower)??number(c?.ConnectorModelPower)??number(c?.connectorModelPower),
+          kind:connectorKind,
+          powerKw:connectorPower,
           powerSource:'Club EV-Charge native',
           plugName:text(c?.ConnectorModelStandardName||c?.connectorType)||null,
+          tariff:tariffRate!=null&&tariffUnit&&tariffCurrency?{rate:tariffRate,unit:tariffUnit,currency:tariffCurrency,source:'Club EV-Charge native'}:null,
           status:{state,nativeState:nativeState||null,error:text(safe.Error)||null,freshness:statusFresh?'fresh':'stale'}
         };
         if(!groups.has(cpid))groups.set(cpid,[]);
@@ -121,6 +125,24 @@
         status:{state:totalNativeAggregateState(list.map(c=>c.status?.state)),freshness:statusFresh?'fresh':'stale'}
       }));
       const stationState=totalNativeAggregateState(evses.flatMap(e=>e.connectors.map(c=>c.status?.state)));
+      const tariffGroups=new Map();
+      for(const e of evses)for(const c of e.connectors||[]){
+        const rate=number(c?.tariff?.rate),unit=text(c?.tariff?.unit).toLowerCase(),currency=text(c?.tariff?.currency).toUpperCase(),power=number(c?.powerKw),kind=text(c?.kind).toUpperCase();
+        if(rate==null||!unit||!currency||power==null||!kind)continue;
+        const key=`${kind}|${power}|${rate}|${unit}|${currency}`;
+        const row=tariffGroups.get(key)||{kind,power,rate,unit,currency,connectorIds:[]};
+        row.connectorIds.push(c.id);tariffGroups.set(key,row);
+      }
+      const offers=[...tariffGroups.values()].map(t=>{
+        const pricing=t.unit==='min'?{type:'rules',rules:[{scope:'allDay',billing:'minute',currency:t.currency,pricePerMinute:t.rate}]}:null;
+        if(!pricing)return null;
+        return{
+          id:`totalenergies-native:${sid}:${t.kind.toLowerCase()}:${String(t.power).replace(/[^0-9.]+/g,'-')}kw:${String(t.rate).replace(/[^0-9.]+/g,'-')}`,
+          provider:'TotalEnergies direct',kind:'direct',countries:['MA'],currency:t.currency,
+          connectorKinds:[t.kind],minPowerKw:t.power,maxPowerKw:t.power,pricing,
+          metadata:{tariffChannel:'Club EV-Charge native',billingUnit:t.unit,nativeRate:t.rate,nativeConnectorIds:t.connectorIds,taxTreatment:'native rate as returned; no additional tax applied'}
+        };
+      }).filter(Boolean);
       const nativeName=text(st?.detail?.ChargeStationName||st?.name)||`TotalEnergies ${sid}`;
       const canonicalSlug=TOTAL_NATIVE_CANONICAL_SLUG_BY_ID[sid]||slug(nativeName.replace(/^TotalEnergies\s+/i,''));
       const address=[text(st?.detail?.ChargeStationAddress),text(st?.detail?.ChargeStationCity)].filter(Boolean).join(', ');
@@ -132,7 +154,7 @@
         evses,
         access:{kind:'public',limited:false,siteBrand:'TotalEnergies',appSource:'Club EV-Charge public guest native',accessNetwork:'Club EV-Charge'},
         status:{state:stationState,sourceId,statusSource:'Numocity native connector status',updatedAt:statusGeneratedAt||text(dataset?.generated_at)||null,freshness:statusFresh?'fresh':'stale'},
-        offers:[],updatedAt:statusGeneratedAt||text(dataset?.generated_at)||null
+        offers,updatedAt:statusGeneratedAt||text(dataset?.generated_at)||null
       };
     });
     if(connectorCount<connectorFloor)throw new Error(`TotalEnergies native expected at least ${connectorFloor} connectors, got ${connectorCount}`);
