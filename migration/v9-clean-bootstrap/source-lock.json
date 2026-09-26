@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "createdAt": "2026-09-26",
+  "targetRepository": "yass3705/tesla-charge-companion-v9",
+  "sourceLocks": {
+    "stable": {
+      "repository": "yass3705/tesla-charge-companion-stable",
+      "commit": "79791636e75b7c26c36dfaa05b5e61c146beb7b9"
+    },
+    "dataLab": {
+      "repository": "yass3705/tesla-charge-companion-data-lab",
+      "commit": "947c3cd7959f2458608c66f62a6be052cbaca3f6"
+    },
+    "updater": {
+      "repository": "yass3705/tesla-stations-updater-test",
+      "commit": "969dd9a8df825ab13a1ddc12db5b18cc18fec75d"
+    }
+  },
+  "invariants": {
+    "mutateSourceRepos": false,
+    "tariffsAllowedStatuses": [
+      "treated",
+      "complete",
+      "validated"
+    ],
+    "excludedStatuses": [
+      "partial",
+      "active",
+      "setAside",
+      "blocked"
+    ],
+    "preserveFailClosedRows": true,
+    "nationalInventoryIsPhysicalBaseline": true,
+    "teslaIsAdditionalPhysicalSource": true,
+    "emspCreatesPhysicalDuplicates": false,
+    "subscriptionAppliedOnlyWhenSelectedAndCompatible": true,
+    "atomicPublication": true,
+    "keepLastKnownGoodOnRefreshFailure": true
+  },
+  "sources": {
+    "tesla": {
+      "mode": "global",
+      "preferred": "SuC-Tracker",
+      "comparison": "Mac extraction where available",
+      "updaterPath": "data/suc-tracker/tesla_stations.json",
+      "productionPath": "v9-production-runtime/data/tesla_stations.json"
+    },
+    "electra": {
+      "role": [
+        "direct-cpo",
+        "emsp-overlay"
+      ],
+      "validatedFranceDataset": "data/operator_direct/electra_exact_france.json",
+      "refresh": "daily-target"
+    },
+    "electroverse": {
+      "role": "emsp-overlay",
+      "physicalDiscovery": false,
+      "strategy": "match national EVSE first, fetch only prices for known compatible stations/EVSE",
+      "refresh": "daily-target-after-optimization"
+    }
+  },
+  "countries": {
+    "FR": {
+      "inventory": "national IRVE / V9 France static baseline",
+      "tariffs": "validated-only",
+      "state": "eligible",
+      "note": "Rebuild whitelist from the latest lineage/batch state; do not rely on stale 2026-09-04 progress snapshot."
+    },
+    "IT": {
+      "inventory": "PUN",
+      "tariffs": "validated-only",
+      "state": "eligible",
+      "authoritativeProgress": "docs/italy-cpo-progress-2026-09.json",
+      "treatedAtLock": 23
+    },
+    "NL": {
+      "inventory": "national dotNL dataset already wired in V9",
+      "tariffs": "validated direct offers",
+      "state": "eligible"
+    },
+    "ES": {
+      "inventory": "REVE",
+      "tariffs": "validated-only",
+      "state": "staging",
+      "authoritativeProgress": "reports/spain/cpo-progress-state.json",
+      "treatedAtLock": 8,
+      "blocker": "finish current REVE national inventory/pagination before declaring national baseline complete"
+    },
+    "DE": {
+      "inventory": "national dataset",
+      "tariffs": "validated-only",
+      "state": "staging",
+      "blocker": "consolidated Germany progress/source artifact not present in the three locked repositories; recover from the active Germany workstream before import"
+    },
+    "MA": {
+      "inventory": "CPO-by-CPO plus Tesla",
+      "tariffs": "optional per CPO/station; unknown tariff does not hide station",
+      "state": "eligible-special",
+      "noNationalBaseline": true
+    }
+  }
+}
