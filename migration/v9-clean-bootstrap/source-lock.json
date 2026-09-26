@@ -58,6 +58,13 @@
       "physicalDiscovery": false,
       "strategy": "match national EVSE first, fetch only prices for known compatible stations/EVSE",
       "refresh": "daily-target-after-optimization"
+    },
+    "atlante": {
+      "role": "direct-cpo",
+      "authentication": "app-provided technical key",
+      "manualSecretRequired": false,
+      "secretName": null,
+      "rule": "Refresh workflow must recover/use the technical API key from the app/update flow automatically. No user intervention and no repository secret ATLANTE_API_SUBSCRIPTION_KEY required."
     }
   },
   "countries": {
