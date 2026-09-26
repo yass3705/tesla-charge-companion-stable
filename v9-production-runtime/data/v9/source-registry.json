@@ -737,31 +737,31 @@
     },
     {
       "id": "morocco-totalenergies-hosts",
-      "label": "Morocco TotalEnergies official charging host inventory",
+      "label": "Morocco TotalEnergies / Club EV-Charge native inventory/status",
       "adapter": "morocco-public-v1",
-      "profile": "totalenergies",
-      "urls": {
-        "official": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/official-network-inventory-2026-08-23.json",
-        "alWaha": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/al-waha-cpo-attribution.json",
-        "links": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/official-link-reconciliation-2026-08-30.json"
-      },
+      "profile": "totalenergies-native",
       "countries": [
         "MA"
       ],
       "capabilities": [
         "inventory",
         "connectors",
-        "access"
+        "access",
+        "status"
       ],
       "priority": {
-        "identity": 45,
-        "connectors": 45,
+        "identity": 96,
+        "connectors": 96,
         "access": 95,
-        "status": 20,
+        "status": 96,
         "tariff": 0
       },
-      "refresh": "official-source-change-or-monthly",
-      "active": true
+      "refresh": "published-native-snapshot-every-2h",
+      "active": true,
+      "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/latest-native-overlay.json",
+      "freshnessMaxMinutes": 180,
+      "expectedMinStations": 18,
+      "expectedMinConnectors": 38
     },
     {
       "id": "user-stations",
@@ -788,4 +788,4 @@
       "optional": true
     }
   ]
-}\n
+}
