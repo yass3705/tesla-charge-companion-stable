@@ -39,6 +39,9 @@ jobs:
           for(const root of ['v9-production-runtime','v9-test']){
             const adapter=require('./'+root+'/assets/v9/adapters/morocco-public.js');
             if(typeof adapter.normalizeTotalNativeDataset!=='function')throw new Error(root+': native normalizer missing');
+            // Morocco semantics: occupied-like stays available; fault/offline stays unavailable.
+            for(const v of ['Available','Charging','Preparing','Reserved','Occupied'])if(adapter.totalNativeConnectorState(v)!=='available')throw new Error(root+': Morocco status rule failed for '+v);
+            for(const v of ['Faulted','Offline','Unavailable','Inoperative'])if(adapter.totalNativeConnectorState(v)!=='out_of_service')throw new Error(root+': Morocco unavailable rule failed for '+v);
             const fresh=adapter.normalizeTotalNativeDataset(data,{
               sourceId:'morocco-totalenergies-hosts',
               statusFresh:true,
