@@ -72,6 +72,8 @@
       }else if(source.adapter==='morocco-public-v1'&&adapters.moroccoPublic?.createLoader){
         const prepared=adapters.moroccoPublic.createLoader({source,fetchImpl});
         loaders[source.id]=async query=>{const loader=await prepared;return loader(query);};
+      }else if(source.adapter==='morocco-kilowatt-tariff-manifest-v1'&&adapters.moroccoKilowattTariff?.createLoader&&source.url){
+        loaders[source.id]=adapters.moroccoKilowattTariff.createLoader({url:source.url,fetchImpl});
       }else if(/^national-compact-v\d+$/.test(source.adapter)&&adapters.nationalCompact){
         loaders[source.id]=createNationalLoader({source,basePath,adapter:adapters.nationalCompact,fetchImpl});
       }
