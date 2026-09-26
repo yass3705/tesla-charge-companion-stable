@@ -43,7 +43,7 @@
       'assets/v9/adapters/tesla-json.js','assets/v9/adapters/national-compact.js','assets/v9/adapters/direct-offers.js',
       'assets/v9/adapters/legacy-direct-tariffs.js','assets/v9/adapters/legacy-direct-stations.js',
       'assets/v9/adapters/france-emsp-compact.js','assets/v9/adapters/france-crosswalk.js','assets/v9/adapters/france-irve-status.js',
-      'assets/v9/adapters/morocco-public.js','assets/v9/browser-loaders.js'
+      'assets/v9/adapters/morocco-public.js','assets/v9/adapters/morocco-kilowatt-tariff.js','assets/v9/browser-loaders.js'
     ];
     for(const path of dependencies){const script=parsed.createElement('script');script.defer=true;script.src=`${runtimeBase}/${path}`;parsed.body.append(script);}
     const bridge=parsed.createElement('script');bridge.defer=true;bridge.src='v9-production-shell/bridge.js';parsed.body.append(bridge);
