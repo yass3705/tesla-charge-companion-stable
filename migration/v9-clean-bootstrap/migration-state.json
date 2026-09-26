@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-09-26",
+  "branch": "migration/v9-clean-bootstrap-20260926",
+  "phase": "bootstrap",
+  "completed": [
+    "created isolated migration branch",
+    "locked source commits for stable/data-lab/updater",
+    "defined fail-closed migration invariants",
+    "defined initial country readiness gates",
+    "verified target repository is not yet present"
+  ],
+  "manualBlocker": {
+    "code": "TARGET_REPOSITORY_MISSING",
+    "repository": "yass3705/tesla-charge-companion-v9",
+    "requiredAction": "Create an empty GitHub repository with this name. Do not add README, .gitignore or license."
+  },
+  "nextAutomaticSteps": [
+    "materialize validated-only CPO whitelist from locked sources",
+    "copy minimal V9 runtime",
+    "copy national EVSE baselines and Tesla source",
+    "copy validated direct tariff sources only",
+    "wire Electra and Electroverse offer overlays",
+    "run parity and duplicate-station guards",
+    "keep existing production untouched until parity passes"
+  ]
+}
