@@ -1,0 +1,97 @@
+name: V9 Morocco Kilowatt tariff regression
+
+on:
+  push:
+    paths:
+      - 'v9-production-runtime/assets/v9/adapters/morocco-kilowatt-tariff.js'
+      - 'v9-test/assets/v9/adapters/morocco-kilowatt-tariff.js'
+      - 'v9-production-runtime/assets/v9/browser-loaders.js'
+      - 'v9-test/assets/v9/browser-loaders.js'
+      - 'v9-production-runtime/data/v9/source-registry.json'
+      - 'v9-test/data/v9/source-registry.json'
+      - 'v9-production-shell/index.html'
+      - 'v9-production-shell/bridge.js'
+      - '.github/workflows/v9-morocco-kilowatt-tariff-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch current Kilowatt evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json \
+            -o /tmp/kilowatt-manifest.json
+          curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json \
+            -o /tmp/kilowatt-inventory.json
+
+      - name: Validate manifest, station merge and production wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const manifest=JSON.parse(fs.readFileSync('/tmp/kilowatt-manifest.json','utf8'));
+          const inventory=JSON.parse(fs.readFileSync('/tmp/kilowatt-inventory.json','utf8'));
+          const petrom='5ffbb0365e2197470cbb7f9f';
+          const alWaha='62e29ef59ad98566676cf824';
+          const unresolved='62e6a87e8f557229001a3bf4';
+
+          for(const root of ['v9-production-runtime','v9-test']){
+            const publicAdapter=require('./'+root+'/assets/v9/adapters/morocco-public.js');
+            const tariffAdapter=require('./'+root+'/assets/v9/adapters/morocco-kilowatt-tariff.js');
+            const dataEngine=require('./'+root+'/assets/v9/data-engine.js');
+
+            const checked=tariffAdapter.validateManifest(manifest);
+            if(checked.freeStationIds.length!==35||checked.unresolvedStationIds.length!==8)throw new Error(root+': expected 35/8, got '+checked.freeStationIds.length+'/'+checked.unresolvedStationIds.length);
+            if(new Set([...checked.freeStationIds,...checked.unresolvedStationIds]).size!==43)throw new Error(root+': manifest coverage mismatch');
+
+            const stations=publicAdapter.normalizeKilowattDataset(inventory,{sourceId:'morocco-kilowatt-public'});
+            if(stations.length!==43)throw new Error(root+': expected 43 production stations, got '+stations.length);
+            const rules=tariffAdapter.offerRulesFromManifest(manifest);
+            if(rules.length!==35)throw new Error(root+': free rule count '+rules.length);
+            const source={id:'morocco-kilowatt-direct-offers',priority:{tariff:115}};
+            const merged=dataEngine.applyOfferRules(stations,rules.map(rule=>({rule,source})));
+
+            const bySource=id=>merged.find(st=>String(st.sourceStationId)===id);
+            for(const id of [petrom,alWaha]){
+              const st=bySource(id);
+              if(!st)throw new Error(root+': free sample missing '+id);
+              const offer=(st.offers||[]).find(o=>o.provider==='Kilowatt direct');
+              if(!offer)throw new Error(root+': free offer missing '+id);
+              if(Number(offer.pricing?.rules?.[0]?.pricePerKwh)!==0||offer.currency!=='MAD')throw new Error(root+': wrong free tariff '+id);
+            }
+            const unknown=bySource(unresolved);
+            if(!unknown)throw new Error(root+': unresolved sample missing');
+            if((unknown.offers||[]).some(o=>o.provider==='Kilowatt direct'))throw new Error(root+': unresolved station received a tariff');
+
+            let raw=fs.readFileSync('./'+root+'/data/v9/source-registry.json','utf8').trim();
+            if(raw.endsWith('\\n'))raw=raw.slice(0,-2);
+            const registry=JSON.parse(raw);
+            const src=registry.sources.find(s=>s.id==='morocco-kilowatt-direct-offers');
+            if(!src||src.adapter!=='morocco-kilowatt-tariff-manifest-v1'||src.priority?.tariff!==115||src.active!==true)throw new Error(root+': tariff source not registered');
+            console.log(root+': OK 43 stations / 35 free / 8 unresolved');
+          }
+
+          const prodShell=fs.readFileSync('v9-production-shell/index.html','utf8');
+          const prodBridge=fs.readFileSync('v9-production-shell/bridge.js','utf8');
+          if(!prodShell.includes('assets/v9/adapters/morocco-kilowatt-tariff.js'))throw new Error('production shell missing Kilowatt adapter script');
+          if(!prodBridge.includes('moroccoKilowattTariff'))throw new Error('production bridge missing Kilowatt adapter');
+          NODE
+
+      - name: Ensure production/test parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp v9-production-runtime/assets/v9/adapters/morocco-kilowatt-tariff.js v9-test/assets/v9/adapters/morocco-kilowatt-tariff.js
+          cmp v9-production-runtime/assets/v9/browser-loaders.js v9-test/assets/v9/browser-loaders.js
