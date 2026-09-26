@@ -737,7 +737,7 @@
     },
     {
       "id": "morocco-totalenergies-hosts",
-      "label": "Morocco TotalEnergies / Club EV-Charge native inventory/status",
+      "label": "Morocco TotalEnergies / Club EV-Charge native daily snapshot",
       "adapter": "morocco-public-v1",
       "profile": "totalenergies-native",
       "countries": [
@@ -756,10 +756,10 @@
         "status": 96,
         "tariff": 0
       },
-      "refresh": "published-native-snapshot-every-2h",
+      "refresh": "published-native-daily-snapshot",
       "active": true,
       "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/totalenergies/latest-native-overlay.json",
-      "freshnessMaxMinutes": 180,
+      "freshnessMaxMinutes": 1560,
       "expectedMinStations": 18,
       "expectedMinConnectors": 38
     },
