@@ -736,6 +736,27 @@
       "active": true
     },
     {
+      "id": "morocco-kilowatt-direct-offers",
+      "label": "Morocco Kilowatt station-specific direct free tariffs",
+      "adapter": "morocco-kilowatt-tariff-manifest-v1",
+      "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json",
+      "countries": [
+        "MA"
+      ],
+      "operatorIds": [
+        "kilowatt"
+      ],
+      "capabilities": [
+        "tariff"
+      ],
+      "priority": {
+        "tariff": 115
+      },
+      "refresh": "station-specific-evidence-change-or-monthly",
+      "active": true,
+      "optional": true
+    },
+    {
       "id": "morocco-totalenergies-hosts",
       "label": "Morocco TotalEnergies / Club EV-Charge native daily snapshot",
       "adapter": "morocco-public-v1",
