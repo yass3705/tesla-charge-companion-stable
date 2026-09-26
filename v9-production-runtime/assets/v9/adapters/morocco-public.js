@@ -63,14 +63,14 @@
   function totalNativeConnectorState(v){
     const s=text(v).toLowerCase();
     if(s==='available')return'available';
-    if(['charging','preparing','suspendedev','suspendedevse','finishing','reserved'].includes(s))return'occupied';
+    if(['charging','preparing','suspendedev','suspendedevse','finishing','reserved','occupied'].includes(s))return'available';
     if(['faulted','unavailable','offline','inoperative'].includes(s))return'out_of_service';
     return'unknown';
   }
   function totalNativeAggregateState(states){
     const values=(states||[]).filter(Boolean);
     if(values.includes('available'))return'available';
-    if(values.includes('occupied'))return'occupied';
+    if(values.includes('occupied'))return'available';
     if(values.length&&values.every(v=>v==='out_of_service'))return'out_of_service';
     return'unknown';
   }
@@ -100,8 +100,8 @@
         const cpid=text(c?.ChargePointName||c?.ChargePointDisplayName||c?.cpId||c?.CPID),cid=text(c?.ChargePointConnectorNumber??c?.connectorId??c?.ConnectorId);
         if(!cpid||!cid)continue;
         const liveRow=liveByKey.get(`${cpid}|${cid}`),safe=liveRow?.safe_status||{};
-        const nativeState=statusFresh?text(safe.ComputedStatusForCpo||safe.ComputedStatus||safe.CpLastReportedStatus):'';
-        const state=statusFresh?totalNativeConnectorState(nativeState):'unknown';
+        const nativeState=text(safe.ComputedStatusForCpo||safe.ComputedStatus||safe.CpLastReportedStatus);
+        const state=totalNativeConnectorState(nativeState);
         const connector={
           id:`totalenergies:${sid}:${slug(cpid)}:${cid}`,
           kind:text(c?.ConnectorModelCurrentType).toUpperCase()==='DC'?'DC':'AC',
@@ -120,7 +120,7 @@
         connectors:list,
         status:{state:totalNativeAggregateState(list.map(c=>c.status?.state)),freshness:statusFresh?'fresh':'stale'}
       }));
-      const stationState=statusFresh?totalNativeAggregateState(evses.flatMap(e=>e.connectors.map(c=>c.status?.state))):'unknown';
+      const stationState=totalNativeAggregateState(evses.flatMap(e=>e.connectors.map(c=>c.status?.state)));
       const nativeName=text(st?.detail?.ChargeStationName||st?.name)||`TotalEnergies ${sid}`;
       const canonicalSlug=TOTAL_NATIVE_CANONICAL_SLUG_BY_ID[sid]||slug(nativeName.replace(/^TotalEnergies\s+/i,''));
       const address=[text(st?.detail?.ChargeStationAddress),text(st?.detail?.ChargeStationCity)].filter(Boolean).join(', ');
