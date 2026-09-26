@@ -712,10 +712,9 @@
     },
     {
       "id": "morocco-kilowatt-public",
-      "label": "Morocco Kilowatt public inventory/status",
+      "label": "Morocco Kilowatt native connectors / status / tariffs",
       "adapter": "morocco-public-v1",
-      "profile": "kilowatt",
-      "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json",
+      "profile": "kilowatt-native",
       "countries": [
         "MA"
       ],
@@ -723,38 +722,25 @@
         "inventory",
         "connectors",
         "access",
-        "status"
-      ],
-      "priority": {
-        "identity": 85,
-        "connectors": 85,
-        "access": 85,
-        "status": 70,
-        "tariff": 0
-      },
-      "refresh": "monthly-or-on-demand",
-      "active": true
-    },
-    {
-      "id": "morocco-kilowatt-direct-offers",
-      "label": "Morocco Kilowatt station-specific direct tariffs",
-      "adapter": "morocco-kilowatt-tariff-manifest-v1",
-      "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json",
-      "countries": [
-        "MA"
-      ],
-      "operatorIds": [
-        "kilowatt"
-      ],
-      "capabilities": [
+        "status",
         "tariff"
       ],
       "priority": {
-        "tariff": 115
+        "identity": 90,
+        "connectors": 110,
+        "access": 90,
+        "status": 95,
+        "tariff": 120
       },
-      "refresh": "app-backend-evidence-change-or-monthly",
+      "refresh": "published-native-daily-snapshot",
       "active": true,
-      "optional": true
+      "urls": {
+        "inventory": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json",
+        "native": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-native-connector-tariffs.json"
+      },
+      "freshnessMaxMinutes": 1560,
+      "expectedMinStations": 43,
+      "expectedMinConnectors": 80
     },
     {
       "id": "morocco-totalenergies-hosts",
