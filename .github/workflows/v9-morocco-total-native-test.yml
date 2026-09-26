@@ -60,7 +60,10 @@ jobs:
               minStations:18,
               minConnectors:38
             });
-            if(stale.some(st=>st.status?.state!=='unknown'))throw new Error(root+': stale snapshot leaked live status');
+            for(let i=0;i<fresh.length;i++){
+              if(stale[i].status?.state!==fresh[i].status?.state)throw new Error(root+': stale snapshot changed latest-known status');
+              if(stale[i].status?.freshness!=='stale')throw new Error(root+': stale snapshot freshness metadata missing');
+            }
 
             let raw=fs.readFileSync('./'+root+'/data/v9/source-registry.json','utf8').trim();
             if(raw.endsWith('\\n'))raw=raw.slice(0,-2);
