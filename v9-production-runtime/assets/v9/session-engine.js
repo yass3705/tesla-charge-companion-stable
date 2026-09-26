@@ -22,24 +22,31 @@
     const power=num(connector.powerKw);return power!=null&&power>22?'DC':'AC';
   }
 
+  function connectorUsable(connector={}){
+    const state=text(connector?.status?.state??connector?.status).toLowerCase();
+    return !['out_of_service','unavailable','offline','faulted','inoperative'].includes(state);
+  }
   function stationChargingProfile(station){
     let selected=null;
     for(const evse of station?.evses||[])for(const connector of evse?.connectors||[]){
+      if(!connectorUsable(connector))continue;
       const power=num(connector?.powerKw);if(power==null||power<=0)continue;
-      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(connector)};
+      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(connector),connectorId:text(connector?.id)||null,plugName:text(connector?.plugName||connector?.type)||null};
     }
-    if(selected)return selected;
-    for(const evse of station?.evses||[])for(const connector of evse?.connectors||[])return{powerKw:num(connector?.powerKw),kind:connectorKind(connector)};
-    return{powerKw:null,kind:null};
+    return selected||{powerKw:null,kind:null,connectorId:null,plugName:null};
   }
   function stationChargingKind(station){return stationChargingProfile(station).kind;}
 
-  function offerMatchesChargingKind(offer,chargingKind,chargingPowerKw=null){
+  function offerMatchesChargingKind(offer,chargingKind,chargingPowerKw=null,chargingPlugName=null,chargingConnectorId=null){
     const allowed=Array.isArray(offer?.connectorKinds)?offer.connectorKinds.map(v=>text(v).toUpperCase()).filter(Boolean):[];
     if(chargingKind&&allowed.length&&!allowed.includes(chargingKind))return false;
     const min=num(offer?.minPowerKw),max=num(offer?.maxPowerKw),power=num(chargingPowerKw);
     if(power!=null&&min!=null&&power<min-1e-9)return false;
     if(power!=null&&max!=null&&power>max+1e-9)return false;
+    const ids=Array.isArray(offer?.connectorIds)?offer.connectorIds.map(text).filter(Boolean):[];
+    if(ids.length&&chargingConnectorId&&!ids.includes(text(chargingConnectorId)))return false;
+    const plugs=Array.isArray(offer?.plugNames)?offer.plugNames.map(v=>text(v).toUpperCase()).filter(Boolean):[];
+    if(plugs.length&&chargingPlugName&&!plugs.includes(text(chargingPlugName).toUpperCase()))return false;
     return true;
   }
 
@@ -157,8 +164,8 @@
 
   function evaluateStation(station,session={},options={}){
     const selectedSubscriptions=options.selectedSubscriptions||session.selectedSubscriptions||[];
-    const chargingProfile=stationChargingProfile(station),chargingKind=chargingProfile.kind,chargingPowerKw=chargingProfile.powerKw;
-    const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode}).filter(offer=>offerMatchesChargingKind(offer,chargingKind,chargingPowerKw));
+    const chargingProfile=stationChargingProfile(station),chargingKind=chargingProfile.kind,chargingPowerKw=chargingProfile.powerKw,chargingPlugName=chargingProfile.plugName,chargingConnectorId=chargingProfile.connectorId;
+    const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode}).filter(offer=>offerMatchesChargingKind(offer,chargingKind,chargingPowerKw,chargingPlugName,chargingConnectorId));
     const targetCurrency=text(options.targetCurrency||session.targetCurrency||'EUR').toUpperCase();
     const fxRates=options.fxRates||session.fxRates||{};
     const effectiveSession=stationSession(station,session,options),km=recoveredKm(session),evaluations=[];
@@ -192,7 +199,7 @@
     });
     const best=comparable[0]||null;
     return{
-      stationId:text(station?.id||station?.canonicalId||station?.stationId),chargingKind,chargingPowerKw,
+      stationId:text(station?.id||station?.canonicalId||station?.stationId),chargingKind,chargingPowerKw,chargingPlugName,chargingConnectorId,
       eligibleOfferCount:offers.length,comparableOfferCount:comparable.length,targetCurrency,recoveredKm:km,
       requestedEnergyKwh:effectiveSession.requestedEnergyKwh,approachEnergyKwh:effectiveSession.approachEnergyKwh,billedEnergyKwh:effectiveSession.energyKwh,
       best,
@@ -213,5 +220,5 @@
     return rows;
   }
 
-  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateOfferValidity,evaluateSessionStartLockedOffer,evaluateTimelineOffer,timelineEnergy,stationChargingProfile,stationChargingKind,offerMatchesChargingKind,connectorKind};
+  return{evaluateStation,evaluateArea,recoveredKm,fxRate,stationSession,evaluateOfferValidity,evaluateSessionStartLockedOffer,evaluateTimelineOffer,timelineEnergy,stationChargingProfile,stationChargingKind,offerMatchesChargingKind,connectorKind,connectorUsable};
 });
