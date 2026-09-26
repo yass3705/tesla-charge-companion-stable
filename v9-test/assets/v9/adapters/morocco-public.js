@@ -59,6 +59,86 @@
   function kilowattState(v){const s=text(v).toLowerCase();return s==='available'?'available':s==='occupied'||s==='charging'?'occupied':['faulted','offline','unknown','unavailable'].includes(s)?'out_of_service':'unknown';}
   function normalizeKilowattDataset(dataset,{sourceId='morocco-kilowatt-public'}={}){const rows=Array.isArray(dataset?.stations)?dataset.stations:[],production=rows.filter(r=>r?.production_candidate===true);if(rows.length!==47||production.length!==43)throw new Error(`Kilowatt expected 47/43, got ${rows.length}/${production.length}`);return production.map(st=>{const lat=number(st.latitude),lon=number(st.longitude);if(!validMoroccoGps(lat,lon))throw new Error(`invalid Kilowatt GPS ${st.id}`);const connectors=(st.connectors||[]).map((c,i)=>({id:`kilowatt:${st.id}:connector:${i}`,kind:(text(c?.type).toUpperCase().includes('CCS')||text(c?.type).toUpperCase().includes('CHADEMO'))?'DC':'AC',powerKw:number(c?.power_kw),plugName:text(c?.type)||null}));return{canonicalId:`MA:kilowatt:${text(st.id)}`,aliases:[`kilowatt-station:${text(st.id)}`],sourceStationId:text(st.id),countryCode:'MA',name:text(st.name)||'Kilowatt',address:text(st.address),latitude:lat,longitude:lon,physicalOperator:{name:'Kilowatt'},networkBrand:'Kilowatt',access:{kind:'public',limited:false,siteBrand:st.site_brand==null?null:text(st.site_brand),appSource:'Kilowatt public web map',accessNetwork:'Kilowatt'},evses:[{id:`kilowatt:${text(st.id)}`,connectors}],status:{state:kilowattState(st.status),sourceId,statusSource:text(st.status_source)||'Kilowatt public web map',updatedAt:null},offers:[]};});}
 
+
+  function totalNativeConnectorState(v){
+    const s=text(v).toLowerCase();
+    if(s==='available')return'available';
+    if(['charging','preparing','suspendedev','suspendedevse','finishing','reserved'].includes(s))return'occupied';
+    if(['faulted','unavailable','offline','inoperative'].includes(s))return'out_of_service';
+    return'unknown';
+  }
+  function totalNativeAggregateState(states){
+    const values=(states||[]).filter(Boolean);
+    if(values.includes('available'))return'available';
+    if(values.includes('occupied'))return'occupied';
+    if(values.length&&values.every(v=>v==='out_of_service'))return'out_of_service';
+    return'unknown';
+  }
+  function totalNativeFreshness(dataset,maxMinutes=180,nowMs=Date.now()){
+    const raw=text(dataset?.generated_at),timestamp=Date.parse(raw),limit=number(maxMinutes);
+    if(!raw||!Number.isFinite(timestamp)||limit==null||limit<=0)return{fresh:false,generatedAt:raw||null,ageMinutes:null,maxMinutes:limit};
+    const ageMinutes=Math.max(0,(Number(nowMs)-timestamp)/60000);
+    return{fresh:ageMinutes<=limit,generatedAt:raw,ageMinutes,maxMinutes:limit};
+  }
+  const TOTAL_NATIVE_CANONICAL_SLUG_BY_ID={
+    '1':'relais-chaouia','2':'tanger-med','3':'relais-atlantis','4':'relais-oulmes','5':'relais-chichaoua','6':'palmeraie',
+    '7':'bouregreg','8':'relais-al-baida','10':'relais-de-tanger','11':'djebilet','12':'relais-agadir','13':'relais-amsekroud',
+    '15':'taourirt','17':'tamesna','18':'relais-mazagan','19':'relais-lissasfa','20':'relais-khemisset','22':'mogador'
+  };
+  function normalizeTotalNativeDataset(dataset,{sourceId='morocco-totalenergies-hosts',statusFresh=true,statusGeneratedAt=null,minStations=18,minConnectors=38}={}){
+    const rows=Array.isArray(dataset?.results)?dataset.results:[];
+    const stationFloor=number(minStations)??18,connectorFloor=number(minConnectors)??38;
+    if(rows.length<stationFloor)throw new Error(`TotalEnergies native expected at least ${stationFloor} stations, got ${rows.length}`);
+    let connectorCount=0;
+    const stations=rows.map(st=>{
+      const sid=text(st?.station_id??st?.detail?.ChargeStationID),lat=number(st?.detail?.ChargeStationLat??st?.lat),lon=number(st?.detail?.ChargeStationLong??st?.lon);
+      if(!sid||!validMoroccoGps(lat,lon))throw new Error(`invalid TotalEnergies native station ${sid}`);
+      const connectors=Array.isArray(st?.connectors)?st.connectors:[];connectorCount+=connectors.length;
+      const live=Array.isArray(st?.live_status)?st.live_status:[],liveByKey=new Map(live.map(x=>[`${text(x?.cpid)}|${text(x?.connectorId)}`,x]));
+      const groups=new Map();
+      for(const c of connectors){
+        const cpid=text(c?.ChargePointName||c?.ChargePointDisplayName||c?.cpId||c?.CPID),cid=text(c?.ChargePointConnectorNumber??c?.connectorId??c?.ConnectorId);
+        if(!cpid||!cid)continue;
+        const liveRow=liveByKey.get(`${cpid}|${cid}`),safe=liveRow?.safe_status||{};
+        const nativeState=statusFresh?text(safe.ComputedStatusForCpo||safe.ComputedStatus||safe.CpLastReportedStatus):'';
+        const state=statusFresh?totalNativeConnectorState(nativeState):'unknown';
+        const connector={
+          id:`totalenergies:${sid}:${slug(cpid)}:${cid}`,
+          kind:text(c?.ConnectorModelCurrentType).toUpperCase()==='DC'?'DC':'AC',
+          powerKw:number(c?.MaxConnectorPower)??number(c?.ConnectorModelPower),
+          powerSource:'Club EV-Charge native',
+          plugName:text(c?.ConnectorModelStandardName)||null,
+          status:{state,nativeState:nativeState||null,error:text(safe.Error)||null,freshness:statusFresh?'fresh':'stale'}
+        };
+        if(!groups.has(cpid))groups.set(cpid,[]);
+        groups.get(cpid).push(connector);
+      }
+      const evses=[...groups.entries()].map(([cpid,list])=>({
+        id:`totalenergies:${sid}:cp:${slug(cpid)}`,
+        aliases:[`totalenergies-cpid:${cpid}`],
+        label:cpid,
+        connectors:list,
+        status:{state:totalNativeAggregateState(list.map(c=>c.status?.state)),freshness:statusFresh?'fresh':'stale'}
+      }));
+      const stationState=statusFresh?totalNativeAggregateState(evses.flatMap(e=>e.connectors.map(c=>c.status?.state))):'unknown';
+      const nativeName=text(st?.detail?.ChargeStationName||st?.name)||`TotalEnergies ${sid}`;
+      const canonicalSlug=TOTAL_NATIVE_CANONICAL_SLUG_BY_ID[sid]||slug(nativeName.replace(/^TotalEnergies\s+/i,''));
+      const address=[text(st?.detail?.ChargeStationAddress),text(st?.detail?.ChargeStationCity)].filter(Boolean).join(', ');
+      return{
+        canonicalId:`MA:totalenergies-host:${canonicalSlug}`,
+        aliases:[`totalenergies-host:${canonicalSlug}`,`totalenergies-native-station:${sid}`],
+        sourceStationId:sid,countryCode:'MA',name:nativeName,address,latitude:lat,longitude:lon,
+        physicalOperator:{name:'TotalEnergies'},networkBrand:'TotalEnergies',
+        evses,
+        access:{kind:'public',limited:false,siteBrand:'TotalEnergies',appSource:'Club EV-Charge public guest native',accessNetwork:'Club EV-Charge'},
+        status:{state:stationState,sourceId,statusSource:'Numocity native connector status',updatedAt:statusGeneratedAt||text(dataset?.generated_at)||null,freshness:statusFresh?'fresh':'stale'},
+        offers:[],updatedAt:statusGeneratedAt||text(dataset?.generated_at)||null
+      };
+    });
+    if(connectorCount<connectorFloor)throw new Error(`TotalEnergies native expected at least ${connectorFloor} connectors, got ${connectorCount}`);
+    return stations;
+  }
+
   function normalizeTotalEnergies(official,alWaha,links,{sourceId='morocco-totalenergies-hosts'}={}){
     if(!Array.isArray(official?.rows))throw new Error('invalid TotalEnergies official inventory');
     const corrected=text(links?.reconciliation?.corrected_second_tamesna_label),coords=new Map((links?.official_link_coordinates||[]).map(x=>[text(x.site_name),{lat:number(x.latitude),lon:number(x.longitude)}]));
@@ -83,10 +163,11 @@
       }
       if(source.profile==='fastvolt')return normalizeFastVoltDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
       if(source.profile==='kilowatt')return normalizeKilowattDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
+      if(source.profile==='totalenergies-native'){const dataset=await fetchJson(source.url,fetchImpl);const freshness=totalNativeFreshness(dataset,number(source.freshnessMaxMinutes)??180,nowMs==null?Date.now():Number(nowMs));return normalizeTotalNativeDataset(dataset,{sourceId:source.id,statusFresh:freshness.fresh,statusGeneratedAt:freshness.generatedAt,minStations:number(source.expectedMinStations)??18,minConnectors:number(source.expectedMinConnectors)??38});}
       if(source.profile==='totalenergies'){const [official,alWaha,links]=await Promise.all([fetchJson(source.urls.official,fetchImpl),fetchJson(source.urls.alWaha,fetchImpl),fetchJson(source.urls.links,fetchImpl)]);return normalizeTotalEnergies(official,alWaha,links,{sourceId:source.id}).stations;}
       throw new Error(`unsupported Morocco profile ${source.profile}`);
     };
   }
 
-  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalEnergies,evgoClassify,kilowattState};
+  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalNativeDataset,totalNativeFreshness,totalNativeConnectorState,normalizeTotalEnergies,evgoClassify,kilowattState};
 });
