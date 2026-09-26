@@ -77,12 +77,14 @@ jobs:
             const byId=id=>stations.find(s=>String(s.sourceStationId)===id);
 
             const commune=byId(ids.communeFes);
+            if(commune.status?.state!=='out_of_service')throw new Error(root+': Commune Fes should be latest-known out_of_service');
             const communeEval=sessionEngine.evaluateStation(commune,{energyKwh:12,durationMinutes:40,targetCurrency:'MAD'},{targetCurrency:'MAD'});
-            if(communeEval.best?.total!==0)throw new Error(root+': Commune Fes should be free');
+            if(communeEval.comparableOfferCount!==0||communeEval.best!==null)throw new Error(root+': Commune Fes offline connector leaked tariff');
 
             const berkane=byId(ids.berkane);
+            if(berkane.status?.state!=='out_of_service')throw new Error(root+': Province Berkane should be latest-known out_of_service');
             const berkaneEval=sessionEngine.evaluateStation(berkane,{energyKwh:12,durationMinutes:40,targetCurrency:'MAD'},{targetCurrency:'MAD'});
-            if(berkaneEval.best?.total!==0)throw new Error(root+': Province Berkane should be free');
+            if(berkaneEval.comparableOfferCount!==0||berkaneEval.best!==null)throw new Error(root+': Province Berkane offline connector leaked tariff');
 
             const jnane=byId(ids.jnane);
             const jp=sessionEngine.stationChargingProfile(jnane);
