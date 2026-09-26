@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 125,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 189
+  },
+  "decisions": [
+    {
+      "canonicalName": "Torelló",
+      "labels": ["Torelló"],
+      "status": "partial",
+      "model": "municipal public charging",
+      "evidence": ["https://torello.cat/ple-de-lajuntament-del-mes-de-juliol-2/", "https://boletinbien.com/barcelona/ayuntamientos/torello/preu-public-recarrega"],
+      "coverageKnown": "Current municipal source confirms Torelló is regulating its municipal EV charging service and public price; a current secondary bulletin report cites 0.40 EUR/kWh semi-fast and 0.42 EUR/kWh fast.",
+      "blockingReason": "The current numeric tariff was not located in a directly accessible official municipal tariff publication during this first pass, so the secondary numeric values are not promoted to TCC.",
+      "resumeCondition": "Direct official ordinance/BOP tariff publication or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Torrefarrera",
+      "labels": ["Torrefarrera"],
+      "status": "partial",
+      "model": "municipal public charging",
+      "evidence": ["https://www.torrefarrera.cat/actualitat/noticies/torrefarrera-posa-en-marxa-tres-carregadors-municipals-per-a-vehicles-electrics", "https://www.torrefarrera.cat/ajuntament/normativa-i-ordenances-muncipals/ordenanca-fiscal-num-40-reguladora-del-preu-public-pel-servei-de-recarrega-de-vehicles-electrics-en-estacions-publiques.pdf/view"],
+      "coverageKnown": "Official municipal sources confirm three municipal semi-fast charging stations and a dedicated public-price ordinance.",
+      "blockingReason": "The numeric current tariff was not safely extractable from the official publication in this pass; historical free-period wording and third-party prices are not promoted.",
+      "resumeCondition": "Readable current official tariff text or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "SERVICIOS Y APLICACIONES INEL, S.L.",
+      "labels": ["SERVICIOS Y APLICACIONES INEL, S.L. Servicio Aplicaciones"],
+      "status": "partial",
+      "model": "single-site / FENIE-managed charging",
+      "evidence": ["https://recarga.fenieenergia.es/punto-recarga/0075", "https://apeme.es/asociados/ontinyent/servicios-y-aplicaciones-inel-sl"],
+      "coverageKnown": "Current FENIE page confirms point 0075 at INEL in Ontinyent, 3.6 kW, one bay, 24/7, owner SERVICIOS Y APLICACIONES INEL, S.L., and a two-hour reservation limit.",
+      "blockingReason": "The current public page exposes the point and operator identity but no numeric charging tariff without authenticated interaction; no price is inferred.",
+      "resumeCondition": "Public FENIE numeric tariff, QR/app price, or deterministic REVE tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Restaurante El Ninot",
+      "labels": ["Restaurante El Ninot"],
+      "status": "setAside",
+      "model": "restaurant/site-level",
+      "evidence": ["https://el-ninot.com/", "https://www.electromaps.com/es/puntos-carga/espana/madrid/madrid/restaurante-el-ninot-calle-de-nuestra-senora-de-valverde"],
+      "coverageKnown": "The official restaurant site confirms the entity. A current third-party charging listing reports a charger and free charging, but that price is not authoritative for TCC.",
+      "blockingReason": "No current official restaurant/charging-operator numeric tariff was located; third-party 'free' is deliberately not promoted.",
+      "resumeCondition": "Official restaurant/operator tariff, QR/app evidence, or deterministic REVE tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Restaurante Peña Mea",
+      "labels": ["Restaurante Peña Mea"],
+      "status": "setAside",
+      "model": "restaurant/site-level",
+      "evidence": ["https://www.electromaps.com/es/puntos-carga/espana/asturias/guyame/restaurante-pena-mea-as-373"],
+      "coverageKnown": "A current third-party charging listing exposes four 22 kW Type 2 connectors and states public free access.",
+      "blockingReason": "No current official restaurant/operator charging tariff authority was located, so third-party free-access wording is not promoted.",
+      "resumeCondition": "Official restaurant/operator tariff, QR/app evidence, or deterministic REVE tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "ZOILO RIOS, S.A.",
+      "labels": ["ZOILO RIOS, S.A."],
+      "status": "active",
+      "model": "multi-site direct charging network / station-dependent",
+      "evidence": ["https://www.zoilorios.es/particulares/vehiculos-electricos/punto-de-carga-mas-cercano/", "https://www.zoilorios.es/estaciones-de-servicio/estacion-de-servicio-el-portazgo"],
+      "coverageKnown": "Current official Zoilo Ríos pages confirm an operating charging network with direct on-site payment, Waylet, Autocharge and e-mobility apps, with station powers ranging from moderate to ultrafast.",
+      "blockingReason": "No current uniform public numeric tariff is published on the official pages; station-level pricing must be mapped rather than extrapolated.",
+      "resumeCondition": "Deterministic station/connector tariff from official payment flow or REVE connector-tariff mapping after first pass.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {
+    "firstPassTraversed": 6,
+    "sourceValidated": 0,
+    "partial": 3,
+    "setAside": 2,
+    "active": 1,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "difficultCaseReauditPerformed": false,
+    "legacyDenominatorChanged": false
+  },
+  "generatedAt": "2026-09-14T16:52:00Z"
+}

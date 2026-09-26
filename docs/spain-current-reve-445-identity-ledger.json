@@ -1,0 +1,4429 @@
+{
+  "schemaVersion": 2,
+  "country": "ES",
+  "mode": "IDENTITY_ONLY_NO_TARIFF",
+  "source": "data/spain_reve/reve_public_web_probe.json#identityDiagnostics.operatorLabels",
+  "sourceOperatorLabels": 445,
+  "rawUniqueLabels": 445,
+  "normalizationCollisionGroups": [
+    {
+      "normalized": "fenie energia",
+      "rawLabels": [
+        "Feníe Energía",
+        "FENÍE ENERGÍA"
+      ]
+    }
+  ],
+  "currentReveInventoryIdentityFirstPassComplete": true,
+  "identityFirstPassCount": 445,
+  "counts": {
+    "representedHistorical": 199,
+    "currentIdentityTraversed": 246
+  },
+  "historicalLegacyWorkLabelCount": 618,
+  "historical618FullyReconstructed": false,
+  "historicalUncertainty": "Current REVE 445 raw labels are fully traversed by identity. Normalization collisions are recorded, never silently merged. This does not prove reconstruction of all historical 618 labels. Legacy 589/618 is deprecated because duplicate increments were detected.",
+  "tariffResearchPerformed": false,
+  "externalReveQuotaConsumed": false,
+  "runtimePublishReady": false,
+  "entries": [
+    {
+      "label": "ACCIONA Recarga",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "ACCIONA Recarga",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
+        }
+      ]
+    },
+    {
+      "label": "ADURIZ ENERGIA SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Aduriz Energía",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
+        },
+        {
+          "name": "ADURIZ ENERGIA SLU",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "Aeroports de la Generalitat",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Aeroports de la Generalitat",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Aj. Mollerussa",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Aj. Mollerussa",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run.json"
+        }
+      ]
+    },
+    {
+      "label": "Aj. Montcada i Reixac",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Bonrepòs Mirambell",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament Bonrepòs Mirambell",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament d'Alcanar",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d'Alcanar",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament d’Alforja des",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament d'Amer",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d'Amer",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament d’Argentona",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d’Argentona",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT D'INCA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d'Inca",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
+        },
+        {
+          "name": "AJUNTAMENT D'INCA",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT D'OS DE BALAGUER",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d'Os de Balaguer",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
+        },
+        {
+          "name": "AJUNTAMENT D'OS DE BALAGUER",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run29.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament d'Ullastret",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d'Ullastret",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run23.json"
+        },
+        {
+          "name": "Ajuntament d'Ullastret",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run46.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Banyoles",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Banyoles",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run29.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE BELLREGUARD",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "AJUNTAMENT DE BELLREGUARD",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run2.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Bellvís",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Bellvís",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run29.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Berga",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Berga",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run29.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Blancafort",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Blancafort",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run2.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Bordils",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Bordils",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run29.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE BUNYOLA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Bunyola",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run22.json"
+        },
+        {
+          "name": "AJUNTAMENT DE BUNYOLA",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        },
+        {
+          "name": "AJUNTAMENT DE BUNYOLA",
+          "status": null,
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Cabrera de Mar",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Cabrera de Mar",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        },
+        {
+          "name": "Ajuntament de Cabrera de Mar",
+          "status": null,
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Calaf",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Calaf",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run23.json"
+        },
+        {
+          "name": "Ajuntament de Calaf",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        },
+        {
+          "name": "Ajuntament de Calaf",
+          "status": null,
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Calafell",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Calafell",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        },
+        {
+          "name": "Ajuntament de Calafell",
+          "status": null,
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE CALVIÀ",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Calvià",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run23.json"
+        },
+        {
+          "name": "AJUNTAMENT DE CALVIÀ",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        },
+        {
+          "name": "AJUNTAMENT DE CALVIÀ",
+          "status": null,
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Canet de Mar",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Canet de Mar",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Canovelles",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Canovelles",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run2.json"
+        },
+        {
+          "name": "Ajuntament de Canovelles",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Cardedeu",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Cardedeu",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run2.json"
+        },
+        {
+          "name": "Ajuntament de Cardedeu",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Carrícola Ajuntament Carricola",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Carrícola Ajuntament Carricola",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Casserres",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Casserres",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run3.json"
+        },
+        {
+          "name": "Ajuntament de Casserres",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Corçà",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Corçà",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE COSTITX",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Costitx",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run23.json"
+        },
+        {
+          "name": "AJUNTAMENT DE COSTITX",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Cunit",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Cunit",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json"
+        },
+        {
+          "name": "Ajuntament de Cunit",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE EL MORELL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "AJUNTAMENT DE EL MORELL",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Folgueroles",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Folgueroles",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Font-rubi",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Gironella",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Gironella",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run3.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Guardiola de Berguedà",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Guissona",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Gurb",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Juneda",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de l'Albiol",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de l'Espluga de Francolí",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AJUNTAMENT DE L'OLLERIA - -",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de La Secuita",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de La Secuita",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run3.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de la Vall d'en Bas",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de la Vall d'en Bas",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run5.json"
+        },
+        {
+          "name": "Ajuntament de Vall d'en Bas",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run46.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Les Borges Blanques",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Lliçà d'Amunt",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Lliçà d'Amunt",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Malla",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Vilamalla",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run48.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Martorell",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Martorelles",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run3.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Martorelles",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Martorelles",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run3.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Miralcamp",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Miralcamp",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run23.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Moià",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Mont-roig del Camp",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Montferrer",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Palafolls",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "Ajuntament de Palafolls"
+    },
+    {
+      "label": "Ajuntament de Pals",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Pals",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run4.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Paüls",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "distinct_from_Pals"
+    },
+    {
+      "label": "Ajuntament de Pont de Suert",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Prat de Llobregat",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament del Prat de Llobregat",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run5.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Renau",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Riells i Viabrea",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Rubi",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Rubí",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Saldes",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Salomó",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Andreu de Llavaneres",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Boi de Lluçanès",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Celoni",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Sant Celoni",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run4.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Sant Feliu de Codines",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Fruitós de Bages",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Jaume d'Enveja",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Julià de Cerdanyola",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AJUNTAMENT DE SANT LLUIS",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Sant Lluís",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run23.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Santa Coloma de Queralt",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Santa Coloma de Queralt",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run43.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Santa Cristina d'Aro",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Santa Cristina d'Aro",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run5.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Santa Fe del Penedès",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Santa Margarida de Montbui",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Santa Margarida de Montbui",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "AJUNTAMENT DE SANTA MARIA DEL CAMI",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Santa Maria del Camí",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run23.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Soses",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Súria",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Súria",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run4.json"
+        },
+        {
+          "name": "Ajuntament de Súria",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run45.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Tiana",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Tiana",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run23.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Torroella de Montgrí",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Vallgorguina",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Vallgorguina",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run4.json"
+        },
+        {
+          "name": "Ajuntament de Vallgorguina",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run47.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Vic",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Vilabella",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Vilabella",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run23.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Vilablareix",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Vilablareix",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run4.json"
+        },
+        {
+          "name": "Ajuntament de Vilablareix",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run47.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament de Vilada",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "distinct_identity"
+    },
+    {
+      "label": "Ajuntament de Vinyols i els Arcs",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament del Catllar",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament del Lloar",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament del Pla de Santa Maria",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament dels Pallaresos",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AJUNTAMENT DES CASTELL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament des Castell",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run23.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament Lliçà de Vall",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Manlleu",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Sant Joan de Vilatorrada",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament Sant Joan de Vilatorrada",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-13-web-reconstruction-run4.json"
+        }
+      ]
+    },
+    {
+      "label": "Ajuntament Sant Julià de Llor i Bonmatí",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Selva del Camp",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Alcover",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ALDI",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ALEGRIA HOTELS",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ALGUPIBE, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Algupibe, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Allego",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Allego Spain S.L.U",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Almatret",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ANARGO 2002 SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "ANARGO 2002 SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Andrés Rodríguez Brenes",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ANTONIO SALDAÑA MARCO",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "APARCAMENTS Tarragona",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ARETE MACENAS HOTELES, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Areté Macenas Hoteles, S.L.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "ARSA INVERSIONES SAU",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Artesa de Segre",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ascó",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Asociacion Autonoma de Instaladores Electricos y de Telecomunicaciones de Granada",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ATENCO ENERGIA SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Atenco Energía, SL / Canaluz Recarga",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Atlante Iberia S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Atlante",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run17.json"
+        },
+        {
+          "name": "Atlante",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "AUTOCARES DIPESA SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Autocares Dipesa SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "AUTOMOVILES ARTAL, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Automóviles Artal, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Autos Pisa SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Autos Pisa SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Avinyonet de Puigventos",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayto Beriáin",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYTO ZAMORA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "AYTO ZAMORA",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Ayto. Ansoain Ansoain Ansoain",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento Alcalá de la Selva",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento cendea de Olza/Oltza Zendea Ayuntamiento Ayuntamiento",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Agullent - -",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ALMOCITA . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ARRONIZ . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE AZAGRA Azagra Navarra",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE CARRIÓN DE LOS CONDES - -",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Carrión de los Condes",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json"
+        }
+      ]
+    },
+    {
+      "label": "Ayuntamiento de Casas Bajas Casas Bajas Casas Bajas",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Espirdo Espirdo Espirdo",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ESTERIBAR Esteribar Navarra",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Falces Falces Falces",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE FELANITX",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Felanitx",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "AYUNTAMIENTO DE FONZ",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Fonz",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Garínoain",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Grazalema Grazalema Cádiz",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE GUADALIX DE LA SIERRA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Guadalix de la Sierra",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Ayuntamiento de Huarte",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE LLIBER AYUNTAMIENTO LLIBER",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE LOS MONTESINOS . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE MERINDAD DE RÍO UBIERNA MERINDAD RÍO UBIERNA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ayuntamiento de Navas del Rey",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Navas del Rey",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "AYUNTAMIENTO DE OLOCAU",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE PADULES . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "distinct_identity"
+    },
+    {
+      "label": "Ayuntamiento de Premià",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Ribafrecha - -",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Urkabustaiz",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Urkabustaiz",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Ayuntamiento de Viana . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "distinct_identity"
+    },
+    {
+      "label": "AYUNTAMIENTO DE VILLADIEGO BURGOS ESPAÑA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE VILVIESTRE DEL PINAR",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Xeraco Ayuntamiento Ayuntamiento",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Zamora",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "AYTO ZAMORA",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Ayuntamiento Getaria",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento Santo Domingo de la Calzada",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO VALLE DE ARANGUREN",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Badia del Vallés",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Baix Ebre Innova SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Baix Ebre Innova SL",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Balsareny",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Banana Express",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Barter Mobility S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Barter Mobility S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "BEASAINGO UDALA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Beasaingo Udala",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Belen Lorefice Gaitan",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Benavent de Segrià",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Bescanó",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Bescanó",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run19.json"
+        }
+      ]
+    },
+    {
+      "label": "Bodegas Macias Batle",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Bodegas Nodus",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Bolaños",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "BONPREU, S.A.U.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Braker Corporation",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Breda",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Breda",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "C.C. LAS RAMBLAS CENTRO S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "C.C. Las Ramblas Centro",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Cabildo Lanzarote",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "CADENA MAR S.L. MAR HOTELS",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Caldes de Malavella",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Caldes de Malavella",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Cambrils APARCAM",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Camping l'Amfora",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Camping Mas Patoxas",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Capmany",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Cardona",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "CARGADORES LOW COST",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Carmen Andres Garcia",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Caseres",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Castellolí",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Castellvell del Camp",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Castellvell del Camp",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json"
+        }
+      ]
+    },
+    {
+      "label": "Centro Comercial Plaza Eliptica",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Centro Comercial Plaza Eliptica",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "CENTROS COMERCIALES CARREFOUR SA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "CHARGEVITE ENERGY SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Chargevite Energy",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "CHARGING TOGETHER SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Charging Together",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        },
+        {
+          "name": "Charging Together",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "CHELMONTE, SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Chelmonte SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "CIMALSA Castellar del Vallès",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "CIMALSA la Selva",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Club de Golf el Bosque Chiva",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Club de Golf Gorraiz",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Club Nàutic l'Escala",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Club Nàutic l'Escala",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "Club Náutico Moraira",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "COMPAÑIA GENERAL NAFTE, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Compañía General Naftë",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "Complex Comercial Vilafranca",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Comunidad de Bienes Aparcamientos Primero de Mayo",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Aparcamientos Primero de Mayo",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "CONCELLO DE VEDRA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Concello de Vedra",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "Consell Insular de Menorca",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Consell Insular de Menorca",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        },
+        {
+          "name": "Consell Insular de Menorca",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "Constanti",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Consum",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Cooperativa Eléctrica Catralense",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Corbera de Llobregat",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "distinct_identity"
+    },
+    {
+      "label": "COSENTINO INDUSTRIAL, S.A.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Cosentino Industrial",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "COSTCO WHOLESALE SPAIN SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Costco Wholesale Spain",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        },
+        {
+          "name": "COSTCO WHOLESALE SPAIN SLU",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "COVES ENERGY SOLUTIONS SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Coves Energy Solutions",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "Darsen Motor S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Darsen Motor",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "DIA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "DIA",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "Diputación de Badajoz",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Diputación de Badajoz",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "Diputación Foral de Gipuzkoa",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Diputación Foral de Gipuzkoa",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        },
+        {
+          "name": "Diputación Foral de Gipuzkoa",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "DIRAN S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "DIRAN S.A.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run27.json"
+        },
+        {
+          "name": "DIRAN S.A.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "Ditec Automoviles Barcelona S.L.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ditec Automoviles Barcelona S.L.U.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "Ditec Hanstein SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ditec Hanstein SA",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "DORSOL, SAU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "DORSOL SAU",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "EATIM  JESUS POBRE",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "EATIM JESUS POBRE",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "EDISON NEXT SPAIN SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Edison Next Spain",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
+        },
+        {
+          "name": "EDISON NEXT SPAIN SLU",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "EDP Charge",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "EDP Charge",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "EFICIENCIA Y SERVICIOS RENOVABLES SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Eficiencia y Servicios Renovables",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
+        },
+        {
+          "name": "EFICIENCIA Y SERVICIOS RENOVABLES SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "El Far d'Empordà",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "El Masroig",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "El Pont de Vilomara",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ELECSUM FOTOVOLTAICA, S.L.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "ELECSUM FOTOVOLTAICA, S.L.U.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run27.json"
+        }
+      ]
+    },
+    {
+      "label": "Electra",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Electra",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+        },
+        {
+          "name": "Electra",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        },
+        {
+          "name": "Electra",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run26.json"
+        }
+      ]
+    },
+    {
+      "label": "ELECTRICA SOLLERENSE S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "Eléctrica Sollerense / U Energia"
+    },
+    {
+      "label": "ELECTROMAPS SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Electromaps",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run28.json"
+        }
+      ]
+    },
+    {
+      "label": "elRetiro",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "EMAG S.L ARILLA ALLUE",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "EMAYA, S.A.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Emerix Systems S.L.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Emovili Fast, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Emovili Fast",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run29.json"
+        }
+      ]
+    },
+    {
+      "label": "EMPRESA MUNICIPAL DE TRANSPORTES DE MADRID, S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Empresa Municipal de Transportes de Madrid, S.A.",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run20.json"
+        }
+      ]
+    },
+    {
+      "label": "ENDESA X WAY, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Endesa X Way",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run16.json"
+        },
+        {
+          "name": "Endesa X Way",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Endolla Barcelona",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Barcelona de Serveis Municipals / Endolla Barcelona",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "ENERGEA CONSULTING Y ASESORES SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Energía Distribuida del Norte S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "Energía Distribuida del Norte / Edinor"
+    },
+    {
+      "label": "ENILEC ENILEC ENILEC",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "EPRESA ENERGIA SA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Eranovum E-Mobility",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Eranovum",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+        },
+        {
+          "name": "Eranovum",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+        },
+        {
+          "name": "Eranovum",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Ernesto Serra Gomez",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Espolla",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Estació Servei Porto Gas",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ESTACION DE SERVICIO AYALA S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Estación de Servicio Ayala",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO LAPIDO SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Estación de Servicio Lapido",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO LOW COST 2015, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Estación de Servicio Low Cost 2015",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "ESTACION DE SERVICIO VILLAROSA S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Estación de Servicio Villarosa",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "ESTACION SERVICIO JAIME I, S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Estación Servicio Jaime I",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "ESTACIONAMIENTOS LUCENSES SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Estacionamientos Lucenses",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "ETECNIC",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Etecnic / EVcharge",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "EUROPA CENTER",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "EXPLOTACIONES INDUSTRIALES LOS RODEOS,S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Explotaciones Industriales Los Rodeos",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Explotaciones IOndustriales Sur de Tenerife SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "high_confidence_fuzzy",
+      "historicalMatches": [
+        {
+          "name": "Explotaciones Industriales Sur de Tenerife",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Fastned",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Fastned",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+        },
+        {
+          "name": "Fastned",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        },
+        {
+          "name": "Fastned",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Febrer Gasolineras",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Feníe Energía",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Feníe Energía",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "FENÍE ENERGÍA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Feníe Energía",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run30.json"
+        }
+      ]
+    },
+    {
+      "label": "Fenie Propietario Propietario",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "FERROVIAL CONSTRUCCIÓN S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Ferrovial Construcción",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "FERVI, SL.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Fervi",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Fira CCIB",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Fira CCIB",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run20.json"
+        }
+      ]
+    },
+    {
+      "label": "FISERSA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "FLORETTE HORTÍCOLA NAVARRA - MILAGRO",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Fornells de la Selva",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Forumsa",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "FUNDACIO BALEAR D'INNOVACIÓ I TECNOLOGIA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Fundació Balear d'Innovació i Tecnologia",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "FUNDACION FEMEVAL Fundacion Femeval",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "FUNDACION PAIDEIA GALIZA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Fundación Paideia Galiza",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Gaia Green Tech S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Gaia Green Tech",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Galp Energía España, S.A.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Galp Energía España",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "GALP_SPAIN",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Gandesa",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "GASOLINERA RAFAL --",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "GESTION INTELIGENTE DE CARGAS S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Gestión Inteligente de Cargas",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Girona Motor SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Girona Motor",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Golf Vistahermosa",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "GP TRADE",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "GRUP SUPECO MAXOR SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Grup Supeco Maxor",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "Guadalupe Martínez Sánchez",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Guaw",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "H2PLT",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "H2PLT",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run31.json"
+        }
+      ]
+    },
+    {
+      "label": "HCC HOTELS SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "HERNAZOS GESTIÓN S.L",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Hernazos Gestión",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Horta de Sant Joan",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hospital de Toledo",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hospital Ribera de Covadonga",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hospitalet de l'Infant",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hotel Amic Horizonte",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hotel Amoros Cala Ratjada",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hotel Bosquemar SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "HOTEL CIUDAD DE ALCAÑIZ SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Hotel Ciudad de Alcañiz",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "HOTEL DEL OSO",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Hotel OCA Vermar .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "HOTEL PEDRO I DE ARAGON SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Hotel Pedro I de Aragón",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "HOTEL PUENTE DE LA TOJA S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Hotel Puente de la Toja",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Hotel Spa Atlántico . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "HOTELES SOL DEL SUR, SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Hoteles Sol del Sur",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Iberdrola | bp pulse",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Iberdrola | bp pulse",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run16.json"
+        },
+        {
+          "name": "Iberdrola | bp pulse",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "IBERDROLA CLIENTES S.A.U",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ibérica de Tecnología y Servicios de Automoción, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ibérica de Tecnología y Servicios de Automoción",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "Ingenieria de Recarga SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ingeniería de Recarga",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "INMOMEDIC 09, S.L.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Inmomedic 09",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run32.json"
+        }
+      ]
+    },
+    {
+      "label": "InstaVolt CPO",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Inversiones Pascual",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "INVESMORAZO S.L",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "ION SMART ENERGY 2000 SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "IONITY",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "IONITY",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+        },
+        {
+          "name": "IONITY",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        },
+        {
+          "name": "IONITY",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Ivars d'Urgell",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "J. REDONDO, S.L.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Jarada Motor, S.L.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "JARDINES LA TEJERA, S.A.U.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Jesus Vidal Ubeda",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Joncosa de Montmell",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "JOSE LUIS DOMINGO VENTURA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "La Jonquera",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "La Llagosta",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "La Pobla de Segur",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "LAG OLEIROS SLU",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "LES FONTS DE MARIOLA, S.L.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Llagostera",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Lleida",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Lloret de Mar",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run72.json"
+        }
+      ]
+    },
+    {
+      "label": "Lucía María Díaz Soberón",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "M.P. PORT ROSES SA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Manresa",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Marbella Premium SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Marbella Premium SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "Marbella Premium SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run72.json"
+        }
+      ]
+    },
+    {
+      "label": "Martin Rivera Bua",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Matadepera",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "MED PLAYA MANAGEMENT, SLU",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "MED PLAYA MANAGEMENT, SLU",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "MED PLAYA MANAGEMENT, SLU",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run72.json"
+        }
+      ]
+    },
+    {
+      "label": "Mediterraneo Golf",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Moeve",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Moeve",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "Moeve",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run18.json"
+        },
+        {
+          "name": "Moeve",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        },
+        {
+          "name": "Moeve",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run72.json"
+        }
+      ]
+    },
+    {
+      "label": "Montmeló",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Móra d'Ebre",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Móra la Nova",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Motor Box Mallorca SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Motor Box Mallorca SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "Motor Box Mallorca SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run73.json"
+        }
+      ]
+    },
+    {
+      "label": "Movilidad Eléctrica Gran Canaria",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Muntaner Batle Sl Muntaner Batle Sl Muntaner Batle Sl",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Mutua Madrileña Inmobiliaria",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "NAITEC",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "NATURGY RECARGA",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Navarcles",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Navarra te recarga",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Navàs",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Ayuntamiento de Navas del Rey",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "NIMA GRUP D'AUTOMOCIO SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Nuñez y Navarro",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ocimax P de Mallorca",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "OESTE SOLUCIONES ENERGETICAS, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "OESTE SOLUCIONES ENERGETICAS, S.L.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "OESTE SOLUCIONES ENERGETICAS, S.L.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run73.json"
+        }
+      ]
+    },
+    {
+      "label": "Oftalmedic Salva",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Orís",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament d'Orís",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run25.json"
+        }
+      ]
+    },
+    {
+      "label": "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run74.json"
+        }
+      ]
+    },
+    {
+      "label": "Palol de Revardit",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Pamplona",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Parking Benalmadena Pueblosol",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Parking Garatge 2000",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PARKING LIDER S.A.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PARKING MOGAN SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "PARKING MOGAN SA",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run11.json"
+        },
+        {
+          "name": "PARKING MOGAN SA",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run73.json"
+        }
+      ]
+    },
+    {
+      "label": "Parking NN Espronceda",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Parking Pozuelo",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Parking TEKNON",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PARKING VAPOR GRAN",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Patrimonio Natural CyL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PAVAPARK MOVILIDAD, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "PAVAPARK MOVILIDAD SL",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run12.json"
+        }
+      ]
+    },
+    {
+      "label": "Peralada",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PETREM DISTRIBUCIO SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "PETREM DISTRIBUCIO SA",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run12.json"
+        },
+        {
+          "name": "PETREM DISTRIBUCIO SA",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run74.json"
+        }
+      ]
+    },
+    {
+      "label": "PETRO PALOL, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "PETRO PALOL, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run12.json"
+        },
+        {
+          "name": "PETRO PALOL, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run74.json"
+        },
+        {
+          "name": "PETRO PALOL, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run22.json"
+        }
+      ]
+    },
+    {
+      "label": "Petrolia Conil de la Frontera",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PLENOIL CANARIAS, S.L.U.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "PLENOIL CANARIAS, S.L.U. / Plenergy",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run12.json"
+        }
+      ]
+    },
+    {
+      "label": "PLENOIL, S.L.",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Polinyà",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ponent Energia",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PORSAMADRID, S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "PORSAMADRID, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run12.json"
+        },
+        {
+          "name": "PORSAMADRID, S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run74.json"
+        }
+      ]
+    },
+    {
+      "label": "Porsatecnic S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Porsatecnic S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-07-run12.json"
+        },
+        {
+          "name": "Porsatecnic S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run74.json"
+        },
+        {
+          "name": "Porsatecnic S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run22.json"
+        }
+      ]
+    },
+    {
+      "label": "Port de Roses",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Ports de la Generalitat",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ports de la Generalitat",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run22.json"
+        }
+      ]
+    },
+    {
+      "label": "Postventa Propietario Propietario",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Powerdot Spain",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Powerdot",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run19.json"
+        },
+        {
+          "name": "Powerdot",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        }
+      ]
+    },
+    {
+      "label": "Powy",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Premià de Mar",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Prio Recharge Sl.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Prio Recharge Sl.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        }
+      ]
+    },
+    {
+      "label": "Puig-reig",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "PUMSA Mataró",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Qwello",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "QWELLO España SL",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        },
+        {
+          "name": "QWELLO España SL",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run74.json"
+        }
+      ]
+    },
+    {
+      "label": "RAMIS GARAU, S.A. MIQUEL RAMIS",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Rasquera",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Real Club Pineda",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Repsol",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Repsol",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run15.json"
+        },
+        {
+          "name": "Repsol",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        }
+      ]
+    },
+    {
+      "label": "REPSOL SOLUCIONES ENERGÉTICAS SA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "REPSOL SOLUCIONES ENERGÉTICAS SA",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        }
+      ]
+    },
+    {
+      "label": "Restaurante El Ninot",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Restaurante El Ninot",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Restaurante Peña Mea",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Restaurante Peña Mea",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Roda de Ter",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Roses",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Sallent",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Sallent",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run22.json"
+        }
+      ]
+    },
+    {
+      "label": "Salvador Fernandez Labadia",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Sant Julià de Vilatorta",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "Ajuntament de Sant Julià de Vilatorta"
+    },
+    {
+      "label": "Sant Pere de Ribes",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Sant Quirze de Besora",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Sant Vicenç de Castellet",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Santa Barbara",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Santa Coloma de Farners",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Santa Eulàlia de Ronçana",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "SANTA LUCIA VIVIENDAS SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Santa Maria de Palautordera",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Santa Perpètua de Mogoda",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Santpedor",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "SCL AGROPIENSO",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "SCL AGROPIENSO F22009468",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        },
+        {
+          "name": "SCL AGROPIENSO F22009468",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "Sergio Peinado Gimenez",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "SERVEIS FERROVIARIS DE MALLORCA",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "SERVEIS FERROVIARIS DE MALLORCA",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        },
+        {
+          "name": "SERVEIS FERROVIARIS DE MALLORCA",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "Servicios Petroleros Mallorca SL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "SERVICIOS PUENTE LIÑARES SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "SERVICIOS PUENTE LIÑARES SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        },
+        {
+          "name": "SERVICIOS PUENTE LIÑARES SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "SERVICIOS Y APLICACIONES INEL, S.L. Servicio Aplicaciones",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "SERVICIOS Y APLICACIONES INEL, S.L.",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Ses Jardines . .",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Seva",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Seva",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run44.json"
+        }
+      ]
+    },
+    {
+      "label": "Siemens",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run13.json"
+        },
+        {
+          "name": "SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "Solsona",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Solsona",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run44.json"
+        }
+      ]
+    },
+    {
+      "label": "SUNSET OASIS IBIZA ROSELLO RAUSELL",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Taradell",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Taradell",
+          "status": "sourceValidated",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run24.json"
+        },
+        {
+          "name": "Ajuntament de Taradell",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run45.json"
+        }
+      ]
+    },
+    {
+      "label": "Telpark",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Telpark",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run15.json"
+        },
+        {
+          "name": "Telpark",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        }
+      ]
+    },
+    {
+      "label": "Tersa",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "Tersa"
+    },
+    {
+      "label": "Tesla, Inc.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Tesla",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run15.json"
+        },
+        {
+          "name": "Tesla",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run20.json"
+        }
+      ]
+    },
+    {
+      "label": "Test REMO",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Torelló",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Torelló",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run21.json"
+        },
+        {
+          "name": "Ajuntament de Torelló",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run46.json"
+        }
+      ]
+    },
+    {
+      "label": "Torre Inbisa",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Torrecillas Serna, S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Torrecillas Serna, S.A.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run14.json"
+        },
+        {
+          "name": "Torrecillas Serna, S.A.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "Torrefarrera",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Torrefarrera",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run21.json"
+        },
+        {
+          "name": "Ajuntament de Torrefarrera",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run46.json"
+        }
+      ]
+    },
+    {
+      "label": "Tortosa",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Tortosa",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run46.json"
+        }
+      ]
+    },
+    {
+      "label": "TotalEnergies",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "TotalEnergies",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run15.json"
+        }
+      ]
+    },
+    {
+      "label": "TRANSPORTES PENADES E HIJOS SL",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "TRANSPORTES PENADES E HIJOS SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run14.json"
+        },
+        {
+          "name": "TRANSPORTES PENADES E HIJOS SL",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "Tuwyncar Sport S.L.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Tuwyncar Sport S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run14.json"
+        },
+        {
+          "name": "Tuwyncar Sport S.L.",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "UMBRELLA e-MOBILITY",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run14.json"
+        },
+        {
+          "name": "UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        }
+      ]
+    },
+    {
+      "label": "URBAN PADESPORT & COFFEE, S.L",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "URBAN PADESPORT & COFFEE, S.L",
+          "status": "setAside",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run22.json"
+        }
+      ]
+    },
+    {
+      "label": "Vallmoll",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Valls",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Ajuntament de Valls",
+          "status": "partial",
+          "file": "docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run47.json"
+        }
+      ]
+    },
+    {
+      "label": "Vibroaspre, S.A. Vibroaspre Vibroaspre",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Vicente Martinez Corcoles",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Vidreres",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Viladrau",
+      "identityFirstPass": true,
+      "classification": "currentIdentityTraversed",
+      "resolution": "no_plausible_persisted_historical_match"
+    },
+    {
+      "label": "Wenea Mobile Energy",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_containment",
+      "historicalMatches": [
+        {
+          "name": "Wenea",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run15.json"
+        }
+      ]
+    },
+    {
+      "label": "ZOILO RIOS, S.A.",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "ZOILO RIOS, S.A.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run14.json"
+        },
+        {
+          "name": "ZOILO RIOS, S.A.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-11-run75.json"
+        },
+        {
+          "name": "ZOILO RIOS, S.A.",
+          "status": "active",
+          "file": "docs/spain-cpo-progress-batches/2026-09-14-web-reconstruction-run21.json"
+        }
+      ]
+    },
+    {
+      "label": "Zunder",
+      "identityFirstPass": true,
+      "classification": "representedHistorical",
+      "resolution": "normalized_exact",
+      "historicalMatches": [
+        {
+          "name": "Zunder",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run16.json"
+        },
+        {
+          "name": "Zunder",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run17.json"
+        },
+        {
+          "name": "Zunder",
+          "status": "supersededAlias",
+          "file": "docs/spain-cpo-progress-batches/2026-09-08-run21.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 48,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversed": 341,
+    "maximumNeverTraversed": 277,
+    "firstPassComplete": false,
+    "newLabelsTraversed": 0,
+    "newSourceValidated": 0
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "workflowRunId": 34413690845,
+    "generatedAt": "2026-09-09T22:44:35.535291Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPagesCollectedThisBatch": [65, 66, 67],
+    "tariffNewRows": 260,
+    "tariffUpdatedRows": 0,
+    "persistentNextTariffPage": 68,
+    "persistentTariffPagesCollected": 67,
+    "persistentTariffRowsStored": 6612,
+    "tariffTotalPages": 461,
+    "statusPagesCollectedThisBatch": [44, 45],
+    "statusNewRows": 110,
+    "statusUpdatedRows": 77,
+    "persistentNextStatusPage": 46,
+    "persistentStatusPagesCollected": 45,
+    "persistentStatusRowsStored": 4096,
+    "statusTotalPages": 447,
+    "persistenceSucceeded": true,
+    "temporaryTriggerRemoved": true
+  },
+  "canonicalReconstruction": {
+    "notRepeated": true,
+    "reason": "The single allowed reconstruction attempt was already completed in run40 and established that 98 legacy nominative decisions cannot be safely reconstructed from current GitHub history. No synthetic labels were created."
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noSyntheticHistoricalLabels": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "investigationCurrent": "Current REVE nominative snapshot remains first-pass covered. No additional never-traversed historical label can be proven from the preserved canonical/history without fabrication; do not reopen setAside cases until new evidence or FIRST PASS COMPLETE.",
+  "updatedAt": "2026-09-09T22:46:00Z"
+}

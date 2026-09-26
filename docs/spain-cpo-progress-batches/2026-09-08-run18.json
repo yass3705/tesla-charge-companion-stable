@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T05:39:22Z",
+  "firstPass": {
+    "previousMinimumTraversed": 180,
+    "newNominativeDecisions": 10,
+    "minimumTraversed": 190,
+    "maximumNeverTraversed": 428,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; prioritize deterministic canonical pricing and identity-backed aliases without reopening set-aside cases"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 17,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 37,
+    "total": 190
+  },
+  "decisions": [
+    {"canonicalName":"Eranovum","label":"ERANOVUM","status":"sourceValidated","sourceEvidence":["https://eranovum.energy/es/nuestras-tarifas/","https://eranovum.energy/es/condiciones-de-uso-de-la-app/","data/spain_reve/coverage.json"],"model":"official Spain direct CPO power-class tariff: <=22kW 0.35 EUR/kWh; 30kW 0.40; 60kW 0.43; 120kW 0.46; >=150kW 0.49; occupancy penalties separate","coverageKnown":"Official Spain tariff grid; REVE current identity ERANOVUM E-MOBILITY, S.L. party ERA, 334 locations / 1156 EVSE.","blockingReason":null,"resumeCondition":"Revalidate if Eranovum changes the published Spain tariff grid.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Eranovum","label":"ERANOVUM E-MOBILITY","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> source-validated Eranovum direct tariff model","coverageKnown":"Alias matches current REVE ERANOVUM E-MOBILITY, S.L. party ERA; no extra tariff inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Moeve","label":"CEPSA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"legacy brand alias -> Moeve canonical identity; canonical pricing unchanged","coverageKnown":"Repository alias candidate; current REVE identity MOEVE COMMERCIAL, SAU party MOE, 120 locations / 252 EVSE.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Moeve","label":"CEPSA COMERCIAL PETROLEO","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"legacy legal/brand alias -> Moeve canonical identity; canonical pricing unchanged","coverageKnown":"Alias mapping retained against current MOEVE COMMERCIAL, SAU identity; no tariff copied from legacy label.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Electra","label":"ELECTRA ESPANA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> Electra canonical identity; tariff handling unchanged","coverageKnown":"Current REVE identity CHARG-ELECTRA SPAIN SL party ELC, 14 locations / 105 EVSE.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Electra","label":"ELECTRA ESPAÑA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"accent variant alias -> Electra canonical identity; tariff handling unchanged","coverageKnown":"Current REVE identity CHARG-ELECTRA SPAIN SL party ELC; no tariff inferred from label normalization.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"IONITY","label":"IONITY GMBH","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"legal-name alias -> IONITY canonical station-level pricing model","coverageKnown":"Current REVE identity IONITY GmbH Sucursal en España party IOY, 43 locations / 172 EVSE; no Spain-wide price inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Fastned","label":"FASTNED ESPANA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> Fastned canonical identity; direct pricing unchanged","coverageKnown":"Current REVE identity FASTNED ESPAÑA, S.L. party FAS, 2 locations / 16 EVSE.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Fastned","label":"FASTNED ESPAÑA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"accent variant alias -> Fastned canonical identity; direct pricing unchanged","coverageKnown":"Matches current REVE FASTNED ESPAÑA, S.L. party FAS; no tariff inferred from alias normalization.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"EDP","label":"EDP CHARGE ESPANA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"legacy alias -> EDP canonical identity; direct CPO pricing remains distinct from roaming/eMSP","coverageKnown":"Alias candidate supported by current REVE EDP CLIENTES SAU party GFX identity; no tariff copied.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T04:45:45.473246Z",
+    "batchLaunchedThisRun": false,
+    "reasonNoBatch": "Less than one real hour elapsed since the last successful live REVE batch at run start.",
+    "requestsAttemptedThisRun": 0,
+    "requestsSucceededThisRun": 0,
+    "locationsRequestsThisRun": 0,
+    "http429Count": 0,
+    "nextTariffPage": 26,
+    "tariffPagesCollected": 25,
+    "tariffRowsStored": 2500,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 18,
+    "statusPagesCollected": 17,
+    "statusRowsStored": 1610,
+    "statusTotalPages": 447
+  },
+  "runtimeSafety": {"pr50DraftRequired":true,"preIntegrationOnly":true,"runtimePublishReady":false,"locationsCollectionComplete":true,"locationsCollectionMustNotRestart":true},
+  "coherenceCheck": {"result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY","continuityCountSum":190,"firstPassMinimumTraversed":190,"newBatchCountsDeriveExactly":true,"legacyFirst98ListDerivabilityGapStillDocumented":true,"noSetAsideReauditWithoutNewEvidence":true,"noThirdPartyTariffPromoted":true,"directCpoAndEmspPricingSeparated":true,"reveRequestBudgetRespected":true,"locationsEndpointUnused":true}
+}

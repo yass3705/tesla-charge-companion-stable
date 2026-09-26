@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-08-run33",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "note": "GitHub reconstruction snapshot already contains nominative decisions for InstaVolt ES through LAG OLEIROS SLU. Those identities were not re-audited; this batch resumes with the next never-traversed current-REVE identities."
+  },
+  "newNominativeDecisions": [
+    {
+      "canonicalName": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+      "labels": ["LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L."],
+      "partyId": "LCG",
+      "status": "setAside",
+      "source": ["https://www.lcgroup.es/"],
+      "model": "single-site/unknown direct charging tariff",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 1 connector.",
+      "blockingReason": "Company identity and fuel/mobility activity are public, but no official/public numeric EV charging tariff was located in the first-pass budget.",
+      "resumeCondition": "New official station/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "MAKSU ESPAÑA SL / Telpark mobility",
+      "labels": ["MAKSU ESPAÑA SL"],
+      "partyId": "EPK",
+      "status": "active",
+      "source": ["https://apps.apple.com/pe/developer/maksu-espana-s-l/id1015130531", "https://www.empark.com/"],
+      "model": "managed parking/charging network; station/app-level pricing",
+      "coverageKnown": "REVE snapshot: 109 locations, 861 EVSE, 861 connectors. MAKSU publishes/operates mobility apps including electric charging; public certification for Grupo Empark/MAKSU explicitly covers electric charging services.",
+      "blockingReason": "No uniform official numeric direct charging tariff surfaced; station/app enumeration would slow the first pass.",
+      "resumeCondition": "After first-pass completion, enumerate deterministic Telpark/MAKSU station prices or map REVE connector tariffs.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Marbella Premium SL",
+      "labels": ["Marbella Premium SL"],
+      "partyId": "922",
+      "status": "setAside",
+      "source": [],
+      "model": "dealer/site-level",
+      "coverageKnown": "REVE snapshot: 2 locations, 2 EVSE, 2 connectors.",
+      "blockingReason": "No deterministic official/public direct numeric charging tariff located in the first-pass search.",
+      "resumeCondition": "New official dealer/site/QR/app tariff or deterministic REVE mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "MED PLAYA MANAGEMENT, SLU",
+      "labels": ["MED PLAYA MANAGEMENT, SLU"],
+      "partyId": "MPM",
+      "status": "setAside",
+      "source": ["https://www.medplaya.com/"],
+      "model": "hotel/site-level",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 4 connectors.",
+      "blockingReason": "No official/public numeric direct EV charging tariff surfaced in the first-pass budget.",
+      "resumeCondition": "Official hotel/site tariff, QR/app price or deterministic REVE mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Moeve Commercial SAU",
+      "labels": ["MOEVE COMMERCIAL, SAU"],
+      "partyId": "MOE",
+      "status": "sourceValidated",
+      "source": ["https://www.moeve.es/es/particular/movilidad-electrica/recarga-electrica/tarifas-y-suscripciones", "https://www.moeve.es/es/particular/movilidad-electrica/faqs"],
+      "model": "network-wide direct ultrafast tariff; loyalty/subscription benefits kept separate",
+      "coverageKnown": "REVE snapshot: 120 locations, 252 EVSE, 252 connectors. Moeve officially states one standard ultrafast direct tariff of 0.60 EUR/kWh. Club gow accumulation and Electric Plan subscription benefits are separate from the direct base tariff.",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate when Moeve changes its published standard tariff or when connector mapping reveals non-ultrafast exceptions.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Motor Box Mallorca SL",
+      "labels": ["Motor Box Mallorca SL"],
+      "partyId": "915",
+      "status": "setAside",
+      "source": [],
+      "model": "dealer/site-level",
+      "coverageKnown": "REVE snapshot: 2 locations, 2 EVSE, 2 connectors.",
+      "blockingReason": "No deterministic official/public direct numeric charging tariff located in first pass.",
+      "resumeCondition": "New official dealer/site/QR/app tariff or deterministic REVE mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Moya Estaciones Electricas SL",
+      "labels": ["Moya Estaciones Electricas SL"],
+      "partyId": "MOY",
+      "status": "active",
+      "source": [],
+      "model": "station-level direct tariff",
+      "coverageKnown": "REVE snapshot: 1 location, 12 EVSE, 12 connectors. Public registry evidence confirms the company's purpose includes operating EV charging points; third-party station data exposes numeric prices but those values are not promoted as direct authority.",
+      "blockingReason": "No first-party numeric tariff authority located in the first-pass budget.",
+      "resumeCondition": "Official station/QR/app price or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Naturgy Nuevas Energías, SLU",
+      "labels": ["Naturgy Nuevas Energías, SLU"],
+      "partyId": "NTG",
+      "status": "active",
+      "source": ["https://www.naturgy.es/hogar/blog/Cuanto_cuesta_cargar_un_coche_electrico"],
+      "model": "public charging / station-level pricing",
+      "coverageKnown": "REVE snapshot: 30 locations, 115 EVSE, 126 connectors. Naturgy's current public guidance states public charging prices vary by operator, power and location; no Naturgy network-wide direct tariff was found.",
+      "blockingReason": "No uniform official direct CPO tariff may be safely extrapolated; station-level enumeration is deferred until first-pass completion.",
+      "resumeCondition": "Official Naturgy public-charging tariff source, station/QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    }
+  ],
+  "deltaCounts": {
+    "sourceValidated": 1,
+    "partial": 0,
+    "active": 3,
+    "setAside": 4,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 8
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 311,
+    "maximumNeverTraversed": 307,
+    "firstPassComplete": false
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "countsDeriveExactly": true
+  },
+  "investigationCurrent": "Continue first-pass queue after Naturgy Nuevas Energías, SLU; next current-REVE identities begin with OESTE SOLUCIONES ENERGETICAS, PARKING MOGAN, PAVAPARK MOVILIDAD, PETREM DISTRIBUCIO and PETRO PALOL.",
+  "updatedAt": "2026-09-08T20:48:00Z"
+}

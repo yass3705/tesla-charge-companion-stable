@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 71,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "newLabelsTraversed": 0,
+    "newSourceValidated": 0,
+    "reasonNoNominativeProgress": "The frozen 618-label nominative snapshot remains incompletely preserved. This run did not synthesize historical membership from the mutable live mirror and did not reopen previously set-aside cases without new evidence."
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 66,
+    "total": 346
+  },
+  "reveTariffStatus": {
+    "workflowRunId": 34446412330,
+    "workflowAttempt": 15,
+    "workflowJobId": 103233598840,
+    "persistenceCommit": "c2867ae995e61c7418764ca1dcb899e9047dff38",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "http429Observed": 0,
+    "locationsRequests": 0,
+    "tariffPages": [119, 120, 121],
+    "statusPages": [80, 81],
+    "tariffNewRows": 255,
+    "tariffUpdatedRows": 1,
+    "tariffUnchangedOrDeduplicatedRows": 44,
+    "statusNewRows": 155,
+    "statusUpdatedRows": 22,
+    "statusUnchangedOrDeduplicatedRows": 23,
+    "nextTariffPage": 122,
+    "tariffPagesCollected": 121,
+    "tariffRowsStored": 11335,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 82,
+    "statusPagesCollected": 81,
+    "statusRowsStored": 7066,
+    "statusTotalPages": 448,
+    "complete": false
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
+    "countsDeriveExactly": true,
+    "historicalQueueFrozenAt618": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "directCpoAndEmspPricingSeparated": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "investigationCurrent": "Continue first-pass recovery only from genuinely preserved historical identity cues. Do not infer frozen-snapshot membership from the mutable live mirror; continue REVE tariff/status pagination only at the permitted hourly cadence.",
+  "updatedAt": "2026-09-11T10:39:20Z"
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-14T01:38:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "firstPassBefore": 396,
+  "firstPassAfter": 399,
+  "labels": [
+    {
+      "canonicalName": "CIMALSA Castellar del Vallès",
+      "sourceLabel": "CIMALSA Castellar del Vallès",
+      "status": "partial",
+      "model": "site-level/logistics parking charging",
+      "evidence": ["https://cimalsa.cat/truck_castellar.php"],
+      "finding": "Official CIMALSA page confirms six EV charging points at the Castellar del Vallès truck parking and publishes current 2026 parking tariffs, but no deterministic public numeric EV charging tariff was established in this first pass.",
+      "resumeCondition": "Official charging tariff, QR/app price, or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Constanti",
+      "sourceLabel": "Constanti",
+      "status": "partial",
+      "model": "municipal/restricted charging",
+      "evidence": ["https://laciutat.cat/laciutatdetarragona/constanti-installa-dos-nous-punts-de-recarrega-per-a-vehicles-electrics"],
+      "finding": "Municipal charging infrastructure and EVCharge access conditions are documented; the cited points are restricted to registered Constantí residents and no current public numeric charging tariff was established in this first pass.",
+      "resumeCondition": "Current municipal tariff/ordinance, EVCharge price, or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Diputación de Badajoz",
+      "sourceLabel": "Diputación de Badajoz",
+      "status": "sourceValidated",
+      "model": "provincial public network / MOVEM via Zunder",
+      "evidence": ["https://movembadajoz.es/"],
+      "finding": "Current official MOVEM site publishes 0.25 EUR/kWh up to 22 kW and 0.30 EUR/kWh up to 50 kW for subscribed users, and documents the provincial public charging network and Zunder app/RFID access.",
+      "resumeCondition": "Revalidate if MOVEM/Zunder publishes tariff changes or if station-specific exceptions appear."
+    }
+  ],
+  "countDelta": {
+    "sourceValidated": 1,
+    "partial": 2,
+    "active": 0,
+    "setAside": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0,
+    "total": 3
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "firstPassPriorityRespected": true,
+    "hardCasesReaudited": false,
+    "thirdPartyTariffPromoted": false
+  }
+}

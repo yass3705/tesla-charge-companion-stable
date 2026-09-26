@@ -1,0 +1,20 @@
+{
+  "country":"ES",
+  "integrationStatus":"PRE_INTEGRATION_ONLY",
+  "generatedAt":"2026-09-16T17:55:00+01:00",
+  "legacyWorkLabelCount":618,
+  "historicalMembershipClaimed":false,
+  "source":"persisted REVE public-web national sweep + current official/public research",
+  "labels":[
+    {"canonicalName":"Ajuntament de Juneda","status":"partial","reason":"REVE public-web nominative identity. Official municipal fiscal material publishes 0.38 EUR/kWh IVA included for municipal charging, but the recovered numeric text is from the 2024 ordinance and is not extrapolated to 2026."},
+    {"canonicalName":"Ajuntament de l'Albiol","status":"partial","reason":"REVE public-web nominative identity. The municipality's 2026 fiscal-ordinance page explicitly lists the public-price ordinance for municipal EV charging, but the current numeric tariff was not recovered in this first-pass check."},
+    {"canonicalName":"Ajuntament de l'Espluga de Francolí","status":"setAside","reason":"REVE public-web nominative identity. No sufficiently authoritative current numeric tariff was recovered in the quick first-pass research; deferred under anti-stagnation rule."},
+    {"canonicalName":"AJUNTAMENT DE L'OLLERIA - -","status":"sourceValidated","reason":"REVE public-web nominative identity. Current FENIE Energia station page identifies AJUNTAMENT DE L'OLLERIA, 22 kW, two bays, 24/7, and explicitly states charging has no cost."},
+    {"canonicalName":"Ajuntament de Les Borges Blanques","status":"partial","reason":"REVE public-web nominative identity. Current municipal normative page confirms ordinance OF31 for public EV charging is in force; older municipal material gives 0.40 EUR/kWh but that older numeric value is not extrapolated to 2026."}
+  ],
+  "countsAfter":{"sourceValidated":67,"partial":68,"active":104,"setAside":229,"excludedPlatform":3,"supersededAlias":68,"total":539},
+  "firstPass":{"minimumTraversed":539,"maximumHistoricalUnreconstructedOrNeverTraversed":79,"firstPassComplete":false},
+  "coherence":{"legacyWorkLabelCountPreserved":true,"syntheticHistoricalMembershipCreated":false,"thirdPartyTariffPromoted":false,"difficultCaseReauditPerformed":false,"result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "reveWeb":{"persistedSweep":"pages 1-600 x25","uniqueOperatorLabels":445},
+  "nextAction":"Continue with next genuinely new nominatively recoverable labels from the persisted 445-label sweep before difficult-case reaudit."
+}

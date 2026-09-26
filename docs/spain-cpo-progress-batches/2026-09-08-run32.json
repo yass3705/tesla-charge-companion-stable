@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-08-run32",
+  "historicalWorkQueueLabels": 618,
+  "authoritativeCpoDenominator": false,
+  "firstPassBefore": 295,
+  "firstPassAfter": 303,
+  "maximumNeverTraversedAfter": 315,
+  "firstPassComplete": false,
+  "antiStagnation": {
+    "priority": "FIRST_PASS_NEW_LABELS",
+    "setAsideReauditPerformed": false,
+    "canonicalReconstructionAttemptedThisRun": false,
+    "canonicalReconstructionNote": "The one-shot reconstruction retry was already consumed in run25; the documented 98-decision historical nominative gap remains explicit and was not retried."
+  },
+  "decisions": [
+    {"canonicalName":"Hernazos Gestión","labels":["HERNAZOS GESTIÓN S.L"],"aliases":[],"status":"setAside","source":["REVE coverage snapshot: partyId HDT, 1 location, 1 EVSE/connector","https://www.escapadarural.com/casa-rural/avila/casa-la-fragua"],"evidence":"REVE confirms a single charging asset under the legal entity. Public business evidence identifies Hernazos Gestión with Casa La Fragua, but no deterministic current first-party direct EV-charging tariff surfaced in the bounded first pass.","tariffModel":"single-site hospitality/unknown","coverageKnown":"REVE: 1 location / 1 EVSE-connector","blockerOrResumeCondition":"Resume after FIRST PASS COMPLETE only with official accommodation charging terms, QR/ad-hoc price, or mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Hotel Ciudad de Alcañiz","labels":["HOTEL CIUDAD DE ALCAÑIZ SA"],"aliases":[],"status":"setAside","source":["REVE coverage snapshot: partyId A44, 1 location, 1 EVSE, 2 connectors","https://www.gargallo-hotels.com/teruel/hotel-ciudad-de-alcaniz/faq"],"evidence":"The hotel's official FAQ confirms paid EV charging subject to availability, but does not publish the charging price. The separate parking fee is not treated as the EV tariff.","tariffModel":"paid hospitality charging; numeric EV tariff not public","coverageKnown":"REVE: 1 location / 1 EVSE / 2 connectors","blockerOrResumeCondition":"Resume with first-party numeric charging fee, QR/ad-hoc flow, app/backend price, or mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Hotel Pedro I de Aragón","labels":["HOTEL PEDRO I DE ARAGON SL"],"aliases":[],"status":"setAside","source":["REVE coverage snapshot: partyId B22, 1 location, 1 EVSE, 2 connectors","https://www.gargallo-hotels.com/huesca/hotel-pedro-i-de-aragon/faq"],"evidence":"The official hotel FAQ confirms EV charging is paid and subject to availability, but provides no numeric charging price. A third-party 0.35 EUR/kWh observation is not promoted.","tariffModel":"paid hospitality charging; numeric EV tariff not public","coverageKnown":"REVE: 1 location / 1 EVSE / 2 connectors","blockerOrResumeCondition":"Resume with first-party numeric charge price, QR/ad-hoc flow, or deterministic mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Hotel Puente de la Toja","labels":["HOTEL PUENTE DE LA TOJA S.L."],"aliases":[],"status":"setAside","source":["REVE coverage snapshot: partyId PLT, 1 location, 1 EVSE/connector","https://hotelpuentedelatoja.com/parking/"],"evidence":"The hotel's official parking page confirms EV charging and instructs guests to request availability/tariff at reservation or before arrival; no public deterministic numeric charging tariff is published.","tariffModel":"hospitality charging; tariff on request","coverageKnown":"REVE: 1 location / 1 EVSE-connector","blockerOrResumeCondition":"Resume with published first-party EV fee, direct QR/ad-hoc price, or mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Hoteles Sol del Sur","labels":["HOTELES SOL DEL SUR, SA"],"aliases":[],"status":"setAside","source":["REVE coverage snapshot: partyId HSS, 1 location, 1 EVSE, 2 connectors"],"evidence":"REVE confirms a single-site charging footprint. No deterministic current first-party direct numeric charging tariff surfaced in the bounded first pass.","tariffModel":"single-site hospitality/unknown","coverageKnown":"REVE: 1 location / 1 EVSE / 2 connectors","blockerOrResumeCondition":"Resume after FIRST PASS COMPLETE with official hotel charging conditions, QR/ad-hoc price, or mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Ibérica de Tecnología y Servicios de Automoción","labels":["Ibérica de Tecnología y Servicios de Automoción, S.L."],"aliases":["Centro Porsche Asturias","ITSA"],"status":"setAside","source":["REVE coverage snapshot: partyId 914, 2 locations, 2 EVSE/connectors","https://dealer.porsche.com/es/asturias/es-ES/footer/legal-notice"],"evidence":"The official Porsche Asturias legal notice resolves the REVE legal entity to ITSA/Centro Porsche Asturias. No public deterministic direct charging tariff for its two REVE assets was found in the bounded first pass; no Porsche-network or roaming price is extrapolated.","tariffModel":"dealer/site-level charging; price not proven","coverageKnown":"REVE: 2 locations / 2 EVSE-connectors","blockerOrResumeCondition":"Resume with dealer-site charging terms, QR/ad-hoc price, or mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Ingeniería de Recarga","labels":["Ingenieria de Recarga SLU"],"aliases":["Més Energia Movilidad Eléctrica"],"status":"active","source":["REVE coverage snapshot: partyId 686, 2 locations, 3 EVSE, 4 connectors","https://mesenergia.cat/es/"],"evidence":"The official Més Energia site confirms Ingeniería de Recarga SLU and explicitly offers operation/maintenance plus billing of consumed energy for charging installations. This proves an operator/billing path, but no current national or site numeric direct tariff surfaced in the bounded first pass.","tariffModel":"managed site-level OCPP charging with operator billing; numeric price site-dependent","coverageKnown":"REVE: 2 locations / 3 EVSE / 4 connectors","blockerOrResumeCondition":"After FIRST PASS COMPLETE inspect the specific public sites/QR/backend or mapped REVE connector tariffs; do not infer a generic tariff from installation services.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Inmomedic 09","labels":["INMOMEDIC 09, S.L.U."],"aliases":["Immomèdic","Aparcament Doctor Roig i Raventós"],"status":"setAside","source":["REVE coverage snapshot: partyId I09, 1 location, 4 EVSE, 8 connectors","https://immomedic.med.es/"],"evidence":"The official parking site confirms Inmomèdic 09 and publishes parking tariffs/services, but no deterministic EV charging tariff is exposed. Parking prices are not treated as charging prices.","tariffModel":"parking-site charging; EV price not publicly proven","coverageKnown":"REVE: 1 location / 4 EVSE / 8 connectors","blockerOrResumeCondition":"Resume with first-party EV charging tariff/QR/app terms or deterministic mapped REVE tariff evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "countsAfter":{"sourceValidated":24,"partial":8,"active":72,"setAside":135,"platformExcluded":3,"supersededAlias":61,"total":303},
+  "reveHourly": {
+    "batchLaunched": false,
+    "generatedAt": "2026-09-08T18:49:37.110648Z",
+    "decision": "No live REVE request: less than one real hour had elapsed since the last successful live batch when the gate was checked.",
+    "requestsAttempted": 0,
+    "requestsSucceeded": 0,
+    "http429Count": 0,
+    "locationsRequests": 0,
+    "nextTariffPage": 47,
+    "tariffPagesCollected": 46,
+    "tariffRowsStored": 4587,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 32,
+    "statusPagesCollected": 31,
+    "statusRowsStored": 2874,
+    "statusTotalPages": 447,
+    "complete": false
+  },
+  "coherenceCheck": {
+    "result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY","continuityCountSum":303,"firstPassMinimumTraversed":303,"countsDeriveExactly":true,"legacyFirst98ListDerivabilityGapStillDocumented":true,"duplicateOrAlreadyDecidedLabelsSkipped":true,"noSetAsideReauditWithoutNewEvidence":true,"noRepeatedInvestigationAboveTwoRunsWithoutNewLead":true,"noThirdPartyTariffPromoted":true,"directCpoAndEmspPricingSeparated":true,"reveRequestBudgetRespected":true,"locationsEndpointUnused":true
+  },
+  "runtimeSafety":{"pr50MustRemainDraft":true,"preIntegrationOnly":true,"runtimePublishReady":false,"locationsCollectionComplete":true,"locationsCollectionMustNotRestart":true},
+  "investigationCurrent":"Continue first-pass alphabetic queue after INMOMEDIC 09, S.L.U.; do not reopen active/setAside cases until all 618 derived labels have received a first-pass decision."
+}
