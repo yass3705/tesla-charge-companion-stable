@@ -59,7 +59,7 @@
     if(end>start)return minute>=start&&minute<end;
     return minute>=start||minute<end;
   }
-  function ruleDayMatches(rule,startAt,timeZone,pricing){
+  function ruleThresholdMatches(rule,session={}){\n    const energy=num(session.energyKwh),power=num(session.powerKw),soc=num(session.vehicleSoc),congestion=num(session.congestionPct),duration=num(session.durationMinutes);\n    const ge=(v,min)=>min==null||v!=null&&v>=Number(min), le=(v,max)=>max==null||v!=null&&v<=Number(max);\n    if(!ge(energy,rule?.minEnergyKwh)||!le(energy,rule?.maxEnergyKwh))return false;\n    if(!ge(power,rule?.minPowerKw)||!le(power,rule?.maxPowerKw))return false;\n    if(!ge(duration,rule?.minDurationMinutes)||!le(duration,rule?.maxDurationMinutes))return false;\n    if(!ge(soc,rule?.minVehicleSoc)||!le(soc,rule?.maxVehicleSoc))return false;\n    if(!ge(congestion,rule?.minCongestionPct)||!le(congestion,rule?.maxCongestionPct))return false;\n    return true;\n  }\n  function ruleDayMatches(rule,startAt,timeZone,pricing){
     const days=Array.isArray(rule?.daysOfWeek)?rule.daysOfWeek.map(Number).filter(n=>n>=0&&n<=6):null;
     const constrained=Boolean(days?.length||rule?.holidayOnly===true||rule?.excludeHolidays===true);
     if(!constrained)return true;
@@ -71,10 +71,10 @@
     if(days?.length&&!days.includes(parts.weekday))return false;
     return true;
   }
-  function matchingRule(pricing,startAt,timeZone){
+  function matchingRule(pricing,startAt,timeZone,session={}){
     const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
-    if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay'&&ruleDayMatches(r,startAt,timeZone,pricing))||null;
-    return rules.find(r=>ruleDayMatches(r,startAt,timeZone,pricing)&&ruleContains(r,minute))||null;
+    if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay'&&ruleDayMatches(r,startAt,timeZone,pricing)&&ruleThresholdMatches(r,session))||null;
+    return rules.find(r=>ruleDayMatches(r,startAt,timeZone,pricing)&&ruleContains(r,minute)&&ruleThresholdMatches(r,session))||null;
   }
   function minutesUntilRuleBoundary(rule,startAt,timeZone){
     if(!rule)return Infinity;
@@ -252,5 +252,5 @@
     const finalized=applyMinimumTotal(pricing,total,components);
     return{complete:!longConnection,totalEur:finalized.totalEur,components:finalized.components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,segmented,timeZone};
   }
-  return{evaluateOffer,evaluateRule,evaluateSegmentedRules,segmentableRule,evaluateConditionalSessionFees,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary,applyMinimumTotal};
+  return{evaluateOffer,evaluateRule,evaluateSegmentedRules,segmentableRule,ruleThresholdMatches,evaluateConditionalSessionFees,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary,applyMinimumTotal};
 });
