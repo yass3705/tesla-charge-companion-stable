@@ -747,14 +747,15 @@
         "inventory",
         "connectors",
         "access",
-        "status"
+        "status",
+        "tariff"
       ],
       "priority": {
         "identity": 96,
         "connectors": 96,
         "access": 95,
         "status": 96,
-        "tariff": 0
+        "tariff": 100
       },
       "refresh": "published-native-daily-snapshot",
       "active": true,
