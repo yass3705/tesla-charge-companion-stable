@@ -97,17 +97,17 @@
       const live=Array.isArray(st?.live_status)?st.live_status:[],liveByKey=new Map(live.map(x=>[`${text(x?.cpid)}|${text(x?.connectorId)}`,x]));
       const groups=new Map();
       for(const c of connectors){
-        const cpid=text(c?.ChargePointName||c?.ChargePointDisplayName||c?.cpId||c?.CPID),cid=text(c?.ChargePointConnectorNumber??c?.connectorId??c?.ConnectorId);
+        const cpid=text(c?.ChargePointName||c?.ChargePointDisplayName||c?.chargePointName||c?.chargePointDisplayName||c?.cpId||c?.CPID),cid=text(c?.ChargePointConnectorNumber??c?.connectorId??c?.ConnectorId);
         if(!cpid||!cid)continue;
         const liveRow=liveByKey.get(`${cpid}|${cid}`),safe=liveRow?.safe_status||{};
-        const nativeState=text(safe.ComputedStatusForCpo||safe.ComputedStatus||safe.CpLastReportedStatus);
+        const nativeState=text(safe.ComputedStatusForCpo||safe.ComputedStatus||safe.CpLastReportedStatus||c?.ComputedStatus||c?.CpLastReportedStatus);
         const state=totalNativeConnectorState(nativeState);
         const connector={
           id:`totalenergies:${sid}:${slug(cpid)}:${cid}`,
-          kind:text(c?.ConnectorModelCurrentType).toUpperCase()==='DC'?'DC':'AC',
-          powerKw:number(c?.MaxConnectorPower)??number(c?.ConnectorModelPower),
+          kind:(text(c?.ConnectorModelCurrentType||c?.connectorModelCurrentType).toUpperCase()==='DC'||['CCS','CCS2','CHADEMO'].some(x=>text(c?.connectorType||c?.ConnectorModelStandardName).toUpperCase().includes(x)))?'DC':'AC',
+          powerKw:number(c?.MaxConnectorPower)??number(c?.ConnectorModelPower)??number(c?.connectorModelPower),
           powerSource:'Club EV-Charge native',
-          plugName:text(c?.ConnectorModelStandardName)||null,
+          plugName:text(c?.ConnectorModelStandardName||c?.connectorType)||null,
           status:{state,nativeState:nativeState||null,error:text(safe.Error)||null,freshness:statusFresh?'fresh':'stale'}
         };
         if(!groups.has(cpid))groups.set(cpid,[]);
