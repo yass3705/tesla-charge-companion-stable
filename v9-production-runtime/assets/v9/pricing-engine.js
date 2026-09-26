@@ -59,7 +59,17 @@
     if(end>start)return minute>=start&&minute<end;
     return minute>=start||minute<end;
   }
-  function ruleThresholdMatches(rule,session={}){\n    const energy=num(session.energyKwh),power=num(session.powerKw),soc=num(session.vehicleSoc),congestion=num(session.congestionPct),duration=num(session.durationMinutes);\n    const ge=(v,min)=>min==null||v!=null&&v>=Number(min), le=(v,max)=>max==null||v!=null&&v<=Number(max);\n    if(!ge(energy,rule?.minEnergyKwh)||!le(energy,rule?.maxEnergyKwh))return false;\n    if(!ge(power,rule?.minPowerKw)||!le(power,rule?.maxPowerKw))return false;\n    if(!ge(duration,rule?.minDurationMinutes)||!le(duration,rule?.maxDurationMinutes))return false;\n    if(!ge(soc,rule?.minVehicleSoc)||!le(soc,rule?.maxVehicleSoc))return false;\n    if(!ge(congestion,rule?.minCongestionPct)||!le(congestion,rule?.maxCongestionPct))return false;\n    return true;\n  }\n  function ruleDayMatches(rule,startAt,timeZone,pricing){
+  function ruleThresholdMatches(rule,session={}){
+    const energy=num(session.energyKwh),power=num(session.powerKw),soc=num(session.vehicleSoc),congestion=num(session.congestionPct),duration=num(session.durationMinutes);
+    const ge=(v,min)=>min==null||v!=null&&v>=Number(min), le=(v,max)=>max==null||v!=null&&v<=Number(max);
+    if(!ge(energy,rule?.minEnergyKwh)||!le(energy,rule?.maxEnergyKwh))return false;
+    if(!ge(power,rule?.minPowerKw)||!le(power,rule?.maxPowerKw))return false;
+    if(!ge(duration,rule?.minDurationMinutes)||!le(duration,rule?.maxDurationMinutes))return false;
+    if(!ge(soc,rule?.minVehicleSoc)||!le(soc,rule?.maxVehicleSoc))return false;
+    if(!ge(congestion,rule?.minCongestionPct)||!le(congestion,rule?.maxCongestionPct))return false;
+    return true;
+  }
+  function ruleDayMatches(rule,startAt,timeZone,pricing){
     const days=Array.isArray(rule?.daysOfWeek)?rule.daysOfWeek.map(Number).filter(n=>n>=0&&n<=6):null;
     const constrained=Boolean(days?.length||rule?.holidayOnly===true||rule?.excludeHolidays===true);
     if(!constrained)return true;
@@ -138,7 +148,7 @@
     const duration=Math.max(0,num(session.durationMinutes)??0),energy=Math.max(0,num(session.energyKwh)??0),charging=Math.max(0,Math.min(duration,num(session.chargingMinutes)??duration));
     if(!session.startAt)return{complete:false,reason:'segmentation_requires_start_time'};
     if(duration<=0){
-      const rule=matchingRule(pricing,session.startAt,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule'};
+      const rule=matchingRule(pricing,session.startAt,timeZone,session);if(!rule)return{complete:false,reason:'no_matching_time_rule'};
       if(!segmentableRule(rule))return{complete:false,reason:'tariff_window_crossing_unsupported_components'};
       const evaluated=evaluateRule(rule,{energyKwh:energy,durationMinutes:0});
       return{complete:true,totalEur:evaluated.totalEur,components:{segmentedPricing:{segments:[{startAt:new Date(session.startAt).toISOString(),durationMinutes:0,energyKwh:energy,totalEur:evaluated.totalEur,rule}]}}};
@@ -146,7 +156,7 @@
     let elapsed=0,total=0;const segments=[];
     while(elapsed<duration-1e-9){
       const at=addMinutes(session.startAt,elapsed);if(!at)return{complete:false,reason:'invalid_segmentation_start_time'};
-      const rule=matchingRule(pricing,at,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule',segmentStartAt:at.toISOString()};
+      const rule=matchingRule(pricing,at,timeZone,session);if(!rule)return{complete:false,reason:'no_matching_time_rule',segmentStartAt:at.toISOString()};
       if(!segmentableRule(rule))return{complete:false,reason:'tariff_window_crossing_unsupported_components',segmentStartAt:at.toISOString(),matchedRule:rule};
       let boundary=minutesUntilRuleBoundary(rule,at,timeZone);if(boundary==null)return{complete:false,reason:'unresolved_tariff_boundary'};
       if(!Number.isFinite(boundary))boundary=duration-elapsed;
@@ -234,7 +244,7 @@
       const finalized=applyMinimumTotal(pricing,base+conditional.totalEur+post.totalEur,components);
       return{complete:true,totalEur:finalized.totalEur,components:finalized.components,offerId:offer?.id||null,currency:offer?.currency||'EUR'};
     }
-    const rule=matchingRule(pricing,session.startAt,timeZone);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
+    const rule=matchingRule(pricing,session.startAt,timeZone,session);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
     const duration=Math.max(0,num(session.durationMinutes)??0),boundary=minutesUntilRuleBoundary(rule,session.startAt,timeZone);
     let base,segmented=false;
     if(boundary!=null&&Number.isFinite(boundary)&&duration>boundary+1e-9){
