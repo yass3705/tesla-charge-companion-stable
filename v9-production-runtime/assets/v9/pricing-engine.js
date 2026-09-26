@@ -67,6 +67,8 @@
     if(!ge(duration,rule?.minDurationMinutes)||!le(duration,rule?.maxDurationMinutes))return false;
     if(!ge(soc,rule?.minVehicleSoc)||!le(soc,rule?.maxVehicleSoc))return false;
     if(!ge(congestion,rule?.minCongestionPct)||!le(congestion,rule?.maxCongestionPct))return false;
+    const reservation=rule?.reservationState;if(reservation!=null){const actual=String(session.reservationState||'').toUpperCase();if(!actual||actual!==String(reservation).toUpperCase())return false;}
+    const startDate=rule?.validFromDate,endDate=rule?.validThroughDate;if(startDate!=null||endDate!=null){const parts=localDateParts(session.startAt,session.timeZone||null);if(!parts)return false;if(startDate!=null&&parts.key<String(startDate))return false;if(endDate!=null&&parts.key>String(endDate))return false;}
     return true;
   }
   function ruleDayMatches(rule,startAt,timeZone,pricing){
