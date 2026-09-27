@@ -1,0 +1,17 @@
+name: REVE V2 sync feature branch with main
+on:
+  push:
+    paths: ['.github/workflows/reve-v2-sync-main.yml']
+permissions: { contents: write }
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: reve-v2-pricing-engine, fetch-depth: 0 }
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git merge --no-edit origin/main
+          git push origin HEAD:reve-v2-pricing-engine
