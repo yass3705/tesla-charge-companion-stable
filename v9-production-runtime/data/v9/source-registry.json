@@ -643,8 +643,7 @@
     {
       "id": "spain-reve-offers",
       "label": "Spain REVE official direct offers",
-      "adapter": "direct-offer-json",
-      "path": "data/v9/spain-reve-offers.json",
+      "adapter": "direct-offer-sharded-v1",
       "countries": [
         "ES"
       ],
@@ -656,7 +655,9 @@
       },
       "refresh": "daily-or-on-demand",
       "active": true,
-      "optional": true
+      "optional": true,
+      "root": "data/v9/spain-reve-offers/",
+      "manifest": "data/v9/spain-reve-offers/manifest.json"
     },
     {
       "id": "italy-pun",
