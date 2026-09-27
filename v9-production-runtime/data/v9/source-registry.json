@@ -616,6 +616,50 @@
       "optional": true
     },
     {
+      "id": "spain-reve",
+      "label": "Spain REVE national physical baseline",
+      "adapter": "national-compact-v4",
+      "root": "data/v9/spain-static/",
+      "manifest": "data/v9/spain-static/manifest.json",
+      "countries": [
+        "ES"
+      ],
+      "capabilities": [
+        "inventory",
+        "connectors",
+        "access",
+        "status"
+      ],
+      "priority": {
+        "identity": 60,
+        "connectors": 65,
+        "access": 60,
+        "status": 70,
+        "tariff": 0
+      },
+      "refresh": "daily-or-on-demand",
+      "active": true
+    },
+    {
+      "id": "spain-reve-offers",
+      "label": "Spain REVE official direct offers",
+      "adapter": "direct-offer-sharded-v1",
+      "countries": [
+        "ES"
+      ],
+      "capabilities": [
+        "tariff"
+      ],
+      "priority": {
+        "tariff": 130
+      },
+      "refresh": "daily-or-on-demand",
+      "active": true,
+      "optional": true,
+      "root": "data/v9/spain-reve-offers/",
+      "manifest": "data/v9/spain-reve-offers/manifest.json"
+    },
+    {
       "id": "italy-pun",
       "label": "Italy GSE PUN national physical baseline",
       "adapter": "national-compact-v4",

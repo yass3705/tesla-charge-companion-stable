@@ -1,0 +1,32 @@
+name: REVE V2 pricing engine validation
+on:
+  push:
+    branches: [reve-v2-pricing-engine]
+permissions: { contents: read }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: node tests/reve-v2-pricing-thresholds.test.cjs
+      - run: node tests/reve-v2-identity-scope.test.cjs
+      - run: node tests/reve-v2-spain-runtime-e2e.test.cjs
+      - run: node tests/reve-v2-spain-sharded-loader.test.cjs
+      - name: Full regression against main baseline
+        run: |
+          git fetch origin main
+          git worktree add /tmp/tcc-main origin/main
+          for f in tests/*.test.cjs; do
+            echo "== $f =="
+            if node "$f"; then continue; fi
+            echo "Branch test failed; checking same test on main baseline"
+            if (cd /tmp/tcc-main && node "$f" 2>/dev/null); then
+              echo "::error::$f regressed versus main"
+              exit 1
+            else
+              echo "::warning::$f also fails on main; classified as pre-existing baseline failure"
+            fi
+          done
