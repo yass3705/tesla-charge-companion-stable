@@ -70,7 +70,7 @@
       }else if(source.adapter==='france-irve-status-json'&&adapters.franceIrveStatus?.createLoader&&source.path){
         loaders[source.id]=adapters.franceIrveStatus.createLoader({url:join(basePath,source.path),fetchImpl,maxAgeMinutes:num(source.freshnessMaxMinutes)??120});
       }else if(source.adapter==='morocco-public-v1'&&adapters.moroccoPublic?.createLoader){
-        const prepared=adapters.moroccoPublic.createLoader({source,fetchImpl});
+        const prepared=adapters.moroccoPublic.createLoader({source:source.path?{...source,url:join(basePath,source.path)}:source,fetchImpl});
         loaders[source.id]=async query=>{const loader=await prepared;return loader(query);};
       }else if(source.adapter==='morocco-kilowatt-tariff-manifest-v1'&&adapters.moroccoKilowattTariff?.createLoader&&source.url){
         loaders[source.id]=adapters.moroccoKilowattTariff.createLoader({url:source.url,fetchImpl});

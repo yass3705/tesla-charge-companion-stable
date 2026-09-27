@@ -269,9 +269,38 @@
     return{stations,diagnostics,summary:{officialRows:official.rows.length,reconciledHosts:grouped.size,geolocatedHosts:stations.length,excludedWithoutGeo:diagnostics.length,alWahaExactMerged:stations.some(s=>s.canonicalId===`MA:kilowatt:${exactId}`)}};
   }
 
+
+  // Narrow policy scope: this fallback must never apply to Shell-hosted third-party CPOs.
+  function normalizeShellAlJazira(dataset,{sourceId='morocco-shell-al-jazira'}={}){
+    const s=dataset?.station;
+    if(dataset?.schemaVersion!==1||s?.id!=='10125255'||s?.countryCode!=='MA'||s?.networkBrand!=='Shell Recharge')
+      throw new Error('Shell Al Jazira policy scope mismatch');
+    const lat=number(s.latitude),lon=number(s.longitude);
+    if(!validMoroccoGps(lat,lon))throw new Error('Shell Al Jazira coordinates invalid');
+    const tariff=dataset.tariff;
+    const explicit=tariff!=null;
+    if(explicit&&(!['official','native'].includes(tariff.sourceType)||!text(tariff.sourceUrl)||tariff.currency!=='MAD'||number(tariff.pricePerKwh)==null||number(tariff.pricePerKwh)<0))
+      throw new Error('Shell Al Jazira explicit tariff invalid');
+    const rate=explicit?number(tariff.pricePerKwh):0;
+    return [{
+      canonicalId:'MA:shell:10125255',aliases:['shell-station:10125255'],sourceStationId:s.id,
+      countryCode:'MA',name:'Shell Al Jazira',address:text(s.address),latitude:lat,longitude:lon,
+      physicalOperator:null,networkBrand:'Shell Recharge',
+      access:{kind:'public',limited:false,siteBrand:'Shell',appSource:'Shell official station directory',accessNetwork:'Shell Recharge'},
+      evses:[],status:{state:'unknown',sourceId,statusSource:null,updatedAt:null},
+      offers:[{id:'shell-al-jazira-direct',provider:explicit?'Shell Recharge':'Shell Recharge — gratuité de repli TCC',
+        kind:'direct',countries:['MA'],currency:'MAD',pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:rate}]},
+        metadata:{tariffChannel:'Shell Recharge direct',tariffSource:explicit?tariff.sourceType:'tcc_policy_fallback',
+          fallbackApplied:!explicit,officialPriceVerified:explicit,sourceUrl:explicit?tariff.sourceUrl:dataset.policyUrl}}],
+      metadata:{evidence:s.evidence,coordinateConfidence:'candidate',connectorDetailsVerified:false},
+      updatedAt:null
+    }];
+  }
+
   function createLoader({source,fetchImpl,nowMs}={}){
     if(!source?.profile)throw new Error('Morocco source profile missing');
     return async function(){
+      if(source.profile==='shell-al-jazira-policy')return normalizeShellAlJazira(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
       if(source.profile==='evgo'){
         const statusUrl=text(source.statusUrl)||String(source.url||'').replace(/latest-normalized-stations\.json(?:\?.*)?$/,'latest-status-overlay.json');
         if(!statusUrl||statusUrl===source.url)throw new Error('EVGO status overlay URL unresolved');
@@ -288,5 +317,5 @@
     };
   }
 
-  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeKilowattNativeDataset,kilowattNativeConnectorState,kilowattNativeAggregateState,kilowattNativeFreshness,kilowattNativePricing,normalizeTotalNativeDataset,totalNativeFreshness,totalNativeConnectorState,normalizeTotalEnergies,evgoClassify,kilowattState};
+  return{createLoader,normalizeShellAlJazira,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeKilowattNativeDataset,kilowattNativeConnectorState,kilowattNativeAggregateState,kilowattNativeFreshness,kilowattNativePricing,normalizeTotalNativeDataset,totalNativeFreshness,totalNativeConnectorState,normalizeTotalEnergies,evgoClassify,kilowattState};
 });
