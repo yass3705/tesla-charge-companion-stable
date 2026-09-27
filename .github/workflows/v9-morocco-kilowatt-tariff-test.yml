@@ -1,16 +1,16 @@
-name: V9 Morocco Kilowatt tariff regression
+name: V9 Morocco Kilowatt native regression
 
 on:
   push:
     paths:
-      - 'v9-production-runtime/assets/v9/adapters/morocco-kilowatt-tariff.js'
-      - 'v9-test/assets/v9/adapters/morocco-kilowatt-tariff.js'
-      - 'v9-production-runtime/assets/v9/browser-loaders.js'
-      - 'v9-test/assets/v9/browser-loaders.js'
+      - 'v9-production-runtime/assets/v9/adapters/morocco-public.js'
+      - 'v9-test/assets/v9/adapters/morocco-public.js'
+      - 'v9-production-runtime/assets/v9/session-engine.js'
+      - 'v9-test/assets/v9/session-engine.js'
+      - 'v9-production-runtime/assets/v9/charge-model-engine.js'
+      - 'v9-test/assets/v9/charge-model-engine.js'
       - 'v9-production-runtime/data/v9/source-registry.json'
       - 'v9-test/data/v9/source-registry.json'
-      - 'v9-production-shell/index.html'
-      - 'v9-production-shell/bridge.js'
       - '.github/workflows/v9-morocco-kilowatt-tariff-test.yml'
   workflow_dispatch:
 
@@ -20,78 +20,116 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch current Kilowatt evidence
+      - name: Fetch current Kilowatt native snapshot
         shell: bash
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
-            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-v9-tariff-overlay-manifest.json \
-            -o /tmp/kilowatt-manifest.json
-          curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
             https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json \
             -o /tmp/kilowatt-inventory.json
+          curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-native-connector-tariffs.json \
+            -o /tmp/kilowatt-native.json
 
-      - name: Validate manifest, station merge and production wiring
+      - name: Validate native connectors, tariffs and calculator
         shell: bash
         run: |
           set -euo pipefail
           node <<'NODE'
           const fs=require('fs');
-          const manifest=JSON.parse(fs.readFileSync('/tmp/kilowatt-manifest.json','utf8'));
           const inventory=JSON.parse(fs.readFileSync('/tmp/kilowatt-inventory.json','utf8'));
-          const petrom='5ffbb0365e2197470cbb7f9f';
-          const alWaha='62e29ef59ad98566676cf824';
-          const unresolved='62e6a87e8f557229001a3bf4';
+          const native=JSON.parse(fs.readFileSync('/tmp/kilowatt-native.json','utf8'));
+
+          const ids={
+            jnane:'645677788932331fb0eb148c',
+            label:'64317d874a3f1b0be3af541e',
+            agora:'6349e35ec315981adeda2f55',
+            alWaha:'62e29ef59ad98566676cf824',
+            ikea:'663ac49676c6f9099786bc77',
+            communeFes:'62e6a87e8f557229001a3bf4',
+            berkane:'63db9bc90b98e91d06545ac3'
+          };
 
           for(const root of ['v9-production-runtime','v9-test']){
-            const publicAdapter=require('./'+root+'/assets/v9/adapters/morocco-public.js');
-            const tariffAdapter=require('./'+root+'/assets/v9/adapters/morocco-kilowatt-tariff.js');
-            const dataEngine=require('./'+root+'/assets/v9/data-engine.js');
+            const adapter=require('./'+root+'/assets/v9/adapters/morocco-public.js');
+            const sessionEngine=require('./'+root+'/assets/v9/session-engine.js');
+            const chargeModel=require('./'+root+'/assets/v9/charge-model-engine.js');
 
-            const checked=tariffAdapter.validateManifest(manifest);
-            if(checked.freeStationIds.length!==35||checked.unresolvedStationIds.length!==8)throw new Error(root+': expected 35/8, got '+checked.freeStationIds.length+'/'+checked.unresolvedStationIds.length);
-            if(new Set([...checked.freeStationIds,...checked.unresolvedStationIds]).size!==43)throw new Error(root+': manifest coverage mismatch');
+            if(typeof adapter.normalizeKilowattNativeDataset!=='function')throw new Error(root+': native Kilowatt normalizer missing');
+            const stations=adapter.normalizeKilowattNativeDataset(inventory,native,{
+              sourceId:'morocco-kilowatt-public',
+              statusFresh:true,
+              statusGeneratedAt:native.generated_at,
+              minStations:43,
+              minConnectors:80
+            });
+            const connectors=stations.flatMap(s=>(s.evses||[]).flatMap(e=>e.connectors||[]));
+            const offers=stations.flatMap(s=>s.offers||[]);
+            if(stations.length!==43)throw new Error(root+': station count '+stations.length);
+            if(connectors.length!==88)throw new Error(root+': connector count '+connectors.length);
+            if(offers.length!==87)throw new Error(root+': priced connector offers '+offers.length);
+            if(stations.some(s=>!(s.evses||[]).length))throw new Error(root+': station without native EVSE');
 
-            const stations=publicAdapter.normalizeKilowattDataset(inventory,{sourceId:'morocco-kilowatt-public'});
-            if(stations.length!==43)throw new Error(root+': expected 43 production stations, got '+stations.length);
-            const rules=tariffAdapter.offerRulesFromManifest(manifest);
-            if(rules.length!==35)throw new Error(root+': free rule count '+rules.length);
-            const source={id:'morocco-kilowatt-direct-offers',priority:{tariff:115}};
-            const merged=dataEngine.applyOfferRules(stations,rules.map(rule=>({rule,source})));
+            const byId=id=>stations.find(s=>String(s.sourceStationId)===id);
 
-            const bySource=id=>merged.find(st=>String(st.sourceStationId)===id);
-            for(const id of [petrom,alWaha]){
-              const st=bySource(id);
-              if(!st)throw new Error(root+': free sample missing '+id);
-              const offer=(st.offers||[]).find(o=>o.provider==='Kilowatt direct');
-              if(!offer)throw new Error(root+': free offer missing '+id);
-              if(Number(offer.pricing?.rules?.[0]?.pricePerKwh)!==0||offer.currency!=='MAD')throw new Error(root+': wrong free tariff '+id);
-            }
-            const unknown=bySource(unresolved);
-            if(!unknown)throw new Error(root+': unresolved sample missing');
-            if((unknown.offers||[]).some(o=>o.provider==='Kilowatt direct'))throw new Error(root+': unresolved station received a tariff');
+            const commune=byId(ids.communeFes);
+            if(commune.status?.state!=='out_of_service')throw new Error(root+': Commune Fes should be latest-known out_of_service');
+            const communeEval=sessionEngine.evaluateStation(commune,{energyKwh:12,durationMinutes:40,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(communeEval.comparableOfferCount!==0||communeEval.best!==null)throw new Error(root+': Commune Fes offline connector leaked tariff');
+
+            const berkane=byId(ids.berkane);
+            if(berkane.status?.state!=='out_of_service')throw new Error(root+': Province Berkane should be latest-known out_of_service');
+            const berkaneEval=sessionEngine.evaluateStation(berkane,{energyKwh:12,durationMinutes:40,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(berkaneEval.comparableOfferCount!==0||berkaneEval.best!==null)throw new Error(root+': Province Berkane offline connector leaked tariff');
+
+            const jnane=byId(ids.jnane);
+            const jp=sessionEngine.stationChargingProfile(jnane);
+            if(jp.powerKw!==180||jp.kind!=='DC'||String(jp.plugName).toUpperCase()!=='CCS2')throw new Error(root+': Jnane connector profile '+JSON.stringify(jp));
+            const je=sessionEngine.evaluateStation(jnane,{energyKwh:20,durationMinutes:30,chargingMinutes:30,postChargeMinutes:10,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(Math.abs((je.best?.total??NaN)-70)>1e-6)throw new Error(root+': Jnane expected 70 MAD, got '+je.best?.total);
+
+            const label=byId(ids.label);
+            const le=sessionEngine.evaluateStation(label,{energyKwh:10,durationMinutes:30,chargingMinutes:30,postChargeMinutes:10,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(Math.abs((le.best?.total??NaN)-60)>1e-6)throw new Error(root+': Label Gallery expected 60 MAD, got '+le.best?.total);
+
+            const agora=byId(ids.agora);
+            const ap=sessionEngine.stationChargingProfile(agora);
+            if(ap.powerKw!==60||String(ap.plugName).toUpperCase()!=='CCS2')throw new Error(root+': Agora should select usable CCS2 '+JSON.stringify(ap));
+            const ae=sessionEngine.evaluateStation(agora,{energyKwh:10,durationMinutes:20,chargingMinutes:20,postChargeMinutes:0,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(Math.abs((ae.best?.total??NaN)-100)>1e-6)throw new Error(root+': Agora expected 100 MAD CCS2, got '+ae.best?.total);
+
+            const alWaha=byId(ids.alWaha);
+            const we=sessionEngine.evaluateStation(alWaha,{energyKwh:10,durationMinutes:30,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(we.best?.total!==0)throw new Error(root+': Al Waha should select usable free connector, got '+we.best?.total);
+
+            const ikea=byId(ids.ikea);
+            if(ikea.status?.state!=='out_of_service')throw new Error(root+': IKEA expected latest-known out_of_service, got '+ikea.status?.state);
+            const ip=sessionEngine.stationChargingProfile(ikea);
+            if(ip.powerKw!==null)throw new Error(root+': IKEA should have no usable connector '+JSON.stringify(ip));
+            const ie=sessionEngine.evaluateStation(ikea,{energyKwh:10,durationMinutes:30,targetCurrency:'MAD'},{targetCurrency:'MAD'});
+            if(ie.comparableOfferCount!==0||ie.best!==null)throw new Error(root+': IKEA unavailable connector leaked tariff');
+
+            if(chargeModel.stationCapability(jnane).connectorId!==jp.connectorId)throw new Error(root+': charge/session connector selection mismatch');
 
             let raw=fs.readFileSync('./'+root+'/data/v9/source-registry.json','utf8').trim();
             if(raw.endsWith('\\n'))raw=raw.slice(0,-2);
             const registry=JSON.parse(raw);
-            const src=registry.sources.find(s=>s.id==='morocco-kilowatt-direct-offers');
-            if(!src||src.adapter!=='morocco-kilowatt-tariff-manifest-v1'||src.priority?.tariff!==115||src.active!==true)throw new Error(root+': tariff source not registered');
-            console.log(root+': OK 43 stations / 35 free / 8 unresolved');
-          }
+            const src=registry.sources.find(s=>s.id==='morocco-kilowatt-public');
+            if(!src||src.profile!=='kilowatt-native'||src.priority?.tariff!==120)throw new Error(root+': native Kilowatt source not promoted');
+            if(registry.sources.some(s=>s.id==='morocco-kilowatt-direct-offers'))throw new Error(root+': obsolete Kilowatt tariff overlay still active');
 
-          const prodShell=fs.readFileSync('v9-production-shell/index.html','utf8');
-          const prodBridge=fs.readFileSync('v9-production-shell/bridge.js','utf8');
-          if(!prodShell.includes('assets/v9/adapters/morocco-kilowatt-tariff.js'))throw new Error('production shell missing Kilowatt adapter script');
-          if(!prodBridge.includes('moroccoKilowattTariff'))throw new Error('production bridge missing Kilowatt adapter');
+            console.log(root+': OK 43 stations / 88 connectors / 87 priced connectors');
+          }
           NODE
 
       - name: Ensure production/test parity
         shell: bash
         run: |
           set -euo pipefail
-          cmp v9-production-runtime/assets/v9/adapters/morocco-kilowatt-tariff.js v9-test/assets/v9/adapters/morocco-kilowatt-tariff.js
-          cmp v9-production-runtime/assets/v9/browser-loaders.js v9-test/assets/v9/browser-loaders.js
+          cmp v9-production-runtime/assets/v9/adapters/morocco-public.js v9-test/assets/v9/adapters/morocco-public.js
+          cmp v9-production-runtime/assets/v9/session-engine.js v9-test/assets/v9/session-engine.js
+          cmp v9-production-runtime/assets/v9/charge-model-engine.js v9-test/assets/v9/charge-model-engine.js

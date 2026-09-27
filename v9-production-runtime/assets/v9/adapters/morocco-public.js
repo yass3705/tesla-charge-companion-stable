@@ -60,6 +60,101 @@
   function normalizeKilowattDataset(dataset,{sourceId='morocco-kilowatt-public'}={}){const rows=Array.isArray(dataset?.stations)?dataset.stations:[],production=rows.filter(r=>r?.production_candidate===true);if(rows.length!==47||production.length!==43)throw new Error(`Kilowatt expected 47/43, got ${rows.length}/${production.length}`);return production.map(st=>{const lat=number(st.latitude),lon=number(st.longitude);if(!validMoroccoGps(lat,lon))throw new Error(`invalid Kilowatt GPS ${st.id}`);const connectors=(st.connectors||[]).map((c,i)=>({id:`kilowatt:${st.id}:connector:${i}`,kind:(text(c?.type).toUpperCase().includes('CCS')||text(c?.type).toUpperCase().includes('CHADEMO'))?'DC':'AC',powerKw:number(c?.power_kw),plugName:text(c?.type)||null}));return{canonicalId:`MA:kilowatt:${text(st.id)}`,aliases:[`kilowatt-station:${text(st.id)}`],sourceStationId:text(st.id),countryCode:'MA',name:text(st.name)||'Kilowatt',address:text(st.address),latitude:lat,longitude:lon,physicalOperator:{name:'Kilowatt'},networkBrand:'Kilowatt',access:{kind:'public',limited:false,siteBrand:st.site_brand==null?null:text(st.site_brand),appSource:'Kilowatt public web map',accessNetwork:'Kilowatt'},evses:[{id:`kilowatt:${text(st.id)}`,connectors}],status:{state:kilowattState(st.status),sourceId,statusSource:text(st.status_source)||'Kilowatt public web map',updatedAt:null},offers:[]};});}
 
 
+  function kilowattNativeConnectorState(connector,parentById){
+    const parent=parentById?.get?.(text(connector?.chargestation_id));
+    if(connector?.active===false||parent?.active===false||parent?.online===false)return'out_of_service';
+    const s=text(connector?.status).toLowerCase();
+    if(['available','charging','preparing','finishing','reserved','occupied','suspendedev','suspendedevse'].includes(s))return'available';
+    if(['faulted','unavailable','offline','inoperative'].includes(s))return'out_of_service';
+    return'unknown';
+  }
+  function kilowattNativeAggregateState(states){
+    const values=(states||[]).filter(Boolean);
+    if(values.includes('available'))return'available';
+    if(values.length&&values.every(v=>v==='out_of_service'))return'out_of_service';
+    return'unknown';
+  }
+  function kilowattNativeFreshness(dataset,maxMinutes=1560,nowMs=Date.now()){
+    const raw=text(dataset?.generated_at),timestamp=Date.parse(raw),limit=number(maxMinutes);
+    if(!raw||!Number.isFinite(timestamp)||limit==null||limit<=0)return{fresh:false,generatedAt:raw||null,ageMinutes:null,maxMinutes:limit};
+    const ageMinutes=Math.max(0,(Number(nowMs)-timestamp)/60000);
+    return{fresh:ageMinutes<=limit,generatedAt:raw,ageMinutes,maxMinutes:limit};
+  }
+  function kilowattNativePricing(connector){
+    const rate=number(connector?.rate_price),currency=text(connector?.rate_currency).toUpperCase(),description=text(connector?.rate_description);
+    if(rate==null||!currency)return null;
+    const rule={scope:'allDay'};
+    if(rate===0||/^free$/i.test(description)||/gratuit/i.test(description))rule.pricePerKwh=0;
+    else if(/kwh/i.test(description))rule.pricePerKwh=rate;
+    else if(/session/i.test(description))rule.sessionFeeEur=rate;
+    else return null;
+    const pricing={type:'rules',rules:[rule]};
+    const idle=description.match(/inactivit[^0-9]*([0-9]+(?:[.,][0-9]+)?)\s*dh\s*\/\s*min/i);
+    if(idle){
+      const perMinute=number(String(idle[1]).replace(',','.'));
+      if(perMinute!=null)pricing.postChargeFee={graceMinutes:0,eurPerMinute:perMinute};
+    }
+    return{rate,currency,description,pricing};
+  }
+  function normalizeKilowattNativeDataset(inventory,native,{sourceId='morocco-kilowatt-public',statusFresh=true,statusGeneratedAt=null,minStations=43,minConnectors=80}={}){
+    const base=normalizeKilowattDataset(inventory,{sourceId});
+    const rows=Array.isArray(native?.stations)?native.stations:[];
+    const stationFloor=number(minStations)??43,connectorFloor=number(minConnectors)??80;
+    if(rows.length<stationFloor)throw new Error(`Kilowatt native expected at least ${stationFloor} stations, got ${rows.length}`);
+    const byId=new Map(rows.map(x=>[text(x?.station_id),x]));
+    let connectorCount=0;
+    const stations=base.map(st=>{
+      const nativeStation=byId.get(text(st.sourceStationId));
+      if(!nativeStation)throw new Error(`Kilowatt native station missing ${st.sourceStationId}`);
+      const parentById=new Map((nativeStation.chargestations||[]).map(x=>[text(x?.id),x]));
+      const groups=new Map(),offers=[];
+      for(const c of nativeStation.connectors||[]){
+        const nativeId=text(c?.id);if(!nativeId)continue;
+        connectorCount++;
+        const csid=text(c?.chargestation_id)||`unknown-${nativeId}`;
+        const rawType=text(c?.type),rawPowerType=text(c?.power_type).toUpperCase();
+        const kind=(rawPowerType.includes('DC')||rawType.toUpperCase().includes('CCS')||rawType.toUpperCase().includes('CHADEMO'))?'DC':'AC';
+        const power=number(c?.power),state=kilowattNativeConnectorState(c,parentById),connectorId=`kilowatt-native:${nativeId}`;
+        const parsed=kilowattNativePricing(c);
+        const connector={
+          id:connectorId,kind,powerKw:power,plugName:rawType||null,powerSource:'Kilowatt native Supabase',
+          status:{state,nativeState:text(c?.status)||null,active:c?.active!==false,parentOnline:parentById.get(csid)?.online!==false,freshness:statusFresh?'fresh':'stale'},
+          tariff:parsed?{rate:parsed.rate,currency:parsed.currency,description:parsed.description,rateId:text(c?.rate_id)||null}:null
+        };
+        if(!groups.has(csid))groups.set(csid,[]);
+        groups.get(csid).push(connector);
+        if(parsed&&power!=null&&power>0){
+          offers.push({
+            id:`kilowatt-native:${st.sourceStationId}:${nativeId}`,
+            provider:'Kilowatt direct',kind:'direct',countries:['MA'],currency:parsed.currency,
+            pricingModelId:`kilowatt-native-${nativeId}`,
+            connectorKinds:[kind],plugNames:rawType?[rawType]:[],connectorIds:[connectorId],
+            minPowerKw:power,maxPowerKw:power,pricing:parsed.pricing,
+            metadata:{
+              tariffChannel:'Kilowatt native Supabase',nativeRate:parsed.rate,nativeRateId:text(c?.rate_id)||null,
+              nativeRateDescription:parsed.description,nativeConnectorId:nativeId,
+              billingBasis:/kwh/i.test(parsed.description)?'kWh':(/session/i.test(parsed.description)?'session':'free'),
+              taxTreatment:'native rate as returned; no additional tax applied'
+            }
+          });
+        }
+      }
+      const evses=[...groups.entries()].map(([csid,list])=>({
+        id:`kilowatt-native:${csid}`,aliases:[`kilowatt-chargestation:${csid}`],connectors:list,
+        status:{state:kilowattNativeAggregateState(list.map(c=>c.status?.state)),freshness:statusFresh?'fresh':'stale'}
+      }));
+      const states=evses.flatMap(e=>e.connectors.map(c=>c.status?.state));
+      return{...st,evses,offers,status:{
+        state:kilowattNativeAggregateState(states),sourceId,statusSource:'Kilowatt native Supabase snapshot',
+        updatedAt:statusGeneratedAt||text(native?.generated_at)||null,freshness:statusFresh?'fresh':'stale'
+      },updatedAt:statusGeneratedAt||text(native?.generated_at)||null};
+    });
+    if(connectorCount<connectorFloor)throw new Error(`Kilowatt native expected at least ${connectorFloor} connectors, got ${connectorCount}`);
+    return stations;
+  }
+
+
+
   function totalNativeConnectorState(v){
     const s=text(v).toLowerCase();
     if(s==='available')return'available';
@@ -185,6 +280,7 @@
         return normalizeEvgoDataset(applyEvgoStatusOverlay(inventory,overlay),{sourceId:source.id,statusFresh:freshness.fresh,statusGeneratedAt:freshness.generatedAt});
       }
       if(source.profile==='fastvolt')return normalizeFastVoltDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
+      if(source.profile==='kilowatt-native'){const [inventory,native]=await Promise.all([fetchJson(source.urls.inventory,fetchImpl),fetchJson(source.urls.native,fetchImpl)]);const freshness=kilowattNativeFreshness(native,number(source.freshnessMaxMinutes)??1560,nowMs==null?Date.now():Number(nowMs));return normalizeKilowattNativeDataset(inventory,native,{sourceId:source.id,statusFresh:freshness.fresh,statusGeneratedAt:freshness.generatedAt,minStations:number(source.expectedMinStations)??43,minConnectors:number(source.expectedMinConnectors)??80});}
       if(source.profile==='kilowatt')return normalizeKilowattDataset(await fetchJson(source.url,fetchImpl),{sourceId:source.id});
       if(source.profile==='totalenergies-native'){const dataset=await fetchJson(source.url,fetchImpl);const freshness=totalNativeFreshness(dataset,number(source.freshnessMaxMinutes)??180,nowMs==null?Date.now():Number(nowMs));return normalizeTotalNativeDataset(dataset,{sourceId:source.id,statusFresh:freshness.fresh,statusGeneratedAt:freshness.generatedAt,minStations:number(source.expectedMinStations)??18,minConnectors:number(source.expectedMinConnectors)??38});}
       if(source.profile==='totalenergies'){const [official,alWaha,links]=await Promise.all([fetchJson(source.urls.official,fetchImpl),fetchJson(source.urls.alWaha,fetchImpl),fetchJson(source.urls.links,fetchImpl)]);return normalizeTotalEnergies(official,alWaha,links,{sourceId:source.id}).stations;}
@@ -192,5 +288,5 @@
     };
   }
 
-  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeTotalNativeDataset,totalNativeFreshness,totalNativeConnectorState,normalizeTotalEnergies,evgoClassify,kilowattState};
+  return{createLoader,normalizeEvgoDataset,applyEvgoStatusOverlay,evgoOverlayFreshness,normalizeFastVoltDataset,normalizeKilowattDataset,normalizeKilowattNativeDataset,kilowattNativeConnectorState,kilowattNativeAggregateState,kilowattNativeFreshness,kilowattNativePricing,normalizeTotalNativeDataset,totalNativeFreshness,totalNativeConnectorState,normalizeTotalEnergies,evgoClassify,kilowattState};
 });

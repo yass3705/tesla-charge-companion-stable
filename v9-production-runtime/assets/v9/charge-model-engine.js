@@ -23,13 +23,18 @@
     const power=num(connector.powerKw);return power!=null&&power>22?'DC':'AC';
   }
 
+  function connectorUsable(connector={}){
+    const state=String(connector?.status?.state??connector?.status??'').trim().toLowerCase();
+    return !['out_of_service','unavailable','offline','faulted','inoperative'].includes(state);
+  }
   function stationCapability(station){
     let selected=null;
     for(const evse of station?.evses||[])for(const c of evse?.connectors||[]){
+      if(!connectorUsable(c))continue;
       const power=num(c?.powerKw);if(power==null||power<=0)continue;
-      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(c)};
+      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(c),connectorId:String(c?.id??'').trim()||null,plugName:String(c?.plugName??c?.type??'').trim()||null};
     }
-    return selected||{powerKw:null,kind:null};
+    return selected||{powerKw:null,kind:null,connectorId:null,plugName:null};
   }
   function stationPowerKw(station){return stationCapability(station).powerKw;}
 
@@ -99,5 +104,5 @@
     return{...base,minutes:round(minutes),energyKwh:round(delivered),profile:resolved.profile,averagePowerKw:round(delivered/(minutes/60)),timeline};
   }
 
-  return{estimate,stationPowerKw,stationCapability,connectorKind,normalizeCurve,interpolate,flatTimeline,GENERIC_DC_CURVE};
+  return{estimate,stationPowerKw,stationCapability,connectorKind,connectorUsable,normalizeCurve,interpolate,flatTimeline,GENERIC_DC_CURVE};
 });
