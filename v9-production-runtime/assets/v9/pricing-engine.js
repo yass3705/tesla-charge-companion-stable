@@ -103,9 +103,9 @@
     const energy=Math.max(0,num(energyKwh)??0),duration=Math.max(0,num(durationMinutes)??0),charging=Math.max(0,Math.min(duration,num(chargingMinutes)??duration)),components={};let total=0;
     const perKwh=num(rule?.pricePerKwh);
     if(perKwh!=null){
-      const billedEnergy=rule?.energyRounding==='started_kwh'&&energy>0?Math.ceil(energy):energy;
+      const stepWh=num(rule?.energyStepWh);const billedEnergy=stepWh>0&&energy>0?Math.ceil((energy*1000)/stepWh)*stepWh/1000:rule?.energyRounding==='started_kwh'&&energy>0?Math.ceil(energy):energy;
       components.energy=money(billedEnergy*perKwh);total+=components.energy;
-      if(billedEnergy!==energy)components.energyBilling={actualKwh:energy,billedKwh:billedEnergy,rounding:'started_kwh'};
+      if(billedEnergy!==energy)components.energyBilling={actualKwh:energy,billedKwh:billedEnergy,rounding:stepWh>0?'started_step':'started_kwh',stepWh:stepWh>0?stepWh:undefined};
     }
     const blockMinutes=num(rule?.connectedTimeBlockMinutes),blockEur=num(rule?.connectedTimeBlockEur);
     if(blockMinutes>0&&blockEur!=null){
@@ -113,8 +113,8 @@
       components.connectedTimeBlocks={blocks,blockMinutes,unitPriceEur:blockEur,costEur:money(blocks*blockEur)};total+=components.connectedTimeBlocks.costEur;
     }
     const genericPerMinute=num(rule?.pricePerMinute),legacyPerMinute=num(rule?.connectedTimePerMinuteEur),perMinute=genericPerMinute??legacyPerMinute;
-    if(perMinute!=null){components.connectedTimePerMinute=money(duration*perMinute);total+=components.connectedTimePerMinute;}
-    const chargingPerMinute=num(rule?.chargingTimePerMinuteEur);if(chargingPerMinute!=null){components.chargingTime=money(charging*chargingPerMinute);total+=components.chargingTime;}
+    if(perMinute!=null){const step=num(rule?.connectedTimeStepSeconds),billed=step>0&&duration>0?Math.ceil(duration*60/step)*step/60:duration;components.connectedTimePerMinute=money(billed*perMinute);total+=components.connectedTimePerMinute;if(billed!==duration)components.connectedTimeBilling={actualMinutes:duration,billedMinutes:billed,stepSeconds:step};}
+    const chargingPerMinute=num(rule?.chargingTimePerMinuteEur);if(chargingPerMinute!=null){const step=num(rule?.chargingTimeStepSeconds),billed=step>0&&charging>0?Math.ceil(charging*60/step)*step/60:charging;components.chargingTime=money(billed*chargingPerMinute);total+=components.chargingTime;if(billed!==charging)components.chargingTimeBilling={actualMinutes:charging,billedMinutes:billed,stepSeconds:step};}
     const freeMinutes=num(rule?.connectedTimeFreeMinutes),afterFree=num(rule?.connectedTimePerMinuteAfterFreeEur);
     if(freeMinutes!=null&&freeMinutes>=0&&afterFree!=null){
       const billableMinutes=Math.max(0,duration-freeMinutes),costEur=money(billableMinutes*afterFree);
@@ -133,7 +133,7 @@
   function segmentableRule(rule){
     if(!rule)return false;
     if(rule.mustEndSameLocalDay===true||rule.holidayOnly===true||rule.excludeHolidays===true||(Array.isArray(rule.daysOfWeek)&&rule.daysOfWeek.length))return false;
-    if(rule.energyRounding==='started_kwh')return false;
+    if(rule.energyRounding==='started_kwh'||num(rule.energyStepWh)>0||num(rule.connectedTimeStepSeconds)>0||num(rule.chargingTimeStepSeconds)>0)return false;
     if(num(rule.connectedTimeBlockMinutes)>0||num(rule.connectedTimeBlockEur)!=null)return false;
     if(num(rule.connectedTimeFreeMinutes)!=null||num(rule.connectedTimePerMinuteAfterFreeEur)!=null)return false;
     if(num(rule.connectedTimeInitialMinutes)!=null||num(rule.connectedTimeInitialFlatEur)!=null||num(rule.connectedTimeAfterInitialPerMinuteEur)!=null)return false;
