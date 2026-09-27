@@ -6,7 +6,12 @@
   "runtimeBase": "v9-production-runtime",
   "observedCandidateSha": "8d2c20b7c76004389edd8f4a3b80d6b314900ba0",
   "runtimeFingerprint": "sha256:455b371c14342a83d55fdfde0e3f2a63e7e3f967c2c84fb3fc31b6fe7bffd697",
-  "engineScopeCountries": ["FR", "NL", "IT"],
+  "engineScopeCountries": [
+    "FR",
+    "NL",
+    "IT",
+    "ES"
+  ],
   "fallback": "legacy-compare",
-  "notes": "Candidate mode for the guarded production canary. Stable V7.3 UI remains the shell; V9 is used for compare only, with automatic legacy-compare fallback on any candidate execution failure. Runtime and data remain isolated under /v9-production-runtime/."
+  "notes": "Candidate production shell. Stable V7.3 UI remains the shell; V9 compare is enabled for FR, NL, IT and validated Spain REVE V2, with automatic legacy-compare fallback on candidate execution failure. Runtime and data remain isolated under /v9-production-runtime/."
 }
