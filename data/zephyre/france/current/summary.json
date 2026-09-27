@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-27T00:44:41.384Z",
+  "generatedAt": "2026-09-27T10:02:31.923Z",
   "country": "FR",
   "network": "Zephyre",
   "partyId": "FR*ZP1",
   "source": {
     "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-    "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260926-035034/consolidation-etalab-schema-irve-statique-v-2.3.1-20260926.csv",
+    "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260927-070429/consolidation-etalab-schema-irve-statique-v-2.3.1-20260927.csv",
     "bff": "https://api.services-emobility.com/pay/api",
     "nearby": "POST /stations/nearby",
     "detail": "GET /stations/chargepoint/{internalName}"
@@ -14,15 +14,15 @@
   "rawFrZp1Rows": 425,
   "irveUniqueEvse": 373,
   "seedCoordinates": 148,
-  "liveDetailStations": 135,
-  "liveDirectEvse": 135,
-  "liveTariffPresent": 135,
-  "directPaymentEnabled": 135,
+  "liveDetailStations": 148,
+  "liveDirectEvse": 148,
+  "liveTariffPresent": 148,
+  "directPaymentEnabled": 148,
   "nearbyErrors": 0,
   "detailErrors": 0,
-  "unresolvedIrveEvse": 238,
+  "unresolvedIrveEvse": 225,
   "unresolvedByDataset": {
-    "63dccb1307e9b2f213a5130c": 37,
+    "63dccb1307e9b2f213a5130c": 24,
     "65a5487fa94ead1ffa4562a3": 201
   },
   "providers": [
