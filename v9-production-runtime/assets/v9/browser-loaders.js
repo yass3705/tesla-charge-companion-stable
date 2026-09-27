@@ -51,6 +51,19 @@
     };
   }
 
+  function createShardedOfferLoader({source,basePath='..',adapter,fetchImpl}={}){
+    if(!source?.manifest||!source?.root)throw new Error('sharded offer source manifest/root missing');
+    if(!adapter?.normalizePayload)throw new Error('direct offer adapter missing');
+    let manifestPromise=null;
+    return async function(query={}){
+      manifestPromise=manifestPromise||fetchJson(join(basePath,source.manifest),fetchImpl);
+      const manifest=await manifestPromise,tiles=selectTiles(manifest,query);
+      const payloads=await Promise.all(tiles.map(t=>fetchJson(join(basePath,`${source.root}${t.file}`),fetchImpl)));
+      const offerRules=[];for(const payload of payloads)offerRules.push(...adapter.normalizePayload(payload).offerRules);
+      return{stations:[],offerRules};
+    };
+  }
+
   function createRegistryLoaders({registry,basePath='..',adapters={},fetchImpl}={}){
     const loaders={};
     for(const source of registry?.sources||[]){
@@ -59,6 +72,8 @@
         loaders[source.id]=adapters.teslaJson.createLoader({url:join(basePath,source.path),fetchImpl});
       }else if(source.adapter==='direct-offer-json'&&adapters.directOffers?.createLoader&&source.path){
         loaders[source.id]=adapters.directOffers.createLoader({url:join(basePath,source.path),fetchImpl});
+      }else if(source.adapter==='direct-offer-sharded-v1'&&adapters.directOffers?.normalizePayload&&source.root&&source.manifest){
+        loaders[source.id]=createShardedOfferLoader({source,basePath,adapter:adapters.directOffers,fetchImpl});
       }else if(source.adapter==='direct-tariff-gzip'&&adapters.legacyDirectTariffs?.createLoader&&source.path){
         loaders[source.id]=adapters.legacyDirectTariffs.createLoader({url:join(basePath,source.path),fetchImpl,source});
       }else if(source.adapter==='direct-station-gzip'&&adapters.legacyDirectStations?.createLoader&&source.path){
@@ -81,5 +96,5 @@
     return loaders;
   }
 
-  return{fetchJson,boundsFromQuery,tileIntersects,selectTiles,createNationalLoader,createRegistryLoaders};
+  return{fetchJson,boundsFromQuery,tileIntersects,selectTiles,createNationalLoader,createShardedOfferLoader,createRegistryLoaders};
 });
