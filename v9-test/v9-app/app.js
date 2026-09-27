@@ -30,7 +30,7 @@
     summaryEl.textContent=`${(area.stations||[]).length} stations · ${area.diagnostics?.routedStationCount||0}/${area.diagnostics?.routingRequestedCount||0} routées · ${area.diagnostics?.fullyScoredStationCount||0} scorées`;
     stationsEl.innerHTML=stations.slice(0,50).map(st=>{
       const ev=area.sessionEvaluations?.[st.id],score=area.stationScores?.[st.id],plan=area.sessionPlans?.[st.id];
-      return `<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name)} · ${maxPower(st)} kW</div>${ev?.best?`<div class="best">${Number(ev.best.total).toFixed(2)} ${esc(ev.best.targetCurrency)} · ${esc(ev.best.provider)}</div>`:'<div class="best muted">Aucune offre comparable</div>'}${plan?`<div class="offer">SOC arrivée ${fmt(plan.arrivalSoc)}% → ${fmt(plan.actualTargetSoc)}%</div>`:''}${score?`<div class="offer">Charge ${fmt(score.chargingMinutes)} min · total ${fmt(score.totalTimeMinutes)} min</div>`:''}</div>`;
+      return `<div class="station"><strong>${esc(st.name)}</strong><div class="muted">${esc(st.physicalOperator?.name==='Unknown'?'Opérateur non confirmé':st.physicalOperator?.name)} · ${maxPower(st)>0?`${maxPower(st)} kW`:'Puissance non confirmée'}</div>${ev?.best?`<div class="best">${Number(ev.best.total).toFixed(2)} ${esc(ev.best.targetCurrency)} · ${esc(ev.best.provider)}</div>`:'<div class="best muted">Aucune offre comparable</div>'}${plan&&maxPower(st)>0?`<div class="offer">SOC arrivée ${fmt(plan.arrivalSoc)}% → ${fmt(plan.actualTargetSoc)}%</div>`:''}${score&&maxPower(st)>0?`<div class="offer">Charge ${fmt(score.chargingMinutes)} min · total ${fmt(score.totalTimeMinutes)} min</div>`:''}</div>`;
     }).join('')||'<span class="muted">Aucune station.</span>';
   }
 
