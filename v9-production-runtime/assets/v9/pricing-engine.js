@@ -63,7 +63,7 @@
     const energy=num(session.energyKwh),power=num(session.powerKw),soc=num(session.vehicleSoc),congestion=num(session.congestionPct),duration=num(session.durationMinutes);
     const bound=(v,min,max)=>{if(min==null&&max==null)return'match';if(v==null)return'unknown';if(min!=null&&v<Number(min))return'no_match';if(max!=null&&v>Number(max))return'no_match';return'match';};
     for(const [v,min,max] of [[energy,rule?.minEnergyKwh,rule?.maxEnergyKwh],[power,rule?.minPowerKw,rule?.maxPowerKw],[duration,rule?.minDurationMinutes,rule?.maxDurationMinutes],[soc,rule?.minVehicleSoc,rule?.maxVehicleSoc],[congestion,rule?.minCongestionPct,rule?.maxCongestionPct]]){const s=bound(v,min,max);if(s!=='match')return s;}
-    const reservation=rule?.reservationState;if(reservation!=null){const actual=String(session.reservationState||'').toUpperCase();if(!actual)return'unknown';if(actual!==String(reservation).toUpperCase())return'no_match';}
+    const reservation=rule?.reservationState;if(reservation!=null){const actual=String(session.reservationState||'').toUpperCase();if(!actual)return'no_match';if(actual!==String(reservation).toUpperCase())return'no_match';}
     const startDate=rule?.validFromDate,endDate=rule?.validThroughDate;if(startDate!=null||endDate!=null){const parts=localDateParts(session.startAt,timeZone||session.timeZone||null);if(!parts)return'unknown';if(startDate!=null&&parts.key<String(startDate))return'no_match';if(endDate!=null&&parts.key>String(endDate))return'no_match';}
     return'match';
   }
