@@ -13,5 +13,6 @@ jobs:
       - run: node tests/reve-v2-pricing-thresholds.test.cjs
       - run: node tests/reve-v2-identity-scope.test.cjs
       - run: node tests/reve-v2-spain-runtime-e2e.test.cjs
+      - run: node tests/reve-v2-spain-sharded-loader.test.cjs
       - run: |
           for f in tests/*pricing*.test.cjs; do echo "== $f =="; node "$f"; done
