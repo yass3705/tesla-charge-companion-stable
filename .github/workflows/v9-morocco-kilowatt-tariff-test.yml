@@ -29,10 +29,10 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
-            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-public-station-inventory.json \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/5cc4607aa1b0da7bf936357f35bd20f725d8f679/reports/morocco/kilowatt/latest-public-station-inventory.json \
             -o /tmp/kilowatt-inventory.json
           curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
-            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/morocco/kilowatt/latest-native-connector-tariffs.json \
+            https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/5cc4607aa1b0da7bf936357f35bd20f725d8f679/reports/morocco/kilowatt/latest-native-connector-tariffs.json \
             -o /tmp/kilowatt-native.json
 
       - name: Validate native connectors, tariffs and calculator
@@ -125,6 +125,9 @@ jobs:
             console.log(root+': OK 43 stations / 88 connectors / 87 priced connectors');
           }
           NODE
+
+      - name: Shell Al Jazira registry and pricing regression
+        run: node tests/v9-shell-al-jazira.test.cjs
 
       - name: Ensure production/test parity
         shell: bash
