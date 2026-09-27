@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "policyUrl": "https://github.com/yass3705/tesla-charge-companion-data-lab/blob/main/reports/morocco/shell-vivo/tariff-policy.json",
+  "station": {
+    "id": "10125255",
+    "countryCode": "MA",
+    "networkBrand": "Shell Recharge",
+    "latitude": 33.779558,
+    "longitude": -7.232679,
+    "address": "A1 Rabat–Casablanca, El Mansouria, après le péage de Bouznika, direction Casablanca",
+    "evidence": [
+      "https://find.shell.com/ma/fuel/10125255-al-jazira/fr_MA",
+      "https://github.com/yass3705/tesla-charge-companion-data-lab/blob/main/reports/morocco/shell-vivo/al-jazira-evidence-2026-08-30.json"
+    ]
+  },
+  "tariff": null
+}

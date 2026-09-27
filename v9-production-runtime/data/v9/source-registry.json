@@ -838,6 +838,30 @@
       "refresh": "runtime",
       "active": true,
       "optional": true
+    },
+    {
+      "id": "morocco-shell-al-jazira",
+      "label": "Shell Al Jazira — tarif de repli TCC",
+      "adapter": "morocco-public-v1",
+      "profile": "shell-al-jazira-policy",
+      "path": "data/v9/morocco-shell-al-jazira.json",
+      "countries": [
+        "MA"
+      ],
+      "capabilities": [
+        "inventory",
+        "access",
+        "tariff"
+      ],
+      "priority": {
+        "identity": 80,
+        "connectors": 0,
+        "access": 80,
+        "status": 0,
+        "tariff": 50
+      },
+      "refresh": "on-demand",
+      "active": true
     }
   ]
 }
