@@ -1,0 +1,24 @@
+name: Spain V9 production scope validation
+on:
+  push:
+    branches: ['activate/spain-reve-v9']
+  pull_request:
+    branches: [main]
+    paths:
+      - 'v9-production-shell/shell-config.json'
+      - 'tests/reve-v2-spain-production-scope.test.cjs'
+      - '.github/workflows/reve-v2-spain-production-scope.yml'
+permissions: { contents: read }
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: node tests/reve-v2-spain-production-scope.test.cjs
+      - run: node tests/reve-v2-spain-runtime-e2e.test.cjs
+      - run: node tests/reve-v2-spain-sharded-loader.test.cjs
+      - run: node tests/reve-v2-pricing-thresholds.test.cjs
+      - run: node tests/reve-v2-identity-scope.test.cjs
+      - run: node tests/v9-tesla-nl-preview.test.cjs
