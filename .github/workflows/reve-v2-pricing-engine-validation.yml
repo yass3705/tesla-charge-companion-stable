@@ -23,7 +23,7 @@ jobs:
             echo "== $f =="
             if node "$f"; then continue; fi
             echo "Branch test failed; checking same test on main baseline"
-            if (cd /tmp/tcc-main && node "$GITHUB_WORKSPACE/$f" 2>/dev/null); then
+            if (cd /tmp/tcc-main && node "$f" 2>/dev/null); then
               echo "::error::$f regressed versus main"
               exit 1
             else
