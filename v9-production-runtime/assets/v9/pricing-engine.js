@@ -59,18 +59,15 @@
     if(end>start)return minute>=start&&minute<end;
     return minute>=start||minute<end;
   }
-  function ruleThresholdMatches(rule,session={}){
+  function ruleThresholdStatus(rule,session={},timeZone=null){
     const energy=num(session.energyKwh),power=num(session.powerKw),soc=num(session.vehicleSoc),congestion=num(session.congestionPct),duration=num(session.durationMinutes);
-    const ge=(v,min)=>min==null||v!=null&&v>=Number(min), le=(v,max)=>max==null||v!=null&&v<=Number(max);
-    if(!ge(energy,rule?.minEnergyKwh)||!le(energy,rule?.maxEnergyKwh))return false;
-    if(!ge(power,rule?.minPowerKw)||!le(power,rule?.maxPowerKw))return false;
-    if(!ge(duration,rule?.minDurationMinutes)||!le(duration,rule?.maxDurationMinutes))return false;
-    if(!ge(soc,rule?.minVehicleSoc)||!le(soc,rule?.maxVehicleSoc))return false;
-    if(!ge(congestion,rule?.minCongestionPct)||!le(congestion,rule?.maxCongestionPct))return false;
-    const reservation=rule?.reservationState;if(reservation!=null){const actual=String(session.reservationState||'').toUpperCase();if(!actual||actual!==String(reservation).toUpperCase())return false;}
-    const startDate=rule?.validFromDate,endDate=rule?.validThroughDate;if(startDate!=null||endDate!=null){const parts=localDateParts(session.startAt,session.timeZone||null);if(!parts)return false;if(startDate!=null&&parts.key<String(startDate))return false;if(endDate!=null&&parts.key>String(endDate))return false;}
-    return true;
+    const bound=(v,min,max)=>{if(min==null&&max==null)return'match';if(v==null)return'unknown';if(min!=null&&v<Number(min))return'no_match';if(max!=null&&v>Number(max))return'no_match';return'match';};
+    for(const [v,min,max] of [[energy,rule?.minEnergyKwh,rule?.maxEnergyKwh],[power,rule?.minPowerKw,rule?.maxPowerKw],[duration,rule?.minDurationMinutes,rule?.maxDurationMinutes],[soc,rule?.minVehicleSoc,rule?.maxVehicleSoc],[congestion,rule?.minCongestionPct,rule?.maxCongestionPct]]){const s=bound(v,min,max);if(s!=='match')return s;}
+    const reservation=rule?.reservationState;if(reservation!=null){const actual=String(session.reservationState||'').toUpperCase();if(!actual)return'unknown';if(actual!==String(reservation).toUpperCase())return'no_match';}
+    const startDate=rule?.validFromDate,endDate=rule?.validThroughDate;if(startDate!=null||endDate!=null){const parts=localDateParts(session.startAt,timeZone||session.timeZone||null);if(!parts)return'unknown';if(startDate!=null&&parts.key<String(startDate))return'no_match';if(endDate!=null&&parts.key>String(endDate))return'no_match';}
+    return'match';
   }
+  function ruleThresholdMatches(rule,session={},timeZone=null){return ruleThresholdStatus(rule,session,timeZone)==='match';}
   function ruleDayMatches(rule,startAt,timeZone,pricing){
     const days=Array.isArray(rule?.daysOfWeek)?rule.daysOfWeek.map(Number).filter(n=>n>=0&&n<=6):null;
     const constrained=Boolean(days?.length||rule?.holidayOnly===true||rule?.excludeHolidays===true);
@@ -83,11 +80,14 @@
     if(days?.length&&!days.includes(parts.weekday))return false;
     return true;
   }
-  function matchingRule(pricing,startAt,timeZone,session={}){
-    const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
-    if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay'&&ruleDayMatches(r,startAt,timeZone,pricing)&&ruleThresholdMatches(r,session))||null;
-    return rules.find(r=>ruleDayMatches(r,startAt,timeZone,pricing)&&ruleContains(r,minute)&&ruleThresholdMatches(r,session))||null;
+  function matchingRuleDetailed(pricing,startAt,timeZone,session={}){
+    const rules=Array.isArray(pricing?.rules)?pricing.rules:[];if(!rules.length)return{rule:null,unknown:false};
+    const minute=minuteOfDay(startAt,timeZone);
+    for(const rule of rules){if(minute==null&&rule.scope!=='allDay')continue;if(!ruleDayMatches(rule,startAt,timeZone,pricing))continue;if(minute!=null&&!ruleContains(rule,minute))continue;const status=ruleThresholdStatus(rule,session,timeZone);if(status==='unknown')return{rule:null,unknown:true,reason:'missing_rule_context'};if(status==='match')return{rule,unknown:false};}
+    return{rule:null,unknown:false};
   }
+  function matchingRule(pricing,startAt,timeZone,session={}){return matchingRuleDetailed(pricing,startAt,timeZone,session).rule;}
+
   function minutesUntilRuleBoundary(rule,startAt,timeZone){
     if(!rule)return Infinity;
     const minute=minuteOfDay(startAt,timeZone);if(minute==null)return null;
@@ -240,7 +240,7 @@
     let total=0;const components={componentGroups:[]};
     for(const group of groups){
       const rules=Array.isArray(group?.rules)?group.rules:[];if(!rules.length)continue;
-      const localPricing={...pricing,rules};const rule=matchingRule(localPricing,session.startAt,timeZone,session);
+      const localPricing={...pricing,rules};const match=matchingRuleDetailed(localPricing,session.startAt,timeZone,session);if(match.unknown)return{complete:false,reason:match.reason,componentKind:group.kind||null};const rule=match.rule;
       if(!rule){components.componentGroups.push({kind:group.kind||null,matched:false,costEur:0});continue;}
       const evaluated=evaluateRule(rule,session);total+=evaluated.totalEur;components.componentGroups.push({kind:group.kind||null,matched:true,costEur:evaluated.totalEur,components:evaluated.components,rule});
     }
@@ -261,7 +261,7 @@
       const finalized=applyMinimumTotal(pricing,base+conditional.totalEur+post.totalEur,components);
       return{complete:true,totalEur:finalized.totalEur,components:finalized.components,offerId:offer?.id||null,currency:offer?.currency||'EUR'};
     }
-    const rule=matchingRule(pricing,session.startAt,timeZone,session);if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
+    const match=matchingRuleDetailed(pricing,session.startAt,timeZone,session);if(match.unknown)return{complete:false,reason:match.reason,offerId:offer?.id||null,timeZone};const rule=match.rule;if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:offer?.id||null,timeZone};
     const duration=Math.max(0,num(session.durationMinutes)??0),boundary=minutesUntilRuleBoundary(rule,session.startAt,timeZone);
     let base,segmented=false;
     if(boundary!=null&&Number.isFinite(boundary)&&duration>boundary+1e-9){
@@ -279,5 +279,5 @@
     const finalized=applyMinimumTotal(pricing,total,components);
     return{complete:!longConnection,totalEur:finalized.totalEur,components:finalized.components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,segmented,timeZone};
   }
-  return{evaluateOffer,evaluateRule,evaluateSegmentedRules,evaluateComponentGroups,segmentableRule,ruleThresholdMatches,evaluateConditionalSessionFees,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary,applyMinimumTotal};
+  return{evaluateOffer,evaluateRule,evaluateSegmentedRules,evaluateComponentGroups,segmentableRule,ruleThresholdStatus,ruleThresholdMatches,matchingRuleDetailed,evaluateConditionalSessionFees,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary,applyMinimumTotal};
 });
