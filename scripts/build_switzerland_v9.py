@@ -9,7 +9,9 @@ LAB_RAW="https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-
 OUT_DIR=Path("v9-production-runtime/data/v9/switzerland-static")
 OFFERS_OUT=Path("v9-production-runtime/data/v9/switzerland-offers.json")
 REPORT_OUT=Path("v9-production-runtime/data/v9/switzerland-build-report.json")
-UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}\nEVSE_META={}\nNATIONAL_RECORDS=[]
+UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}
+EVSE_META={}
+NATIONAL_RECORDS=[]
 
 SOURCES=[
  "data/switzerland/migrol-official-direct-tariffs.json",
