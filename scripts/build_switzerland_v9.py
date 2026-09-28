@@ -375,12 +375,12 @@ def gofast_offers(payload,path):
     for st in payload:
         loc=st.get("location") or {}
         lat=first_num(loc.get("lat"));lon=first_num(loc.get("lng"))
-        m=re.search(r"([0-9]+(?:[.,][0-9]+)?)\\s*CHF\\s*/\\s*kWh",text(st.get("pricing_de")),re.I)
+        m=re.search(r"([0-9]+(?:[.,][0-9]+)?)\s*CHF\s*/\s*kWh",text(st.get("pricing_de")),re.I)
         if lat is None or lon is None or not m:continue
         k=float(m.group(1).replace(",","."))
         detail=text(st.get("pricing_detail_de") or st.get("pricing_detail_en"))
-        fm=re.search(r"(?:ab|after|from)\\s*(\\d+)\\.?\\s*(?:Minute|min)",detail,re.I)
-        pm=re.search(r"CHF\\s*([0-9]+(?:[.,][0-9]+)?)\\s*/\\s*Min",detail,re.I)
+        fm=re.search(r"(?:ab|after|from)\s*(\d+)\.?\s*(?:Minute|min)",detail,re.I)
+        pm=re.search(r"CHF\s*([0-9]+(?:[.,][0-9]+)?)\s*/\s*Min",detail,re.I)
         official.append({"lat":lat,"lon":lon,"price":k,"free":float(fm.group(1)) if fm else None,"after":float(pm.group(1).replace(",",".")) if pm else None,"name":st.get("title_de"),"slug":st.get("slug")})
     outs=[]
     for oid,on,eid,rec in NATIONAL_RECORDS:
