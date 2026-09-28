@@ -8,6 +8,21 @@
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null;};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const V7_DC_POINTS=[[0,175],[10,175],[20,170],[30,160],[40,145],[50,125],[60,105],[70,85],[80,60],[85,42],[90,28],[95,16],[98,10],[100,6]];
+  const SUBSCRIPTION_KEY='tccV9SelectedSubscriptionsV1';
+
+  function selectedSubscriptions(w){
+    try{const raw=JSON.parse(w.localStorage.getItem(SUBSCRIPTION_KEY)||'[]');return Array.isArray(raw)?[...new Set(raw.map(text).filter(Boolean))]:[];}catch(_){return[];}
+  }
+  function saveSelectedSubscriptions(w,ids){const clean=[...new Set((ids||[]).map(text).filter(Boolean))];try{w.localStorage.setItem(SUBSCRIPTION_KEY,JSON.stringify(clean));}catch(_){}return clean;}
+  function subscriptionLabel(row){const provider=text(row?.provider),label=text(row?.label),id=text(row?.id);if(label&&label!==id)return label;if(provider&&provider!==id)return provider;return id;}
+  function renderSubscriptionSelector(w,options,countryCode){
+    const compare=w.document.getElementById('compare'),card=compare?.querySelector('.card');if(!card)return;
+    let box=w.document.getElementById('v9SubscriptionSelector');
+    if(!box){box=w.document.createElement('details');box.id='v9SubscriptionSelector';box.className='box';box.style.marginTop='10px';const primary=card.querySelector('button.primary');if(primary)card.insertBefore(box,primary);else card.appendChild(box);}
+    const selected=new Set(selectedSubscriptions(w)),rows=(options||[]).slice();
+    box.innerHTML=`<summary><b>Abonnements recharge</b> <span class="small">(${rows.length} compatible(s) en ${esc(countryCode)})</span></summary><div class="small" style="margin-top:8px">Les abonnements sélectionnés s'appliquent automatiquement dans tous les pays où leur compatibilité est vérifiée.</div><div id="v9SubscriptionChoices" style="margin-top:8px">${rows.length?rows.map(row=>{const id=text(row.id),checked=selected.has(id)?' checked':'';const countries=(row.countries||[]).join(', ');return `<label style="display:block;margin:7px 0"><input type="checkbox" data-v9-subscription-id="${esc(id)}" style="width:auto"${checked}> ${esc(subscriptionLabel(row))}${countries?` <span class="small">· ${esc(countries)}</span>`:''}</label>`;}).join(''):'<span class="small">Aucun abonnement tarifaire vérifié pour cette zone.</span>'}</div>`;
+    box.querySelectorAll('input[data-v9-subscription-id]').forEach(input=>input.addEventListener('change',()=>{const current=new Set(selectedSubscriptions(w)),id=text(input.dataset.v9SubscriptionId);if(input.checked)current.add(id);else current.delete(id);saveSelectedSubscriptions(w,[...current]);w.compare();}));
+  }
 
   function rankingWeights(mode){if(mode==='price')return{price:.7,distance:.3};if(mode==='distance')return{price:.3,distance:.7};return{price:.5,distance:.5};}
   function rankRows(rows,mode='balanced',limit=20){
@@ -66,8 +81,9 @@
     if(typeof w.resolveOrigin!=='function')throw new Error('stable origin resolver unavailable');const origin=await w.resolveOrigin(input.originText),countryCode=await countryCodeForOrigin(w,origin),scope=cfg.engineScopeCountries||[];
     if(scope.length&&!scope.includes(countryCode))throw new Error(`country outside V9 shell scope: ${countryCode}`);
     const queryRadius=input.radiusKm>0?input.radiusKm:20,filters=input.operatorMode==='tesla'?{operatorIds:['tesla']}:{},session=buildSession(input);
-    const area=await engine.queryArea({countryCode,origin:{lat:Number(origin.lat),lon:Number(origin.lon)},radiusKm:queryRadius,filters,session,vehicleProfileId:'generic-ev-preview',selectedSubscriptions:[],subscriptionFilters:{countryCodes:[countryCode],coverageMode:'any'},routingBudget:80,perOperatorFloor:2,sortBy:'finalCost'});
-    const rows=rankRows(rowsFromArea(area),input.rankingMode,20);return{area,rows,origin,countryCode,queryRadius,partialRadius:!(input.radiusKm>0)};
+    const selected=selectedSubscriptions(w);
+    const area=await engine.queryArea({countryCode,origin:{lat:Number(origin.lat),lon:Number(origin.lon)},radiusKm:queryRadius,filters,session,vehicleProfileId:'generic-ev-preview',selectedSubscriptions:selected,subscriptionFilters:{countryCodes:[countryCode],coverageMode:'any'},routingBudget:80,perOperatorFloor:2,sortBy:'finalCost'});
+    const rows=rankRows(rowsFromArea(area),input.rankingMode,20);return{area,rows,origin,countryCode,queryRadius,partialRadius:!(input.radiusKm>0),selectedSubscriptions:selected};
   }
   async function install(w){
     const cfg=w.__TCC_V9_SHELL_CONFIG__;if(!cfg||!['shadow','candidate'].includes(cfg.mode))throw new Error('shell config unavailable');const legacyCompare=w.compare;if(typeof legacyCompare!=='function')throw new Error('stable compare unavailable');
@@ -75,10 +91,10 @@
     w.compare=async function(){const input=readInputs(w);if(cfg.mode==='shadow'){
       const stable=await legacyCompare.apply(this,arguments);enginePromise.then(engine=>executeV9(w,engine,cfg,input)).then(run=>diagnosticStore(w,{mode:'shadow',outcome:'v9-ok',countryCode:run.countryCode,stationCount:run.area?.stations?.length||0,rankedCount:run.rows.length,sourceErrors:run.area?.diagnostics?.errors?.length||0,routingErrors:run.area?.diagnostics?.routingErrorCount||0,partialRadius:run.partialRadius})).catch(err=>diagnosticStore(w,{mode:'shadow',outcome:'v9-fallback',reason:err.message}));return stable;
     }
-      try{const engine=await enginePromise,run=await executeV9(w,engine,cfg,input);renderCandidate(w,run.area,run.rows,run.origin.label||input.originText);diagnosticStore(w,{mode:'candidate',outcome:'v9-ok',countryCode:run.countryCode,stationCount:run.area?.stations?.length||0,rankedCount:run.rows.length,sourceErrors:run.area?.diagnostics?.errors?.length||0,routingErrors:run.area?.diagnostics?.routingErrorCount||0});return run.area;}catch(err){diagnosticStore(w,{mode:'candidate',outcome:'legacy-fallback',reason:err.message});return legacyCompare.apply(this,arguments);}
+      try{const engine=await enginePromise,run=await executeV9(w,engine,cfg,input);renderSubscriptionSelector(w,run.area?.subscriptions||[],run.countryCode);renderCandidate(w,run.area,run.rows,run.origin.label||input.originText);diagnosticStore(w,{mode:'candidate',outcome:'v9-ok',countryCode:run.countryCode,stationCount:run.area?.stations?.length||0,rankedCount:run.rows.length,selectedSubscriptionCount:run.selectedSubscriptions.length,sourceErrors:run.area?.diagnostics?.errors?.length||0,routingErrors:run.area?.diagnostics?.routingErrorCount||0});return run.area;}catch(err){diagnosticStore(w,{mode:'candidate',outcome:'legacy-fallback',reason:err.message});return legacyCompare.apply(this,arguments);}
     };
     w.__TCC_V9_SHELL__={mode:cfg.mode,candidateSha:cfg.observedCandidateSha,engineScopeCountries:(cfg.engineScopeCountries||[]).slice(),fallback:cfg.fallback||'legacy-compare'};
     return w.__TCC_V9_SHELL__;
   }
-  return{rankingWeights,rankRows,combineDateTime,dcCurve,readInputs,buildSession,rowsFromArea,executeV9,install};
+  return{rankingWeights,rankRows,combineDateTime,dcCurve,readInputs,buildSession,rowsFromArea,selectedSubscriptions,saveSelectedSubscriptions,subscriptionLabel,renderSubscriptionSelector,executeV9,install};
 });
