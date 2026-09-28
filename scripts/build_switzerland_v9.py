@@ -9,12 +9,12 @@ LAB_RAW="https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-
 OUT_DIR=Path("v9-production-runtime/data/v9/switzerland-static")
 OFFERS_OUT=Path("v9-production-runtime/data/v9/switzerland-offers.json")
 REPORT_OUT=Path("v9-production-runtime/data/v9/switzerland-build-report.json")
-UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}
+UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}\nEVSE_META={}\nNATIONAL_RECORDS=[]
 
 SOURCES=[
  "data/switzerland/migrol-official-direct-tariffs.json",
  "data/switzerland/shell-evpass-official-direct-tariffs.json",
- "data/switzerland/move-direct-tariffs.json",
+ "data/switzerland/move-direct-tariffs-second-pass.json",
  "data/switzerland/cci-move-cpo-tariffs-national.json",
  "data/switzerland/energie360-direct-tariffs.json",
  "data/switzerland/powerup-monta-direct-tariffs.json",
@@ -201,6 +201,12 @@ def offer(eid,provider,source,currency="CHF",pricing=None,kind="direct",subscrip
        "provider":provider,"countries":["CH"],"currency":"EUR","evseIds":[eid],"verifiedScope":"exact_evse",
        "pricing":pricing,"priority":130,"source":source,
        "metadata":{"originalCurrency":text(currency or "CHF").upper(),"fxChfPerEur":CHF_PER_EUR,"fxDate":FX_DATE,**(metadata or {})}}
+    meta=EVSE_META.get(eid)
+    if meta:
+        x["connectorKinds"]=[meta["kind"]]
+        p=float(meta["powerKw"])
+        x["minPowerKw"]=max(0,p-0.01);x["maxPowerKw"]=p+0.01
+        x["verifiedScope"]="exact_evse_power"
     if kind=="subscription":
         x["selectionId"]=subscription_id or x["id"];x["monthlyFeeEur"]=metadata.get("monthlyFeeEur") if metadata else None
     return x
@@ -319,7 +325,45 @@ def swisscharge_offers(payload,provider,source):
         outs.append(offer(eid,provider,source,cur,pricing,metadata={"tariffName":t.get("name"),"originalPhysicalReference":e.get("physicalReference")}))
     return [x for x in outs if x]
 
+def haversine_m(a,b):
+    lat1,lon1=a;lat2,lon2=b
+    r=6371000.0
+    p1=math.radians(lat1);p2=math.radians(lat2)
+    dp=math.radians(lat2-lat1);dl=math.radians(lon2-lon1)
+    h=math.sin(dp/2)**2+math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+    return 2*r*math.atan2(math.sqrt(h),math.sqrt(max(0,1-h)))
+
+def gofast_offers(payload,path):
+    if not isinstance(payload,list):return []
+    official=[]
+    for st in payload:
+        loc=st.get("location") or {}
+        lat=first_num(loc.get("lat"));lon=first_num(loc.get("lng"))
+        m=re.search(r"([0-9]+(?:[.,][0-9]+)?)\\s*CHF\\s*/\\s*kWh",text(st.get("pricing_de")),re.I)
+        if lat is None or lon is None or not m:continue
+        k=float(m.group(1).replace(",","."))
+        detail=text(st.get("pricing_detail_de") or st.get("pricing_detail_en"))
+        fm=re.search(r"(?:ab|after|from)\\s*(\\d+)\\.?\\s*(?:Minute|min)",detail,re.I)
+        pm=re.search(r"CHF\\s*([0-9]+(?:[.,][0-9]+)?)\\s*/\\s*Min",detail,re.I)
+        official.append({"lat":lat,"lon":lon,"price":k,"free":float(fm.group(1)) if fm else None,"after":float(pm.group(1).replace(",",".")) if pm else None,"name":st.get("title_de"),"slug":st.get("slug")})
+    outs=[]
+    for oid,on,eid,rec in NATIONAL_RECORDS:
+        if oid!="CH*GFT":continue
+        co=coords(rec)
+        if co[0] is None:continue
+        cand=sorted((haversine_m(co,(s["lat"],s["lon"])),s) for s in official)
+        if not cand or cand[0][0]>15:continue
+        d,s=cand[0]
+        # Fail closed if two official GOFAST sites are effectively colocated.
+        if len(cand)>1 and cand[1][0]<=15 and abs(cand[1][0]-d)<3:continue
+        outs.append(offer(eid,"GOFAST",path,"CHF",rule_pricing(s["price"],currency="CHF",free_min=s["free"],after_free=s["after"]),metadata={"officialStation":s["name"],"officialSlug":s["slug"],"distanceMeters":round(d,2),"mappingPolicy":"nearest official GOFAST coordinate accepted only within 15m; colocated ambiguity rejected"}))
+    return [x for x in outs if x]
+
 def compile_payload(payload,path):
+    if "data/gofast/ev_charger_stations.json" in path:
+        return gofast_offers(payload,path)
+    if not isinstance(payload,dict):
+        return []
     provider=text(payload.get("cpo") or payload.get("operator") or payload.get("operatorId") or Path(path).stem)
     if "swisscharge-tariffs" in path:return swisscharge_offers(payload,"Swisscharge",path)
     if "cpi-current" in path:return cpi_offers(payload,"ChargePoint",path)
@@ -360,13 +404,16 @@ def compile_offers():
     return out
 
 def main():
+    global NATIONAL_RECORDS,EVSE_META
     feed=fetch_json(NATIONAL_URL,240)
     records=collect_national(feed)
+    NATIONAL_RECORDS=records
+    EVSE_META={eid:{"kind":evse_kind_power(rec)[0],"powerKw":evse_kind_power(rec)[1]} for _,_,eid,rec in records}
     manifest=build_static(records)
     offers=compile_offers()
     report={"generatedAt":datetime.now(timezone.utc).isoformat(),"country":"CH",
             "national":{"owners":len({x[0] for x in records}),"evses":len(records),"stations":manifest["stationCount"],"tiles":len(manifest["tiles"])},
-            "offers":{"direct":len(offers["directOffers"]),"subscriptions":len(offers["subscriptionOffers"]),"sourceCounts":offers["build"]["sources"],"sourceErrors":offers["build"]["errors"]},
+            "offers":{"direct":len(offers["directOffers"]),"subscriptions":len(offers["subscriptionOffers"]),"uniqueDirectEvse":len({e for o in offers["directOffers"] for e in o.get("evseIds",[])}),"uniqueSubscriptionEvse":len({e for o in offers["subscriptionOffers"] for e in o.get("evseIds",[])}),"sourceCounts":offers["build"]["sources"],"sourceErrors":offers["build"]["errors"]},
             "fx":{"CHFperEUR":CHF_PER_EUR,"date":FX_DATE}}
     REPORT_OUT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,ensure_ascii=False,indent=2))
