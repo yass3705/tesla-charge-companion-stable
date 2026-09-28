@@ -12,7 +12,7 @@ REPORT_OUT=Path("v9-production-runtime/data/v9/switzerland-build-report.json")
 UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}
 EVSE_META={}
 NATIONAL_RECORDS=[]
-GOFAST_AUDIT={"nationalEvse":0,"matchedByName":0,"matchedByCoordinate":0,"unmatched":0,"nearestDistances":[],"samples":[]}
+GOFAST_AUDIT={"nationalEvse":0,"matchedByName":0,"matchedByCoordinate":0,"unmatched":0,"nearestDistances":[],"samples":[],"unmatchedDetails":[]}
 
 SOURCES=[
  "data/switzerland/migrol-official-direct-tariffs.json",
@@ -404,10 +404,14 @@ def gofast_offers(payload,path):
                 continue
             GOFAST_AUDIT["nearestDistances"].append(round(cand[0][0],2))
             if cand[0][0]>50:
+                if len(GOFAST_AUDIT["unmatchedDetails"])<30:
+                    GOFAST_AUDIT["unmatchedDetails"].append({"evseId":eid,"nationalName":name_from(rec),"nationalAddress":addr(rec),"nearestOfficial":cand[0][1]["name"],"nearestSlug":cand[0][1]["slug"],"distanceMeters":round(cand[0][0],2)})
                 GOFAST_AUDIT["unmatched"]+=1
                 continue
             d,s=cand[0]
             if len(cand)>1 and cand[1][0]<=50 and abs(cand[1][0]-d)<10:
+                if len(GOFAST_AUDIT["unmatchedDetails"])<30:
+                    GOFAST_AUDIT["unmatchedDetails"].append({"evseId":eid,"nationalName":name_from(rec),"nationalAddress":addr(rec),"nearestOfficial":cand[0][1]["name"],"secondOfficial":cand[1][1]["name"],"distanceMeters":round(d,2),"reason":"ambiguous_colocated"})
                 GOFAST_AUDIT["unmatched"]+=1
                 continue
             policy="unique nearest official GOFAST coordinate within 50m"
