@@ -16,7 +16,6 @@ NATIONAL_RECORDS=[]
 SOURCES=[
  "data/switzerland/migrol-official-direct-tariffs.json",
  "data/switzerland/shell-evpass-official-direct-tariffs.json",
- "data/switzerland/move-direct-tariffs-second-pass.json",
  "data/switzerland/cci-move-cpo-tariffs-national.json",
  "data/switzerland/energie360-direct-tariffs.json",
  "data/switzerland/powerup-monta-direct-tariffs.json",
@@ -335,6 +334,9 @@ def haversine_m(a,b):
     h=math.sin(dp/2)**2+math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
     return 2*r*math.atan2(math.sqrt(h),math.sqrt(max(0,1-h)))
 
+def norm_name(v):
+    return re.sub(r"[^a-z0-9]+","",text(v).lower().replace("ü","u").replace("ö","o").replace("ä","a").replace("é","e").replace("è","e").replace("à","a"))
+
 def gofast_offers(payload,path):
     if not isinstance(payload,list):return []
     official=[]
@@ -353,12 +355,17 @@ def gofast_offers(payload,path):
         if oid!="CH*GFT":continue
         co=coords(rec)
         if co[0] is None:continue
-        cand=sorted((haversine_m(co,(s["lat"],s["lon"])),s) for s in official)
-        if not cand or cand[0][0]>15:continue
-        d,s=cand[0]
-        # Fail closed if two official GOFAST sites are effectively colocated.
-        if len(cand)>1 and cand[1][0]<=15 and abs(cand[1][0]-d)<3:continue
-        outs.append(offer(eid,"GOFAST",path,"CHF",rule_pricing(s["price"],currency="CHF",free_min=s["free"],after_free=s["after"]),metadata={"officialStation":s["name"],"officialSlug":s["slug"],"distanceMeters":round(d,2),"mappingPolicy":"nearest official GOFAST coordinate accepted only within 15m; colocated ambiguity rejected"}))
+        national_name=norm_name(name_from(rec))
+        name_matches=[s for s in official if norm_name(s["name"])==national_name and national_name]
+        if len(name_matches)==1:
+            s=name_matches[0];d=haversine_m(co,(s["lat"],s["lon"]));policy="exact normalized station-name match"
+        else:
+            cand=sorted((haversine_m(co,(s["lat"],s["lon"])),s) for s in official)
+            if not cand or cand[0][0]>50:continue
+            d,s=cand[0]
+            if len(cand)>1 and cand[1][0]<=50 and abs(cand[1][0]-d)<10:continue
+            policy="unique nearest official GOFAST coordinate within 50m"
+        outs.append(offer(eid,"GOFAST",path,"CHF",rule_pricing(s["price"],currency="CHF",free_min=s["free"],after_free=s["after"]),metadata={"officialStation":s["name"],"officialSlug":s["slug"],"distanceMeters":round(d,2),"mappingPolicy":policy}))
     return [x for x in outs if x]
 
 def compile_payload(payload,path):
@@ -379,6 +386,35 @@ def compile_payload(payload,path):
         outs.extend(atlas_direct_offers(payload,provider,path))
     return outs
 
+def derive_move_ccc(direct,subs):
+    templates={}
+    for o in direct+subs:
+        eids=o.get("evseIds") or []
+        if not eids or not eids[0].startswith("CH*CCI*"):continue
+        if "move" not in text(o.get("provider")).lower():continue
+        kinds=tuple(o.get("connectorKinds") or [])
+        if len(kinds)!=1:continue
+        key=(kinds[0],text(o.get("selectionId")),json.dumps(o.get("pricing"),sort_keys=True))
+        templates[key]=o
+    by_kind=defaultdict(list)
+    for (_,_,_),o in templates.items():
+        by_kind[(o.get("connectorKinds") or [""])[0]].append(o)
+    out_d=[];out_s=[]
+    for oid,on,eid,rec in NATIONAL_RECORDS:
+        if oid!="CH*CCC" or not eid.startswith("CH*CCC*"):continue
+        meta=EVSE_META.get(eid)
+        if not meta:continue
+        for t in by_kind.get(meta["kind"],[]):
+            md=dict(t.get("metadata") or {})
+            md.update({"derivedFrom":"explicit Move CPO-level tariff schedule already validated on CH*CCI","ownerScope":"CH*CCC"})
+            if t.get("selectionId"):
+                x=offer(eid,"MOVE", "data/switzerland/cci-move-cpo-tariffs-national.json","CHF",t.get("pricing"),kind="subscription",subscription_id=t.get("selectionId"),metadata=md)
+                if x:out_s.append(x)
+            else:
+                x=offer(eid,"MOVE","data/switzerland/cci-move-cpo-tariffs-national.json","CHF",t.get("pricing"),metadata=md)
+                if x:out_d.append(x)
+    return out_d,out_s
+
 def compile_offers():
     direct=[]; subs=[]; errors=[]; source_counts={}
     for path in SOURCES:
@@ -390,6 +426,9 @@ def compile_offers():
                 (subs if o.get("selectionId") else direct).append(o)
         except Exception as e:
             errors.append({"path":path,"error":type(e).__name__+": "+str(e)})
+    ccc_direct,ccc_subs=derive_move_ccc(direct,subs)
+    direct.extend(ccc_direct);subs.extend(ccc_subs)
+    source_counts["derived:CH*CCC-from-explicit-Move-CPO-level-schedules"]=len(ccc_direct)+len(ccc_subs)
     # exact semantic dedupe
     def key(o):
         return (tuple(o.get("evseIds") or []),text(o.get("provider")),text(o.get("selectionId")),json.dumps(o.get("pricing"),sort_keys=True))
@@ -414,7 +453,7 @@ def main():
     manifest=build_static(records)
     offers=compile_offers()
     report={"generatedAt":datetime.now(timezone.utc).isoformat(),"country":"CH",
-            "national":{"owners":len({x[0] for x in records}),"evses":len(records),"publishedNonTeslaEvses":manifest["evseCount"],"excludedTeslaEvseCount":sum(1 for x in records if x[0]=="CH*TSL"),"stations":manifest["stationCount"],"tiles":len(manifest["tiles"])},
+            "national":{"owners":len({x[0] for x in records}),"evses":len(records),"publishedNonTeslaEvses":manifest["evseCount"],"excludedTeslaEvseCount":sum(1 for x in records if x[0] in ("CH*TES","CH*TSL")),"stations":manifest["stationCount"],"tiles":len(manifest["tiles"])},
             "offers":{"direct":len(offers["directOffers"]),"subscriptions":len(offers["subscriptionOffers"]),"uniqueDirectEvse":len({e for o in offers["directOffers"] for e in o.get("evseIds",[])}),"uniqueSubscriptionEvse":len({e for o in offers["subscriptionOffers"] for e in o.get("evseIds",[])}),"sourceCounts":offers["build"]["sources"],"sourceErrors":offers["build"]["errors"]},
             "fx":{"CHFperEUR":CHF_PER_EUR,"date":FX_DATE}}
     REPORT_OUT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
