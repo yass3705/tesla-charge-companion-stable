@@ -12,6 +12,7 @@ REPORT_OUT=Path("v9-production-runtime/data/v9/switzerland-build-report.json")
 UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}
 EVSE_META={}
 NATIONAL_RECORDS=[]
+GOFAST_AUDIT={"nationalEvse":0,"matchedByName":0,"matchedByCoordinate":0,"unmatched":0,"nearestDistances":[]}
 
 SOURCES=[
  "data/switzerland/migrol-official-direct-tariffs.json",
@@ -134,6 +135,8 @@ def collect_national(feed):
 def build_static(records):
     groups=defaultdict(list)
     for oid,on,eid,rec in records:
+        if oid in ("CH*TES","CH*TSL"):
+            continue
         sid=text(rec.get("ChargingStationId")) or eid
         groups[(oid,sid)].append((on,eid,rec))
     rows=[]
@@ -338,6 +341,7 @@ def norm_name(v):
     return re.sub(r"[^a-z0-9]+","",text(v).lower().replace("ü","u").replace("ö","o").replace("ä","a").replace("é","e").replace("è","e").replace("à","a"))
 
 def gofast_offers(payload,path):
+    global GOFAST_AUDIT
     if not isinstance(payload,list):return []
     official=[]
     for st in payload:
@@ -353,18 +357,29 @@ def gofast_offers(payload,path):
     outs=[]
     for oid,on,eid,rec in NATIONAL_RECORDS:
         if oid!="CH*GFT":continue
+        GOFAST_AUDIT["nationalEvse"]+=1
         co=coords(rec)
         if co[0] is None:continue
         national_name=norm_name(name_from(rec))
         name_matches=[s for s in official if norm_name(s["name"])==national_name and national_name]
         if len(name_matches)==1:
             s=name_matches[0];d=haversine_m(co,(s["lat"],s["lon"]));policy="exact normalized station-name match"
+            GOFAST_AUDIT["matchedByName"]+=1
         else:
             cand=sorted((haversine_m(co,(s["lat"],s["lon"])),s) for s in official)
-            if not cand or cand[0][0]>50:continue
+            if not cand:
+                GOFAST_AUDIT["unmatched"]+=1
+                continue
+            GOFAST_AUDIT["nearestDistances"].append(round(cand[0][0],2))
+            if cand[0][0]>50:
+                GOFAST_AUDIT["unmatched"]+=1
+                continue
             d,s=cand[0]
-            if len(cand)>1 and cand[1][0]<=50 and abs(cand[1][0]-d)<10:continue
+            if len(cand)>1 and cand[1][0]<=50 and abs(cand[1][0]-d)<10:
+                GOFAST_AUDIT["unmatched"]+=1
+                continue
             policy="unique nearest official GOFAST coordinate within 50m"
+            GOFAST_AUDIT["matchedByCoordinate"]+=1
         outs.append(offer(eid,"GOFAST",path,"CHF",rule_pricing(s["price"],currency="CHF",free_min=s["free"],after_free=s["after"]),metadata={"officialStation":s["name"],"officialSlug":s["slug"],"distanceMeters":round(d,2),"mappingPolicy":policy}))
     return [x for x in outs if x]
 
@@ -455,7 +470,7 @@ def main():
     report={"generatedAt":datetime.now(timezone.utc).isoformat(),"country":"CH",
             "national":{"owners":len({x[0] for x in records}),"evses":len(records),"publishedNonTeslaEvses":manifest["evseCount"],"excludedTeslaEvseCount":sum(1 for x in records if x[0] in ("CH*TES","CH*TSL")),"stations":manifest["stationCount"],"tiles":len(manifest["tiles"])},
             "offers":{"direct":len(offers["directOffers"]),"subscriptions":len(offers["subscriptionOffers"]),"uniqueDirectEvse":len({e for o in offers["directOffers"] for e in o.get("evseIds",[])}),"uniqueSubscriptionEvse":len({e for o in offers["subscriptionOffers"] for e in o.get("evseIds",[])}),"sourceCounts":offers["build"]["sources"],"sourceErrors":offers["build"]["errors"]},
-            "fx":{"CHFperEUR":CHF_PER_EUR,"date":FX_DATE}}
+            "fx":{"CHFperEUR":CHF_PER_EUR,"date":FX_DATE},"gofastAudit":{**GOFAST_AUDIT,"nearestDistanceMin":min(GOFAST_AUDIT["nearestDistances"]) if GOFAST_AUDIT["nearestDistances"] else None,"nearestDistanceMedian":sorted(GOFAST_AUDIT["nearestDistances"])[len(GOFAST_AUDIT["nearestDistances"])//2] if GOFAST_AUDIT["nearestDistances"] else None,"nearestDistanceMax":max(GOFAST_AUDIT["nearestDistances"]) if GOFAST_AUDIT["nearestDistances"] else None}}
     REPORT_OUT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,ensure_ascii=False,indent=2))
 
