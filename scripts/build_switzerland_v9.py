@@ -116,20 +116,35 @@ def evse_kind_power(rec):
 
 def collect_national(feed):
     records=[]
-    def walk(x,owner_id=None,owner_name=None):
+    inherited_fields={
+      "ChargingStationId","ChargingStationNames","Address","GeoCoordinates","Accessibility",
+      "IsOpen24Hours","SubOperatorName","SuboperatorName","PaymentOptions","AuthenticationModes",
+      "EvseStatus","Status","HotlinePhoneNumber","AccessibilityLocation"
+    }
+    def walk(x,owner_id=None,owner_name=None,ctx=None):
+        ctx=dict(ctx or {})
         if isinstance(x,dict):
             oid=owner_id; on=owner_name
             if text(x.get("OperatorID")): oid=text(x.get("OperatorID"))
             if text(x.get("OperatorName")): on=text(x.get("OperatorName"))
+            next_ctx=dict(ctx)
+            for k in inherited_fields:
+                if k in x and x.get(k) is not None:
+                    next_ctx[k]=x.get(k)
             eid=x.get("EvseID")
             if oid and isinstance(eid,str) and eid.strip():
-                records.append((oid,on or oid,eid.strip(),x))
-            for v in x.values(): walk(v,oid,on)
+                rec=dict(next_ctx)
+                rec.update(x)
+                records.append((oid,on or oid,eid.strip(),rec))
+            for v in x.values():
+                walk(v,oid,on,next_ctx)
         elif isinstance(x,list):
-            for v in x: walk(v,owner_id,owner_name)
+            for v in x:
+                walk(v,owner_id,owner_name,ctx)
     walk(feed)
     uniq={}
-    for oid,on,eid,rec in records: uniq[(oid,eid)]=(oid,on,eid,rec)
+    for oid,on,eid,rec in records:
+        uniq[(oid,eid)]=(oid,on,eid,rec)
     return list(uniq.values())
 
 def build_static(records):
