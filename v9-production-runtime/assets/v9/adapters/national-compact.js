@@ -48,7 +48,7 @@
     return{kind:'ocpi',limited:!(shown.length===1&&shown[0][0]==='00:00'&&shown[0][1]==='24:00'),date:dateStr,intervals:shown,parkingType,parkingRestrictions,raw:clone(compact)};
   }
 
-  function statusFromValue(value,sourceId,updatedAt){const v=text(value).toUpperCase();return{state:v==='IN_SERVICE'||v==='AVAILABLE'||v==='OPERATIONAL'?'available':v==='OUT_OF_SERVICE'||v==='INOPERATIVE'||v==='OUTOFORDER'||v==='NON_OPERATIONAL'?'out_of_service':'unknown',sourceId,updatedAt:updatedAt||null};}
+  function statusFromValue(value,sourceId,updatedAt){const v=text(value).toUpperCase();return{state:v==='IN_SERVICE'||v==='AVAILABLE'||v==='OPERATIONAL'||v==='OCCUPIED'||v==='CHARGING'?'available':v==='OUT_OF_SERVICE'||v==='INOPERATIVE'||v==='OUTOFORDER'||v==='NON_OPERATIONAL'||v==='OFFLINE'||v==='FAULTED'?'out_of_service':'unknown',sourceId,updatedAt:updatedAt||null};}
 
   function normalizeRow(row,{countryCode,sourceId,schemaVersion=1,queryDate}={}){
     if(!Array.isArray(row)||!row[0])return null;
