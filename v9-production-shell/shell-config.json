@@ -10,8 +10,9 @@
     "FR",
     "NL",
     "IT",
-    "ES"
+    "ES",
+    "CH"
   ],
   "fallback": "legacy-compare",
-  "notes": "Candidate production shell. Stable V7.3 UI remains the shell; V9 compare is enabled for FR, NL, IT and validated Spain REVE V2, with automatic legacy-compare fallback on candidate execution failure. Runtime and data remain isolated under /v9-production-runtime/."
+  "notes": "Candidate production shell. Stable V7.3 UI remains the shell; V9 compare is enabled for FR, NL, IT, ES and CH. Switzerland uses the BFE/OICP national baseline plus exact verified CPO tariff overlays; unresolved EVSEs remain visible without an invented direct price."
 }
