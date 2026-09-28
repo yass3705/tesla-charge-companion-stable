@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-09-28T17:47:29.692451+00:00",
+  "generatedAt": "2026-09-28T17:49:18.284116+00:00",
   "country": "CH",
   "national": {
     "owners": 41,
     "evses": 19469,
     "publishedNonTeslaEvses": 19469,
-    "excludedTeslaEvseCount": 0,
+    "excludedTeslaEvseCount": 444,
     "stations": 13650,
     "tiles": 56
   },
   "offers": {
-    "direct": 16242,
-    "subscriptions": 2047,
-    "uniqueDirectEvse": 16120,
-    "uniqueSubscriptionEvse": 2047,
+    "direct": 16658,
+    "subscriptions": 2463,
+    "uniqueDirectEvse": 16536,
+    "uniqueSubscriptionEvse": 2463,
     "sourceCounts": {
       "data/switzerland/migrol-official-direct-tariffs.json": 1031,
       "data/switzerland/shell-evpass-official-direct-tariffs.json": 1171,
@@ -45,14 +45,10 @@
       "data/switzerland/ecarup-owner-direct-tariffs.json": 3246,
       "data/switzerland/ecarup-owner-coordinate-safe-overlay.json": 3224,
       "data/swisscharge/swisscharge-tariffs.json": 2382,
-      "data/gofast/ev_charger_stations.json": 0
+      "data/gofast/ev_charger_stations.json": 0,
+      "derived:CH*CCC-from-explicit-Move-CPO-level-schedules": 832
     },
-    "sourceErrors": [
-      {
-        "path": "data/switzerland/move-direct-tariffs-second-pass.json",
-        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
-      }
-    ]
+    "sourceErrors": []
   },
   "fx": {
     "CHFperEUR": 0.944129,
