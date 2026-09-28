@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 4,
+  "country": "CH",
+  "generatedAt": "2026-09-28T17:39:51.392109+00:00",
+  "source": "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json",
+  "stationCount": 13650,
+  "evseCount": 19469,
+  "tiles": [
+    {
+      "file": "tile_-84_-56.json.gz",
+      "minLat": -84,
+      "maxLat": -83,
+      "minLon": -56,
+      "maxLon": -55,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_-9_-125.json.gz",
+      "minLat": -9,
+      "maxLat": -8,
+      "minLon": -125,
+      "maxLon": -124,
+      "stationCount": 5
+    },
+    {
+      "file": "tile_0_0.json.gz",
+      "minLat": 0,
+      "maxLat": 1,
+      "minLon": 0,
+      "maxLon": 1,
+      "stationCount": 21
+    },
+    {
+      "file": "tile_9_38.json.gz",
+      "minLat": 9,
+      "maxLat": 10,
+      "minLon": 38,
+      "maxLon": 39,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_9_47.json.gz",
+      "minLat": 9,
+      "maxLat": 10,
+      "minLon": 47,
+      "maxLon": 48,
+      "stationCount": 3
+    },
+    {
+      "file": "tile_28_1.json.gz",
+      "minLat": 28,
+      "maxLat": 29,
+      "minLon": 1,
+      "maxLon": 2,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_30_34.json.gz",
+      "minLat": 30,
+      "maxLat": 31,
+      "minLon": 34,
+      "maxLon": 35,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_31_120.json.gz",
+      "minLat": 31,
+      "maxLat": 32,
+      "minLon": 120,
+      "maxLon": 121,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_35_-6.json.gz",
+      "minLat": 35,
+      "maxLat": 36,
+      "minLon": -6,
+      "maxLon": -5,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_35_14.json.gz",
+      "minLat": 35,
+      "maxLat": 36,
+      "minLon": 14,
+      "maxLon": 15,
+      "stationCount": 7
+    },
+    {
+      "file": "tile_38_114.json.gz",
+      "minLat": 38,
+      "maxLat": 39,
+      "minLon": 114,
+      "maxLon": 115,
+      "stationCount": 8
+    },
+    {
+      "file": "tile_41_2.json.gz",
+      "minLat": 41,
+      "maxLat": 42,
+      "minLon": 2,
+      "maxLon": 3,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_42_21.json.gz",
+      "minLat": 42,
+      "maxLat": 43,
+      "minLon": 21,
+      "maxLon": 22,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_43_12.json.gz",
+      "minLat": 43,
+      "maxLat": 44,
+      "minLon": 12,
+      "maxLon": 13,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_43_15.json.gz",
+      "minLat": 43,
+      "maxLat": 44,
+      "minLon": 15,
+      "maxLon": 16,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_43_18.json.gz",
+      "minLat": 43,
+      "maxLat": 44,
+      "minLon": 18,
+      "maxLon": 19,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_44_16.json.gz",
+      "minLat": 44,
+      "maxLat": 45,
+      "minLon": 16,
+      "maxLon": 17,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_45_7.json.gz",
+      "minLat": 45,
+      "maxLat": 46,
+      "minLon": 7,
+      "maxLon": 8,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_45_8.json.gz",
+      "minLat": 45,
+      "maxLat": 46,
+      "minLon": 8,
+      "maxLon": 9,
+      "stationCount": 167
+    },
+    {
+      "file": "tile_45_9.json.gz",
+      "minLat": 45,
+      "maxLat": 46,
+      "minLon": 9,
+      "maxLon": 10,
+      "stationCount": 36
+    },
+    {
+      "file": "tile_46_5.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 5,
+      "maxLon": 6,
+      "stationCount": 10
+    },
+    {
+      "file": "tile_46_6.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 6,
+      "maxLon": 7,
+      "stationCount": 2162
+    },
+    {
+      "file": "tile_46_7.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 7,
+      "maxLon": 8,
+      "stationCount": 2209
+    },
+    {
+      "file": "tile_46_8.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 8,
+      "maxLon": 9,
+      "stationCount": 870
+    },
+    {
+      "file": "tile_46_9.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 9,
+      "maxLon": 10,
+      "stationCount": 673
+    },
+    {
+      "file": "tile_46_10.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 10,
+      "maxLon": 11,
+      "stationCount": 92
+    },
+    {
+      "file": "tile_46_15.json.gz",
+      "minLat": 46,
+      "maxLat": 47,
+      "minLon": 15,
+      "maxLon": 16,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_47_-26.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": -26,
+      "maxLon": -25,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_47_6.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 6,
+      "maxLon": 7,
+      "stationCount": 147
+    },
+    {
+      "file": "tile_47_7.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 7,
+      "maxLon": 8,
+      "stationCount": 1888
+    },
+    {
+      "file": "tile_47_8.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 8,
+      "maxLon": 9,
+      "stationCount": 3879
+    },
+    {
+      "file": "tile_47_9.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 9,
+      "maxLon": 10,
+      "stationCount": 1350
+    },
+    {
+      "file": "tile_47_10.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 10,
+      "maxLon": 11,
+      "stationCount": 8
+    },
+    {
+      "file": "tile_47_11.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 11,
+      "maxLon": 12,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_47_12.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 12,
+      "maxLon": 13,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_47_13.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 13,
+      "maxLon": 14,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_47_14.json.gz",
+      "minLat": 47,
+      "maxLat": 48,
+      "minLon": 14,
+      "maxLon": 15,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_48_-23.json.gz",
+      "minLat": 48,
+      "maxLat": 49,
+      "minLon": -23,
+      "maxLon": -22,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_48_13.json.gz",
+      "minLat": 48,
+      "maxLat": 49,
+      "minLon": 13,
+      "maxLon": 14,
+      "stationCount": 6
+    },
+    {
+      "file": "tile_48_14.json.gz",
+      "minLat": 48,
+      "maxLat": 49,
+      "minLon": 14,
+      "maxLon": 15,
+      "stationCount": 4
+    },
+    {
+      "file": "tile_49_-23.json.gz",
+      "minLat": 49,
+      "maxLat": 50,
+      "minLon": -23,
+      "maxLon": -22,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_49_7.json.gz",
+      "minLat": 49,
+      "maxLat": 50,
+      "minLon": 7,
+      "maxLon": 8,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_49_8.json.gz",
+      "minLat": 49,
+      "maxLat": 50,
+      "minLon": 8,
+      "maxLon": 9,
+      "stationCount": 3
+    },
+    {
+      "file": "tile_50_-15.json.gz",
+      "minLat": 50,
+      "maxLat": 51,
+      "minLon": -15,
+      "maxLon": -14,
+      "stationCount": 55
+    },
+    {
+      "file": "tile_51_-1.json.gz",
+      "minLat": 51,
+      "maxLat": 52,
+      "minLon": -1,
+      "maxLon": 0,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_51_3.json.gz",
+      "minLat": 51,
+      "maxLat": 52,
+      "minLon": 3,
+      "maxLon": 4,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_51_8.json.gz",
+      "minLat": 51,
+      "maxLat": 52,
+      "minLon": 8,
+      "maxLon": 9,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_51_10.json.gz",
+      "minLat": 51,
+      "maxLat": 52,
+      "minLon": 10,
+      "maxLon": 11,
+      "stationCount": 2
+    },
+    {
+      "file": "tile_52_-1.json.gz",
+      "minLat": 52,
+      "maxLat": 53,
+      "minLon": -1,
+      "maxLon": 0,
+      "stationCount": 3
+    },
+    {
+      "file": "tile_52_7.json.gz",
+      "minLat": 52,
+      "maxLat": 53,
+      "minLon": 7,
+      "maxLon": 8,
+      "stationCount": 4
+    },
+    {
+      "file": "tile_59_-44.json.gz",
+      "minLat": 59,
+      "maxLat": 60,
+      "minLon": -44,
+      "maxLon": -43,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_68_-45.json.gz",
+      "minLat": 68,
+      "maxLat": 69,
+      "minLon": -45,
+      "maxLon": -44,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_69_1.json.gz",
+      "minLat": 69,
+      "maxLat": 70,
+      "minLon": 1,
+      "maxLon": 2,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_72_-39.json.gz",
+      "minLat": 72,
+      "maxLat": 73,
+      "minLon": -39,
+      "maxLon": -38,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_83_-36.json.gz",
+      "minLat": 83,
+      "maxLat": 84,
+      "minLon": -36,
+      "maxLon": -35,
+      "stationCount": 1
+    },
+    {
+      "file": "tile_84_-35.json.gz",
+      "minLat": 84,
+      "maxLat": 85,
+      "minLon": -35,
+      "maxLon": -34,
+      "stationCount": 1
+    }
+  ]
+}

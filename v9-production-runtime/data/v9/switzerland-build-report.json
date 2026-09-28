@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-09-28T17:40:01.783922+00:00",
+  "country": "CH",
+  "national": {
+    "owners": 41,
+    "evses": 19469,
+    "stations": 13650,
+    "tiles": 56
+  },
+  "offers": {
+    "direct": 16242,
+    "subscriptions": 2047,
+    "sourceCounts": {
+      "data/switzerland/migrol-official-direct-tariffs.json": 1031,
+      "data/switzerland/shell-evpass-official-direct-tariffs.json": 1171,
+      "data/switzerland/cci-move-cpo-tariffs-national.json": 3752,
+      "data/switzerland/energie360-direct-tariffs.json": 820,
+      "data/switzerland/powerup-monta-direct-tariffs.json": 235,
+      "data/switzerland/iwb-direct-tariffs-second-pass.json": 414,
+      "data/switzerland/iwb-official-basel-overlay.json": 31,
+      "data/switzerland/saascharge-official-direct-tariffs.json": 226,
+      "data/switzerland/soc-move-cpo-tariffs-national.json": 288,
+      "data/switzerland/lidl-official-direct-tariffs.json": 173,
+      "data/switzerland/ewz-direct-tariffs.json": 414,
+      "data/switzerland/plenitude-official-direct-tariffs.json": 180,
+      "data/switzerland/electra-direct-tariffs.json": 244,
+      "data/switzerland/ail-emoti-official-direct-tariffs.json": 42,
+      "data/switzerland/ionity-official-national-direct-tariffs.json": 168,
+      "data/switzerland/agr-monta-direct-tariffs.json": 17,
+      "data/switzerland/ewd-official-direct-tariffs.json": 8,
+      "data/switzerland/ewo-ecarup-direct-tariffs.json": 7,
+      "data/switzerland/mmn-move-cpo-tariffs.json": 12,
+      "data/switzerland/ebs-ecarup-direct-tariffs.json": 5,
+      "data/switzerland/edh-direct-tariffs.json": 28,
+      "data/switzerland/de-edh-direct-tariffs.json": 2,
+      "data/switzerland/autosense-amag-direct-tariffs.json": 10,
+      "data/switzerland/cpi-current-direct-tariffs.json": 121,
+      "data/switzerland/fastned-official-direct-tariffs.json": 78,
+      "data/switzerland/tae-matterhorn-terminal-direct-tariffs.json": 16,
+      "data/switzerland/chevp-evpass-official-direct-tariffs.json": 40,
+      "data/switzerland/ecarup-owner-direct-tariffs.json": 3246,
+      "data/switzerland/ecarup-owner-coordinate-safe-overlay.json": 3224,
+      "data/swisscharge/swisscharge-tariffs.json": 2382
+    },
+    "sourceErrors": [
+      {
+        "path": "data/switzerland/move-direct-tariffs.json",
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      {
+        "path": "data/gofast/ev_charger_stations.json",
+        "error": "AttributeError: 'list' object has no attribute 'get'"
+      }
+    ]
+  },
+  "fx": {
+    "CHFperEUR": 0.944129,
+    "date": "2026-09-28"
+  }
+}
