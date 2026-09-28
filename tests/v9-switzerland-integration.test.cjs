@@ -28,6 +28,20 @@ for(const id of ['ionity-motion','ionity-power']){
   assert.ok((row.countries||[]).includes('CH'));
   assert.equal(row.pricingStatusByCountry?.CH,'station-exact-subscription-price-not-yet-modeled');
 }
+
+for(const id of ['ionity-motion-365','ionity-power-365']){
+  const row=coverageById.get(id);
+  assert.ok(row,`Missing IONITY 365 cross-border subscription coverage: ${id}`);
+  assert.ok((row.countries||[]).includes('FR'));
+  assert.ok((row.countries||[]).includes('CH'));
+  assert.equal(row.pricingStatusByCountry?.CH,'station-exact-subscription-price-not-yet-modeled');
+  assert.equal(row.planType,'ANNUAL');
+}
+assert.equal(coverageById.get('ionity-power')?.productIdentifiersByCountry?.FR,'FR*P*POWER*002');
+assert.equal(coverageById.get('ionity-motion')?.productIdentifiersByCountry?.FR,'FR*P*MOTION*002');
+assert.equal(coverageById.get('ionity-power-365')?.productIdentifiersByCountry?.FR,'FR*P*POWER*365*003');
+assert.equal(coverageById.get('ionity-motion-365')?.productIdentifiersByCountry?.FR,'FR*P*MOTION*365*003');
+
 for(const id of ['totalenergies-charge-plus-zen','belib-nonresident','belib-resident','syder-qovoltis-card']){
   const row=coverageById.get(id);
   assert.ok(row,`Missing France-only subscription coverage: ${id}`);
