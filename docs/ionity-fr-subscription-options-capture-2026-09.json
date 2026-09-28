@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-29",
+  "source": "IONITY Android v2.480 authenticated subscription options response, country FR",
+  "endpoint": "/api/v2/subscription/PRIVATE/options",
+  "country": "FR",
+  "plans": [
+    {
+      "subscriptionId": "ionity-power",
+      "productIdentifier": "FR*P*POWER*002",
+      "displayName": "IONITY Power",
+      "subscriptionType": "MONTHLY",
+      "subscriptionGrossFee": {
+        "amount": 11.99,
+        "currency": "EUR"
+      },
+      "ionity": {
+        "amount": 0.31,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FROM"
+      },
+      "chargingAlliance": {
+        "amount": 0.53,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FROM"
+      }
+    },
+    {
+      "subscriptionId": "ionity-power-365",
+      "productIdentifier": "FR*P*POWER*365*003",
+      "displayName": "IONITY Power 365",
+      "subscriptionType": "ANNUAL",
+      "subscriptionGrossFee": {
+        "amount": 119.99,
+        "currency": "EUR"
+      },
+      "ionity": {
+        "amount": 0.33,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FIXED"
+      },
+      "chargingAlliance": {
+        "amount": 0.53,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FROM"
+      }
+    },
+    {
+      "subscriptionId": "ionity-motion",
+      "productIdentifier": "FR*P*MOTION*002",
+      "displayName": "IONITY Motion",
+      "subscriptionType": "MONTHLY",
+      "subscriptionGrossFee": {
+        "amount": 5.99,
+        "currency": "EUR"
+      },
+      "ionity": {
+        "amount": 0.39,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FROM"
+      },
+      "chargingAlliance": {
+        "amount": 0.58,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FROM"
+      }
+    },
+    {
+      "subscriptionId": "ionity-motion-365",
+      "productIdentifier": "FR*P*MOTION*365*003",
+      "displayName": "IONITY Motion 365",
+      "subscriptionType": "ANNUAL",
+      "subscriptionGrossFee": {
+        "amount": 59.99,
+        "currency": "EUR"
+      },
+      "ionity": {
+        "amount": 0.41,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FIXED"
+      },
+      "chargingAlliance": {
+        "amount": 0.58,
+        "currency": "EUR",
+        "unit": "kWh",
+        "prefix": "FROM"
+      }
+    }
+  ],
+  "interpretation": {
+    "monthlyPlans": "FROM values are not safe as station-exact prices.",
+    "annualPlans": "FIXED is captured for the FR option; do not assume the same numeric amount in Switzerland without a Swiss/location response.",
+    "crossBorderCompatibility": "IONITY subscription compatibility with Switzerland remains registered, but Swiss station-exact price must be confirmed from authenticated station response."
+  },
+  "nextRequiredCapture": "Authenticated /api/v3/location/{uuid} response for a Swiss IONITY station while logged into the same account."
+}
