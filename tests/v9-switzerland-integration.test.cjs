@@ -1,0 +1,55 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const adapter=require('../v9-production-runtime/assets/v9/adapters/national-compact.js');
+const data=require('../v9-production-runtime/assets/v9/data-engine.js');
+const direct=require('../v9-production-runtime/assets/v9/adapters/direct-offers.js');
+const registry=require('../v9-production-runtime/data/v9/source-registry.json');
+
+const nat=registry.sources.find(s=>s.id==='switzerland-national');
+const off=registry.sources.find(s=>s.id==='switzerland-verified-offers');
+assert.ok(nat&&nat.active&&nat.countries.includes('CH'));
+assert.ok(off&&off.active&&off.countries.includes('CH'));
+
+const allDays=Array.from({length:7},(_,d)=>[d,'00:00','24:00']);
+const row=['CH*TEST:ST1','Swiss test','Addr',47.0,8.0,'Test CPO',2,allDays,
+ [
+  ['CH*TEST*E1','Test · E1','AC',22,1,[],['CH*TEST*E1']],
+  ['CH*TEST*E2','Test · E2','DC',150,1,[],['CH*TEST*E2']]
+ ],
+ '2026-09-28T00:00:00Z','OCCUPIED','Test network'];
+const st=adapter.normalizeRow(row,{countryCode:'CH',sourceId:'switzerland-national',schemaVersion:4,queryDate:'2026-09-28'});
+assert.equal(st.countryCode,'CH');
+assert.equal(st.networkBrand,'Test network');
+assert.equal(st.status.state,'available');
+assert.equal(st.evses.length,2);
+
+const payload={schemaVersion:1,country:'CH',directOffers:[{
+ id:'ch:test:e1:direct',provider:'Test CPO',countries:['CH'],currency:'EUR',
+ evseIds:['CH*TEST*E1'],verifiedScope:'exact_evse_power',
+ connectorKinds:['AC'],minPowerKw:21.99,maxPowerKw:22.01,
+ pricing:{type:'rules',rules:[{scope:'allDay',pricePerKwh:0.5}]},priority:130
+}]};
+const rule=direct.normalizePayload(payload).offerRules[0];
+assert.equal(data.ruleMatchesStation(rule,st),true);
+const unmatched=adapter.normalizeRow(['CH*OTHER:ST2','Other','Addr2',47.1,8.1,'Test CPO',1,allDays,
+ [['CH*OTHER*E9','Other · E9','DC',150,1,[],['CH*OTHER*E9']]],
+ '2026-09-28T00:00:00Z','OFFLINE','Other'],{countryCode:'CH',sourceId:'switzerland-national',schemaVersion:4});
+assert.equal(unmatched.status.state,'out_of_service');
+assert.equal(data.ruleMatchesStation(rule,unmatched),false);
+const applied=data.applyOfferRules([st,unmatched],[{rule,source:{id:'switzerland-verified-offers',priority:{tariff:130}}}]);
+assert.equal(applied.length,2,'unpriced Swiss station must remain visible');
+assert.equal(applied[0].offers.length,1);
+assert.equal(applied[1].offers.length,0);
+
+const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'../v9-production-runtime/data/v9/switzerland-static/manifest.json'),'utf8'));
+const report=JSON.parse(fs.readFileSync(path.join(__dirname,'../v9-production-runtime/data/v9/switzerland-build-report.json'),'utf8'));
+const offers=JSON.parse(fs.readFileSync(path.join(__dirname,'../v9-production-runtime/data/v9/switzerland-offers.json'),'utf8'));
+assert.ok(manifest.evseCount>18000);
+assert.ok(report.national.excludedTeslaEvseCount>0,'Swiss national Tesla EVSEs must be excluded from CH baseline to avoid Tesla-global duplicates');
+assert.equal(manifest.evseCount,report.national.publishedNonTeslaEvses);
+assert.ok(report.offers.uniqueDirectEvse>10000);
+assert.ok(offers.directOffers.every(o=>Array.isArray(o.evseIds)&&o.evseIds.length===1));
+assert.ok(offers.directOffers.every(o=>o.verifiedScope==='exact_evse_power'));
+assert.ok(offers.directOffers.every(o=>Array.isArray(o.connectorKinds)&&o.connectorKinds.length===1));
+console.log('Switzerland V9 integration test OK',report.national,report.offers.uniqueDirectEvse);
