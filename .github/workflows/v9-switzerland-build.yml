@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/build_switzerland_v9.py'
       - '.github/workflows/v9-switzerland-build.yml'
+      - 'tests/v9-switzerland-integration.test.cjs'
+      - 'v9-production-runtime/data/v9/source-registry.json'
   schedule:
     - cron: '20 23 * * *'
 permissions:
