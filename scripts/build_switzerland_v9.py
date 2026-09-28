@@ -11,6 +11,7 @@ OFFERS_OUT=Path("v9-production-runtime/data/v9/switzerland-offers.json")
 REPORT_OUT=Path("v9-production-runtime/data/v9/switzerland-build-report.json")
 UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}
 EVSE_META={}
+EVSE_NORM={}
 NATIONAL_RECORDS=[]
 GOFAST_AUDIT={"nationalEvse":0,"matchedByName":0,"matchedByCoordinate":0,"unmatched":0,"nearestDistances":[],"samples":[],"unmatchedDetails":[]}
 
@@ -226,28 +227,61 @@ def rule_pricing(kwh=None, per_min=None, session=None, free_min=None, after_free
         r["connectedTimeFreeMinutes"]=float(free_min);r["connectedTimePerMinuteAfterFreeEur"]=round(to_eur(after_free,currency),8)
     return {"type":"rules","rules":[r]}
 
+def norm_eid(v):
+    return re.sub(r"[^A-Z0-9]+","",text(v).upper())
+
 def offer(eid,provider,source,currency="CHF",pricing=None,kind="direct",subscription_id=None,metadata=None):
     if not eid or not pricing:return None
+    canonical=eid if eid in EVSE_META else EVSE_NORM.get(norm_eid(eid))
+    if not canonical:return None
+    eid=canonical
+    meta=EVSE_META[eid]
     oid=re.sub(r"[^a-z0-9]+","-",text(provider).lower()).strip("-") or "switzerland-cpo"
     x={"id":f"ch:{oid}:{re.sub(r'[^A-Za-z0-9]+','-',eid).strip('-')}:{kind}",
-       "provider":provider,"countries":["CH"],"currency":"EUR","evseIds":[eid],"verifiedScope":"exact_evse",
+       "provider":provider,"countries":["CH"],"currency":"EUR","evseIds":[eid],"verifiedScope":"exact_evse_power",
        "pricing":pricing,"priority":130,"source":source,
        "metadata":{"originalCurrency":text(currency or "CHF").upper(),"fxChfPerEur":CHF_PER_EUR,"fxDate":FX_DATE,**(metadata or {})}}
-    meta=EVSE_META.get(eid)
-    if meta:
-        x["connectorKinds"]=[meta["kind"]]
-        p=float(meta["powerKw"])
-        x["minPowerKw"]=max(0,p-0.01);x["maxPowerKw"]=p+0.01
-        x["verifiedScope"]="exact_evse_power"
+    x["connectorKinds"]=[meta["kind"]]
+    p=float(meta["powerKw"])
+    x["minPowerKw"]=max(0,p-0.01);x["maxPowerKw"]=p+0.01
     if kind=="subscription":
-        x["selectionId"]=subscription_id or x["id"];x["monthlyFeeEur"]=metadata.get("monthlyFeeEur") if metadata else None
+        x["selectionId"]=subscription_id or x["id"]
+        x["monthlyFeeEur"]=metadata.get("monthlyFeeEur") if metadata else None
     return x
 
 def simple_evse_offer(e,provider,source):
     eid=text(e.get("evseId") or e.get("EvseID") or e.get("emi3Id") or e.get("physicalReference"))
     cur=text(e.get("currency") or e.get("Currency") or (e.get("tariff") or {}).get("currency") or "CHF").upper()
-    # explicit common fields
-    kwh=first_num(e.get("pricePerKwh"),e.get("directWebPricePerKwh"),e.get("standardPricePerKwh"),e.get("pricePerKwhCHF"),e.get("energyPrice"))
+    outs=[]
+
+    # First-party paired direct/member price products.
+    standard=first_num(e.get("standardPricePerKwh"))
+    gold=first_num(e.get("goldPricePerKwh"))
+    if standard is not None:
+        outs.append(offer(eid,provider,source,cur,rule_pricing(standard,currency=cur),metadata={"originalPricePerKwh":standard}))
+        if gold is not None:
+            outs.append(offer(eid,provider,source,cur,rule_pricing(gold,currency=cur),kind="subscription",subscription_id="fastned-gold",metadata={"originalPricePerKwh":gold,"plan":"Fastned Gold"}))
+        return [x for x in outs if x]
+
+    direct_web=first_num(e.get("directWebPricePerKwh"))
+    plus=first_num(e.get("lidlPlusPricePerKwh"))
+    if direct_web is not None:
+        outs.append(offer(eid,provider,source,cur,rule_pricing(direct_web,currency=cur),metadata={"originalPricePerKwh":direct_web}))
+        if plus is not None:
+            outs.append(offer(eid,provider,source,cur,rule_pricing(plus,currency=cur),kind="subscription",subscription_id="lidl-plus-ch",metadata={"originalPricePerKwh":plus,"plan":"Lidl Plus"}))
+        return [x for x in outs if x]
+
+    non=first_num(e.get("nonMemberPricePerKwh")); mem=first_num(e.get("memberPricePerKwh"))
+    if non is not None or mem is not None:
+        if non is not None:
+            outs.append(offer(eid,provider,source,cur,rule_pricing(non,currency=cur),metadata={"originalPricePerKwh":non}))
+        if mem is not None:
+            fee=first_num(e.get("memberAnnualFeeChf"))
+            outs.append(offer(eid,provider,source,cur,rule_pricing(mem,currency=cur),kind="subscription",subscription_id="emoti-member-ch",metadata={"annualFeeEur":round(to_eur(fee,cur),8) if fee is not None else None,"originalPricePerKwh":mem,"plan":"emotì member"}))
+        return [x for x in outs if x]
+
+    # Explicit common direct fields.
+    kwh=first_num(e.get("pricePerKwh"),e.get("pricePerKwhCHF"),e.get("energyPrice"))
     per_min=first_num(e.get("pricePerMinute"))
     sess=first_num(e.get("sessionFee"),e.get("sessionFeeCHF"),e.get("startFee"))
     t=e.get("tariff") or {}
@@ -255,35 +289,29 @@ def simple_evse_offer(e,provider,source):
     if per_min is None:per_min=first_num(t.get("pricePerMinute"))
     if sess is None:sess=first_num(t.get("sessionFee"),t.get("connectionFee"))
     if kwh is not None:
-        return [offer(eid,provider,source,cur,rule_pricing(kwh,per_min,sess,currency=cur),metadata={"originalPricePerKwh":kwh})]
-    # eCarUp exact form
+        return [x for x in [offer(eid,provider,source,cur,rule_pricing(kwh,per_min,sess,currency=cur),metadata={"originalPricePerKwh":kwh})] if x]
+
+    # eCarUp exact form.
     ec=e.get("ecarup") or {}
     p=ec.get("price") or {}
     if e.get("classification")=="priced_public_direct" and isinstance(p,dict):
         k=first_num(p.get("EnergyPrice")); pm=first_num(p.get("ParkingPrice"))
-        if k is not None:return [offer(eid,provider,source,p.get("Currency") or "CHF",rule_pricing(k,currency=p.get("Currency") or "CHF"),metadata={"parkingPriceOriginal":pm})]
-    # eCarUp coordinate overlay
+        if k is not None:
+            return [x for x in [offer(eid,provider,source,p.get("Currency") or "CHF",rule_pricing(k,currency=p.get("Currency") or "CHF"),metadata={"parkingPriceOriginal":pm})] if x]
+
+    # eCarUp coordinate-safe overlay.
     pt=e.get("priceTuple")
     if isinstance(pt,list) and pt:
         k=first_num(pt[0]); cur=(pt[5] if len(pt)>5 else "CHF")
-        if k is not None:return [offer(eid,provider,source,cur,rule_pricing(k,currency=cur),metadata={"coordinateSafeOverlay":True})]
-    # eCarUp public connectors (EWO etc)
-    pcs=[c for c in (e.get("publicConnectors") or []) if first_num(c.get("energyPrice")) is not None]
-    tuples={(first_num(c.get("energyPrice")),text(c.get("currency") or "CHF").upper()) for c in pcs}
+        if k is not None:
+            return [x for x in [offer(eid,provider,source,cur,rule_pricing(k,currency=cur),metadata={"coordinateSafeOverlay":True})] if x]
+
+    # eCarUp public connector evidence (EWO etc).
+    pcs=[cc for cc in (e.get("publicConnectors") or []) if first_num(cc.get("energyPrice")) is not None]
+    tuples={(first_num(cc.get("energyPrice")),text(cc.get("currency") or "CHF").upper()) for cc in pcs}
     if len(tuples)==1:
-        k,cur=next(iter(tuples));return [offer(eid,provider,source,cur,rule_pricing(k,currency=cur),metadata={"connectorEvidenceCount":len(pcs)})]
-    # non-member / membership
-    non=first_num(e.get("nonMemberPricePerKwh")); mem=first_num(e.get("memberPricePerKwh"))
-    outs=[]
-    if non is not None: outs.append(offer(eid,provider,source,cur,rule_pricing(non,currency=cur),metadata={"originalPricePerKwh":non}))
-    if mem is not None:
-        fee=first_num(e.get("memberAnnualFeeChf"))
-        outs.append(offer(eid,provider,source,cur,rule_pricing(mem,currency=cur),kind="subscription",subscription_id=f"ch-{provider.lower().replace(' ','-')}-member",metadata={"annualFeeEur":round(to_eur(fee,cur),8) if fee is not None else None,"originalPricePerKwh":mem}))
-    if outs:return [x for x in outs if x]
-    # Lidl plus
-    plus=first_num(e.get("lidlPlusPricePerKwh"))
-    if plus is not None:
-        return [offer(eid,provider,source,cur,rule_pricing(plus,currency=cur),kind="subscription",subscription_id="lidl-plus-ch",metadata={"originalPricePerKwh":plus})]
+        k,ccur=next(iter(tuples))
+        return [x for x in [offer(eid,provider,source,ccur,rule_pricing(k,currency=ccur),metadata={"connectorEvidenceCount":len(pcs)})] if x]
     return []
 
 def tariffs_list_offers(e,provider,source):
@@ -496,11 +524,15 @@ def compile_offers():
     return out
 
 def main():
-    global NATIONAL_RECORDS,EVSE_META
+    global NATIONAL_RECORDS,EVSE_META,EVSE_NORM
     feed=fetch_json(NATIONAL_URL,240)
     records=collect_national(feed)
     NATIONAL_RECORDS=records
     EVSE_META={eid:{"kind":evse_kind_power(rec)[0],"powerKw":evse_kind_power(rec)[1]} for _,_,eid,rec in records}
+    norm_groups=defaultdict(list)
+    for eid in EVSE_META:
+        norm_groups[norm_eid(eid)].append(eid)
+    EVSE_NORM={k:v[0] for k,v in norm_groups.items() if len(v)==1}
     manifest=build_static(records)
     offers=compile_offers()
     report={"generatedAt":datetime.now(timezone.utc).isoformat(),"country":"CH",
