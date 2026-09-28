@@ -15,14 +15,16 @@
       "subscriptionId": "fastned-gold",
       "countries": [
         "FR",
-        "NL"
+        "NL",
+        "CH"
       ],
       "operatorIds": [
         "fastned"
       ],
       "evidenceSources": [
         "france-canonical-direct-offers",
-        "netherlands-direct-offers"
+        "netherlands-direct-offers",
+        "switzerland-verified-offers"
       ]
     },
     {
@@ -62,6 +64,57 @@
       ],
       "evidenceSources": [
         "italy-verified-offers"
+      ]
+    },
+    {
+      "subscriptionId": "lidl-plus-ch",
+      "countries": [
+        "CH"
+      ],
+      "operatorIds": [
+        "lidl"
+      ],
+      "evidenceSources": [
+        "switzerland-verified-offers"
+      ]
+    },
+    {
+      "subscriptionId": "emoti-member-ch",
+      "countries": [
+        "CH"
+      ],
+      "operatorIds": [
+        "ail",
+        "emoti"
+      ],
+      "evidenceSources": [
+        "switzerland-verified-offers"
+      ]
+    },
+    {
+      "subscriptionId": "cci-move-cpo-tariffs-national:Move comfort",
+      "countries": [
+        "CH"
+      ],
+      "operatorIds": [
+        "move",
+        "move-mobility"
+      ],
+      "evidenceSources": [
+        "switzerland-verified-offers"
+      ]
+    },
+    {
+      "subscriptionId": "socar-/-move-charging-backend:Move comfort",
+      "countries": [
+        "CH"
+      ],
+      "operatorIds": [
+        "socar",
+        "move"
+      ],
+      "evidenceSources": [
+        "switzerland-verified-offers"
       ]
     }
   ],
