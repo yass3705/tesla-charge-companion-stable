@@ -74,4 +74,21 @@ const gated={offers:[
 ]};
 assert.deepEqual(data.eligibleOffers(gated,[]).map(o=>o.id),['direct']);
 assert.deepEqual(data.eligibleOffers(gated,['fastned-gold']).map(o=>o.id),['direct','gold']);
+
+// Real generated Swiss Fastned regression: French/global Fastned Gold selection
+// must unlock the verified Swiss Gold price while preserving the direct offer.
+const realFastnedGold=(offers.subscriptionOffers||[]).find(o=>o.selectionId==='fastned-gold');
+assert.ok(realFastnedGold,'Fastned Gold Swiss offer missing');
+const realFastnedEvse=realFastnedGold.evseIds?.[0];
+assert.ok(realFastnedEvse,'Fastned Gold Swiss EVSE missing');
+const realFastnedDirect=(offers.directOffers||[]).find(o=>(o.evseIds||[]).includes(realFastnedEvse)&&o.provider==='Fastned');
+assert.ok(realFastnedDirect,'Fastned Swiss direct offer missing for Gold EVSE');
+assert.equal(realFastnedDirect.metadata?.originalPricePerKwh,0.75);
+assert.equal(realFastnedGold.metadata?.originalPricePerKwh,0.53);
+const realFastnedStation={countryCode:'CH',offers:[
+  {...realFastnedDirect,subscriptionId:null},
+  {...realFastnedGold,subscriptionId:'fastned-gold'}
+]};
+assert.deepEqual(data.eligibleOffers(realFastnedStation,[]).map(o=>o.id),[realFastnedDirect.id]);
+assert.deepEqual(new Set(data.eligibleOffers(realFastnedStation,['fastned-gold']).map(o=>o.id)),new Set([realFastnedDirect.id,realFastnedGold.id]));
 console.log('Switzerland V9 integration test OK',report.national,report.offers.uniqueDirectEvse);
