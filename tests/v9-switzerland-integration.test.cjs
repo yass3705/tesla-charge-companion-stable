@@ -61,8 +61,11 @@ assert.ok(offers.directOffers.every(o=>Array.isArray(o.evseIds)&&o.evseIds.lengt
 assert.ok(offers.directOffers.every(o=>o.verifiedScope==='exact_evse_power'));
 assert.ok(offers.directOffers.every(o=>Array.isArray(o.connectorKinds)&&o.connectorKinds.length===1));
 const swissSubscriptionIds=new Set((offers.subscriptionOffers||[]).map(o=>o.selectionId));
-for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','move-mobility:Move comfort','socar-/-move-charging-backend:Move comfort']){
+for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','move-mobility:Move comfort','move-mobility-/-mynet:Move comfort','socar-/-move-charging-backend:Move comfort']){
   assert.ok(swissSubscriptionIds.has(id),`Swiss subscription offer missing from build: ${id}`);
+}
+for(const id of swissSubscriptionIds){
+  assert.ok(swissCoverage.has(id),`Generated Swiss subscription is not exposed by the selector registry: ${id}`);
 }
 const gated={offers:[
   {id:'direct',provider:'Direct',subscriptionId:null},
