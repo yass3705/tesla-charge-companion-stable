@@ -412,7 +412,7 @@ def main():
     manifest=build_static(records)
     offers=compile_offers()
     report={"generatedAt":datetime.now(timezone.utc).isoformat(),"country":"CH",
-            "national":{"owners":len({x[0] for x in records}),"evses":len(records),"stations":manifest["stationCount"],"tiles":len(manifest["tiles"])},
+            "national":{"owners":len({x[0] for x in records}),"evses":len(records),"publishedNonTeslaEvses":manifest["evseCount"],"excludedTeslaEvseCount":sum(1 for x in records if x[0]=="CH*TSL"),"stations":manifest["stationCount"],"tiles":len(manifest["tiles"])},
             "offers":{"direct":len(offers["directOffers"]),"subscriptions":len(offers["subscriptionOffers"]),"uniqueDirectEvse":len({e for o in offers["directOffers"] for e in o.get("evseIds",[])}),"uniqueSubscriptionEvse":len({e for o in offers["subscriptionOffers"] for e in o.get("evseIds",[])}),"sourceCounts":offers["build"]["sources"],"sourceErrors":offers["build"]["errors"]},
             "fx":{"CHFperEUR":CHF_PER_EUR,"date":FX_DATE}}
     REPORT_OUT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
