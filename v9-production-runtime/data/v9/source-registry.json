@@ -129,6 +129,122 @@
       "evidenceSources": [
         "switzerland-verified-offers"
       ]
+    },
+    {
+      "subscriptionId": "ionity-motion",
+      "countries": [
+        "FR",
+        "NL",
+        "CH"
+      ],
+      "operatorIds": [
+        "ionity"
+      ],
+      "evidenceSources": [
+        "ionity-official-subscription-terms"
+      ],
+      "pricingStatusByCountry": {
+        "FR": "station-exact-subscription-price-not-yet-modeled",
+        "CH": "station-exact-subscription-price-not-yet-modeled",
+        "NL": "priced"
+      }
+    },
+    {
+      "subscriptionId": "ionity-power",
+      "countries": [
+        "FR",
+        "NL",
+        "CH"
+      ],
+      "operatorIds": [
+        "ionity"
+      ],
+      "evidenceSources": [
+        "ionity-official-subscription-terms"
+      ],
+      "pricingStatusByCountry": {
+        "FR": "station-exact-subscription-price-not-yet-modeled",
+        "CH": "station-exact-subscription-price-not-yet-modeled",
+        "NL": "priced"
+      }
+    },
+    {
+      "subscriptionId": "totalenergies-charge-plus-zen",
+      "countries": [
+        "FR"
+      ],
+      "operatorIds": [
+        "totalenergies"
+      ],
+      "evidenceSources": [
+        "france-canonical-direct-offers",
+        "totalenergies-charge-plus-official"
+      ]
+    },
+    {
+      "subscriptionId": "zunder-easy",
+      "countries": [
+        "FR",
+        "ES"
+      ],
+      "operatorIds": [
+        "zunder"
+      ],
+      "evidenceSources": [
+        "france-canonical-direct-offers",
+        "zunder-official-subscriptions"
+      ]
+    },
+    {
+      "subscriptionId": "zunder-pro",
+      "countries": [
+        "FR",
+        "ES"
+      ],
+      "operatorIds": [
+        "zunder"
+      ],
+      "evidenceSources": [
+        "france-canonical-direct-offers",
+        "zunder-official-subscriptions"
+      ]
+    },
+    {
+      "subscriptionId": "belib-nonresident",
+      "countries": [
+        "FR"
+      ],
+      "operatorIds": [
+        "belib"
+      ],
+      "evidenceSources": [
+        "france-belib-offers"
+      ]
+    },
+    {
+      "subscriptionId": "belib-resident",
+      "countries": [
+        "FR"
+      ],
+      "operatorIds": [
+        "belib"
+      ],
+      "evidenceSources": [
+        "france-belib-offers"
+      ]
+    },
+    {
+      "subscriptionId": "syder-qovoltis-card",
+      "countries": [
+        "FR"
+      ],
+      "operatorIds": [
+        "qovoltis",
+        "syder-qovoltis"
+      ],
+      "evidenceSources": [
+        "france-qovoltis-offers"
+      ]
     }
   ],
   "sources": [
