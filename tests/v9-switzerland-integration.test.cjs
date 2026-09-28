@@ -14,7 +14,7 @@ const swissCoverage=new Map((registry.subscriptionCoverage||[]).filter(x=>(x.cou
 assert.ok(swissCoverage.has('fastned-gold'),'French Fastned Gold selection must carry into Switzerland');
 assert.ok((swissCoverage.get('fastned-gold').countries||[]).includes('FR'));
 assert.ok((swissCoverage.get('fastned-gold').evidenceSources||[]).includes('switzerland-verified-offers'));
-for(const id of ['lidl-plus-ch','emoti-member-ch','cci-move-cpo-tariffs-national:Move comfort','socar-/-move-charging-backend:Move comfort']){
+for(const id of ['lidl-plus-ch','emoti-member-ch','move-mobility:Move comfort','socar-/-move-charging-backend:Move comfort']){
   assert.ok(swissCoverage.has(id),`Swiss selectable subscription missing from registry: ${id}`);
   assert.ok((swissCoverage.get(id).evidenceSources||[]).includes('switzerland-verified-offers'));
 }
@@ -61,7 +61,7 @@ assert.ok(offers.directOffers.every(o=>Array.isArray(o.evseIds)&&o.evseIds.lengt
 assert.ok(offers.directOffers.every(o=>o.verifiedScope==='exact_evse_power'));
 assert.ok(offers.directOffers.every(o=>Array.isArray(o.connectorKinds)&&o.connectorKinds.length===1));
 const swissSubscriptionIds=new Set((offers.subscriptionOffers||[]).map(o=>o.selectionId));
-for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','cci-move-cpo-tariffs-national:Move comfort','socar-/-move-charging-backend:Move comfort']){
+for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','move-mobility:Move comfort','socar-/-move-charging-backend:Move comfort']){
   assert.ok(swissSubscriptionIds.has(id),`Swiss subscription offer missing from build: ${id}`);
 }
 const gated={offers:[
