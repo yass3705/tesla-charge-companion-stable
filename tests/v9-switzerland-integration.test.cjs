@@ -10,6 +10,11 @@ const nat=registry.sources.find(s=>s.id==='switzerland-national');
 const off=registry.sources.find(s=>s.id==='switzerland-verified-offers');
 assert.ok(nat&&nat.active&&nat.countries.includes('CH'));
 assert.ok(off&&off.active&&off.countries.includes('CH'));
+const swissCoverage=new Map((registry.subscriptionCoverage||[]).filter(x=>(x.countries||[]).includes('CH')).map(x=>[x.subscriptionId,x]));
+for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','cci-move-cpo-tariffs-national:Move comfort','socar-/-move-charging-backend:Move comfort']){
+  assert.ok(swissCoverage.has(id),`Swiss selectable subscription missing from registry: ${id}`);
+  assert.ok((swissCoverage.get(id).evidenceSources||[]).includes('switzerland-verified-offers'));
+}
 
 const allDays=Array.from({length:7},(_,d)=>[d,'00:00','24:00']);
 const row=['CH*TEST:ST1','Swiss test','Addr',47.0,8.0,'Test CPO',2,allDays,
@@ -52,4 +57,15 @@ assert.ok(report.offers.uniqueDirectEvse>10000);
 assert.ok(offers.directOffers.every(o=>Array.isArray(o.evseIds)&&o.evseIds.length===1));
 assert.ok(offers.directOffers.every(o=>o.verifiedScope==='exact_evse_power'));
 assert.ok(offers.directOffers.every(o=>Array.isArray(o.connectorKinds)&&o.connectorKinds.length===1));
+const swissSubscriptionIds=new Set((offers.subscriptionOffers||[]).map(o=>o.selectionId));
+for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','cci-move-cpo-tariffs-national:Move comfort','socar-/-move-charging-backend:Move comfort']){
+  assert.ok(swissSubscriptionIds.has(id),`Swiss subscription offer missing from build: ${id}`);
+}
+const gated={offers:[
+  {id:'direct',provider:'Direct',subscriptionId:null},
+  {id:'gold',provider:'Fastned Gold',subscriptionId:'fastned-gold'},
+  {id:'lidl',provider:'Lidl Plus',subscriptionId:'lidl-plus-ch'}
+]};
+assert.deepEqual(data.eligibleOffers(gated,[]).map(o=>o.id),['direct']);
+assert.deepEqual(data.eligibleOffers(gated,['fastned-gold']).map(o=>o.id),['direct','gold']);
 console.log('Switzerland V9 integration test OK',report.national,report.offers.uniqueDirectEvse);
