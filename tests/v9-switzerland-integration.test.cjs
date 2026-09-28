@@ -19,6 +19,29 @@ for(const id of ['lidl-plus-ch','emoti-member-ch','move-mobility:Move comfort','
   assert.ok((swissCoverage.get(id).evidenceSources||[]).includes('switzerland-verified-offers'));
 }
 
+
+const coverageById=new Map((registry.subscriptionCoverage||[]).map(x=>[x.subscriptionId,x]));
+for(const id of ['ionity-motion','ionity-power']){
+  const row=coverageById.get(id);
+  assert.ok(row,`Missing cross-border subscription coverage: ${id}`);
+  assert.ok((row.countries||[]).includes('FR'));
+  assert.ok((row.countries||[]).includes('CH'));
+  assert.equal(row.pricingStatusByCountry?.CH,'station-exact-subscription-price-not-yet-modeled');
+}
+for(const id of ['totalenergies-charge-plus-zen','belib-nonresident','belib-resident','syder-qovoltis-card']){
+  const row=coverageById.get(id);
+  assert.ok(row,`Missing France-only subscription coverage: ${id}`);
+  assert.ok((row.countries||[]).includes('FR'));
+  assert.ok(!(row.countries||[]).includes('CH'),`${id} must not be exposed as Switzerland-compatible`);
+}
+for(const id of ['zunder-easy','zunder-pro']){
+  const row=coverageById.get(id);
+  assert.ok(row,`Missing Zunder subscription coverage: ${id}`);
+  assert.ok((row.countries||[]).includes('FR'));
+  assert.ok((row.countries||[]).includes('ES'));
+  assert.ok(!(row.countries||[]).includes('CH'),`${id} must not be exposed as Switzerland-compatible`);
+}
+
 const allDays=Array.from({length:7},(_,d)=>[d,'00:00','24:00']);
 const row=['CH*TEST:ST1','Swiss test','Addr',47.0,8.0,'Test CPO',2,allDays,
  [
