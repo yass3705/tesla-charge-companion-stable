@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-28",
+  "scope": "France to Switzerland subscription compatibility audit",
+  "policy": {
+    "noCrossBorderInference": true,
+    "compatibilityDoesNotImplyStationExactPrice": true,
+    "onlyStationExactOrOtherwiseVerifiedPricesAreRankable": true
+  },
+  "plans": [
+    {
+      "subscriptionId": "fastned-gold",
+      "franceSelectable": true,
+      "switzerlandCompatible": true,
+      "switzerlandPriceStatus": "exact-generated",
+      "decision": "active",
+      "evidence": [
+        "France V9 Fastned Gold offer",
+        "Switzerland V9 exact Fastned Gold offers",
+        "Fastned subscription coverage FR/NL/CH"
+      ]
+    },
+    {
+      "subscriptionId": "ionity-motion",
+      "franceSelectableInCurrentV9": false,
+      "switzerlandCompatible": true,
+      "switzerlandPriceStatus": "compatible-but-station-exact-price-not-yet-modeled",
+      "decision": "compatibility-registered-no-swiss-price-inference",
+      "evidence": [
+        "IONITY subscriptions valid across 23 European countries",
+        "IONITY states charging prices vary by charger location when travelling",
+        "Official country table publishes Switzerland minimum subscription price but warns station price may be higher"
+      ]
+    },
+    {
+      "subscriptionId": "ionity-power",
+      "franceSelectableInCurrentV9": false,
+      "switzerlandCompatible": true,
+      "switzerlandPriceStatus": "compatible-but-station-exact-price-not-yet-modeled",
+      "decision": "compatibility-registered-no-swiss-price-inference",
+      "evidence": [
+        "IONITY subscriptions valid across 23 European countries",
+        "IONITY states charging prices vary by charger location when travelling",
+        "Official country table publishes Switzerland minimum subscription price but warns station price may be higher"
+      ]
+    },
+    {
+      "subscriptionId": "totalenergies-charge-plus-zen",
+      "franceSelectable": true,
+      "switzerlandCompatible": false,
+      "decision": "france-only",
+      "evidence": [
+        "Official Charge+ Zen discount applies only to TotalEnergies high-power stations in metropolitan France"
+      ]
+    },
+    {
+      "subscriptionId": "zunder-easy",
+      "franceSelectable": true,
+      "switzerlandCompatible": false,
+      "decision": "france-spain-only",
+      "evidence": [
+        "Official Zunder page states Easy/Pro benefits are exclusive to Zunder networks in Spain and France"
+      ]
+    },
+    {
+      "subscriptionId": "zunder-pro",
+      "franceSelectable": true,
+      "switzerlandCompatible": false,
+      "decision": "france-spain-only",
+      "evidence": [
+        "Official Zunder page states Easy/Pro benefits are exclusive to Zunder networks in Spain and France"
+      ]
+    },
+    {
+      "subscriptionId": "belib-nonresident",
+      "franceSelectable": true,
+      "switzerlandCompatible": false,
+      "decision": "local-france-only",
+      "evidence": [
+        "Belib tariff class is tied to Paris charging network"
+      ]
+    },
+    {
+      "subscriptionId": "belib-resident",
+      "franceSelectable": true,
+      "switzerlandCompatible": false,
+      "decision": "local-france-only",
+      "evidence": [
+        "Belib resident tariff class is tied to Paris charging network"
+      ]
+    },
+    {
+      "subscriptionId": "syder-qovoltis-card",
+      "franceSelectable": true,
+      "switzerlandCompatible": false,
+      "decision": "local-france-only",
+      "evidence": [
+        "SYDER-Qovoltis tariff source is territorial France-only"
+      ]
+    }
+  ],
+  "nextStep": "Find a first-party station-level IONITY Motion/Power tariff source before adding rankable FR or CH subscription offers."
+}
