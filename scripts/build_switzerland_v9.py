@@ -121,6 +121,16 @@ def collect_national(feed):
       "IsOpen24Hours","SubOperatorName","SuboperatorName","PaymentOptions","AuthenticationModes",
       "EvseStatus","Status","HotlinePhoneNumber","AccessibilityLocation"
     }
+    def meaningful(v):
+        if v is None:return False
+        if isinstance(v,str):return bool(v.strip()) and v.strip().lower() not in ("none","null","nan")
+        if isinstance(v,dict):
+            if not v:return False
+            g=v.get("Google")
+            if isinstance(g,str) and ("none" in g.lower() or not g.strip()):return False
+            return any(meaningful(x) for x in v.values())
+        if isinstance(v,list):return any(meaningful(x) for x in v)
+        return True
     def walk(x,owner_id=None,owner_name=None,ctx=None):
         ctx=dict(ctx or {})
         if isinstance(x,dict):
@@ -129,12 +139,15 @@ def collect_national(feed):
             if text(x.get("OperatorName")): on=text(x.get("OperatorName"))
             next_ctx=dict(ctx)
             for k in inherited_fields:
-                if k in x and x.get(k) is not None:
+                if k in x and meaningful(x.get(k)):
                     next_ctx[k]=x.get(k)
             eid=x.get("EvseID")
             if oid and isinstance(eid,str) and eid.strip():
                 rec=dict(next_ctx)
-                rec.update(x)
+                for k,v in x.items():
+                    if k in inherited_fields and not meaningful(v):
+                        continue
+                    rec[k]=v
                 records.append((oid,on or oid,eid.strip(),rec))
             for v in x.values():
                 walk(v,oid,on,next_ctx)
