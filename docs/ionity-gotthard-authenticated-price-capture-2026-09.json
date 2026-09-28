@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-29",
+  "source": "IONITY Android v2.480 authenticated location response supplied by user",
+  "endpoint": "/api/v3/location/155fa4be-06ab-48be-a386-bbb679ca79aa",
+  "station": {
+    "uuid": "155fa4be-06ab-48be-a386-bbb679ca79aa",
+    "name": "IONITY Gotthard Nord",
+    "country": "CH"
+  },
+  "observedProfile": "authenticated FR PRIVATE profile without active Motion/Power subscription",
+  "connectorGroups": [
+    {
+      "maxPowerKw": 350,
+      "count": 6,
+      "chargingPrice": {
+        "amount": 0.82,
+        "currency": "CHF",
+        "name": "Switzerland"
+      },
+      "adhocPrice": {
+        "amount": 0.87,
+        "currency": "CHF",
+        "name": "IONITY DIRECT"
+      },
+      "discountedChargingPrice": null,
+      "lowestChargingPrice": null,
+      "discount": null
+    },
+    {
+      "maxPowerKw": 400,
+      "count": 6,
+      "chargingPrice": {
+        "amount": 0.82,
+        "currency": "CHF",
+        "name": "Switzerland"
+      },
+      "adhocPrice": {
+        "amount": 0.8,
+        "currency": "CHF",
+        "name": "IONITY DIRECT"
+      },
+      "discountedChargingPrice": null,
+      "lowestChargingPrice": null,
+      "discount": null
+    }
+  ],
+  "interpretation": {
+    "chargingPrice": "authenticated app/account price, distinct from adhoc/direct price",
+    "adhocPrice": "public IONITY DIRECT price and power-dependent at this station",
+    "discountedChargingPrice": "not populated for this account because no active paid IONITY subscription is attached",
+    "implication": "Motion/Power exact station price cannot be inferred from this unaffiliated account response; an active subscription response or another first-party exact-price source is required."
+  }
+}
