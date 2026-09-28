@@ -7,6 +7,8 @@ on:
       - '.github/workflows/v9-switzerland-build.yml'
       - 'tests/v9-switzerland-integration.test.cjs'
       - 'v9-production-runtime/data/v9/source-registry.json'
+      - 'v9-production-shell/bridge.js'
+      - 'tests/v9-production-subscriptions.test.cjs'
   schedule:
     - cron: '20 23 * * *'
 permissions:
@@ -31,6 +33,7 @@ jobs:
           node-version: '22'
       - run: python3 scripts/build_switzerland_v9.py
       - run: node tests/v9-switzerland-integration.test.cjs
+      - run: node tests/v9-production-subscriptions.test.cjs
       - name: Persist V9 Switzerland artifacts
         run: |
           set -euo pipefail
