@@ -11,9 +11,11 @@ const off=registry.sources.find(s=>s.id==='switzerland-verified-offers');
 assert.ok(nat&&nat.active&&nat.countries.includes('CH'));
 assert.ok(off&&off.active&&off.countries.includes('CH'));
 const swissCoverage=new Map((registry.subscriptionCoverage||[]).filter(x=>(x.countries||[]).includes('CH')).map(x=>[x.subscriptionId,x]));
-for(const id of ['fastned-gold','lidl-plus-ch','emoti-member-ch','cci-move-cpo-tariffs-national:Move comfort','socar-/-move-charging-backend:Move comfort']){
-  assert.ok(swissCoverage.has(id),`Swiss selectable subscription missing from registry: ${id}`);
-  assert.ok((swissCoverage.get(id).evidenceSources||[]).includes('switzerland-verified-offers'));
+assert.ok(swissCoverage.has('fastned-gold'),'French Fastned Gold selection must carry into Switzerland');
+assert.ok((swissCoverage.get('fastned-gold').countries||[]).includes('FR'));
+assert.ok((swissCoverage.get('fastned-gold').evidenceSources||[]).includes('switzerland-verified-offers'));
+for(const id of ['lidl-plus-ch','emoti-member-ch','cci-move-cpo-tariffs-national:Move comfort','socar-/-move-charging-backend:Move comfort']){
+  assert.equal(swissCoverage.has(id),false,`Swiss-only plan must not be exposed as a selectable subscription: ${id}`);
 }
 
 const allDays=Array.from({length:7},(_,d)=>[d,'00:00','24:00']);
