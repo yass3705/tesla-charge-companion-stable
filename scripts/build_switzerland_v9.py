@@ -12,7 +12,7 @@ REPORT_OUT=Path("v9-production-runtime/data/v9/switzerland-build-report.json")
 UA={"User-Agent":"Tesla-Charge-Companion-V9-Switzerland/1.0","Accept":"application/json"}
 EVSE_META={}
 NATIONAL_RECORDS=[]
-GOFAST_AUDIT={"nationalEvse":0,"matchedByName":0,"matchedByCoordinate":0,"unmatched":0,"nearestDistances":[]}
+GOFAST_AUDIT={"nationalEvse":0,"matchedByName":0,"matchedByCoordinate":0,"unmatched":0,"nearestDistances":[],"samples":[]}
 
 SOURCES=[
  "data/switzerland/migrol-official-direct-tariffs.json",
@@ -387,7 +387,11 @@ def gofast_offers(payload,path):
         if oid!="CH*GFT":continue
         GOFAST_AUDIT["nationalEvse"]+=1
         co=coords(rec)
-        if co[0] is None:continue
+        if co[0] is None:
+            if len(GOFAST_AUDIT["samples"])<5:
+                GOFAST_AUDIT["samples"].append({"evseId":eid,"chargingStationId":rec.get("ChargingStationId"),"names":rec.get("ChargingStationNames"),"geo":rec.get("GeoCoordinates"),"address":rec.get("Address"),"keys":sorted(rec.keys())})
+            GOFAST_AUDIT["unmatched"]+=1
+            continue
         national_name=norm_name(name_from(rec))
         name_matches=[s for s in official if norm_name(s["name"])==national_name and national_name]
         if len(name_matches)==1:
