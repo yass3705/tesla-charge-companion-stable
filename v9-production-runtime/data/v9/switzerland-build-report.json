@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-09-28T17:49:18.284116+00:00",
+  "generatedAt": "2026-09-28T17:51:19.343076+00:00",
   "country": "CH",
   "national": {
     "owners": 41,
     "evses": 19469,
-    "publishedNonTeslaEvses": 19469,
+    "publishedNonTeslaEvses": 19025,
     "excludedTeslaEvseCount": 444,
-    "stations": 13650,
+    "stations": 13206,
     "tiles": 56
   },
   "offers": {
@@ -53,5 +53,15 @@
   "fx": {
     "CHFperEUR": 0.944129,
     "date": "2026-09-28"
+  },
+  "gofastAudit": {
+    "nationalEvse": 563,
+    "matchedByName": 0,
+    "matchedByCoordinate": 0,
+    "unmatched": 563,
+    "nearestDistances": [],
+    "nearestDistanceMin": null,
+    "nearestDistanceMedian": null,
+    "nearestDistanceMax": null
   }
 }
