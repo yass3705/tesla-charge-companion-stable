@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-09-27T10:02:32.077Z",
+  "generatedAt": "2026-09-28T10:56:18.271Z",
   "mode": "verified_zephyre_direct",
   "policy": {
     "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
     "resolver": {
       "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260927-070429/consolidation-etalab-schema-irve-statique-v-2.3.1-20260927.csv",
+      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260928-034309/consolidation-etalab-schema-irve-statique-v-2.3.1-20260928.csv",
       "bff": "https://api.services-emobility.com/pay/api",
       "nearby": "POST /stations/nearby",
       "detail": "GET /stations/chargepoint/{internalName}"
@@ -225,16 +225,14 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E77654",
-        "FR*ZP1*E77657"
+        "FR*ZP1*E77654"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 2,
+        "exactEvseCount": 1,
         "internalNames": [
-          "LG-2150-0",
-          "LG-2179-4"
+          "LG-2150-0"
         ],
         "rawPriceComponents": [
           {
@@ -359,10 +357,8 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E00012",
         "FR*ZP1*E00013",
         "FR*ZP1*E00014",
-        "FR*ZP1*E00015",
         "FR*ZP1*E108319",
         "FR*ZP1*E108337",
         "FR*ZP1*E108345",
@@ -379,7 +375,6 @@
         "FR*ZP1*E12970687",
         "FR*ZP1*E129707",
         "FR*ZP1*E130056",
-        "FR*ZP1*E130075",
         "FR*ZP1*E130209",
         "FR*ZP1*E130798",
         "FR*ZP1*E130808",
@@ -394,7 +389,6 @@
         "FR*ZP1*E133892",
         "FR*ZP1*E133905",
         "FR*ZP1*E133933",
-        "FR*ZP1*E133978",
         "FR*ZP1*E133987",
         "FR*ZP1*E133989",
         "FR*ZP1*E133992",
@@ -422,10 +416,8 @@
         "FR*ZP1*E97684",
         "FR*ZP1*E97720",
         "FR*ZP1*E97723",
-        "FR*ZP1*EAC*06007",
         "FR*ZP1*EAC*16041",
         "FR*ZP1*EAC*42388",
-        "FR*ZP1*EAC*42428",
         "FR*ZP1*EAC*43447",
         "FR*ZP1*EAC*43448",
         "FR*ZP1*EAC*54211",
@@ -437,7 +429,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 74,
+        "exactEvseCount": 68,
         "internalNames": [
           "FR*ZP1*EAC*43447",
           "FR*ZP1*EAC*43448",
@@ -473,7 +465,6 @@
           "LF-9670-7",
           "LF-9674-2",
           "LF-9680-5",
-          "LF-9684-0",
           "LF-9688-6",
           "LF-9689-2",
           "LF-9693-2",
@@ -503,16 +494,11 @@
           "LG-2170-7",
           "LG-2171-3",
           "LG-2173-6",
-          "LG-2181-1",
-          "LG-2184-0",
-          "LG-2189-2",
           "LG-2198-4",
           "LG-2201-5",
           "LG-2205-0",
-          "LI-0134-5",
           "LI-0372-3",
-          "LI-4238-8",
-          "LI-4242-8"
+          "LI-4238-8"
         ],
         "rawPriceComponents": [
           {
@@ -872,62 +858,6 @@
             "end": "24:00",
             "billing": "kwh",
             "currency": "EUR",
-            "pricePerKwh": 0.48
-          }
-        ]
-      },
-      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
-      "directOperatorOnly": true,
-      "verifiedScope": "exact_evse",
-      "defaultSelected": false,
-      "evseIds": [
-        "FR*ZP1*E88452"
-      ],
-      "metadata": {
-        "pricingContext": "anonymous_direct_payment",
-        "currentType": "AC",
-        "exactEvseCount": 1,
-        "internalNames": [
-          "LA-7171-2"
-        ],
-        "rawPriceComponents": [
-          {
-            "priceUnit": "CHARGING_KWH",
-            "price": 0.48,
-            "freeParkingCostMinutes": 0,
-            "restrictionStartTime": null,
-            "restrictionEndTime": null,
-            "taxAmount": 20
-          }
-        ],
-        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
-        "priceBasis": "ePowerDirect displayed direct price"
-      }
-    },
-    {
-      "id": "zephyre-direct-profile-12",
-      "selectionId": "zephyre-direct-profile-12",
-      "provider": "Zephyre direct",
-      "operatorAliases": [
-        "Zephyre",
-        "Zephyre SAS",
-        "FR*ZP1",
-        "FRZP1"
-      ],
-      "countries": [
-        "FR"
-      ],
-      "currency": "EUR",
-      "priority": 132,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {
-            "scope": "allDay",
-            "start": "00:00",
-            "end": "24:00",
-            "billing": "kwh",
-            "currency": "EUR",
             "pricePerKwh": 0.54
           }
         ]
@@ -961,8 +891,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-13",
-      "selectionId": "zephyre-direct-profile-13",
+      "id": "zephyre-direct-profile-12",
+      "selectionId": "zephyre-direct-profile-12",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -1017,8 +947,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-14",
-      "selectionId": "zephyre-direct-profile-14",
+      "id": "zephyre-direct-profile-13",
+      "selectionId": "zephyre-direct-profile-13",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -1050,15 +980,13 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E124743",
         "FR*ZP1*E124764"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 2,
+        "exactEvseCount": 1,
         "internalNames": [
-          "LF-9663-8",
           "LF-9690-3"
         ],
         "rawPriceComponents": [
@@ -1084,8 +1012,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-15",
-      "selectionId": "zephyre-direct-profile-15",
+      "id": "zephyre-direct-profile-14",
+      "selectionId": "zephyre-direct-profile-14",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -1146,8 +1074,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-16",
-      "selectionId": "zephyre-direct-profile-16",
+      "id": "zephyre-direct-profile-15",
+      "selectionId": "zephyre-direct-profile-15",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -1193,6 +1121,62 @@
           {
             "priceUnit": "CHARGING_KWH",
             "price": 0.66,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-16",
+      "selectionId": "zephyre-direct-profile-16",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.71
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E88452"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
+        "exactEvseCount": 1,
+        "internalNames": [
+          "LA-7171-2"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.71,
             "freeParkingCostMinutes": 0,
             "restrictionStartTime": null,
             "restrictionEndTime": null,
@@ -1432,9 +1416,11 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
+        "FR*ZP1*E112313",
         "FR*ZP1*E112811",
         "FR*ZP1*E124791",
         "FR*ZP1*E66005",
+        "FR*ZP1*E85888",
         "FR*ZP1*E97538",
         "FR*ZP1*EAC*49680",
         "FR*ZP1*EAC*54210"
@@ -1442,14 +1428,16 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 6,
+        "exactEvseCount": 8,
         "internalNames": [
           "LB-1090-3",
           "LB-2930-0",
           "LF-6271-3",
           "LF-6274-2",
+          "LF-9633-3",
           "LF-9698-4",
-          "LG-2144-8"
+          "LG-2144-8",
+          "LG-2151-7"
         ],
         "rawPriceComponents": [
           {
@@ -1470,13 +1458,13 @@
   "sourceEvidence": {
     "summary": {
       "schemaVersion": 1,
-      "generatedAt": "2026-09-27T10:02:31.923Z",
+      "generatedAt": "2026-09-28T10:56:18.122Z",
       "country": "FR",
       "network": "Zephyre",
       "partyId": "FR*ZP1",
       "source": {
         "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260927-070429/consolidation-etalab-schema-irve-statique-v-2.3.1-20260927.csv",
+        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260928-034309/consolidation-etalab-schema-irve-statique-v-2.3.1-20260928.csv",
         "bff": "https://api.services-emobility.com/pay/api",
         "nearby": "POST /stations/nearby",
         "detail": "GET /stations/chargepoint/{internalName}"
@@ -1484,15 +1472,15 @@
       "rawFrZp1Rows": 425,
       "irveUniqueEvse": 373,
       "seedCoordinates": 148,
-      "liveDetailStations": 148,
-      "liveDirectEvse": 148,
-      "liveTariffPresent": 148,
-      "directPaymentEnabled": 148,
+      "liveDetailStations": 142,
+      "liveDirectEvse": 142,
+      "liveTariffPresent": 142,
+      "directPaymentEnabled": 142,
       "nearbyErrors": 0,
       "detailErrors": 0,
-      "unresolvedIrveEvse": 225,
+      "unresolvedIrveEvse": 231,
       "unresolvedByDataset": {
-        "63dccb1307e9b2f213a5130c": 24,
+        "63dccb1307e9b2f213a5130c": 30,
         "65a5487fa94ead1ffa4562a3": 201
       },
       "providers": [
@@ -1506,8 +1494,8 @@
         "bindingPricingOfferTokenStored": false
       }
     },
-    "liveDirectEvse": 148,
-    "exactEvseIds": 148,
+    "liveDirectEvse": 142,
+    "exactEvseIds": 142,
     "priceProfiles": 20
   }
 }
