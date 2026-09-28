@@ -704,6 +704,50 @@
       "optional": true
     },
     {
+      "id": "switzerland-national",
+      "label": "Switzerland BFE/OICP national physical baseline",
+      "adapter": "national-compact-v4",
+      "root": "data/v9/switzerland-static/",
+      "manifest": "data/v9/switzerland-static/manifest.json",
+      "countries": [
+        "CH"
+      ],
+      "capabilities": [
+        "inventory",
+        "connectors",
+        "access",
+        "status"
+      ],
+      "priority": {
+        "identity": 60,
+        "connectors": 65,
+        "access": 60,
+        "status": 65,
+        "tariff": 0
+      },
+      "refresh": "daily-public-national-snapshot",
+      "active": true
+    },
+    {
+      "id": "switzerland-verified-offers",
+      "label": "Switzerland verified CPO direct and subscription offers",
+      "adapter": "direct-offer-json",
+      "path": "data/v9/switzerland-offers.json",
+      "countries": [
+        "CH"
+      ],
+      "capabilities": [
+        "tariff",
+        "subscription"
+      ],
+      "priority": {
+        "tariff": 130
+      },
+      "refresh": "daily-public-source-snapshot",
+      "active": true,
+      "optional": true
+    },
+    {
       "id": "morocco-evgo-native",
       "label": "Morocco EVGO native normalized inventory/status",
       "adapter": "morocco-public-v1",
