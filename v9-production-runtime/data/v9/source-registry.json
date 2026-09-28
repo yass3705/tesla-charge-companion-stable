@@ -141,12 +141,39 @@
         "ionity"
       ],
       "evidenceSources": [
-        "ionity-official-subscription-terms"
+        "ionity-official-subscription-terms",
+        "ionity-android-v2.480-private-options-fr"
       ],
       "pricingStatusByCountry": {
-        "FR": "station-exact-subscription-price-not-yet-modeled",
+        "FR": "country-advertised-from-price-captured",
         "CH": "station-exact-subscription-price-not-yet-modeled",
         "NL": "priced"
+      },
+      "productIdentifiersByCountry": {
+        "FR": "FR*P*MOTION*002"
+      },
+      "planType": "MONTHLY",
+      "subscriptionFeeByCountry": {
+        "FR": {
+          "amount": 5.99,
+          "currency": "EUR"
+        }
+      },
+      "advertisedIonityPriceByCountry": {
+        "FR": {
+          "amount": 0.39,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FROM"
+        }
+      },
+      "advertisedAlliancePriceByCountry": {
+        "FR": {
+          "amount": 0.58,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FROM"
+        }
       }
     },
     {
@@ -160,12 +187,39 @@
         "ionity"
       ],
       "evidenceSources": [
-        "ionity-official-subscription-terms"
+        "ionity-official-subscription-terms",
+        "ionity-android-v2.480-private-options-fr"
       ],
       "pricingStatusByCountry": {
-        "FR": "station-exact-subscription-price-not-yet-modeled",
+        "FR": "country-advertised-from-price-captured",
         "CH": "station-exact-subscription-price-not-yet-modeled",
         "NL": "priced"
+      },
+      "productIdentifiersByCountry": {
+        "FR": "FR*P*POWER*002"
+      },
+      "planType": "MONTHLY",
+      "subscriptionFeeByCountry": {
+        "FR": {
+          "amount": 11.99,
+          "currency": "EUR"
+        }
+      },
+      "advertisedIonityPriceByCountry": {
+        "FR": {
+          "amount": 0.31,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FROM"
+        }
+      },
+      "advertisedAlliancePriceByCountry": {
+        "FR": {
+          "amount": 0.53,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FROM"
+        }
       }
     },
     {
@@ -245,6 +299,96 @@
       "evidenceSources": [
         "france-qovoltis-offers"
       ]
+    },
+    {
+      "subscriptionId": "ionity-power-365",
+      "countries": [
+        "FR",
+        "NL",
+        "CH"
+      ],
+      "operatorIds": [
+        "ionity"
+      ],
+      "evidenceSources": [
+        "ionity-android-v2.480-private-options-fr"
+      ],
+      "productIdentifiersByCountry": {
+        "FR": "FR*P*POWER*365*003"
+      },
+      "planType": "ANNUAL",
+      "subscriptionFeeByCountry": {
+        "FR": {
+          "amount": 119.99,
+          "currency": "EUR"
+        }
+      },
+      "advertisedIonityPriceByCountry": {
+        "FR": {
+          "amount": 0.33,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FIXED"
+        }
+      },
+      "advertisedAlliancePriceByCountry": {
+        "FR": {
+          "amount": 0.53,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FROM"
+        }
+      },
+      "pricingStatusByCountry": {
+        "FR": "country-fixed-price-captured",
+        "CH": "station-exact-subscription-price-not-yet-modeled",
+        "NL": "compatibility-known-price-not-modeled"
+      }
+    },
+    {
+      "subscriptionId": "ionity-motion-365",
+      "countries": [
+        "FR",
+        "NL",
+        "CH"
+      ],
+      "operatorIds": [
+        "ionity"
+      ],
+      "evidenceSources": [
+        "ionity-android-v2.480-private-options-fr"
+      ],
+      "productIdentifiersByCountry": {
+        "FR": "FR*P*MOTION*365*003"
+      },
+      "planType": "ANNUAL",
+      "subscriptionFeeByCountry": {
+        "FR": {
+          "amount": 59.99,
+          "currency": "EUR"
+        }
+      },
+      "advertisedIonityPriceByCountry": {
+        "FR": {
+          "amount": 0.41,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FIXED"
+        }
+      },
+      "advertisedAlliancePriceByCountry": {
+        "FR": {
+          "amount": 0.58,
+          "currency": "EUR",
+          "unit": "kWh",
+          "prefix": "FROM"
+        }
+      },
+      "pricingStatusByCountry": {
+        "FR": "country-fixed-price-captured",
+        "CH": "station-exact-subscription-price-not-yet-modeled",
+        "NL": "compatibility-known-price-not-modeled"
+      }
     }
   ],
   "sources": [
