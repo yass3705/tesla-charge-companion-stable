@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 150,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 215
+  },
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament de Santa Margarida de Montbui",
+      "labels": ["Ajuntament de Santa Margarida de Montbui"],
+      "status": "sourceValidated",
+      "model": "municipal public charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.montbui.cat/media/repository/ORDENANCES_FISCALS_2026.pdf"],
+      "coverageKnown": "2026 municipal fiscal ordinances explicitly regulate the municipal EV charging service.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.28, "vatIncluded": true, "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if the municipality changes the ordinance or publishes a station-specific override.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Breda",
+      "labels": ["Ajuntament de Breda"],
+      "status": "sourceValidated",
+      "model": "municipal public charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://breda.cat/wp-content/uploads/2026/01/Butlleti_Juny-2025_versio-internet.pdf"],
+      "coverageKnown": "Official municipal bulletin states both public chargers became paid after the initial free period.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.3, "overstayEurPerMinute": 0.05, "overstayAfterMinutes": 120, "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if Breda publishes a later ordinance or EVCharge station-specific change.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Castellvell del Camp",
+      "labels": ["Ajuntament de Castellvell del Camp"],
+      "status": "sourceValidated",
+      "model": "municipal public charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://castellvelldelcamp.cat/wp-content/uploads/2025/06/07.-Text-regulador-del-Preu-public_definitiu.pdf"],
+      "coverageKnown": "Official municipal price agreement applies to all EV charging points managed by the municipality.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.25, "overstayEurPerMinute": 0.04, "overstayAfterMinutes": 30, "vatIncluded": true, "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if the agreement is modified or repealed.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Taradell",
+      "labels": ["Ajuntament de Taradell"],
+      "status": "sourceValidated",
+      "model": "municipal public charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.taradell.cat/actualitat/noticies-destacades/el-punt-de-carrega-per-a-vehicles-electrics-de-lespai-1-doctubre-passa-a-ser-de-pagament.html", "https://www.taradell.cat/descobreix/serveis-al-visitant/aparcaments-municipals.html"],
+      "coverageKnown": "Official municipal sources confirm paid charging and direct users to the current public-price ordinance/EVCharge.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.3, "discountedEnergyEurPerKwh": 0.1, "discountEligibility": "ABT/TCT local-commerce card", "vatIncluded": true, "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if ordinance 48 or EVCharge publishes a later tariff.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "AYTO ZAMORA",
+      "labels": ["AYTO ZAMORA"],
+      "status": "partial",
+      "model": "municipal public charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.zamora.es/noticia.aspx?idNoticia=71049"],
+      "coverageKnown": "REVE public-web probe exposes the exact municipality label; official municipal history confirms a public charging point.",
+      "blockingReason": "The official zero-price statement located is from 2017 and is too old to promote as the current 2026 tariff.",
+      "resumeCondition": "Current municipal/FENIE/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {"firstPassTraversed": 5, "sourceValidated": 4, "partial": 1, "setAside": 0, "active": 0, "supersededAlias": 0, "platformExcluded": 0},
+  "aggregateAfter": {"minimumTraversed": 470, "maximumNeverTraversed": 148, "sourceValidated": 57, "partial": 46, "setAside": 200, "active": 96, "supersededAlias": 68, "platformExcluded": 3, "total": 470},
+  "webTrackAfter": {"newReconstructedLabelsFirstPassedCount": 97, "endpoint": "https://www.mapareve.es/api/public/v1", "validatedSample": "150x25", "uniqueOperatorLabelsObserved": 215},
+  "coherence": {"syntheticHistoricalMembershipCreated": false, "thirdPartyTariffPromoted": false, "difficultCaseReauditPerformed": false, "legacyDenominatorChanged": false, "check": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "generatedAt": "2026-09-14T20:47:00Z"
+}

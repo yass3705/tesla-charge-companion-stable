@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 29,
+  "source": "persisted REVE public-web national sweep + official/public first-pass research",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "previousMinimumTraversed": 490,
+  "newNominativeDecisions": 5,
+  "minimumTraversedAfter": 495,
+  "maximumNeverTraversedAfter": 123,
+  "decisions": [
+    {"canonicalName":"AJUNTAMENT D'OS DE BALAGUER","status":"setAside","provenance":"reconstructedCurrentReveWeb","reason":"Current REVE public-web sweep proves the nominative identity; official municipal site was found but no authoritative numeric EV charging tariff was located in bounded first-pass research.","resumeCondition":"Official municipal/app/QR tariff or deterministic REVE connector-tariff mapping."},
+    {"canonicalName":"Ajuntament de Banyoles","status":"setAside","provenance":"reconstructedCurrentReveWeb","reason":"Current REVE public-web sweep proves the nominative identity; no authoritative current numeric direct charging tariff was recovered in bounded first-pass research.","resumeCondition":"Official municipal/app/QR tariff or deterministic REVE connector-tariff mapping."},
+    {"canonicalName":"Ajuntament de Bellvís","status":"setAside","provenance":"reconstructedCurrentReveWeb","reason":"Current REVE public-web sweep proves the nominative identity; no authoritative current numeric direct charging tariff was recovered in bounded first-pass research.","resumeCondition":"Official municipal/app/QR tariff or deterministic REVE connector-tariff mapping."},
+    {"canonicalName":"Ajuntament de Berga","status":"sourceValidated","provenance":"reconstructedCurrentReveWeb","model":"municipal direct tariff","tariff":"0.25 EUR/kWh","evidence":["https://ajberga.cat/actualitat/noticies/berga-implementa-el-pagament-del-servei-de-recarrega-de-vehicles-electrics-i-hibrids-a-partir-del-13-dabril"],"reason":"Official municipality states charging became paid on 13 April 2026 at 0.25 EUR/kWh via EVCharge."},
+    {"canonicalName":"Ajuntament de Bordils","status":"partial","provenance":"reconstructedCurrentReveWeb","model":"municipal direct tariff","evidence":["https://www.bordils.cat/ca/equipaments/punt-de-recarrega-de-vehicles-electrics-i-hibrids-endollables/"],"reason":"Official municipality page publishes 0.31 EUR/kWh explicitly for 2025. It is authoritative historical evidence but is not extrapolated to 2026 without current confirmation.","resumeCondition":"2026 ordinance/current app or REVE connector-tariff confirmation."}
+  ],
+  "coherence":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+  "notes":"No difficult-case reaudit. No synthetic historical-618 membership. Five genuinely nominative identities from the persisted 445-label national public-web sweep received first-pass decisions."
+}

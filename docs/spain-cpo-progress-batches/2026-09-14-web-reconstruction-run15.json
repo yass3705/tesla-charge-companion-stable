@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historical618MembershipClaimed": false,
+  "generatedAt": "2026-09-14T09:41:00Z",
+  "labels": [
+    {
+      "canonicalName": "RAMIS GARAU, S.A. MIQUEL RAMIS",
+      "status": "setAside",
+      "evidence": [
+        "https://cincodias.elpais.com/directorio-empresas/empresa/8162/ramis-garau"
+      ],
+      "finding": "Current public research confirms the legal entity RAMIS GARAU SA but did not locate an official/public EV-charging tariff authority or a deterministic numeric direct tariff in the first pass. No third-party charging price is promoted.",
+      "resumeCondition": "Official site/QR/app tariff or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Rasquera",
+      "status": "partial",
+      "evidence": [
+        "https://etecnic.es/portfolio/semirrapida/"
+      ],
+      "finding": "ETECNIC documents a public semi-fast charging point in Rasquera, confirming the charging service/operator context, but no current numeric charging tariff was found in the first-pass public source. No historical/free assumption is extrapolated.",
+      "resumeCondition": "Current municipal/ETECNIC app or QR numeric tariff, or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Real Club Pineda",
+      "status": "setAside",
+      "evidence": [
+        "https://eventos.rcpineda.com/"
+      ],
+      "finding": "The official club source confirms the site identity, but no official/public EV-charging tariff was located. A current third-party price range exists for the label but is deliberately not promoted as authoritative.",
+      "resumeCondition": "Official club/QR/app charging price or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Sant Quirze de Besora",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://www.ajsantquirze.cat/media/repository/documents_oficials/ordenances/OF._68_-_Preu_public_servei_recarrega_vehicles_electrics__Set_2025__-_sig.pdf",
+        "https://www.ajsantquirze.cat/actualitat/noticies/lajuntament-incorpora-vehicles-electrics-i-un-nou-punt-de-recarrega-per-avancar-cap-a-un-municipi-mes-sostenible.html"
+      ],
+      "finding": "Municipal Fiscal Ordinance 68, signed in December 2025 and remaining in force until modification or repeal, sets VAT-included charging prices at 0.25 EUR/kWh for eligible residents/local business owners or workers and 0.35 EUR/kWh for non-residents. The municipality also confirms its public charging network remained active/expanded in late 2025.",
+      "resumeCondition": "Periodic ordinance/tariff revalidation."
+    }
+  ],
+  "skippedAlreadyCoveredAliases": [
+    {"observedLabel":"REPSOL SOLUCIONES ENERGÉTICAS SA","durableCanonical":"Repsol"}
+  ],
+  "firstPassAfter": {
+    "minimumTraversed": 429,
+    "maximumNeverTraversed": 189,
+    "firstPassComplete": false
+  },
+  "countsAfter": {
+    "sourceValidated": 42,
+    "partial": 32,
+    "active": 94,
+    "setAside": 190,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 429
+  },
+  "reveTariffStatusBatch": {
+    "generatedAt": "2026-09-14T08:43:07.075469Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "plan": [["tariffs",221],["tariffs",222],["tariffs",223],["status",148],["status",149]],
+    "nextTariffPage": 224,
+    "tariffPagesCollected": 223,
+    "tariffRowsStored": 19775,
+    "nextStatusPage": 150,
+    "statusPagesCollected": 149,
+    "statusRowsStored": 12997,
+    "currentRunDecision": "No official REVE batch launched because a full real hour had not yet elapsed since the latest successful persisted batch at the time of the check."
+  },
+  "reveWebLead": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "validatedSamplePages": 100,
+    "perPage": 25,
+    "newReconstructedLabelsFirstPassedThisRun": 4,
+    "nextSafeStep": "Continue diff-first processing after Sant Quirze de Besora; skip aliases already represented by durable canonical identities before any difficult-case reaudit."
+  },
+  "coherence": {
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "countSumMatchesFirstPass": true,
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"
+  }
+}

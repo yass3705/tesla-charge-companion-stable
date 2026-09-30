@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 51,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversed": 341,
+    "maximumNeverTraversed": 277,
+    "firstPassComplete": false,
+    "newLabelsTraversed": 0,
+    "newSourceValidated": 0
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "batchGeneratedAt": "2026-09-10T04:43:38.752276Z",
+    "workflowRunId": 34413690845,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPagesCollectedThisBatch": [74,75,76],
+    "statusPagesCollectedThisBatch": [50,51],
+    "tariffNewRows": 252,
+    "tariffUpdatedRows": 1,
+    "statusNewRows": 148,
+    "statusUpdatedRows": 21,
+    "persistentNextTariffPage": 77,
+    "persistentTariffPagesCollected": 76,
+    "persistentTariffRowsStored": 7380,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 52,
+    "persistentStatusPagesCollected": 51,
+    "persistentStatusRowsStored": 4412,
+    "statusTotalPages": 447,
+    "persistenceSucceeded": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "legacyNominativeGapStillDocumented": true
+  },
+  "investigation": "No additional never-traversed historical label can be proven from the preserved canonical/history without fabrication. Current REVE nominative snapshot remains first-pass covered. Do not reopen setAside/active cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionMustNotRestart": true
+  },
+  "updatedAt": "2026-09-10T04:44:30Z"
+}

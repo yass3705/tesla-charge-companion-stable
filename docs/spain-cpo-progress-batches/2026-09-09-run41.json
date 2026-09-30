@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": 41,
+  "updatedAt": "2026-09-09T05:45:00Z",
+  "firstPass": {
+    "minimumTraversedBefore": 341,
+    "newNominativeDecisions": 0,
+    "minimumTraversedAfter": 341,
+    "maximumNeverTraversed": 277,
+    "firstPassComplete": false
+  },
+  "countsAfter": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "nominativeWork": {
+    "newLabelsTraversed": [],
+    "newlyTreated": [],
+    "investigation": "Targeted recovery of concrete never-traversed historical labels was attempted from the current stored REVE snapshot and inspected GitHub history. The current 148-CPO snapshot remains exhausted through ZOILO RIOS, S.A.; no additional label could be proven to belong to the historical 618-label queue without inventing membership. No active/setAside case was reopened.",
+    "antiStagnationDecision": "Do not spend the run re-auditing already decided cases. Preserve the 341-decision floor and resume only when a concrete never-traversed historical label is recoverable or first-pass source evidence expands."
+  },
+  "reveTariffStatus": {
+    "persistentStateBefore": {
+      "tariffPagesCollected": 52,
+      "nextTariffPage": 53,
+      "tariffRowsStored": 5187,
+      "tariffTotalPages": 462,
+      "statusPagesCollected": 35,
+      "nextStatusPage": 36,
+      "statusRowsStored": 3274,
+      "statusTotalPages": 447
+    },
+    "liveBatch": {
+      "triggerIssuedAt": "2026-09-09T05:37:26Z",
+      "workflowRunId": 34315725084,
+      "jobId": 102351415440,
+      "requestsAttempted": 5,
+      "requestsSucceeded": 5,
+      "locationsRequests": 0,
+      "http429": 0,
+      "tariffPagesObservedCollected": [53, 54, 55],
+      "statusPagesObservedCollected": [36, 37],
+      "observedTariffRowsStored": 5487,
+      "observedStatusRowsStored": 3474,
+      "observedNextTariffPage": 56,
+      "observedNextStatusPage": 38,
+      "collectorAndBudgetVerificationSucceeded": true,
+      "runnerCommit": "ba76fc3",
+      "pushSucceeded": false,
+      "pushFailure": "non-fast-forward because the remote branch advanced after the trigger while the job was running"
+    },
+    "persistenceDecision": "The live calls consumed the hourly quota, so no second batch was launched. Because the raw gzip files from the runner commit were not persisted, the repository cursors were deliberately not advanced manually. The next eligible live batch must restart from persistent cursors 53/36 to repersist those rows safely; this will be a recovery re-fetch, not a silent cursor skip.",
+    "temporaryTriggerCleanup": "The one-shot trigger sentinel was deleted and the collector is restored to workflow_dispatch only. National /locations remains disabled."
+  },
+  "coherenceCheck": {
+    "reason": "Mandatory immediate check after two consecutive runs without nominative progression.",
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  }
+}

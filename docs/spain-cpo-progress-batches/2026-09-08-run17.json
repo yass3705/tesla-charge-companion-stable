@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T04:47:00Z",
+  "firstPass": {
+    "previousMinimumTraversed": 176,
+    "newNominativeDecisions": 4,
+    "minimumTraversed": 180,
+    "maximumNeverTraversed": 438,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; only aliases with explicit repository mapping plus current REVE identity evidence were advanced in this batch"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 16,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 28,
+    "total": 180
+  },
+  "decisions": [
+    {"canonicalName":"Zunder","label":"EASY CHARGER","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"legacy alias -> canonical Zunder identity; canonical tariff model unchanged","coverageKnown":"Explicit alias candidate supported by current REVE identity '(ZUNDER) Grupo Easychargar SA' (party ZUN); no tariff value copied or re-audited.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Atlante","label":"ATLANTE","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical Atlante identity; station/connector tariff handling unchanged","coverageKnown":"Explicit alias candidate supported by current REVE identity 'Atlante Iberia S.L.' (party ATE), 104 locations / 377 EVSE in the completed national location coverage; no Spain-wide tariff inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Atlante","label":"ATLANTE IBERIA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical Atlante identity; station/connector tariff handling unchanged","coverageKnown":"Explicit alias candidate aligned to current REVE 'Atlante Iberia S.L.' identity (party ATE); no station tariff extrapolated nationally.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"EDP","label":"EDP CLIENTES","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical EDP identity; direct CPO tariff handling remains separate from roaming/eMSP","coverageKnown":"Explicit alias candidate supported by current REVE identity 'EDP CLIENTES SAU' (party GFX), 456 locations / 1584 EVSE in completed national location coverage; no tariff value copied.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T04:45:45.473246Z",
+    "batchLaunchedThisRun": true,
+    "workflowRunId": 34167974789,
+    "workflowRunAttempt": 4,
+    "requestsAttemptedThisRun": 5,
+    "requestsSucceededThisRun": 5,
+    "locationsRequestsThisRun": 0,
+    "http429Count": 0,
+    "tariffPagesCollectedThisRun": [23,24,25],
+    "statusPagesCollectedThisRun": [16,17],
+    "tariffNewRowsThisRun": 300,
+    "tariffUpdatedRowsThisRun": 0,
+    "statusNewRowsThisRun": 200,
+    "statusUpdatedRowsThisRun": 0,
+    "nextTariffPage": 26,
+    "tariffPagesCollected": 25,
+    "tariffRowsStored": 2500,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 18,
+    "statusPagesCollected": 17,
+    "statusRowsStored": 1610,
+    "statusTotalPages": 447
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum":180,
+    "firstPassMinimumTraversed":180,
+    "newBatchCountsDeriveExactly":true,
+    "newLabelsUniqueAgainstRuns15And16":true,
+    "legacyFirst98ListDerivabilityGapStillDocumented":true,
+    "noSetAsideReauditWithoutNewEvidence":true,
+    "noTariffReauditForAliasResolution":true,
+    "noThirdPartyTariffPromoted":true,
+    "directCpoAndEmspPricingSeparated":true,
+    "reveRequestBudgetRespected":true,
+    "locationsEndpointUnused":true
+  }
+}

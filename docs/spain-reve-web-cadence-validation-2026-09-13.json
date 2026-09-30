@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "purpose": "Bounded cadence validation of the unauthenticated public REVE web feed before any national sweep or runtime integration.",
+  "endpointBase": "https://www.mapareve.es/api/public/v1",
+  "test": {
+    "startedAt": "2026-09-13T16:44:29.194Z",
+    "finishedAt": "2026-09-13T16:45:37.542Z",
+    "maxPages": 20,
+    "perPage": 25,
+    "result": "SUCCESS",
+    "dgtStationsLoaded": 12138,
+    "matchedStations": 594,
+    "matchedWithPrices": 526,
+    "matchedWithAvailability": 594,
+    "matchedWithReveData": 594,
+    "rateLimitOrRequestFailureObserved": false
+  },
+  "interpretation": {
+    "cadenceDecision": "GO_CONDITIONAL",
+    "reason": "Twenty consecutive bounded public pages completed successfully in about 68 seconds and returned the station/connectivity data needed for first-pass inventory work. This is materially faster than the documented external API collector and is sufficient to continue progressive validation.",
+    "notYetProven": [
+      "national pagination completeness without holes or duplicates",
+      "stability of CPO/operator identities across the full public feed",
+      "longer-run rate limiting or service protection behavior",
+      "full semantic parity of tariffs and operational status with the documented external API"
+    ],
+    "historical618Rule": "Do not treat current public-feed identities as proven members of the lost frozen 618-label historical snapshot. legacyWorkLabelCount remains 618 and current-feed identities must retain reconstruction provenance.",
+    "runtimePromotionAllowed": false
+  },
+  "nextSafeStep": "Increase the bounded public-feed validation progressively, explicitly count unique location IDs and operator/CPO labels, detect pagination duplicates/gaps, and use any genuinely new durable nominative identities only as provenance-tagged reconstruction candidates. Do not promote the public feed to runtime TCC or claim historical-618 membership without evidence.",
+  "evidence": "data/spain_reve/reve_public_web_probe.json",
+  "updatedAt": "2026-09-13T16:47:00Z"
+}

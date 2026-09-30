@@ -1,0 +1,19 @@
+{
+  "country":"ES",
+  "integrationStatus":"PRE_INTEGRATION_ONLY",
+  "generatedAt":"2026-09-16T00:40:00Z",
+  "legacyWorkLabelCount":618,
+  "historicalMembershipClaimed":false,
+  "source":"persisted REVE public-web national sweep + durable public/official research",
+  "labels":[
+    {"canonicalName":"Montmeló","status":"partial","reason":"Current REVE web label is nominative. The municipality's current charging page confirms the municipal station, payment via EVCharge and that cost is governed by fiscal ordinance 18. A municipal 2021 notice published 0.35 EUR/kWh, but this historical numeric amount is not extrapolated to 2026 without current ordinance extraction."},
+    {"canonicalName":"Móra d'Ebre","status":"setAside","reason":"Current REVE web label is nominative and public charging infrastructure is observable, but no durable first-party current numeric tariff authority was established in this first pass. Third-party station prices were not promoted."},
+    {"canonicalName":"Móra la Nova","status":"setAside","reason":"Current REVE web label is nominative and public charging infrastructure is observable, but no durable first-party current numeric tariff authority was established in this first pass. Third-party station data were not promoted."},
+    {"canonicalName":"Motor Box Mallorca SL","status":"setAside","reason":"Current REVE web label is nominative. First-pass research did not establish a durable first-party current numeric EV charging tariff authority; no identity or tariff was inferred beyond the observed label."},
+    {"canonicalName":"Movilidad Eléctrica Gran Canaria","status":"partial","reason":"Official Consejo Insular de la Energía source updated 2026-08-19 confirms the active island charging network, app/web operation and that tariffs are in force; a 2026 official announcement confirms 0.25 EUR/kWh for the new Tafira fast chargers. This station-specific amount is not extrapolated network-wide, so current per-station tariff mapping remains required."}
+  ],
+  "countsAfter":{"sourceValidated":64,"partial":64,"active":102,"setAside":224,"excludedPlatform":3,"supersededAlias":68,"total":525},
+  "firstPass":{"minimumTraversed":525,"maximumHistoricalUnreconstructedOrNeverTraversed":93,"firstPassComplete":false},
+  "coherence":{"legacyWorkLabelCountPreserved":true,"syntheticHistoricalMembershipCreated":false,"thirdPartyTariffPromoted":false,"difficultCaseReauditPerformed":false,"result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "nextAction":"Continue with next genuinely new nominatively recoverable labels from the persisted 445-label REVE public-web sweep before difficult-case reaudit."
+}

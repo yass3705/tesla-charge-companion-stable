@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-10-run54",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "newNeverTraversedLabels": 0,
+    "note": "No historical label was fabricated or re-audited. A mandatory coherence review found that the five labels recorded in run52 are shorter historical label variants of CPO identities already traversed in run11; they remain valid first-pass label decisions but must be classified as supersededAlias rather than as five additional independent CPO decisions."
+  },
+  "coherenceCorrection": {
+    "type": "RUN52_ALIAS_RECLASSIFICATION",
+    "evidence": [
+      "docs/spain-cpo-progress-batches/2026-09-07-run11.json",
+      "docs/spain-cpo-progress-batches/2026-09-10-run52.json",
+      "data/spain_reve/operator_aliases_es.json"
+    ],
+    "aliasesResolved": [
+      {
+        "label": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP",
+        "canonical": "LOGISTICA DE CARBURANTES PETROLIFEROS GROUP, S.L.",
+        "priorRun52Status": "setAside"
+      },
+      {
+        "label": "MAKSU ESPAÑA",
+        "canonical": "MAKSU ESPAÑA SL / Telpark",
+        "priorRun52Status": "platformExcluded"
+      },
+      {
+        "label": "Marbella Premium",
+        "canonical": "Marbella Premium SL",
+        "priorRun52Status": "setAside"
+      },
+      {
+        "label": "MED PLAYA MANAGEMENT",
+        "canonical": "MED PLAYA MANAGEMENT, SLU",
+        "priorRun52Status": "setAside"
+      },
+      {
+        "label": "MOEVE COMMERCIAL",
+        "canonical": "Moeve",
+        "priorRun52Status": "sourceValidated"
+      }
+    ],
+    "firstPassTraversalEffect": 0,
+    "reasonTraversalUnchanged": "The five short labels are distinct historical queue labels that did receive a first-pass decision in run52; only their category/canonical-identity interpretation is corrected.",
+    "countAdjustments": {
+      "sourceValidated": -1,
+      "partial": 0,
+      "active": 0,
+      "setAside": -3,
+      "platformExcluded": -1,
+      "supersededAlias": 5,
+      "total": 0
+    },
+    "countsAfter": {
+      "sourceValidated": 28,
+      "partial": 8,
+      "active": 87,
+      "setAside": 154,
+      "platformExcluded": 3,
+      "supersededAlias": 66,
+      "total": 346
+    }
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false
+  },
+  "reveTariffStatus": {
+    "batchLaunched": true,
+    "launchMethod": "rerun last successful workflow job",
+    "workflowRunId": 34446412330,
+    "rerunJobId": 102788466199,
+    "generatedAt": "2026-09-10T07:46:22.310439Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "http429Count": 0,
+    "locationsRequests": 0,
+    "pagesCollectedThisBatch": {
+      "tariffs": [80, 81, 82],
+      "status": [54, 55]
+    },
+    "newRows": {
+      "tariffs": 262,
+      "status": 198
+    },
+    "updatedRows": {
+      "tariffs": 0,
+      "status": 0
+    },
+    "persistentStateAfter": {
+      "nextTariffPage": 83,
+      "tariffPagesCollected": 82,
+      "tariffRowsStored": 7905,
+      "tariffTotalPages": 462,
+      "nextStatusPage": 56,
+      "statusPagesCollected": 55,
+      "statusRowsStored": 4810,
+      "statusTotalPages": 447
+    },
+    "quotaConsumedForCurrentHour": true,
+    "secondBatchForbiddenThisWindow": true,
+    "locationsCollectionRestarted": false
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AFTER_ALIAS_CORRECTION",
+    "mandatoryCadenceCheckPerformed": true,
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
+    "countsDeriveExactly": true,
+    "run52DuplicateCanonicalIdentitiesCorrected": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "investigationCurrent": "Current 148-CPO REVE snapshot is already first-pass covered. Continue mining only preserved historical identity cues for genuinely never-traversed labels; treat newly recovered spelling/legal-name variants as aliases when they map to an already traversed canonical CPO. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T07:48:00Z"
+}

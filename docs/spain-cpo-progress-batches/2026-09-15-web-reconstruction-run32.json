@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 32,
+  "generatedAt": "2026-09-15T13:39:00Z",
+  "source": "persisted REVE public-web national sweep + official/public CPO research",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "previousMinimumTraversed": 505,
+  "newNominativeDecisions": 5,
+  "minimumTraversed": 510,
+  "maximumNeverTraversed": 108,
+  "decisions": [
+    {"label":"Ajuntament de Corçà","status":"setAside","reason":"Official municipal energy-transition pages were located, but no current public numeric EV-charging tariff was found in first pass.","evidence":["https://corca.cat/serveis/transicio-energetica/"]},
+    {"label":"AJUNTAMENT DE COSTITX","status":"partial","reason":"Municipal charging point is evidenced; March 2024 reporting states Costitx was still not charging users, but no durable 2026 municipal tariff/free-service authority was found, so the 2024 condition is not extrapolated.","evidence":["https://ajcostitx.net/es/tipus-de-contractes/obras","https://www.totpla.cat/2024/03/16/els-cotxes-electrics-ja-no-tendran-recarrega-gratuita-a-la-majoria-de-pobles/"]},
+    {"label":"Ajuntament de Cunit","status":"partial","reason":"Official February 2026 municipal source confirms eight public charging points after expansion, but does not publish a charging tariff. Parking-zone prices are not promoted as charging prices.","evidence":["https://www.cunit.cat/cunit-amplia-la-xarxa-publica-de-recarrega-amb-dos-nous-punts-per-a-vehicles-electrics/"]},
+    {"label":"AJUNTAMENT DE EL MORELL","status":"sourceValidated","reason":"Official municipal public-price ordinance remains published in the fiscal-ordinance portal and specifies station-level prices: Av. Camí de Reus 0.3400 EUR/kWh; Av. Catalunya 0.2900 EUR/kWh.","evidence":["https://seu-e.cat/ca/web/elmorell/govern-obert-i-transparencia/accio-de-govern-i-normativa/normativa-plans-i-programes/ordenances-fiscals","https://seu-e.cat/documents/1458514/16760799/09_Anunci_Aprovacio_def_Orden%C3%A7a_fiscal_recarrega_VE.pdf/269a9043-4569-427f-8e14-3f7506a3cd6d"]},
+    {"label":"Ajuntament de Folgueroles","status":"partial","reason":"Official municipal source confirms the charging point and that charging was temporarily free when launched in May 2023; no current 2026 numeric/free tariff authority was found, so the launch condition is not extrapolated.","evidence":["https://www.folgueroles.cat/actualitat/noticies/folgueroles-ja-disposa-dun-punt-de-recarrega-de-vehicles-electrics.html"]}
+  ],
+  "coherence": {"countsDeriveExactly":true,"syntheticHistoricalMembershipCreated":false,"difficultCaseReauditPerformed":false,"legacyWorkLabelCountPreserved":true}
+}

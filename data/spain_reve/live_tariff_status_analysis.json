@@ -1,0 +1,1112 @@
+{
+  "country": "ES",
+  "diagnostics": {
+    "evseCountReconciliation": "42,180 EVSE objects are present in /locations; identifier coverage and duplicate-key counts are reported separately so 42,174 identifiers are not mistaken for the object total.",
+    "liveStatusMinusSnapshotEvseObjects": 2426,
+    "note": "Live /evses/operational_status total-count is not assumed equivalent to EVSE objects embedded in the paginated /locations snapshot; the difference remains diagnostic until lifecycle/duplication semantics are reconciled.",
+    "operationalStatusSemantics": "The bulk /evses/operational_status feed exposes a boolean operational_status. It is preserved raw here. This audit does not yet equate false with a TCC display status; targeted /evses/{evse_id}/status returns the separate OCPI-style availability state."
+  },
+  "gates": {
+    "evseObjectVsIdentifierCountReconciled": true,
+    "operationalStatusBooleanPreserved": true,
+    "probeTransportValidated": true,
+    "runtimePublishReady": false,
+    "statusSchemaValidated": true,
+    "tariffSchemaValidated": true,
+    "threeRepresentativeStatusChecksValidated": true
+  },
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "liveFeeds": {
+    "operationalStatus": {
+      "isBooleanFieldInSample": true,
+      "sampleMatchPct": 100.0,
+      "sampleMatchedToLocationSnapshot": 100,
+      "sampleRows": 100,
+      "samples": [
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Madrid",
+            "internalEvseId": "b7cb0aa9-27c0-4a34-9ee2-c96a241c022b",
+            "locationId": "08d0352b-2992-4811-8c8f-1bb3bd59fa33",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQEGRP3F11",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQEGRP3F11",
+            "id": "b7cb0aa9-27c0-4a34-9ee2-c96a241c022b",
+            "last_operational_status_updated": "2026-09-07T11:06:01.384Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Madrid",
+            "internalEvseId": "977373b7-e138-4020-8f72-84ec980be68e",
+            "locationId": "08d0352b-2992-4811-8c8f-1bb3bd59fa33",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQEGRP3F12",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQEGRP3F12",
+            "id": "977373b7-e138-4020-8f72-84ec980be68e",
+            "last_operational_status_updated": "2026-09-07T01:19:05.703Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Onda",
+            "internalEvseId": "223b0721-cfa8-4b6f-b208-9a11ee791148",
+            "locationId": "1590fbb0-901d-48b4-b1a1-8c2bcbf15781",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQEGH4W411",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQEGH4W411",
+            "id": "223b0721-cfa8-4b6f-b208-9a11ee791148",
+            "last_operational_status_updated": "2026-09-06T17:27:07.501Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Getafe",
+            "internalEvseId": "221c950c-6b23-4f89-b495-4276a678a1f8",
+            "locationId": "eb763222-31db-4db0-b9f2-0f295eaf4fc1",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE3X76H22",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQE3X76H22",
+            "id": "221c950c-6b23-4f89-b495-4276a678a1f8",
+            "last_operational_status_updated": "2026-09-07T10:59:56.521Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Getafe",
+            "internalEvseId": "35f16260-e636-438b-b8b9-23a1ada4f701",
+            "locationId": "eb763222-31db-4db0-b9f2-0f295eaf4fc1",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE3X76H21",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQE3X76H21",
+            "id": "35f16260-e636-438b-b8b9-23a1ada4f701",
+            "last_operational_status_updated": "2026-09-07T02:14:56.807Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Onda",
+            "internalEvseId": "9cad721f-209b-4399-b93c-9faab3e72158",
+            "locationId": "58352f49-dfd0-40b8-bfd7-96b9b21764ec",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQEJH56M21",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQEJH56M21",
+            "id": "9cad721f-209b-4399-b93c-9faab3e72158",
+            "last_operational_status_updated": "2026-08-23T17:09:28.576Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Corvera de Asturias",
+            "internalEvseId": "9011d9ce-9dbb-4e38-ba0f-be80dca8dd24",
+            "locationId": "8bcf6ea7-0bbf-4bb2-b861-7a7dcca39249",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE47XJ911",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQE47XJ911",
+            "id": "9011d9ce-9dbb-4e38-ba0f-be80dca8dd24",
+            "last_operational_status_updated": "2026-09-07T11:46:36.909Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Corvera de Asturias",
+            "internalEvseId": "7335f173-cb7b-4453-98a7-e59a615a3f7f",
+            "locationId": "8bcf6ea7-0bbf-4bb2-b861-7a7dcca39249",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE47XJ912",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQE47XJ912",
+            "id": "7335f173-cb7b-4453-98a7-e59a615a3f7f",
+            "last_operational_status_updated": "2026-09-07T12:03:28.944Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Puente San Miguel",
+            "internalEvseId": "03fb98f0-9540-421b-ba3c-b867810b6575",
+            "locationId": "51819b57-4b43-4fc8-a211-f7ff357d31e0",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE2GM2W12",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQE2GM2W12",
+            "id": "03fb98f0-9540-421b-ba3c-b867810b6575",
+            "last_operational_status_updated": "2026-09-06T22:12:42.217Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Puente San Miguel",
+            "internalEvseId": "e5d08d33-0e4f-4a5d-8f55-c06fa4fc82c4",
+            "locationId": "51819b57-4b43-4fc8-a211-f7ff357d31e0",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQE2GM2W11",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQE2GM2W11",
+            "id": "e5d08d33-0e4f-4a5d-8f55-c06fa4fc82c4",
+            "last_operational_status_updated": "2026-09-07T01:38:44.973Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Onda",
+            "internalEvseId": "11001c52-4483-457f-9468-42e3c1ef457a",
+            "locationId": "c5e1ead9-f718-4654-8474-a07d54218a7c",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQEWX29V31",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQEWX29V31",
+            "id": "11001c52-4483-457f-9468-42e3c1ef457a",
+            "last_operational_status_updated": "2026-09-06T23:48:49.422Z",
+            "operational_status": true
+          }
+        },
+        {
+          "context": {
+            "canonicalOperator": null,
+            "city": "Madrid",
+            "internalEvseId": "905a4935-c952-4f28-b7a5-5364fc04f618",
+            "locationId": "a4127786-984f-448e-bc64-7f8a4725a6c5",
+            "locationName": null,
+            "partyId": "AEQ",
+            "publicEvseId": "ESAEQEX4F6H121",
+            "rawCpoName": "QWELLO España SL"
+          },
+          "matchedSnapshot": true,
+          "normalizedOperationalStatusKey": "TRUE",
+          "raw": {
+            "evse_id": "ESAEQEX4F6H121",
+            "id": "905a4935-c952-4f28-b7a5-5364fc04f618",
+            "last_operational_status_updated": "2026-09-07T11:26:12.248Z",
+            "operational_status": true
+          }
+        }
+      ],
+      "statusValues": {
+        "FALSE": 1,
+        "TRUE": 99
+      },
+      "targetOperatorRows": {},
+      "totalCount": 44606,
+      "totalPages": 447
+    },
+    "tariffs": {
+      "complexRows": 59,
+      "componentTypes": {
+        "CONGESTION_TIME": 2,
+        "ENERGY": 97,
+        "FLAT": 33,
+        "PARKING_TIME": 27,
+        "TIME": 6
+      },
+      "currencies": {
+        "EUR": 100
+      },
+      "restrictionKeys": {
+        "day_of_week": 14,
+        "end_date": 4,
+        "end_time": 14,
+        "max_duration": 25,
+        "max_power": 11,
+        "min_congestion_threshold": 2,
+        "min_duration": 25,
+        "min_vehicle_soc": 2,
+        "reservation": 31,
+        "start_date": 6,
+        "start_time": 14
+      },
+      "sampleMatchPct": 91.0,
+      "sampleMatchedToLocationSnapshot": 91,
+      "sampleRows": 100,
+      "samples": [
+        {
+          "connectorId": "000272da-498b-4223-b0aa-acf8962c41b6",
+          "context": {
+            "canonicalOperator": "Iberdrola | bp pulse",
+            "city": "BENICARLO",
+            "internalEvseId": "a4def383-9e38-4f28-b35f-07579389c045",
+            "locationId": "61f3b335-802a-49c2-893e-beb046e89e44",
+            "locationName": "E-CS-Benicarlo-004",
+            "partyId": "IBD",
+            "publicEvseId": "ES*IBD*E144768*2",
+            "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+          },
+          "evseReference": "a4def383-9e38-4f28-b35f-07579389c045",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0004459b-77e5-4cc6-a8ca-43fee142a9c3",
+          "context": {
+            "canonicalOperator": "Iberdrola | bp pulse",
+            "city": "GRANADA",
+            "internalEvseId": "a767302c-5156-4c81-9710-85452a71207b",
+            "locationId": "8cea80a4-bd4d-4126-af43-fad16ac4887b",
+            "locationName": "E-GR-Granada-008",
+            "partyId": "IBD",
+            "publicEvseId": "ES*IBD*E144002*1",
+            "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+          },
+          "evseReference": "a767302c-5156-4c81-9710-85452a71207b",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00046b92-f172-4560-a948-ea12a5bd58ab",
+          "context": {
+            "canonicalOperator": "Moeve",
+            "city": "Ameyugo",
+            "internalEvseId": "65ea8b40-fdbe-4044-9cdb-94f3cdfc0a74",
+            "locationId": "01b04054-4d64-476a-baec-eaa9a95ebfa0",
+            "locationName": "MOEVE-ES317160-AMEYUGO I",
+            "partyId": "MOE",
+            "publicEvseId": "ES*MOE*E62522016340020*02",
+            "rawCpoName": "MOEVE COMMERCIAL, SAU"
+          },
+          "evseReference": "65ea8b40-fdbe-4044-9cdb-94f3cdfc0a74",
+          "lastTariffUpdated": "2026-06-01T13:28:02.355Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0004c863-0a9b-4727-8256-b703df768bfc",
+          "context": null,
+          "evseReference": "65a1653e-b302-43da-9f48-19a520ac9159",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "matchedSnapshot": false,
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0009df11-f2de-42e7-95f4-e76d02d0619a",
+          "context": {
+            "canonicalOperator": null,
+            "city": "San Fernando",
+            "internalEvseId": "4d0c1e40-ac20-4ee5-be62-ffd28d938360",
+            "locationId": "68db0ee0-9d74-47b9-aa42-40f181d930f8",
+            "locationName": "ACCIONA - Cádiz - Centro Comercial Bahía Sur (San Fernando)",
+            "partyId": "ARE",
+            "publicEvseId": "ES*ARE*E28FP9RS30XKSDE4AVUHS",
+            "rawCpoName": "ACCIONA Recarga"
+          },
+          "evseReference": "4d0c1e40-ac20-4ee5-be62-ffd28d938360",
+          "lastTariffUpdated": "2025-12-04T10:06:58.239Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 2,
+            "componentTypes": [
+              "ENERGY",
+              "TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000a1483-52f2-42b7-915e-86db44ba2f6b",
+          "context": {
+            "canonicalOperator": "Zunder",
+            "city": "Vitoria-Gasteiz",
+            "internalEvseId": "f7dee41a-56cb-402f-a2ad-b6b71c56d734",
+            "locationId": "460bd63f-5a1e-481a-aa76-72bbb5909fe1",
+            "locationName": "Vitoria-Gasteiz - Calle Juan Gris",
+            "partyId": "ZUN",
+            "publicEvseId": "ES*ZUN*E0114ER2",
+            "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+          },
+          "evseReference": "f7dee41a-56cb-402f-a2ad-b6b71c56d734",
+          "lastTariffUpdated": "2025-03-05T10:55:02.828Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000d8045-87fd-4fb5-be88-30c380a089d0",
+          "context": {
+            "canonicalOperator": null,
+            "city": "Barcelona",
+            "internalEvseId": "531fdc2a-b9d4-4636-849f-e39d61552923",
+            "locationId": "d77373b0-dd31-43d6-9f5a-b313e2885e13",
+            "locationName": "Mapfre CUBS Sant Cugat (CUT1)",
+            "partyId": "ETE",
+            "publicEvseId": "ES*ETE*E449910",
+            "rawCpoName": "Etecnic Movilidad Electrica, SRL"
+          },
+          "evseReference": "531fdc2a-b9d4-4636-849f-e39d61552923",
+          "lastTariffUpdated": "2026-05-28T08:07:23.573Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000dadd9-725c-433f-9722-c89a339a41e8",
+          "context": {
+            "canonicalOperator": "Endesa X Way",
+            "city": "Ledesma",
+            "internalEvseId": "c1e318b0-4e4e-4927-b0a1-66b82c55fb30",
+            "locationId": "e10322d4-f71e-4a99-943c-a9288b33ad73",
+            "locationName": "22XP22T3KKJAK00160",
+            "partyId": "ESX",
+            "publicEvseId": "ES*ESX*E22XP22T3KKJAK00160*2",
+            "rawCpoName": "ENDESA X WAY, S.L."
+          },
+          "evseReference": "c1e318b0-4e4e-4927-b0a1-66b82c55fb30",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000ddec5-7c16-4eb6-98ec-c54ea6bdeb9f",
+          "context": {
+            "canonicalOperator": "Repsol",
+            "city": "Galdakao",
+            "internalEvseId": "c6462a20-5c05-437a-9182-b6417b9ef9f9",
+            "locationId": "ca09938d-d2de-48c5-bccf-1782e9dfc816",
+            "locationName": "Repsol, Hospital Galdakao, túnel trabajadores",
+            "partyId": "REP",
+            "publicEvseId": "ES*REP*E3350*1",
+            "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+          },
+          "evseReference": "c6462a20-5c05-437a-9182-b6417b9ef9f9",
+          "lastTariffUpdated": "2025-12-01T00:00:03.599Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000e1ecf-aa4a-4719-ae24-55e14a727c6b",
+          "context": {
+            "canonicalOperator": "Repsol",
+            "city": "Monforte de Lemos",
+            "internalEvseId": "9964933b-5b4b-4ed3-a32d-1e8e88e9fcde",
+            "locationId": "38296838-6237-4e15-87a7-f8c3ee84db76",
+            "locationName": "Repsol ES, Combustibles As Fontes S.L.",
+            "partyId": "REP",
+            "publicEvseId": "ES*REP*E16067*1",
+            "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+          },
+          "evseReference": "9964933b-5b4b-4ed3-a32d-1e8e88e9fcde",
+          "lastTariffUpdated": "2025-12-01T00:00:03.492Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000ebc75-b38a-48ca-aac1-31f61eb4f2c6",
+          "context": {
+            "canonicalOperator": null,
+            "city": "Ayamonte",
+            "internalEvseId": "31c25c97-cb93-4f00-bc17-4f1993c7243d",
+            "locationId": "a971e4ef-3b96-43b7-a01f-95221d5956a4",
+            "locationName": "Hotel Vila Galé Ayamonte",
+            "partyId": "GFX",
+            "publicEvseId": "ES*GFX*E00937*1",
+            "rawCpoName": "EDP CLIENTES SAU"
+          },
+          "evseReference": "31c25c97-cb93-4f00-bc17-4f1993c7243d",
+          "lastTariffUpdated": "2026-09-03T02:23:46.617Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 8,
+            "componentTypes": [
+              "ENERGY",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 4,
+            "restrictionKeys": [
+              "end_date",
+              "start_date"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "000f497a-2884-4493-8086-16ee43b2d7f7",
+          "context": {
+            "canonicalOperator": "Repsol",
+            "city": "Madrid",
+            "internalEvseId": "7632a756-910b-4130-9872-20a9432a027b",
+            "locationId": "f4397c04-cac1-48b1-bde1-f903c7f43ccf",
+            "locationName": "Repsol ES, G. El Pilar",
+            "partyId": "REP",
+            "publicEvseId": "ES*REP*E13611*1",
+            "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+          },
+          "evseReference": "7632a756-910b-4130-9872-20a9432a027b",
+          "lastTariffUpdated": "2025-12-01T00:00:03.492Z",
+          "matchedSnapshot": true,
+          "shape": {
+            "componentCount": 1,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 1,
+            "restrictionKeys": [],
+            "simpleEnergyOnly": true,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "simpleEnergyOnlyRows": 41,
+      "targetOperatorRows": {
+        "Endesa X Way": 10,
+        "Eranovum": 2,
+        "Iberdrola | bp pulse": 22,
+        "Moeve": 3,
+        "Powerdot": 2,
+        "Repsol": 17,
+        "Wenea": 2,
+        "Zunder": 5
+      },
+      "totalCount": 46773,
+      "totalPages": 468,
+      "unmatchedRows": [
+        {
+          "connectorId": "0004c863-0a9b-4727-8256-b703df768bfc",
+          "evseReference": "65a1653e-b302-43da-9f48-19a520ac9159",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00303954-f75b-4141-b16c-3ef3303984d5",
+          "evseReference": "ec70f99d-6665-4b1e-aa28-a3c4a2895f55",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00332ae1-505f-4937-9d08-9f93a3f530a5",
+          "evseReference": "882ab065-f2e6-4bc9-91bc-7870f7051ff4",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "005c439f-30bd-4e2d-9d07-f138109dc665",
+          "evseReference": "c3d50c73-d7f2-4bd1-99a8-104c233f8705",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 3,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 3,
+            "restrictionKeys": [
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0064f6bd-1d15-437a-a693-a4585b6b1e7c",
+          "evseReference": "a0f84f04-80ef-4191-a375-6105eaa4ef1e",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "007ab1b7-7540-456e-845d-3030004bbda4",
+          "evseReference": "aece86f4-8ce2-4e22-bc93-03ca9daf9bee",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "007f7ffe-da61-416b-8542-cb977698f0d2",
+          "evseReference": "03b657c0-d930-4cfa-a75e-ba64b2d931bb",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "0085a5d3-dd41-49ee-aa5b-40690ae53dc9",
+          "evseReference": "e85361bd-d314-41b3-a01b-69810d32bd91",
+          "lastTariffUpdated": "2025-12-17T10:45:16.085Z",
+          "shape": {
+            "componentCount": 5,
+            "componentTypes": [
+              "ENERGY",
+              "FLAT",
+              "PARKING_TIME"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 5,
+            "restrictionKeys": [
+              "max_duration",
+              "min_duration",
+              "reservation"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        },
+        {
+          "connectorId": "00919cf3-0bbe-4e18-952c-2efb8c55b743",
+          "evseReference": "ad450d06-29e8-4bdd-9073-977ab80582d4",
+          "lastTariffUpdated": "2026-07-31T12:08:47.762Z",
+          "shape": {
+            "componentCount": 9,
+            "componentTypes": [
+              "ENERGY"
+            ],
+            "currencies": [
+              "EUR"
+            ],
+            "elementCount": 9,
+            "restrictionKeys": [
+              "day_of_week",
+              "end_time",
+              "max_power",
+              "start_time"
+            ],
+            "simpleEnergyOnly": false,
+            "tariffCount": 1
+          },
+          "temporal": {
+            "allExpired": false,
+            "hasActiveOrUnbounded": true,
+            "hasFuture": false,
+            "states": [
+              "ACTIVE_OR_UNBOUNDED"
+            ]
+          }
+        }
+      ],
+      "unmatchedSampleRows": 9
+    }
+  },
+  "networkRequests": 0,
+  "nextGate": "Continue tariff/status pagination under the 5-requests/hour REVE budget, preserve complex tariff components/restrictions, investigate unmatched tariff lifecycle rows, and cross-check the remaining representative CPOs before runtime publication.",
+  "probeComplete": true,
+  "probeGeneratedAt": "2026-09-07T12:23:49.189094Z",
+  "schemaVersion": 2,
+  "snapshot": {
+    "duplicateInternalIdKeys": 0,
+    "duplicatePublicIdKeys": 129,
+    "evseObjectsObserved": 42180,
+    "evsesMissingInternalId": 6,
+    "evsesMissingPublicId": 6,
+    "evsesWithInternalId": 42174,
+    "evsesWithPublicId": 42174,
+    "locations": 13648,
+    "uniqueInternalEvseIds": 42174,
+    "uniquePublicEvseIds": 42045
+  },
+  "source": "REVE",
+  "targetedStatusChecks": [
+    {
+      "evseId": "ES*IBD*E135326*1",
+      "httpStatus": 200,
+      "internalId": "0c5427b3-c5d2-4822-902e-3ba40e887722",
+      "lastStatusUpdated": "2026-09-07T09:48:34.775Z",
+      "operator": "Iberdrola | bp pulse",
+      "status": "AVAILABLE"
+    },
+    {
+      "evseId": "ES*ESX*E61948051050013*1",
+      "httpStatus": 200,
+      "internalId": "1e7e9865-d22e-40be-820a-89aa8c559c7e",
+      "lastStatusUpdated": "2026-09-07T10:48:58.156Z",
+      "operator": "Endesa X Way",
+      "status": "AVAILABLE"
+    },
+    {
+      "evseId": "ES*REP*E15141*1",
+      "httpStatus": 200,
+      "internalId": "a329cf94-36cc-4668-ab2f-0bf8ed6eb52e",
+      "lastStatusUpdated": "2026-09-06T18:48:37.721Z",
+      "operator": "Repsol",
+      "status": "AVAILABLE"
+    }
+  ]
+}

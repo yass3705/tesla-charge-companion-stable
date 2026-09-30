@@ -1,0 +1,19 @@
+{
+  "country":"ES",
+  "integrationStatus":"PRE_INTEGRATION_ONLY",
+  "generatedAt":"2026-09-16T12:38:00Z",
+  "legacyWorkLabelCount":618,
+  "historicalMembershipClaimed":false,
+  "source":"persisted REVE public-web national sweep + durable public/official research",
+  "labels":[
+    {"canonicalName":"Navarra te recarga","status":"active","reason":"Nominative public-web label. Official Navarra material confirms the platform manages public charging points, payments and availability; no network-wide numeric tariff is inferred because pricing remains point/authority specific."},
+    {"canonicalName":"Navàs","status":"sourceValidated","reason":"Nominative public-web label. Durable municipal tariff evidence establishes an official charging tariff with time-of-use values; station-specific/public authority provenance retained without claiming historical-618 membership."},
+    {"canonicalName":"Olost","status":"partial","reason":"Nominative public-web label. Public charging infrastructure is confirmed, but the located free-charging evidence dates from launch-era material and is not extrapolated to 2026."},
+    {"canonicalName":"Palau-solità i Plegamans","status":"sourceValidated","reason":"Nominative public-web label. Municipal material publishes station-specific charging prices for the local public chargers; retained as station-level source evidence without extrapolating beyond the published scope."}
+  ],
+  "countsAfter":{"sourceValidated":66,"partial":65,"active":104,"setAside":228,"excludedPlatform":3,"supersededAlias":68,"total":534},
+  "firstPass":{"minimumTraversed":534,"maximumHistoricalUnreconstructedOrNeverTraversed":84,"firstPassComplete":false},
+  "coherence":{"legacyWorkLabelCountPreserved":true,"syntheticHistoricalMembershipCreated":false,"thirdPartyTariffPromoted":false,"difficultCaseReauditPerformed":false,"result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "reveWeb":{"endpoint":"POST /api/public/v1/locations","persistedSweep":"pages 1-600 x25","matchedStations":11212,"uniqueReveLocationIds":10493,"uniqueOperatorLabels":445,"paginationAnomalyObserved":false},
+  "nextAction":"Continue with next genuinely new nominatively recoverable labels from the persisted 445-label REVE public-web sweep before difficult-case reaudit."
+}

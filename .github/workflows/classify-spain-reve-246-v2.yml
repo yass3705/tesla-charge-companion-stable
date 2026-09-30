@@ -1,0 +1,88 @@
+name: Classify Spain REVE 246 v2
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/classify_246_v2_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - name: Reclassify against persisted historical evidence
+        run: |
+          python <<'PY'
+          import json,re,unicodedata,difflib
+          from pathlib import Path
+          def norm(s):
+            s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
+            s=re.sub(r'\b(ajuntament|ayuntamiento|aj|ayto)\b',' ',s)
+            s=re.sub(r'\b(sociedad anonima|sociedad limitada|sau|slu|sl|sa)\b',' ',s)
+            toks=re.findall(r'[a-z0-9]+',s)
+            out=[]
+            for t in toks:
+              if not out or out[-1]!=t: out.append(t)
+            return ' '.join(out)
+          src=json.loads(Path('docs/spain-reve-246-classification.json').read_text())
+          candidates=[x['label'] for x in src.get('entries',[]) if x.get('classification')=='candidateCpo']
+          evidence=set()
+          keys={'canonicalName','canonical','name','label','reveLabel','rawLabel','cpo','cpoName','operator','operatorName'}
+          def walk(v,k=None):
+            if isinstance(v,dict):
+              for kk,vv in v.items(): walk(vv,kk)
+            elif isinstance(v,list):
+              for x in v: walk(x,k)
+            elif isinstance(v,str) and k in keys and 2<len(v)<180:
+              evidence.add(v)
+          for p in Path('docs/spain-cpo-progress-batches').glob('*.json'):
+            try: walk(json.loads(p.read_text()))
+            except: pass
+          # include manually adjudicated historical canonicals
+          coh=Path('docs/spain-cpo-progress-batches/2026-09-16-coherence-dedup-and-reve445-first-pass.json')
+          if coh.exists():
+            try:
+              c=json.loads(coh.read_text())
+              for _,v in c.get('manualAdjudications',{}).items():
+                if isinstance(v,list) and v and v[0]=='representedHistorical' and len(v)>1: evidence.add(v[1])
+            except: pass
+          en={norm(x):x for x in evidence if norm(x)}
+          platforms={'tesla','totalenergies','wenea','zunder','repsol','telpark','powergo','powy','prio','qwello'}
+          out=[]
+          for label in candidates:
+            n=norm(label)
+            if any(p in n for p in platforms):
+              p=next(p for p in platforms if p in n); out.append({'label':label,'classification':'representedPlatform','match':p,'method':'explicit_platform'}); continue
+            if n in en:
+              out.append({'label':label,'classification':'representedHistorical','match':en[n],'method':'exact_normalized'}); continue
+            best=[]
+            for k,v in en.items():
+              r=difflib.SequenceMatcher(None,n,k).ratio()
+              a=set(n.split()); b=set(k.split()); jac=len(a&b)/max(1,len(a|b))
+              score=max(r,jac)
+              if score>=0.78: best.append((score,r,jac,v,k))
+            best.sort(reverse=True)
+            if best and best[0][0]>=0.95 and (len(best)==1 or best[0][0]-best[1][0]>=0.04):
+              out.append({'label':label,'classification':'representedHistorical','match':best[0][3],'method':'high_confidence_similarity','score':round(best[0][0],4)})
+            elif best and best[0][0]>=0.84:
+              out.append({'label':label,'classification':'manualReview','match':best[0][3],'method':'possible_historical','score':round(best[0][0],4)})
+            else:
+              out.append({'label':label,'classification':'candidateCpo','match':None,'method':'no_persisted_historical_match'})
+          # retain platform item(s) from v1
+          for x in src.get('entries',[]):
+            if x.get('classification')=='representedPlatform': out.append({'label':x['label'],'classification':'representedPlatform','match':x.get('canonicalOrPlatform'),'method':'v1_explicit_platform'})
+          counts={}
+          for x in out: counts[x['classification']]=counts.get(x['classification'],0)+1
+          res={'schemaVersion':2,'country':'ES','mode':'IDENTITY_CLASSIFICATION_NO_TARIFF','input':len(out),'counts':counts,'complete':len(out)==246,'entries':out,'runtimePublishReady':False}
+          Path('docs/spain-reve-246-classification-v2.json').write_text(json.dumps(res,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({'input':len(out),'counts':counts,'complete':res['complete']},indent=2))
+          PY
+      - name: Persist
+        run: |
+          git add docs/spain-reve-246-classification-v2.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): persist REVE 246 classification v2"
+          git pull --rebase origin spain-reve-preintegration
+          git push

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T07:42:18Z",
+  "firstPass": {
+    "previousMinimumTraversed": 194,
+    "newNominativeDecisions": 10,
+    "minimumTraversed": 204,
+    "maximumNeverTraversed": 414,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; resolve explicit repository aliases that had not yet received an individual post-reconstruction decision, without reopening set-aside CPOs or re-auditing tariffs"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 17,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 51,
+    "total": 204
+  },
+  "decisions": [
+    {"canonicalName":"Repsol","label":"REPSOL","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run13.json"],"model":"brand alias -> source-validated Repsol canonical identity; no tariff re-audit","coverageKnown":"Canonical Repsol identity and direct tariff model were already source-validated; this decision only normalizes the historical label.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Moeve","label":"MOEVE","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"brand alias -> Moeve canonical identity; canonical direct-pricing model unchanged","coverageKnown":"Alias normalization only; no numeric tariff inherited or extrapolated.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Powerdot","label":"POWERDOT","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"brand alias -> Powerdot canonical identity; station/connector pricing remains separate","coverageKnown":"Alias normalization only; no direct price inferred from the brand label.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"EDP","label":"EDP","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"brand alias -> EDP canonical identity; direct CPO pricing remains separate from roaming/eMSP","coverageKnown":"Current REVE coverage already evidences EDP CLIENTES SAU; no tariff value copied by alias resolution.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Electra","label":"ELECTRA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"brand alias -> Electra canonical identity; canonical tariff handling unchanged","coverageKnown":"Current REVE identity is CHARG-ELECTRA SPAIN SL; no tariff inferred from alias normalization.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"IONITY","label":"IONITY","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"brand alias -> IONITY canonical station-level identity; no Spain-wide price inferred","coverageKnown":"Current REVE identity is IONITY GmbH Sucursal en España; location-dependent tariff handling remains unchanged.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Fastned","label":"FASTNED","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"brand alias -> Fastned canonical identity; no tariff re-audit","coverageKnown":"Current REVE identity is FASTNED ESPAÑA, S.L.; alias resolution does not create a tariff value.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Tesla","label":"TESLA SPAIN","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run14.json"],"model":"brand/country alias -> Tesla Spain canonical station/time-specific model","coverageKnown":"Tesla Spain remains runtime-sourced from the existing Tesla dataset; no Spain-wide price inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Telpark","label":"TELPARK","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"brand alias -> Telpark canonical identity; station-level direct charging pricing unchanged","coverageKnown":"Alias normalization only; no parking or eMSP price is substituted for direct charging price.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Telpark","label":"MAKSU ESPAÑA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"accented legal-name alias -> Telpark canonical identity; no tariff inherited","coverageKnown":"Explicit repository alias counterpart of MAKSU ESPANA; tariff handling remains station-level and unchanged.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T06:42:48.221999Z",
+    "batchLaunchedThisRun": false,
+    "reasonNoBatch": "At run start, less than one full real hour had elapsed since the latest successful live REVE batch; quota not consumed.",
+    "requestsAttemptedThisRun": 0,
+    "requestsSucceededThisRun": 0,
+    "locationsRequestsThisRun": 0,
+    "http429Count": 0,
+    "nextTariffPage": 29,
+    "tariffPagesCollected": 28,
+    "tariffRowsStored": 2800,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 20,
+    "statusPagesCollected": 19,
+    "statusRowsStored": 1810,
+    "statusTotalPages": 447
+  },
+  "canonicalReconstruction": {
+    "attemptedPreviously": true,
+    "complete": false,
+    "newEvidenceForRetryThisRun": false,
+    "action": "do not repeat the already-performed one-shot reconstruction without new evidence; preserve the documented 618-label queue and append-only nominative ledger"
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "pr50VerifiedDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 204,
+    "firstPassMinimumTraversed": 204,
+    "newBatchCountsDeriveExactly": true,
+    "newLabelsUniqueAgainstRuns15To19": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noTariffReauditForAliasResolution": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-10-run55",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "newNeverTraversedLabels": 0,
+    "note": "No new preserved historical identity cue could be recovered safely in this run. The 618-label historical queue remains authoritative only as a first-pass work queue; no synthetic label was created and no prior setAside/active case was re-audited without new evidence."
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "counts": {
+      "sourceValidated": 28,
+      "partial": 8,
+      "active": 87,
+      "setAside": 154,
+      "platformExcluded": 3,
+      "supersededAlias": 66,
+      "total": 346
+    }
+  },
+  "reveTariffStatus": {
+    "batchLaunched": true,
+    "launchMethod": "rerun last successful workflow job",
+    "workflowRunId": 34446412330,
+    "rerunJobId": 102822508608,
+    "generatedAt": "2026-09-10T09:43:49.646314Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "http429Count": 0,
+    "locationsRequests": 0,
+    "pagesCollectedThisBatch": {
+      "tariffs": [83, 84, 85],
+      "status": [56, 57]
+    },
+    "newRows": {
+      "tariffs": 261,
+      "status": 126
+    },
+    "updatedRows": {
+      "tariffs": 0,
+      "status": 2
+    },
+    "persistentStateAfter": {
+      "nextTariffPage": 86,
+      "tariffPagesCollected": 85,
+      "tariffRowsStored": 8166,
+      "tariffTotalPages": 461,
+      "nextStatusPage": 58,
+      "statusPagesCollected": 57,
+      "statusRowsStored": 4936,
+      "statusTotalPages": 448
+    },
+    "quotaConsumedForCurrentHour": true,
+    "secondBatchForbiddenThisWindow": true,
+    "locationsCollectionRestarted": false
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AFTER_ALIAS_CORRECTION",
+    "mandatoryCadenceCheckPerformed": false,
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "investigationCurrent": "Continue mining only preserved historical identity cues for genuinely never-traversed labels. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T09:44:00Z"
+}

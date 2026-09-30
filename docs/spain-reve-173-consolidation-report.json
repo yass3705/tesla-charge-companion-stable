@@ -1,0 +1,27 @@
+{
+  "country": "ES",
+  "queueTotal": 173,
+  "processed": 36,
+  "remaining": 137,
+  "statusCounts": {
+    "setAside": 11,
+    "sourceValidated": 9,
+    "partial": 16,
+    "pending_first_pass": 137
+  },
+  "matchedDecisionLabels": 28,
+  "sourceFilesScanned": [
+    "data/spain_reve/first_pass_batch_001.json",
+    "docs/spain-reve-173-first-pass-batch-2026-09-17T0639.json",
+    "docs/spain-reve-first-pass-batch-2026-09-17-05.json",
+    "docs/spain-reve-first-pass-batch-2026-09-17T04.json"
+  ],
+  "consistency": {
+    "totalEntries": 173,
+    "totalExpected": 173,
+    "processedPlusRemaining": 173,
+    "uniqueLabels": 173,
+    "matchedDecisionLabels": 28,
+    "ok": true
+  }
+}

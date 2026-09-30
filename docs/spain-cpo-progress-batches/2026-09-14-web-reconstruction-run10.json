@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "generatedAt": "2026-09-14T04:42:00Z",
+  "firstPassBefore": 408,
+  "firstPassAfter": 411,
+  "newLabels": [
+    {
+      "label": "Móra d'Ebre",
+      "status": "partial",
+      "evidence": [
+        "https://www.imaginaradio.cat/mora-debre-registra-un-85-mes-de-consum-al-principal-punt-de-recarrega-electrica/"
+      ],
+      "finding": "Current 2026 public evidence confirms active municipal EV charging usage, but no deterministic current numeric charging tariff was located in the first pass.",
+      "resumeCondition": "Official municipal/app/QR numeric tariff or deterministic REVE connector tariff mapping."
+    },
+    {
+      "label": "Movilidad Eléctrica Gran Canaria",
+      "status": "partial",
+      "evidence": [
+        "https://www.energiagrancanaria.com/movilidad-electrica/",
+        "https://teror.es/el-punto-de-recarga-publica-de-vehiculos-electricos-se-encuentra-operativo/"
+      ],
+      "finding": "The Consejo Insular de la Energía confirms the network, paid tariffs, and migration to a new app from April 2026. A current municipal node documents time/energy pricing, but no single network-wide tariff is extrapolated across all stations.",
+      "resumeCondition": "Map exact station/connector tariffs from official app/web or REVE connector tariff data."
+    },
+    {
+      "label": "Navàs",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://www.navas.cat/noticia/lajuntament-de-navas-posa-en-marxa-el-nou-preu-public-per-a-la-recarrega-de-vehicles-electrics/",
+        "https://www.navas.cat/wp-content/uploads/2025/10/Publicacio-definitiva-BOP-Ordenanca-27.11-PP-recarrega-vehciles.pdf"
+      ],
+      "finding": "Official municipal tariff remains in force until modified or repealed: semi-fast charging 0.1706557 EUR/kWh excl. VAT in peak hours and 0.1030139 EUR/kWh excl. VAT off-peak.",
+      "resumeCondition": "Revalidate if Navàs amends or repeals Ordinance 27.11."
+    }
+  ],
+  "countsDelta": {
+    "sourceValidated": 1,
+    "partial": 2,
+    "active": 0,
+    "setAside": 0,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 3
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "legacyWorkLabelCountPreserved": true,
+    "firstPassPriorityRespected": true
+  }
+}

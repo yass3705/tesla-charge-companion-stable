@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 150,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 215
+  },
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament d'Ullastret",
+      "labels": ["Ajuntament d'Ullastret"],
+      "status": "setAside",
+      "model": "municipal/public-web operator identity",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://ullastret.cat/contacte/"],
+      "coverageKnown": "REVE public-web probe exposes the exact municipal operator label.",
+      "blockingReason": "No current official numeric EV-charging tariff was located in first pass.",
+      "resumeCondition": "Official municipal/app/QR tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Calaf",
+      "labels": ["Ajuntament de Calaf"],
+      "status": "partial",
+      "model": "municipal public charging",
+      "evidence": ["https://www.calaf.cat/actualitat/noticies/el-punt-de-recarrega-per-a-vehicles-electrics-de-calaf-ha-registrat-467-carregues-de-151-usuaris-en-els-6-primers-mesos-de-funcionament.html", "https://www.calaf.cat/actualitat/noticies/el-ple-de-calaf-aprova-per-unanimitat-el-pla-local-municipal-de-prevencio-de-residus-i-el-duprocim-documen-unic-de-proteccio-civil-municipal-.html"],
+      "coverageKnown": "Official municipal sources confirm the public charger; a 2022 plenary item changed the charging price after earlier free operation.",
+      "blockingReason": "Current numeric tariff not recovered safely; the older free tariff is not promoted because an official later price modification is documented.",
+      "resumeCondition": "Current ordinance/EVCharge tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Miralcamp",
+      "labels": ["Ajuntament de Miralcamp"],
+      "status": "setAside",
+      "model": "municipal/public-web operator identity",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.miralcamp.cat/ajuntament/dus-5000"],
+      "coverageKnown": "REVE public-web probe exposes the municipal label; official municipal material confirms EV charging infrastructure projects.",
+      "blockingReason": "No current official public numeric tariff attributable to the REVE label was located in first pass.",
+      "resumeCondition": "Official public-station/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Tiana",
+      "labels": ["Ajuntament de Tiana"],
+      "status": "partial",
+      "model": "AMB metropolitan paid public charging",
+      "evidence": ["https://tiana.cat/nou-punt-de-recarrega-de-cotxes-electrics/"],
+      "coverageKnown": "Official municipal source confirms a paid public charger integrated into the AMB Electrolineres network.",
+      "blockingReason": "Official page confirms paid access but does not publish the current numeric tariff.",
+      "resumeCondition": "Current AMB tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Vilabella",
+      "labels": ["Ajuntament de Vilabella"],
+      "status": "sourceValidated",
+      "model": "municipal public charging",
+      "evidence": ["https://www.vilabella.cat/noticies/en-marxa-el-punt-de-recarrega-de-vehicles-electrics-la-placa-del-casal"],
+      "coverageKnown": "Official municipal source states the Plaça del Casal public charging point is free and operated through EVCharge/ETECNIC.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.0, "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if the municipality or EVCharge publishes a tariff change.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {
+    "firstPassTraversed": 5,
+    "sourceValidated": 1,
+    "partial": 2,
+    "setAside": 2,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  },
+  "aggregateAfter": {
+    "minimumTraversed": 465,
+    "maximumNeverTraversed": 153,
+    "sourceValidated": 53,
+    "partial": 45,
+    "setAside": 200,
+    "active": 96,
+    "supersededAlias": 68,
+    "platformExcluded": 3,
+    "total": 465
+  },
+  "webTrackAfter": {
+    "newReconstructedLabelsFirstPassedCount": 92,
+    "endpoint": "https://www.mapareve.es/api/public/v1",
+    "validatedSample": "150x25",
+    "uniqueOperatorLabelsObserved": 215
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "difficultCaseReauditPerformed": false,
+    "legacyDenominatorChanged": false,
+    "check": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"
+  },
+  "generatedAt": "2026-09-14T19:39:00Z"
+}

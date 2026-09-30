@@ -1,0 +1,46 @@
+{
+  "run": 64,
+  "country": "ES",
+  "recordedAt": "2026-09-10T21:39:42Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "runtimePublishReady": false,
+  "firstPass": {
+    "inventoryBase": 618,
+    "processedTotal": 346,
+    "remainingAtMost": 272,
+    "sourceValidated": 28,
+    "partial": 8,
+    "setAside": 154,
+    "active": 87,
+    "supersededAlias": 66,
+    "excludedPlatform": 3,
+    "newNominativeDecisions": 0,
+    "firstPassComplete": false,
+    "note": "A targeted GitHub history/code recovery pass found no additional preserved identities from the frozen 618-label snapshot. No current 633-label mirror identity was backfilled synthetically and no setAside case was re-audited."
+  },
+  "reve": {
+    "liveBatchLaunchedThisRun": false,
+    "lastPersistedBatchGeneratedAt": "2026-09-10T20:43:55.846544Z",
+    "lastPersistedStateUpdatedAt": "2026-09-10T20:44:04.017725Z",
+    "elapsedSinceLastSuccessfulBatchAtRunStart": "PT55M46S",
+    "decision": "No REVE call: less than one real hour had elapsed since the last successful live batch.",
+    "nextTariffPage": 101,
+    "nextStatusPage": 68,
+    "tariffPagesCollected": 100,
+    "statusPagesCollected": 67,
+    "tariffRowsStored": 9534,
+    "statusRowsStored": 5897,
+    "locationsRequests": 0
+  },
+  "coherenceCheck": {
+    "status": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "categorySum": 346,
+    "processedTotal": 346,
+    "consistent": true,
+    "blockedReaudits": 0,
+    "syntheticHistoricalMembershipCreated": false,
+    "historicalQueueFrozenAt618": true,
+    "runtimePublishReady": false
+  },
+  "currentInvestigation": "Continue first-pass recovery only when a genuinely preserved historical identity cue exists. Do not infer membership from the mutable 633-label mirror and do not reopen setAside/active cases before FIRST PASS COMPLETE without new evidence."
+}

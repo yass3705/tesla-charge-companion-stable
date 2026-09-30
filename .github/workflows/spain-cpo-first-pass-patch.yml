@@ -1,0 +1,56 @@
+name: Spain CPO first-pass queue patch
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: ['ops/spain-cpo-first-pass-trigger.txt']
+  workflow_dispatch:
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: spain-reve-preintegration
+      - name: Patch queue batch 2
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('docs/spain-reve-173-cpo-workqueue.json')
+          d=json.loads(p.read_text())
+          decisions={
+          'Ajuntament de Soses': {'queueStatus':'partial','source':{'type':'official_municipal_project_page','url':'https://www.soses.cat/installacio-de-punts-de-recarrega-per-a-vehicles-electrics-a-soses/','provider':'Ajuntament de Soses / ETECNIC'},'evidence':'Official municipal page confirms a fast public charging point, mobile app/software and ETECNIC management, but does not publish a deterministic current direct/ad-hoc tariff.','resumeCondition':'Resolve tariff from EVcharge/ETECNIC public guest surface or municipal price ordinance.'},
+          'Ajuntament de Torroella de Montgrí': {'queueStatus':'sourceValidated','tariff':{'model':'energy','price':0.20,'unit':'EUR/kWh','conditions':'Municipal public charging points; maximum parking/charging time 2h; payment through Electromaps credit.'},'source':{'type':'official_municipal_tariff_page','url':'https://www.torroella-estartit.cat/ca/noticies/4480-els-punts-de-recarrega-de-vehicles-electrics-.html'},'evidence':'Official municipal page states the three municipal charging points became paid at the public price approved in municipal ordinances: 0.20 EUR/kWh.'},
+          'Ajuntament de Vic': {'queueStatus':'partial','source':{'type':'official_municipal_mobility_page','url':'https://www.vic.cat/serveis/territori/mobilitat/mobilitat-en-vehicle-privat/mobilitat-electrica','provider':'Ajuntament de Vic / EVCharge'},'evidence':'Official current mobility page confirms five municipal charging locations, EVCharge/RFID access and says access is free, but wording does not deterministically establish zero-energy tariff for every current EVSE.','resumeCondition':'Verify EVCharge current tariff objects or explicit municipal price ordinance before sourceValidated.'},
+          'Ajuntament de Vilada': {'queueStatus':'sourceValidated','tariff':{'model':'time_of_use_energy','unit':'EUR/kWh','withoutSubscription':{'weekday_00_00_07_59':0.22,'other_times':0.28},'withSubscription':{'weekday_00_00_07_59':0.11,'other_times':0.17,'annualFeeEUR':50}},'source':{'type':'official_municipal_tariff_page','url':'https://www.vilada.cat/actualitat/noticies/els-carregadors-de-vehicles-electrics-de-vilada-passen-a-ser-de-pagament-a-partir-del-29-de-desembre.html','provider':'Ajuntament de Vilada / EVcharge'},'evidence':'Official municipal notice dated 2025-12-15 gives tariffs effective 2025-12-29 for both municipal double chargers and EVcharge access.'},
+          'Ajuntament de Vinyols i els Arcs': {'queueStatus':'partial','source':{'type':'official_municipal_station_page','url':'https://vinyols.altanet.org/noticies/nova-estacio-de-recarrega-electrica','provider':'Ajuntament de Vinyols i els Arcs / EVcharge'},'evidence':'Official municipal page confirms public EVcharge-managed 22 kW and 50 kW connectors, but publishes no deterministic tariff.','resumeCondition':'Resolve current EVcharge tariff objects or municipal ordinance.'},
+          'Ajuntament del Catllar': {'queueStatus':'setAside','reason':'Municipal identity is real, but no deterministic current direct/ad-hoc EV charging tariff was found in a reasonable first-pass search; municipal service pages do not expose one.'},
+          'Ajuntament del Lloar': {'queueStatus':'setAside','reason':'No deterministic current direct/ad-hoc EV charging tariff found in reasonable first-pass search; retain for post-first-pass audit.'},
+          'Ajuntament del Pla de Santa Maria': {'queueStatus':'setAside','reason':'Search found charging-infrastructure references but no deterministic current municipal public direct/ad-hoc tariff; retain for post-first-pass audit.'}
+          }
+          seen=set()
+          for e in d['entries']:
+              if e['label'] in decisions:
+                  if e.get('queueStatus')!='pending_first_pass':
+                      raise SystemExit(f"Refuse overwrite already processed {e['label']}")
+                  e.update(decisions[e['label']]); seen.add(e['label'])
+          missing=set(decisions)-seen
+          if missing: raise SystemExit(f'Missing labels: {missing}')
+          processed=sum(e.get('queueStatus')!='pending_first_pass' for e in d['entries'])
+          d['processed']=processed; d['remaining']=d['total']-processed
+          if d['total']!=173 or processed+d['remaining']!=173: raise SystemExit('counter invariant failed')
+          labels=[e['label'] for e in d['entries']]
+          if len(labels)!=len(set(labels)): raise SystemExit('duplicate labels')
+          p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+          print({'processed':processed,'remaining':d['remaining']})
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add docs/spain-reve-173-cpo-workqueue.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Advance Spain CPO first pass batch 2'
+          git push origin HEAD:spain-reve-preintegration

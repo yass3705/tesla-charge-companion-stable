@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-08-run29",
+  "historicalWorkQueueLabels": 618,
+  "authoritativeCpoDenominator": false,
+  "firstPassBefore": 270,
+  "firstPassAfter": 274,
+  "maximumNeverTraversedAfter": 344,
+  "firstPassComplete": false,
+  "antiStagnation": {
+    "priority": "FIRST_PASS_NEW_LABELS",
+    "setAsideReauditPerformed": false,
+    "canonicalReconstructionAttemptedThisRun": false,
+    "canonicalReconstructionNote": "The requested one-shot reconstruction attempt was consumed in run25 and failed safely; the documented 98-decision legacy nominative gap is preserved without synthetic entries."
+  },
+  "decisions": [
+    {
+      "canonicalName": "Emovili Fast",
+      "labels": ["Emovili Fast, S.L."],
+      "aliases": [],
+      "status": "active",
+      "source": [
+        "REVE coverage snapshot: partyId EMO, 47 locations, 190 EVSE/connectors",
+        "https://emovili.com/fast/",
+        "https://emovili.com/fast/app-punto-recarga/"
+      ],
+      "evidence": "Official Emovili FAST pages confirm it operates public charging infrastructure and supports app, TPV, roaming, direct mobile and web payment without subscription. No current official public numeric national tariff was found during the bounded first pass; third-party station prices were deliberately not promoted.",
+      "tariffModel": "direct CPO price exposed through the Emovili FAST charging journey; station/current-price path exists but no official public national numeric grid proven",
+      "coverageKnown": "REVE: 47 locations / 190 EVSE; official CPO role confirmed",
+      "blockerOrResumeCondition": "After FIRST PASS COMPLETE, inspect app/public web payment station prices or a newly published official tariff grid; do not transpose third-party rates.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "EMT Madrid / Electro-EMT",
+      "labels": ["Empresa Municipal de Transportes de Madrid, S. A."],
+      "aliases": ["Electro-EMT"],
+      "status": "sourceValidated",
+      "source": [
+        "REVE coverage snapshot: partyId EMT, 24 locations, 277 EVSE/connectors",
+        "https://www.emtmadrid.es/emting/eulaelectroemt.aspx"
+      ],
+      "evidence": "EMT Madrid publishes the current direct charging tariff including VAT: EUR0.40/kWh for rapid chargers on the public access road under Jardines del Descubrimiento (Colon); EUR0.35/kWh for rapid chargers in EMT-managed car parks; EUR0.35/kWh for slow chargers in the Pitis, Fuente de la Mora, Aviacion Espanola and Estadio Metropolitano park-and-ride sites; EUR0.00/kWh for slow chargers in EMT-managed rotation/mixed car parks. Reservation costs EUR2 and post-charge overstay after the 10-minute removal window costs EUR2.",
+      "tariffModel": "official direct CPO tariff differentiated by EMT site/charger category",
+      "coverageKnown": "official tariff categories plus REVE footprint of 24 locations / 277 EVSE",
+      "blockerOrResumeCondition": "For TCC mapping, reconcile each REVE EMT EVSE/location to the official category before runtime publication; no tariff extrapolation across categories.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Energea / DIGAVEL",
+      "labels": ["ENERGEA CONSULTING Y ASESORES SL"],
+      "aliases": ["DIGAVEL"],
+      "status": "active",
+      "source": [
+        "REVE coverage snapshot: partyId ENE, 33 locations, 42 EVSE",
+        "https://digavel.com/",
+        "https://evcharge.net/casosdexito/digavel-confia-en-la-solucion-white-label-de-evcharge-para-gestionar-su-red-de-mas-de-100-cargadores-en-galicia/"
+      ],
+      "evidence": "REVE identifies Energea as CPO. DIGAVEL exposes app/card charging, and EVcharge documents DIGAVEL as Energea's EV department operating a charging network in Galicia. No deterministic official public numeric charging tariff was found in the bounded first pass.",
+      "tariffModel": "managed charging network; tariff appears session/station/app dependent and is not publicly proven as a national grid",
+      "coverageKnown": "REVE: 33 locations / 42 EVSE; network-management role independently corroborated",
+      "blockerOrResumeCondition": "After FIRST PASS COMPLETE, inspect DIGAVEL app/backend or station payment path for direct per-station prices; do not use generic electricity/service prices.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Epresa Ecomovilidad",
+      "labels": ["EPRESA ENERGIA SA"],
+      "aliases": ["Ecomovilidad Epresa"],
+      "status": "active",
+      "source": [
+        "REVE coverage snapshot: partyId EPR, 1 location, 1 EVSE",
+        "https://epresaenergia.es/bienvenido-a-la-ecomovilidad-de-epresa/",
+        "Ecomovilidad Epresa app listing (developer: IBIL Gestor de Carga de VE)"
+      ],
+      "evidence": "Epresa officially confirms a public 22.17 kW Type 2 charging point and app-based reservation, start/stop and payment. The app changelog confirms a dedicated 'conditions and other costs' area showing detailed prices, but no current numeric direct price is exposed publicly enough to validate in this first pass.",
+      "tariffModel": "direct app/session pricing; numeric price requires app/station view",
+      "coverageKnown": "REVE: 1 location / 1 EVSE; official public charging/payment path confirmed",
+      "blockerOrResumeCondition": "After FIRST PASS COMPLETE, inspect the single EVSE/app price view or a public price page if published.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    }
+  ],
+  "skippedAlreadyDecidedInAlphabeticalSection": [
+    "ENDESA X WAY, S.L.",
+    "ERANOVUM E-MOBILITY, S.L."
+  ],
+  "countsAfter": {
+    "sourceValidated": 24,
+    "partial": 8,
+    "active": 65,
+    "setAside": 113,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 274
+  },
+  "reveHourly": {
+    "batchLaunched": true,
+    "triggerMethod": "rerun of the last successful targeted collect job because workflow_dispatch was not exposed by the connector",
+    "liveBatchAlreadyConsumedForWindow": true,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "http429Count": 0,
+    "locationsRequests": 0,
+    "allRequestStatuses": 200,
+    "plan": {
+      "tariffPages": [41, 42, 43],
+      "statusPages": [28, 29]
+    },
+    "tariffs": {
+      "rowsReceived": 300,
+      "newRows": 300,
+      "updatedRows": 0,
+      "unchangedOrDeduplicatedRows": 0,
+      "pagesCollected": 43,
+      "rowsStored": 4288,
+      "totalPages": 462,
+      "nextPage": 44
+    },
+    "status": {
+      "rowsReceived": 200,
+      "newRows": 164,
+      "updatedRows": 6,
+      "unchangedOrDeduplicatedRows": 30,
+      "pagesCollected": 29,
+      "rowsStored": 2681,
+      "totalPages": 447,
+      "nextPage": 30
+    },
+    "generatedAt": "2026-09-08T16:46:24.233485Z",
+    "stateUpdatedAt": "2026-09-08T16:46:31.380711Z",
+    "complete": false
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 274,
+    "firstPassMinimumTraversed": 274,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "duplicateOrAlreadyDecidedLabelsSkipped": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "investigationCurrent": "Continue first-pass alphabetic queue after the already-decided Eranovum entry; do not reopen active/setAside cases until all 618 work labels have a first-pass decision."
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": 81,
+  "updatedAt": "2026-09-12T19:43:00Z",
+  "historicalWorkQueue": {
+    "labels": 618,
+    "authoritativeCpoDenominator": false
+  },
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "newSincePreviousPoint": {
+    "labelsTraversed": [],
+    "newlySourceValidated": [],
+    "newlySetAside": [],
+    "newlyActive": [],
+    "newAliases": []
+  },
+  "reconstructionPersistence": {
+    "oneTimeHistoricalRecoveryCompleted": true,
+    "fullFrozen618NominativeSnapshotFound": false,
+    "replacementIdentityQueueExhausted": true,
+    "currentDurableReveDistinctCpos": 148,
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "criticalCountryProgressPersistedInGit": true
+  },
+  "reveTariffStatus": {
+    "streamsComplete": false,
+    "liveBatchGeneratedAt": "2026-09-12T19:40:32.142499Z",
+    "livePlan": [
+      ["tariffs", 167],
+      ["tariffs", 168],
+      ["tariffs", 169],
+      ["status", 112],
+      ["status", 113]
+    ],
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffNewRows": 242,
+    "tariffUpdatedRows": 1,
+    "statusNewRows": 158,
+    "statusUpdatedRows": 35,
+    "persistenceSucceeded": true,
+    "nextTariffPage": 170,
+    "nextStatusPage": 114,
+    "tariffRowsStored": 15319,
+    "statusRowsStored": 9565,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448,
+    "secondBatchLaunchedThisHour": false
+  },
+  "workflowCleanup": {
+    "temporaryPushTriggerRemoved": true,
+    "workflowDispatchOnlyRestored": true,
+    "temporaryTriggerSentinelDeleted": true,
+    "concurrentPushMitigationActive": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "replacementQueueExhausted": true,
+    "currentReveCoverageStill148DistinctCpos": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "revePersistenceGapResolved": true,
+    "criticalProgressPersistenceGuardActive": true
+  },
+  "investigationCurrent": "The persisted tariff/status batch adds stream coverage but no genuinely new durable nominative CPO identity: current REVE coverage remains 148 distinct CPOs and its replacement identity queue is exhausted. Continue first-pass advancement only when new durable nominative evidence appears; do not fabricate historical-618 membership or reopen setAside cases without new evidence.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedOpenDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  }
+}

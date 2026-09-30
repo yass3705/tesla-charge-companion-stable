@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 2,
+  "country": "ES",
+  "kind": "coherence-dedup-and-reve445-first-pass",
+  "currentReveLabels": 445,
+  "identityFirstPassComplete": true,
+  "counts": {
+    "representedHistorical": 199,
+    "currentIdentityTraversed": 246
+  },
+  "normalizationCollisionGroupCount": 1,
+  "normalizationCollisions": [
+    {
+      "normalized": "fenie energia",
+      "rawLabels": [
+        "Feníe Energía",
+        "FENÍE ENERGÍA"
+      ]
+    }
+  ],
+  "manualAdjudications": {
+    "Ajuntament de Vilada": [
+      "currentIdentityTraversed",
+      "distinct_identity"
+    ],
+    "AYUNTAMIENTO DE PADULES . .": [
+      "currentIdentityTraversed",
+      "distinct_identity"
+    ],
+    "Ayuntamiento de Viana . .": [
+      "currentIdentityTraversed",
+      "distinct_identity"
+    ],
+    "Corbera de Llobregat": [
+      "currentIdentityTraversed",
+      "distinct_identity"
+    ],
+    "ELECTRICA SOLLERENSE S.A.": [
+      "representedHistorical",
+      "Eléctrica Sollerense / U Energia"
+    ],
+    "Energía Distribuida del Norte S.A.": [
+      "representedHistorical",
+      "Energía Distribuida del Norte / Edinor"
+    ],
+    "Sant Julià de Vilatorta": [
+      "representedHistorical",
+      "Ajuntament de Sant Julià de Vilatorta"
+    ],
+    "Tersa": [
+      "representedHistorical",
+      "Tersa"
+    ],
+    "Ajuntament de Palafolls": [
+      "representedHistorical",
+      "Ajuntament de Palafolls"
+    ],
+    "Ajuntament de Paüls": [
+      "currentIdentityTraversed",
+      "distinct_from_Pals"
+    ]
+  },
+  "falsePositiveRejected": "Ajuntament de Paüls != Ajuntament de Pals",
+  "legacyCounterDeprecated": true,
+  "legacyWorkLabelCount": 618,
+  "runtimePublishReady": false
+}

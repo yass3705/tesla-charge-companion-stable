@@ -1,0 +1,26 @@
+{
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchStartedAt": "2026-09-13T13:40:17Z",
+  "requestsAttempted": 5,
+  "requestsSucceeded": 5,
+  "locationsRequests": 0,
+  "http429Observed": 0,
+  "plannedPages": {
+    "tariffs": [191, 192, 193],
+    "status": [128, 129]
+  },
+  "inRunnerStateAfter": {
+    "nextTariffPage": 194,
+    "tariffPagesCollected": 193,
+    "tariffRowsStored": 17312,
+    "nextStatusPage": 130,
+    "statusPagesCollected": 129,
+    "statusRowsStored": 11130
+  },
+  "persisted": false,
+  "persistenceFailure": "The workflow generated the correct five-page batch and passed the hard request-budget verification, but its final git push was rejected because the branch received concurrent commits after checkout/rebase. The runner-only raw data therefore did not reach the branch.",
+  "recoveryRule": "Do not advance persistent cursors and do not launch another batch in the same real-hour window. At the next eligible window, recollect the same persistent pages 191-193 tariffs and 128-129 status from the unchanged durable cursors, then verify persistence before any unrelated branch write.",
+  "runtimePublishReady": false,
+  "pr50MustRemainDraft": true
+}

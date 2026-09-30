@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 50,
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPass": {
+    "minimumTraversed": 341,
+    "maximumNeverTraversed": 277,
+    "firstPassComplete": false,
+    "newLabelsTraversed": 0,
+    "newSourceValidated": 0
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "batchGeneratedAt": "2026-09-10T02:43:11.721086Z",
+    "workflowRunId": 34413690845,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPagesCollectedThisRun": [71,72,73],
+    "statusPagesCollectedThisRun": [48,49],
+    "tariffNewRows": 275,
+    "tariffUpdatedRows": 0,
+    "statusNewRows": 29,
+    "statusUpdatedRows": 54,
+    "persistentNextTariffPage": 74,
+    "persistentTariffPagesCollected": 73,
+    "persistentTariffRowsStored": 7128,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 50,
+    "persistentStatusPagesCollected": 49,
+    "persistentStatusRowsStored": 4264,
+    "statusTotalPages": 447,
+    "persistenceSucceeded": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "legacyNominativeGapStillDocumented": true
+  },
+  "note": "Exactly one eligible REVE live batch was rerun from persistent cursors 71/48. The job completed and persisted successfully. No new historical never-traversed label could be proven without fabrication, so first-pass continuity remains at 341/618. No setAside case was reopened."
+}

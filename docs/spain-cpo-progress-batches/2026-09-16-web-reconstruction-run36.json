@@ -1,0 +1,20 @@
+{
+  "country":"ES",
+  "integrationStatus":"PRE_INTEGRATION_ONLY",
+  "generatedAt":"2026-09-16T06:38:00Z",
+  "legacyWorkLabelCount":618,
+  "historicalMembershipClaimed":false,
+  "source":"persisted REVE public-web national sweep + durable public/official research",
+  "labels":[
+    {"canonicalName":"Muntaner Batle Sl Muntaner Batle Sl Muntaner Batle Sl","status":"setAside","reason":"Current REVE public-web label is nominative. First-pass research did not establish a durable first-party current numeric public EV charging tariff authority; no identity normalization or tariff was invented."},
+    {"canonicalName":"Mutua Madrileña Inmobiliaria","status":"setAside","reason":"Current REVE public-web label is nominative. Mutua's official current web presence confirms its real-estate entity/contact context and EV-related services at group level, but no durable first-party current public charging tariff for the observed REVE identity was established in this first pass."},
+    {"canonicalName":"NAITEC","status":"setAside","reason":"Current REVE public-web label is nominative. First-pass research did not establish a durable first-party current numeric public EV charging tariff for the observed identity; no third-party tariff was promoted."},
+    {"canonicalName":"NATURGY RECARGA","status":"active","reason":"Current REVE public-web label is nominative. Naturgy's public charging application easyRecarga explicitly exposes point/connector characteristics, live state and the tariff applicable to each point/connector, with session start/stop and payment. This proves an active per-station tariff-capable direct source, without inventing a network-wide numeric tariff."},
+    {"canonicalName":"Navarcles","status":"setAside","reason":"Current REVE public-web label is nominative. Public charging infrastructure is observable, but no durable first-party current numeric municipal tariff authority was established during this first pass; third-party station prices were not promoted."}
+  ],
+  "countsAfter":{"sourceValidated":64,"partial":64,"active":103,"setAside":228,"excludedPlatform":3,"supersededAlias":68,"total":530},
+  "firstPass":{"minimumTraversed":530,"maximumHistoricalUnreconstructedOrNeverTraversed":88,"firstPassComplete":false},
+  "coherence":{"legacyWorkLabelCountPreserved":true,"syntheticHistoricalMembershipCreated":false,"thirdPartyTariffPromoted":false,"difficultCaseReauditPerformed":false,"result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "reveWeb":{"endpoint":"POST /api/public/v1/locations","persistedSweep":"pages 1-600 x25","matchedStations":11212,"uniqueReveLocationIds":10493,"uniqueOperatorLabels":445,"paginationAnomalyObserved":false},
+  "nextAction":"Continue with next genuinely new nominatively recoverable labels from the persisted 445-label REVE public-web sweep before difficult-case reaudit."
+}

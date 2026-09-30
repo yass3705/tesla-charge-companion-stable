@@ -1,0 +1,55 @@
+name: Probe Spain REVE tariff/status
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["spain-reve-preintegration"]
+    paths:
+      - ".github/workflows/probe-spain-reve-tariff-status.yml"
+      - "scripts/reve_es_live_probe.py"
+      - "data/spain_reve/live_probe_trigger.txt"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: probe-spain-reve-tariff-status
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: spain-reve-preintegration
+
+      - name: Run controlled live probe
+        env:
+          REVE_API_KEY: ${{ secrets.REVE_API_KEY }}
+        run: python scripts/reve_es_live_probe.py
+
+      - name: Commit probe report
+        shell: bash
+        run: |
+          git add data/spain_reve/live_tariff_status_probe.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "probe(es): record REVE tariff/status live sample"
+          git push
+
+      - name: Enforce probe completion
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('data/spain_reve/live_tariff_status_probe.json').read_text())
+          if r.get('requestsAttempted', 0) > 5:
+              raise SystemExit('Safety gate violated: more than 5 REVE requests attempted')
+          if not r.get('probeComplete'):
+              raise SystemExit(f"REVE live probe incomplete: {r.get('requestsSucceeded')}/{r.get('requestsAttempted')} requests succeeded")
+          PY

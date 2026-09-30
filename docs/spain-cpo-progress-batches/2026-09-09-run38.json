@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-09-run38",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "note": "Continued strictly with the current REVE snapshot identities immediately after TRANSPORTES PENADES E HIJOS SL. No previously active or set-aside identity was re-audited."
+  },
+  "inventoryEvidence": {
+    "historicalWorkQueueLabels": 618,
+    "authoritativeCpoDenominator": false,
+    "currentDistinctReveCpos": 148,
+    "newEvidence": "The completed stored /locations-derived coverage snapshot exposes five additional current CPO identities after the previous run37 boundary: Tuwyncar Sport, Universidad Miguel Hernandez de Elche, Wenea Services Spain, Zero Carbon Emobility and Zoilo Rios. No live /locations request was made.",
+    "canonicalReconstructionRetried": false,
+    "canonicalReconstructionReason": "The previous one-shot reconstruction attempt remains the governing fallback; the newly exposed tail identities are used to advance the first pass without claiming the historical 618-label nominative gap is fully reconstructed."
+  },
+  "newNominativeDecisions": [
+    {
+      "canonicalName": "Tuwyncar Sport S.L.",
+      "labels": ["Tuwyncar Sport S.L."],
+      "status": "setAside",
+      "source": ["https://dealer.porsche.com/es/alicante/es-ES/footer/legal-notice"],
+      "model": "Porsche Alicante dealership/site-level charging; direct tariff unresolved",
+      "coverageKnown": "REVE coverage records 2 locations / 2 EVSEs for Tuwyncar Sport. The official Porsche Alicante legal notice confirms Tuwyncar Sport as the dealership entity. No authoritative numeric direct charging price surfaced in the first-pass budget.",
+      "blockingReason": "Station/QR/Porsche backend investigation required; not allowed to stall the first pass.",
+      "resumeCondition": "Official dealership/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Universidad Miguel Hernández de Elche",
+      "labels": ["UNIVERSIDAD MIGUEL HERNANDEZ DE ELCHE"],
+      "status": "sourceValidated",
+      "source": ["https://innovacionumh.es/presupuestos/2026/tomo3/files/basic-html/page84.html"],
+      "model": "official university campus charging tariff",
+      "coverageKnown": "The University's 2026 budget tariff annex explicitly sets the charging price at EUR 0.20/kWh for its EV charging stations across its campuses; missed reservation incurs EUR 1 penalty under the published rules.",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate on a later tariff-year update or if REVE connector mapping shows a conflicting current tariff.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Wenea Services Spain, S.L.",
+      "labels": ["Wenea Services Spain, S.L."],
+      "status": "sourceValidated",
+      "source": ["https://wenea.com/tarifas-de-carga/"],
+      "model": "official direct CPO tariff by charging-power class; partner-operated stations may vary",
+      "coverageKnown": "Wenea publishes direct prices for its own stations: AC 7.4-22 kW EUR 0.39/kWh, DC 50-150 kW EUR 0.49/kWh, HPC 151-400 kW EUR 0.59/kWh. Wenea explicitly states that collaboration/partner stations may have different prices; those are not generalized. Subscription prices are kept separate from direct standard prices.",
+      "blockingReason": null,
+      "resumeCondition": "After first-pass completion, reconcile the 319 REVE locations to identify Wenea-owned versus partner/collaboration pricing where needed.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Zero Carbon Emobility, S.L.",
+      "labels": ["ZERO CARBON EMOBILITY, S.L."],
+      "status": "setAside",
+      "source": ["data/spain_reve/coverage.json"],
+      "model": "public charging operator identity present in REVE; direct tariff unresolved",
+      "coverageKnown": "The completed stored REVE coverage snapshot records 81 locations / 202 EVSEs for this identity, but no authoritative first-party numeric charging tariff surfaced in first-pass web research.",
+      "blockingReason": "Requires deeper corporate identity, app/QR or connector-tariff mapping; no third-party price may be promoted.",
+      "resumeCondition": "New official first-party tariff evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Zoilo Ríos, S.A.",
+      "labels": ["ZOILO RIOS, S.A."],
+      "status": "active",
+      "source": ["https://zoilo.sumun.dev/particulares/vehiculos-electricos/punto-de-carga-mas-cercano/"],
+      "model": "direct site-level charging with multiple payment routes; numeric tariff not publicly exposed",
+      "coverageKnown": "Zoilo Ríos officially lists its own EV charging network, power classes and direct payment at the point of sale, Waylet, Autocharge and other mobility apps. No authoritative numeric direct tariff was published in the first-pass budget.",
+      "blockingReason": "Price appears site/payment-context specific; exhaustive site enumeration would slow the first pass.",
+      "resumeCondition": "After first-pass completion, enumerate direct station prices or map deterministic REVE tariff rows for the 3 REVE locations.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    }
+  ],
+  "deltaCounts": {
+    "sourceValidated": 2,
+    "partial": 0,
+    "active": 1,
+    "setAside": 2,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 5
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 341,
+    "maximumNeverTraversed": 277,
+    "firstPassComplete": false
+  },
+  "reveTariffStatus": {
+    "batchTriggerIssued": true,
+    "batchConfirmedCompleted": false,
+    "previousSuccessfulGeneratedAt": "2026-09-08T23:39:11.610436Z",
+    "requestsAttemptedObserved": 0,
+    "requestsSucceededObserved": 0,
+    "http429CountObserved": 0,
+    "locationsRequestsObserved": 0,
+    "quotaWindowConservativelyConsumed": true,
+    "decision": "More than one real hour had elapsed. Exactly one targeted temporary push trigger was issued because workflow_dispatch was not directly invocable. The collector workflow was restored immediately to workflow_dispatch-only. No second live REVE trigger is permitted in this quota window even if the resulting last_run materializes late."
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "mandatoryCadenceCheckPerformed": true,
+    "continuityCountSum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespectedByObservedState": true,
+    "locationsEndpointUnusedByObservedState": true
+  },
+  "investigationCurrent": "Current 148-CPO snapshot tail is now first-pass covered through ZOILO RIOS, S.A. Continue the historical 618-label first-pass queue only from recoverable never-traversed derived labels; do not reopen active/setAside cases before first-pass completion.",
+  "updatedAt": "2026-09-09T01:52:00Z"
+}

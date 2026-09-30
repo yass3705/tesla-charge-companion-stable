@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": 82,
+  "updatedAt": "2026-09-12T20:38:00Z",
+  "historicalWorkQueue": {
+    "labels": 618,
+    "authoritativeCpoDenominator": false
+  },
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "firstPassComplete": false
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "newSincePreviousPoint": {
+    "labelsTraversed": [],
+    "newlySourceValidated": [],
+    "newlySetAside": [],
+    "newlyActive": [],
+    "newAliases": []
+  },
+  "reconstructionPersistence": {
+    "oneTimeHistoricalRecoveryCompleted": true,
+    "fullFrozen618NominativeSnapshotFound": false,
+    "replacementIdentityQueueExhausted": true,
+    "currentDurableReveDistinctCpos": 148,
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "criticalCountryProgressPersistedInGit": true
+  },
+  "reveTariffStatus": {
+    "streamsComplete": false,
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-12T19:40:32.142499Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "nextTariffPage": 170,
+    "nextStatusPage": 114,
+    "tariffRowsStored": 15319,
+    "statusRowsStored": 9565,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448,
+    "liveBatchLaunchedThisRun": false,
+    "decision": "No live REVE request: less than one real hour had elapsed since the latest successful persisted batch. Persistent cursors and quota state were left untouched."
+  },
+  "workflowCleanup": {
+    "workflowDispatchOnlyConfirmed": true,
+    "staleInertTriggerSentinelFound": true,
+    "staleInertTriggerSentinelDeletedThisRun": true,
+    "staleSentinelDeletionCommit": "e2be5036dd2d855a87fbafab8ba9243d2ec2cbc8",
+    "accidentalLiveTriggerRisk": false,
+    "concurrentPushMitigationActive": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_STALE_SENTINEL_CORRECTED_AND_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "countsDeriveExactly": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "replacementQueueExhausted": true,
+    "currentReveCoverageStill148DistinctCpos": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "criticalProgressPersistenceGuardActive": true
+  },
+  "investigationCurrent": "The 148-identity immutable current-REVE replacement queue remains exhausted. No new durable nominative identity was proven this run. The apparent 633 current observed-operator-label count is not materialized as a durable nominative queue in the persisted REVE coverage/alias sources, so it is not used to fabricate historical-618 membership. Continue only from genuinely new durable nominative evidence.",
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedOpenDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  }
+}

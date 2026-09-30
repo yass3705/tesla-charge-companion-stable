@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "generatedAt": "2026-09-13T19:45:00Z",
+  "source": "REVE public web bounded 100-page identity diagnostic + official/public first-pass research",
+  "historicalQueueRule": {
+    "legacyWorkLabelCount": 618,
+    "historical618MembershipClaimed": false,
+    "note": "These are provenance-tagged current REVE web identities. They increase the minimum first-pass traversal continuity but are not presented as recovered members of the lost frozen 618-label snapshot."
+  },
+  "webProbeEvidence": {
+    "endpointBase": "https://www.mapareve.es/api/public/v1",
+    "maxPages": 100,
+    "perPage": 25,
+    "matchedStations": 2686,
+    "uniqueReveLocationIds": 1853,
+    "uniqueOperatorLabels": 166,
+    "rateLimitOrRequestFailureObserved": false
+  },
+  "decisions": [
+    {
+      "canonicalName": "Aj. Mollerussa",
+      "labels": ["Aj. Mollerussa"],
+      "status": "setAside",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging",
+      "evidence": [
+        "REVE public web 100-page identity diagnostic",
+        "https://www.mollerussa.cat/wp-content/uploads/2023/06/PLA-MOBILITAT-URBANA.-MEMORIA.pdf"
+      ],
+      "blockingReason": "Current public-web identity is nominatively observed and municipal documentation confirms public EV charging, but no current deterministic numeric charging tariff was established in the first pass.",
+      "resumeCondition": "Official current tariff, app/QR price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament Bonrepòs Mirambell",
+      "labels": ["Ajuntament Bonrepòs Mirambell"],
+      "status": "setAside",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging",
+      "evidence": [
+        "REVE public web 100-page identity diagnostic"
+      ],
+      "blockingReason": "Current public-web identity is nominatively observed, but no deterministic official numeric charging tariff was established in the first pass; public municipal reporting concerns charging-point investment rather than a usable charging tariff.",
+      "resumeCondition": "Official current service/tariff publication, app/QR price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament d'Amer",
+      "labels": ["Ajuntament d'Amer"],
+      "status": "setAside",
+      "provenanceClass": "reconstructedCurrentReveWeb",
+      "historical618MembershipProven": false,
+      "model": "municipal/public charging",
+      "evidence": [
+        "REVE public web 100-page identity diagnostic",
+        "https://media.seu-e.cat/acteca/1700780001/2024/8ef38843-fe8c-497d-ac23-651011e5c2a2/2024.04.25%20ACTA%20PLE%20ORDINARI%2025%20DE%20ABRIL%20DE%202024.pdf"
+      ],
+      "blockingReason": "Current public-web identity is nominatively observed and the municipality formally established an EV charging service, but no current deterministic numeric charging tariff was established in the first pass.",
+      "resumeCondition": "Official current tariff/regulation publication, app/QR price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    }
+  ],
+  "delta": {
+    "labelsTraversed": 3,
+    "sourceValidated": 0,
+    "partial": 0,
+    "active": 0,
+    "setAside": 3,
+    "platformExcluded": 0,
+    "supersededAlias": 0
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "legacyWorkLabelCountPreserved": true,
+    "publicWebSourcePromotedToRuntime": false
+  }
+}

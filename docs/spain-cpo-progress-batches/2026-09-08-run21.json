@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T08:40:00Z",
+  "firstPass": {
+    "previousMinimumTraversed": 204,
+    "newNominativeDecisions": 8,
+    "minimumTraversed": 212,
+    "maximumNeverTraversed": 406,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; exact live REVE legal-name variants are resolved as aliases without tariff re-audit"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 17,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 59,
+    "total": 212
+  },
+  "decisions": [
+    {"canonicalName":"Iberdrola | bp pulse","label":"IBERDROLA CLIENTES S.A.U","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/tariff_status_candidates.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE legal-name variant -> canonical operator identity; no tariff inherited","coverageKnown":"REVE snapshot: partyId IBD, 2288 locations, 8475 EVSE, 9463 connectors; tariff handling remains canonical and separate from alias normalization.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Endesa X Way","label":"ENDESA X WAY, S.L.","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/tariff_status_candidates.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE legal-name variant -> Endesa X Way; no tariff inherited","coverageKnown":"REVE snapshot: partyId ESX, 2565 locations, 4927 EVSE, 4928 connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Eranovum","label":"ERANOVUM E-MOBILITY, S.L.","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/operator_aliases_es.json","docs/spain-cpo-progress-batches/2026-09-08-run18.json"],"model":"exact live REVE legal-name variant -> source-validated Eranovum canonical identity; no tariff re-audit","coverageKnown":"REVE snapshot: partyId ERA, 334 locations, 1156 EVSE/connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Fastned","label":"FASTNED ESPAÑA, S.L.","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE Spain legal-name variant -> Fastned; no tariff inherited","coverageKnown":"REVE snapshot: partyId FAS, 2 locations, 16 EVSE, 20 connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"IONITY","label":"IONITY GmbH Sucursal en España","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE Spanish branch legal name -> IONITY canonical identity; no tariff inherited","coverageKnown":"REVE snapshot: partyId IOY, 43 locations, 172 EVSE/connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"EDP","label":"EDP CLIENTES SAU","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE legal-name variant -> EDP canonical identity; direct CPO and roaming prices remain separated","coverageKnown":"REVE snapshot: partyId GFX, 456 locations, 1584 EVSE, 1651 connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Atlante","label":"Atlante Iberia S.L.","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE legal-name variant -> Atlante canonical identity; no tariff inherited","coverageKnown":"REVE snapshot: partyId ATE, 104 locations, 377 EVSE/connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Zunder","label":"(ZUNDER) Grupo Easychargar SA","status":"supersededAlias","sourceEvidence":["data/spain_reve/coverage.json","data/spain_reve/operator_aliases_es.json"],"model":"exact live REVE legal-name variant -> Zunder canonical identity; no tariff inherited","coverageKnown":"REVE snapshot: partyId ZUN, 439 locations, 1768 EVSE/connectors.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "canonicalReconstruction": {
+    "attemptedPreviously": true,
+    "complete": false,
+    "newEvidenceForRetryThisRun": false,
+    "action": "No repeated reconstruction attempt: the documented earliest-98 nominative gap remains unresolved; preserve the 618-label queue and append-only ledger."
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum":212,
+    "firstPassMinimumTraversed":212,
+    "newBatchCountsDeriveExactly":true,
+    "legacyFirst98ListDerivabilityGapStillDocumented":true,
+    "noSetAsideReauditWithoutNewEvidence":true,
+    "noTariffReauditForAliasResolution":true,
+    "noThirdPartyTariffPromoted":true,
+    "directCpoAndEmspPricingSeparated":true
+  }
+}

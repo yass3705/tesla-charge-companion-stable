@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "mode": "CPO_FIRST_PASS_DELTA",
+  "canonicalQueue": "docs/spain-reve-173-cpo-workqueue.json",
+  "canonicalBaseProcessed": 15,
+  "decisionsCount": 12,
+  "effectiveProcessedAfterMerge": 27,
+  "effectiveRemainingAfterMerge": 146,
+  "mergeRequired": true,
+  "decisions": [
+    {"label":"Ajuntament dels Pallaresos","queueStatus":"partial","evidence":"Municipal charging regulation exists, but exact current official direct/ad-hoc amount not deterministically recovered in first pass.","resumeCondition":"Extract current municipal tariff/EVcharge tariff object."},
+    {"label":"Ajuntament Lliçà de Vall","queueStatus":"sourceValidated","tariff":{"model":"energy","price":0.35,"unit":"EUR/kWh"},"source":{"type":"official_municipal_tariff_page","url":"https://www.llissadevall.cat/actualitat/noticies/el-punt-de-recarrega-de-vehicles-electrics-passara-a-ser-de-pagament-a-partir-del-2-de-gener.html"},"evidence":"Official municipality states 0.35 EUR/kWh from 2024-01-02; current municipal service page updated 2025-11-14 still identifies the municipal EVcharge service."},
+    {"label":"Ajuntament Manlleu","queueStatus":"partial","evidence":"Municipal identity/infrastructure confirmed in prior first-pass work, but no deterministic current direct/ad-hoc tariff recovered.","resumeCondition":"Resolve current municipal/EVcharge tariff object after first pass."},
+    {"label":"Ajuntament Sant Julià de Llor i Bonmatí","queueStatus":"partial","evidence":"Municipal charging service/regulatory surface identified in prior first-pass work, but exact current direct tariff not recovered.","resumeCondition":"Extract current municipal price ordinance or EVcharge tariff object."},
+    {"label":"Ajuntament Selva del Camp","queueStatus":"partial","tariff":{"model":"energy_observed","price":0.25,"unit":"EUR/kWh"},"source":{"type":"third_party_station_page","url":"https://www.electromaps.com/fr/stations-de-recharge/espagne/tarragona/la-selva-del-camp/la-selva-del-camp-semi-rapid-raval-de-sant-rafael"},"evidence":"Current station listing updated 2025-08-31 shows 0.25 EUR/kWh and EVCharge/ETECNIC; official municipal tariff text still required."},
+    {"label":"Alcover","queueStatus":"sourceValidated","tariff":{"model":"power_class","unit":"EUR/kWh","rapid":0.35,"semiRapid":0.26},"source":{"type":"official_municipal_tariff_page","url":"https://www.alcover.cat/mobilitat/"},"evidence":"Official current municipal mobility page states rapid 0.35 EUR/kWh and semi-rapid 0.26 EUR/kWh, paid through EVCharge."},
+    {"label":"ALDI","queueStatus":"partial","evidence":"Current ALDI-labelled stations are observed under multiple actual operators/backends (e.g. REMO Mobility and Atlante) and different station tariffs; ALDI label alone is not a deterministic direct CPO tariff.","resumeCondition":"Map each REVE ALDI EVSE/location to actual operator/backend before tariff assignment."},
+    {"label":"ALEGRIA HOTELS","queueStatus":"partial","source":{"type":"official_operator_faq","url":"https://www.alegria-hotels.com/es/faqs"},"evidence":"Official ALEGRIA FAQ confirms EV charging at seven named hotels but explicitly directs users to each hotel for applicable tariffs; no network-wide deterministic tariff exists on the public FAQ.","resumeCondition":"Resolve tariff per hotel/location after first pass."},
+    {"label":"Andrés Rodríguez Brenes","queueStatus":"setAside","reason":"No deterministic current direct/ad-hoc EV charging tariff or sufficiently attributable official public charging surface recovered in reasonable first-pass search."},
+    {"label":"ANTONIO SALDAÑA MARCO","queueStatus":"sourceValidated","tariff":{"model":"energy","price":0.60,"unit":"EUR/kWh","maxReservationHours":2},"source":{"type":"official_cpo_service_page","url":"https://recarga.fenieenergia.es/punto-recarga/0146","provider":"FENÍE ENERGÍA","stationId":"0146"},"evidence":"Official FENÍE page identifies owner ANTONIO SALDAÑA MARCO, public 24h access and charging cost 0.60 EUR/kWh."},
+    {"label":"APARCAMENTS Tarragona","queueStatus":"partial","source":{"type":"official_municipal_parking_surface","url":"https://www.tarragona.cat/mobilitat/aparcar-a-tarragona/aparcaments-tancats-de-tarragona"},"evidence":"Municipal parking operator/infrastructure is identifiable, but first-pass public sources expose parking pricing rather than a deterministic current EV charging energy tariff.","resumeCondition":"Resolve charging tariff from AMT/MOT charging backend or exact EVSE mapping after first pass."},
+    {"label":"ARSA INVERSIONES SAU","queueStatus":"setAside","reason":"No deterministic current direct/ad-hoc EV charging tariff or sufficiently attributable official charging surface recovered in reasonable first-pass search."}
+  ],
+  "coherence":{"total":173,"baseProcessed":15,"deltaDecisions":12,"effectiveProcessed":27,"effectiveRemaining":146,"duplicateLabelsInDelta":0,"identityFabrication":false},
+  "notes":"Persisted as an append-only delta because the canonical queue file is a large single-line JSON payload in the connector response. Merge into canonical queue before processing these labels again; do not re-investigate them during first pass."
+}

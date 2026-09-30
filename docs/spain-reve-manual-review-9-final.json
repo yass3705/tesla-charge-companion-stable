@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "mode": "IDENTITY_ONLY_NO_TARIFF",
+  "status": "COMPLETE",
+  "reviewedCount": 9,
+  "resolvedAsHistoricalIdentity": 5,
+  "confirmedDistinctNoMatch": 4,
+  "rejectedPriorFalsePositive": 1,
+  "decisions": [
+    {"reveLabel":"Ajuntament de Vilada","decision":"distinct_no_historical_match","reason":"Vilada is distinct from Viladecans and Vilamalla; similarity is lexical only."},
+    {"reveLabel":"AYUNTAMIENTO DE PADULES . .","decision":"distinct_no_historical_match","reason":"Padules is distinct from Pals and Valls; similarity is lexical only."},
+    {"reveLabel":"Ayuntamiento de Viana . .","decision":"distinct_no_historical_match","reason":"Viana is distinct from Tiana and Calvià; similarity is lexical only."},
+    {"reveLabel":"Corbera de Llobregat","decision":"distinct_no_historical_match","reason":"Corbera de Llobregat is distinct from El Prat de Llobregat; shared geographic suffix is not identity evidence."},
+    {"reveLabel":"ELECTRICA SOLLERENSE S.A.","decision":"resolved_historical_identity","canonical":"Eléctrica Sollerense / U Energia","reason":"Same operator identity; legal-name variant versus persisted operator/trading-name representation."},
+    {"reveLabel":"Energía Distribuida del Norte S.A.","decision":"resolved_historical_identity","canonical":"Energía Distribuida del Norte / Edinor","reason":"Same operator identity; legal-name variant versus persisted short/trading name."},
+    {"reveLabel":"Sant Julià de Vilatorta","decision":"resolved_historical_identity","canonical":"Sant Julià de Vilatorta","historicalEvidence":"docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run42.json","historicalStatus":"setAside","reason":"Known historical decision; resolver candidate Sant Joan de Vilatorrada was a false lexical match."},
+    {"reveLabel":"Tersa","decision":"resolved_historical_identity","canonical":"Tersa","historicalEvidence":"docs/spain-cpo-progress-batches/2026-09-16-web-reconstruction-run43.json","historicalStatus":"partial","reason":"Known historical decision; Tesla similarity was a false lexical match."},
+    {"reveLabel":"Ajuntament de Palafolls","decision":"resolved_historical_identity","canonical":"Ajuntament de Palafolls","historicalEvidence":"docs/spain-cpo-progress-batches/2026-09-15-web-reconstruction-run40.json","historicalStatus":"sourceValidated","reason":"Known historical decision; Calafell/Pals candidates were false lexical matches."}
+  ],
+  "correction": {
+    "reveLabel":"Ajuntament de Paüls",
+    "priorIncorrectCanonical":"Ajuntament de Pals",
+    "decision":"reject_false_positive_distinct_identity",
+    "reason":"Paüls and Pals are different municipalities. Similarity score must not merge them."
+  },
+  "guardrail":"Municipality names are never merged from fuzzy spelling similarity alone; legal/trading operator variants require semantic identity evidence."
+}

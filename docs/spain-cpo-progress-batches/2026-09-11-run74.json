@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 74,
+  "updatedAt": "2026-09-11T14:39:54Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "firstPassBefore": 356,
+  "firstPassAfter": 363,
+  "legacyWorkQueue": 618,
+  "newNominativeDecisions": 7,
+  "skippedAlreadyHistoricallyInvestigated": [
+    "PAVAPARK MOVILIDAD SL",
+    "PLENOIL CANARIAS, S.L.U.",
+    "PLENOIL, S.L.",
+    "Powergo Public SL",
+    "Prio Recharge Sl."
+  ],
+  "decisions": [
+    {
+      "canonicalName": "PETREM DISTRIBUCIO SA",
+      "labels": ["PETREM DISTRIBUCIO SA"],
+      "partyId": "PTM",
+      "provenance": "reconstructedCurrentReve",
+      "status": "setAside",
+      "tariffModel": "single-site service-station charging",
+      "coverageKnown": "1 location / 1 EVSE / 2 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+        "https://www.petrem.com/es/avis-legal-2/"
+      ],
+      "blockingReason": "Official Petrem public surface confirms the operator identity but no current deterministic direct EV charging tariff or official public checkout price surfaced in reasonable first-pass research. A third-party numeric candidate is not promoted as tariff authority.",
+      "resumeCondition": "Official Petrem station/QR/app tariff or deterministic REVE connector-tariff mapping after first pass.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    },
+    {
+      "canonicalName": "PETRO PALOL, S.L.",
+      "labels": ["PETRO PALOL, S.L."],
+      "partyId": "843",
+      "provenance": "reconstructedCurrentReve",
+      "status": "setAside",
+      "tariffModel": "single-site service-station charging",
+      "coverageKnown": "1 location / 2 EVSE / 6 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+        "https://www.gasoils.cat/html/socis-resultats.php"
+      ],
+      "blockingReason": "Public evidence identifies Petro Palol/Petroestany as the service-station operator, but no current official/direct deterministic EV charging tariff or public checkout surfaced in first-pass research.",
+      "resumeCondition": "Official site/QR/app numeric tariff or deterministic REVE connector-tariff mapping after first pass.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    },
+    {
+      "canonicalName": "PORSAMADRID, S.L.",
+      "labels": ["PORSAMADRID, S.L."],
+      "partyId": "920",
+      "provenance": "reconstructedCurrentReve",
+      "status": "setAside",
+      "tariffModel": "Porsche dealer/site-level charging",
+      "coverageKnown": "8 locations / 8 EVSE / 8 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+        "https://www.porschemadrid.es/aviso_legal.php"
+      ],
+      "blockingReason": "Official Porsche Madrid legal surface proves Porsamadrid as the dealer entity, but no current deterministic public EV charging tariff or direct checkout price surfaced in first-pass research. Porsche customer/dealer services are not inferred as public tariffs.",
+      "resumeCondition": "Official dealer charging tariff, QR/ad-hoc checkout or deterministic REVE connector-tariff mapping after first pass.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    },
+    {
+      "canonicalName": "Porsatecnic S.L.",
+      "labels": ["Porsatecnic S.L."],
+      "partyId": "926",
+      "provenance": "reconstructedCurrentReve",
+      "status": "setAside",
+      "tariffModel": "Porsche dealer/site-level charging",
+      "coverageKnown": "2 locations / 2 EVSE / 2 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+        "https://www.porsche-valencia.com"
+      ],
+      "blockingReason": "Porsatecnic is the Porsche Valencia dealer entity, but reasonable first-pass public research did not surface a current deterministic public EV charging tariff or direct checkout price.",
+      "resumeCondition": "Official dealer charging tariff, QR/ad-hoc checkout or deterministic REVE connector-tariff mapping after first pass.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    },
+    {
+      "canonicalName": "Punto Recargas SL",
+      "labels": ["Punto Recargas SL"],
+      "partyId": "PWH",
+      "provenance": "reconstructedCurrentReve",
+      "status": "supersededAlias",
+      "tariffModel": "Powerdot Spain legal operating entity",
+      "coverageKnown": "137 locations / 1181 EVSE / 1191 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+        "https://www.powerdot.eu/es/nuestras-soluciones"
+      ],
+      "coverage": "Powerdot's official Spanish site identifies PUNTO RECARGAS, S.L. (B06995765) as the Spanish legal entity/contact for Powerdot. It must not be counted as an independent tariff authority from Powerdot.",
+      "blockingReason": null,
+      "resumeCondition": "Use the existing Powerdot canonical tariff path; keep this REVE label as an alias only.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    },
+    {
+      "canonicalName": "P‑APP & WEB SERVICIOS DIGITALES S.L.U.",
+      "labels": ["P‑APP & WEB SERVICIOS DIGITALES S.L.U."],
+      "partyId": "IPK",
+      "provenance": "reconstructedCurrentReve",
+      "status": "setAside",
+      "tariffModel": "parking-operator managed charging, station-level",
+      "coverageKnown": "59 locations / 597 EVSE / 597 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7"
+      ],
+      "coverage": "Public corporate/registry evidence ties P-APP & WEB Servicios Digitales to digital parking management and Interparking-related management, while current public station listings show REVE charging points under this legal name. No official deterministic direct charging tariff or safe network-wide price surfaced in first-pass research.",
+      "blockingReason": "Exact EV charging prices appear station/parking-specific and require operator checkout/app or deterministic REVE connector-tariff mapping; third-party price tables are not tariff authority.",
+      "resumeCondition": "Post-first-pass official Interparking/P-APP charging checkout, app/backend or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    },
+    {
+      "canonicalName": "QWELLO España SL",
+      "labels": ["QWELLO España SL"],
+      "partyId": "AEQ",
+      "provenance": "reconstructedCurrentReve",
+      "status": "active",
+      "tariffModel": "Qwello direct energy plus infrastructure/time fee, station/app-visible",
+      "coverageKnown": "117 locations / 188 EVSE / 234 connectors in immutable REVE coverage snapshot",
+      "evidence": [
+        "data/spain_reve/coverage.json@4230d6745a66f6de010e5fef20bed21d83b7e8d7",
+        "https://qwello.es/",
+        "https://qwello.es/user_agreement_qwello-SPAIN.pdf"
+      ],
+      "coverage": "Qwello's official Spanish site confirms direct public charging, card/app payment, real-time cost display, and a pricing model combining green-energy cost with an infrastructure time fee. Current Spanish terms state exact prices are shown in Qwello's pricing/app flow. No safe single network-wide numeric tariff is inferred.",
+      "blockingReason": "Exact rankable values require deterministic station/app pricing extraction; the generic pricing model is not sufficient for one static tariff.",
+      "resumeCondition": "Post-first-pass deterministic Qwello pricing/app/backend extraction or station-level official tariff mapping.",
+      "lastInvestigated": "2026-09-11",
+      "lastChanged": "2026-09-11"
+    }
+  ],
+  "countsAfter": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 93,
+    "setAside": 163,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 363
+  },
+  "reveTariffStatus": {
+    "actionThisRun": "NO_LIVE_CALL_HOURLY_WINDOW_NOT_ELIGIBLE_AT_INITIAL_CHECK",
+    "lastSuccessfulPersistedBatchGeneratedAt": "2026-09-11T13:41:18.015682Z",
+    "requestsAttemptedThisRun": 0,
+    "tariffPagesCollected": 127,
+    "nextTariffPage": 128,
+    "tariffRowsStored": 11849,
+    "tariffTotalPages": 462,
+    "statusPagesCollected": 85,
+    "nextStatusPage": 86,
+    "statusRowsStored": 7326,
+    "statusTotalPages": 448
+  },
+  "reconstructionPersistence": {
+    "historical618FullyRecovered": false,
+    "oneTimeHistoricalRecoveryRepeated": false,
+    "fallbackManifest": "docs/spain-first-pass-recovery-manifest.json",
+    "criticalCountryProgressPersistedInGit": true,
+    "actionsArtifactsNotSoleCanonicalStore": true
+  },
+  "coherence": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "countsDeriveExactly": true,
+    "countSum": 363,
+    "firstPassMinimumTraversed": 363,
+    "maximumNeverTraversed": 255,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noHistoricalMembershipSynthesized": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "noThirdPartyTariffPromoted": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "criticalProgressPersistedInGit": true
+  },
+  "nextQueueRule": "Continue after QWELLO España SL in immutable current-REVE replacement-queue order, skipping REMO and REPSOL because they were already historically investigated; process the next genuinely new identities before any active/setAside re-audit."
+}
