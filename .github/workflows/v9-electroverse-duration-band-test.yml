@@ -24,3 +24,7 @@ jobs:
         run: node tests/v9-test-ocpi-duration-pricing.test.cjs
       - name: Run V9 production-engine OCPI duration pricing tests
         run: node tests/v9-production-ocpi-duration-pricing.test.cjs
+      - name: Run existing V9 pricing threshold regression
+        run: node tests/reve-v2-pricing-thresholds.test.cjs
+      - name: Run existing Spain runtime pricing regression
+        run: node tests/reve-v2-spain-runtime-e2e.test.cjs
