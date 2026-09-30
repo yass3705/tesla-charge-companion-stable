@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-09-24T22:34:36.495Z",
+  "generatedAt": "2026-09-30T10:01:25.503Z",
   "mode": "verified_zewatt_direct",
   "policy": {
     "source": "Ze-Watt first-party public guest/card company endpoint joined to official data.gouv static inventory",
@@ -589,7 +589,6 @@
         "FRZWOEZW033221",
         "FRZWOEZW033231",
         "FRZWOEZW054091",
-        "FRZWOEZW054101",
         "FRZWOEZW054111",
         "FRZWOEZW054121",
         "FRZWOEZW054131",
@@ -687,7 +686,6 @@
           "ZW03322",
           "ZW03323",
           "ZW05409",
-          "ZW05410",
           "ZW05411",
           "ZW05412",
           "ZW05413",
@@ -737,8 +735,8 @@
           "ZW09062",
           "ZW09063"
         ],
-        "exactStationCount": 92,
-        "exactEvseCount": 95,
+        "exactStationCount": 91,
+        "exactEvseCount": 94,
         "structuredTtcProfile": {
           "perKwhEurTtc": 0.18,
           "perMinuteEurTtc": 0.0041,
@@ -778,161 +776,7 @@
             "end": "24:00",
             "billing": "kwh",
             "currency": "EUR",
-            "pricePerKwh": 0.19
-          }
-        ]
-      },
-      "source": "my.ze-watt.com /api/stripe-payment/v1/charge-point/{serial}/company",
-      "directOperatorOnly": true,
-      "verifiedScope": "exact_evse",
-      "defaultSelected": false,
-      "evseIds": [
-        "FRZWOEZW012401",
-        "FRZWOEZW012402",
-        "FRZWOEZW039831",
-        "FRZWOEZW039832",
-        "FRZWOEZW039841",
-        "FRZWOEZW039842",
-        "FRZWOEZW095471",
-        "FRZWOEZW095472",
-        "FRZWOEZW124911",
-        "FRZWOEZW124912",
-        "FRZWOEZW124921",
-        "FRZWOEZW124922",
-        "FRZWOEZW124931",
-        "FRZWOEZW124932",
-        "FRZWOEZW124941",
-        "FRZWOEZW124942",
-        "FRZWOEZW125991",
-        "FRZWOEZW125992",
-        "FRZWOEZW125996",
-        "FRZWOEZW126001",
-        "FRZWOEZW126002",
-        "FRZWOEZW126006",
-        "FRZWOEZW126011",
-        "FRZWOEZW126012",
-        "FRZWOEZW126016"
-      ],
-      "metadata": {
-        "visitorStripeRequired": true,
-        "pricingContext": "anonymous_guest_card",
-        "stationSerials": [
-          "ZW01240",
-          "ZW03983",
-          "ZW03984",
-          "ZW09547",
-          "ZW12491",
-          "ZW12492",
-          "ZW12493",
-          "ZW12494",
-          "ZW12599",
-          "ZW12600",
-          "ZW12601"
-        ],
-        "exactStationCount": 11,
-        "exactEvseCount": 25,
-        "structuredTtcProfile": {
-          "perKwhEurTtc": 0.19,
-          "perMinuteEurTtc": 0,
-          "postChargePerMinuteEurTtc": 0,
-          "postChargeGraceMinutes": 0,
-          "connectedTimePerMinuteEurTtc": 0,
-          "connectedTimeGraceMinutes": 0,
-          "perSessionEurTtc": 0
-        },
-        "fallback": "Electra then Electroverse for non-guest or unresolved stations",
-        "priceMinNotRanked": true,
-        "priceMinReason": "retained in raw snapshot only; not proven to be a tariff component"
-      }
-    },
-    {
-      "id": "zewatt-direct-profile-10",
-      "selectionId": "zewatt-direct-profile-10",
-      "provider": "Ze-Watt direct",
-      "operatorAliases": [
-        "Ze-Watt",
-        "ZE-WATT",
-        "ZE WATT",
-        "FR*ZWO",
-        "FRZWO"
-      ],
-      "countries": [
-        "FR"
-      ],
-      "currency": "EUR",
-      "priority": 132,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {
-            "scope": "allDay",
-            "start": "00:00",
-            "end": "24:00",
-            "billing": "kwh",
-            "currency": "EUR",
-            "pricePerKwh": 0.2
-          }
-        ]
-      },
-      "source": "my.ze-watt.com /api/stripe-payment/v1/charge-point/{serial}/company",
-      "directOperatorOnly": true,
-      "verifiedScope": "exact_evse",
-      "defaultSelected": false,
-      "evseIds": [
-        "FRZWOEZW057911",
-        "FRZWOEZW057912",
-        "FRZWOEZW057921",
-        "FRZWOEZW057922"
-      ],
-      "metadata": {
-        "visitorStripeRequired": true,
-        "pricingContext": "anonymous_guest_card",
-        "stationSerials": [
-          "ZW05791",
-          "ZW05792"
-        ],
-        "exactStationCount": 2,
-        "exactEvseCount": 4,
-        "structuredTtcProfile": {
-          "perKwhEurTtc": 0.2,
-          "perMinuteEurTtc": 0,
-          "postChargePerMinuteEurTtc": 0,
-          "postChargeGraceMinutes": 0,
-          "connectedTimePerMinuteEurTtc": 0,
-          "connectedTimeGraceMinutes": 0,
-          "perSessionEurTtc": 0
-        },
-        "fallback": "Electra then Electroverse for non-guest or unresolved stations",
-        "priceMinNotRanked": true,
-        "priceMinReason": "retained in raw snapshot only; not proven to be a tariff component"
-      }
-    },
-    {
-      "id": "zewatt-direct-profile-11",
-      "selectionId": "zewatt-direct-profile-11",
-      "provider": "Ze-Watt direct",
-      "operatorAliases": [
-        "Ze-Watt",
-        "ZE-WATT",
-        "ZE WATT",
-        "FR*ZWO",
-        "FRZWO"
-      ],
-      "countries": [
-        "FR"
-      ],
-      "currency": "EUR",
-      "priority": 132,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {
-            "scope": "allDay",
-            "start": "00:00",
-            "end": "24:00",
-            "billing": "kwh",
-            "currency": "EUR",
-            "pricePerKwh": 0.2,
+            "pricePerKwh": 0.18,
             "sessionFeeEur": 0.6,
             "chargingTimePerMinuteEur": 0.0083,
             "connectedTimePerMinuteAfterFreeEur": 0.0083,
@@ -1030,6 +874,7 @@
         "FRZWOEZW040911",
         "FRZWOEZW040931",
         "FRZWOEZW040941",
+        "FRZWOEZW040951",
         "FRZWOEZW040961",
         "FRZWOEZW040971",
         "FRZWOEZW040981",
@@ -1171,6 +1016,7 @@
           "ZW04091",
           "ZW04093",
           "ZW04094",
+          "ZW04095",
           "ZW04096",
           "ZW04097",
           "ZW04098",
@@ -1223,16 +1069,170 @@
           "ZW04145",
           "ZW04146"
         ],
-        "exactStationCount": 136,
-        "exactEvseCount": 136,
+        "exactStationCount": 137,
+        "exactEvseCount": 137,
         "structuredTtcProfile": {
-          "perKwhEurTtc": 0.2,
+          "perKwhEurTtc": 0.18,
           "perMinuteEurTtc": 0.0083,
           "postChargePerMinuteEurTtc": 0,
           "postChargeGraceMinutes": 0,
           "connectedTimePerMinuteEurTtc": 0.0083,
           "connectedTimeGraceMinutes": 0,
           "perSessionEurTtc": 0.6
+        },
+        "fallback": "Electra then Electroverse for non-guest or unresolved stations",
+        "priceMinNotRanked": true,
+        "priceMinReason": "retained in raw snapshot only; not proven to be a tariff component"
+      }
+    },
+    {
+      "id": "zewatt-direct-profile-10",
+      "selectionId": "zewatt-direct-profile-10",
+      "provider": "Ze-Watt direct",
+      "operatorAliases": [
+        "Ze-Watt",
+        "ZE-WATT",
+        "ZE WATT",
+        "FR*ZWO",
+        "FRZWO"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.19
+          }
+        ]
+      },
+      "source": "my.ze-watt.com /api/stripe-payment/v1/charge-point/{serial}/company",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FRZWOEZW012401",
+        "FRZWOEZW012402",
+        "FRZWOEZW039831",
+        "FRZWOEZW039832",
+        "FRZWOEZW039841",
+        "FRZWOEZW039842",
+        "FRZWOEZW095471",
+        "FRZWOEZW095472",
+        "FRZWOEZW124911",
+        "FRZWOEZW124912",
+        "FRZWOEZW124921",
+        "FRZWOEZW124922",
+        "FRZWOEZW124931",
+        "FRZWOEZW124932",
+        "FRZWOEZW124941",
+        "FRZWOEZW124942",
+        "FRZWOEZW125991",
+        "FRZWOEZW125992",
+        "FRZWOEZW125996",
+        "FRZWOEZW126001",
+        "FRZWOEZW126002",
+        "FRZWOEZW126006",
+        "FRZWOEZW126011",
+        "FRZWOEZW126012",
+        "FRZWOEZW126016"
+      ],
+      "metadata": {
+        "visitorStripeRequired": true,
+        "pricingContext": "anonymous_guest_card",
+        "stationSerials": [
+          "ZW01240",
+          "ZW03983",
+          "ZW03984",
+          "ZW09547",
+          "ZW12491",
+          "ZW12492",
+          "ZW12493",
+          "ZW12494",
+          "ZW12599",
+          "ZW12600",
+          "ZW12601"
+        ],
+        "exactStationCount": 11,
+        "exactEvseCount": 25,
+        "structuredTtcProfile": {
+          "perKwhEurTtc": 0.19,
+          "perMinuteEurTtc": 0,
+          "postChargePerMinuteEurTtc": 0,
+          "postChargeGraceMinutes": 0,
+          "connectedTimePerMinuteEurTtc": 0,
+          "connectedTimeGraceMinutes": 0,
+          "perSessionEurTtc": 0
+        },
+        "fallback": "Electra then Electroverse for non-guest or unresolved stations",
+        "priceMinNotRanked": true,
+        "priceMinReason": "retained in raw snapshot only; not proven to be a tariff component"
+      }
+    },
+    {
+      "id": "zewatt-direct-profile-11",
+      "selectionId": "zewatt-direct-profile-11",
+      "provider": "Ze-Watt direct",
+      "operatorAliases": [
+        "Ze-Watt",
+        "ZE-WATT",
+        "ZE WATT",
+        "FR*ZWO",
+        "FRZWO"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.2
+          }
+        ]
+      },
+      "source": "my.ze-watt.com /api/stripe-payment/v1/charge-point/{serial}/company",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FRZWOEZW057911",
+        "FRZWOEZW057912",
+        "FRZWOEZW057921",
+        "FRZWOEZW057922"
+      ],
+      "metadata": {
+        "visitorStripeRequired": true,
+        "pricingContext": "anonymous_guest_card",
+        "stationSerials": [
+          "ZW05791",
+          "ZW05792"
+        ],
+        "exactStationCount": 2,
+        "exactEvseCount": 4,
+        "structuredTtcProfile": {
+          "perKwhEurTtc": 0.2,
+          "perMinuteEurTtc": 0,
+          "postChargePerMinuteEurTtc": 0,
+          "postChargeGraceMinutes": 0,
+          "connectedTimePerMinuteEurTtc": 0,
+          "connectedTimeGraceMinutes": 0,
+          "perSessionEurTtc": 0
         },
         "fallback": "Electra then Electroverse for non-guest or unresolved stations",
         "priceMinNotRanked": true,
@@ -1550,6 +1550,7 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
+        "FRZWOEZW014101",
         "FRZWOEZW014102"
       ],
       "metadata": {
@@ -1559,7 +1560,7 @@
           "ZW01410"
         ],
         "exactStationCount": 1,
-        "exactEvseCount": 1,
+        "exactEvseCount": 2,
         "structuredTtcProfile": {
           "perKwhEurTtc": 0.24,
           "perMinuteEurTtc": 0.0041,
@@ -2714,6 +2715,12 @@
         "FRZWOEZW084381",
         "FRZWOEZW084391",
         "FRZWOEZW084411",
+        "FRZWOEZW084521",
+        "FRZWOEZW084531",
+        "FRZWOEZW084541",
+        "FRZWOEZW084551",
+        "FRZWOEZW084561",
+        "FRZWOEZW084571",
         "FRZWOEZW084581",
         "FRZWOEZW084591",
         "FRZWOEZW084601",
@@ -2887,6 +2894,12 @@
           "ZW08438",
           "ZW08439",
           "ZW08441",
+          "ZW08452",
+          "ZW08453",
+          "ZW08454",
+          "ZW08455",
+          "ZW08456",
+          "ZW08457",
           "ZW08458",
           "ZW08459",
           "ZW08460",
@@ -2943,8 +2956,8 @@
           "ZW11916",
           "ZW12183"
         ],
-        "exactStationCount": 162,
-        "exactEvseCount": 171,
+        "exactStationCount": 168,
+        "exactEvseCount": 177,
         "structuredTtcProfile": {
           "perKwhEurTtc": 0.3,
           "perMinuteEurTtc": 0.0084,
@@ -3653,19 +3666,19 @@
   "sourceEvidence": {
     "summary": {
       "schemaVersion": 1,
-      "generatedAt": "2026-09-24T22:34:36.325Z",
+      "generatedAt": "2026-09-30T10:01:25.383Z",
       "source": {
         "staticResource": "1189bf16-bad6-410b-93c5-8dad856ae49c",
         "dynamicResource": "5a9a3832-7461-4eab-b945-b856df055517",
         "companyEndpoint": "https://my.ze-watt.com/api/stripe-payment/v1/charge-point/{serial}/company"
       },
-      "staticRows": 880,
-      "dynamicRows": 880,
-      "uniqueSerials": 651,
+      "staticRows": 886,
+      "dynamicRows": 886,
+      "uniqueSerials": 656,
       "unresolvedStaticRows": 21,
-      "companyOk": 650,
-      "companyErrors": 1,
-      "directGuestStations": 596,
+      "companyOk": 656,
+      "companyErrors": 0,
+      "directGuestStations": 602,
       "visitorStripeNoPositivePrice": 0,
       "accountOrRoamingOnlyStations": 54,
       "uniqueDirectGuestPriceProfiles": 39,
@@ -3679,8 +3692,8 @@
         "roamingNotDirect": true
       }
     },
-    "directGuestStations": 596,
-    "exactEvseIds": 757,
+    "directGuestStations": 602,
+    "exactEvseIds": 764,
     "priceProfiles": 39
   }
 }
