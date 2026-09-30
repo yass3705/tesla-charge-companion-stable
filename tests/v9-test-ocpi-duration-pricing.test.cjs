@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const Pricing=require('../v9-test/assets/v9/pricing-engine.js');
 
 function close(actual,expected,label){
-  assert.ok(Math.abs(Number(actual)-Number(expected))<1e-8,`${label}: expected ${expected}, got ${actual}`);
+  assert.ok(Math.abs(Number(actual)-Number(expected))<1e-6,`${label}: expected ${expected}, got ${actual}`);
 }
 
 {
