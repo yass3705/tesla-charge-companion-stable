@@ -44,4 +44,16 @@ function close(actual,expected,label){
   close(r.totalEur,20*(30/90)*0.55+30*0.20+1,'bounded combined total');
 }
 
+{
+  const pricing={type:'rules',rules:[
+    {scope:'timeWindow',start:'00:00',end:'00:45',chargePerMinute:0,ocpiDurationBands:[['TIME',1800,null,0.02]]},
+    {scope:'timeWindow',start:'00:45',end:'24:00',chargePerMinute:0,ocpiDurationBands:[['TIME',1800,null,0.02]]}
+  ]};
+  const r=Pricing.evaluateSegmentedRules(pricing,{
+    startAt:'2026-10-01T00:00:00Z',durationMinutes:60,chargingMinutes:60,energyKwh:0
+  },'UTC');
+  assert.equal(r.complete,true);
+  close(r.totalEur,0.6,'duration bands keep global elapsed time across tariff windows');
+}
+
 console.log(JSON.stringify({ok:true,module:'v9-test-ocpi-duration-pricing'},null,2));
