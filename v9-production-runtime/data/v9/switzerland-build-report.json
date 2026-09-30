@@ -1,21 +1,21 @@
 {
-  "generatedAt": "2026-09-29T02:36:40.368164+00:00",
+  "generatedAt": "2026-09-30T02:11:20.346211+00:00",
   "country": "CH",
   "national": {
     "owners": 41,
-    "evses": 19463,
-    "publishedNonTeslaEvses": 19019,
+    "evses": 19472,
+    "publishedNonTeslaEvses": 19028,
     "excludedTeslaEvseCount": 444,
-    "stations": 13208,
+    "stations": 13213,
     "tiles": 56
   },
   "offers": {
-    "direct": 17155,
+    "direct": 17157,
     "subscriptions": 2714,
-    "uniqueDirectEvse": 17037,
+    "uniqueDirectEvse": 17039,
     "uniqueSubscriptionEvse": 2714,
     "sourceCounts": {
-      "data/switzerland/migrol-official-direct-tariffs.json": 1027,
+      "data/switzerland/migrol-official-direct-tariffs.json": 1030,
       "data/switzerland/shell-evpass-official-direct-tariffs.json": 1166,
       "data/switzerland/cci-move-cpo-tariffs-national.json": 3752,
       "data/switzerland/energie360-direct-tariffs.json": 809,
@@ -34,7 +34,7 @@
       "data/switzerland/ewd-official-direct-tariffs.json": 8,
       "data/switzerland/ewo-ecarup-direct-tariffs.json": 7,
       "data/switzerland/mmn-move-cpo-tariffs.json": 12,
-      "data/switzerland/ebs-ecarup-direct-tariffs.json": 5,
+      "data/switzerland/ebs-ecarup-direct-tariffs.json": 6,
       "data/switzerland/edh-direct-tariffs.json": 16,
       "data/switzerland/de-edh-direct-tariffs.json": 2,
       "data/switzerland/autosense-amag-direct-tariffs.json": 10,
@@ -43,7 +43,7 @@
       "data/switzerland/tae-matterhorn-terminal-direct-tariffs.json": 16,
       "data/switzerland/chevp-evpass-official-direct-tariffs.json": 40,
       "data/switzerland/ecarup-owner-direct-tariffs.json": 3246,
-      "data/switzerland/ecarup-owner-coordinate-safe-overlay.json": 3224,
+      "data/switzerland/ecarup-owner-coordinate-safe-overlay.json": 3222,
       "data/swisscharge/swisscharge-tariffs.json": 2382,
       "data/gofast/ev_charger_stations.json": 542,
       "derived:CH*CCC-from-explicit-Move-CPO-level-schedules": 832
@@ -51,8 +51,8 @@
     "sourceErrors": []
   },
   "fx": {
-    "CHFperEUR": 0.944129,
-    "date": "2026-09-28"
+    "CHFperEUR": 0.945922,
+    "date": "2026-09-29"
   },
   "gofastAudit": {
     "nationalEvse": 563,
