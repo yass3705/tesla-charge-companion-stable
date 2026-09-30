@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-09-29T10:41:14.024Z",
+  "generatedAt": "2026-09-30T10:31:53.702Z",
   "mode": "verified_zephyre_direct",
   "policy": {
     "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
     "resolver": {
       "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260929-032646/consolidation-etalab-schema-irve-statique-v-2.3.1-20260929.csv",
+      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260930-033028/consolidation-etalab-schema-irve-statique-v-2.3.1-20260930.csv",
       "bff": "https://api.services-emobility.com/pay/api",
       "nearby": "POST /stations/nearby",
       "detail": "GET /stations/chargepoint/{internalName}"
@@ -169,14 +169,16 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E91696"
+        "FR*ZP1*E91696",
+        "FR*ZP1*E91707"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 1,
+        "exactEvseCount": 2,
         "internalNames": [
-          "LB-3391-6"
+          "LB-3391-6",
+          "LE-7545-9"
         ],
         "rawPriceComponents": [
           {
@@ -236,10 +238,12 @@
       "evseIds": [
         "FR*ZP1*E00012",
         "FR*ZP1*E00013",
+        "FR*ZP1*E00014",
         "FR*ZP1*E00015",
         "FR*ZP1*E108319",
         "FR*ZP1*E108337",
         "FR*ZP1*E108345",
+        "FR*ZP1*E118022",
         "FR*ZP1*E121740",
         "FR*ZP1*E121744",
         "FR*ZP1*E121760",
@@ -263,9 +267,13 @@
         "FR*ZP1*E131909",
         "FR*ZP1*E131916",
         "FR*ZP1*E131919",
+        "FR*ZP1*E131920",
+        "FR*ZP1*E133869",
         "FR*ZP1*E133872",
+        "FR*ZP1*E133892",
         "FR*ZP1*E133905",
         "FR*ZP1*E133933",
+        "FR*ZP1*E133978",
         "FR*ZP1*E133987",
         "FR*ZP1*E133989",
         "FR*ZP1*E133992",
@@ -275,10 +283,10 @@
         "FR*ZP1*E37714",
         "FR*ZP1*E39538",
         "FR*ZP1*E45602",
-        "FR*ZP1*E50286",
         "FR*ZP1*E51117",
         "FR*ZP1*E51219",
         "FR*ZP1*E77654",
+        "FR*ZP1*E77657",
         "FR*ZP1*E78083",
         "FR*ZP1*E81846",
         "FR*ZP1*E81910",
@@ -304,6 +312,7 @@
         "FR*ZP1*EAC*54211",
         "FR*ZP1*EAC*57121",
         "FR*ZP1*EAC*57701",
+        "FR*ZP1*EAC*57707",
         "FR*ZP1*EAC*65814",
         "FR*ZP1*EAC*65920",
         "FR*ZP1*EAC*65935"
@@ -311,7 +320,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 73,
+        "exactEvseCount": 80,
         "internalNames": [
           "FR*ZP1*EAC*43447",
           "FR*ZP1*EAC*43448",
@@ -324,6 +333,7 @@
           "LB-3409-2",
           "LB-3419-0",
           "LD-4002-0",
+          "LD-4003-7",
           "LD-4008-9",
           "LD-4010-6",
           "LE-7536-7",
@@ -341,13 +351,13 @@
           "LF-9639-1",
           "LF-9642-5",
           "LF-9644-8",
-          "LF-9647-7",
           "LF-9651-7",
           "LF-9655-2",
           "LF-9659-8",
           "LF-9665-0",
           "LF-9667-3",
           "LF-9670-7",
+          "LF-9674-2",
           "LF-9680-5",
           "LF-9684-0",
           "LF-9688-6",
@@ -362,6 +372,8 @@
           "LF-9707-3",
           "LF-9709-6",
           "LF-9710-7",
+          "LF-9711-3",
+          "LF-9713-6",
           "LF-9714-2",
           "LF-9715-9",
           "LF-9716-5",
@@ -372,13 +384,17 @@
           "LG-0233-3",
           "LG-0235-6",
           "LG-0236-2",
+          "LG-0237-9",
           "LG-2142-5",
           "LG-2150-0",
           "LG-2166-7",
           "LG-2170-7",
+          "LG-2171-3",
           "LG-2173-6",
+          "LG-2179-4",
           "LG-2181-1",
           "LG-2184-0",
+          "LG-2189-2",
           "LG-2198-4",
           "LG-2201-5",
           "LG-2205-0",
@@ -449,6 +465,7 @@
         "FR*ZP1*EAC*03072",
         "FR*ZP1*EAC*05462",
         "FR*ZP1*EAC*070811",
+        "FR*ZP1*EAC*10061",
         "FR*ZP1*EAC*10064",
         "FR*ZP1*EAC*10065",
         "FR*ZP1*EAC*11061",
@@ -459,6 +476,7 @@
         "FR*ZP1*EAC*13084",
         "FR*ZP1*EAC*16062",
         "FR*ZP1*EAC*17062",
+        "FR*ZP1*EAC*17063",
         "FR*ZP1*EAC*24061",
         "FR*ZP1*EAC*24062",
         "FR*ZP1*EAC*25062",
@@ -474,7 +492,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 27,
+        "exactEvseCount": 29,
         "internalNames": [
           "LI-0123-0",
           "LI-0298-9",
@@ -489,9 +507,11 @@
           "LI-0371-7",
           "LI-0374-6",
           "LI-0377-5",
+          "LI-0378-1",
           "LI-0543-4",
           "LI-0545-6",
           "LI-0546-2",
+          "LI-0547-9",
           "LI-0549-1",
           "LI-0550-2",
           "LI-0552-5",
@@ -561,7 +581,6 @@
       "evseIds": [
         "FR*ZP1*E113431",
         "FR*ZP1*E126480",
-        "FR*ZP1*E145823",
         "FR*ZP1*E215796",
         "FR*ZP1*E97624",
         "FR*ZP1*EAC*25091",
@@ -570,13 +589,12 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 7,
+        "exactEvseCount": 6,
         "internalNames": [
           "LA-7172-9",
           "LB-3384-7",
           "LG-2178-8",
           "LG-2190-3",
-          "LG-2195-5",
           "LG-2200-9",
           "LI-0556-0"
         ],
@@ -597,6 +615,62 @@
     {
       "id": "zephyre-direct-profile-07",
       "selectionId": "zephyre-direct-profile-07",
+      "provider": "Zephyre direct",
+      "operatorAliases": [
+        "Zephyre",
+        "Zephyre SAS",
+        "FR*ZP1",
+        "FRZP1"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "currency": "EUR",
+      "priority": 132,
+      "pricing": {
+        "type": "rules",
+        "rules": [
+          {
+            "scope": "allDay",
+            "start": "00:00",
+            "end": "24:00",
+            "billing": "kwh",
+            "currency": "EUR",
+            "pricePerKwh": 0.46
+          }
+        ]
+      },
+      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
+      "directOperatorOnly": true,
+      "verifiedScope": "exact_evse",
+      "defaultSelected": false,
+      "evseIds": [
+        "FR*ZP1*E129792"
+      ],
+      "metadata": {
+        "pricingContext": "anonymous_direct_payment",
+        "currentType": "AC",
+        "exactEvseCount": 1,
+        "internalNames": [
+          "LF-9669-6"
+        ],
+        "rawPriceComponents": [
+          {
+            "priceUnit": "CHARGING_KWH",
+            "price": 0.46,
+            "freeParkingCostMinutes": 0,
+            "restrictionStartTime": null,
+            "restrictionEndTime": null,
+            "taxAmount": 20
+          }
+        ],
+        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
+        "priceBasis": "ePowerDirect displayed direct price"
+      }
+    },
+    {
+      "id": "zephyre-direct-profile-08",
+      "selectionId": "zephyre-direct-profile-08",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -662,8 +736,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-08",
-      "selectionId": "zephyre-direct-profile-08",
+      "id": "zephyre-direct-profile-09",
+      "selectionId": "zephyre-direct-profile-09",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -718,8 +792,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-09",
-      "selectionId": "zephyre-direct-profile-09",
+      "id": "zephyre-direct-profile-10",
+      "selectionId": "zephyre-direct-profile-10",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -752,14 +826,16 @@
       "defaultSelected": false,
       "evseIds": [
         "FR*ZP1*E124743",
+        "FR*ZP1*E124751",
         "FR*ZP1*E124764"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 2,
+        "exactEvseCount": 3,
         "internalNames": [
           "LF-9663-8",
+          "LF-9666-7",
           "LF-9690-3"
         ],
         "rawPriceComponents": [
@@ -785,8 +861,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-10",
-      "selectionId": "zephyre-direct-profile-10",
+      "id": "zephyre-direct-profile-11",
+      "selectionId": "zephyre-direct-profile-11",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -818,16 +894,14 @@
       "defaultSelected": false,
       "evseIds": [
         "FR*ZP1*E108356",
-        "FR*ZP1*E97590",
         "FR*ZP1*E97622",
         "FR*ZP1*E97648"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 4,
+        "exactEvseCount": 3,
         "internalNames": [
-          "LF-6262-1",
           "LF-6264-4",
           "LF-6267-3",
           "LF-6279-4"
@@ -847,8 +921,8 @@
       }
     },
     {
-      "id": "zephyre-direct-profile-11",
-      "selectionId": "zephyre-direct-profile-11",
+      "id": "zephyre-direct-profile-12",
+      "selectionId": "zephyre-direct-profile-12",
       "provider": "Zephyre direct",
       "operatorAliases": [
         "Zephyre",
@@ -894,62 +968,6 @@
           {
             "priceUnit": "CHARGING_KWH",
             "price": 0.66,
-            "freeParkingCostMinutes": 0,
-            "restrictionStartTime": null,
-            "restrictionEndTime": null,
-            "taxAmount": 20
-          }
-        ],
-        "fallback": "Electra then Electroverse for unresolved/non-exposed EVSEs",
-        "priceBasis": "ePowerDirect displayed direct price"
-      }
-    },
-    {
-      "id": "zephyre-direct-profile-12",
-      "selectionId": "zephyre-direct-profile-12",
-      "provider": "Zephyre direct",
-      "operatorAliases": [
-        "Zephyre",
-        "Zephyre SAS",
-        "FR*ZP1",
-        "FRZP1"
-      ],
-      "countries": [
-        "FR"
-      ],
-      "currency": "EUR",
-      "priority": 132,
-      "pricing": {
-        "type": "rules",
-        "rules": [
-          {
-            "scope": "allDay",
-            "start": "00:00",
-            "end": "24:00",
-            "billing": "kwh",
-            "currency": "EUR",
-            "pricePerKwh": 0.71
-          }
-        ]
-      },
-      "source": "ePowerDirect /pay/api/stations/chargepoint/{internalName}",
-      "directOperatorOnly": true,
-      "verifiedScope": "exact_evse",
-      "defaultSelected": false,
-      "evseIds": [
-        "FR*ZP1*E88452"
-      ],
-      "metadata": {
-        "pricingContext": "anonymous_direct_payment",
-        "currentType": "AC",
-        "exactEvseCount": 1,
-        "internalNames": [
-          "LA-7171-2"
-        ],
-        "rawPriceComponents": [
-          {
-            "priceUnit": "CHARGING_KWH",
-            "price": 0.71,
             "freeParkingCostMinutes": 0,
             "restrictionStartTime": null,
             "restrictionEndTime": null,
@@ -1061,15 +1079,13 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E118280",
-        "FR*ZP1*E118286"
+        "FR*ZP1*E118280"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 2,
+        "exactEvseCount": 1,
         "internalNames": [
-          "LF-9662-1",
           "LF-9699-0"
         ],
         "rawPriceComponents": [
@@ -1121,17 +1137,21 @@
       "defaultSelected": false,
       "evseIds": [
         "FR*ZP1*E77902",
+        "FR*ZP1*E77903",
         "FR*ZP1*EAC*38139",
-        "FR*ZP1*EAC*51386"
+        "FR*ZP1*EAC*51386",
+        "FR*ZP1*EAC*52036"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 3,
+        "exactEvseCount": 5,
         "internalNames": [
           "LA-5724-6",
+          "LA-6524-2",
           "LB-0639-1",
-          "LB-2659-7"
+          "LB-2659-7",
+          "LI-5203-6"
         ],
         "rawPriceComponents": [
           {
@@ -1184,7 +1204,6 @@
         "FR*ZP1*E112313",
         "FR*ZP1*E112811",
         "FR*ZP1*E124791",
-        "FR*ZP1*E66005",
         "FR*ZP1*E85888",
         "FR*ZP1*E97538",
         "FR*ZP1*EAC*49680",
@@ -1193,7 +1212,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 8,
+        "exactEvseCount": 7,
         "internalNames": [
           "LB-1090-3",
           "LB-2930-0",
@@ -1201,7 +1220,6 @@
           "LF-6274-2",
           "LF-9633-3",
           "LF-9698-4",
-          "LG-2144-8",
           "LG-2151-7"
         ],
         "rawPriceComponents": [
@@ -1223,13 +1241,13 @@
   "sourceEvidence": {
     "summary": {
       "schemaVersion": 1,
-      "generatedAt": "2026-09-29T10:41:13.884Z",
+      "generatedAt": "2026-09-30T10:31:53.544Z",
       "country": "FR",
       "network": "Zephyre",
       "partyId": "FR*ZP1",
       "source": {
         "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260929-032646/consolidation-etalab-schema-irve-statique-v-2.3.1-20260929.csv",
+        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20260930-033028/consolidation-etalab-schema-irve-statique-v-2.3.1-20260930.csv",
         "bff": "https://api.services-emobility.com/pay/api",
         "nearby": "POST /stations/nearby",
         "detail": "GET /stations/chargepoint/{internalName}"
@@ -1237,15 +1255,15 @@
       "rawFrZp1Rows": 425,
       "irveUniqueEvse": 373,
       "seedCoordinates": 148,
-      "liveDetailStations": 137,
-      "liveDirectEvse": 137,
-      "liveTariffPresent": 137,
-      "directPaymentEnabled": 137,
+      "liveDetailStations": 146,
+      "liveDirectEvse": 146,
+      "liveTariffPresent": 146,
+      "directPaymentEnabled": 146,
       "nearbyErrors": 0,
       "detailErrors": 0,
-      "unresolvedIrveEvse": 236,
+      "unresolvedIrveEvse": 227,
       "unresolvedByDataset": {
-        "63dccb1307e9b2f213a5130c": 35,
+        "63dccb1307e9b2f213a5130c": 26,
         "65a5487fa94ead1ffa4562a3": 201
       },
       "providers": [
@@ -1259,8 +1277,8 @@
         "bindingPricingOfferTokenStored": false
       }
     },
-    "liveDirectEvse": 137,
-    "exactEvseIds": 137,
+    "liveDirectEvse": 146,
+    "exactEvseIds": 146,
     "priceProfiles": 16
   }
 }
