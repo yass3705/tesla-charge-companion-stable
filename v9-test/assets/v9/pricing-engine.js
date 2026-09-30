@@ -128,16 +128,17 @@
   function durationFlatRate(rule,durationMinutes,baseRate=0){
     return durationBandRate(rule,'FLAT',Math.max(0,durationMinutes)*60,baseRate);
   }
-  function evaluateRule(rule,{energyKwh=0,durationMinutes=0,chargingMinutes=null}={}){
+  function evaluateRule(rule,{energyKwh=0,durationMinutes=0,chargingMinutes=null,elapsedMinutes=0}={}){
     const energy=Math.max(0,num(energyKwh)??0),duration=Math.max(0,num(durationMinutes)??0),
-      charging=Math.max(0,Math.min(duration,num(chargingMinutes)??duration)),idle=Math.max(0,duration-charging),components={};let total=0;
+      charging=Math.max(0,Math.min(duration,num(chargingMinutes)??duration)),idle=Math.max(0,duration-charging),
+      elapsed=Math.max(0,num(elapsedMinutes)??0),components={};let total=0;
     const perKwh=num(rule?.pricePerKwh);
     if(perKwh!=null||durationBands(rule,'ENERGY').length){
       const billedEnergy=rule?.energyRounding==='started_kwh'&&energy>0?Math.ceil(energy):energy;
       const baseRate=perKwh??0;
       let energyRate=baseRate;
       if(durationBands(rule,'ENERGY').length&&charging>0){
-        const integrated=integrateDurationRate(rule,'ENERGY',0,charging,baseRate);
+        const integrated=integrateDurationRate(rule,'ENERGY',elapsed,elapsed+charging,baseRate);
         energyRate=integrated/charging;
       }
       components.energy=money(billedEnergy*energyRate);total+=components.energy;
@@ -147,13 +148,13 @@
     const chargePerMinute=num(rule?.chargePerMinute)??num(rule?.chargingTimePerMinuteEur);
     if(chargePerMinute!=null||durationBands(rule,'TIME').length){
       const baseRate=chargePerMinute??0;
-      const cost=integrateDurationRate(rule,'TIME',0,charging,baseRate);
+      const cost=integrateDurationRate(rule,'TIME',elapsed,elapsed+charging,baseRate);
       components.chargingTime=money(cost);total+=components.chargingTime;
     }
     const idlePerMinute=num(rule?.idlePerMinute);
     if(idlePerMinute!=null||durationBands(rule,'PARKING_TIME').length){
       const baseRate=idlePerMinute??0;
-      const cost=integrateDurationRate(rule,'PARKING_TIME',charging,duration,baseRate);
+      const cost=integrateDurationRate(rule,'PARKING_TIME',elapsed+charging,elapsed+duration,baseRate);
       components.parkingTime=money(cost);total+=components.parkingTime;
     }
     const connectionFee=num(rule?.connectionFee);
@@ -187,6 +188,7 @@
     if(!rule)return false;
     if(rule.mustEndSameLocalDay===true||rule.holidayOnly===true||rule.excludeHolidays===true||(Array.isArray(rule.daysOfWeek)&&rule.daysOfWeek.length))return false;
     if(rule.energyRounding==='started_kwh')return false;
+    if((num(rule.connectionFee)??0)!==0||durationBands(rule,'FLAT').length)return false;
     if(num(rule.connectedTimeBlockMinutes)>0||num(rule.connectedTimeBlockEur)!=null)return false;
     if(num(rule.connectedTimeFreeMinutes)!=null||num(rule.connectedTimePerMinuteAfterFreeEur)!=null)return false;
     if(num(rule.connectedTimeInitialMinutes)!=null||num(rule.connectedTimeInitialFlatEur)!=null||num(rule.connectedTimeAfterInitialPerMinuteEur)!=null)return false;
@@ -217,7 +219,7 @@
       if(!Number.isFinite(boundary))boundary=duration-elapsed;
       const slice=Math.min(duration-elapsed,Math.max(boundary,1e-6));
       const chargeOverlap=Math.max(0,Math.min(charging,elapsed+slice)-elapsed),segmentEnergy=charging>0?energy*(chargeOverlap/charging):0;
-      const evaluated=evaluateRule(rule,{energyKwh:segmentEnergy,durationMinutes:slice,chargingMinutes:chargeOverlap});
+      const evaluated=evaluateRule(rule,{energyKwh:segmentEnergy,durationMinutes:slice,chargingMinutes:chargeOverlap,elapsedMinutes:elapsed});
       total+=evaluated.totalEur;
       segments.push({startAt:at.toISOString(),durationMinutes:money(slice),chargingMinutes:money(chargeOverlap),energyKwh:money(segmentEnergy),totalEur:evaluated.totalEur,components:evaluated.components,rule});
       elapsed+=slice;
