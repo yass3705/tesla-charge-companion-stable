@@ -1,0 +1,22 @@
+name: V9 Electroverse duration-band test
+on:
+  push:
+    branches:
+      - electroverse-v9-duration-bands
+    paths:
+      - "v9-test/assets/v9/pricing-engine.js"
+      - "tests/v9-test-ocpi-duration-pricing.test.cjs"
+      - ".github/workflows/v9-electroverse-duration-band-test.yml"
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V9 OCPI duration pricing tests
+        run: node tests/v9-test-ocpi-duration-pricing.test.cjs
