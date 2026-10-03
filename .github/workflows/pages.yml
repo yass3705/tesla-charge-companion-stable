@@ -398,6 +398,54 @@ jobs:
       - name: Retirer l ancienne preview V9 obsolète
         run: rm -rf site/v9-test
 
+      - name: Récupérer la branche V9 validée
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-production
+          ref: v9/interface-foundation-frozen-snapshot
+          path: v9prod
+          persist-credentials: false
+
+      - name: Récupérer le snapshot Data Lab figé
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          ref: 40806cdd10c428579ed7c6b0bbecca0a01b70d12
+          path: datalab
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Récupérer la baseline Stable figée
+        uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-stable
+          ref: 0a6d2c3415504397310d3dc92fae40be843b2435
+          path: stablebase
+          persist-credentials: false
+
+      - name: Construire la preview V9 isolée
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C datalab rev-parse HEAD)" = "40806cdd10c428579ed7c6b0bbecca0a01b70d12"
+          python v9prod/scripts/build_refresh_candidate_config.py \
+            --base v9prod/config/snapshots/2026-09-30-r9-electra-fr.json \
+            --datalab-sha 40806cdd10c428579ed7c6b0bbecca0a01b70d12 \
+            --snapshot-id 2026-10-03-nl-datalab-candidate \
+            --out v9prod/config/snapshots/explicit-candidate.json \
+            --use-datalab-nl
+          python v9prod/scripts/validate_snapshot.py v9prod/config/snapshots/explicit-candidate.json
+          python v9prod/scripts/validate_electra_platform_overlay.py datalab
+          python v9prod/scripts/build_snapshot.py \
+            --stable stablebase \
+            --datalab datalab \
+            --config v9prod/config/snapshots/explicit-candidate.json \
+            --out site/v9-preview
+          python v9prod/scripts/validate_built_snapshot.py site/v9-preview 2026-10-03-nl-datalab-candidate
+          python v9prod/scripts/validate_stable_parity.py stablebase site/v9-preview --allow-nl-override
+          python v9prod/scripts/validate_browser_asset_graph.py site/v9-preview
+          python v9prod/scripts/verify_candidate_manifest.py site/v9-preview
+
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
 
