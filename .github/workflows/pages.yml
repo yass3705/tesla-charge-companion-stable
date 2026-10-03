@@ -4,6 +4,7 @@ name: Publier le site
 # V9 bridge cache-bust build
 # V9 bridge syntax fix
 # V9 mobile dropdown fix: refresh production shell from the pinned candidate branch.
+# Clean V9 redeploy checkpoint 2026-10-03: rebuild from pinned refs and publish a fresh artifact.
 
 on:
   push:
