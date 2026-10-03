@@ -9,6 +9,7 @@ name: Publier le site
 # V9 default network selection: all operators; Tesla is quick filter only.
 # V9 tariff eligibility fix: null power bounds must remain unbounded.
 # V9 tariff cards: show CPO and eMSP alternatives, not only the cheapest row.
+# V9 filters: native multi-select dropdowns and dynamic operator refresh.
 
 on:
   push:
