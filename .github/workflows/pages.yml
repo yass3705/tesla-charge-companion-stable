@@ -6,6 +6,7 @@ name: Publier le site
 # V9 mobile dropdown fix: refresh production shell from the pinned candidate branch.
 # Clean V9 redeploy checkpoint 2026-10-03: rebuild from pinned refs and publish a fresh artifact.
 # Operator dropdown mirror refresh: redraw after candidate results.
+# V9 default network selection: all operators; Tesla is quick filter only.
 
 on:
   push:
