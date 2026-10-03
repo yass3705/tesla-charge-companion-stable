@@ -10,6 +10,7 @@ name: Publier le site
 # V9 tariff eligibility fix: null power bounds must remain unbounded.
 # V9 tariff cards: show CPO and eMSP alternatives, not only the cheapest row.
 # V9 filters: native multi-select dropdowns and dynamic operator refresh.
+# V9 currency: use local MAD/CHF/GBP for comparable native offers.
 
 on:
   push:
