@@ -446,6 +446,28 @@ jobs:
           python v9prod/scripts/validate_browser_asset_graph.py site/v9-preview
           python v9prod/scripts/verify_candidate_manifest.py site/v9-preview
 
+
+      - name: Rendre la preview V9 accessible depuis la racine
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > site/v9-preview/index.html <<'HTML'
+          <!doctype html>
+          <html lang="fr">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="refresh" content="0; url=v9-production-shell/">
+            <title>TCC V9</title>
+          </head>
+          <body>
+            <p>Ouverture de la V9…</p>
+            <p><a href="v9-production-shell/">Ouvrir la V9</a></p>
+            <script>location.replace('v9-production-shell/');</script>
+          </body>
+          </html>
+          HTML
+
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
 
