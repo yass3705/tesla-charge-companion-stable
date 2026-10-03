@@ -7,6 +7,7 @@ name: Publier le site
 # Clean V9 redeploy checkpoint 2026-10-03: rebuild from pinned refs and publish a fresh artifact.
 # Operator dropdown mirror refresh: redraw after candidate results.
 # V9 default network selection: all operators; Tesla is quick filter only.
+# V9 tariff eligibility fix: null power bounds must remain unbounded.
 
 on:
   push:
