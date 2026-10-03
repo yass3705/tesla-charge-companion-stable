@@ -14,6 +14,7 @@ name: Publier le site
 # V9 pricing: EUR FX normalization, base tariff per power, recovered-km ranking.
 # V9 path fix: exchange rates resolved relative to the published shell.
 # V9 resilience: snapshot FX fallback prevents search failure on asset fetch errors.
+# V9 cache: bridge fingerprint bumped after pricing release.
 
 on:
   push:
