@@ -450,6 +450,34 @@ jobs:
           python v9prod/scripts/validate_browser_asset_graph.py site/v9-preview
           python v9prod/scripts/verify_candidate_manifest.py site/v9-preview
 
+          # Contrat UI V9 : bloquer toute publication si le bridge ou l'entrée
+          # mobile réintroduit l'ancien contrôle sans l'habillage V9.
+          node --check site/v9-preview/v9-production-shell/bridge.js
+          python -m py_compile v9prod/scripts/build_snapshot.py
+          python - <<'PY'
+          from pathlib import Path
+          bridge = Path('site/v9-preview/v9-production-shell/bridge.js').read_text(encoding='utf-8')
+          shell = Path('site/v9-preview/v9-production-shell/index.html').read_text(encoding='utf-8')
+          root = Path('site/v9-preview/index.html').read_text(encoding='utf-8')
+          required = (
+              "function normalizeLegacyChrome",
+              "Version V9",
+              "netherlandsRefreshButton",
+              "v9UseCurrentPosition",
+              "v9TeslaOnly",
+              "v9MapSummary",
+              "bridge.js?v=v9-ui-",
+          )
+          missing = [item for item in required if item not in bridge + shell]
+          if missing:
+              raise SystemExit("Contrat UI V9 incomplet: " + ", ".join(missing))
+          if "st.status?.state" in bridge or "Version 7.3 Stable" in bridge:
+              raise SystemExit("Élément legacy visible dans le bridge V9")
+          if "v9-production-shell/" not in root or "location.replace" not in root:
+              raise SystemExit("Point d'entrée racine V9 invalide")
+          print("Contrat UI V9 validé avant publication")
+          PY
+
 
       - name: Rendre la preview V9 accessible depuis la racine
         shell: bash
