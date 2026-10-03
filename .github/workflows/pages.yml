@@ -15,6 +15,7 @@ name: Publier le site
 # V9 path fix: exchange rates resolved relative to the published shell.
 # V9 resilience: snapshot FX fallback prevents search failure on asset fetch errors.
 # V9 cache: bridge fingerprint bumped after pricing release.
+# V9 Tesla tariffs: normalize power-band rates in the runtime adapter.
 
 on:
   push:
