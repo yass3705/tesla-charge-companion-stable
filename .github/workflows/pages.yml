@@ -1,6 +1,7 @@
 name: Publier le site
 
-# V9 UI bridge: refresh production shell from the pinned candidate branch.
+# V9 UI bridge
+# V9 bridge cache-bust build: refresh production shell from the pinned candidate branch.
 
 on:
   push:
