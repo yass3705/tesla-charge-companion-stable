@@ -7,6 +7,23 @@
   const text=v=>String(v==null?'':v).trim();
   const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
 
+  function normalizedPricing(pricing,powerKw){
+    const out=clone(pricing);if(!out||!Array.isArray(out.rules))return out;
+    out.rules=out.rules.map(rule=>{
+      const next={...rule};
+      if(next.pricePerMinute==null){
+        const bands=Array.isArray(next.powerBands)?next.powerBands:[];
+        const band=bands.find(item=>{
+          const min=Number(item?.minKw),max=Number(item?.maxKw);
+          return Number.isFinite(min)&&Number.isFinite(max)&&powerKw>=min&&(powerKw<max||powerKw===max&&max===Math.max(...bands.map(x=>Number(x?.maxKw)||0)));
+        });
+        const rate=band?.ratePerMinute??next.chargePerMinute;
+        if(Number.isFinite(Number(rate)))next.pricePerMinute=Number(rate);
+      }
+      return next;
+    });
+    return out;
+  }
   function configRows(raw){
     if(Array.isArray(raw?.chargingConfigurations)&&raw.chargingConfigurations.length)return raw.chargingConfigurations;
     return [{id:`${raw?.id||'tesla'}:default`,label:'Tesla',kind:raw?.kind||'DC',powerKw:Number(raw?.powerKw||0),stalls:Number(raw?.stalls||0),pricing:raw?.pricing||null}];
@@ -26,7 +43,7 @@
       if(cfg?.pricing||raw?.pricing)offers.push({
         id:`tesla-direct:${evseId}`,
         provider:'Tesla',kind:'direct',subscriptionId:null,countries:[text(raw?.countryCode).toUpperCase()||'*'],currency:'EUR',
-        evseIds:[evseId],pricing:clone(cfg?.pricing||raw?.pricing),priority:100
+        evseIds:[evseId],pricing:normalizedPricing(cfg?.pricing||raw?.pricing,cfg?.powerKw||raw?.powerKw),priority:100
       });
     }
     return{
