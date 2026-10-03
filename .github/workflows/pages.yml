@@ -395,6 +395,9 @@ jobs:
 
           echo 'V8 RC4.8 rc48bt preview : registre tarifaire unifié + cache cohérent par déploiement + page Comparer consolidée + abonnements compacts catalogue complet + La Borne Bleue calculable préparée avec succès'
 
+      - name: Retirer l ancienne preview V9 obsolète
+        run: rm -rf site/v9-test
+
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v5
 
