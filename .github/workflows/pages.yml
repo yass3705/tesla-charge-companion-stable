@@ -17,6 +17,7 @@ name: Publier le site
 # V9 cache: bridge fingerprint bumped after pricing release.
 # V9 Tesla tariffs: normalize power-band rates in the runtime adapter.
 # V9 Tesla cache: invalidate the adapter after tariff normalization.
+# Publish V9 PR #5 merge 605d3a2 from the validated production branch.
 
 on:
   push:
