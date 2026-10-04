@@ -18,6 +18,7 @@ name: Publier le site
 # V9 Tesla tariffs: normalize power-band rates in the runtime adapter.
 # V9 Tesla cache: invalidate the adapter after tariff normalization.
 # Publish V9 PR #5 merge 605d3a2 from the validated production branch.
+# Publish V9 tariff UI and local-currency fix PR #6 merge fc4be12.
 
 on:
   push:
