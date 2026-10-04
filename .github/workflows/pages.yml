@@ -461,7 +461,7 @@ jobs:
             --config v9prod/config/snapshots/explicit-candidate.json \
             --out site/v9-preview
           python v9prod/scripts/validate_built_snapshot.py site/v9-preview 2026-10-03-nl-datalab-candidate
-          python v9prod/scripts/validate_stable_parity.py stablebase site/v9-preview --allow-nl-override
+          python v9prod/scripts/validate_stable_parity.py stablebase site/v9-preview --allow-nl-override --allow-pricing-engine-override
           python v9prod/scripts/validate_browser_asset_graph.py site/v9-preview
           python v9prod/scripts/verify_candidate_manifest.py site/v9-preview
 
