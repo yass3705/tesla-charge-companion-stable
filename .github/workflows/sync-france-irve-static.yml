@@ -1,0 +1,78 @@
+name: Sync France IRVE static bundle from Data Lab
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/sync-france-irve-static.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-france-irve-static
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Fetch canonical Data Lab bundle
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/yass3705/tesla-charge-companion-data-lab.git /tmp/france-data-lab
+          git -C /tmp/france-data-lab sparse-checkout set data/national/france-irve-static-v9
+      - name: Validate and sync production-runtime and test bundles
+        run: |
+          python - <<'PY'
+          import gzip, hashlib, json, pathlib, shutil
+          source = pathlib.Path("/tmp/france-data-lab/data/national/france-irve-static-v9")
+          manifest = json.loads((source / "manifest.json").read_text())
+          def verify(path, expected):
+              actual = hashlib.sha256(path.read_bytes()).hexdigest()
+              if actual != expected:
+                  raise SystemExit(f"SHA256 mismatch: {path}: {actual} != {expected}")
+          verify(source / manifest["allFile"], manifest["allSha256"])
+          with gzip.open(source / manifest["allFile"], "rt", encoding="utf-8") as f:
+              rows = json.load(f)
+          if len(rows) != manifest["stationCount"]:
+              raise SystemExit("Station count mismatch in all.json.gz")
+          for tile in manifest["tiles"]:
+              verify(source / tile["file"], tile["sha256"])
+              with gzip.open(source / tile["file"], "rt", encoding="utf-8") as f:
+                  tile_rows = json.load(f)
+              if len(tile_rows) != tile["count"]:
+                  raise SystemExit(f"Tile count mismatch: {tile['id']}")
+          # The TCC V9 runtime consumes tile files at the bundle root.
+          manifest["tiles"] = [{**tile, "file": pathlib.Path(tile["file"]).name} for tile in manifest["tiles"]]
+          for target in (
+              pathlib.Path("v9-production-runtime/data/v9/france-static"),
+              pathlib.Path("v9-test/data/v9/france-static"),
+          ):
+              if target.exists():
+                  shutil.rmtree(target)
+              (target / "tiles").mkdir(parents=True, exist_ok=True)
+              shutil.copy2(source / "all.json.gz", target / "all.json.gz")
+              for tile in manifest["tiles"]:
+                  shutil.copy2(source / "tiles" / tile["file"], target / "tiles" / tile["file"])
+              (target / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":")) + "\n")
+              # Flat copies are required by the current runtime manifest contract.
+              for tile in manifest["tiles"]:
+                  shutil.copy2(source / "tiles" / tile["file"], target / tile["file"])
+          print(json.dumps({k: manifest[k] for k in ("sourceRetrievedAt","sourceSha256","stationCount","pdcCount","tileCount")}))
+          PY
+      - name: Commit refreshed bundles
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v9-production-runtime/data/v9/france-static v9-test/data/v9/france-static
+          if git diff --cached --quiet; then
+            echo "TCC bundles already match Data Lab."
+            exit 0
+          fi
+          git commit -m "Refresh France static IRVE bundle"
+          git push origin HEAD:main
