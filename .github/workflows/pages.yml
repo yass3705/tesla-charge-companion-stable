@@ -430,7 +430,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: yass3705/tesla-charge-companion-data-lab
-          ref: 40806cdd10c428579ed7c6b0bbecca0a01b70d12
+          ref: 047419bb6f2bbb7a2a3a276de0371635b2e9b5b7
           path: datalab
           fetch-depth: 1
           persist-credentials: false
@@ -447,13 +447,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git -C datalab rev-parse HEAD)" = "40806cdd10c428579ed7c6b0bbecca0a01b70d12"
+          test "$(git -C datalab rev-parse HEAD)" = "047419bb6f2bbb7a2a3a276de0371635b2e9b5b7"
           python v9prod/scripts/build_refresh_candidate_config.py \
-            --base v9prod/config/snapshots/2026-09-30-r9-electra-fr.json \
-            --datalab-sha 40806cdd10c428579ed7c6b0bbecca0a01b70d12 \
-            --snapshot-id 2026-10-03-nl-datalab-candidate \
+            --base v9prod/config/snapshots/2026-10-04-r12-full-national.json \
+            --datalab-sha 047419bb6f2bbb7a2a3a276de0371635b2e9b5b7 \
+            --snapshot-id 2026-10-05-r4-operator-multiselect \
             --out v9prod/config/snapshots/explicit-candidate.json \
-            --use-datalab-nl
           python v9prod/scripts/validate_snapshot.py v9prod/config/snapshots/explicit-candidate.json
           python v9prod/scripts/validate_electra_platform_overlay.py datalab
           python v9prod/scripts/build_snapshot.py \
@@ -461,8 +460,8 @@ jobs:
             --datalab datalab \
             --config v9prod/config/snapshots/explicit-candidate.json \
             --out site/v9-preview
-          python v9prod/scripts/validate_built_snapshot.py site/v9-preview 2026-10-03-nl-datalab-candidate
-          python v9prod/scripts/validate_stable_parity.py stablebase site/v9-preview --allow-nl-override --allow-pricing-engine-override
+          python v9prod/scripts/validate_built_snapshot.py site/v9-preview 2026-10-05-r4-operator-multiselect
+          python v9prod/scripts/validate_stable_parity.py stablebase site/v9-preview --allow-tesla-override --allow-pricing-engine-override
           python v9prod/scripts/validate_browser_asset_graph.py site/v9-preview
           python v9prod/scripts/verify_candidate_manifest.py site/v9-preview
 
