@@ -452,7 +452,7 @@ jobs:
             --base v9prod/config/snapshots/2026-10-04-r12-full-national.json \
             --datalab-sha 047419bb6f2bbb7a2a3a276de0371635b2e9b5b7 \
             --snapshot-id 2026-10-05-r4-operator-multiselect \
-            --out v9prod/config/snapshots/explicit-candidate.json \
+            --out v9prod/config/snapshots/explicit-candidate.json
           python v9prod/scripts/validate_snapshot.py v9prod/config/snapshots/explicit-candidate.json
           python v9prod/scripts/validate_electra_platform_overlay.py datalab
           python v9prod/scripts/build_snapshot.py \
