@@ -74,7 +74,8 @@
   function matchingRule(pricing,startAt,timeZone){
     const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
     if(!rules.length)return null;const minute=minuteOfDay(startAt,timeZone);if(minute==null)return rules.find(r=>r.scope==='allDay'&&ruleDayMatches(r,startAt,timeZone,pricing))||null;
-    return rules.find(r=>ruleDayMatches(r,startAt,timeZone,pricing)&&ruleContains(r,minute))||null;
+    const ordered=rules.filter(r=>r.scope!=='allDay').concat(rules.filter(r=>r.scope==='allDay'));
+    return ordered.find(r=>ruleDayMatches(r,startAt,timeZone,pricing)&&ruleContains(r,minute))||null;
   }
   function minutesUntilRuleBoundary(rule,startAt,timeZone){
     if(!rule)return Infinity;
