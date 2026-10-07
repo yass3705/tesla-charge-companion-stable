@@ -40,7 +40,8 @@
   function offerMatchesChargingKind(offer,chargingKind,chargingPowerKw=null,chargingPlugName=null,chargingConnectorId=null){
     const allowed=Array.isArray(offer?.connectorKinds)?offer.connectorKinds.map(v=>text(v).toUpperCase()).filter(Boolean):[];
     if(chargingKind&&allowed.length&&!allowed.includes(chargingKind))return false;
-    const min=num(offer?.minPowerKw),max=num(offer?.maxPowerKw),power=num(chargingPowerKw);
+    const optionalNumber=value=>value==null||String(value).trim()===''?null:num(value);
+    const min=optionalNumber(offer?.minPowerKw),max=optionalNumber(offer?.maxPowerKw),power=optionalNumber(chargingPowerKw);
     if((min!=null||max!=null)&&power==null)return false;
     if(power!=null&&min!=null&&power<min-1e-9)return false;
     if(power!=null&&max!=null&&power>max+1e-9)return false;
