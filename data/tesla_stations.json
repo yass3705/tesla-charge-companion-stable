@@ -155955,44 +155955,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
+          "currency": "EUR",
           "pricePerKwh": 0.23,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
+          "currency": "EUR",
           "pricePerKwh": 0.23,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "21:00",
           "billing": "kwh",
-          "pricePerKwh": 0.57,
+          "currency": "EUR",
+          "pricePerKwh": 0.59,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "21:00",
           "end": "00:00",
           "billing": "kwh",
+          "currency": "EUR",
           "pricePerKwh": 0.23,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "EUR"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -156056,44 +156056,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
+              "currency": "EUR",
               "pricePerKwh": 0.23,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
+              "currency": "EUR",
               "pricePerKwh": 0.23,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "21:00",
               "billing": "kwh",
-              "pricePerKwh": 0.57,
+              "currency": "EUR",
+              "pricePerKwh": 0.59,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "21:00",
               "end": "00:00",
               "billing": "kwh",
+              "currency": "EUR",
               "pricePerKwh": 0.23,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "EUR"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
