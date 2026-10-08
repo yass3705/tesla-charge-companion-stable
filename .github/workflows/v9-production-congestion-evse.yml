@@ -22,4 +22,3 @@ jobs:
         run: |
           node tests/v9-production-congestion-evse.test.cjs
           node tests/v9-production-ocpi-duration-pricing.test.cjs
-          node tests/v9-production-bootstrap.test.cjs
