@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - "v9-production-runtime/assets/v9/pricing-engine.js"
+      - "v9-production-runtime/assets/v9/offer-engine.js"
+      - "v9-production-runtime/assets/v9/session-engine.js"
+      - "tests/v9-production-evse-offer-isolation.test.cjs"
       - "tests/v9-production-congestion-evse.test.cjs"
       - ".github/workflows/v9-production-congestion-evse.yml"
   workflow_dispatch:
@@ -20,5 +23,6 @@ jobs:
           node-version: 22
       - name: Pricing regression
         run: |
+          node tests/v9-production-evse-offer-isolation.test.cjs
           node tests/v9-production-congestion-evse.test.cjs
           node tests/v9-production-ocpi-duration-pricing.test.cjs
