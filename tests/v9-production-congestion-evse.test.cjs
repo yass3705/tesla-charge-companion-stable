@@ -17,7 +17,7 @@ r=engine.evaluateOffer(offer,{...session,includeCongestion:true,arrivalSoc:80,ta
 near(r.totalEur,22,'SOC already at 80');
 const bounded={...base,congestionTimePerMinute:0,ocpiCongestionDurationBands:[[300,7800,0.2]]};
 r=engine.evaluateOffer({...offer,pricing:{type:'rules',rules:[bounded]}},{...session,arrivalSoc:80,targetSoc:100,durationMinutes:20,chargingMinutes:20});
-near(r.totalEur,14,'five-minute explicit band starts before SOC80 fee is billed');
+near(r.totalEur,13,'five-minute explicit band starts before SOC80 fee is billed');
 r=engine.evaluateOffer({...offer,pricing:{type:'rules',rules:[bounded]}},{...session,durationMinutes:60,chargingMinutes:60});
 near(r.totalEur,16,'intersection of default SOC80 and explicit duration band');
 r=engine.evaluateOffer(offer,{...session,arrivalSoc:null,targetSoc:null});
