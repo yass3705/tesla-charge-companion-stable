@@ -51,7 +51,8 @@
   function semanticKey(raw,countryCode){
     const offer=materializeOffer(raw,countryCode)||clone(raw)||{};
     const cc=country(countryCode||offer.countryCode);
-    if(text(offer.equivalenceKey))return `explicit|${text(offer.equivalenceKey)}|${cc}`;
+    const evseScope=uniq((offer.evseIds||[]).map(x=>text(x).toUpperCase().replace(/[^A-Z0-9]/g,''))).sort().join(',');
+    if(text(offer.equivalenceKey))return `explicit|${text(offer.equivalenceKey)}|${cc}|EVSE:${evseScope}`;
     const subscriptionId=text(offer.subscriptionId);
     const connectorKinds=uniq((offer.connectorKinds||[]).map(v=>text(v).toUpperCase())).sort();
     const operatorIds=uniq((offer.operatorIds||[]).map(providerId)).sort();
@@ -59,7 +60,7 @@
     const discriminator=text(offer.tariffId||offer.planId||offer.pricingModelId);
     return [
       'offer',text(offer.kind)||'unknown',providerId(offer.provider),operatorIds.join(','),connectorKinds.join(','),
-      discriminator,stableStringify(offer.pricing||{}),cc
+      discriminator,stableStringify(offer.pricing||{}),cc,'EVSE:'+evseScope
     ].join('|');
   }
 
