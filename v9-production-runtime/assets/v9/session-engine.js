@@ -31,13 +31,16 @@
     for(const evse of station?.evses||[])for(const connector of evse?.connectors||[]){
       if(!connectorUsable(connector))continue;
       const power=num(connector?.powerKw);if(power==null||power<=0)continue;
-      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(connector),connectorId:text(connector?.id)||null,plugName:text(connector?.plugName||connector?.type)||null};
+      if(!selected||power>selected.powerKw)selected={powerKw:power,kind:connectorKind(connector),connectorId:text(connector?.id)||null,plugName:text(connector?.plugName||connector?.type)||null,evseId:text(evse?.evseId||evse?.pdcId||evse?.id)||null};
     }
-    return selected||{powerKw:null,kind:null,connectorId:null,plugName:null};
+    return selected||{powerKw:null,kind:null,connectorId:null,plugName:null,evseId:null};
   }
   function stationChargingKind(station){return stationChargingProfile(station).kind;}
 
-  function offerMatchesChargingKind(offer,chargingKind,chargingPowerKw=null,chargingPlugName=null,chargingConnectorId=null){
+  function offerMatchesChargingKind(offer,chargingKind,chargingPowerKw=null,chargingPlugName=null,chargingConnectorId=null,chargingEvseId=null){
+    const evseNorm=v=>text(v).toUpperCase().replace(/[^A-Z0-9]/g,'');
+    const scopedEvses=Array.isArray(offer?.evseIds)?offer.evseIds.map(evseNorm).filter(Boolean):[];
+    if(scopedEvses.length&&(!chargingEvseId||!scopedEvses.includes(evseNorm(chargingEvseId))))return false;
     const allowed=Array.isArray(offer?.connectorKinds)?offer.connectorKinds.map(v=>text(v).toUpperCase()).filter(Boolean):[];
     if(chargingKind&&allowed.length&&!allowed.includes(chargingKind))return false;
     const optionalNumber=value=>value==null||String(value).trim()===''?null:num(value);
@@ -166,8 +169,8 @@
 
   function evaluateStation(station,session={},options={}){
     const selectedSubscriptions=options.selectedSubscriptions||session.selectedSubscriptions||[];
-    const chargingProfile=stationChargingProfile(station),chargingKind=chargingProfile.kind,chargingPowerKw=chargingProfile.powerKw,chargingPlugName=chargingProfile.plugName,chargingConnectorId=chargingProfile.connectorId;
-    const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode}).filter(offer=>offerMatchesChargingKind(offer,chargingKind,chargingPowerKw,chargingPlugName,chargingConnectorId));
+    const chargingProfile=stationChargingProfile(station),chargingKind=chargingProfile.kind,chargingPowerKw=chargingProfile.powerKw,chargingPlugName=chargingProfile.plugName,chargingConnectorId=chargingProfile.connectorId,chargingEvseId=chargingProfile.evseId;
+    const offers=OfferEngine.eligibleOffers(station,selectedSubscriptions,{countryCode:station?.countryCode}).filter(offer=>offerMatchesChargingKind(offer,chargingKind,chargingPowerKw,chargingPlugName,chargingConnectorId,chargingEvseId));
     const targetCurrency=text(options.targetCurrency||session.targetCurrency||'EUR').toUpperCase();
     const fxRates=options.fxRates||session.fxRates||{};
     const effectiveSession=stationSession(station,session,options),km=recoveredKm(session),evaluations=[];
