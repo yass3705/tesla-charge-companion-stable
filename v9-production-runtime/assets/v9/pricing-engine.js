@@ -139,7 +139,64 @@
   function durationFlatRate(rule,durationMinutes,baseRate=0){
     return durationBandRate(rule,'FLAT',Math.max(0,durationMinutes)*60,baseRate);
   }
-  function evaluateRule(rule,{energyKwh=0,durationMinutes=0,chargingMinutes=null,elapsedMinutes=0}={}){
+  function evaluateCongestion(rule,session,charging,elapsed,duration){
+    const base=num(rule?.congestionTimePerMinute)??0;
+    const bands=Array.isArray(rule?.ocpiCongestionDurationBands)?rule.ocpiCongestionDurationBands:[];
+    if(base<=0&&!bands.length)return{complete:true,costEur:0,minutes:0};
+    if(session?.includeCongestionFees===false||session?.includeCongestion===false||session?.applyCongestionFees===false)
+      return{complete:true,costEur:0,minutes:0,excludedByUser:true};
+    const threshold=num(rule?.congestionStartSoc)??80;
+    const from=num(session?.arrivalSoc??session?.startSoc??session?.vehicleSoc);
+    const to=num(session?.targetSoc??session?.endSoc);
+    let crossing=null;
+    const totalCharging=Math.max(0,num(session?.totalChargingMinutes)??charging);
+    const timeline=session?.chargeTimeline??session?.socTimeline??session?.timeline;
+    if(Array.isArray(timeline)&&timeline.length){
+      for(const segment of timeline){
+        const a=num(segment?.startSoc),b=num(segment?.endSoc);
+        const start=num(segment?.offsetMinutes)??0,len=num(segment?.durationMinutes)??0;
+        if(a==null||b==null||len<0)continue;
+        if(a>=threshold){crossing=start;break;}
+        if(b>threshold&&b>a){crossing=start+len*(threshold-a)/(b-a);break;}
+      }
+    }
+    if(crossing==null&&from!=null&&from>=threshold)crossing=0;
+    if(crossing==null&&from!=null&&to!=null){
+      if(to<=threshold)return{complete:true,costEur:0,minutes:0};
+      if(to>from&&totalCharging>0)crossing=totalCharging*(threshold-from)/(to-from);
+    }
+    if(crossing==null){
+      const explicit=num(session?.congestionMinutes);
+      if(explicit!=null&&explicit>=0)crossing=Math.max(0,elapsed+duration-explicit);
+      else return{complete:false,reason:'congestion_soc_context_unavailable'};
+    }
+    const a=Math.max(elapsed,crossing),b=elapsed+duration;
+    if(b<=a)return{complete:true,costEur:0,minutes:0,startAfterMinutes:crossing};
+    const rateAt=seconds=>{
+      for(const band of bands){
+        if(!Array.isArray(band)||band.length<3)continue;
+        const lo=Math.max(0,num(band[0])??0),hi=num(band[1]),rate=num(band[2]);
+        if(rate==null||rate<0)continue;
+        if(seconds+1e-9>=lo&&(hi==null||seconds<hi-1e-9))return rate;
+      }
+      return base;
+    };
+    const cuts=[a,b];
+    for(const band of bands){
+      if(!Array.isArray(band))continue;
+      for(const v of [band[0],band[1]]){
+        const n=num(v);if(n==null)continue;const m=n/60;
+        if(m>a+1e-9&&m<b-1e-9)cuts.push(m);
+      }
+    }
+    cuts.sort((x,y)=>x-y);
+    let total=0;
+    for(let i=0;i<cuts.length-1;i++){
+      const x=cuts[i],y=cuts[i+1];if(y>x)total+=(y-x)*rateAt(((x+y)/2)*60);
+    }
+    return{complete:true,costEur:money(total),minutes:money(b-a),startAfterMinutes:crossing,defaultSoc:threshold};
+  }
+  function evaluateRule(rule,{energyKwh=0,durationMinutes=0,chargingMinutes=null,elapsedMinutes=0,...context}={}){
     const energy=Math.max(0,num(energyKwh)??0),duration=Math.max(0,num(durationMinutes)??0),
       charging=Math.max(0,Math.min(duration,num(chargingMinutes)??duration)),elapsed=Math.max(0,num(elapsedMinutes)??0),components={};let total=0;
     const perKwh=num(rule?.pricePerKwh);
@@ -189,6 +246,9 @@
     }
     const fixed=num(rule?.connectedTimeComponentEur);if(fixed!=null&&fixed!==0){components.connectedTimeComponent=money(fixed);total+=components.connectedTimeComponent;}
     const sessionFee=num(rule?.sessionFeeEur);if(sessionFee!=null&&sessionFee!==0){components.sessionFee=money(sessionFee);total+=components.sessionFee;}
+    const congestion=evaluateCongestion(rule,context,charging,elapsed,duration);
+    if(!congestion.complete)return{complete:false,reason:congestion.reason,totalEur:null,components};
+    if(congestion.costEur>0){components.congestionTime={...congestion};total+=congestion.costEur;}
     const minimum=num(rule?.minimumSessionEur);if(minimum!=null&&total<minimum){components.minimumSession={minimumEur:minimum,preMinimumTotalEur:money(total),topUpEur:money(minimum-total)};total=minimum;}
     return{totalEur:money(total),components};
   }
@@ -227,7 +287,8 @@
       if(!Number.isFinite(boundary))boundary=duration-elapsed;
       const slice=Math.min(duration-elapsed,Math.max(boundary,1e-6));
       const chargeOverlap=Math.max(0,Math.min(charging,elapsed+slice)-elapsed),segmentEnergy=charging>0?energy*(chargeOverlap/charging):0;
-      const evaluated=evaluateRule(rule,{energyKwh:segmentEnergy,durationMinutes:slice,chargingMinutes:chargeOverlap,elapsedMinutes:elapsed});
+      const evaluated=evaluateRule(rule,{...session,energyKwh:segmentEnergy,durationMinutes:slice,chargingMinutes:chargeOverlap,elapsedMinutes:elapsed,totalChargingMinutes:charging});
+      if(evaluated.complete===false)return{complete:false,reason:evaluated.reason};
       total+=evaluated.totalEur;
       segments.push({startAt:at.toISOString(),durationMinutes:money(slice),chargingMinutes:money(chargeOverlap),energyKwh:money(segmentEnergy),totalEur:evaluated.totalEur,components:evaluated.components,rule});
       elapsed+=slice;
@@ -305,7 +366,7 @@
       const rules=Array.isArray(group?.rules)?group.rules:[];if(!rules.length)continue;
       const localPricing={...pricing,rules};const match=matchingRuleDetailed(localPricing,session.startAt,timeZone,session);if(match.unknown)return{complete:false,reason:match.reason,componentKind:group.kind||null};const rule=match.rule;
       if(!rule){components.componentGroups.push({kind:group.kind||null,matched:false,costEur:0});continue;}
-      const evaluated=evaluateRule(rule,session);total+=evaluated.totalEur;components.componentGroups.push({kind:group.kind||null,matched:true,costEur:evaluated.totalEur,components:evaluated.components,rule});
+      const evaluated=evaluateRule(rule,session);if(evaluated.complete===false)return{complete:false,reason:evaluated.reason};total+=evaluated.totalEur;components.componentGroups.push({kind:group.kind||null,matched:true,costEur:evaluated.totalEur,components:evaluated.components,rule});
     }
     return{complete:true,totalEur:money(total),components};
   }
@@ -330,6 +391,7 @@
     if(boundary!=null&&Number.isFinite(boundary)&&duration>boundary+1e-9){
       base=evaluateSegmentedRules(pricing,session,timeZone);if(base.complete===false)return{...base,offerId:offer?.id||null,timeZone,boundaryMinutes:boundary};segmented=true;
     }else base=evaluateRule(rule,session);
+    if(base.complete===false)return{complete:false,reason:base.reason,offerId:offer?.id||null};
     const longFee=pricing.longConnectionFee;let longConnection=null,total=base.totalEur;
     if(longFee&&duration>(num(longFee.thresholdMinutes)??Infinity)){
       const rate=num(longFee.eurPerHourAfterThreshold);if(rate!=null){const excess=duration-Number(longFee.thresholdMinutes);longConnection={complete:false,reason:'hourly_rounding_unspecified',excessMinutes:excess,rateEurPerHour:rate};}
@@ -342,5 +404,5 @@
     const finalized=applyMinimumTotal(pricing,total,components);
     return{complete:!longConnection,totalEur:finalized.totalEur,components:finalized.components,longConnection,offerId:offer?.id||null,currency:offer?.currency||'EUR',matchedRule:rule,segmented,timeZone};
   }
-  return{evaluateOffer,evaluateRule,evaluateSegmentedRules,evaluateComponentGroups,segmentableRule,durationBands,durationBandRate,integrateDurationRate,durationFlatRate,ruleThresholdStatus,ruleThresholdMatches,matchingRuleDetailed,evaluateConditionalSessionFees,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary,applyMinimumTotal};
+  return{evaluateOffer,evaluateRule,evaluateCongestion,evaluateSegmentedRules,evaluateComponentGroups,segmentableRule,durationBands,durationBandRate,integrateDurationRate,durationFlatRate,ruleThresholdStatus,ruleThresholdMatches,matchingRuleDetailed,evaluateConditionalSessionFees,evaluatePostChargeFee,postChargeBillableMinutes,exemptWindowContains,matchingRule,ruleContains,ruleDayMatches,localDateParts,isHoliday,italianHolidayKeys,minuteOfDay,minutesUntilRuleBoundary,applyMinimumTotal};
 });
