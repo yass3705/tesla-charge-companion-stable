@@ -1,10 +1,10 @@
 {
   "schemaVersion": 4,
   "country": "CH",
-  "generatedAt": "2026-10-09T02:59:00.233541+00:00",
+  "generatedAt": "2026-10-09T13:35:58.369019+00:00",
   "source": "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json",
-  "stationCount": 13408,
-  "evseCount": 19948,
+  "stationCount": 13410,
+  "evseCount": 19952,
   "tiles": [
     {
       "file": "tile_-84_-56.json.gz",
@@ -244,7 +244,7 @@
       "maxLat": 48,
       "minLon": 7,
       "maxLon": 8,
-      "stationCount": 1871
+      "stationCount": 1873
     },
     {
       "file": "tile_47_8.json.gz",
@@ -252,7 +252,7 @@
       "maxLat": 48,
       "minLon": 8,
       "maxLon": 9,
-      "stationCount": 3816
+      "stationCount": 3815
     },
     {
       "file": "tile_47_9.json.gz",
@@ -325,6 +325,14 @@
       "minLon": 14,
       "maxLon": 15,
       "stationCount": 4
+    },
+    {
+      "file": "tile_48_16.json.gz",
+      "minLat": 48,
+      "maxLat": 49,
+      "minLon": 16,
+      "maxLon": 17,
+      "stationCount": 1
     },
     {
       "file": "tile_49_-23.json.gz",
