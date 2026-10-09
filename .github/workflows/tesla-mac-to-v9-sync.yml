@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: sync-tesla-mac-into-v9-main
@@ -32,6 +33,7 @@ jobs:
           fetch-depth: 0
 
       - name: Validate canonical Tesla source and sync current V9 data
+        id: sync
         shell: bash
         run: |
           set -euo pipefail
@@ -52,12 +54,14 @@ jobs:
               data/tesla-mac-catalogue-publication.json
 
             if git diff --cached --quiet; then
+              echo "changed=false" >> "$GITHUB_OUTPUT"
               echo "TESLA_MAC_V9_ALREADY_SYNCHRONIZED"
               exit 0
             fi
 
             git commit -m "data(tesla): sync Mac canonical catalogue to V9 mirrors"
             if git push origin HEAD:main; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
               echo "TESLA_MAC_V9_SYNC_PUBLISHED"
               exit 0
             fi
@@ -84,3 +88,13 @@ jobs:
               assert (root/p).read_bytes()==base, p
           print('V9_TESLA_MAC_SYNC_PASS',len(json.loads(base)))
           PY
+
+      - name: Republish GitHub Pages after Mac/V9 synchronization
+        # GitHub Actions token commits do not trigger another push workflow,
+        # but an explicit workflow_dispatch does.
+        if: steps.sync.outputs.changed == 'true' || github.event_name != 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run pages.yml --ref main
+          echo "TESLA_V9_SITE_REDEPLOY_REQUESTED"
