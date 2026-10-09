@@ -109,8 +109,9 @@ def verify(site,preview):
     if not ma or ma.get('preferredTariffSource')!='Mac' or ma.get('sucTariffs')!=0:
         raise SystemExit('Morocco must always choose the Mac tariff')
     ctx['builtTeslaTariffDecisions']=decision['countries']
-    p=preview/'snapshot-inputs/TESLA/current-mac-publication.json'
-    p.parent.mkdir(parents=True,exist_ok=True)
+    # Keep provenance in the Pages ROOT, not inside the finalized V9 snapshot:
+    # verify_candidate_manifest rejects any file added after snapshot manifesting.
+    p=site/'tesla-pages-live-source.json'
     p.write_text(json.dumps(ctx,indent=2,ensure_ascii=False)+'\n',encoding='utf8')
     print('TESLA_PAGES_LIVE_VERIFIED='+json.dumps({
         'stations':len(stations),'sha256Mac':digest(source),
