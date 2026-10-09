@@ -223,8 +223,10 @@
       components.chargingTime=money(cost);total+=components.chargingTime;
       if(billed!==charging)components.chargingTimeBilling={actualMinutes:charging,billedMinutes:billed,stepSeconds:step};
     }
+    const parkingExcluded=rule?.parkingIsCongestion===true&&(
+      context.includeCongestionFees===false||context.includeCongestion===false||context.applyCongestionFees===false);
     const idlePerMinute=num(rule?.idlePerMinute);
-    if(idlePerMinute!=null||durationBands(rule,'PARKING_TIME').length){
+    if(!parkingExcluded&&(idlePerMinute!=null||durationBands(rule,'PARKING_TIME').length)){
       const idle=Math.max(0,duration-charging),baseRate=idlePerMinute??0;
       const cost=durationBands(rule,'PARKING_TIME').length?integrateDurationRate(rule,'PARKING_TIME',elapsed+charging,elapsed+duration,baseRate):idle*baseRate;
       components.parkingTime=money(cost);total+=components.parkingTime;
