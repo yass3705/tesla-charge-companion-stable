@@ -117,6 +117,23 @@ def prepare(site,pinned_stable,prod):
         raise SystemExit('V9 station session timezone dispatch changed')
     session_src=session_src.replace(raw_return,tz_return,1)
     session_path.write_text(session_src,encoding='utf8')
+    # Snapshot-only exclusion: Tesla ID 30168 duplicates the same twelve public
+    # Dartford Centre stalls as dartfordservicecentresuperchargerq122.
+    # Canonical Mac extraction and sync mirrors retain the unmodified source.
+    filter_path=prod/'scripts/tesla_v9_public_site_dedup_20261010.py'
+    shutil.copyfile(site/'scripts/tesla_v9_public_site_dedup_20261010.py',filter_path)
+    builder_path=prod/'scripts/build_snapshot.py'
+    builder=builder_path.read_text(encoding='utf8')
+    builder_anchor='    # Netherlands: optionally replace the legacy Stable baseline'
+    if builder.count(builder_anchor)!=1:
+        raise SystemExit('V9 build pipeline hook changed: cannot safely filter duplicate')
+    builder_hook="""    # Prevent known duplicate public Tesla listings from appearing as extra sites.
+    subprocess.run([sys.executable,str(production_root/'scripts/tesla_v9_public_site_dedup_20261010.py'),
+                    '--preview',str(out)],check=True)
+"""
+    builder=builder.replace(builder_anchor,builder_hook+builder_anchor,1)
+    builder_path.write_text(builder,encoding='utf8')
+    print('TESLA_DARTFORD_30168_KNOWN_DUPLICATE_FILTER_INSTALLED')
     print('TCC_V9_SESSION_ENGINE_COMPLEX_TARIFF_DISPATCH_APPLIED')
     print('TESLA_ADAPTER_NATIVE_CURRENCIES_AND_REAL_POWER_BANDS_APPLIED')
     print('TCC_V9_ENGINE_EXACT_AFTER_MINUTES_AND_POWER_MINUTE_APPLIED')
@@ -172,8 +189,18 @@ def verify(site,preview):
     for p in (selected,ctrl,report):
         if not p.is_file():raise SystemExit('V9 built snapshot missing Tesla file: '+str(p))
     stations=load(selected);mac=load(source)
-    if len(stations)!=len(mac) or set(s['id'] for s in stations)!=set(s['id'] for s in mac):
-        raise SystemExit('V9 preview station inventory was not built from latest Mac')
+    from tesla_v9_public_site_dedup_20261010 import ALIAS,CANONICAL,SECOND,remove_dartford_duplicate
+    expected,alias=remove_dartford_duplicate(mac)
+    if stations!=expected or len(stations)!=len(mac)-1 or set(s['id'] for s in stations)!=(set(s['id'] for s in mac)-{ALIAS}):
+        raise SystemExit('V9 preview public station inventory diverges from Mac minus confirmed duplicate')
+    alias_report=preview/'snapshot-inputs/TESLA/public-site-aliases.json'
+    aliases=load(alias_report)
+    if aliases.get('sourceCount')!=len(mac) or aliases.get('publishedCount')!=len(stations):
+        raise SystemExit('V9 preview alias audit provenance mismatch')
+    if len(aliases.get('aliases',[]))!=1 or aliases['aliases'][0]['aliasId']!=ALIAS:
+        raise SystemExit('V9 preview alias resolution is not the approved 30168 case')
+    if not {CANONICAL,SECOND}.issubset({s['id'] for s in stations}):
+        raise SystemExit('V9 public Dartford locations missing')
     if digest(ctrl)!=digest(selected):
         raise SystemExit('V9 preview root and runtime Tesla sources differ')
     decision=load(report)
@@ -195,6 +222,9 @@ def verify(site,preview):
     # verify_candidate_manifest rejects any file added after snapshot manifesting.
     p=site/'tesla-pages-live-source.json'
     p.write_text(json.dumps(ctx,indent=2,ensure_ascii=False)+'\n',encoding='utf8')
+    print('TESLA_DARTFORD_PUBLIC_SITES_VERIFIED='+json.dumps({
+        'rawMacStations':len(mac),'publicV9Stations':len(stations),
+        'excludedDuplicateAlias':ALIAS,'kept':sorted([CANONICAL,SECOND])}))
     print('TESLA_PAGES_LIVE_VERIFIED='+json.dumps({
         'stations':len(stations),'sha256Mac':digest(source),
         'countryTariffDecisions':{k:{'preferred':v.get('preferredTariffSource'),
