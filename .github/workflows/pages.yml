@@ -444,6 +444,13 @@ jobs:
           path: stablebase
           persist-credentials: false
 
+      - name: Injecter la base Tesla Mac actuelle dans le build V9 figé
+        shell: bash
+        run: |
+          set -euo pipefail
+          python site/scripts/tesla_v9_pages_mac_source.py \
+            --mode prepare --site site --pinned-stable stablebase --production v9prod
+
       - name: Construire la preview V9 isolée
         shell: bash
         run: |
@@ -465,6 +472,8 @@ jobs:
             --datalab datalab \
             --config v9prod/config/snapshots/explicit-candidate.json \
             --out site/v9-preview
+          python site/scripts/tesla_v9_pages_mac_source.py \
+            --mode verify --site site --preview site/v9-preview
           python v9prod/scripts/validate_built_snapshot.py site/v9-preview 2026-10-09-r15
           python v9prod/scripts/validate_stable_parity.py stablebase site/v9-preview --allow-nl-override --allow-country-tesla-priority --allow-pricing-engine-override
           node v9prod/tests/v9-congestion-soc80.test.mjs site/v9-preview
