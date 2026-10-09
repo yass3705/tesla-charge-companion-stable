@@ -191,8 +191,14 @@ def verify(site,preview):
     stations=load(selected);mac=load(source)
     from tesla_v9_public_site_dedup_20261010 import ALIAS,CANONICAL,SECOND,remove_dartford_duplicate
     expected,alias=remove_dartford_duplicate(mac)
-    if stations!=expected or len(stations)!=len(mac)-1 or set(s['id'] for s in stations)!=(set(s['id'] for s in mac)-{ALIAS}):
-        raise SystemExit('V9 preview public station inventory diverges from Mac minus confirmed duplicate')
+    if len(stations)!=len(mac)-1 or [s['id'] for s in stations]!=[s['id'] for s in expected]:
+        raise SystemExit('V9 preview station IDs differ from the canonical Mac catalogue minus 30168')
+    # Germany may legitimately use the newer SuC country rates. UK has a
+    # fresh Mac country publication, and must match Mac exactly, except alias.
+    mac_gb={s['id']:s for s in expected if s.get('countryCode')=='GB'}
+    snapshot_gb={s['id']:s for s in stations if s.get('countryCode')=='GB'}
+    if mac_gb!=snapshot_gb:
+        raise SystemExit('UK V9 Tesla pricing diverges from current Mac priority')
     alias_report=preview/'snapshot-inputs/TESLA/public-site-aliases.json'
     aliases=load(alias_report)
     if aliases.get('sourceCount')!=len(mac) or aliases.get('publishedCount')!=len(stations):
