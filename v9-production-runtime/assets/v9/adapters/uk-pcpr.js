@@ -21,7 +21,7 @@
       if(!element||!Array.isArray(element.price_components)||!element.price_components.length)return null;
       const restrictions=element.restrictions||{},keys=Object.keys(restrictions);
       if(keys.some(k=>!['start_date','min_duration'].includes(k)))return null;
-      if(restrictions.start_date&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(str(restrictions.start_date)))return null;
+      if(restrictions.start_date&&!/^\d{4}-\d{2}-\d{2}$/.test(str(restrictions.start_date)))return null;
       const minDuration=restrictions.min_duration==null?null:num(restrictions.min_duration);
       if(minDuration!=null&&(!Number.isInteger(minDuration)||minDuration<0))return null;
       for(const c of element.price_components){
