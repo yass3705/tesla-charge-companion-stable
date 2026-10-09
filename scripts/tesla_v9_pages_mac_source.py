@@ -53,7 +53,7 @@ def prepare(site,pinned_stable,prod):
         raise SystemExit('V9 production pricing exports changed: refuse unsafe patch')
     engine_text=engine_text.replace('  function evaluateOffer(offer,session={})',
                                     '  function evaluateOfferBase(offer,session={})',1)
-    engine_text=engine_text.replace(anchor,engine_extension+'\\n'+anchor,1)
+    engine_text=engine_text.replace(anchor,engine_extension+'\n'+anchor,1)
     engine_path.write_text(engine_text,encoding='utf8')
     adapter_src=pinned_stable/'v9-production-runtime/assets/v9/adapters/tesla-json.js'
     adapter=adapter_src.read_text(encoding='utf8')
