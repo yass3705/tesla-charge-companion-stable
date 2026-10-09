@@ -1,10 +1,10 @@
 {
   "schemaVersion": 4,
   "country": "CH",
-  "generatedAt": "2026-10-01T02:12:50.028349+00:00",
+  "generatedAt": "2026-10-09T02:59:00.233541+00:00",
   "source": "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json",
-  "stationCount": 13223,
-  "evseCount": 19041,
+  "stationCount": 13408,
+  "evseCount": 19948,
   "tiles": [
     {
       "file": "tile_-84_-56.json.gz",
@@ -156,7 +156,7 @@
       "maxLat": 46,
       "minLon": 8,
       "maxLon": 9,
-      "stationCount": 144
+      "stationCount": 151
     },
     {
       "file": "tile_45_9.json.gz",
@@ -180,7 +180,7 @@
       "maxLat": 47,
       "minLon": 6,
       "maxLon": 7,
-      "stationCount": 2115
+      "stationCount": 2128
     },
     {
       "file": "tile_46_7.json.gz",
@@ -188,7 +188,7 @@
       "maxLat": 47,
       "minLon": 7,
       "maxLon": 8,
-      "stationCount": 2143
+      "stationCount": 2163
     },
     {
       "file": "tile_46_8.json.gz",
@@ -196,7 +196,7 @@
       "maxLat": 47,
       "minLon": 8,
       "maxLon": 9,
-      "stationCount": 838
+      "stationCount": 860
     },
     {
       "file": "tile_46_9.json.gz",
@@ -204,7 +204,7 @@
       "maxLat": 47,
       "minLon": 9,
       "maxLon": 10,
-      "stationCount": 644
+      "stationCount": 653
     },
     {
       "file": "tile_46_10.json.gz",
@@ -236,7 +236,7 @@
       "maxLat": 48,
       "minLon": 6,
       "maxLon": 7,
-      "stationCount": 131
+      "stationCount": 133
     },
     {
       "file": "tile_47_7.json.gz",
@@ -244,7 +244,7 @@
       "maxLat": 48,
       "minLon": 7,
       "maxLon": 8,
-      "stationCount": 1841
+      "stationCount": 1871
     },
     {
       "file": "tile_47_8.json.gz",
@@ -252,7 +252,7 @@
       "maxLat": 48,
       "minLon": 8,
       "maxLon": 9,
-      "stationCount": 3754
+      "stationCount": 3816
     },
     {
       "file": "tile_47_9.json.gz",
@@ -260,7 +260,7 @@
       "maxLat": 48,
       "minLon": 9,
       "maxLon": 10,
-      "stationCount": 1320
+      "stationCount": 1339
     },
     {
       "file": "tile_47_10.json.gz",
@@ -405,6 +405,14 @@
       "minLon": 7,
       "maxLon": 8,
       "stationCount": 4
+    },
+    {
+      "file": "tile_54_2.json.gz",
+      "minLat": 54,
+      "maxLat": 55,
+      "minLon": 2,
+      "maxLon": 3,
+      "stationCount": 1
     },
     {
       "file": "tile_59_-44.json.gz",

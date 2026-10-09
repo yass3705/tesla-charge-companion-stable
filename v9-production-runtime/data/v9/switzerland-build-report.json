@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-10-01T02:12:55.257095+00:00",
+  "generatedAt": "2026-10-09T02:59:11.510203+00:00",
   "country": "CH",
   "national": {
     "owners": 41,
-    "evses": 19485,
-    "publishedNonTeslaEvses": 19041,
+    "evses": 20392,
+    "publishedNonTeslaEvses": 19948,
     "excludedTeslaEvseCount": 444,
-    "stations": 13223,
-    "tiles": 56
+    "stations": 13408,
+    "tiles": 57
   },
   "offers": {
-    "direct": 17153,
+    "direct": 17126,
     "subscriptions": 2714,
-    "uniqueDirectEvse": 17035,
+    "uniqueDirectEvse": 17008,
     "uniqueSubscriptionEvse": 2714,
     "sourceCounts": {
-      "data/switzerland/migrol-official-direct-tariffs.json": 1030,
-      "data/switzerland/shell-evpass-official-direct-tariffs.json": 1166,
+      "data/switzerland/migrol-official-direct-tariffs.json": 1022,
+      "data/switzerland/shell-evpass-official-direct-tariffs.json": 1165,
       "data/switzerland/cci-move-cpo-tariffs-national.json": 3752,
       "data/switzerland/energie360-direct-tariffs.json": 808,
-      "data/switzerland/powerup-monta-direct-tariffs.json": 235,
-      "data/switzerland/iwb-direct-tariffs-second-pass.json": 409,
+      "data/switzerland/powerup-monta-direct-tariffs.json": 233,
+      "data/switzerland/iwb-direct-tariffs-second-pass.json": 408,
       "data/switzerland/iwb-official-basel-overlay.json": 31,
       "data/switzerland/saascharge-official-direct-tariffs.json": 226,
       "data/switzerland/soc-move-cpo-tariffs-national.json": 288,
@@ -42,17 +42,17 @@
       "data/switzerland/fastned-official-direct-tariffs.json": 156,
       "data/switzerland/tae-matterhorn-terminal-direct-tariffs.json": 16,
       "data/switzerland/chevp-evpass-official-direct-tariffs.json": 40,
-      "data/switzerland/ecarup-owner-direct-tariffs.json": 3244,
-      "data/switzerland/ecarup-owner-coordinate-safe-overlay.json": 3221,
-      "data/swisscharge/swisscharge-tariffs.json": 2382,
+      "data/switzerland/ecarup-owner-direct-tariffs.json": 3238,
+      "data/switzerland/ecarup-owner-coordinate-safe-overlay.json": 3217,
+      "data/swisscharge/swisscharge-tariffs.json": 2377,
       "data/gofast/ev_charger_stations.json": 542,
       "derived:CH*CCC-from-explicit-Move-CPO-level-schedules": 832
     },
     "sourceErrors": []
   },
   "fx": {
-    "CHFperEUR": 0.946208,
-    "date": "2026-09-30"
+    "CHFperEUR": 0.933069,
+    "date": "2026-10-08"
   },
   "gofastAudit": {
     "nationalEvse": 563,
