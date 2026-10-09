@@ -43,6 +43,59 @@ def prepare(site,pinned_stable,prod):
     if not safe_priority.is_file():
         raise SystemExit('Required safe Tesla precedence module missing')
     shutil.copyfile(safe_priority,prod/'scripts/tesla_tariff_priority.py')
+    engine_path=prod/'runtime-overrides/assets/v9/pricing-engine.js'
+    engine_text=engine_path.read_text(encoding='utf8')
+    engine_extension=(site/'scripts/tcc_v9_pricing_runtime_extension_20261010.js').read_text(encoding='utf8')
+    if engine_text.count('  function evaluateOffer(offer,session={})')!=1:
+        raise SystemExit('V9 production pricing engine signature changed: refuse unsafe patch')
+    anchor='  return{congestionBillableMinutes,congestionFee,evaluateOffer,'
+    if engine_text.count(anchor)!=1:
+        raise SystemExit('V9 production pricing exports changed: refuse unsafe patch')
+    engine_text=engine_text.replace('  function evaluateOffer(offer,session={})',
+                                    '  function evaluateOfferBase(offer,session={})',1)
+    engine_text=engine_text.replace(anchor,engine_extension+'\\n'+anchor,1)
+    engine_path.write_text(engine_text,encoding='utf8')
+    adapter_src=pinned_stable/'v9-production-runtime/assets/v9/adapters/tesla-json.js'
+    adapter=adapter_src.read_text(encoding='utf8')
+    first=adapter.index('  function normalizedPricing(')
+    last=adapter.index('  function configRows(',first)
+    adapter=adapter[:first]+'''  function normalizedPricing(pricing,powerKw){
+    // Keep all real source power-minute bands. Never flatten against stall power.
+    return clone(pricing);
+  }
+  function sourceCurrency(pricing,countryCode){
+    const rules=Array.isArray(pricing?.rules)?pricing.rules:[];
+    const native=[...new Set(rules.map(r=>String(r.currency||'').trim().toUpperCase()).filter(Boolean))];
+    const country={'CH':'CHF','GB':'GBP','UK':'GBP','MA':'MAD'};
+    if(native.length>1)return null;
+    return native[0]||String(pricing?.currency||country[countryCode]||'EUR').toUpperCase();
+  }
+'''+adapter[last:]
+    original="""      if(cfg?.pricing||raw?.pricing)offers.push({
+        id:`tesla-direct:${evseId}`,
+        provider:'Tesla',kind:'direct',subscriptionId:null,countries:[text(raw?.countryCode).toUpperCase()||'*'],currency:'EUR',
+        evseIds:[evseId],pricing:normalizedPricing(cfg?.pricing||raw?.pricing,cfg?.powerKw||raw?.powerKw),priority:100
+      });"""
+    updated="""      if(cfg?.pricing||raw?.pricing){
+        const sourcePricing=cfg?.pricing||raw?.pricing;
+        const currency=sourceCurrency(sourcePricing,text(raw?.countryCode).toUpperCase());
+        offers.push({
+          id:`tesla-direct:${evseId}`,
+          provider:'Tesla',kind:'direct',subscriptionId:null,
+          countries:[text(raw?.countryCode).toUpperCase()||'*'],currency:currency||'UNKNOWN',
+          evseIds:[evseId],pricing:normalizedPricing(sourcePricing,cfg?.powerKw||raw?.powerKw),
+          metadata:currency?{}:{incompletePricingReason:'tesla_mixed_native_currencies'},
+          priority:100
+        });
+      }"""
+    if adapter.count(original)!=1:
+        raise SystemExit('Pinned Tesla adapter shape changed: abort')
+    adapter=adapter.replace(original,updated,1)
+    adapter_dest=prod/'runtime-overrides/assets/v9/adapters/tesla-json.js'
+    adapter_dest.parent.mkdir(parents=True,exist_ok=True)
+    adapter_dest.write_text(adapter,encoding='utf8')
+    print('TESLA_ADAPTER_NATIVE_CURRENCIES_AND_REAL_POWER_BANDS_APPLIED')
+    print('TCC_V9_ENGINE_EXACT_AFTER_MINUTES_AND_POWER_MINUTE_APPLIED')
     updates_path=prod/'data/tesla_mac_country_updates.json'
     updates=load(updates_path)
     if updates.get('schemaVersion')!=1 or updates.get('timeZone')!='Europe/Paris':
