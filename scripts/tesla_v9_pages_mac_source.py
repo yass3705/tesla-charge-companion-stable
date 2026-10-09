@@ -106,6 +106,16 @@ def prepare(site,pinned_stable,prod):
     if session_src.count(original_lock)!=1:
         raise SystemExit('V9 session engine path changed: cannot protect afterMinutes')
     session_src=session_src.replace(original_lock,adjusted_lock,1)
+    raw_return="""    return{...session,requestedEnergyKwh:requested,approachEnergyKwh:approach,energyKwh:money(Math.max(0,requested+(include?approach:0)))};"""
+    tz_return="""    const zones={FR:'Europe/Paris',IT:'Europe/Rome',CH:'Europe/Zurich',DE:'Europe/Berlin',
+      ES:'Europe/Madrid',NL:'Europe/Amsterdam',BE:'Europe/Brussels',GB:'Europe/London',
+      UK:'Europe/London',MA:'Africa/Casablanca',PT:'Europe/Lisbon',LU:'Europe/Luxembourg'};
+    const cc=String(station?.countryCode||'').toUpperCase();
+    const timeZone=session.timeZone||station?.timeZone||zones[cc]||null;
+    return{...session,timeZone,requestedEnergyKwh:requested,approachEnergyKwh:approach,energyKwh:money(Math.max(0,requested+(include?approach:0)))};"""
+    if session_src.count(raw_return)!=1:
+        raise SystemExit('V9 station session timezone dispatch changed')
+    session_src=session_src.replace(raw_return,tz_return,1)
     session_path.write_text(session_src,encoding='utf8')
     print('TCC_V9_SESSION_ENGINE_COMPLEX_TARIFF_DISPATCH_APPLIED')
     print('TESLA_ADAPTER_NATIVE_CURRENCIES_AND_REAL_POWER_BANDS_APPLIED')
