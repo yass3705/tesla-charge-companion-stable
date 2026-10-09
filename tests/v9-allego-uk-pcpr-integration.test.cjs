@@ -5,6 +5,7 @@ const zlib=require('node:zlib');
 const A=require('../v9-production-runtime/assets/v9/adapters/uk-pcpr.js');
 const P=require('../v9-production-runtime/assets/v9/pricing-engine.js');
 const S=require('../v9-production-runtime/assets/v9/session-engine.js');
+const Runtime=require('../v9-production-runtime/assets/v9/runtime-engine.js');
 
 const base='https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/';
 async function get(url){
@@ -18,13 +19,6 @@ async function main(){
     get(base+'reports/uk/allego_uk-pcpr-validation-latest.json')]);
   const doc=JSON.parse(zlib.gunzipSync(Buffer.from(await dataRes.arrayBuffer())).toString('utf8'));
   const audit=await auditRes.json();
-  const lengths={},power={},reason={},all=doc.sources[0].locations.flatMap(l=>l.evses.flatMap(e=>e.connectors.map(c=>({c,l}))));
-  for(const {c} of all){const n=(c.tariff_ids||[]).length;lengths[n]=(lengths[n]||0)+1;const kw=String(c.max_electric_power??'MISSING');power[kw]=(power[kw]||0)+1;}
-  const powerEnvelopes={};for(const {c} of all){const k=[c.power_type,c.max_voltage,c.max_amperage].join('|');powerEnvelopes[k]=(powerEnvelopes[k]||0)+1;}
-  const sample=all[0];const tariff=doc.sources[0].tariffs[0];
-  console.log('PRE-VALIDATION',JSON.stringify({connectorTariffIdsHistogram:lengths,connectorPowerWatts:power,powerEnvelopes,
-    firstConnector:sample.c,firstEvse:doc.sources[0].locations[0].evses[0],firstStation:{id:doc.sources[0].locations[0].id,name:doc.sources[0].locations[0].name,address:doc.sources[0].locations[0].address,city:doc.sources[0].locations[0].city,party_id:doc.sources[0].locations[0].party_id},
-    firstTariff:{id:tariff.id,party_id:tariff.party_id,priceBasis:tariff.tccPriceBasis,parsedPricing:A.pricingFromTariff(tariff)}},null,2));
   const parsed=A.normalizePayload(doc,audit,{id:'allego-uk-pcpr-direct',priority:{tariff:130}});
   const stations=parsed.stations,offers=stations.flatMap(st=>st.offers);
   const connectors=stations.flatMap(st=>st.evses).flatMap(e=>e.connectors);
@@ -55,6 +49,18 @@ async function main(){
   const registered=registry.sources.find(s=>s.id==='allego-uk-pcpr-direct');
   assert(registered?.active===true&&registered.adapter==='uk-pcpr-v1');
   assert(!registry.sources.some(s=>/source.ev.*pcpr/.test(s.id)), 'Unauthorized Source EV activation');
+  const liveEngine=Runtime.createEngine({registry,loaders:{'allego-uk-pcpr-direct':async()=>({stations})}});
+  const first=stations[0];
+  const sessionQuery={startAt:'2026-10-10T12:00:00Z',startSoc:30,targetSoc:80,batteryCapacityKwh:75,
+    vehicleMaxAcKw:11,vehicleMaxDcKw:250,chargeEfficiency:0.92,consumptionKwhPer100Km:15,
+    chargeCurve:[{soc:0,powerKw:175},{soc:50,powerKw:125},{soc:80,powerKw:60},{soc:100,powerKw:5}],
+    targetCurrency:'GBP'};
+  const area=await liveEngine.queryArea({countryCode:'GB',origin:{lat:first.latitude,lon:first.longitude},
+    radiusKm:1,session:sessionQuery,routingBudget:20,sortBy:'finalCost'});
+  assert(area.stations.length>0,'No Allego sites visible to runtime query');
+  assert(area.diagnostics.sources['allego-uk-pcpr-direct']?.loaded===true);
+  assert(area.sessionEvaluations[first.canonicalId]?.best?.comparable===true,'No exact Allego connector costs in runtime');
+  assert(area.sessionEvaluations[first.canonicalId]?.best?.connectorId,'V9 runtime lost selected connector identity');
   const config=JSON.parse(fs.readFileSync('v9-production-shell/shell-config.json','utf8'));
   assert(config.engineScopeCountries.includes('GB'));
   assert(fs.readFileSync('v9-production-shell/index.html','utf8').includes('adapters/uk-pcpr.js'));
