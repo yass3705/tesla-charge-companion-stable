@@ -450,6 +450,7 @@ jobs:
           set -euo pipefail
           python site/scripts/tesla_v9_pages_mac_source.py \
             --mode prepare --site site --pinned-stable stablebase --production v9prod
+          python site/scripts/test_tesla_v9_tariff_priority_safe.py
 
       - name: Construire la preview V9 isolée
         shell: bash
