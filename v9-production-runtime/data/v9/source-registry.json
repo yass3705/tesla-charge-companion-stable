@@ -1186,6 +1186,35 @@
       "expectedMinConnectors": 38
     },
     {
+      "id": "allego-uk-pcpr-direct",
+      "label": "Allego UK CPO direct PCPR exact EVSE connector tariffs",
+      "adapter": "uk-pcpr-v1",
+      "url": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/data/national/uk_allego_uk_pcpr_v9.json.gz",
+      "auditUrl": "https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/uk/allego_uk-pcpr-validation-latest.json",
+      "countries": [
+        "GB"
+      ],
+      "operatorIds": [
+        "allego"
+      ],
+      "capabilities": [
+        "inventory",
+        "connectors",
+        "access",
+        "tariff"
+      ],
+      "priority": {
+        "identity": 90,
+        "connectors": 95,
+        "access": 90,
+        "status": 0,
+        "tariff": 130
+      },
+      "refresh": "daily-verified-pcpr",
+      "active": true,
+      "optional": true
+    },
+    {
       "id": "user-stations",
       "label": "User-added stations",
       "adapter": "runtime-user-stations",
