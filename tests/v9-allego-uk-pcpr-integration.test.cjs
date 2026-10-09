@@ -20,8 +20,9 @@ async function main(){
   const audit=await auditRes.json();
   const lengths={},power={},reason={},all=doc.sources[0].locations.flatMap(l=>l.evses.flatMap(e=>e.connectors.map(c=>({c,l}))));
   for(const {c} of all){const n=(c.tariff_ids||[]).length;lengths[n]=(lengths[n]||0)+1;const kw=String(c.max_electric_power??'MISSING');power[kw]=(power[kw]||0)+1;}
+  const powerEnvelopes={};for(const {c} of all){const k=[c.power_type,c.max_voltage,c.max_amperage].join('|');powerEnvelopes[k]=(powerEnvelopes[k]||0)+1;}
   const sample=all[0];const tariff=doc.sources[0].tariffs[0];
-  console.log('PRE-VALIDATION',JSON.stringify({connectorTariffIdsHistogram:lengths,connectorPowerWatts:power,
+  console.log('PRE-VALIDATION',JSON.stringify({connectorTariffIdsHistogram:lengths,connectorPowerWatts:power,powerEnvelopes,
     firstConnector:sample.c,firstEvse:doc.sources[0].locations[0].evses[0],firstStation:{id:doc.sources[0].locations[0].id,name:doc.sources[0].locations[0].name,address:doc.sources[0].locations[0].address,city:doc.sources[0].locations[0].city,party_id:doc.sources[0].locations[0].party_id},
     firstTariff:{id:tariff.id,party_id:tariff.party_id,priceBasis:tariff.tccPriceBasis,parsedPricing:A.pricingFromTariff(tariff)}},null,2));
   const parsed=A.normalizePayload(doc,audit,{id:'allego-uk-pcpr-direct',priority:{tariff:130}});
