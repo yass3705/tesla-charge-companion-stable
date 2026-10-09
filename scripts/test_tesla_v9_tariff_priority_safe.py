@@ -55,7 +55,51 @@ def main():
         '2026-11-20','Mac',0.55,updates('FR','2026-10-09'))
     run('per_configuration_mac_tiers_not_flattened',station('FR',cfg_rates=[.5,.7]),
         [suc('FR','2026-11-14T01:00:00Z')],'2026-11-20','Mac',0.55,updates('FR','2026-10-09'))
-    print('TESLA_PRIORITY_TESTS_PASS=9/9')
+    # Source freshness is COUNTRY-WIDE, even if individual station's old
+    # metadata would suggest a different observation date.
+    multi_mac=[station('FR',site_id='a',observed='2026-10-27T01:00:00Z'),
+               station('FR',site_id='b',last_updated='2026-07-22')]
+    multi_suc=[suc('FR','2026-10-25T01:00:00Z',site_id='a'),
+               suc('FR','2026-10-25T01:00:00Z',site_id='b')]
+    out,report=select_tariffs(multi_mac,multi_suc,updates('FR','2026-10-09'),'2026-10-28')
+    assert report['countries']['FR']['preferredTariffSource']=='SuC Tracker',report
+    assert report['countries']['FR']['sucTariffs']==2,report
+    assert all(x['pricing']['rules'][0]['pricePerKwh']==0.4 for x in out),out
+    print('TESLA_PRIORITY_TEST country_uniform_even_when_station_dates_vary PASS')
+
+    # One older SuC station is enough to keep the whole country Mac;
+    # avoid mixing source age station by station.
+    multi_suc[1]['sourceObservedAt']='2026-10-02T01:00:00Z'
+    multi_suc[1]['sucTracker']['lastSuccessfulAt']='2026-10-02T01:00:00Z'
+    out,report=select_tariffs(multi_mac,multi_suc,updates('FR','2026-10-09'),'2026-10-28')
+    assert report['countries']['FR']['preferredTariffSource']=='Mac',report
+    assert report['countries']['FR']['macTariffs']==2
+    print('TESLA_PRIORITY_TEST heterogeneous_suc_country_dates_fail_closed PASS')
+
+    # Station-level comparison ONLY for missing station in either source.
+    out,report=select_tariffs(
+        [station('DE',site_id='only-mac'),station('DE',site_id='both')],
+        [suc('DE','2026-10-25T01:00:00Z',site_id='both'),
+         suc('DE','2026-10-25T01:00:00Z',site_id='only-suc')],
+         updates('DE'),'2026-10-28')
+    info=report['countries']['DE']
+    assert info['preferredTariffSource']=='SuC Tracker',info
+    assert info['sucTariffs']==1 and info['onlyMacStations']==1 and info['sucOnlyStations']==1,info
+    assert len(out)==2 and len(info['sourceExceptionRows'])==2,info
+    assert sorted(x['type'] for x in info['sourceExceptionRows'])==['only_mac','only_suc_unverified_access']
+    print('TESLA_PRIORITY_TEST source_presence_exceptions_only PASS')
+
+    # Morocco remains Mac for every station independently of SuC ages.
+    out,report=select_tariffs(
+        [station('MA',site_id='a',currency='MAD'),station('MA',site_id='b',currency='MAD')],
+        [suc('MA','2026-11-18T01:00:00Z',site_id='a',currency='MAD'),
+         suc('MA','2026-11-18T01:00:00Z',site_id='b',currency='MAD')],
+        updates('MA','2026-10-07'),'2026-11-20')
+    assert report['countries']['MA']['preferredTariffSource']=='Mac'
+    assert report['countries']['MA']['sucTariffs']==0
+    print('TESLA_PRIORITY_TEST morocco_country_mac_only PASS')
+
+    print('TESLA_PRIORITY_TESTS_PASS=13/13')
 
 if __name__=='__main__':
     main()
