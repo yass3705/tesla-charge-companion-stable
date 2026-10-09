@@ -1,0 +1,25 @@
+name: TCC V9 Allego UK live source and tariff smoke
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'v9-production-runtime/assets/v9/adapters/uk-pcpr.js'
+      - 'v9-production-runtime/assets/v9/browser-loaders.js'
+      - 'v9-production-runtime/assets/v9/session-engine.js'
+      - 'v9-production-runtime/assets/v9/runtime-engine.js'
+      - 'v9-production-runtime/assets/v9/pricing-engine.js'
+      - 'v9-production-runtime/data/v9/source-registry.json'
+      - 'v9-production-shell/**'
+      - 'tests/v9-allego-uk-pcpr-integration.test.cjs'
+      - '.github/workflows/v9-allego-uk-pcpr-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify actual audited Allego UK feed, 240 connector prices, and V9 pricing
+        run: node tests/v9-allego-uk-pcpr-integration.test.cjs
