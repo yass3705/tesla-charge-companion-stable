@@ -73,10 +73,11 @@ def _country_choice(cc,today,mac_date,suc_date):
     if cc=="MA":return "Mac","morocco_mac_only"
     if mac_date and (today-mac_date).days<0:
         raise ValueError(f"Future Mac country publication {cc}: {mac_date}")
-    if suc_date and (today-suc_date).days<0:
-        raise ValueError(f"Future SuC country observation {cc}: {suc_date}")
     if mac_date and (today-mac_date).days<10:
         return "Mac","mac_country_updated_within_10_days"
+    # Do not use an as-yet-future SuC snapshot in historical scenarios.
+    if suc_date and (today-suc_date).days<0:
+        return "Mac","suc_country_observation_in_future"
     if mac_date and suc_date and suc_date>mac_date:
         return "SuC Tracker","suc_country_observation_strictly_newer_than_mac_country"
     return "Mac","suc_not_strictly_newer_or_country_dates_incomplete"
