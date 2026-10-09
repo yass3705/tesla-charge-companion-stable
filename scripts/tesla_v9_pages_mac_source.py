@@ -39,6 +39,10 @@ def prepare(site,pinned_stable,prod):
     shutil.copyfile(canonical,mirror)
     # Keep the pinned baseline runtime consistent within the ephemeral build.
     shutil.copyfile(canonical,pinned_stable/'v9-production-runtime/data/tesla_stations.json')
+    safe_priority=site/'scripts/tesla_v9_tariff_priority_safe.py'
+    if not safe_priority.is_file():
+        raise SystemExit('Required safe Tesla precedence module missing')
+    shutil.copyfile(safe_priority,prod/'scripts/tesla_tariff_priority.py')
     updates_path=prod/'data/tesla_mac_country_updates.json'
     updates=load(updates_path)
     if updates.get('schemaVersion')!=1 or updates.get('timeZone')!='Europe/Paris':
@@ -74,7 +78,8 @@ def prepare(site,pinned_stable,prod):
         'timeAuthority':'Mac country publication, NOT invented station observation',
         'productionInputsPinnedExceptTesla':True,
         'priorityMetadata':str(updates_path),
-        'dateRule':'Mac country age 0-9 days; Morocco always Mac; other sources compared under existing V9 policy'
+        'priorityModule':'Mac <10d; newer SuC observation ONLY if strictly newer after 10d',
+        'dateRule':'Mac country age 0-9 days; after 10d SuC only if observed price newer; Morocco always Mac'
     }
     (site/'tesla-pages-live-source.json').write_text(json.dumps(ctx,indent=2,ensure_ascii=False)+'\n',encoding='utf8')
     print('TESLA_PAGES_LIVE_PREPARED='+json.dumps({
