@@ -21,5 +21,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - name: Check browser shell syntax and existing exact-EVSE/congestion regressions
+        run: |
+          node --check v9-production-shell/bridge.js
+          node --check v9-production-runtime/assets/v9/session-engine.js
+          node --check v9-production-runtime/assets/v9/runtime-engine.js
+          node tests/v9-production-evse-offer-isolation.test.cjs
+          node tests/v9-production-congestion-evse.test.cjs
       - name: Verify actual audited Allego UK feed, 240 connector prices, and V9 pricing
         run: node tests/v9-allego-uk-pcpr-integration.test.cjs
