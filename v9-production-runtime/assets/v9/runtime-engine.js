@@ -31,7 +31,23 @@
       if(query.session){
         sessionPlans=SessionPlannerEngine.planArea(stations,session,{route:{byStationId:routeMap}});
         const selectedSubscriptions=query.selectedSubscriptions||session.selectedSubscriptions||[],targetCurrency=query.targetCurrency||session.targetCurrency||'EUR',fxRates=query.fxRates||session.fxRates||{};
-        const evalRows=stations.map(st=>({station:st,evaluation:SessionEngine.evaluateStation(st,sessionPlans[st.id]?.effectiveSession||session,{selectedSubscriptions,targetCurrency,fxRates})}));
+        const pcprSessionsByStation={};
+        for(const st of stations){
+          if(!(st.offers||[]).some(o=>o?.metadata?.pcprExactConnector===true))continue;
+          const sessions={};
+          for(const e of st.evses||[])for(const c of e.connectors||[]){
+            if(!c.id||!(number(c.powerKw)>0)||!['AC','DC'].includes(String(c.kind||'').toUpperCase()))continue;
+            const isolated={...st,evses:[{...e,connectors:[c]}]};
+            const plan=SessionPlannerEngine.planStation(isolated,session,{route:{byStationId:routeMap}});
+            sessions[c.id]=plan.effectiveSession;
+          }
+          pcprSessionsByStation[st.id]=sessions;
+        }
+        const evalRows=stations.map(st=>({station:st,evaluation:SessionEngine.evaluateStation(st,sessionPlans[st.id]?.effectiveSession||session,{selectedSubscriptions,targetCurrency,fxRates,pcprConnectorSessions:pcprSessionsByStation[st.id]||{}})}));
+        for(const row of evalRows){
+          const id=row.station.id,chosen=row.evaluation.best?.connectorId,scoped=chosen&&pcprSessionsByStation[id]?.[chosen];
+          if(scoped&&sessionPlans[id])sessionPlans[id]={...sessionPlans[id],effectiveSession:scoped,chargingMinutes:scoped.chargingMinutes,postChargeMinutes:scoped.postChargeMinutes,connectedMinutes:scoped.durationMinutes};
+        }
         sessionEvaluations=Object.fromEntries(evalRows.map(row=>[row.evaluation.stationId,row.evaluation]));
         const scoreRows=stations.map(st=>({station:st,score:StationScoreEngine.scoreStation(st,sessionEvaluations[st.id],sessionPlans[st.id]?.effectiveSession||session,{route:{byStationId:routeMap},plan:sessionPlans[st.id]})}));
         const scored=StationScoreEngine.sortRows(scoreRows,query.sortBy||session.sortBy||'finalCost');
