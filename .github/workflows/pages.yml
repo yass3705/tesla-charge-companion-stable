@@ -457,6 +457,16 @@ jobs:
           node site/scripts/test_tcc_v9_runtime_fix_20261010.cjs \
             v9prod/runtime-overrides/assets/v9/pricing-engine.js \
             v9prod/runtime-overrides/assets/v9/adapters/tesla-json.js
+          # Match the complete 84 real offers, not just synthetic examples.
+          REF=https://raw.githubusercontent.com/yass3705/tesla-charge-companion-data-lab/main/reports/tariff-scenarios
+          curl --fail --silent --show-error --retry 3 --location "$REF/deep-review/france-after-minutes-candidate-latest.json" -o /tmp/tcc-france-after-golden.json
+          curl --fail --silent --show-error --retry 3 --location "$REF/france-runtime-offer-fixtures.json" -o /tmp/tcc-france-runtime-fixtures.json
+          curl --fail --silent --show-error --retry 3 --location "$REF/france-real-offer-fixtures.json" -o /tmp/tcc-france-real-fixtures.json
+          node site/scripts/test_tcc_v9_real_france_tariff_corpus_20261010.cjs \
+            v9prod/runtime-overrides/assets/v9/pricing-engine.js \
+            /tmp/tcc-france-after-golden.json \
+            /tmp/tcc-france-runtime-fixtures.json \
+            /tmp/tcc-france-real-fixtures.json
 
       - name: Construire la preview V9 isolée
         shell: bash
