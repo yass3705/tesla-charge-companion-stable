@@ -1,0 +1,86 @@
+name: Sync Tesla Mac updates into all V9 mirrors
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/tesla_stations.json'
+      - 'scripts/tesla_v9_catalogue_sync.py'
+      - '.github/workflows/tesla-mac-to-v9-sync.yml'
+  workflow_dispatch:
+  schedule:
+    # Fallback for Mac publishers using GITHUB_TOKEN, whose pushes may not
+    # trigger another GitHub Actions workflow. Runs hourly, without changes if
+    # both V9 mirrors already match the canonical Mac source.
+    - cron: '17 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-tesla-mac-into-v9-main
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate canonical Tesla source and sync current V9 data
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for attempt in 1 2 3 4 5; do
+            # Always read latest Mac-published main, not a stale event checkout.
+            git fetch origin main
+            git reset --hard origin/main
+
+            python3 scripts/tesla_v9_catalogue_sync.py --apply
+            python3 scripts/tesla_v9_catalogue_sync.py --check
+
+            git add \
+              v9-production-runtime/data/tesla_stations.json \
+              v9-test/data/tesla_stations.json \
+              data/tesla-mac-catalogue-publication.json
+
+            if git diff --cached --quiet; then
+              echo "TESLA_MAC_V9_ALREADY_SYNCHRONIZED"
+              exit 0
+            fi
+
+            git commit -m "data(tesla): sync Mac canonical catalogue to V9 mirrors"
+            if git push origin HEAD:main; then
+              echo "TESLA_MAC_V9_SYNC_PUBLISHED"
+              exit 0
+            fi
+            echo "Concurrent Mac publication detected; retrying latest source"
+            sleep "$((attempt*3))"
+          done
+          echo "::error::Tesla V9 sync could not be published; Mac canonical source remains intact."
+          exit 1
+
+      - name: Confirm published canonical/V9 mirrors agree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
+          python3 scripts/tesla_v9_catalogue_sync.py --check
+          python3 - <<'PY'
+          import json,hashlib,pathlib
+          root=pathlib.Path('.')
+          base=(root/'data/tesla_stations.json').read_bytes()
+          meta=json.loads((root/'data/tesla-mac-catalogue-publication.json').read_text())
+          assert meta['canonicalSha256']==hashlib.sha256(base).hexdigest()
+          for p in ('v9-production-runtime/data/tesla_stations.json','v9-test/data/tesla_stations.json'):
+              assert (root/p).read_bytes()==base, p
+          print('V9_TESLA_MAC_SYNC_PASS',len(json.loads(base)))
+          PY
