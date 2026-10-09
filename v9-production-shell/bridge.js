@@ -69,11 +69,23 @@
   }
   function rowsFromArea(area){return(area.rankedStations||area.stations||[]).map(st=>{const evaluation=area.sessionEvaluations?.[st.id],score=area.stationScores?.[st.id],route=area.routes?.byStationId?.[st.id];return{station:st,evaluation,score,route,total:num(evaluation?.best?.total),distanceKm:num(score?.distanceKm??route?.distanceKm)};});}
   function maxPower(st){let max=0;for(const evse of st?.evses||[])for(const c of evse?.connectors||[])max=Math.max(max,num(c?.powerKw)||0);return max;}
+  function connectorOfferRows(row){
+    const values=[row?.evaluation?.best,...(row?.evaluation?.alternatives||[])].filter(x=>x?.comparable&&x.connectorId&&Number.isFinite(x.total));
+    if(!values.length)return'';
+    const seen=new Set(),rows=[];
+    for(const o of values){
+      const key=[o.connectorPowerKw,Number(o.total).toFixed(3),o.currency].join('|');
+      if(seen.has(key))continue;seen.add(key);
+      rows.push(`<div class="small">• ${esc(o.connectorPowerKw||'?')} kW · ${Number(o.total).toFixed(2)} ${esc(o.targetCurrency||o.currency||'GBP')} TTC · ${esc(o.provider||'Allego direct')}</div>`);
+    }
+    return `<div style="margin-top:7px"><b class="small">Coût par configuration de charge</b>${rows.join('')}</div>`;
+  }
+
   function renderCandidate(w,area,rows,originLabel){
     const results=w.document.getElementById('results'),routeStatus=w.document.getElementById('routeStatus');if(!results)throw new Error('stable results container missing');
     if(routeStatus)routeStatus.innerHTML=`<span class="good">Moteur V9 canary · ${rows.length} borne(s) classée(s) depuis ${esc(originLabel)}.</span>`;
     if(!rows.length){results.innerHTML='<div class="warn">Aucune borne V9 exploitable pour cette recherche. Retour au moteur stable recommandé.</div>';return;}
-    results.innerHTML=`<div class="small box"><b>Moteur V9 canary</b> · interface V7.3 stable · candidat moteur épinglé</div>`+rows.map((row,i)=>{const st=row.station,best=row.evaluation?.best,score=row.score,route=row.route;return `<div class="box" style="margin-top:10px"><b>${i+1}. ${esc(st.name||'Borne')}</b><div class="small">${esc(st.physicalOperator?.name||'Opérateur inconnu')} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div><div style="margin-top:6px">${best?`<b>${Number(best.total).toFixed(2)} ${esc(best.targetCurrency||'EUR')}</b> · ${esc(best.provider||'tarif')}`:'<span class="warn">Tarif non comparable</span>'}${Number.isFinite(row.distanceKm)?` · ${row.distanceKm.toFixed(1)} km`:''}</div>${score?`<div class="small">Charge ${num(score.chargingMinutes)!=null?Number(score.chargingMinutes).toFixed(0)+' min':'—'} · trajet ${num(score.driveMinutes)!=null?Number(score.driveMinutes).toFixed(0)+' min':'—'} · total ${num(score.totalTimeMinutes)!=null?Number(score.totalTimeMinutes).toFixed(0)+' min':'—'}</div>`:''}${route?.provider?`<div class="small">Routage ${esc(route.provider)}</div>`:''}</div>`;}).join('');
+    results.innerHTML=`<div class="small box"><b>Moteur V9 canary</b> · interface V7.3 stable · candidat moteur épinglé</div>`+rows.map((row,i)=>{const st=row.station,best=row.evaluation?.best,score=row.score,route=row.route;return `<div class="box" style="margin-top:10px"><b>${i+1}. ${esc(st.name||'Borne')}</b><div class="small">${esc(st.physicalOperator?.name||'Opérateur inconnu')} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div><div style="margin-top:6px">${best?`<b>${Number(best.total).toFixed(2)} ${esc(best.targetCurrency||'EUR')}</b> · ${esc(best.provider||'tarif')}`:'<span class="warn">Tarif non comparable</span>'}${Number.isFinite(row.distanceKm)?` · ${row.distanceKm.toFixed(1)} km`:''}</div>${connectorOfferRows(row)}${score?`<div class="small">Charge ${num(score.chargingMinutes)!=null?Number(score.chargingMinutes).toFixed(0)+' min':'—'} · trajet ${num(score.driveMinutes)!=null?Number(score.driveMinutes).toFixed(0)+' min':'—'} · total ${num(score.totalTimeMinutes)!=null?Number(score.totalTimeMinutes).toFixed(0)+' min':'—'}</div>`:''}${route?.provider?`<div class="small">Routage ${esc(route.provider)}</div>`:''}</div>`;}).join('');
   }
   async function executeV9(w,engine,cfg,input){
     if(!(input.targetSoc>input.startSoc))throw new Error('invalid SOC target');if(!input.originText)throw new Error('origin required');
