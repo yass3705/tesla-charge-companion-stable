@@ -4623,44 +4623,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.45,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -4724,44 +4724,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.45,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -4791,11 +4791,11 @@
           "start": "00:00",
           "end": "24:00",
           "billing": "kwh",
-          "pricePerKwh": 0.47,
+          "currency": "CHF",
+          "pricePerKwh": 0.48,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -4859,11 +4859,11 @@
               "start": "00:00",
               "end": "24:00",
               "billing": "kwh",
-              "pricePerKwh": 0.47,
+              "currency": "CHF",
+              "pricePerKwh": 0.48,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -4893,33 +4893,33 @@
           "start": "00:00",
           "end": "16:00",
           "billing": "kwh",
-          "pricePerKwh": 0.47,
+          "currency": "CHF",
+          "pricePerKwh": 0.48,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "16:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.56,
+          "currency": "CHF",
+          "pricePerKwh": 0.58,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.47,
+          "currency": "CHF",
+          "pricePerKwh": 0.48,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -4983,33 +4983,33 @@
               "start": "00:00",
               "end": "16:00",
               "billing": "kwh",
-              "pricePerKwh": 0.47,
+              "currency": "CHF",
+              "pricePerKwh": 0.48,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "16:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.56,
+              "currency": "CHF",
+              "pricePerKwh": 0.58,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.47,
+              "currency": "CHF",
+              "pricePerKwh": 0.48,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -5039,44 +5039,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.37,
+          "currency": "CHF",
+          "pricePerKwh": 0.35,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.37,
+          "currency": "CHF",
+          "pricePerKwh": 0.35,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.58,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.37,
+          "currency": "CHF",
+          "pricePerKwh": 0.35,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -5140,44 +5140,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.37,
+              "currency": "CHF",
+              "pricePerKwh": 0.35,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.37,
+              "currency": "CHF",
+              "pricePerKwh": 0.35,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.58,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.37,
+              "currency": "CHF",
+              "pricePerKwh": 0.35,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -5207,33 +5207,55 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
+          "end": "12:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.55,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "12:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.63,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.55,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -5297,33 +5319,55 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
+              "end": "12:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.55,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "12:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.63,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.55,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -5353,44 +5397,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.37,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.37,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
-          "end": "20:00",
-          "billing": "kwh",
-          "pricePerKwh": 0.54,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
-        },
-        {
-          "scope": "timeWindow",
-          "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.41,
+          "currency": "CHF",
+          "pricePerKwh": 0.45,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -5454,44 +5487,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.37,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.37,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
-              "end": "20:00",
-              "billing": "kwh",
-              "pricePerKwh": 0.54,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
-            },
-            {
-              "scope": "timeWindow",
-              "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.41,
+              "currency": "CHF",
+              "pricePerKwh": 0.45,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -5521,44 +5543,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.57,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.44,
+          "currency": "CHF",
+          "pricePerKwh": 0.43,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -5622,44 +5644,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.57,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.44,
+              "currency": "CHF",
+              "pricePerKwh": 0.43,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -5689,44 +5711,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.59,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -5790,44 +5812,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.59,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -5857,44 +5879,55 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
-          "end": "09:00",
+          "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
-          "start": "09:00",
+          "start": "08:00",
+          "end": "12:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.52,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "12:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.59,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
+          "currency": "CHF",
           "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -5958,44 +5991,55 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
-              "end": "09:00",
+              "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
-              "start": "09:00",
+              "start": "08:00",
+              "end": "12:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.52,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "12:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.59,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
+              "currency": "CHF",
               "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6025,33 +6069,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.53,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -6115,33 +6159,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.53,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6171,33 +6215,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.57,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -6261,33 +6305,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.57,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6317,44 +6361,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
           "end": "23:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.58,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "23:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -6418,44 +6462,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
               "end": "23:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.58,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "23:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6485,33 +6529,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.47,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.4,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
+          "end": "21:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.59,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "21:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.47,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -6575,33 +6630,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.47,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.4,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
+              "end": "21:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.59,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "21:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.47,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6631,44 +6697,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.56,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
+          "currency": "CHF",
           "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -6732,44 +6798,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.56,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
+              "currency": "CHF",
               "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6808,33 +6874,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
+          "end": "20:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.55,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.49,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -6898,33 +6975,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
+              "end": "20:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.55,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.49,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -6954,44 +7042,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.6,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.44,
+          "currency": "CHF",
+          "pricePerKwh": 0.43,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -7055,44 +7143,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.6,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.44,
+              "currency": "CHF",
+              "pricePerKwh": 0.43,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -7122,44 +7210,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.64,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
+          "currency": "CHF",
           "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -7223,44 +7311,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.64,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
+              "currency": "CHF",
               "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -7298,44 +7386,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
           "end": "19:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.63,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "19:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -7399,44 +7487,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
               "end": "19:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.63,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "19:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -7466,44 +7554,55 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
+          "end": "18:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.61,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "18:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.55,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -7567,44 +7666,55 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
+              "end": "18:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.61,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "18:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.55,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -7634,44 +7744,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.31,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.31,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "19:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.6,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "19:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.31,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -7735,44 +7845,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.31,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.31,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "19:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.6,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "19:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.31,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -7802,44 +7912,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.58,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -7903,44 +8013,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.58,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -7970,44 +8080,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "21:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.53,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "21:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -8071,44 +8181,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "21:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.53,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "21:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -8138,44 +8248,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.61,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.32,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -8239,44 +8349,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.61,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.32,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -8306,44 +8416,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.43,
+          "currency": "CHF",
+          "pricePerKwh": 0.44,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.43,
+          "currency": "CHF",
+          "pricePerKwh": 0.44,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.56,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.43,
+          "currency": "CHF",
+          "pricePerKwh": 0.44,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -8407,44 +8517,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.43,
+              "currency": "CHF",
+              "pricePerKwh": 0.44,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.43,
+              "currency": "CHF",
+              "pricePerKwh": 0.44,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.56,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.43,
+              "currency": "CHF",
+              "pricePerKwh": 0.44,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -8474,44 +8584,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.42,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.57,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.34,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -8575,44 +8685,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.42,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.57,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.34,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -8642,33 +8752,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.44,
+          "currency": "CHF",
+          "pricePerKwh": 0.45,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.56,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.44,
+          "currency": "CHF",
+          "pricePerKwh": 0.45,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -8732,33 +8842,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.44,
+              "currency": "CHF",
+              "pricePerKwh": 0.45,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.56,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.44,
+              "currency": "CHF",
+              "pricePerKwh": 0.45,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -8788,44 +8898,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.32,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
-          "end": "10:00",
-          "billing": "kwh",
-          "pricePerKwh": 0.4,
-          "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
-        },
-        {
-          "scope": "timeWindow",
-          "start": "10:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.46,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.32,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -8889,44 +8988,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.32,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
-              "end": "10:00",
-              "billing": "kwh",
-              "pricePerKwh": 0.4,
-              "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
-            },
-            {
-              "scope": "timeWindow",
-              "start": "10:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.46,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.32,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -8956,44 +9044,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
           "end": "23:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.46,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "23:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9057,44 +9145,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
               "end": "23:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.46,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "23:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -9124,44 +9212,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
           "end": "12:00",
           "billing": "kwh",
-          "pricePerKwh": 0.44,
+          "currency": "CHF",
+          "pricePerKwh": 0.45,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "12:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.55,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9225,44 +9313,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
               "end": "12:00",
               "billing": "kwh",
-              "pricePerKwh": 0.44,
+              "currency": "CHF",
+              "pricePerKwh": 0.45,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "12:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.55,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -9292,44 +9380,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.26,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.59,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.36,
+          "currency": "CHF",
+          "pricePerKwh": 0.38,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9393,44 +9481,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.26,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.59,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.36,
+              "currency": "CHF",
+              "pricePerKwh": 0.38,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -9460,33 +9548,33 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "08:00",
           "end": "00:00",
           "billing": "kwh",
+          "currency": "CHF",
           "pricePerKwh": 0.54,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9550,33 +9638,33 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "08:00",
               "end": "00:00",
               "billing": "kwh",
+              "currency": "CHF",
               "pricePerKwh": 0.54,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -9606,11 +9694,11 @@
           "start": "00:00",
           "end": "24:00",
           "billing": "kwh",
-          "pricePerKwh": 0.45,
+          "currency": "CHF",
+          "pricePerKwh": 0.48,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9674,11 +9762,11 @@
               "start": "00:00",
               "end": "24:00",
               "billing": "kwh",
-              "pricePerKwh": 0.45,
+              "currency": "CHF",
+              "pricePerKwh": 0.48,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -9708,44 +9796,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "23:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.53,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "23:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9809,44 +9897,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "23:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.53,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "23:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -9876,44 +9964,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.3,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.3,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
           "end": "22:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.46,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "22:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.3,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -9977,44 +10065,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.3,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.3,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
               "end": "22:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.46,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "22:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.3,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -10044,44 +10132,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "09:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "09:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.55,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.27,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -10145,44 +10233,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "09:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "09:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.55,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.27,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -10402,44 +10490,44 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
           "end": "10:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "10:00",
           "end": "21:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.56,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "21:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.28,
+          "currency": "CHF",
+          "pricePerKwh": 0.33,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -10503,44 +10591,44 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
               "end": "10:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "10:00",
               "end": "21:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.56,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "21:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.28,
+              "currency": "CHF",
+              "pricePerKwh": 0.33,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -10570,44 +10658,55 @@
           "start": "00:00",
           "end": "04:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "04:00",
-          "end": "09:00",
+          "end": "08:00",
           "billing": "kwh",
-          "pricePerKwh": 0.29,
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
-          "start": "09:00",
+          "start": "08:00",
+          "end": "12:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.52,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "12:00",
           "end": "20:00",
           "billing": "kwh",
-          "pricePerKwh": 0.54,
+          "currency": "CHF",
+          "pricePerKwh": 0.59,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         },
         {
           "scope": "timeWindow",
           "start": "20:00",
           "end": "00:00",
           "billing": "kwh",
-          "pricePerKwh": 0.39,
+          "currency": "CHF",
+          "pricePerKwh": 0.4,
           "chargePerMinute": 0,
-          "connectionFee": 0,
-          "idlePerMinute": 0,
-          "currency": "CHF"
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
         }
       ]
     },
@@ -10671,44 +10770,55 @@
               "start": "00:00",
               "end": "04:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "04:00",
-              "end": "09:00",
+              "end": "08:00",
               "billing": "kwh",
-              "pricePerKwh": 0.29,
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
-              "start": "09:00",
+              "start": "08:00",
+              "end": "12:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.52,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "12:00",
               "end": "20:00",
               "billing": "kwh",
-              "pricePerKwh": 0.54,
+              "currency": "CHF",
+              "pricePerKwh": 0.59,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             },
             {
               "scope": "timeWindow",
               "start": "20:00",
               "end": "00:00",
               "billing": "kwh",
-              "pricePerKwh": 0.39,
+              "currency": "CHF",
+              "pricePerKwh": 0.4,
               "chargePerMinute": 0,
-              "connectionFee": 0,
-              "idlePerMinute": 0,
-              "currency": "CHF"
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
             }
           ]
         }
@@ -172063,6 +172173,195 @@
               "billing": "kwh",
               "currency": "EUR",
               "pricePerKwh": 0.45,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "tesla-436554-switzerland",
+    "name": "Tesla Silvaplana, Switzerland",
+    "kind": "DC",
+    "source": "teslaSupercharger",
+    "countryCode": "CH",
+    "department": "",
+    "powerKw": 250,
+    "stalls": 8,
+    "address": "62B Via Chantunela, 7513 Silvaplana, Grisons, Switzerland",
+    "latitude": 46.455853,
+    "longitude": 9.790989,
+    "mapsUrl": "https://maps.google.com/maps?daddr=46.455853,9.790989",
+    "teslaUrl": "https://www.tesla.com/fr_CH/findus/location/supercharger/436554",
+    "pricing": {
+      "type": "rules",
+      "rules": [
+        {
+          "scope": "timeWindow",
+          "start": "00:00",
+          "end": "04:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.27,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "04:00",
+          "end": "10:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.27,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "10:00",
+          "end": "19:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.54,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "19:00",
+          "end": "23:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.32,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        },
+        {
+          "scope": "timeWindow",
+          "start": "23:00",
+          "end": "00:00",
+          "billing": "kwh",
+          "currency": "CHF",
+          "pricePerKwh": 0.27,
+          "chargePerMinute": 0,
+          "connectionFee": 0.0,
+          "idlePerMinute": 0
+        }
+      ]
+    },
+    "access": {
+      "limited": false,
+      "days": {
+        "0": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "1": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "2": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "3": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "4": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "5": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        },
+        "6": {
+          "open": true,
+          "start": "00:00",
+          "end": "24:00"
+        }
+      },
+      "afterCloseMode": "exit_allowed",
+      "afterCloseNote": "Accès 24 h/24, 7 j/7 indiqué par Tesla."
+    },
+    "lastUpdated": "2026-10-09",
+    "temporarilyUnavailable": false,
+    "operator": "Tesla",
+    "chargingConfigurations": [
+      {
+        "id": "main",
+        "label": "DC 250 kW",
+        "kind": "DC",
+        "powerKw": 250,
+        "stalls": 8,
+        "pricing": {
+          "type": "rules",
+          "rules": [
+            {
+              "scope": "timeWindow",
+              "start": "00:00",
+              "end": "04:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.27,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "04:00",
+              "end": "10:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.27,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "10:00",
+              "end": "19:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.54,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "19:00",
+              "end": "23:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.32,
+              "chargePerMinute": 0,
+              "connectionFee": 0.0,
+              "idlePerMinute": 0
+            },
+            {
+              "scope": "timeWindow",
+              "start": "23:00",
+              "end": "00:00",
+              "billing": "kwh",
+              "currency": "CHF",
+              "pricePerKwh": 0.27,
               "chargePerMinute": 0,
               "connectionFee": 0.0,
               "idlePerMinute": 0
