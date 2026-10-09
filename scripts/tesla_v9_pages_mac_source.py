@@ -94,6 +94,20 @@ def prepare(site,pinned_stable,prod):
     adapter_dest=prod/'runtime-overrides/assets/v9/adapters/tesla-json.js'
     adapter_dest.parent.mkdir(parents=True,exist_ok=True)
     adapter_dest.write_text(adapter,encoding='utf8')
+    session_path=prod/'runtime-overrides/assets/v9/session-engine.js'
+    session_src=session_path.read_text(encoding='utf8')
+    original_lock="""    const locked=validity.complete?evaluateSessionStartLockedOffer(offer,effectiveSession):null;
+      const timeline=validity.complete&&!locked?evaluateTimelineOffer(offer,effectiveSession):null;"""
+    adjusted_lock="""    // Surcharges and Tesla dynamic-power rules require the complete pricing engine.
+      const fullPricing=Boolean((offer?.pricing?.rules||[]).some(rule=>
+        Number(rule?.afterMinutesRate)>0||rule?.billing==='powerMinute'));
+      const locked=validity.complete&&!fullPricing?evaluateSessionStartLockedOffer(offer,effectiveSession):null;
+      const timeline=validity.complete&&!locked&&!fullPricing?evaluateTimelineOffer(offer,effectiveSession):null;"""
+    if session_src.count(original_lock)!=1:
+        raise SystemExit('V9 session engine path changed: cannot protect afterMinutes')
+    session_src=session_src.replace(original_lock,adjusted_lock,1)
+    session_path.write_text(session_src,encoding='utf8')
+    print('TCC_V9_SESSION_ENGINE_COMPLEX_TARIFF_DISPATCH_APPLIED')
     print('TESLA_ADAPTER_NATIVE_CURRENCIES_AND_REAL_POWER_BANDS_APPLIED')
     print('TCC_V9_ENGINE_EXACT_AFTER_MINUTES_AND_POWER_MINUTE_APPLIED')
     updates_path=prod/'data/tesla_mac_country_updates.json'
