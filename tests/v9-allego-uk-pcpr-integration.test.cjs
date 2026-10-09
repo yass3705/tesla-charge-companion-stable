@@ -22,7 +22,7 @@ async function main(){
   for(const {c} of all){const n=(c.tariff_ids||[]).length;lengths[n]=(lengths[n]||0)+1;const kw=String(c.max_electric_power??'MISSING');power[kw]=(power[kw]||0)+1;}
   const sample=all[0];const tariff=doc.sources[0].tariffs[0];
   console.log('PRE-VALIDATION',JSON.stringify({connectorTariffIdsHistogram:lengths,connectorPowerWatts:power,
-    firstConnector:{id:sample.c.id,tariff_ids:sample.c.tariff_ids,sourceTariffIds:sample.c.sourceTariffIds,standard:sample.c.standard,max_electric_power:sample.c.max_electric_power},
+    firstConnector:sample.c,firstEvse:doc.sources[0].locations[0].evses[0],firstStation:{id:doc.sources[0].locations[0].id,name:doc.sources[0].locations[0].name,address:doc.sources[0].locations[0].address,city:doc.sources[0].locations[0].city,party_id:doc.sources[0].locations[0].party_id},
     firstTariff:{id:tariff.id,party_id:tariff.party_id,priceBasis:tariff.tccPriceBasis,parsedPricing:A.pricingFromTariff(tariff)}},null,2));
   const parsed=A.normalizePayload(doc,audit,{id:'allego-uk-pcpr-direct',priority:{tariff:130}});
   const stations=parsed.stations,offers=stations.flatMap(st=>st.offers);
