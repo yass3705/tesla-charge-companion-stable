@@ -65,6 +65,20 @@
     return null;
   }
 
+  function connectorPower(c){
+    const official=num(c.max_electric_power);
+    if(official!=null&&official>0)return{powerKw:official/1000,source:'ocpi_max_electric_power'};
+    const volts=num(c.max_voltage),amps=num(c.max_amperage),type=str(c.power_type).toUpperCase();
+    if(volts==null||amps==null||volts<=0||amps<=0)return{powerKw:null,source:'missing_power'};
+    let value;
+    if(type==='DC')value=volts*amps/1000;
+    else if(type==='AC_3_PHASE')value=3*volts*amps/1000; // 230V phase-neutral, three phases
+    else if(type==='AC_1_PHASE')value=volts*amps/1000;
+    else return{powerKw:null,source:'unsupported_power_type'};
+    if(!(value>0&&value<=500))return{powerKw:null,source:'invalid_electrical_envelope'};
+    return{powerKw:Math.round(value*10)/10,source:'derived_from_ocpi_voltage_current'};
+  }
+
   function normalizePayload(doc,audit,source={}){
     if(doc?.country!=='GB'||doc?.sources?.length!==1||doc.sources[0]?.id!=='allego-uk-pcpr-direct')reject('source identity');
     if(doc.integrationStatus!=='cpo_direct_exact_connector_vat_inclusive_staged')reject('source not validated staging');
@@ -96,9 +110,9 @@
           if(!cid||connKeys.has(connectorId))reject('duplicate or missing connector');
           connKeys.add(connectorId);
           count++;
-          const powerWatts=num(c.max_electric_power),powerKw=powerWatts!=null?powerWatts/1000:null;
+          const {powerKw,source:powerSource}=connectorPower(c);
           const kind=connectorKind(c);
-          conns.push({id:connectorId,kind:kind||'OTHER',powerKw,plugName:str(c.standard),metadata:{nativeConnectorId:cid,sourceTariffIds:c.sourceTariffIds||[],tariffScope:'exact_connector'}});
+          conns.push({id:connectorId,kind:kind||'OTHER',powerKw,powerSource,plugName:str(c.standard),metadata:{nativeConnectorId:cid,sourceTariffIds:c.sourceTariffIds||[],tariffScope:'exact_connector',maxVoltageV:num(c.max_voltage),maxAmperageA:num(c.max_amperage)}});
           const ids=c.tariff_ids||[];
           if(!Array.isArray(ids)||ids.length!==1||!kind||!powerKw||powerKw<=0){unpriced++;continue;}
           const key=['GB',party,str(ids[0])].join('|'),tariff=tariffIndex.get(key);
@@ -148,5 +162,5 @@
       return cache;
     };
   }
-  return{pricingFromTariff,connectorKind,normalizePayload,createLoader};
+  return{pricingFromTariff,connectorKind,connectorPower,normalizePayload,createLoader};
 });
