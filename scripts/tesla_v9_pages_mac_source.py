@@ -183,44 +183,6 @@ def prepare(site,pinned_stable,prod):
         bridge=bridge.replace(guide_before,guide_after)
     bridge_path.write_text(bridge,encoding='utf8')
     print('TCC_V9_TARIFF_FAILURE_LABELS_INSTALLED')
-    # Patch production-owned shell used in the actual Pages V9 preview.
-    # The pricing engine already marks unresolved calculations complete=false;
-    # this controls presentation only and preserves fail-closed price ranking.
-    display_file=site/'scripts/tcc_v9_tariff_failure_status_20261010.js'
-    bridge_path=prod/'v9-production-shell/bridge.js'
-    bridge=bridge_path.read_text(encoding='utf8')
-    display_extension=display_file.read_text(encoding='utf8')
-    anchor='  // A lane is evaluated independently.'
-    if bridge.count(anchor)!=1:raise SystemExit('V9 tariff display anchor changed')
-    bridge=bridge.replace(anchor,display_extension+'\n'+anchor,1)
-    replacements=[
-        ("    return{status:'unresolved',item:null,offers};",
-         "    return{status:offers.some(item=>hasTariffSourceEvidence(item,station))?'unresolved':'missing',item:null,offers};"),
-        ("""return item?'<div class="v9-tesla-price"><strong>Tesla</strong> · '+esc(displayAmount(item,fxRates))+'</div>':'<div class="v9-tesla-price">Tarif non disponible</div>';""",
-         """return item?'<div class="v9-tesla-price"><strong>Tesla</strong> · '+esc(displayAmount(item,fxRates))+'</div>':'<div class="v9-tesla-price">'+esc(tariffFailureLabel(evaluation,station))+'</div>';"""),
-        ("state.status==='ambiguous'?'Tarif ambigu à vérifier auprès de l’opérateur'",
-         "state.status==='ambiguous'?'Tarif incalculable'"),
-        ("state.status==='unresolved'?'Tarif à vérifier auprès de l’opérateur'",
-         "state.status==='unresolved'?'Tarif incalculable'"),
-        ("state.status==='priced'?displayAmount(displayItem,fxRates):'Tarif non disponible'",
-         "state.status==='priced'?displayAmount(displayItem,fxRates):'Tarif indisponible'"),
-        (""":'<div class="small" style="color:#c7d0d9">Tarif de base non disponible</div>';""",
-         """:'<div class="small" style="color:#c7d0d9">'+esc(tariffFailureLabel(row?.evaluation,station))+'</div>';"""),
-        ("best?'Session dès '+amount:'Tarif indisponible'",
-         "best?'Session dès '+amount:(nearby.some(row=>tariffFailureStatus(row.evaluation,row.station)==='incalculable')?'Tarif incalculable':'Tarif indisponible')"),
-        ("best?'session dès '+amount:'tarif indisponible'",
-         "best?'session dès '+amount:(nearby.some(row=>tariffFailureStatus(row.evaluation,row.station)==='incalculable')?'tarif incalculable':'tarif indisponible')"),
-        ("Les tarifs non validés ou non comparables restent signalés comme indisponibles.",
-         "Un tarif absent est indisponible ; si les données tarifaires existent mais que le calcul est ambigu ou incomplet, le tarif est incalculable."),
-        ("  return{congestionLaneKey,congestionAdjustedTotal,bindCongestionToggles,tariffLaneState,",
-         "  return{tariffFailureStatus,tariffFailureLabel,hasTariffSourceEvidence,congestionLaneKey,congestionAdjustedTotal,bindCongestionToggles,tariffLaneState,"),
-    ]
-    for before,after in replacements:
-        if bridge.count(before)!=1:
-            raise SystemExit('V9 tariff display text changed: '+before[:85]+' ('+str(bridge.count(before))+')')
-        bridge=bridge.replace(before,after,1)
-    bridge_path.write_text(bridge,encoding='utf8')
-    print('TCC_V9_TARIFF_UNAVAILABLE_VS_INCALCULABLE_DISPLAY_APPLIED')
     updates_path=prod/'data/tesla_mac_country_updates.json'
     updates=load(updates_path)
     if updates.get('schemaVersion')!=1 or updates.get('timeZone')!='Europe/Paris':
