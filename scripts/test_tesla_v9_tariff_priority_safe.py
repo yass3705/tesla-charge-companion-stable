@@ -50,11 +50,11 @@ def main():
     run('de_old_legacy_suc_newer',station('DE'),[suc('DE','2026-10-02T01:00:00Z')],
         '2026-10-10','SuC Tracker',0.4,updates('DE'))
     run('source_id_mismatch_reject',fr,[suc('FR','2026-10-25T01:00:00Z','other-id')],
-        '2026-11-20','Mac',0.55,updates('FR','2026-10-09'))
+        '2026-11-20','SuC Tracker',0.55,updates('FR','2026-10-09'))
     run('suc_missing_observation_reject',fr,[station('FR',rate=.3)],
         '2026-11-20','Mac',0.55,updates('FR','2026-10-09'))
     run('per_configuration_mac_tiers_not_flattened',station('FR',cfg_rates=[.5,.7]),
-        [suc('FR','2026-11-14T01:00:00Z')],'2026-11-20','Mac',0.55,updates('FR','2026-10-09'))
+        [suc('FR','2026-11-14T01:00:00Z')],'2026-11-20','SuC Tracker',0.55,updates('FR','2026-10-09'))
     # Source freshness is COUNTRY-WIDE, even if individual station's old
     # metadata would suggest a different observation date.
     multi_mac=[station('FR',site_id='a',observed='2026-10-27T01:00:00Z'),
