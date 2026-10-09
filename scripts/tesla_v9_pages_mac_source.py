@@ -137,6 +137,52 @@ def prepare(site,pinned_stable,prod):
     print('TCC_V9_SESSION_ENGINE_COMPLEX_TARIFF_DISPATCH_APPLIED')
     print('TESLA_ADAPTER_NATIVE_CURRENCIES_AND_REAL_POWER_BANDS_APPLIED')
     print('TCC_V9_ENGINE_EXACT_AFTER_MINUTES_AND_POWER_MINUTE_APPLIED')
+    # The Pages shell is production-owned and pinned. Patch the ephemeral build
+    # copy, never rewrite the committed/immutable candidate baseline.
+    bridge_path=prod/'v9-production-shell/bridge.js'
+    bridge=bridge_path.read_text(encoding='utf8')
+    label_fn=(site/'scripts/tcc_v9_tariff_failure_labels_20261010.js').read_text(encoding='utf8')
+    label_anchor='  function displayAmount(item,fxRates={}){'
+    if bridge.count(label_anchor)!=1 or bridge.count('  function tariffLaneState(')!=1:
+        raise SystemExit('V9 public tariff UI contracts changed; manual review required')
+    bridge=bridge.replace(label_anchor,label_fn+'\n'+label_anchor,1)
+    lane_before="""      const amount=state.status==='ambiguous'?'Tarif ambigu à vérifier auprès de l’opérateur'
+        :state.status==='unresolved'?'Tarif à vérifier auprès de l’opérateur'
+        :state.status==='priced'?displayAmount(displayItem,fxRates):'Tarif non disponible';"""
+    lane_after="""      const amount=state.status==='priced'?displayAmount(displayItem,fxRates)
+        :tariffFailureLabel(state.offers,station,state.status);"""
+    if bridge.count(lane_before)!=1:
+        raise SystemExit('V9 tariff lane failure rendering changed; refuse unsafe patch')
+    bridge=bridge.replace(lane_before,lane_after,1)
+    tesla_before="""      return item?'<div class="v9-tesla-price"><strong>Tesla</strong> · '+esc(displayAmount(item,fxRates))+'</div>':'<div class="v9-tesla-price">Tarif non disponible</div>';"""
+    tesla_after="""      const failed=[evaluation?.best,...(evaluation?.alternatives||[]),...(evaluation?.incomplete||[])].filter(Boolean);
+      return item?'<div class="v9-tesla-price"><strong>Tesla</strong> · '+esc(displayAmount(item,fxRates))+'</div>':'<div class="v9-tesla-price">'+esc(tariffFailureLabel(failed,station,'unresolved'))+'</div>';"""
+    if bridge.count(tesla_before)!=1:
+        raise SystemExit('V9 Tesla tariff failure rendering changed; refuse unsafe patch')
+    bridge=bridge.replace(tesla_before,tesla_after,1)
+    # For both map labels and hover text, make the reason visible, not only
+    # an unexplained dash. 'Incalculable' is reserved for known tariffs.
+    map_before="""best?formatCurrencyAmount(best.total,best.targetCurrency||currencyForCountry(nearby[0]?.station?.countryCode)):'—'"""
+    map_after="""best?formatCurrencyAmount(best.total,best.targetCurrency||currencyForCountry(nearby[0]?.station?.countryCode)):nearby.some(row=>tariffFailureLabel([row.evaluation?.best,...(row.evaluation?.alternatives||[]),...(row.evaluation?.incomplete||[])],row.station,'unresolved')==='Tarif incalculable')?'Incalculable':'Indisponible'"""
+    if bridge.count(map_before)!=1:
+        raise SystemExit('V9 map marker pricing label changed; cannot safely classify')
+    bridge=bridge.replace(map_before,map_after,1)
+    # Existing marker title/aria uses the fallback text and must no longer
+    # claim 'Tarif indisponible' when the label indicates ambiguity.
+    map_title_before="""best?'Session dès '+amount:'Tarif indisponible'"""
+    map_title_after="""best?'Session dès '+amount:'Tarif '+amount.toLowerCase()"""
+    map_aria_before="""best?'session dès '+amount:'tarif indisponible'"""
+    map_aria_after="""best?'session dès '+amount:'tarif '+amount.toLowerCase()"""
+    if bridge.count(map_title_before)!=1 or bridge.count(map_aria_before)!=1:
+        raise SystemExit('V9 map tooltip contract changed; cannot safely classify')
+    bridge=bridge.replace(map_title_before,map_title_after,1)
+    bridge=bridge.replace(map_aria_before,map_aria_after,1)
+    guide_before="""Les tarifs non validés ou non comparables restent signalés comme indisponibles."""
+    guide_after="""Tarif incalculable : calcul ambigu malgré des données tarifaires. Tarif indisponible : aucune offre exploitable."""
+    if guide_before in bridge:
+        bridge=bridge.replace(guide_before,guide_after)
+    bridge_path.write_text(bridge,encoding='utf8')
+    print('TCC_V9_TARIFF_FAILURE_LABELS_INSTALLED')
     updates_path=prod/'data/tesla_mac_country_updates.json'
     updates=load(updates_path)
     if updates.get('schemaVersion')!=1 or updates.get('timeZone')!='Europe/Paris':
