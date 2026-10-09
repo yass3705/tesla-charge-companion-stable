@@ -11,8 +11,9 @@
     "NL",
     "IT",
     "ES",
-    "CH"
+    "CH",
+    "GB"
   ],
   "fallback": "legacy-compare",
-  "notes": "Candidate production shell. Stable V7.3 UI remains the shell; V9 compare is enabled for FR, NL, IT, ES and CH. Switzerland uses the BFE/OICP national baseline plus exact verified CPO tariff overlays; unresolved EVSEs remain visible without an invented direct price."
+  "notes": "Candidate production shell. Stable V7.3 UI remains the shell; V9 compare is enabled for FR, NL, IT, ES and CH. Switzerland uses the BFE/OICP national baseline plus exact verified CPO tariff overlays; unresolved EVSEs remain visible without an invented direct price. Allego UK is loaded exclusively from independently audited, CPO-scoped exact connector PCPR evidence; unresolved tariffs are not guessed."
 }
