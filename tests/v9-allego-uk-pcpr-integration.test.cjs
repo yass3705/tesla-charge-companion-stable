@@ -18,6 +18,12 @@ async function main(){
     get(base+'reports/uk/allego_uk-pcpr-validation-latest.json')]);
   const doc=JSON.parse(zlib.gunzipSync(Buffer.from(await dataRes.arrayBuffer())).toString('utf8'));
   const audit=await auditRes.json();
+  const lengths={},power={},reason={},all=doc.sources[0].locations.flatMap(l=>l.evses.flatMap(e=>e.connectors.map(c=>({c,l}))));
+  for(const {c} of all){const n=(c.tariff_ids||[]).length;lengths[n]=(lengths[n]||0)+1;const kw=String(c.max_electric_power??'MISSING');power[kw]=(power[kw]||0)+1;}
+  const sample=all[0];const tariff=doc.sources[0].tariffs[0];
+  console.log('PRE-VALIDATION',JSON.stringify({connectorTariffIdsHistogram:lengths,connectorPowerWatts:power,
+    firstConnector:{id:sample.c.id,tariff_ids:sample.c.tariff_ids,sourceTariffIds:sample.c.sourceTariffIds,standard:sample.c.standard,max_electric_power:sample.c.max_electric_power},
+    firstTariff:{id:tariff.id,party_id:tariff.party_id,priceBasis:tariff.tccPriceBasis,parsedPricing:A.pricingFromTariff(tariff)}},null,2));
   const parsed=A.normalizePayload(doc,audit,{id:'allego-uk-pcpr-direct',priority:{tariff:130}});
   const stations=parsed.stations,offers=stations.flatMap(st=>st.offers);
   const connectors=stations.flatMap(st=>st.evses).flatMap(e=>e.connectors);
