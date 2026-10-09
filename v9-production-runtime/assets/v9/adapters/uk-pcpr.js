@@ -18,8 +18,14 @@
     let components=0;
     const stepValues={};
     for(const element of t.elements){
-      if(!element||Object.keys(element.restrictions||{}).length||!Array.isArray(element.price_components)||!element.price_components.length)return null;
+      if(!element||!Array.isArray(element.price_components)||!element.price_components.length)return null;
+      const restrictions=element.restrictions||{},keys=Object.keys(restrictions);
+      if(keys.some(k=>!['start_date','min_duration'].includes(k)))return null;
+      if(restrictions.start_date&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(str(restrictions.start_date)))return null;
+      const minDuration=restrictions.min_duration==null?null:num(restrictions.min_duration);
+      if(minDuration!=null&&(!Number.isInteger(minDuration)||minDuration<0))return null;
       for(const c of element.price_components){
+        if(minDuration!=null&&c.type!=='PARKING_TIME')return null;
         const kind=str(c.type),price=num(c.price),step=num(c.step_size??1);
         if(!COMPONENTS.has(kind)||price==null||price<0||step==null||step<0||c.vat!=null)return null;
         if(kind!=='FLAT'&&step<=0)return null;
@@ -29,7 +35,14 @@
         components++;
         if(kind==='ENERGY')r.pricePerKwh=(r.pricePerKwh||0)+price;
         if(kind==='TIME')r.chargePerMinute=(r.chargePerMinute||0)+price/60; // OCPI TIME is GBP/hour.
-        if(kind==='PARKING_TIME')r.idlePerMinute=(r.idlePerMinute||0)+price/60;
+        if(kind==='PARKING_TIME'){
+          if(minDuration!=null){
+            r.idlePerMinute=r.idlePerMinute||0;
+            r.ocpiDurationBands=r.ocpiDurationBands||[];
+            r.ocpiDurationBands.push(['PARKING_TIME',minDuration,null,price/60]);
+            r.parkingIsCongestion=true;
+          }else r.idlePerMinute=(r.idlePerMinute||0)+price/60;
+        }
         if(kind==='FLAT')r.connectionFee=(r.connectionFee||0)+price;
       }
     }
@@ -37,6 +50,11 @@
     if(stepValues.ENERGY>1)r.energyStepWh=stepValues.ENERGY;
     if(stepValues.TIME>1)r.chargingTimeStepSeconds=stepValues.TIME;
     return{type:'rules',rules:[r]};
+  }
+
+  function tariffValidFrom(t){
+    const dates=(t?.elements||[]).map(el=>str(el?.restrictions?.start_date)).filter(Boolean);
+    return dates.length?dates.sort().at(-1):null;
   }
 
   function connectorKind(c){
@@ -90,7 +108,8 @@
           if(!pricing){unpriced++;continue;}
           offers.push({id:'allego-direct:'+stationId+':'+evseId+':'+cid,provider:'Allego direct',kind:'direct',offerKind:'direct',
             countries:['GB'],currency:'GBP',operatorIds:['allego'],directOperatorOnly:true,evseIds:[evseId],connectorIds:[connectorId],
-            connectorKinds:[kind],minPowerKw:powerKw,maxPowerKw:powerKw,pricing,priority:Number(source?.priority?.tariff||130),
+            connectorKinds:[kind],minPowerKw:powerKw,maxPowerKw:powerKw,pricing,
+            validFrom:tariffValidFrom(tariff),priority:Number(source?.priority?.tariff||130),
             metadata:{pcprExactConnector:true,sourceTariffId:str(ids[0]),sourcePartyId:party,sourceConnectorId:cid,
               timeZone:'Europe/London',tccPriceBasis:'GBP_including_public_UK_VAT',sourceId:source.id,verified:true}});
           priced++;
