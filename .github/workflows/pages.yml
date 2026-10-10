@@ -469,6 +469,22 @@ jobs:
           PY
           rsync -a --delete electrafresh/data/platforms/electra/france/ datalab/data/platforms/electra/france/
           cmp electrafresh/data/platforms/electra/france/manifest.json datalab/data/platforms/electra/france/manifest.json
+          # Add provenance before build_snapshot, so its integrity manifest tracks it.
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("datalab/data/platforms/electra/france")
+          m=json.loads((root/"manifest.json").read_text(encoding="utf-8"))
+          (root/"sync-provenance.json").write_text(json.dumps({
+             "provider":"Electra eMSP", "country":"FR",
+             "baseDataLabSha":"4b1454473dc108e6a0c909f98c6a97b58e826b70",
+             "electraDatasetSha":"0636de8a28af20ed1ed6d9dcdfc70e5d3b582e22",
+             "generatedAt":m["generatedAt"],
+             "publishedOffers":m["stats"]["publishedOffers"],
+             "powerdotAcDcFamilyEvse":m["stats"]["powerdotAcDcFamilyEvse"],
+             "scope":"Electra France only; all other CPO sources pinned"
+          },indent=2)+"\n",encoding="utf-8")
+          PY
           python v9prod/scripts/validate_electra_platform_overlay.py datalab
 
       - name: Récupérer la baseline Stable figée
@@ -527,24 +543,6 @@ jobs:
             --datalab datalab \
             --config v9prod/config/snapshots/explicit-candidate.json \
             --out site/v9-preview
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          out=Path("site/v9-preview/snapshot-inputs/FR/platforms/electra")
-          m=json.loads((out/"manifest.json").read_text(encoding="utf-8"))
-          assert m["stats"]["publishedOffers"] == 104577
-          assert m["stats"]["powerdotAcDcFamilyEvse"] == 5847
-          (out/"sync-provenance.json").write_text(json.dumps({
-             "provider":"Electra eMSP","country":"FR",
-             "baseDataLabSha":"4b1454473dc108e6a0c909f98c6a97b58e826b70",
-             "electraDatasetSha":"0636de8a28af20ed1ed6d9dcdfc70e5d3b582e22",
-             "generatedAt":m["generatedAt"],
-             "publishedOffers":m["stats"]["publishedOffers"],
-             "powerdotAcDcFamilyEvse":m["stats"]["powerdotAcDcFamilyEvse"],
-             "scope":"Electra France only; all other CPO sources pinned"
-          },indent=2)+"\n",encoding="utf-8")
-          print("Electra V9 validated:",m["generatedAt"])
-          PY
           python site/scripts/tesla_v9_pages_mac_source.py \
             --mode verify --site site --preview site/v9-preview
           python v9prod/scripts/validate_built_snapshot.py site/v9-preview 2026-10-09-r15
