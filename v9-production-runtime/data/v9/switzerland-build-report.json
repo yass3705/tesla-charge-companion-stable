@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-10-10T02:25:33.044673+00:00",
+  "generatedAt": "2026-10-10T14:03:47.992781+00:00",
   "country": "CH",
   "national": {
     "owners": 41,
-    "evses": 20395,
-    "publishedNonTeslaEvses": 19951,
+    "evses": 20394,
+    "publishedNonTeslaEvses": 19950,
     "excludedTeslaEvseCount": 444,
-    "stations": 13411,
+    "stations": 13410,
     "tiles": 58
   },
   "offers": {
-    "direct": 17121,
+    "direct": 17120,
     "subscriptions": 2714,
-    "uniqueDirectEvse": 17003,
+    "uniqueDirectEvse": 17002,
     "uniqueSubscriptionEvse": 2714,
     "sourceCounts": {
       "data/switzerland/migrol-official-direct-tariffs.json": 1018,
       "data/switzerland/shell-evpass-official-direct-tariffs.json": 1165,
       "data/switzerland/cci-move-cpo-tariffs-national.json": 3752,
       "data/switzerland/energie360-direct-tariffs.json": 808,
-      "data/switzerland/powerup-monta-direct-tariffs.json": 232,
+      "data/switzerland/powerup-monta-direct-tariffs.json": 231,
       "data/switzerland/iwb-direct-tariffs-second-pass.json": 408,
       "data/switzerland/iwb-official-basel-overlay.json": 31,
       "data/switzerland/saascharge-official-direct-tariffs.json": 226,
@@ -51,8 +51,8 @@
     "sourceErrors": []
   },
   "fx": {
-    "CHFperEUR": 0.932807,
-    "date": "2026-10-09"
+    "CHFperEUR": 0.930538,
+    "date": "2026-10-10"
   },
   "gofastAudit": {
     "nationalEvse": 563,
