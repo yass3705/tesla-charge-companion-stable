@@ -9,6 +9,10 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const V7_DC_POINTS=[[0,175],[10,175],[20,170],[30,160],[40,145],[50,125],[60,105],[70,85],[80,60],[85,42],[90,28],[95,16],[98,10],[100,6]];
   const SUBSCRIPTION_KEY='tccV9SelectedSubscriptionsV1';
+  const CONGESTION_PREF_KEY='tccV9StationCongestionOptInV1';
+  function congestionPreferences(w){try{const a=JSON.parse(w.localStorage.getItem(CONGESTION_PREF_KEY)||'{}');return a&&typeof a==='object'&&!Array.isArray(a)?a:{};}catch(_){return{};}}
+  function setCongestionPreference(w,id,on){const a=congestionPreferences(w);if(on)a[id]=true;else delete a[id];try{w.localStorage.setItem(CONGESTION_PREF_KEY,JSON.stringify(a));}catch(_){}}
+  function hasCongestionPricing(st){return(st?.offers||[]).some(o=>(o?.pricing?.rules||[]).some(r=>(num(r?.congestionTimePerMinute)||0)>0||(num(r?.electraCongestionPolicy?.rateEurPerMinute)||0)>0||(r?.ocpiCongestionDurationBands||[]).some(b=>Array.isArray(b)&&(num(b[2])||0)>0)));}
 
   function selectedSubscriptions(w){
     try{const raw=JSON.parse(w.localStorage.getItem(SUBSCRIPTION_KEY)||'[]');return Array.isArray(raw)?[...new Set(raw.map(text).filter(Boolean))]:[];}catch(_){return[];}
@@ -48,7 +52,7 @@
     const rawRadius=text(get('simMaxDistance')?.value),radius=rawRadius===''?0:Math.max(0,num(rawRadius)||0);
     return{startSoc:num(get('simNow')?.value),targetSoc:num(get('simTarget')?.value),date,time,startAt,disconnectAt,condition:get('simCondition')?.value||'normal',profile:get('simProfile')?.value||'realistic',operatorMode:get('simOperatorFilter')?.value||'tesla',rankingMode:get('simRanking')?.value||'balanced',radiusKm:radius,originText:text(get('simOrigin')?.value)};
   }
-  function buildSession(input){return{startSoc:input.startSoc,targetSoc:input.targetSoc,startAt:input.startAt,disconnectAt:input.disconnectAt,targetCurrency:'EUR',batteryCapacityKwh:75,consumptionKwhPer100Km:15,vehicleMaxAcKw:11,vehicleMaxDcKw:250,chargeEfficiency:.92,chargeCurve:dcCurve(input.condition,input.profile)};}
+  function buildSession(input){return{startSoc:input.startSoc,targetSoc:input.targetSoc,startAt:input.startAt,disconnectAt:input.disconnectAt,targetCurrency:'EUR',batteryCapacityKwh:75,consumptionKwhPer100Km:15,vehicleMaxAcKw:11,vehicleMaxDcKw:250,chargeEfficiency:.92,chargeCurve:dcCurve(input.condition,input.profile),includeCongestionFees:false};}
   function diagnosticStore(w,event){try{const key='tccV9ProductionShellDiagnosticsV1',rows=JSON.parse(w.localStorage.getItem(key)||'[]');rows.unshift({...event,at:new Date().toISOString()});w.localStorage.setItem(key,JSON.stringify(rows.slice(0,20)));}catch(_){}}
   async function countryCodeForOrigin(w,origin){
     const cacheKey=`tcc-v9-country:${Number(origin.lat).toFixed(3)},${Number(origin.lon).toFixed(3)}`;
