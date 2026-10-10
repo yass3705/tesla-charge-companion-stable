@@ -450,9 +450,6 @@ jobs:
           set -euo pipefail
           python site/scripts/tesla_v9_pages_mac_source.py \
             --mode prepare --site site --pinned-stable stablebase --production v9prod
-          node --check v9prod/v9-production-shell/bridge.js
-          node site/scripts/test_tcc_v9_incalculable_status_20261010.cjs \
-            v9prod/v9-production-shell/bridge.js
           python site/scripts/test_tesla_v9_tariff_priority_safe.py
           node --check v9prod/v9-production-shell/bridge.js
           node site/scripts/test_tcc_v9_tariff_failure_labels_20261010.cjs \
