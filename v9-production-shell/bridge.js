@@ -71,7 +71,23 @@
     const loaders=w.TCCV9BrowserLoaders.createRegistryLoaders({registry,basePath:base,adapters:adapters(w)}),routeProvider=w.TCCV9BrowserRouting.osrmProvider();
     return w.TCCV9RuntimeEngine.createEngine({registry,loaders,routeProvider,vehicleProfiles});
   }
-  function rowsFromArea(area){return(area.rankedStations||area.stations||[]).map(st=>{const evaluation=area.sessionEvaluations?.[st.id],score=area.stationScores?.[st.id],route=area.routes?.byStationId?.[st.id];return{station:st,evaluation,score,route,total:num(evaluation?.best?.total),distanceKm:num(score?.distanceKm??route?.distanceKm)};});}
+  function rowsFromArea(area){return(area.rankedStations||area.stations||[]).map(st=>{const evaluation=area.sessionEvaluations?.[st.id],score=area.stationScores?.[st.id],route=area.routes?.byStationId?.[st.id];const total=evaluation?.best?.total;return{station:st,evaluation,score,route,total:total==null?null:num(total),distanceKm:num(score?.distanceKm??route?.distanceKm)};});}
+  function applyCongestionSelections(w,engine,run,input){
+    const prefs=congestionPreferences(w),area=run.area;
+    for(const st of area.stations||[]){
+      if(!hasCongestionPricing(st))continue;
+      const enabled=prefs[st.id]===true;
+      const planned=area.sessionPlans?.[st.id]?.effectiveSession||area.effectiveSession||buildSession(input);
+      const session={...planned,includeCongestionFees:enabled,assumeStationSaturated:enabled};
+      area.sessionEvaluations[st.id]=engine.evaluateStation(st,session,{
+        selectedSubscriptions:run.selectedSubscriptions,
+        targetCurrency:area.effectiveSession?.targetCurrency||session.targetCurrency||'EUR',
+        fxRates:area.effectiveSession?.fxRates||{}
+      });
+    }
+    run.rows=rankRows(rowsFromArea(area),input.rankingMode,20);
+    return run;
+  }
   function maxPower(st){let max=0;for(const evse of st?.evses||[])for(const c of evse?.connectors||[])max=Math.max(max,num(c?.powerKw)||0);return max;}
   function connectorOfferRows(row){
     const values=[row?.evaluation?.best,...(row?.evaluation?.alternatives||[])].filter(x=>x?.comparable&&x.connectorId&&Number.isFinite(x.total));
