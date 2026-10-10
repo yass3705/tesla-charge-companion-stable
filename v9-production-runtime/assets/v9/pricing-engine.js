@@ -214,6 +214,12 @@
     return{complete:true,costEur:money(total),minutes:money(b-a),startAfterMinutes:crossing,defaultSoc:threshold};
   }
   function evaluateRule(rule,{energyKwh=0,durationMinutes=0,chargingMinutes=null,elapsedMinutes=0,...context}={}){
+    // Legacy afterMinutesRate is not enough: the source must say whether it
+    // applies to charging TIME or idle PARKING_TIME. Do not return an exact
+    // amount while silently omitting the surcharge.
+    if((num(rule?.afterMinutesRate)??0)>0&&!['TIME','PARKING_TIME'].includes(rule?.afterMinutesComponent)){
+      return{complete:false,totalEur:null,reason:'after_minutes_component_unverified'};
+    }
     const energy=Math.max(0,num(energyKwh)??0),duration=Math.max(0,num(durationMinutes)??0),
       charging=Math.max(0,Math.min(duration,num(chargingMinutes)??duration)),elapsed=Math.max(0,num(elapsedMinutes)??0),components={};let total=0;
     const perKwh=num(rule?.pricePerKwh);
@@ -247,6 +253,17 @@
       const idle=Math.max(0,duration-charging),baseRate=idlePerMinute??0;
       const cost=durationBands(rule,'PARKING_TIME').length?integrateDurationRate(rule,'PARKING_TIME',elapsed+charging,elapsed+duration,baseRate):idle*baseRate;
       components.parkingTime=money(cost);total+=components.parkingTime;
+    }
+    const afterRate=num(rule?.afterMinutesRate)??0,afterAt=num(rule?.afterMinutesThreshold);
+    if(afterRate>0){
+      if(afterAt==null||afterAt<0)return{complete:false,totalEur:null,components,reason:'invalid_after_minutes_threshold'};
+      const phase=rule.afterMinutesComponent;
+      const start=phase==='TIME'?elapsed:elapsed+charging;
+      const end=phase==='TIME'?elapsed+charging:elapsed+duration;
+      const billable=Math.max(0,end-Math.max(start,afterAt));
+      const fee=money(billable*afterRate);
+      components.afterMinutes={kind:phase,thresholdMinutes:afterAt,ratePerMinute:afterRate,billableMinutes:money(billable),costEur:fee};
+      total+=fee;
     }
     const connectionFee=num(rule?.connectionFee);
     if(connectionFee!=null||durationBands(rule,'FLAT').length){
