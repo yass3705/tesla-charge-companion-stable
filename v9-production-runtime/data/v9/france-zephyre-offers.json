@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-10-10T14:04:32.432Z",
+  "generatedAt": "2026-10-10T14:12:28.541Z",
   "mode": "verified_zephyre_direct",
   "policy": {
     "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
@@ -252,7 +252,6 @@
         "FR*ZP1*E124829",
         "FR*ZP1*E125364",
         "FR*ZP1*E12970687",
-        "FR*ZP1*E129707",
         "FR*ZP1*E130056",
         "FR*ZP1*E130075",
         "FR*ZP1*E130209",
@@ -312,7 +311,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 72,
+        "exactEvseCount": 71,
         "internalNames": [
           "FR*ZP1*EAC*43447",
           "FR*ZP1*EAC*43448",
@@ -340,7 +339,6 @@
           "LF-6277-1",
           "LF-9639-1",
           "LF-9644-8",
-          "LF-9651-7",
           "LF-9659-8",
           "LF-9665-0",
           "LF-9667-3",
@@ -460,7 +458,6 @@
         "FR*ZP1*EAC*13084",
         "FR*ZP1*EAC*16062",
         "FR*ZP1*EAC*17062",
-        "FR*ZP1*EAC*17063",
         "FR*ZP1*EAC*24061",
         "FR*ZP1*EAC*24062",
         "FR*ZP1*EAC*25062",
@@ -476,7 +473,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 29,
+        "exactEvseCount": 28,
         "internalNames": [
           "LI-0123-0",
           "LI-0298-9",
@@ -495,7 +492,6 @@
           "LI-0543-4",
           "LI-0545-6",
           "LI-0546-2",
-          "LI-0547-9",
           "LI-0549-1",
           "LI-0550-2",
           "LI-0552-5",
@@ -1291,7 +1287,7 @@
   "sourceEvidence": {
     "summary": {
       "schemaVersion": 1,
-      "generatedAt": "2026-10-10T14:04:32.308Z",
+      "generatedAt": "2026-10-10T14:12:28.430Z",
       "country": "FR",
       "network": "Zephyre",
       "partyId": "FR*ZP1",
@@ -1305,15 +1301,15 @@
       "rawFrZp1Rows": 422,
       "irveUniqueEvse": 371,
       "seedCoordinates": 148,
-      "liveDetailStations": 144,
-      "liveDirectEvse": 144,
-      "liveTariffPresent": 144,
-      "directPaymentEnabled": 144,
+      "liveDetailStations": 142,
+      "liveDirectEvse": 142,
+      "liveTariffPresent": 142,
+      "directPaymentEnabled": 142,
       "nearbyErrors": 0,
       "detailErrors": 0,
-      "unresolvedIrveEvse": 228,
+      "unresolvedIrveEvse": 230,
       "unresolvedByDataset": {
-        "63dccb1307e9b2f213a5130c": 26,
+        "63dccb1307e9b2f213a5130c": 28,
         "65a5487fa94ead1ffa4562a3": 202
       },
       "providers": [
@@ -1327,8 +1323,8 @@
         "bindingPricingOfferTokenStored": false
       }
     },
-    "liveDirectEvse": 144,
-    "exactEvseIds": 144,
+    "liveDirectEvse": 142,
+    "exactEvseIds": 142,
     "priceProfiles": 17
   }
 }
