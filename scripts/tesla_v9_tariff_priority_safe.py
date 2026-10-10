@@ -82,7 +82,28 @@ def _country_choice(cc,today,mac_date,suc_date):
         return "SuC Tracker","suc_country_observation_strictly_newer_than_mac_country"
     return "Mac","suc_not_strictly_newer_or_country_dates_incomplete"
 
-def select_tariffs(mac_rows,suc_rows,country_updates,as_of_date):
+def _vetted_public_suc_only(source,verification):
+    key=str((source.get('sucTracker') or {}).get('sourceStationId') or '')
+    cc=source.get('countryCode')
+    records=(verification or {}).get('verified') or []
+    evidence=[v for v in records if v.get('sourceStationId')==key and v.get('countryCode')==cc
+        and v.get('sucRowId')==source.get('id')]
+    if len(evidence)!=1:return None
+    row=evidence[0]
+    if not row.get('officialTeslaPage','').endswith('/'+key) or not row.get('accessHours') or not row.get('verifiedPublicAccess'):
+        return None
+    configs=source.get('chargingConfigurations') or []
+    if not configs or not any(float(c.get('powerKw') or 0)>0 for c in configs):
+        return None
+    if not isinstance(source.get('pricing'),dict) or not source['pricing'].get('rules'):
+        return None
+    if (source.get('sucTracker') or {}).get('lifecycle') not in (None,'active'):
+        return None
+    if any((c.get('pricing') or source.get('pricing') or {}).get('rules')==[] for c in configs):
+        return None
+    return row
+
+def select_tariffs(mac_rows,suc_rows,country_updates,as_of_date,public_verifications=None):
     today=_date(as_of_date)
     if country_updates.get("schemaVersion")!=1 or country_updates.get("timeZone")!="Europe/Paris":
         raise ValueError("Invalid Mac country update metadata")
@@ -124,6 +145,10 @@ def select_tariffs(mac_rows,suc_rows,country_updates,as_of_date):
             "ambiguousMatchFallbacks":0,"unpricedSucFallbacks":0,
             "multiConfigurationFallbacks":0,
             "sourceExceptionRows":exceptions,
+            "sucOnlyEligibleByCountryFreshness":0,
+            "sucOnlyPublicVerifiedAdded":0,
+            "sucOnlyPendingPublicVerification":0,
+            "sucOnlyAddedIds":[],
             "selectionGranularity":"country_for_freshness; station_only_for_presence_and_exact_tariff_mapping",
         }
         # Per-station lookup is strictly an existence/identity check, never
@@ -167,18 +192,42 @@ def select_tariffs(mac_rows,suc_rows,country_updates,as_of_date):
             for cfg in row.get("chargingConfigurations") or []:
                 cfg["pricing"]=copy.deepcopy(price)
             info["sucTariffs"]+=1
-        # SuC-only sites have no verified public-access Mac reference, and
-        # SuC can explicitly mark access unknown. Record and investigate them
-        # without automatically inventing public access or rate eligibility.
+        # An absent Mac site is parked UNLESS country SuC is newer.
+        # Even then, public access must be independently verified before
+        # publication (no dealer/private charging sites).
         for key,sites in sorted(lookups.items()):
             if key not in mac_keys:
                 info["sucOnlyStations"]+=len(sites)
                 for source in sites:
-                    exceptions.append({"type":"only_suc_unverified_access",
-                        "macStationId":None,"sucStationId":source.get("id"),
-                        "sucPricingAvailable":bool((source.get("pricing") or {}).get("rules")),
-                        "sucAccessSource":(source.get("sucTracker") or {}).get("accessSource") or "unknown",
-                        "requiresAccessVerificationBeforePublication":True})
+                    id_=source.get("id")
+                    newer=preferred=="SuC Tracker" and cc!="MA"
+                    if newer:info["sucOnlyEligibleByCountryFreshness"]+=1
+                    official=_vetted_public_suc_only(source,public_verifications) if newer and len(sites)==1 else None
+                    if official:
+                        new=copy.deepcopy(source)
+                        new["teslaUrl"]=official["officialTeslaPage"]
+                        new["publicAccessVerification"]={
+                            "verifiedOn":official["verifiedPublicAccess"],
+                            "officialTeslaPage":official["officialTeslaPage"],
+                            "sourceCountryFreshness":info["countryDecisionReason"]}
+                        if id_ in selected_by_id:
+                            raise ValueError("SuC-only ID collides with existing Mac site")
+                        selected.append(new)
+                        selected_by_id[id_]=new
+                        info["sucOnlyPublicVerifiedAdded"]+=1
+                        info["sucOnlyAddedIds"].append(id_)
+                        exceptions.append({"type":"only_suc_newer_public_verified_added",
+                            "macStationId":None,"sucStationId":id_,
+                            "officialTeslaPage":official["officialTeslaPage"],
+                            "countrySelected":preferred})
+                    else:
+                        if newer:info["sucOnlyPendingPublicVerification"]+=1
+                        exceptions.append({"type":"only_suc_newer_access_unverified" if newer else "only_suc_parked_older_country",
+                            "macStationId":None,"sucStationId":id_,
+                            "sucPricingAvailable":bool((source.get("pricing") or {}).get("rules")),
+                            "sucAccessSource":(source.get("sucTracker") or {}).get("accessSource") or "unknown",
+                            "countrySelected":preferred,
+                            "requiresAccessVerificationBeforePublication":newer})
         decisions[cc]=info
     report={
         "schemaVersion":3,
@@ -186,7 +235,7 @@ def select_tariffs(mac_rows,suc_rows,country_updates,as_of_date):
         "policy":"Source freshness compared ONCE PER COUNTRY. Mac <10d; then SuC only if entire SuC country observation newer. MA always Mac.",
         "countryDateSourcePriority":"Mac country batch publication; fallback historic country date only if no batch",
         "sucCountryDateSource":"conservative minimum country observation; fail closed on missing observation timestamps",
-        "exceptionPolicy":"Check station IDs ONLY for one-source-only, unmatched, unpriced, or ambiguous power tiers; SuC-only access must be verified before publication",
+        "exceptionPolicy":"SuC-only is parked unless SuC COUNTRY source is newer. When newer, add only independently verified public Tesla sites; retain unverified as candidates.",
         "countries":decisions,
         "summary":{
           "macStations":len(mac_rows),"sucStations":len(suc_rows),
@@ -195,13 +244,18 @@ def select_tariffs(mac_rows,suc_rows,country_updates,as_of_date):
           "onlySuCStations":sum(v["sucOnlyStations"] for v in decisions.values()),
           "unpricedSuC":sum(v["unpricedSucFallbacks"] for v in decisions.values()),
           "actualSuCTariffsApplied":sum(v["sucTariffs"] for v in decisions.values()),
+          "sucOnlyAdded":sum(v["sucOnlyPublicVerifiedAdded"] for v in decisions.values()),
+          "sucOnlyEligible":sum(v["sucOnlyEligibleByCountryFreshness"] for v in decisions.values()),
+          "sucOnlyPendingPublicVerification":sum(v["sucOnlyPendingPublicVerification"] for v in decisions.values()),
+          "selectedStations":len(selected),
         }
     }
     return selected,report
 
-def build_selected_catalogue(mac_path,suc_path,updates_path,as_of_date,output_path,report_path):
+def build_selected_catalogue(mac_path,suc_path,updates_path,as_of_date,output_path,report_path,public_verifications_path=None):
     def read(p):return json.loads(Path(p).read_text(encoding="utf8"))
-    selected,report=select_tariffs(read(mac_path),read(suc_path),read(updates_path),as_of_date)
+    verification=read(public_verifications_path) if public_verifications_path else None
+    selected,report=select_tariffs(read(mac_path),read(suc_path),read(updates_path),as_of_date,verification)
     for path,value in ((output_path,selected),(report_path,report)):
         dest=Path(path)
         dest.parent.mkdir(parents=True,exist_ok=True)
