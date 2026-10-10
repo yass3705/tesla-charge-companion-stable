@@ -183,7 +183,8 @@
 
     for(const {offer,profile} of offerPairs){
       const scoped=offer?.metadata?.pcprExactConnector===true;
-      const currentSession=scoped?(options.pcprConnectorSessions?.[profile.connectorId]||null):effectiveSession;
+      const baseSession=scoped?(options.pcprConnectorSessions?.[profile.connectorId]||null):effectiveSession;
+      const currentSession=baseSession?{...baseSession,chargingKind:profile.kind}:null;
       const postChargeMinutes=Math.max(0,num(currentSession?.postChargeMinutes)??0);
       const unknownPostCharge=offer?.pricing?.postChargeFeeUnknown===true||offer?.metadata?.postChargeFeeUnknown===true;
       const validity=currentSession?evaluateOfferValidity(offer,currentSession):{complete:false,reason:'connector_charge_plan_unavailable'};
