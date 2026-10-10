@@ -217,6 +217,9 @@
     // Legacy afterMinutesRate is not enough: the source must say whether it
     // applies to charging TIME or idle PARKING_TIME. Do not return an exact
     // amount while silently omitting the surcharge.
+    if((num(rule?.afterMinutesRate)??0)>0&&rule?.afterMinutesCap!=null&&
+        (num(rule.afterMinutesCap)==null||num(rule.afterMinutesCap)<0))
+      return{complete:false,totalEur:null,reason:'after_minutes_invalid_cap_value'};
     if((num(rule?.afterMinutesRate)??0)>0&&!['TIME','PARKING_TIME','CONNECTED_TIME'].includes(rule?.afterMinutesComponent)){
       return{complete:false,totalEur:null,reason:'after_minutes_component_unverified'};
     }
@@ -419,6 +422,8 @@
     if(rate==null||rate<=0||threshold==null||threshold<0||cap==null||cap<=0||
         duration==null||duration<0||duration>10080)
       return{complete:false,reason:'after_minutes_invalid_cap_context'};
+    if(String(rule?.currency||'EUR').toUpperCase()!=='EUR')
+      return{complete:false,reason:'after_minutes_cap_currency_unverified'};
     if(rule.afterMinutesComponent!=='CONNECTED_TIME')
       return{complete:false,reason:'after_minutes_cap_component_requires_source_review'};
     if(mode==='whole_session'&&
