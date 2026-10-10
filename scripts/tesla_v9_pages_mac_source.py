@@ -43,6 +43,25 @@ def prepare(site,pinned_stable,prod):
     if not safe_priority.is_file():
         raise SystemExit('Required safe Tesla precedence module missing')
     shutil.copyfile(safe_priority,prod/'scripts/tesla_tariff_priority.py')
+    # Pin official-Tesla public-access evidence for SuC-only candidates.
+    official=site/'data/tesla-suc-only-public-verification.json'
+    vetted=load(official)
+    if vetted.get('schemaVersion')!=1 or not isinstance(vetted.get('verified'),list):
+        raise SystemExit('Invalid official public-access evidence')
+    shutil.copyfile(official,prod/'data/tesla-suc-only-public-verification.json')
+    source_builder=prod/'scripts/build_snapshot.py'
+    builder_src=source_builder.read_text(encoding='utf8')
+    old_call="""build_selected_catalogue(mac_source,suc_source,updates,cfg["teslaTariffAsOfDate"],
+                                     out/"runtime/data/tesla_stations.json",report)"""
+    newer_call="""build_selected_catalogue(mac_source,suc_source,updates,cfg["teslaTariffAsOfDate"],
+                                     out/"runtime/data/tesla_stations.json",report,
+                                     production_root/"data/tesla-suc-only-public-verification.json")
+            copy_file(production_root/"data/tesla-suc-only-public-verification.json",
+                      out/"snapshot-inputs/TESLA/suc-only-official-access.json")"""
+    if builder_src.count(old_call)!=1:
+        raise SystemExit('V9 Tesla source selection integration changed')
+    builder_src=builder_src.replace(old_call,newer_call,1)
+    source_builder.write_text(builder_src,encoding='utf8')
     engine_path=prod/'runtime-overrides/assets/v9/pricing-engine.js'
     engine_text=engine_path.read_text(encoding='utf8')
     engine_extension=(site/'scripts/tcc_v9_pricing_runtime_extension_20261010.js').read_text(encoding='utf8')
@@ -237,8 +256,22 @@ def verify(site,preview):
     stations=load(selected);mac=load(source)
     from tesla_v9_public_site_dedup_20261010 import ALIAS,CANONICAL,SECOND,remove_dartford_duplicate
     expected,alias=remove_dartford_duplicate(mac)
-    if len(stations)!=len(mac)-1 or [s['id'] for s in stations]!=[s['id'] for s in expected]:
-        raise SystemExit('V9 preview station IDs differ from the canonical Mac catalogue minus 30168')
+    # Country-newer SuC-only sites may be included ONLY with official access
+    # evidence. Mac remains the canonical catalogue, with the known 30168 alias
+    # suppressed only in V9.
+    selected_report=load(preview/'snapshot-inputs/TESLA/tariff-selection.json')
+    added=[sid for cc,info in selected_report['countries'].items() for sid in info.get('sucOnlyAddedIds',[])]
+    verifications=load(preview/'snapshot-inputs/TESLA/suc-only-official-access.json')
+    approved={v['sucRowId'] for v in verifications.get('verified',[])}
+    if not set(added).issubset(approved):
+        raise SystemExit('Unverified SuC-only station added to V9')
+    if [s['id'] for s in stations]!=[s['id'] for s in expected]+added:
+        raise SystemExit('V9 preview IDs differ from Mac minus known alias plus vetted newer SuC-only sites')
+    if selected_report['summary']['sucOnlyAdded']!=len(added):
+        raise SystemExit('V9 added SuC-only count does not match audit report')
+    if any(info.get('sucOnlyAddedIds') and info.get('preferredTariffSource')!='SuC Tracker'
+           for info in selected_report['countries'].values()):
+        raise SystemExit('SuC-only stations added where Mac country is prioritized')
     # Germany may legitimately use the newer SuC country rates. UK has a
     # fresh Mac country publication, and must match Mac exactly, except alias.
     mac_gb={s['id']:s for s in expected if s.get('countryCode')=='GB'}
@@ -276,6 +309,8 @@ def verify(site,preview):
     p.write_text(json.dumps(ctx,indent=2,ensure_ascii=False)+'\n',encoding='utf8')
     print('TESLA_DARTFORD_PUBLIC_SITES_VERIFIED='+json.dumps({
         'rawMacStations':len(mac),'publicV9Stations':len(stations),
+        'newerSuCOnlyPublicVerifiedAdded':added,
+        'newerSuCOnlyPending':selected_report['summary']['sucOnlyPendingPublicVerification'],
         'excludedDuplicateAlias':ALIAS,'kept':sorted([CANONICAL,SECOND])}))
     print('TESLA_PAGES_LIVE_VERIFIED='+json.dumps({
         'stations':len(stations),'sha256Mac':digest(source),
