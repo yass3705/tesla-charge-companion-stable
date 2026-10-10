@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "verified": [
+    {
+      "sourceStationId": "440309",
+      "countryCode": "DE",
+      "sucRowId": "tesla-suc-440309",
+      "officialTeslaPage": "https://www.tesla.com/findus/location/supercharger/440309",
+      "verifiedPublicAccess": "2026-10-10",
+      "siteName": "Herford, Germany – Kaufland",
+      "access": "open to Tesla and other CCS EVs",
+      "accessHours": "24/7",
+      "stalls": 3,
+      "maxPowerKw": 250,
+      "provenance": "Tesla official Find Us public site detail"
+    }
+  ],
+  "policy": "Only append SuC-only sites when country-level SuC is newer than Mac AND official Tesla public access is verified. Keep unverified/private sites in the exception queue; never infer tariff or power."
+}
