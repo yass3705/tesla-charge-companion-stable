@@ -145,6 +145,11 @@
     if(base<=0&&!bands.length)return{complete:true,costEur:0,minutes:0};
     if(session?.includeCongestionFees===false||session?.includeCongestion===false||session?.applyCongestionFees===false)
       return{complete:true,costEur:0,minutes:0,excludedByUser:true};
+    const electraPolicy=rule?.electraCongestionPolicy;
+    if(electraPolicy?.dcOnly===true&&session?.chargingKind==='AC')
+      return{complete:true,costEur:0,minutes:0,excludedByAc:true};
+    if(electraPolicy?.requiresSaturation===true&&session?.assumeStationSaturated!==true)
+      return{complete:false,costEur:null,reason:'electra_congestion_saturation_unconfirmed'};
     const threshold=num(rule?.congestionStartSoc)??80;
     const from=num(session?.arrivalSoc??session?.startSoc??session?.vehicleSoc);
     const to=num(session?.targetSoc??session?.endSoc);
@@ -172,6 +177,18 @@
     }
     const a=Math.max(elapsed,crossing),b=elapsed+duration;
     if(b<=a)return{complete:true,costEur:0,minutes:0,startAfterMinutes:crossing};
+    if(electraPolicy){
+      // Official Electra-app terms: only a *simulated saturated station* incurs
+      // occupancy costs, five grace minutes after crossing SOC 80%, DC only.
+      // Its OCPI duration bands are not assumed to describe time since SOC 80.
+      const grace=Math.max(0,num(electraPolicy.graceMinutes)??0);
+      const billable=Math.max(0,b-Math.max(elapsed,crossing+grace));
+      const rate=Math.max(0,num(electraPolicy.rateEurPerMinute)??0);
+      const cap=num(electraPolicy.capEur);
+      const gross=billable*rate,charge=cap!=null?Math.min(gross,Math.max(0,cap)):gross;
+      return{complete:true,costEur:money(charge),minutes:money(billable),startAfterMinutes:crossing,
+        graceMinutes:grace,capEur:cap,assumedSaturated:true,dcOnly:electraPolicy.dcOnly===true};
+    }
     const rateAt=seconds=>{
       for(const band of bands){
         if(!Array.isArray(band)||band.length<3)continue;
