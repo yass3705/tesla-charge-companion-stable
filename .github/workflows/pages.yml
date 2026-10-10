@@ -423,7 +423,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: yass3705/tesla-charge-companion-production
-          ref: 7253c08f545298dc54dd1fcfe4e58b39a510f350
+          ref: ace262e80a3f103b1ae1ce371bb1d74053e4ae53
           path: v9prod
           persist-credentials: false
 
@@ -475,7 +475,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git -C v9prod rev-parse HEAD)" = "7253c08f545298dc54dd1fcfe4e58b39a510f350"
+          test "$(git -C v9prod rev-parse HEAD)" = "ace262e80a3f103b1ae1ce371bb1d74053e4ae53"
           test "$(git -C stablebase rev-parse HEAD)" = "3b443fc381a851a3741e535e7596a0c8a99833d3"
           test "$(git -C datalab rev-parse HEAD)" = "4b1454473dc108e6a0c909f98c6a97b58e826b70"
           python v9prod/scripts/build_refresh_candidate_config.py \
