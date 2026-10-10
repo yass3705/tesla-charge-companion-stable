@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-10-09T13:43:21.540Z",
+  "generatedAt": "2026-10-10T10:41:07.365Z",
   "mode": "verified_zephyre_direct",
   "policy": {
     "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
     "resolver": {
       "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20261009-032302/consolidation-etalab-schema-irve-statique-v-2.3.1-20261009.csv",
+      "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20261010-032403/consolidation-etalab-schema-irve-statique-v-2.3.1-20261010.csv",
       "bff": "https://api.services-emobility.com/pay/api",
       "nearby": "POST /stations/nearby",
       "detail": "GET /stations/chargepoint/{internalName}"
@@ -236,9 +236,11 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
+        "FR*ZP1*E00012",
         "FR*ZP1*E00013",
         "FR*ZP1*E00014",
         "FR*ZP1*E00015",
+        "FR*ZP1*E108319",
         "FR*ZP1*E108337",
         "FR*ZP1*E108345",
         "FR*ZP1*E121740",
@@ -249,6 +251,7 @@
         "FR*ZP1*E124814",
         "FR*ZP1*E124829",
         "FR*ZP1*E125364",
+        "FR*ZP1*E12970687",
         "FR*ZP1*E129707",
         "FR*ZP1*E130056",
         "FR*ZP1*E130075",
@@ -264,8 +267,7 @@
         "FR*ZP1*E131920",
         "FR*ZP1*E133869",
         "FR*ZP1*E133872",
-        "FR*ZP1*E133892",
-        "FR*ZP1*E133933",
+        "FR*ZP1*E133905",
         "FR*ZP1*E133978",
         "FR*ZP1*E133987",
         "FR*ZP1*E133989",
@@ -275,13 +277,11 @@
         "FR*ZP1*E134010",
         "FR*ZP1*E37714",
         "FR*ZP1*E39538",
-        "FR*ZP1*E45602",
         "FR*ZP1*E50286",
         "FR*ZP1*E51117",
         "FR*ZP1*E51219",
         "FR*ZP1*E77654",
         "FR*ZP1*E77657",
-        "FR*ZP1*E78083",
         "FR*ZP1*E81846",
         "FR*ZP1*E81910",
         "FR*ZP1*E81946",
@@ -299,6 +299,7 @@
         "FR*ZP1*E97723",
         "FR*ZP1*EAC*06007",
         "FR*ZP1*EAC*16041",
+        "FR*ZP1*EAC*42388",
         "FR*ZP1*EAC*42428",
         "FR*ZP1*EAC*43447",
         "FR*ZP1*EAC*43448",
@@ -313,7 +314,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 73,
+        "exactEvseCount": 74,
         "internalNames": [
           "FR*ZP1*EAC*43447",
           "FR*ZP1*EAC*43448",
@@ -321,13 +322,11 @@
           "GARAGE-1",
           "GARAGE-2",
           "LB-2935-2",
-          "LB-3197-6",
           "LB-3383-0",
           "LB-3409-2",
           "LB-3419-0",
           "LD-4002-0",
           "LD-4003-7",
-          "LD-4008-9",
           "LD-4010-6",
           "LE-7536-7",
           "LE-7539-6",
@@ -339,8 +338,10 @@
           "LF-6263-8",
           "LF-6269-6",
           "LF-6273-6",
+          "LF-6276-5",
           "LF-6277-1",
           "LF-9639-1",
+          "LF-9644-8",
           "LF-9647-7",
           "LF-9651-7",
           "LF-9659-8",
@@ -361,14 +362,13 @@
           "LF-9707-3",
           "LF-9709-6",
           "LF-9710-7",
-          "LF-9711-3",
           "LF-9713-6",
           "LF-9714-2",
           "LF-9715-9",
           "LF-9716-5",
           "LF-9717-1",
           "LF-9719-4",
-          "LG-0231-0",
+          "LG-0232-7",
           "LG-0233-3",
           "LG-0235-6",
           "LG-0236-2",
@@ -380,6 +380,7 @@
           "LG-2171-3",
           "LG-2173-6",
           "LG-2179-4",
+          "LG-2181-1",
           "LG-2184-0",
           "LG-2189-2",
           "LG-2198-4",
@@ -387,6 +388,7 @@
           "LG-2205-0",
           "LI-0134-5",
           "LI-0372-3",
+          "LI-4238-8",
           "LI-4242-8"
         ],
         "rawPriceComponents": [
@@ -460,7 +462,6 @@
         "FR*ZP1*EAC*13081",
         "FR*ZP1*EAC*13083",
         "FR*ZP1*EAC*13084",
-        "FR*ZP1*EAC*16062",
         "FR*ZP1*EAC*17062",
         "FR*ZP1*EAC*17063",
         "FR*ZP1*EAC*24061",
@@ -478,7 +479,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 29,
+        "exactEvseCount": 28,
         "internalNames": [
           "LI-0123-0",
           "LI-0298-9",
@@ -490,7 +491,6 @@
           "LI-0361-9",
           "LI-0363-1",
           "LI-0366-0",
-          "LI-0371-7",
           "LI-0374-6",
           "LI-0377-5",
           "LI-0378-1",
@@ -565,7 +565,6 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E113431",
         "FR*ZP1*E126480",
         "FR*ZP1*E145823",
         "FR*ZP1*E215796",
@@ -576,9 +575,8 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 7,
+        "exactEvseCount": 6,
         "internalNames": [
-          "LA-7172-9",
           "LB-3384-7",
           "LG-2178-8",
           "LG-2190-3",
@@ -815,14 +813,16 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
+        "FR*ZP1*E124743",
         "FR*ZP1*E124751",
         "FR*ZP1*E124764"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 2,
+        "exactEvseCount": 3,
         "internalNames": [
+          "LF-9663-8",
           "LF-9666-7",
           "LF-9690-3"
         ],
@@ -1001,15 +1001,13 @@
       "verifiedScope": "exact_evse",
       "defaultSelected": false,
       "evseIds": [
-        "FR*ZP1*E88452",
         "FR*ZP1*E89896"
       ],
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 2,
+        "exactEvseCount": 1,
         "internalNames": [
-          "LA-7171-2",
           "LB-3403-4"
         ],
         "rawPriceComponents": [
@@ -1295,13 +1293,13 @@
   "sourceEvidence": {
     "summary": {
       "schemaVersion": 1,
-      "generatedAt": "2026-10-09T13:43:21.407Z",
+      "generatedAt": "2026-10-10T10:41:07.208Z",
       "country": "FR",
       "network": "Zephyre",
       "partyId": "FR*ZP1",
       "source": {
         "irveRequestedUrl": "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435",
-        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20261009-032302/consolidation-etalab-schema-irve-statique-v-2.3.1-20261009.csv",
+        "irveResolvedUrl": "https://static.data.gouv.fr/resources/base-nationale-des-irve-data-gouv-infrastructures-de-recharge-pour-vehicules-electriques-donnees-statiques/20261010-032403/consolidation-etalab-schema-irve-statique-v-2.3.1-20261010.csv",
         "bff": "https://api.services-emobility.com/pay/api",
         "nearby": "POST /stations/nearby",
         "detail": "GET /stations/chargepoint/{internalName}"
@@ -1309,15 +1307,15 @@
       "rawFrZp1Rows": 422,
       "irveUniqueEvse": 371,
       "seedCoordinates": 148,
-      "liveDetailStations": 146,
-      "liveDirectEvse": 146,
-      "liveTariffPresent": 146,
-      "directPaymentEnabled": 146,
+      "liveDetailStations": 145,
+      "liveDirectEvse": 145,
+      "liveTariffPresent": 145,
+      "directPaymentEnabled": 145,
       "nearbyErrors": 0,
       "detailErrors": 0,
-      "unresolvedIrveEvse": 226,
+      "unresolvedIrveEvse": 227,
       "unresolvedByDataset": {
-        "63dccb1307e9b2f213a5130c": 24,
+        "63dccb1307e9b2f213a5130c": 25,
         "65a5487fa94ead1ffa4562a3": 202
       },
       "providers": [
@@ -1331,8 +1329,8 @@
         "bindingPricingOfferTokenStored": false
       }
     },
-    "liveDirectEvse": 146,
-    "exactEvseIds": 146,
+    "liveDirectEvse": 145,
+    "exactEvseIds": 145,
     "priceProfiles": 17
   }
 }
