@@ -153,12 +153,6 @@ def prepare(site,pinned_stable,prod):
     builder=builder.replace(builder_anchor,builder_hook+builder_anchor,1)
     builder_path.write_text(builder,encoding='utf8')
     print('TESLA_DARTFORD_30168_KNOWN_DUPLICATE_FILTER_INSTALLED')
-    # Production V9 shell is sourced from the pinned production repository;
-    # patch its rendered tariff labels without altering the frozen baseline.
-    bridge=prod/'v9-production-shell/bridge.js'
-    status_patch=site/'scripts/tcc_v9_incalculable_status_20261010.py'
-    import subprocess,sys
-    subprocess.run([sys.executable,str(status_patch),'--bridge',str(bridge)],check=True)
     print('TCC_V9_SESSION_ENGINE_COMPLEX_TARIFF_DISPATCH_APPLIED')
     print('TESLA_ADAPTER_NATIVE_CURRENCIES_AND_REAL_POWER_BANDS_APPLIED')
     print('TCC_V9_ENGINE_EXACT_AFTER_MINUTES_AND_POWER_MINUTE_APPLIED')
