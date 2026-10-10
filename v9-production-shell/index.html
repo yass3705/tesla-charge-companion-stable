@@ -46,7 +46,7 @@
       'assets/v9/adapters/uk-pcpr.js','assets/v9/adapters/morocco-public.js','assets/v9/adapters/morocco-kilowatt-tariff.js','assets/v9/browser-loaders.js'
     ];
     for(const path of dependencies){const script=parsed.createElement('script');script.defer=true;script.src=`${runtimeBase}/${path}`;parsed.body.append(script);}
-    const bridge=parsed.createElement('script');bridge.defer=true;bridge.src='v9-production-shell/bridge.js?v=v9-ui-49851765';parsed.body.append(bridge);
+    const bridge=parsed.createElement('script');bridge.defer=true;bridge.src='v9-production-shell/bridge.js?v=v9-electra-congestion-optin-20261010';parsed.body.append(bridge);
 
     document.open();document.write('<!doctype html>'+parsed.documentElement.outerHTML);document.close();
   }catch(err){failClosed(err?.message||err);}
