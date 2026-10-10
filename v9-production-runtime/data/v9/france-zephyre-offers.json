@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "country": "FR",
-  "generatedAt": "2026-10-10T10:41:07.365Z",
+  "generatedAt": "2026-10-10T14:04:32.432Z",
   "mode": "verified_zephyre_direct",
   "policy": {
     "source": "Vaylens ePowerDirect first-party public BFF joined to official data.gouv national IRVE",
@@ -268,7 +268,6 @@
         "FR*ZP1*E133869",
         "FR*ZP1*E133872",
         "FR*ZP1*E133905",
-        "FR*ZP1*E133978",
         "FR*ZP1*E133987",
         "FR*ZP1*E133989",
         "FR*ZP1*E133992",
@@ -277,11 +276,11 @@
         "FR*ZP1*E134010",
         "FR*ZP1*E37714",
         "FR*ZP1*E39538",
-        "FR*ZP1*E50286",
         "FR*ZP1*E51117",
         "FR*ZP1*E51219",
         "FR*ZP1*E77654",
         "FR*ZP1*E77657",
+        "FR*ZP1*E78083",
         "FR*ZP1*E81846",
         "FR*ZP1*E81910",
         "FR*ZP1*E81946",
@@ -290,7 +289,6 @@
         "FR*ZP1*E87905",
         "FR*ZP1*E88753",
         "FR*ZP1*E92044",
-        "FR*ZP1*E92835",
         "FR*ZP1*E94884",
         "FR*ZP1*E97502",
         "FR*ZP1*E97663",
@@ -314,14 +312,14 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 74,
+        "exactEvseCount": 72,
         "internalNames": [
           "FR*ZP1*EAC*43447",
           "FR*ZP1*EAC*43448",
           "FR*ZP1*EAC*57121",
           "GARAGE-1",
-          "GARAGE-2",
           "LB-2935-2",
+          "LB-3197-6",
           "LB-3383-0",
           "LB-3409-2",
           "LB-3419-0",
@@ -342,7 +340,6 @@
           "LF-6277-1",
           "LF-9639-1",
           "LF-9644-8",
-          "LF-9647-7",
           "LF-9651-7",
           "LF-9659-8",
           "LF-9665-0",
@@ -382,7 +379,6 @@
           "LG-2179-4",
           "LG-2181-1",
           "LG-2184-0",
-          "LG-2189-2",
           "LG-2198-4",
           "LG-2201-5",
           "LG-2205-0",
@@ -462,6 +458,7 @@
         "FR*ZP1*EAC*13081",
         "FR*ZP1*EAC*13083",
         "FR*ZP1*EAC*13084",
+        "FR*ZP1*EAC*16062",
         "FR*ZP1*EAC*17062",
         "FR*ZP1*EAC*17063",
         "FR*ZP1*EAC*24061",
@@ -479,7 +476,7 @@
       "metadata": {
         "pricingContext": "anonymous_direct_payment",
         "currentType": "AC",
-        "exactEvseCount": 28,
+        "exactEvseCount": 29,
         "internalNames": [
           "LI-0123-0",
           "LI-0298-9",
@@ -491,6 +488,7 @@
           "LI-0361-9",
           "LI-0363-1",
           "LI-0366-0",
+          "LI-0371-7",
           "LI-0374-6",
           "LI-0377-5",
           "LI-0378-1",
@@ -1293,7 +1291,7 @@
   "sourceEvidence": {
     "summary": {
       "schemaVersion": 1,
-      "generatedAt": "2026-10-10T10:41:07.208Z",
+      "generatedAt": "2026-10-10T14:04:32.308Z",
       "country": "FR",
       "network": "Zephyre",
       "partyId": "FR*ZP1",
@@ -1307,15 +1305,15 @@
       "rawFrZp1Rows": 422,
       "irveUniqueEvse": 371,
       "seedCoordinates": 148,
-      "liveDetailStations": 145,
-      "liveDirectEvse": 145,
-      "liveTariffPresent": 145,
-      "directPaymentEnabled": 145,
+      "liveDetailStations": 144,
+      "liveDirectEvse": 144,
+      "liveTariffPresent": 144,
+      "directPaymentEnabled": 144,
       "nearbyErrors": 0,
       "detailErrors": 0,
-      "unresolvedIrveEvse": 227,
+      "unresolvedIrveEvse": 228,
       "unresolvedByDataset": {
-        "63dccb1307e9b2f213a5130c": 25,
+        "63dccb1307e9b2f213a5130c": 26,
         "65a5487fa94ead1ffa4562a3": 202
       },
       "providers": [
@@ -1329,8 +1327,8 @@
         "bindingPricingOfferTokenStored": false
       }
     },
-    "liveDirectEvse": 145,
-    "exactEvseIds": 145,
+    "liveDirectEvse": 144,
+    "exactEvseIds": 144,
     "priceProfiles": 17
   }
 }
