@@ -86,7 +86,7 @@ def main():
     assert info['preferredTariffSource']=='SuC Tracker',info
     assert info['sucTariffs']==1 and info['onlyMacStations']==1 and info['sucOnlyStations']==1,info
     assert len(out)==2 and len(info['sourceExceptionRows'])==2,info
-    assert sorted(x['type'] for x in info['sourceExceptionRows'])==['only_mac','only_suc_unverified_access']
+    assert sorted(x['type'] for x in info['sourceExceptionRows'])==['only_mac','only_suc_newer_access_unverified']
     print('TESLA_PRIORITY_TEST source_presence_exceptions_only PASS')
 
     # Morocco remains Mac for every station independently of SuC ages.
