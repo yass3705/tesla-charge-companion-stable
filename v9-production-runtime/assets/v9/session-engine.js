@@ -118,6 +118,7 @@
     const rule=PricingEngine.matchingRule(pricing,session.startAt,timeZone);
     if(!rule)return{complete:false,reason:'no_matching_time_rule',offerId:text(offer?.id||offer?.offerId),timeZone};
     const base=PricingEngine.evaluateRule(rule,session);
+    if(base.complete===false)return{...base,offerId:text(offer?.id||offer?.offerId),timeZone};
     const finalized=PricingEngine.applyMinimumTotal(pricing,base.totalEur,base.components);
     return{
       complete:true,totalEur:finalized.totalEur,components:finalized.components,
