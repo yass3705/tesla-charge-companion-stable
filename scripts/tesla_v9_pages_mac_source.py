@@ -280,7 +280,7 @@ def verify(site,preview):
         raise SystemExit('UK V9 Tesla pricing diverges from current Mac priority')
     alias_report=preview/'snapshot-inputs/TESLA/public-site-aliases.json'
     aliases=load(alias_report)
-    if aliases.get('sourceCount')!=len(mac) or aliases.get('publishedCount')!=len(stations):
+    if aliases.get('sourceCount')!=len(mac)+len(added) or aliases.get('publishedCount')!=len(stations):
         raise SystemExit('V9 preview alias audit provenance mismatch')
     if len(aliases.get('aliases',[]))!=1 or aliases['aliases'][0]['aliasId']!=ALIAS:
         raise SystemExit('V9 preview alias resolution is not the approved 30168 case')
