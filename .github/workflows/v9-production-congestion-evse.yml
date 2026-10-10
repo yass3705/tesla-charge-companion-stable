@@ -8,6 +8,8 @@ on:
       - "v9-production-runtime/assets/v9/session-engine.js"
       - "tests/v9-production-evse-offer-isolation.test.cjs"
       - "tests/v9-production-congestion-evse.test.cjs"
+      - "tests/v9-electra-station-pricing-policy.test.cjs"
+      - "v9-production-shell/bridge.js"
       - ".github/workflows/v9-production-congestion-evse.yml"
   workflow_dispatch:
 permissions:
@@ -26,3 +28,7 @@ jobs:
           node tests/v9-production-evse-offer-isolation.test.cjs
           node tests/v9-production-congestion-evse.test.cjs
           node tests/v9-production-ocpi-duration-pricing.test.cjs
+          node --check v9-production-shell/bridge.js
+          node --check v9-production-runtime/assets/v9/pricing-engine.js
+          node --check v9-production-runtime/assets/v9/session-engine.js
+          node tests/v9-electra-station-pricing-policy.test.cjs
