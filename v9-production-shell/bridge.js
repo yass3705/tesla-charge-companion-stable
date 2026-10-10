@@ -101,11 +101,21 @@
     return `<div style="margin-top:7px"><b class="small">Coût par configuration de charge</b>${rows.join('')}</div>`;
   }
 
-  function renderCandidate(w,area,rows,originLabel){
-    const results=w.document.getElementById('results'),routeStatus=w.document.getElementById('routeStatus');if(!results)throw new Error('stable results container missing');
-    if(routeStatus)routeStatus.innerHTML=`<span class="good">Moteur V9 canary · ${rows.length} borne(s) classée(s) depuis ${esc(originLabel)}.</span>`;
-    if(!rows.length){results.innerHTML='<div class="warn">Aucune borne V9 exploitable pour cette recherche. Retour au moteur stable recommandé.</div>';return;}
-    results.innerHTML=`<div class="small box"><b>Moteur V9 canary</b> · interface V7.3 stable · candidat moteur épinglé</div>`+rows.map((row,i)=>{const st=row.station,best=row.evaluation?.best,score=row.score,route=row.route;return `<div class="box" style="margin-top:10px"><b>${i+1}. ${esc(st.name||'Borne')}</b><div class="small">${esc(st.physicalOperator?.name||'Opérateur inconnu')} · ${maxPower(st)} kW · ${esc(st.status?.state||'unknown')}</div><div style="margin-top:6px">${best?`<b>${Number(best.total).toFixed(2)} ${esc(best.targetCurrency||'EUR')}</b> · ${esc(best.provider||'tarif')}`:'<span class="warn">Tarif non comparable</span>'}${Number.isFinite(row.distanceKm)?` · ${row.distanceKm.toFixed(1)} km`:''}</div>${connectorOfferRows(row)}${score?`<div class="small">Charge ${num(score.chargingMinutes)!=null?Number(score.chargingMinutes).toFixed(0)+' min':'—'} · trajet ${num(score.driveMinutes)!=null?Number(score.driveMinutes).toFixed(0)+' min':'—'} · total ${num(score.totalTimeMinutes)!=null?Number(score.totalTimeMinutes).toFixed(0)+' min':'—'}</div>`:''}${route?.provider?`<div class="small">Routage ${esc(route.provider)}</div>`:''}</div>`;}).join('');
+
+  function renderCandidate(w,area,rows,originLabel,onCongestionChange){
+    const results=w.document.getElementById('results'),routeStatus=w.document.getElementById('routeStatus');
+    if(!results)throw new Error('stable results container missing');
+    if(routeStatus)routeStatus.innerHTML='<span class="good">Moteur V9 · '+rows.length+' bornes classées depuis '+esc(originLabel)+'.</span>';
+    if(!rows.length){results.innerHTML='<div class="warn">Aucune borne V9 exploitable pour cette recherche.</div>';return;}
+    const prefs=congestionPreferences(w);
+    results.innerHTML='<div class="small box">Frais de congestion exclus par défaut · option disponible par station.</div>'+rows.map((row,i)=>{
+      const st=row.station,best=row.evaluation?.best,score=row.score,route=row.route;
+      const cost=best&&Number.isFinite(best.total)?'<b>'+Number(best.total).toFixed(2)+' '+esc(best.targetCurrency||'EUR')+'</b> · '+esc(best.provider||'tarif'):'<span class="warn">Tarif incalculable ou indisponible</span>';
+      const enabled=prefs[st.id]===true,hasFees=hasCongestionPricing(st);
+      const toggle=hasFees?'<label class="small" style="display:flex;gap:7px;align-items:center;margin-top:7px"><input type="checkbox" style="width:auto" data-v9-congestion-station-id="'+esc(st.id)+'" '+(enabled?'checked':'')+'> Inclure congestion après 80 % (station saturée supposée)</label>':'';
+      return '<div class="box" style="margin-top:10px"><b>'+(i+1)+'. '+esc(st.name||'Borne')+'</b><div class="small">'+esc(st.physicalOperator?.name||'Opérateur inconnu')+' · '+maxPower(st)+' kW</div><div style="margin-top:6px">'+cost+(Number.isFinite(row.distanceKm)?' · '+row.distanceKm.toFixed(1)+' km':'')+'</div>'+connectorOfferRows(row)+toggle+(score?'<div class="small">Charge '+(num(score.chargingMinutes)!=null?Number(score.chargingMinutes).toFixed(0)+' min':'—')+'</div>':'')+'</div>';
+    }).join('');
+    results.querySelectorAll('input[data-v9-congestion-station-id]').forEach(el=>el.addEventListener('change',()=>onCongestionChange?.(text(el.dataset.v9CongestionStationId),el.checked)));
   }
   async function executeV9(w,engine,cfg,input){
     if(!(input.targetSoc>input.startSoc))throw new Error('invalid SOC target');if(!input.originText)throw new Error('origin required');
