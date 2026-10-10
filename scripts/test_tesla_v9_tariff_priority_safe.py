@@ -99,7 +99,46 @@ def main():
     assert report['countries']['MA']['sucTariffs']==0
     print('TESLA_PRIORITY_TEST morocco_country_mac_only PASS')
 
-    print('TESLA_PRIORITY_TESTS_PASS=13/13')
+    # A SuC-only station enters the public catalogue only when the SuC COUNTRY
+    # is newer and the specific public site has official Tesla evidence.
+    verified={'schemaVersion':1,'verified':[{
+        'sourceStationId':'440309','countryCode':'DE',
+        'sucRowId':'tesla-suc-440309',
+        'officialTeslaPage':'https://www.tesla.com/findus/location/supercharger/440309',
+        'verifiedPublicAccess':'2026-10-10','accessHours':'24/7'}]}
+    herford=suc('DE','2026-10-25T01:00:00Z',site_id='440309')
+    herford['id']='tesla-suc-440309'
+    herford['sucTracker']['lifecycle']='active'
+    src=[station('DE',site_id='existing')]
+    older_suc=suc('DE','2026-10-25T01:00:00Z',site_id='existing')
+    newer,decision=select_tariffs(src,[older_suc,herford],updates('DE'),
+                                  '2026-10-28',verified)
+    assert len(newer)==2 and decision['countries']['DE']['sucOnlyPublicVerifiedAdded']==1,decision
+    assert newer[-1]['id']=='tesla-suc-440309'
+    assert newer[-1]['publicAccessVerification']['officialTeslaPage'].endswith('/440309')
+    print('TESLA_PRIORITY_TEST newer_suc_country_plus_official_public_access_add PASS')
+    # Do not publish a missing site when Mac is newly updated.
+    parked,decision=select_tariffs(src,[older_suc,herford],updates('DE','2026-10-27'),
+                                  '2026-10-28',verified)
+    assert len(parked)==1 and decision['countries']['DE']['sucOnlyPublicVerifiedAdded']==0
+    print('TESLA_PRIORITY_TEST newer_mac_parks_suc_only_even_if_verified PASS')
+    # Country newest does not grant public access to unknown stations.
+    unknown=suc('DE','2026-10-25T01:00:00Z',site_id='unknown')
+    unknown['id']='tesla-suc-unknown'
+    parked,decision=select_tariffs(src,[older_suc,herford,unknown],updates('DE'),
+                                   '2026-10-28',verified)
+    assert len(parked)==2 and decision['countries']['DE']['sucOnlyPendingPublicVerification']==1
+    print('TESLA_PRIORITY_TEST newer_suc_unknown_access_parks_until_verified PASS')
+    # Morocco must reject SuC-only even with verified public site.
+    ma_source=[station('MA',site_id='original',currency='MAD')]
+    ma_suc=suc('MA','2026-11-10T01:00:00Z',site_id='440309',currency='MAD')
+    ma_suc['id']='tesla-suc-440309'
+    ma_suc['sucTracker']['lifecycle']='active'
+    ma_out,ma_report=select_tariffs(ma_source,[ma_suc],updates('MA'),
+                    '2026-11-11',verified)
+    assert len(ma_out)==1 and ma_report['countries']['MA']['sucOnlyPublicVerifiedAdded']==0
+    print('TESLA_PRIORITY_TEST Morocco_no_suc_only_even_if_newer PASS')
+    print('TESLA_PRIORITY_TESTS_PASS=17/17')
 
 if __name__=='__main__':
     main()
