@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "canonicalFile": "data/tesla_stations.json",
-  "canonicalSha256": "cac26eb46010c01b9cf09a82511cb9be436f1b23d3579f1ca0706ba4f6b26c7e",
-  "stationCount": 1178,
+  "canonicalSha256": "363af2e80f05a01015889f2be1ece4055c74c3f75d1b804fca66f51d01ef57c5",
+  "stationCount": 1179,
   "countries": {
     "BE": {
       "stationCount": 27,
@@ -27,10 +27,15 @@
       }
     },
     "DE": {
-      "stationCount": 326,
+      "stationCount": 327,
       "verifiedPriceObservationCount": 0,
       "latestVerifiedPriceObservation": null,
-      "lastMacCountryBatch": null
+      "lastMacCountryBatch": {
+        "commitSha": "e6dc8e52908d5eb25d5f1ae270900b85b39ad3fb",
+        "publishedAt": "2026-10-10T03:23:47+02:00",
+        "message": "chore(stations): publish germany automated lot update #19",
+        "timestampMeaning": "publication of country batch; NOT verification of each station's price observation"
+      }
     },
     "ES": {
       "stationCount": 105,
