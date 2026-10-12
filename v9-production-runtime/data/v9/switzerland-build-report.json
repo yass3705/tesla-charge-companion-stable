@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-10-11T01:59:08.470377+00:00",
+  "generatedAt": "2026-10-12T02:29:19.891787+00:00",
   "country": "CH",
   "national": {
     "owners": 41,
     "evses": 20391,
     "publishedNonTeslaEvses": 19947,
     "excludedTeslaEvseCount": 444,
-    "stations": 13409,
-    "tiles": 58
+    "stations": 13410,
+    "tiles": 59
   },
   "offers": {
-    "direct": 17117,
-    "subscriptions": 2713,
-    "uniqueDirectEvse": 16999,
-    "uniqueSubscriptionEvse": 2713,
+    "direct": 17116,
+    "subscriptions": 2712,
+    "uniqueDirectEvse": 16998,
+    "uniqueSubscriptionEvse": 2712,
     "sourceCounts": {
       "data/switzerland/migrol-official-direct-tariffs.json": 1018,
       "data/switzerland/shell-evpass-official-direct-tariffs.json": 1165,
@@ -23,7 +23,7 @@
       "data/switzerland/iwb-direct-tariffs-second-pass.json": 406,
       "data/switzerland/iwb-official-basel-overlay.json": 31,
       "data/switzerland/saascharge-official-direct-tariffs.json": 226,
-      "data/switzerland/soc-move-cpo-tariffs-national.json": 286,
+      "data/switzerland/soc-move-cpo-tariffs-national.json": 284,
       "data/switzerland/lidl-official-direct-tariffs.json": 346,
       "data/switzerland/ewz-direct-tariffs.json": 414,
       "data/switzerland/plenitude-official-direct-tariffs.json": 180,
@@ -51,8 +51,8 @@
     "sourceErrors": []
   },
   "fx": {
-    "CHFperEUR": 0.930538,
-    "date": "2026-10-10"
+    "CHFperEUR": 0.930828,
+    "date": "2026-10-11"
   },
   "gofastAudit": {
     "nationalEvse": 563,
