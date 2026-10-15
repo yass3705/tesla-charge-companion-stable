@@ -1,14 +1,8 @@
+# Archived V9 mirror: manual rollback refresh only; Data Lab owns collection.
 name: Ze-Watt France refresh
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '41 3 * * 3'
-  push:
-    paths:
-      - 'scripts/zewatt/extract_zewatt_france.mjs'
-      - 'scripts/zewatt/compile_zewatt_v9_offers.mjs'
-      - '.github/workflows/zewatt-france-refresh.yml'
 
 permissions:
   contents: write
