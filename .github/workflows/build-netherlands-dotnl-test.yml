@@ -2,17 +2,6 @@ name: Build Netherlands DOT-NL runtime
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 4 1 * *'
-  push:
-    branches:
-      - main
-      - feat/ocpi-duration-tariffs-nl
-    paths:
-      - .github/workflows/build-netherlands-dotnl-test.yml
-      - assets/netherlands-catalog.js
-      - assets/ocpi-duration-pricing.js
-      - assets/ocpi-access-intervals.js
 
 permissions:
   contents: write
