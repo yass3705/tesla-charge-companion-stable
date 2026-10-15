@@ -1,10 +1,6 @@
 name: Publier les données Tesla validées
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/tesla-global-trigger"
   workflow_dispatch:
 
 permissions:
