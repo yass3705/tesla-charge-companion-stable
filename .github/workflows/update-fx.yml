@@ -3,10 +3,11 @@ name: Mise à jour des devises
 on:
   workflow_dispatch:
   schedule:
-    - cron: "37 3 * * *"
+    - cron: "37 5 * * *" # after Data Lab's canonical FX collection
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: update-fx-main
@@ -26,12 +27,23 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Actualiser les taux de change
+      - uses: actions/checkout@v4
+        with:
+          repository: yass3705/tesla-charge-companion-data-lab
+          ref: main
+          path: datalab
+          sparse-checkout-cone-mode: false
+          sparse-checkout: data/fx/exchange_rates.json
+          persist-credentials: false
+
+      - name: Vérifier le miroir et actualiser les taux validés
         run: |
           set -euo pipefail
-          python scripts/update_fx.py
-          echo "--- data/exchange_rates.json ---"
-          cat data/exchange_rates.json
+          python -m unittest discover -s tests -p test_sync_fx_from_datalab.py
+          python scripts/sync_fx_from_datalab.py \
+            --source datalab/data/fx/exchange_rates.json \
+            --data-dir data \
+            --data-lab-sha "$(git -C datalab rev-parse HEAD)"
 
       - name: Vérifier le fichier généré
         run: |
@@ -52,14 +64,23 @@ jobs:
           PY
 
       - name: Enregistrer les changements
+        id: persist
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/exchange_rates.json data/metadata.json; then
+          git add data/exchange_rates.json data/metadata.json data/fx-datalab-provenance.json
+          if git diff --cached --quiet; then
             echo "Aucun changement détecté."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "tesla-charge-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/exchange_rates.json data/metadata.json
-          git commit -m "Mise à jour automatique des devises"
+          git commit -m "Miroir des devises validées Data Lab"
           git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Publier le site historique après changement FX
+        if: steps.persist.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
