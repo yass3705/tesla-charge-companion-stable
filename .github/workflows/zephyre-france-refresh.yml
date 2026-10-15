@@ -2,14 +2,6 @@ name: Zephyre France refresh
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 4 * * *'
-  push:
-    paths:
-      - 'scripts/zephyre/extract_zephyre_france.mjs'
-      - 'scripts/zephyre/compile_zephyre_v9_offers.mjs'
-      - '.github/workflows/zephyre-france-refresh.yml'
-      - 'v9-production-runtime/assets/v9/pricing-engine.js'
 
 permissions:
   contents: write
