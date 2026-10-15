@@ -1,8 +1,7 @@
+# Archived V8 mirror: manual rollback refresh only; Data Lab owns collection.
 name: Synchroniser E55C dans TCC V8
 
 on:
-  schedule:
-    - cron: "17 10 * * *"
   workflow_dispatch:
 
 permissions:
