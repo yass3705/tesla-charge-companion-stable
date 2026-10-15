@@ -1,8 +1,7 @@
+# Archived V8 mirror: manual rollback refresh only; Data Lab owns collection.
 name: Synchroniser IONITY Direct dans TCC V8
 
 on:
-  schedule:
-    - cron: "7 11 * * *"
   workflow_dispatch:
 
 permissions:

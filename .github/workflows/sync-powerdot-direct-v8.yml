@@ -1,14 +1,8 @@
+# Archived V8 mirror: manual rollback refresh only; Data Lab owns collection.
 name: Synchroniser Powerdot Direct dans TCC V8
 
 on:
-  schedule:
-    - cron: "37 11 * * *"
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/sync-powerdot-direct-v8.yml"
-      - "scripts/test_powerdot_v8_runtime.mjs"
 
 permissions:
   contents: write
