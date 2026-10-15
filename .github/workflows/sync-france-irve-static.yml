@@ -1,12 +1,7 @@
 name: Sync France IRVE static bundle from Data Lab
 
 on:
-  schedule:
-    - cron: "17 3 * * *"
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/sync-france-irve-static.yml"
 
 permissions:
   contents: write
