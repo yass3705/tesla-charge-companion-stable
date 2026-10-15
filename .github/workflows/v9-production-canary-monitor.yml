@@ -1,17 +1,7 @@
 name: V9 production watchdog
 
 on:
-  schedule:
-    - cron: '17 */2 * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'v9-production-control.json'
-      - 'v9-production-shell/shell-config.json'
-      - 'v9-production-runtime/**'
-      - 'scripts/v9-production-canary-monitor.cjs'
-      - '.github/workflows/v9-production-canary-monitor.yml'
 
 permissions:
   actions: read
