@@ -1,18 +1,7 @@
-name: Sync Tesla Mac updates into all V9 mirrors
+name: Historical Tesla Mac V9 mirror rollback (manual only)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'data/tesla_stations.json'
-      - 'scripts/tesla_v9_catalogue_sync.py'
-      - '.github/workflows/tesla-mac-to-v9-sync.yml'
   workflow_dispatch:
-  schedule:
-    # Fallback for Mac publishers using GITHUB_TOKEN, whose pushes may not
-    # trigger another GitHub Actions workflow. Runs hourly, without changes if
-    # both V9 mirrors already match the canonical Mac source.
-    - cron: '17 * * * *'
 
 permissions:
   contents: write
@@ -92,7 +81,7 @@ jobs:
       - name: Republish GitHub Pages after Mac/V9 synchronization
         # GitHub Actions token commits do not trigger another push workflow,
         # but an explicit workflow_dispatch does.
-        if: steps.sync.outputs.changed == 'true' || github.event_name != 'schedule'
+        if: steps.sync.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
