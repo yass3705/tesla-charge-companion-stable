@@ -1,0 +1,32 @@
+{
+  "country": "ES",
+  "duplicateEvseIds": 129,
+  "duplicateLocationKeys": 0,
+  "evseIdsObserved": 42174,
+  "fullPassValidated": true,
+  "gates": {
+    "coordinatesStructurallyValid": true,
+    "locationKeyDuplicatesZero": true,
+    "nationalPassComplete": true,
+    "pageCoverage146of146": true,
+    "registryHeaderConsistentWithUniqueSnapshot": true,
+    "snapshotReadable": true
+  },
+  "generatedAt": "2026-09-07T10:38:55.272115Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "invalidCoordinates": 0,
+  "locationsMissingCoordinates": 0,
+  "locationsStored": 13648,
+  "malformedLocations": 0,
+  "note": "Validation is offline against the collected snapshot; it performs zero REVE API requests.",
+  "pagesCompleted": 146,
+  "publishReady": false,
+  "publishReadyReason": "Full locations pass validated; runtime publication remains separately gated by tariff/status mapping and representative cross-checks.",
+  "registryCoveragePct": 93.68,
+  "registryGap": 921,
+  "registryGapDisposition": "EXPECTED_DIAGNOSTIC_FOR_MUTABLE_PAGINATION_AND_ID_DEDUP",
+  "registryTotalCount": 14569,
+  "schemaVersion": 2,
+  "source": "REVE",
+  "totalPages": 146
+}

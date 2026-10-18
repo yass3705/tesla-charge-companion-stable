@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-14T06:52:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "firstPassBefore": 414,
+  "firstPassAfter": 418,
+  "labels": [
+    {
+      "label": "Pamplona",
+      "status": "partial",
+      "reason": "Current municipal sources confirm a live public charging network and 2026 Telpark charging activity/discounts, but no single deterministic network-wide numeric charging tariff is published; station/app-level pricing must be mapped later.",
+      "evidence": [
+        "https://www.pamplona.es/actualidad/noticias/ayuntamiento-de-pamplona-y-telpark-ofrecen-un-abono-para-aparcar-12-horas-por",
+        "https://www.pamplona.es/actualidad/noticias/la-semana-del-11-al-17-de-mayo-se-podran-recargar-los-vehiculos-electricos-de"
+      ]
+    },
+    {
+      "label": "Parking Pozuelo",
+      "status": "setAside",
+      "reason": "The REVE web label is nominative, but first-pass public research did not establish a unique official operator/tariff authority for this exact label. Nearby Pozuelo charging offers belong to other named CPOs and are not substituted.",
+      "evidence": []
+    },
+    {
+      "label": "Patrimonio Natural CyL",
+      "status": "setAside",
+      "reason": "Official Patrimonio Natural de Castilla y León sources document Moveletur charging infrastructure, but no current public numeric charging tariff for this REVE label was located in first pass.",
+      "evidence": [
+        "https://patrimonionatural.org/noticias/noticia/el-proyecto-moveletur-pone-en-marcha-el-servicio-de-prestamo-de-vehiculos-electricos-en-espacios-naturales-fronterizos-con-portugal"
+      ]
+    },
+    {
+      "label": "PAVAPARK MOVILIDAD, S.L.",
+      "status": "partial",
+      "reason": "Official Pavapark sources confirm EV charging management through Moviltik and multiple charging-equipped car parks, but no uniform official numeric charging tariff is published; station-level prices must remain unpromoted until deterministically sourced.",
+      "evidence": [
+        "https://www.pavapark.com/moviltik/",
+        "https://www.pavapark.com/noticias/"
+      ]
+    }
+  ],
+  "coherence": {
+    "countDelta": 4,
+    "syntheticHistoricalMembershipCreated": false,
+    "legacyWorkLabelCountUnchanged": true,
+    "firstPassPriorityRespected": true
+  }
+}

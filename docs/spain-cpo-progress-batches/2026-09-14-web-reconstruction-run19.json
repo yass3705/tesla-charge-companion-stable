@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 125,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 189,
+    "note": "Current public-web identities are replacement reconstruction evidence only and are not proof of membership in the lost frozen historical 618-label inventory."
+  },
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament de Cunit",
+      "labels": ["Ajuntament de Cunit"],
+      "status": "partial",
+      "model": "municipal public charging / station-level",
+      "evidence": ["https://www.cunit.cat/cunit-amplia-la-xarxa-publica-de-recarrega-amb-dos-nous-punts-per-a-vehicles-electrics/"],
+      "coverageKnown": "Official municipal source dated 2026-02-09 confirms eight public charging points after two new installations.",
+      "blockingReason": "No current official numeric charging tariff was located in the first-pass search; no third-party or inferred price is promoted.",
+      "resumeCondition": "Official municipal tariff/order, EVCharge numeric price or deterministic REVE connector tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Lliçà d'Amunt",
+      "labels": ["Ajuntament de Lliçà d'Amunt"],
+      "status": "sourceValidated",
+      "model": "municipal network / EVCharge",
+      "evidence": ["https://www.llicamunt.cat/actualitat/noticies/els-punts-de-recarrega-de-vehicles-electrics-passen-a-ser-de-pagament.html"],
+      "coverageKnown": "Official municipal tariff page states five municipal charging points, EVCharge operation and a public price of 0.30 EUR/kWh with a two-hour charging limit.",
+      "tariff": {"energyEurPerKwh": 0.30, "currency": "EUR", "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if the municipality publishes a later tariff/order or REVE connector mapping differs deterministically.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ajuntament de Rubí",
+      "labels": ["Ajuntament de Rubi"],
+      "status": "partial",
+      "model": "municipal network / EVCharge",
+      "evidence": ["https://www.rubi.cat/es/actualidad/noticias/el-pleno-aprueba-el-precio-publico-para-la-recarga-de-vehiculos-electricos-en-la-red-municipal/@@amp", "https://www.rubi.cat/es/actualidad/noticias/el-ayuntamiento-aprueba-el-reglamento-que-ordena-el-uso-de-los-puntos-publicos-de-recarga-de-vehiculos-electricos/@@amp"],
+      "coverageKnown": "Official municipality confirms EVCharge-managed public network. On 2026-09-09 the council approved 0.24 EUR/kWh plus VAT for municipality-operated points.",
+      "blockingReason": "The approved 0.24 EUR/kWh + VAT price only enters into force the day after publication in the BOPB; no confirming BOPB publication was located during this first pass, so the approved future price is not promoted as active yet.",
+      "resumeCondition": "Confirm BOPB publication/effective date, then promote the official tariff if still applicable.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ayuntamiento de Carrión de los Condes",
+      "labels": ["AYUNTAMIENTO DE CARRIÓN DE LOS CONDES - -"],
+      "status": "sourceValidated",
+      "model": "municipal public charging / FENÍE Energía Recarga",
+      "evidence": ["https://recarga.fenieenergia.es/punto-recarga/0080", "https://www.carriondeloscondes.org/ayuntamiento/portal-de-transparencia/ordenanzas-y-reglamentos/"],
+      "coverageKnown": "Current FENÍE public station page identifies the municipality as owner, reports 24/7 operation and last connection 2026-09-12.",
+      "tariff": {"energyEurPerKwh": 0.40, "currency": "EUR", "sourceAuthority": "currentCpoPublicPage"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if FENÍE or the municipal public-price ordinance changes.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Bescanó",
+      "labels": ["Bescanó"],
+      "status": "setAside",
+      "model": "municipal/site-level",
+      "evidence": ["https://www.cilma.cat/wp-content/uploads/2023/03/Memoria-Bescano.pdf", "https://bescano.cat/municipi/dades-del-municipi/guia-del-poble/"],
+      "coverageKnown": "Public municipal/community-energy documentation evidences EV-charging infrastructure in Bescanó.",
+      "blockingReason": "No current official numeric public charging tariff or deterministic direct price authority was located in the first pass.",
+      "resumeCondition": "Official municipal tariff, public operator/app price or deterministic REVE connector tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {
+    "firstPassTraversed": 5,
+    "sourceValidated": 2,
+    "partial": 2,
+    "setAside": 1,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "difficultCaseReauditPerformed": false,
+    "legacyDenominatorChanged": false
+  },
+  "generatedAt": "2026-09-14T15:38:00Z"
+}

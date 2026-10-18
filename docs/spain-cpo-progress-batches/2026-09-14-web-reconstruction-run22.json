@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 125,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 189
+  },
+  "decisions": [
+    {
+      "canonicalName": "Sallent",
+      "labels": ["Sallent"],
+      "status": "sourceValidated",
+      "model": "municipal public charging tariff",
+      "evidence": ["https://www.sallent.cat/media/repository/Ordenanca_fiscals_2026/Ordenanca_Fiscal_39._PREU_PuBLIC_PEL_SERVEI_DE_RECARREGA_DE_VEHICLES_ELeCTRICS.pdf"],
+      "coverageKnown": "REVE public-web probe exposes the Sallent operator label; the official 2026 municipal fiscal ordinance regulates public municipal EV charging.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.36, "sourceAuthority": "officialMunicipality"},
+      "blockingReason": null,
+      "resumeCondition": "Map the REVE station/connectors deterministically to the municipal tariff during runtime-catalog integration.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "PETRO PALOL, S.L.",
+      "labels": ["PETRO PALOL, S.L."],
+      "status": "setAside",
+      "model": "single-site / service-station charging",
+      "evidence": ["https://www.mapareve.es/api/public/v1"],
+      "coverageKnown": "REVE public-web probe exposes PETRO PALOL, S.L.; current public station directories independently identify the Palol de Revardit charging site and 60 kW capability.",
+      "blockingReason": "No current official/direct numeric EV charging tariff attributable to PETRO PALOL was located in first pass; third-party values are not promoted.",
+      "resumeCondition": "Official site/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Porsatecnic S.L.",
+      "labels": ["Porsatecnic S.L."],
+      "status": "setAside",
+      "model": "dealer/site-level charging",
+      "evidence": ["https://dealer.porsche.com/es/valencia/es-ES/footer/legal-notice"],
+      "coverageKnown": "REVE public-web probe exposes Porsatecnic S.L.; the current official Porsche Valencia legal notice confirms Porsatecnic S.L. as the responsible dealer entity.",
+      "blockingReason": "No current official/direct numeric public EV charging tariff attributable to the REVE label was located in first pass.",
+      "resumeCondition": "Official dealer/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Ports de la Generalitat",
+      "labels": ["Ports de la Generalitat"],
+      "status": "partial",
+      "model": "multi-port public charging network",
+      "evidence": ["https://etecnic.es/ca/noticies/viu-etecnic/acords/etecnic-energy-mobility-sadjudica-la-licitacio-per-a-instal%C2%B7lar-punts-de-recarrega-de-vehicle-electric-als-ports-de-la-generalitat/"],
+      "coverageKnown": "REVE public-web probe exposes Ports de la Generalitat; public project evidence confirms charging infrastructure across multiple Catalan ports, including rapid and semi-rapid stations.",
+      "blockingReason": "Infrastructure/operator identity is established but no sufficiently current official numeric charging tariff was located in first pass.",
+      "resumeCondition": "Current official Ports/Etecnic/EVCharge tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "URBAN PADESPORT & COFFEE, S.L",
+      "labels": ["URBAN PADESPORT & COFFEE, S.L"],
+      "status": "setAside",
+      "model": "site-level / operator identity observed in REVE public web",
+      "evidence": ["https://www.mapareve.es/api/public/v1"],
+      "coverageKnown": "REVE public-web probe exposes the exact operator label.",
+      "blockingReason": "No official/public direct numeric EV-charging tariff attributable to this label was located in first pass; no identity or tariff is inferred beyond the observed REVE label.",
+      "resumeCondition": "Official site/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {
+    "firstPassTraversed": 5,
+    "sourceValidated": 1,
+    "partial": 1,
+    "setAside": 3,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  },
+  "aggregateAfter": {
+    "minimumTraversed": 460,
+    "maximumNeverTraversed": 158,
+    "sourceValidated": 52,
+    "partial": 43,
+    "setAside": 198,
+    "active": 96,
+    "supersededAlias": 68,
+    "platformExcluded": 3,
+    "total": 460
+  },
+  "reveTariffStatusAfter": {
+    "tariffPagesCollected": 238,
+    "tariffTotalPages": 462,
+    "tariffRowsStored": 20999,
+    "nextTariffPage": 239,
+    "statusPagesCollected": 159,
+    "statusTotalPages": 449,
+    "statusRowsStored": 13917,
+    "nextStatusPage": 160,
+    "lastBatchRequestsAttempted": 5,
+    "lastBatchRequestsSucceeded": 5,
+    "lastBatchHttp429": 0,
+    "locationsRequests": 0,
+    "complete": false
+  },
+  "webTrackAfter": {
+    "newReconstructedLabelsFirstPassedCount": 87,
+    "endpoint": "https://www.mapareve.es/api/public/v1",
+    "validatedSample": "125x25",
+    "uniqueOperatorLabelsObserved": 189
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "difficultCaseReauditPerformed": false,
+    "legacyDenominatorChanged": false,
+    "check": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"
+  },
+  "generatedAt": "2026-09-14T17:48:00Z"
+}

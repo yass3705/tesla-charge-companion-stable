@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "generatedAt": "2026-09-15T07:10:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historical618MembershipClaimed": false,
+  "source": {
+    "path": "data/spain_reve/reve_public_web_probe.json",
+    "mode": "FULL_CONTROLLED_SWEEP",
+    "maxPages": 600,
+    "perPage": 25,
+    "matchedStations": 11212,
+    "uniqueReveLocationIds": 10493,
+    "uniqueOperatorLabels": 445
+  },
+  "firstPassBefore": 485,
+  "firstPassAfter": 490,
+  "legacyWorkLabelCount": 618,
+  "maximumNeverTraversedAfter": 128,
+  "decisions": [
+    {
+      "canonicalName": "ADURIZ ENERGIA SLU",
+      "sourceLabel": "ADURIZ ENERGIA SLU",
+      "status": "setAside",
+      "reason": "REVE public-web identity is durable. First-pass official web search found Aduriz Energia corporate/service material but no deterministic public EV-charging tariff authority; do not infer a charging tariff from unrelated energy/telecom tariffs.",
+      "resumeCondition": "Official charging site/app/QR tariff or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Aeroports de la Generalitat",
+      "sourceLabel": "Aeroports de la Generalitat",
+      "status": "setAside",
+      "reason": "REVE public-web identity is durable; no deterministic current public charging tariff was recovered in the bounded first-pass search.",
+      "resumeCondition": "Official airport charging tariff, QR/app evidence, or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Ajuntament d'Alcanar",
+      "sourceLabel": "Ajuntament d'Alcanar",
+      "status": "partial",
+      "reason": "Official municipal source confirms the EVCharge-managed public charger and stated charging would be free only for the first months after launch in October 2024. That temporary statement is not promoted as a current 2026 tariff.",
+      "evidence": ["https://www.alcanar.cat/noticies/el-punt-de-recarrega-electric-de-lajuntament-dalcanar-situat-lavinguda-catalunya-just"],
+      "resumeCondition": "Current municipal/EVCharge numeric tariff or deterministic REVE connector tariff."
+    },
+    {
+      "canonicalName": "Ajuntament d’Argentona",
+      "sourceLabel": "Ajuntament d’Argentona",
+      "status": "partial",
+      "reason": "Current public-web identity is durable. A recent local publication attributes 0.36 EUR/kWh and a proposed 0.25/0.21 time split to the municipality, but the authoritative municipal tariff text was not recovered in this bounded pass; third-party wording is not promoted as tariff authority.",
+      "resumeCondition": "Official municipal ordinance/public-price decision or deterministic REVE connector tariff."
+    },
+    {
+      "canonicalName": "AJUNTAMENT D'INCA",
+      "sourceLabel": "AJUNTAMENT D'INCA",
+      "status": "active",
+      "reason": "Official Inca sources confirm a municipal public charging concession/network and migration/expansion of existing charging infrastructure. Current operation is not assigned a single tariff from older MELIB/FENIE or third-party values; exact current station/connector mapping remains required.",
+      "evidence": ["https://incaciutat.com/concessio-demanial-per-a-la-installacio-manteniment-i-explotacio-duna-infraestructura-publica-destacions-de-recarrega-de-vehicles-electrics-a-bens-de-domini-i-us-public-local", "https://incaciutat.com/inca-amplia-la-xarxa-de-punts-de-recarrega-de-vehicles-electrics-amb-una-pionera-infraestructura-de-gestio-de-manteniment"],
+      "resumeCondition": "Deterministic current concession/operator station tariff mapping after first pass."
+    }
+  ],
+  "delta": {"sourceValidated": 0, "partial": 2, "setAside": 2, "active": 1, "supersededAlias": 0, "platformExcluded": 0},
+  "coherence": {
+    "countsAfter": {"sourceValidated": 60, "partial": 51, "active": 100, "setAside": 208, "platformExcluded": 3, "supersededAlias": 68, "total": 490},
+    "sumMatchesFirstPass": true,
+    "syntheticHistoricalMembershipCreated": false,
+    "difficultCasesReaudited": false
+  }
+}

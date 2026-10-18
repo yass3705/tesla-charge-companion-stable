@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 46,
+  "date": "2026-09-09",
+  "firstPass": {
+    "minimumTraversedBefore": 341,
+    "minimumTraversedAfter": 341,
+    "maximumNeverTraversedAfter": 277,
+    "newLabelsTraversed": [],
+    "newSourceValidated": [],
+    "decision": "No concrete newly recoverable historical label from the 618-label queue was proven in this run. Existing active/setAside cases were not re-audited and no synthetic historical entry was created."
+  },
+  "countsAfter": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "liveBatchEligible": true,
+    "liveBatchLaunchedThisRun": false,
+    "reason": "More than one real hour had elapsed since the latest successful persisted batch (2026-09-09T15:44:12.445728Z), but the GitHub connector exposes no workflow_dispatch action and no discoverable last-successful job ID for the preferred rerun path. The permitted last-resort targeted workflow-trigger modification was attempted once and blocked by platform safety checks before any repository change or REVE request occurred. Quota therefore remains unconsumed by this run.",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-09T15:44:12.445728Z",
+    "latestPersistedStateUpdatedAt": "2026-09-09T15:44:20.994190Z",
+    "requestsAttemptedThisRun": 0,
+    "persistentNextTariffPage": 65,
+    "persistentTariffPagesCollected": 64,
+    "persistentTariffRowsStored": 6352,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 44,
+    "persistentStatusPagesCollected": 43,
+    "persistentStatusRowsStored": 3986,
+    "statusTotalPages": 447,
+    "locationsRequestsThisRun": 0
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "locationsEndpointUnusedByObservedState": true
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "firstPassComplete": false
+}

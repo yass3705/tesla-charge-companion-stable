@@ -1,0 +1,1275 @@
+{
+  "allRequiredOperatorsMatched": true,
+  "country": "ES",
+  "generatedAt": "2026-09-07T14:39:05.712856Z",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "networkRequests": 0,
+  "nextGate": "Controlled live REVE tariff/status probe (<=5 requests/hour) using candidates above.",
+  "note": "Matching is candidate-only and never rewrites raw CPO identity. Zero REVE API requests are performed by this audit.",
+  "requiredOperators": [
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Iberdrola | bp pulse",
+          "city": "LA LINEA DE LA CONCEPCION",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "362e683d-e8df-4a8b-bc26-783159c03978",
+              "maxElectricPowerW": 43400,
+              "powerType": "DC",
+              "standard": "CHADEMO"
+            },
+            {
+              "format": "CABLE",
+              "id": "ba560fd4-b7d5-415e-8a03-956b78ab7064",
+              "maxElectricPowerW": 43400,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IBD*E135326*1",
+          "locationId": "e28bb972-9c50-4131-9d1c-9ecf1fcda00d",
+          "locationName": "CA-LaLineadelaConcepcion-001",
+          "matchedAlias": "IBERDROLA CLIENTES",
+          "partyId": "IBD",
+          "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+        },
+        {
+          "canonicalOperator": "Iberdrola | bp pulse",
+          "city": "LA LINEA DE LA CONCEPCION",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "96854baf-baab-4592-badf-0ccb3d76cc22",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            },
+            {
+              "format": "SOCKET",
+              "id": "0ef50c1f-85bd-4c9d-bded-ccd75e68e897",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IBD*E135327*1",
+          "locationId": "e28bb972-9c50-4131-9d1c-9ecf1fcda00d",
+          "locationName": "CA-LaLineadelaConcepcion-001",
+          "matchedAlias": "IBERDROLA CLIENTES",
+          "partyId": "IBD",
+          "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+        },
+        {
+          "canonicalOperator": "Iberdrola | bp pulse",
+          "city": "BANYERES DE MARIOLA",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "476485bb-0a39-436b-8d3b-e517f6cc01d4",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IBD*E14999*1",
+          "locationId": "11b10076-425b-4d42-915d-34ad653f774e",
+          "locationName": "E-A-BanyeresDeMariola-002",
+          "matchedAlias": "IBERDROLA CLIENTES",
+          "partyId": "IBD",
+          "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+        },
+        {
+          "canonicalOperator": "Iberdrola | bp pulse",
+          "city": "BANYERES DE MARIOLA",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "b74fe262-042b-4611-9259-5b7aa40427c2",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IBD*E14999*2",
+          "locationId": "11b10076-425b-4d42-915d-34ad653f774e",
+          "locationName": "E-A-BanyeresDeMariola-002",
+          "matchedAlias": "IBERDROLA CLIENTES",
+          "partyId": "IBD",
+          "rawCpoName": "IBERDROLA CLIENTES S.A.U"
+        }
+      ],
+      "canonical": "Iberdrola | bp pulse",
+      "connectors": 9463,
+      "embeddedStatuses": {},
+      "evses": 8475,
+      "locations": 2288,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 2288,
+          "value": "IBD"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 2288,
+          "value": "IBERDROLA CLIENTES S.A.U"
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Endesa X Way",
+          "city": "València",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "a792219f-2a67-41bf-82a5-dd515332f4a0",
+              "maxElectricPowerW": 5265,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ESX*E61948051050013*1",
+          "locationId": "458d1c9b-d837-47c7-9d6c-502237c61ed4",
+          "locationName": "61948051050013",
+          "matchedAlias": "Endesa X Way",
+          "partyId": "ESX",
+          "rawCpoName": "ENDESA X WAY, S.L."
+        },
+        {
+          "canonicalOperator": "Endesa X Way",
+          "city": "València",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "ea5dddfa-b466-4f2c-ba81-5ecb5551590a",
+              "maxElectricPowerW": 5265,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ESX*E61948051050013*2",
+          "locationId": "458d1c9b-d837-47c7-9d6c-502237c61ed4",
+          "locationName": "61948051050013",
+          "matchedAlias": "Endesa X Way",
+          "partyId": "ESX",
+          "rawCpoName": "ENDESA X WAY, S.L."
+        },
+        {
+          "canonicalOperator": "Endesa X Way",
+          "city": "Port d'Alcúdia",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "62f7e0b9-95ae-43cc-9b4c-cb0d02104882",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ESX*E22XP22T3QQ1AN00868*2",
+          "locationId": "9bc88550-6bc9-4b24-b37b-17d80f505aa1",
+          "locationName": "22XP22T3QQ1AN00868",
+          "matchedAlias": "Endesa X Way",
+          "partyId": "ESX",
+          "rawCpoName": "ENDESA X WAY, S.L."
+        },
+        {
+          "canonicalOperator": "Endesa X Way",
+          "city": "Port d'Alcúdia",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "59871c9c-7dfa-401e-ad47-835c30d5f9c8",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ESX*E22XP22T3QQ1AN00868*1",
+          "locationId": "9bc88550-6bc9-4b24-b37b-17d80f505aa1",
+          "locationName": "22XP22T3QQ1AN00868",
+          "matchedAlias": "Endesa X Way",
+          "partyId": "ESX",
+          "rawCpoName": "ENDESA X WAY, S.L."
+        }
+      ],
+      "canonical": "Endesa X Way",
+      "connectors": 4928,
+      "embeddedStatuses": {},
+      "evses": 4927,
+      "locations": 2565,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 2565,
+          "value": "ESX"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 2565,
+          "value": "ENDESA X WAY, S.L."
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Repsol",
+          "city": "Hernán-Pérez",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "df3ca033-ece1-490c-8572-caf43f1c74b5",
+              "maxElectricPowerW": 43470,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*REP*E15141*2",
+          "locationId": "6e491c86-21de-48ed-83cd-53a550e866a2",
+          "locationName": "Repsol, DC - Hernán Pérez",
+          "matchedAlias": "Repsol",
+          "partyId": "REP",
+          "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+        },
+        {
+          "canonicalOperator": "Repsol",
+          "city": "Hernán-Pérez",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "835c9fdc-5415-4dcf-a177-52b2610a9955",
+              "maxElectricPowerW": 50000,
+              "powerType": "DC",
+              "standard": "CHADEMO"
+            },
+            {
+              "format": "CABLE",
+              "id": "5b15406e-281e-4e79-a20d-bd31f993523d",
+              "maxElectricPowerW": 50000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*REP*E15141*1",
+          "locationId": "6e491c86-21de-48ed-83cd-53a550e866a2",
+          "locationName": "Repsol, DC - Hernán Pérez",
+          "matchedAlias": "Repsol",
+          "partyId": "REP",
+          "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+        },
+        {
+          "canonicalOperator": "Repsol",
+          "city": "Ciudad Rodrigo",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "a92aaf9e-98e7-4ad0-b277-354093d72fd2",
+              "maxElectricPowerW": 50000,
+              "powerType": "DC",
+              "standard": "CHADEMO"
+            },
+            {
+              "format": "CABLE",
+              "id": "23290e31-e7fe-4164-a2d0-d3e600eb0258",
+              "maxElectricPowerW": 43470,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            },
+            {
+              "format": "CABLE",
+              "id": "dfa731f7-830e-4307-af8b-5ceec8004d5f",
+              "maxElectricPowerW": 50000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*REP*E13744*1",
+          "locationId": "b1430a6b-2449-450c-a6e8-30b48d1e72fc",
+          "locationName": "Repsol ES, E.S Avda Portugal",
+          "matchedAlias": "Repsol",
+          "partyId": "REP",
+          "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+        },
+        {
+          "canonicalOperator": "Repsol",
+          "city": "Ciudad Rodrigo",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "ab3be6e3-cb31-4ebb-8acb-5366c0b4745d",
+              "maxElectricPowerW": 50000,
+              "powerType": "DC",
+              "standard": "CHADEMO"
+            },
+            {
+              "format": "CABLE",
+              "id": "bb4fddf4-89db-44ca-adea-4fdb8ecc182e",
+              "maxElectricPowerW": 43470,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            },
+            {
+              "format": "CABLE",
+              "id": "53435080-4286-41ca-af55-72232dfa010b",
+              "maxElectricPowerW": 50000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*REP*E9969*1",
+          "locationId": "b1430a6b-2449-450c-a6e8-30b48d1e72fc",
+          "locationName": "Repsol ES, E.S Avda Portugal",
+          "matchedAlias": "Repsol",
+          "partyId": "REP",
+          "rawCpoName": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+        }
+      ],
+      "canonical": "Repsol",
+      "connectors": 7061,
+      "embeddedStatuses": {},
+      "evses": 4779,
+      "locations": 1926,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 1926,
+          "value": "REP"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 1926,
+          "value": "REPSOL SOLUCIONES ENERGÉTICAS SA"
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Wenea",
+          "city": "Madrid",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "c4fb8895-a113-45ff-b016-15394d4a08f2",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*WEN*EHSHOTELATOCHA04*1",
+          "locationId": "efd97a01-5209-4018-97d0-55deba2183e3",
+          "locationName": "Hs. Madrid Centro Atocha",
+          "matchedAlias": "Wenea",
+          "partyId": "WEN",
+          "rawCpoName": "Wenea Services Spain, S.L."
+        },
+        {
+          "canonicalOperator": "Wenea",
+          "city": "Madrid",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "e20ea981-e177-4e6b-8520-e7ebb610fe6e",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*WEN*EHSHOTELATOCHA01*1",
+          "locationId": "efd97a01-5209-4018-97d0-55deba2183e3",
+          "locationName": "Hs. Madrid Centro Atocha",
+          "matchedAlias": "Wenea",
+          "partyId": "WEN",
+          "rawCpoName": "Wenea Services Spain, S.L."
+        },
+        {
+          "canonicalOperator": "Wenea",
+          "city": "Madrid",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "c376d928-377d-46b7-8b7b-28a4b09e2b90",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*WEN*EHSHOTELATOCHA02*1",
+          "locationId": "efd97a01-5209-4018-97d0-55deba2183e3",
+          "locationName": "Hs. Madrid Centro Atocha",
+          "matchedAlias": "Wenea",
+          "partyId": "WEN",
+          "rawCpoName": "Wenea Services Spain, S.L."
+        },
+        {
+          "canonicalOperator": "Wenea",
+          "city": "Madrid",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "61c74ec2-a851-4f08-a75b-122dcc8ac7e1",
+              "maxElectricPowerW": 150000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*WEN*EHSHOTELATOCHA05*2",
+          "locationId": "efd97a01-5209-4018-97d0-55deba2183e3",
+          "locationName": "Hs. Madrid Centro Atocha",
+          "matchedAlias": "Wenea",
+          "partyId": "WEN",
+          "rawCpoName": "Wenea Services Spain, S.L."
+        }
+      ],
+      "canonical": "Wenea",
+      "connectors": 1672,
+      "embeddedStatuses": {},
+      "evses": 1636,
+      "locations": 319,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 319,
+          "value": "WEN"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 319,
+          "value": "Wenea Services Spain, S.L."
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Zunder",
+          "city": "Mérida",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "0b3c7a15-e142-4614-bf9b-413f1c368c50",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ZUN*EINAME000004ER01",
+          "locationId": "e1c3b86a-aadc-4ce7-9e66-fc10a2d74710",
+          "locationName": "Plaza Margarita Xirgú",
+          "matchedAlias": "Zunder",
+          "partyId": "ZUN",
+          "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+        },
+        {
+          "canonicalOperator": "Zunder",
+          "city": "Mérida",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "87c8b0a3-9d1c-432f-bca6-7911ca009156",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ZUN*EINAME000004ER02",
+          "locationId": "e1c3b86a-aadc-4ce7-9e66-fc10a2d74710",
+          "locationName": "Plaza Margarita Xirgú",
+          "matchedAlias": "Zunder",
+          "partyId": "ZUN",
+          "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+        },
+        {
+          "canonicalOperator": "Zunder",
+          "city": "Mérida",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "173b8f46-2ec4-45d9-bd08-73cceaf96015",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ZUN*EINAME000003ER02",
+          "locationId": "a6285da4-e488-41a2-8746-5247818dec18",
+          "locationName": "Avenida del Prado",
+          "matchedAlias": "Zunder",
+          "partyId": "ZUN",
+          "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+        },
+        {
+          "canonicalOperator": "Zunder",
+          "city": "Mérida",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "8e040396-b4e1-4008-ba71-e7a448e954cb",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ZUN*EINAME000003ER01",
+          "locationId": "a6285da4-e488-41a2-8746-5247818dec18",
+          "locationName": "Avenida del Prado",
+          "matchedAlias": "Zunder",
+          "partyId": "ZUN",
+          "rawCpoName": "(ZUNDER) Grupo Easychargar SA"
+        }
+      ],
+      "canonical": "Zunder",
+      "connectors": 1768,
+      "embeddedStatuses": {},
+      "evses": 1768,
+      "locations": 439,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 439,
+          "value": "ZUN"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 439,
+          "value": "(ZUNDER) Grupo Easychargar SA"
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Moeve",
+          "city": "TELDE",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "94cdb28c-9574-41f0-bc35-92eaeca752d8",
+              "maxElectricPowerW": 180000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*MOE*EC8A233S023DAPJMQLQ*01",
+          "locationId": "5f152f34-a867-4a57-a266-ba5ac47a47a0",
+          "locationName": "MOEVE-ES771770-OJOS DE GARZA",
+          "matchedAlias": "Moeve",
+          "partyId": "MOE",
+          "rawCpoName": "MOEVE COMMERCIAL, SAU"
+        },
+        {
+          "canonicalOperator": "Moeve",
+          "city": "TELDE",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "c60d19bb-3df5-4042-93d7-da3be873e6e5",
+              "maxElectricPowerW": 180000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*MOE*EC8A233S023DAPJMQLQ*02",
+          "locationId": "5f152f34-a867-4a57-a266-ba5ac47a47a0",
+          "locationName": "MOEVE-ES771770-OJOS DE GARZA",
+          "matchedAlias": "Moeve",
+          "partyId": "MOE",
+          "rawCpoName": "MOEVE COMMERCIAL, SAU"
+        },
+        {
+          "canonicalOperator": "Moeve",
+          "city": "Madrid",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "fba89a2c-5c72-4774-b995-874515daeeab",
+              "maxElectricPowerW": 150000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*MOE*EHYC22BZ0339A*02",
+          "locationId": "d628ce26-0d28-4235-a6f9-d23b96f43e23",
+          "locationName": "CEPSA-ES176420-PAU VALLECAS",
+          "matchedAlias": "Moeve",
+          "partyId": "MOE",
+          "rawCpoName": "MOEVE COMMERCIAL, SAU"
+        },
+        {
+          "canonicalOperator": "Moeve",
+          "city": "Madrid",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "dc7c449e-f06a-41b4-bc43-074527bc6d7e",
+              "maxElectricPowerW": 150000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*MOE*EHYC22BZ0341A*01",
+          "locationId": "d628ce26-0d28-4235-a6f9-d23b96f43e23",
+          "locationName": "CEPSA-ES176420-PAU VALLECAS",
+          "matchedAlias": "Moeve",
+          "partyId": "MOE",
+          "rawCpoName": "MOEVE COMMERCIAL, SAU"
+        }
+      ],
+      "canonical": "Moeve",
+      "connectors": 252,
+      "embeddedStatuses": {},
+      "evses": 252,
+      "locations": 120,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 120,
+          "value": "MOE"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 120,
+          "value": "MOEVE COMMERCIAL, SAU"
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "8e288e7f-4a35-44ba-82cc-fa118f628cef",
+              "maxElectricPowerW": 22080,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*ALF0030*2",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        },
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "de0785d5-41fc-4072-b51a-8fd58833cac8",
+              "maxElectricPowerW": 22080,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*ALF0026*2",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        },
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "SOCKET",
+              "id": "f9847baf-1af8-4e77-95c2-38c7203affc1",
+              "maxElectricPowerW": 22080,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*ALF0030*1",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        },
+        {
+          "canonicalOperator": "Powerdot",
+          "city": "Chiclana de la Frontera",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "fd3889f8-3a2d-47a2-a7ab-4d1bb46e8818",
+              "maxElectricPowerW": 100000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*PWH*EPLA*CAD*KEM0028*2",
+          "locationId": "4a69ab9f-86a8-4fb6-9cd9-ce1b50ce1c2a",
+          "locationName": "Centro Comercial Puerta de Chiclana",
+          "matchedAlias": "PUNTO RECARGAS",
+          "partyId": "PWH",
+          "rawCpoName": "Punto Recargas SL"
+        }
+      ],
+      "canonical": "Powerdot",
+      "connectors": 1191,
+      "embeddedStatuses": {},
+      "evses": 1181,
+      "locations": 137,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 137,
+          "value": "PWH"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 137,
+          "value": "Punto Recargas SL"
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Eranovum",
+          "city": "Daimiel",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "a2783502-a149-4eea-bd0c-aa0c9b342f4e",
+              "maxElectricPowerW": 60000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ERA*E251891*1",
+          "locationId": "0b1dfb07-166e-4306-99cc-c09dce25c7a3",
+          "locationName": "Supermercado Consum Daimiel",
+          "matchedAlias": "ERANOVUM E-MOBILITY",
+          "partyId": "ERA",
+          "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+        },
+        {
+          "canonicalOperator": "Eranovum",
+          "city": "Daimiel",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "4b5e6a37-c876-458a-97e3-831ecb7496c2",
+              "maxElectricPowerW": 60000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ERA*E251892*2",
+          "locationId": "0b1dfb07-166e-4306-99cc-c09dce25c7a3",
+          "locationName": "Supermercado Consum Daimiel",
+          "matchedAlias": "ERANOVUM E-MOBILITY",
+          "partyId": "ERA",
+          "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+        },
+        {
+          "canonicalOperator": "Eranovum",
+          "city": "Daimiel",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "7e3435f7-abf8-4622-abc0-ddae467c554b",
+              "maxElectricPowerW": 22000,
+              "powerType": "AC_3_PHASE",
+              "standard": "IEC_62196_T2"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ERA*E251881*1",
+          "locationId": "0b1dfb07-166e-4306-99cc-c09dce25c7a3",
+          "locationName": "Supermercado Consum Daimiel",
+          "matchedAlias": "ERANOVUM E-MOBILITY",
+          "partyId": "ERA",
+          "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+        },
+        {
+          "canonicalOperator": "Eranovum",
+          "city": "Jávea",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "7d26bb60-c688-4438-941d-c658caddf020",
+              "maxElectricPowerW": 60000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ERA*E250101*1",
+          "locationId": "9b248b9f-e424-48a1-836f-6a38dd0c3b1e",
+          "locationName": "Club Náutico de Jávea",
+          "matchedAlias": "ERANOVUM E-MOBILITY",
+          "partyId": "ERA",
+          "rawCpoName": "ERANOVUM E-MOBILITY, S.L."
+        }
+      ],
+      "canonical": "Eranovum",
+      "connectors": 1156,
+      "embeddedStatuses": {},
+      "evses": 1156,
+      "locations": 334,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 334,
+          "value": "ERA"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 334,
+          "value": "ERANOVUM E-MOBILITY, S.L."
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Electra",
+          "city": "San Sebastián de los Reyes",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "0b947b7d-4d6d-4375-b4d2-0f6e69af49a8",
+              "maxElectricPowerW": 200000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ELC*EUG42",
+          "locationId": "f2417893-0bea-4841-bda0-e6328e5f31d3",
+          "locationName": "Electra San Sebastián de los Reyes - Centro Comercial Plaza Norte 2",
+          "matchedAlias": "Electra",
+          "partyId": "ELC",
+          "rawCpoName": "CHARG-ELECTRA SPAIN SL"
+        },
+        {
+          "canonicalOperator": "Electra",
+          "city": "San Sebastián de los Reyes",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "299abade-b289-4d16-97a8-2195a729c870",
+              "maxElectricPowerW": 200000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ELC*ENQD6",
+          "locationId": "f2417893-0bea-4841-bda0-e6328e5f31d3",
+          "locationName": "Electra San Sebastián de los Reyes - Centro Comercial Plaza Norte 2",
+          "matchedAlias": "Electra",
+          "partyId": "ELC",
+          "rawCpoName": "CHARG-ELECTRA SPAIN SL"
+        },
+        {
+          "canonicalOperator": "Electra",
+          "city": "San Sebastián de los Reyes",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "364d62db-b457-4357-8706-c82b5800585e",
+              "maxElectricPowerW": 200000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ELC*EZ36E",
+          "locationId": "f2417893-0bea-4841-bda0-e6328e5f31d3",
+          "locationName": "Electra San Sebastián de los Reyes - Centro Comercial Plaza Norte 2",
+          "matchedAlias": "Electra",
+          "partyId": "ELC",
+          "rawCpoName": "CHARG-ELECTRA SPAIN SL"
+        },
+        {
+          "canonicalOperator": "Electra",
+          "city": "San Sebastián de los Reyes",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "cb1305d0-bf8b-44fe-976e-bc975790ada5",
+              "maxElectricPowerW": 200000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ELC*EKC2P",
+          "locationId": "f2417893-0bea-4841-bda0-e6328e5f31d3",
+          "locationName": "Electra San Sebastián de los Reyes - Centro Comercial Plaza Norte 2",
+          "matchedAlias": "Electra",
+          "partyId": "ELC",
+          "rawCpoName": "CHARG-ELECTRA SPAIN SL"
+        }
+      ],
+      "canonical": "Electra",
+      "connectors": 105,
+      "embeddedStatuses": {},
+      "evses": 105,
+      "locations": 14,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 14,
+          "value": "ELC"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 14,
+          "value": "CHARG-ELECTRA SPAIN SL"
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "Atlante",
+          "city": "Ortuella",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "0bf88faf-69b2-40e8-8f7c-c04843fad810",
+              "maxElectricPowerW": 60000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ATE*E00059*1",
+          "locationId": "cffa1b03-c972-4cf7-bc53-2408fbdd3632",
+          "locationName": "Atlante - Ortuella Mendialde Etxetaldea",
+          "matchedAlias": "ATLANTE IBERIA",
+          "partyId": "ATE",
+          "rawCpoName": "Atlante Iberia S.L."
+        },
+        {
+          "canonicalOperator": "Atlante",
+          "city": "Ortuella",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "26b00959-b4fa-4d6c-8ef5-de53fd5a4d93",
+              "maxElectricPowerW": 60000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ATE*E00059*2",
+          "locationId": "cffa1b03-c972-4cf7-bc53-2408fbdd3632",
+          "locationName": "Atlante - Ortuella Mendialde Etxetaldea",
+          "matchedAlias": "ATLANTE IBERIA",
+          "partyId": "ATE",
+          "rawCpoName": "Atlante Iberia S.L."
+        },
+        {
+          "canonicalOperator": "Atlante",
+          "city": "Caleta de Vélez",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "479394b4-83e7-4f64-a466-135c894a82ce",
+              "maxElectricPowerW": 150000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ATE*E20161*1",
+          "locationId": "8be063c4-c56f-477f-9992-80f08a34702b",
+          "locationName": "Atlante – Aldi Caleta de Velez",
+          "matchedAlias": "ATLANTE IBERIA",
+          "partyId": "ATE",
+          "rawCpoName": "Atlante Iberia S.L."
+        },
+        {
+          "canonicalOperator": "Atlante",
+          "city": "Caleta de Vélez",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "9739e5ab-cbf4-45de-b062-c326ecc7b9a3",
+              "maxElectricPowerW": 150000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*ATE*E20161*2",
+          "locationId": "8be063c4-c56f-477f-9992-80f08a34702b",
+          "locationName": "Atlante – Aldi Caleta de Velez",
+          "matchedAlias": "ATLANTE IBERIA",
+          "partyId": "ATE",
+          "rawCpoName": "Atlante Iberia S.L."
+        }
+      ],
+      "canonical": "Atlante",
+      "connectors": 377,
+      "embeddedStatuses": {},
+      "evses": 377,
+      "locations": 104,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 104,
+          "value": "ATE"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 104,
+          "value": "Atlante Iberia S.L."
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "canonicalOperator": "IONITY",
+          "city": "Torrent",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "3ed8908b-d29e-4fbb-9248-90e71b942077",
+              "maxElectricPowerW": 350000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IOY*E462501",
+          "locationId": "bc80fa5c-08bf-4e72-93e7-a28574279b33",
+          "locationName": "IONITY GmbH IONITY Torrent",
+          "matchedAlias": "IONITY GMBH",
+          "partyId": "IOY",
+          "rawCpoName": "IONITY GmbH Sucursal en España"
+        },
+        {
+          "canonicalOperator": "IONITY",
+          "city": "Torrent",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "e42a98aa-f1ac-4ed0-8433-f372010c7d09",
+              "maxElectricPowerW": 400000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IOY*E462571",
+          "locationId": "bc80fa5c-08bf-4e72-93e7-a28574279b33",
+          "locationName": "IONITY GmbH IONITY Torrent",
+          "matchedAlias": "IONITY GMBH",
+          "partyId": "IOY",
+          "rawCpoName": "IONITY GmbH Sucursal en España"
+        },
+        {
+          "canonicalOperator": "IONITY",
+          "city": "Torrent",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "95e7c10a-40b9-4a3b-a624-3078674ba9bb",
+              "maxElectricPowerW": 350000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IOY*E462502",
+          "locationId": "bc80fa5c-08bf-4e72-93e7-a28574279b33",
+          "locationName": "IONITY GmbH IONITY Torrent",
+          "matchedAlias": "IONITY GMBH",
+          "partyId": "IOY",
+          "rawCpoName": "IONITY GmbH Sucursal en España"
+        },
+        {
+          "canonicalOperator": "IONITY",
+          "city": "Torrent",
+          "connectors": [
+            {
+              "format": "CABLE",
+              "id": "c71b5e6a-871b-4503-9600-03a282308def",
+              "maxElectricPowerW": 350000,
+              "powerType": "DC",
+              "standard": "IEC_62196_T2_COMBO"
+            }
+          ],
+          "embeddedStatus": null,
+          "evseId": "ES*IOY*E462503",
+          "locationId": "bc80fa5c-08bf-4e72-93e7-a28574279b33",
+          "locationName": "IONITY GmbH IONITY Torrent",
+          "matchedAlias": "IONITY GMBH",
+          "partyId": "IOY",
+          "rawCpoName": "IONITY GmbH Sucursal en España"
+        }
+      ],
+      "canonical": "IONITY",
+      "connectors": 172,
+      "embeddedStatuses": {},
+      "evses": 172,
+      "locations": 43,
+      "matched": true,
+      "partyIds": [
+        {
+          "count": 43,
+          "value": "IOY"
+        }
+      ],
+      "rawCpoNames": [
+        {
+          "count": 43,
+          "value": "IONITY GmbH Sucursal en España"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "snapshot": {
+    "connectors": 46894,
+    "connectorsWithId": 46894,
+    "embeddedStatusCoveragePct": 0.0,
+    "embeddedStatusValues": {},
+    "evses": 42180,
+    "evsesWithEmbeddedStatus": 0,
+    "locations": 13648
+  },
+  "source": "REVE",
+  "unmatchedRawCpoNamesTop20": [
+    {
+      "locations": 759,
+      "value": "Etecnic Movilidad Electrica, SRL"
+    },
+    {
+      "locations": 543,
+      "value": "ELECTROMAPS SL"
+    },
+    {
+      "locations": 511,
+      "value": "CHARGING TOGETHER SL"
+    },
+    {
+      "locations": 456,
+      "value": "EDP CLIENTES SAU"
+    },
+    {
+      "locations": 421,
+      "value": "ACCIONA Recarga"
+    },
+    {
+      "locations": 400,
+      "value": "Galp Energía España, S.A.U."
+    },
+    {
+      "locations": 258,
+      "value": "Totalenergies Marketing España, S.A.U."
+    },
+    {
+      "locations": 223,
+      "value": "FENIE ENERGIA, SA"
+    },
+    {
+      "locations": 194,
+      "value": "PLENOIL, S.L."
+    },
+    {
+      "locations": 120,
+      "value": "REMO SUSTAINABLE MOBILITY S.L"
+    },
+    {
+      "locations": 117,
+      "value": "QWELLO España SL"
+    },
+    {
+      "locations": 110,
+      "value": "EMAYA, S.A."
+    },
+    {
+      "locations": 109,
+      "value": "MAKSU ESPAÑA SL"
+    },
+    {
+      "locations": 103,
+      "value": "Tesla Spain SLU"
+    },
+    {
+      "locations": 81,
+      "value": "ZERO CARBON EMOBILITY, S.L."
+    },
+    {
+      "locations": 61,
+      "value": "BONPREU, S.A.U."
+    },
+    {
+      "locations": 59,
+      "value": "P‑APP & WEB SERVICIOS DIGITALES S.L.U."
+    },
+    {
+      "locations": 57,
+      "value": "Prio Recharge Sl."
+    },
+    {
+      "locations": 56,
+      "value": "Consejo Insular de la Energía de Gran Canaria"
+    },
+    {
+      "locations": 54,
+      "value": "CENTROS COMERCIALES CARREFOUR SA"
+    }
+  ]
+}

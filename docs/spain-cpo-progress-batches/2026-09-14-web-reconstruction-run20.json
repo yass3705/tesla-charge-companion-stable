@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 125,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 189
+  },
+  "decisions": [
+    {
+      "canonicalName": "Empresa Municipal de Transportes de Madrid, S.A.",
+      "labels": ["EMPRESA MUNICIPAL DE TRANSPORTES DE MADRID, S.A."],
+      "status": "sourceValidated",
+      "model": "Electro-EMT / station-type dependent public tariff",
+      "evidence": ["https://www.emtmadrid.es/emting/eulaelectroemt.aspx", "https://www.emtmadrid.es/recargaEleectrica/Tarifas"],
+      "coverageKnown": "Current official EMT terms publish the applicable Electro-EMT charging tariffs by site/type and state VAT is included.",
+      "tariff": {
+        "currency": "EUR",
+        "sourceAuthority": "officialCpo",
+        "variants": [
+          {"scope": "Colon public-access rapid chargers", "energyEurPerKwh": 0.40},
+          {"scope": "rapid chargers in EMT-managed car parks", "energyEurPerKwh": 0.35},
+          {"scope": "slow chargers in Pitis/Fuente de la Mora/Aviacion Espanola/Metropolitano rotation-park-and-ride car parks", "energyEurPerKwh": 0.35},
+          {"scope": "slow chargers in EMT rotation/mixed car parks", "energyEurPerKwh": 0.00}
+        ],
+        "reservationFeeEur": 2.00,
+        "postChargeRemovalGraceMinutes": 10,
+        "postChargeOverstayFeeEur": 2.00,
+        "vatIncluded": true
+      },
+      "blockingReason": null,
+      "resumeCondition": "Map REVE station/connectors deterministically to the applicable official EMT tariff variant during runtime-catalog integration.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "Fira CCIB",
+      "labels": ["Fira CCIB"],
+      "status": "setAside",
+      "model": "site-level / operator identity observed in REVE public web",
+      "evidence": ["https://ccib.es/es/contacto/", "https://ccib.es/es/como-llegar/"],
+      "coverageKnown": "REVE public-web probe exposes the Fira CCIB operator label. Current official CCIB pages confirm the entity/site and state that CCIB has no own public parking, instead directing visitors to surrounding public car parks.",
+      "blockingReason": "No current official numeric EV-charging tariff directly attributable to the Fira CCIB REVE label was located; nearby parking/charging tariffs are not attributed to this label without deterministic mapping.",
+      "resumeCondition": "Deterministic REVE station/connector tariff, official CCIB charging tariff, or direct operator mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {
+    "firstPassTraversed": 2,
+    "sourceValidated": 1,
+    "partial": 0,
+    "setAside": 1,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "difficultCaseReauditPerformed": false,
+    "legacyDenominatorChanged": false
+  },
+  "generatedAt": "2026-09-14T15:43:00Z"
+}

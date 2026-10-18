@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "queue": "docs/spain-reve-173-cpo-workqueue.json",
+  "baseProcessed": 15,
+  "decisions": [
+    {
+      "label": "Ajuntament dels Pallaresos",
+      "queueStatus": "partial",
+      "source": {"type":"official_regulatory_index","url":"https://cido.diba.cat/normativa_local/17993838/reglament-de-funcionament-del-servei-de-recarrega-de-vehicles-electrics-i-vehicles-hibrids-endollables-ajuntament-dels-pallaresos"},
+      "evidence": "CIDO confirms the municipal EV charging regulation is in force, definitively approved 2024-10-08. A current station listing reports EVcharge and free charging, but no official current tariff amount was deterministically exposed during this pass.",
+      "resumeCondition": "Extract the definitive regulation/price text or current EVcharge tariff object before sourceValidated."
+    },
+    {
+      "label": "Ajuntament Lliçà de Vall",
+      "queueStatus": "sourceValidated",
+      "tariff": {"model":"energy","price":0.35,"unit":"EUR/kWh","effectiveFrom":"2024-01-02"},
+      "source": {"type":"official_municipal_tariff_page","url":"https://www.llissadevall.cat/actualitat/noticies/el-punt-de-recarrega-de-vehicles-electrics-passara-a-ser-de-pagament-a-partir-del-2-de-gener.html","provider":"Ajuntament de Lliçà de Vall / EVcharge"},
+      "evidence": "Official municipality states its municipally owned charging service became paid on 2024-01-02 at 0.35 EUR/kWh; current municipal service page updated 2025-11-14 confirms two municipal points and EVcharge access."
+    },
+    {
+      "label": "Ajuntament Manlleu",
+      "queueStatus": "partial",
+      "source": {"type":"official_municipal_infrastructure_page","url":"https://www.manlleu.cat/urbanisme/pla-de-millora-dels-poligons-de-manlleu/pln1/comenca-la-segona-fase-de-les-obres-als-poligons","provider":"Ajuntament de Manlleu / EVcharge"},
+      "evidence": "Municipal sources establish public municipal charging infrastructure; ETECNIC documents EVcharge management, but no deterministic current direct/ad-hoc tariff was found in this reasonable first pass.",
+      "resumeCondition": "Resolve current EVcharge tariff object or municipal price ordinance."
+    },
+    {
+      "label": "Ajuntament Sant Julià de Llor i Bonmatí",
+      "queueStatus": "partial",
+      "source": {"type":"official_regulatory_index","url":"https://cido.diba.cat/","provider":"Ajuntament de Sant Julià del Llor i Bonmatí"},
+      "evidence": "A municipal public EV charging network regulation entered the official publication process in 2025 and is listed as current in public administrative indexes. A station listing historically reports free charging, but no current official tariff amount was deterministically exposed during this pass.",
+      "resumeCondition": "Extract current regulation/price schedule or current backend tariff before sourceValidated."
+    },
+    {
+      "label": "Ajuntament Selva del Camp",
+      "queueStatus": "partial",
+      "tariff": {"model":"energy","price":0.25,"unit":"EUR/kWh","scope":"Raval de Sant Rafael municipal semi-fast station candidate"},
+      "source": {"type":"third_party_station_page","url":"https://www.electromaps.com/fr/stations-de-recharge/espagne/tarragona/la-selva-del-camp/la-selva-del-camp-semi-rapid-raval-de-sant-rafael","provider":"EVcharge / ETECNIC"},
+      "evidence": "Current-ish station listing (updated 2025-08-31) reports 0.25 EUR/kWh for the municipal-looking Raval de Sant Rafael EVcharge station; official current municipal tariff text was not found, so this is not sourceValidated.",
+      "resumeCondition": "Confirm municipal ownership and current price from official ordinance or EVcharge tariff object."
+    },
+    {
+      "label": "Alcover",
+      "queueStatus": "sourceValidated",
+      "tariff": {"model":"power_class_energy","unit":"EUR/kWh","classes":[{"class":"fast","price":0.35},{"class":"semi-fast","price":0.26}]},
+      "source": {"type":"official_municipal_tariff_page","url":"https://www.alcover.cat/mobilitat/","provider":"Ajuntament d'Alcover / EVCharge"},
+      "evidence": "Current official municipal mobility page publishes 0.35 EUR/kWh for fast charging and 0.26 EUR/kWh for semi-fast charging, including the Portal semi-fast station, with payment through EVCharge. This supersedes the municipality's older 2020 0.25 EUR/kWh launch price."
+    }
+  ],
+  "resultingProcessed": 21,
+  "resultingRemaining": 152,
+  "coherence": {"decisionCount":6,"duplicateLabels":0,"inventedIdentities":0,"historicalOrPlatformReintroduced":0,"status":"PASS_PENDING_CANONICAL_MERGE"}
+}

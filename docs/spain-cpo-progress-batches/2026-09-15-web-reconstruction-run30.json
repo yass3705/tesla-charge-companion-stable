@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 30,
+  "source": "persisted REVE public-web full national sweep + official/public first-pass research",
+  "historicalWorkLabelCount": 618,
+  "historicalMembershipClaimedForCurrentWebLabels": false,
+  "firstPassBefore": 495,
+  "firstPassAfter": 500,
+  "maximumNeverTraversed": 118,
+  "labelsTraversed": [
+    "AJUNTAMENT DE BUNYOLA",
+    "Ajuntament de Cabrera de Mar",
+    "Ajuntament de Calaf",
+    "Ajuntament de Calafell",
+    "AJUNTAMENT DE CALVIÀ"
+  ],
+  "decisions": [
+    {
+      "label": "AJUNTAMENT DE BUNYOLA",
+      "status": "setAside",
+      "reason": "Current public-web identity is nominative, but no sufficiently current official numeric charging tariff was located in this first pass. Do not infer MELIB-wide pricing.",
+      "resumeCondition": "Current municipal/MELIB station-specific official tariff evidence."
+    },
+    {
+      "label": "Ajuntament de Cabrera de Mar",
+      "status": "partial",
+      "evidence": ["https://cido.diba.cat/normativa_local/16287337/reglament-dus-del-preu-public-del-servei-del-punt-de-recarrega-de-vehicles-electrics-ajuntament-de-cabrera-de-mar"],
+      "reason": "A vigente municipal regulation for the public price/service exists, but the first-pass source did not expose a current numeric tariff suitable for TCC.",
+      "resumeCondition": "Extract current numeric amount from the vigente regulation/official payment surface."
+    },
+    {
+      "label": "Ajuntament de Calaf",
+      "status": "partial",
+      "evidence": ["https://www.calaf.cat/actualitat/noticies/el-punt-de-recarrega-de-vehicles-electrics-passa-a-ser-de-pagament.html"],
+      "reason": "Official municipal source establishes paid charging and a historical 0.59 EUR/kWh price from 21 January 2022, explicitly subject to periodic review. That old value is not extrapolated to September 2026.",
+      "resumeCondition": "Current 2026 municipal ordinance/app/QR numeric tariff."
+    },
+    {
+      "label": "Ajuntament de Calafell",
+      "status": "setAside",
+      "reason": "Current municipal site confirms regulated parking context but no current public numeric EV charging tariff was located in first pass; parking tariff is not treated as charging tariff.",
+      "resumeCondition": "Official charging-specific tariff/app/QR evidence."
+    },
+    {
+      "label": "AJUNTAMENT DE CALVIÀ",
+      "status": "sourceValidated",
+      "evidence": ["https://www.calvia.com/es/calvia-al-dia/noticias/el-ayuntamiento-de-calvia-iniciara-el-cobro-del-servicio-de-recarga-de-vehiculos-electricos-a-partir-del-2-de-febrero-de-2026-3"],
+      "tariff": "0.25 EUR/kWh from 2026-02-02; 3 EUR per hour or fraction after 4 free parking hours",
+      "reason": "Official municipal 2026 publication gives the current charging price and MELIB payment route.",
+      "resumeCondition": "Revalidate only if Calvia publishes a later tariff change."
+    }
+  ],
+  "countDelta": {"sourceValidated": 1, "partial": 2, "active": 0, "setAside": 2, "platformExcluded": 0, "supersededAlias": 0, "total": 5},
+  "countsAfter": {"sourceValidated": 62, "partial": 54, "active": 100, "setAside": 213, "platformExcluded": 3, "supersededAlias": 68, "total": 500},
+  "reveWeb": {"mode": "FULL_CONTROLLED_SWEEP", "maxPages": 600, "perPage": 25, "matchedStations": 11212, "uniqueReveLocationIds": 10493, "uniqueOperatorLabels": 445, "newReconstructedLabelsFirstPassedCount": 127},
+  "coherence": {"result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY", "syntheticHistoricalMembershipCreated": false, "countsSumMatchesFirstPass": true}
+}

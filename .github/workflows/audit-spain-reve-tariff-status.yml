@@ -1,0 +1,96 @@
+name: Audit Spain REVE tariff/status candidates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["spain-reve-preintegration"]
+    paths:
+      - ".github/workflows/audit-spain-reve-tariff-status.yml"
+      - "scripts/reve_es_tariff_status_audit.py"
+      - "scripts/reve_es_live_probe_audit.py"
+      - "scripts/reve_es_stream_collect.py"
+      - "scripts/reve_es_stream_audit.py"
+      - "data/spain_reve/reve_locations_raw.json.gz"
+      - "data/spain_reve/operator_aliases_es.json"
+      - "data/spain_reve/live_tariff_status_probe.json"
+      - "data/spain_reve/reve_connector_tariffs_raw.json.gz"
+      - "data/spain_reve/reve_operational_status_raw.json.gz"
+      - "data/spain_reve/tariff_status_stream_state.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: audit-spain-reve-tariff-status
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: spain-reve-preintegration
+
+      - name: Build offline candidates
+        run: python scripts/reve_es_tariff_status_audit.py
+
+      - name: Analyze live probe offline
+        run: python scripts/reve_es_live_probe_audit.py
+
+      - name: Seed persistent streams from paid page-1 probe
+        run: python scripts/reve_es_stream_collect.py --seed-probe
+
+      - name: Analyze persistent streams offline
+        run: python scripts/reve_es_stream_audit.py
+
+      - name: Commit audit and stream state
+        shell: bash
+        run: |
+          git add \
+            data/spain_reve/tariff_status_candidates.json \
+            data/spain_reve/live_tariff_status_analysis.json \
+            data/spain_reve/tariff_status_stream_analysis.json \
+            data/spain_reve/tariff_status_stream_state.json \
+            data/spain_reve/tariff_status_stream_last_run.json \
+            data/spain_reve/reve_connector_tariffs_raw.json.gz \
+            data/spain_reve/reve_operational_status_raw.json.gz
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "audit(es): record REVE tariff/status stream analysis"
+          git pull --rebase origin spain-reve-preintegration
+          git push
+
+      - name: Enforce offline gates
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('data/spain_reve/tariff_status_candidates.json').read_text())
+          if not r.get('allRequiredOperatorsMatched'):
+              missing=[x['canonical'] for x in r.get('requiredOperators',[]) if not x.get('matched')]
+              raise SystemExit('Required CPO candidates missing: '+', '.join(missing))
+          a=json.loads(Path('data/spain_reve/live_tariff_status_analysis.json').read_text())
+          gates=a.get('gates',{})
+          required=[
+              'probeTransportValidated','tariffSchemaValidated','statusSchemaValidated',
+              'operationalStatusBooleanPreserved','threeRepresentativeStatusChecksValidated',
+              'evseObjectVsIdentifierCountReconciled'
+          ]
+          failed=[g for g in required if not gates.get(g)]
+          if failed:
+              raise SystemExit('Live probe analysis gates failed: '+', '.join(failed))
+          s=json.loads(Path('data/spain_reve/tariff_status_stream_state.json').read_text())
+          if s.get('nextTariffPage',0) < 2 or s.get('nextStatusPage',0) < 2:
+              raise SystemExit('Stream seed did not preserve paid page 1')
+          sa=json.loads(Path('data/spain_reve/tariff_status_stream_analysis.json').read_text())
+          sg=sa.get('gates',{})
+          required_stream=['stateCountsMatchStores','tariffSchemaObserved','statusSchemaObserved','operationalStatusBooleanPreserved']
+          failed_stream=[g for g in required_stream if not sg.get(g)]
+          if failed_stream:
+              raise SystemExit('Persistent stream audit gates failed: '+', '.join(failed_stream))
+          PY

@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-08-run34",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "note": "Continued directly after Naturgy Nuevas Energías with the next never-traversed current-REVE identities. No previously set-aside identity was re-audited."
+  },
+  "newNominativeDecisions": [
+    {
+      "canonicalName": "OESTE SOLUCIONES ENERGETICAS",
+      "labels": ["OESTE SOLUCIONES ENERGETICAS"],
+      "status": "active",
+      "source": ["https://apps.apple.com/es/app/oeste-movilidad/id1592127358"],
+      "model": "app/station-level direct tariff",
+      "coverageKnown": "Official OESTE Movilidad app provides EV charging and explicitly exposes a Conditions and other costs section with detailed charging prices.",
+      "blockingReason": "No uniform public numeric network tariff surfaced; station/app enumeration would slow first-pass coverage.",
+      "resumeCondition": "After first-pass completion, enumerate OESTE app/station prices or map deterministic REVE connector tariffs.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "PARKING MOGAN",
+      "labels": ["PARKING MOGAN"],
+      "status": "active",
+      "source": ["https://ecocargaislas.com/"],
+      "model": "single-site public charging; per-kWh pricing",
+      "coverageKnown": "Eco Carga Islas officially lists Parking Mogán with ten 7.4 kW destination chargers and confirms its public charging model is billed per kWh. A third-party numeric price exists but is not promoted as first-party authority.",
+      "blockingReason": "No numeric first-party tariff was exposed in the public source during first pass.",
+      "resumeCondition": "Official Eco Carga/app/QR numeric tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "PAVAPARK MOVILIDAD, S.L.",
+      "labels": ["PAVAPARK MOVILIDAD, S.L."],
+      "status": "active",
+      "source": ["https://www.pavapark.com/moviltik/", "https://www.pavapark.com/noticias/", "https://oracullera.com/nota-de-prensa"],
+      "model": "managed charging network; municipality/site-level prices via Moviltik",
+      "coverageKnown": "Pavapark officially confirms Moviltik manages and charges for EV charging sessions and publishes multiple site deployments. A municipality-specific source for Cullera publishes a charging rate, demonstrating station/contract-level pricing rather than a safe national tariff.",
+      "blockingReason": "No current network-wide direct tariff can be safely extrapolated across Pavapark sites; exhaustive site enumeration is deferred by anti-stagnation policy.",
+      "resumeCondition": "After first-pass completion, enumerate Moviltik/Pavapark site tariffs and reconcile municipal contract-specific rates with REVE EVSEs.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "PETREM DISTRIBUCIO",
+      "labels": ["PETREM DISTRIBUCIO"],
+      "status": "setAside",
+      "source": ["https://www.petrem.com/es/estaciones-de-servicio/"],
+      "model": "fuel-station/site-level charging",
+      "coverageKnown": "Petrem officially publishes its service-station network; public third-party evidence indicates EV charging exists at at least one Petrem location, but the official public pages reviewed do not expose a numeric EV charging tariff.",
+      "blockingReason": "No deterministic first-party numeric charging tariff located within the first-pass budget.",
+      "resumeCondition": "New official station/QR/app EV tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "PETRO PALOL",
+      "labels": ["PETRO PALOL"],
+      "status": "setAside",
+      "source": [],
+      "model": "site-level/unknown direct charging tariff",
+      "coverageKnown": "Current REVE-derived work-queue identity retained; no sufficiently authoritative public tariff evidence surfaced during the first-pass search.",
+      "blockingReason": "No deterministic official/public direct numeric EV charging tariff found without a deeper station-level investigation.",
+      "resumeCondition": "New official station/QR/app evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    }
+  ],
+  "deltaCounts": {
+    "sourceValidated": 0,
+    "partial": 0,
+    "active": 3,
+    "setAside": 2,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 5
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 316,
+    "maximumNeverTraversed": 302,
+    "firstPassComplete": false
+  },
+  "reveTariffStatus": {
+    "batchConfirmedCompleted": true,
+    "generatedAt": "2026-09-08T21:43:27.486815Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "http429Count": 0,
+    "locationsRequests": 0,
+    "tariffPagesCollectedThisBatch": [47, 48, 49],
+    "statusPagesCollectedThisBatch": [32, 33],
+    "tariffNewRows": 300,
+    "tariffUpdatedRows": 0,
+    "statusNewRows": 200,
+    "statusUpdatedRows": 0,
+    "nextTariffPage": 50,
+    "tariffPagesCollected": 49,
+    "tariffRowsStored": 4887,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 34,
+    "statusPagesCollected": 33,
+    "statusRowsStored": 3074,
+    "statusTotalPages": 447
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "mandatoryCadenceCheckPerformed": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "countsDeriveExactly": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "investigationCurrent": "Continue first-pass queue immediately after PETRO PALOL. Do not reopen active/setAside cases before all 618 derived labels have received a first-pass decision.",
+  "updatedAt": "2026-09-08T21:46:00Z"
+}

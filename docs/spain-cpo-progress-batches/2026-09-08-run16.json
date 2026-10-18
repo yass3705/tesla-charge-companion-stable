@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T03:40:39Z",
+  "firstPass": {
+    "previousMinimumTraversed": 166,
+    "newNominativeDecisions": 10,
+    "minimumTraversed": 176,
+    "maximumNeverTraversed": 442,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; explicit repository aliases are resolved without re-auditing canonical CPO tariffs"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 16,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 24,
+    "total": 176
+  },
+  "decisions": [
+    {"canonicalName":"Iberdrola | bp pulse","label":"IBERDROLA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical CPO identity; canonical station/connector tariff handling unchanged","coverageKnown":"Repository alias candidate; current REVE identity is IBERDROLA CLIENTES S.A.U (party IBD). No tariff value copied from alias text.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Iberdrola | bp pulse","label":"IBERDROLA CLIENTES","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical CPO identity; canonical station/connector tariff handling unchanged","coverageKnown":"Repository alias candidate aligned to current REVE IBERDROLA CLIENTES S.A.U identity; no national tariff inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Iberdrola | bp pulse","label":"IBERDROLA BP PULSE","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"alias -> canonical CPO identity; canonical station/connector tariff handling unchanged","coverageKnown":"Explicit repository alias candidate; no tariff re-audit or value inheritance performed.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Iberdrola | bp pulse","label":"IBERDROLA | BP PULSE","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"alias -> canonical CPO identity; canonical station/connector tariff handling unchanged","coverageKnown":"Explicit repository alias candidate; no tariff re-audit or value inheritance performed.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Endesa X Way","label":"ENDESA","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical CPO identity; direct CPO pricing remains separate from eMSP roaming","coverageKnown":"Repository alias candidate; current REVE identity is ENDESA X WAY, S.L. (party ESX). No tariff value copied.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Endesa X Way","label":"ENDESA X","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical CPO identity; direct CPO pricing remains separate from eMSP roaming","coverageKnown":"Repository alias candidate aligned to current REVE ENDESA X WAY, S.L.; no network price inferred.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Endesa X Way","label":"ENDESA X WAY","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical CPO identity; direct CPO pricing remains separate from eMSP roaming","coverageKnown":"Repository alias candidate matching current REVE ENDESA X WAY, S.L.; suffix normalization only.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Endesa X Way","label":"ENDESA ON YOUR WAY","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json"],"model":"legacy alias -> canonical Endesa X Way identity; direct CPO pricing remains separate from eMSP roaming","coverageKnown":"Explicit repository legacy alias candidate; no tariff value copied or extrapolated.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Zunder","label":"ZUNDER","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"alias -> canonical CPO identity; canonical tariff model unchanged","coverageKnown":"Repository alias candidate; current REVE identity is (ZUNDER) Grupo Easychargar SA (party ZUN). No tariff value copied.","blockingReason":null,"resumeCondition":"Reopen only on contradictory REVE identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"},
+    {"canonicalName":"Zunder","label":"EASYCHARGER","status":"supersededAlias","sourceEvidence":["data/spain_reve/operator_aliases_es.json","data/spain_reve/coverage.json"],"model":"legacy alias -> canonical Zunder identity; canonical tariff model unchanged","coverageKnown":"Repository alias candidate consistent with current REVE '(ZUNDER) Grupo Easychargar SA' naming; no separate tariff invented.","blockingReason":null,"resumeCondition":"Reopen only on contradictory identity evidence.","lastInvestigated":"2026-09-08","lastChanged":"2026-09-08"}
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T02:44:15.530781Z",
+    "batchLaunchedThisRun": false,
+    "reasonNoBatch": "Less than one real hour elapsed since the last successful live REVE batch at run start.",
+    "requestsAttemptedThisRun": 0,
+    "requestsSucceededThisRun": 0,
+    "locationsRequestsThisRun": 0,
+    "http429Count": 0,
+    "nextTariffPage": 23,
+    "tariffPagesCollected": 22,
+    "tariffRowsStored": 2200,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 16,
+    "statusPagesCollected": 15,
+    "statusRowsStored": 1410,
+    "statusTotalPages": 447
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum":176,
+    "firstPassMinimumTraversed":176,
+    "newBatchCountsDeriveExactly":true,
+    "newLabelsUniqueWithinPersistedPostReconstructionLedger":true,
+    "legacyFirst98ListDerivabilityGapStillDocumented":true,
+    "noSetAsideReauditWithoutNewEvidence":true,
+    "noTariffReauditForAliasResolution":true,
+    "noThirdPartyTariffPromoted":true,
+    "directCpoAndEmspPricingSeparated":true
+  }
+}

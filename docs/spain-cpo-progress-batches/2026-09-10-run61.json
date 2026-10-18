@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-10-run61",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "newNeverTraversedLabels": 0,
+    "note": "Repository/tree/history reconstruction was attempted once against the latest branch state. The frozen 618-label source snapshot is still not preserved nominatively; current REVE location identities are already first-pass covered and the mutable ElecTrips mirror has drifted to 633. No synthetic historical identity was created and no setAside/active case was reopened."
+  },
+  "firstPassAfter": {
+    "historicalWorkQueueLabels": 618,
+    "authoritativeCpoDenominator": false,
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "counts": {
+      "sourceValidated": 28,
+      "partial": 8,
+      "active": 87,
+      "setAside": 154,
+      "platformExcluded": 3,
+      "supersededAlias": 66,
+      "total": 346
+    }
+  },
+  "canonicalReconstruction": {
+    "attemptedThisExecution": true,
+    "completed": false,
+    "result": "INCOMPLETE_HISTORICAL_NOMINATIVE_RECOVERY",
+    "evidence": "Recursive latest-branch tree plus progress batches confirm no preserved full nominative 618-label snapshot. data/spain_reve/coverage.json contains the already-covered current location identity set, while the current external ElecTrips mirror is mutable and cannot safely identify which 272 labels belonged to the frozen historical snapshot without fabrication.",
+    "frozenSnapshotLabels": 618,
+    "currentExternalOperatorLabels": 633,
+    "syntheticEntriesCreated": false,
+    "decision": "Preserve 618 and continue only when a genuinely evidenced historical identity can be recovered."
+  },
+  "reveTariffStatus": {
+    "batchLaunchedThisExecution": false,
+    "reason": "The previously queued batch completed and persisted at 2026-09-10T17:41:50.654528Z. Less than one real hour had elapsed at execution time, so no additional live REVE call was permitted.",
+    "previousQueuedBatchNowConfirmed": true,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPagesCollectedThisBatch": [95, 96, 97],
+    "tariffNewRows": 291,
+    "tariffUpdatedRows": 4,
+    "tariffUnchangedOrDeduplicatedRows": 5,
+    "persistentNextTariffPage": 98,
+    "persistentTariffPagesCollected": 97,
+    "persistentTariffRowsStored": 9272,
+    "tariffTotalPages": 461,
+    "statusPagesCollectedThisBatch": [64, 65],
+    "statusNewRows": 198,
+    "statusUpdatedRows": 2,
+    "statusUnchangedOrDeduplicatedRows": 0,
+    "persistentNextStatusPage": 66,
+    "persistentStatusPagesCollected": 65,
+    "persistentStatusRowsStored": 5720,
+    "statusTotalPages": 448,
+    "persistedByCommit": "c1e632ad2326d4401749ffaa315437329af0bd85",
+    "locationsCollectionRestarted": false
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedOpen": true,
+    "pr50ObservedDraft": true,
+    "pr50ObservedMerged": false,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_FROZEN_618_SNAPSHOT",
+    "mandatoryCadenceCheckPerformed": true,
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
+    "countsDeriveExactly": true,
+    "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noSyntheticHistoricalLabels": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "deltaHistoryCompleteThroughRun61": true
+  },
+  "investigationCurrent": "Continue first-pass identity recovery from genuinely preserved historical evidence only; do not infer membership in the frozen 618 from the current 633-label mirror and do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T18:37:00Z"
+}

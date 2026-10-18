@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "generatedAt": "2026-09-14T03:40:00Z",
+  "labelsTraversed": [
+    {
+      "canonicalName": "La Pobla de Segur",
+      "status": "setAside",
+      "evidence": [
+        "https://www.pallarsdigital.cat/etiquetes/punts%2Bde%2Brec_amp_agrave%3Brrega"
+      ],
+      "blockingReason": "Current public evidence confirms vehicle-charging infrastructure in La Pobla de Segur, but no deterministic current numeric direct charging tariff was located in the first pass.",
+      "resumeCondition": "Official municipal/app/QR tariff or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Llagostera",
+      "status": "partial",
+      "evidence": [
+        "https://www.llagostera.cat/noticies/2576/nou-punt-de-recarrega-electrica-a-la-zona-esportiva-de-llagostera"
+      ],
+      "blockingReason": "Municipal source dated 2025-02-26 says the new sports-area charger is free 'de moment'; the temporary wording is not extrapolated as a guaranteed 2026 tariff.",
+      "resumeCondition": "Current municipal/app/QR confirmation of the charging price."
+    },
+    {
+      "canonicalName": "Lleida",
+      "status": "partial",
+      "evidence": [
+        "https://seu.paeria.cat/pressupostPublic/cercadorPublicacio/42161",
+        "https://www.lleida.com/noticia_canal/lleida-regula-lus-de-les-estacions-de-recarrega-de-vehicles-electrics"
+      ],
+      "blockingReason": "The municipality publishes the charging-service public-price ordinance and 2025 reporting states 0.35 EUR/kWh plus 0.20 EUR/min after the time limit, but the exact 2026 operative numeric text was not independently extracted in this pass.",
+      "resumeCondition": "Extract/confirm the operative 2026 municipal price text or map the exact REVE tariff rows."
+    },
+    {
+      "canonicalName": "Lloret de Mar",
+      "status": "partial",
+      "evidence": [
+        "https://www.lloret.cat/ca/seccions/mobilitat/vehicle-electric-2",
+        "https://opendata.lloret.cat/fr/dataset/mobilitat"
+      ],
+      "blockingReason": "Current municipal page and 2026 open-data catalogue confirm the public charging network and EVCharge access, but no current numeric charging tariff is published on the inspected official pages.",
+      "resumeCondition": "Official municipal/app/QR numeric tariff or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Matadepera",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://www.matadepera.cat/actualitat/noticies/tarifes-per-la-carrega-de-vehicles-electrics"
+      ],
+      "tariff": {
+        "residentIvtmEurPerKwhVatIncluded": 0.25,
+        "otherUsersEurPerKwhVatIncluded": 0.35,
+        "access": "EVcharge"
+      },
+      "blockingReason": null,
+      "resumeCondition": "Revalidate only if the municipality publishes a superseding tariff."
+    }
+  ],
+  "delta": {
+    "sourceValidated": 1,
+    "partial": 3,
+    "setAside": 1,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0,
+    "total": 5
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "firstPassPriorityPreserved": true
+  }
+}

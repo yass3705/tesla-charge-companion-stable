@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "currency": "EUR",
+  "updatedAt": "2026-08-28",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "operators": [
+    {
+      "id": "repsol_es",
+      "operator": "Repsol",
+      "direct": {
+        "stationOverridePreferred": true,
+        "referenceRules": [
+          {"category": "normal", "pricePerKwh": 0.36},
+          {"category": "fast", "pricePerKwh": 0.48},
+          {"category": "ultrafast", "pricePerKwh": 0.56}
+        ]
+      },
+      "subscriptions": [
+        {"id": "repsol_mobility_100", "label": "Movilidad 100", "periodDays": 30, "includedKwh": 100, "feeEur": 44.0},
+        {"id": "repsol_mobility_150", "label": "Movilidad 150", "periodDays": 30, "includedKwh": 150, "feeEur": 63.0},
+        {"id": "repsol_mobility_250", "label": "Movilidad 250", "periodDays": 30, "includedKwh": 250, "feeEur": 99.99}
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "wenea_es",
+      "operator": "Wenea",
+      "direct": {
+        "stationOverridePreferred": true,
+        "referenceRules": [
+          {"minKw": 0, "maxKw": 22, "pricePerKwh": 0.39},
+          {"minKw": 50, "maxKw": 150, "pricePerKwh": 0.49},
+          {"minKw": 151, "maxKw": 400, "pricePerKwh": 0.59}
+        ]
+      },
+      "subscriptions": [
+        {
+          "id": "wenea_everyday",
+          "label": "Wenea Everyday",
+          "feeEurPerMonth": 8.99,
+          "feeEurPerYear": 89.9,
+          "discountPercent": 25,
+          "referenceRules": [
+            {"minKw": 0, "maxKw": 22, "pricePerKwh": 0.29},
+            {"minKw": 50, "maxKw": 150, "pricePerKwh": 0.37},
+            {"minKw": 151, "maxKw": 400, "pricePerKwh": 0.44}
+          ]
+        },
+        {
+          "id": "wenea_mystation",
+          "label": "Wenea MyStation",
+          "feeEurPerMonth": 16.99,
+          "feeEurPerYear": 169.9,
+          "assignedStationPricePerKwh": 0.25,
+          "otherNetworkDiscountPercent": 25
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "zunder_es",
+      "operator": "Zunder",
+      "direct": {
+        "stationOverrideRequired": true,
+        "referenceRules": [
+          {"maxKw": 50, "pricePerKwh": 0.42},
+          {"minKwExclusive": 50, "pricePerKwh": 0.59}
+        ]
+      },
+      "subscriptions": [
+        {"id": "zunder_easy", "label": "Easy", "feeEurPerMonth": 1.99, "referencePricePerKwh": 0.51},
+        {"id": "zunder_pro", "label": "Pro", "feeEurPerMonth": 11.99, "referencePricePerKwh": 0.39}
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "moeve_es",
+      "operator": "Moeve",
+      "direct": {"scope": "own ultrafast network", "pricePerKwh": 0.60},
+      "loyalty": {"program": "Moeve gow", "creditPerKwhEur": 0.02},
+      "confidence": "high"
+    },
+    {
+      "id": "eranovum_es",
+      "operator": "Eranovum",
+      "direct": {
+        "referenceRules": [
+          {"maxKw": 22, "pricePerKwh": 0.35},
+          {"powerKw": 30, "pricePerKwh": 0.40},
+          {"powerKw": 60, "pricePerKwh": 0.43},
+          {"powerKw": 120, "pricePerKwh": 0.46},
+          {"minKw": 150, "pricePerKwh": 0.49}
+        ]
+      },
+      "idleRules": [
+        {"scope": "AC<=22_high_occupancy", "graceMinutes": 30, "idlePerMinute": 0.12, "disabledBetween": ["00:00", "08:00"]},
+        {"scope": "AC<=22_low_occupancy", "graceMinutes": 90, "idlePerMinute": 0.12, "disabledBetween": ["00:00", "08:00"]},
+        {"scope": "DC>=30", "graceMinutes": 30, "idlePerMinute": 0.25}
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "atlante_es",
+      "operator": "Atlante",
+      "direct": {"stationOverrideRequired": true, "source": "REVE/myAtlante"},
+      "subscriptions": [
+        {
+          "id": "atlante_go",
+          "label": "Atlante Go",
+          "feeEurPerMonth": 9.99,
+          "ownNetworkPricePerKwh": 0.29,
+          "partnerNetworkPricePerKwh": 0.49,
+          "partnerNetworks": ["Electra", "Fastned", "IONITY"]
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "iberdrola_es",
+      "operator": "Iberdrola / Iberdrola | bp pulse",
+      "direct": {"stationOverrideRequired": true, "source": "REVE/Iberdrola app"},
+      "confidence": "high_for_station_specific_requirement"
+    },
+    {
+      "id": "endesa_es",
+      "operator": "Endesa / Endesa X Way",
+      "direct": {"stationOverrideRequired": true, "source": "REVE/Endesa On Your Way"},
+      "confidence": "high_for_station_specific_requirement"
+    },
+    {
+      "id": "powerdot_es",
+      "operator": "Powerdot",
+      "direct": {"stationOverrideRequired": true, "source": "REVE/operator/eMSP"},
+      "confidence": "high_for_station_specific_requirement"
+    },
+    {
+      "id": "edp_es",
+      "operator": "EDP Charge España",
+      "direct": {"stationOverrideRequired": true, "source": "REVE/EDP Charge España"},
+      "confidence": "medium"
+    },
+    {
+      "id": "tesla_es",
+      "operator": "Tesla",
+      "direct": {"stationOverrideRequired": true, "source": "existing TCC Tesla Spain feed"},
+      "confidence": "high",
+      "note": "Do not replace the existing TCC Tesla Spain source with REVE."
+    }
+  ]
+}

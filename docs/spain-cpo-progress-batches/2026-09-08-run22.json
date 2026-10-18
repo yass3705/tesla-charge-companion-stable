@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T09:39:00Z",
+  "firstPass": {
+    "previousMinimumTraversed": 212,
+    "newNominativeDecisions": 5,
+    "minimumTraversed": 217,
+    "maximumNeverTraversed": 401,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; this run prioritizes previously unrecorded live REVE CPO labels and stops after a deterministic first-pass decision"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 18,
+    "partial": 5,
+    "active": 47,
+    "setAside": 85,
+    "platformExcluded": 3,
+    "supersededAlias": 59,
+    "total": 217
+  },
+  "decisions": [
+    {
+      "canonicalName": "ACCIONA Recarga",
+      "label": "ACCIONA Recarga",
+      "status": "sourceValidated",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://recarga.acciona.com/"
+      ],
+      "model": "official nationwide direct CPO power-class tariff: <=22 kW 0.35 EUR/kWh; >22 kW 0.55 EUR/kWh, VAT included",
+      "coverageKnown": "REVE snapshot: partyId ARE, 421 locations, 1542 EVSE, 1713 connectors. ACCIONA official charging site publishes the two power classes and prices directly.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen only if ACCIONA changes the published tariff classes or REVE exposes exceptions requiring station-level handling.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Aduriz Energía",
+      "label": "ADURIZ ENERGIA SLU",
+      "status": "partial",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://adurizenergia.es/",
+        "https://adurizenergia.es/movilidad-electrica/"
+      ],
+      "model": "official direct CPO evidence proves 0.55 EUR/kWh for 180 kW ultrafast charging, but does not establish one deterministic tariff for every connector/power class",
+      "coverageKnown": "REVE snapshot: partyId ADU, 2 locations, 9 EVSE/connectors. Aduriz officially identifies public stations at Villasante and Medina de Pomar and advertises 180 kW charging at 0.55 EUR/kWh.",
+      "blockingReason": "Lower-power connector pricing is not completely established from the simple official public source; exhaustive station/connector audit would slow first pass.",
+      "resumeCondition": "After first pass, reconcile REVE tariff rows or a current official station tariff table for all 9 EVSE/connectors.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament d'Inca",
+      "label": "AJUNTAMENT D'INCA",
+      "status": "active",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://incaciutat.com/inca-amplia-la-xarxa-de-punts-de-recarrega-de-vehicles-electrics-amb-una-pionera-infraestructura-de-gestio-de-manteniment"
+      ],
+      "model": "municipal charging infrastructure with concession/operation model; no current official deterministic direct price found in first-pass source",
+      "coverageKnown": "REVE snapshot: partyId INC, 6 locations, 6 EVSE, 6 connectors. Municipality confirms public charging network expansion and concession for operation/maintenance.",
+      "blockingReason": "Tariff appears to require concession/station-level identification; third-party quoted prices are not promoted as CPO evidence.",
+      "resumeCondition": "Use REVE tariff rows, concession award/tariff annex, or current municipal operator tariff after first pass.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament d'Os de Balaguer",
+      "label": "AJUNTAMENT D'OS DE BALAGUER",
+      "status": "setAside",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json",
+        "https://www.osbalaguer.cat/"
+      ],
+      "model": "no deterministic official direct charging tariff found during reasonable first-pass search",
+      "coverageKnown": "REVE snapshot: partyId 256, 2 locations, 2 EVSE, 2 connectors.",
+      "blockingReason": "Municipal site does not expose a simple current EV charging tariff; further procurement/ordinance or station-level investigation would exceed first-pass budget.",
+      "resumeCondition": "Reopen after FIRST PASS COMPLETE or on new municipal ordinance, REVE tariff match, QR/ad-hoc evidence, or operator identification.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Ajuntament de Bunyola",
+      "label": "AJUNTAMENT DE BUNYOLA",
+      "status": "setAside",
+      "sourceEvidence": [
+        "data/spain_reve/coverage.json"
+      ],
+      "model": "no deterministic official direct charging tariff found during reasonable first-pass search",
+      "coverageKnown": "REVE snapshot: partyId 814, 4 locations, 6 EVSE, 6 connectors.",
+      "blockingReason": "No simple current official tariff surfaced; station/ordinance investigation would slow the queue.",
+      "resumeCondition": "Reopen after FIRST PASS COMPLETE or on new official tariff, REVE tariff match, QR/ad-hoc evidence, or operator identification.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    }
+  ],
+  "canonicalReconstruction": {
+    "attemptedPreviously": true,
+    "complete": false,
+    "newEvidenceForRetryThisRun": false,
+    "action": "Do not repeat the one-shot reconstruction attempt without new evidence; preserve the documented earliest-98 nominative gap and continue append-only first-pass decisions."
+  },
+  "reveTariffStatus": {
+    "batchLaunched": false,
+    "reason": "less than one full real hour elapsed since successful batch generatedAt 2026-09-08T08:40:19.005576Z",
+    "requestsAttempted": 0,
+    "locationsRequests": 0,
+    "nextTariffPage": 32,
+    "tariffPagesCollected": 31,
+    "tariffRowsStored": 3100,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 22,
+    "statusPagesCollected": 21,
+    "statusRowsStored": 2010,
+    "statusTotalPages": 447
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 217,
+    "firstPassMinimumTraversed": 217,
+    "newBatchCountsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  }
+}

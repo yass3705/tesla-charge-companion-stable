@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "run": "web-reconstruction-run6",
+  "generatedAt": "2026-09-14T00:44:00Z",
+  "newNominativeDecisions": 3,
+  "items": [
+    {
+      "canonicalName": "Almatret",
+      "labels": ["Almatret"],
+      "status": "setAside",
+      "model": "municipal/site-level",
+      "evidence": ["https://almatret.cat/", "https://almatret.cat/es/ayuntamiento/"],
+      "blockingReason": "Current official municipal pages establish the municipality but no public numeric EV-charging tariff or deterministic charging-price authority was located in this first pass.",
+      "resumeCondition": "Official municipal tariff/ordinance, QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14"
+    },
+    {
+      "canonicalName": "Cardona",
+      "labels": ["Cardona"],
+      "status": "partial",
+      "model": "municipal charging network",
+      "evidence": ["https://www.cardona.cat/comunicacio/noticies/cardona-disposa-dun-punt-de-recarrega-de-vehicles-electrics.html"],
+      "blockingReason": "Official municipal source confirms three municipal charging sites / card access, but the inspected public page does not publish a current numeric charging tariff.",
+      "resumeCondition": "Current municipal tariff/ordinance, card terms, or deterministic REVE tariff mapping.",
+      "lastInvestigated": "2026-09-14"
+    },
+    {
+      "canonicalName": "Caseres",
+      "labels": ["Caseres"],
+      "status": "partial",
+      "model": "municipal point managed by ETECNIC",
+      "evidence": ["https://media.seu-e.cat/acteca/4304190004/2023/527f5f8c-3893-4ba0-acf0-36562c5a0988/Acta%206-23.pdf", "https://viurearural.cat/es/servei/etecnic-charging-station/"],
+      "blockingReason": "Public municipal documentation confirms ETECNIC management/maintenance and a Caseres charging point, but no current numeric end-user tariff was established without extrapolation.",
+      "resumeCondition": "Official municipal service tariff/ordinance, ETECNIC app/QR price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14"
+    }
+  ],
+  "countDelta": {
+    "sourceValidated": 0,
+    "partial": 2,
+    "active": 0,
+    "setAside": 1,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 3
+  },
+  "antiStagnation": "First-pass only; no difficult-case reaudit performed.",
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "legacyWorkLabelCountChanged": false
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "batchType": "firstPassReconstruction",
+  "provenanceClass": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "source": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "probe": "data/spain_reve/reve_public_web_probe.json",
+    "probeMaxPages": 150,
+    "probePerPage": 25,
+    "probeUniqueOperatorLabels": 215
+  },
+  "decisions": [
+    {
+      "canonicalName": "EATIM JESUS POBRE",
+      "labels": ["EATIM  JESUS POBRE"],
+      "status": "sourceValidated",
+      "model": "public municipal charging / FENIE Energia managed",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://recarga.fenieenergia.es/punto-recarga/0248"],
+      "coverageKnown": "Current FENIE Energia station page identifies EATIM JESUS POBRE, 22 kW, two spaces, 24/7 access and states that charging has no cost.",
+      "tariff": {"currency": "EUR", "energyEurPerKwh": 0.0, "sourceAuthority": "currentOperatorStationPage"},
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if FENIE/EATIM changes the station conditions.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "EDISON NEXT SPAIN SLU",
+      "labels": ["EDISON NEXT SPAIN SLU"],
+      "status": "active",
+      "model": "public charging operator / station-dependent tariff",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://www.edisonnext.es/es/actualidad/edison-next-y-el-ayuntamiento-de-siero-presentan-las-primeras-estaciones-de-carga/"],
+      "coverageKnown": "Official Edison Next material confirms public EV charging operation, interoperable access and payment by RFID/mobile/bank card.",
+      "blockingReason": "No current official network-wide numeric Spain tariff was found; prices must remain station/connector-specific.",
+      "resumeCondition": "Deterministic REVE connector tariff or official Edison Next station/app price.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "EDP Charge",
+      "labels": ["EDP Charge"],
+      "status": "active",
+      "model": "public charging operator / app-based station pricing",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://edp.com/es/europa/espana/media/noticias/llega-edp-charge-espana-la-nueva-app-para-cargar-tu-coche-electrico"],
+      "coverageKnown": "EDP officially confirms the EDP Charge Espana app locates chargers, exposes real-time status, starts/stops charging and handles payments/history.",
+      "blockingReason": "No safe uniform Spain-wide public numeric tariff is published; exact price remains station/app dependent.",
+      "resumeCondition": "Deterministic REVE connector tariff or official EDP Charge station/app price.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "EFICIENCIA Y SERVICIOS RENOVABLES SL",
+      "labels": ["EFICIENCIA Y SERVICIOS RENOVABLES SL"],
+      "status": "setAside",
+      "model": "site/operator label",
+      "evidence": ["https://www.mapareve.es/api/public/v1"],
+      "coverageKnown": "Exact operator label recovered from the validated REVE public-web sample.",
+      "blockingReason": "No sufficiently deterministic current official public charging site, app or numeric tariff authority was located in the first-pass search.",
+      "resumeCondition": "Official site/app/QR evidence or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    },
+    {
+      "canonicalName": "ELECSUM FOTOVOLTAICA, S.L.U.",
+      "labels": ["ELECSUM FOTOVOLTAICA, S.L.U."],
+      "status": "active",
+      "model": "public charging operator / QR-Monta station pricing",
+      "evidence": ["https://www.mapareve.es/api/public/v1", "https://elecsum.com/es/movilidad-electrica/gestor/", "https://elecsum.com/es/movilidad-electrica/faqs/"],
+      "coverageKnown": "Elecsum officially states its managed public charging points expose current EUR/kWh price and live status through the QR/mobile flow; payment is supported through Monta or charger TPV where available.",
+      "blockingReason": "Official source explicitly says price varies with charging speed and current station price is shown via each charger's QR; no single network tariff may be extrapolated.",
+      "resumeCondition": "Deterministic station QR/Monta price or REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-14",
+      "lastChanged": "2026-09-14"
+    }
+  ],
+  "delta": {"firstPassTraversed": 5, "sourceValidated": 1, "partial": 0, "setAside": 1, "active": 3, "supersededAlias": 0, "platformExcluded": 0},
+  "aggregateAfter": {"minimumTraversed": 485, "maximumNeverTraversed": 133, "sourceValidated": 60, "partial": 49, "setAside": 206, "active": 99, "supersededAlias": 68, "platformExcluded": 3, "total": 485},
+  "webTrackAfter": {"newReconstructedLabelsFirstPassedCount": 112, "endpoint": "https://www.mapareve.es/api/public/v1", "validatedSample": "150x25", "uniqueOperatorLabelsObserved": 215},
+  "coherence": {"syntheticHistoricalMembershipCreated": false, "thirdPartyTariffPromoted": false, "difficultCaseReauditPerformed": false, "legacyDenominatorChanged": false, "check": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"},
+  "generatedAt": "2026-09-14T22:40:00Z"
+}

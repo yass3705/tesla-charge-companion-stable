@@ -1,0 +1,102 @@
+name: Collect Spain REVE pre-integration
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_new_cycle:
+        description: "Start a fresh full national pass from page 1"
+        required: false
+        default: false
+        type: boolean
+      pages_per_run:
+        description: "REVE pages to fetch this run (1-5)"
+        required: false
+        default: "4"
+        type: choice
+        options: ["1", "2", "3", "4", "5"]
+  push:
+    branches: ["spain-reve-preintegration"]
+    paths: ["data/spain_reve/trigger.txt"]
+  schedule:
+    # Monthly refresh window: enough hourly slots to cover a complete national pass
+    # while avoiding all-month no-op Actions usage after the cycle is complete.
+    - cron: "17 * 1-2 * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-spain-reve
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Decide whether a new monthly cycle is needed
+        id: cycle
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          state_path = Path('data/spain_reve/state.json')
+          manual_force = os.environ.get('MANUAL_FORCE', 'false').lower() == 'true'
+          event = os.environ.get('EVENT_NAME', '')
+          now = datetime.now(timezone.utc)
+          force = manual_force
+
+          if event == 'schedule':
+              if state_path.exists():
+                  state = json.loads(state_path.read_text(encoding='utf-8'))
+                  started = state.get('cycleStartedAt') or ''
+                  same_month = started.startswith(now.strftime('%Y-%m'))
+                  complete = bool(state.get('cycleCompletedAt'))
+                  force = now.day <= 2 and (not same_month) and complete
+              else:
+                  force = now.day <= 2
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
+              f.write(f'force={str(force).lower()}\n')
+          PY
+        env:
+          MANUAL_FORCE: ${{ inputs.force_new_cycle || false }}
+          EVENT_NAME: ${{ github.event_name }}
+
+      - name: Collect up to 4 REVE pages
+        shell: bash
+        env:
+          REVE_API_KEY: ${{ secrets.REVE_API_KEY }}
+          REVE_PAGES_PER_RUN: ${{ inputs.pages_per_run || '4' }}
+        run: |
+          args=()
+          if [ "${{ steps.cycle.outputs.force }}" = "true" ]; then
+            args+=(--force-new-cycle)
+          fi
+          python scripts/reve_es_collect.py "${args[@]}"
+
+      - name: Build TCC coverage audit from REVE snapshot
+        shell: bash
+        run: python scripts/reve_es_coverage.py
+
+      - name: Commit pre-integration snapshot progress
+        shell: bash
+        run: |
+          git add data/spain_reve
+          if git diff --cached --quiet -- data/spain_reve; then
+            echo "No REVE data change to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data(es): advance REVE pre-integration snapshot"
+          git push

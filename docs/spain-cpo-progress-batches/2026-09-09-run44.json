@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 44,
+  "date": "2026-09-09",
+  "firstPass": {
+    "minimumTraversedBefore": 341,
+    "minimumTraversedAfter": 341,
+    "maximumNeverTraversedAfter": 277,
+    "newLabelsTraversed": [],
+    "newSourceValidated": [],
+    "decision": "No historical label not already traversed could be proven from the surviving nominative material without fabrication. Existing active/setAside cases were not re-audited."
+  },
+  "countsAfter": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 87,
+    "setAside": 154,
+    "platformExcluded": 3,
+    "supersededAlias": 61,
+    "total": 341
+  },
+  "reveTariffStatus": {
+    "liveBatchLaunchedThisRun": false,
+    "reason": "Less than one real hour had elapsed since the latest successful persisted REVE batch generated at 2026-09-09T13:41:32.435979Z.",
+    "latestSuccessfulPersistedBatchGeneratedAt": "2026-09-09T13:41:32.435979Z",
+    "requestsAttemptedObservedInLatestPersistedBatch": 5,
+    "requestsSucceededObservedInLatestPersistedBatch": 5,
+    "http429ObservedInLatestPersistedBatch": 0,
+    "locationsRequestsObservedInLatestPersistedBatch": 0,
+    "persistentNextTariffPage": 62,
+    "persistentTariffPagesCollected": 61,
+    "persistentTariffRowsStored": 6087,
+    "tariffTotalPages": 461,
+    "persistentNextStatusPage": 42,
+    "persistentStatusPagesCollected": 41,
+    "persistentStatusRowsStored": 3840,
+    "statusTotalPages": 447
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 341,
+    "firstPassMinimumTraversed": 341,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespectedByObservedState": true,
+    "locationsEndpointUnusedByObservedState": true,
+    "mandatoryCadenceCheckPerformed": true,
+    "staleCanonicalReveStateDetected": true,
+    "staleCanonicalReveStateCorrected": true
+  },
+  "correction": {
+    "issue": "docs/spain-cpo-progress-latest.json still reflected the previous persisted REVE batch (tariff 58/status 39) while tariff_status_stream_state.json and tariff_status_stream_last_run.json had already advanced to tariff 61/status 41.",
+    "action": "Synchronize canonical REVE counters/cursors to the authoritative persisted stream files."
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true,
+    "collectorWorkflowDispatchOnlyVerified": true
+  },
+  "firstPassComplete": false
+}

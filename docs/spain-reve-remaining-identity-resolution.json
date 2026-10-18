@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "mode": "IDENTITY_ONLY_NO_TARIFF",
+  "inputResolved": 194,
+  "inputAmbiguous": 19,
+  "inputUnresolved": 232,
+  "additionalResolved": 1,
+  "manualReview": 9,
+  "noPlausiblePersistedMatch": 241,
+  "resolved": [
+    {
+      "reveLabel": "Ajuntament de Paüls",
+      "method": "high_confidence_similarity",
+      "canonical": "Ajuntament de Pals",
+      "confidence": 0.9333
+    }
+  ],
+  "review": [
+    {
+      "reveLabel": "Ajuntament de Vilada",
+      "bestCandidates": [
+        {
+          "name": "Ajuntament de Viladecans",
+          "score": 0.8182
+        },
+        {
+          "name": "Ajuntament de Vilamalla",
+          "score": 0.7619
+        }
+      ]
+    },
+    {
+      "reveLabel": "AYUNTAMIENTO DE PADULES . .",
+      "bestCandidates": [
+        {
+          "name": "Ajuntament de Pals",
+          "score": 0.8235
+        },
+        {
+          "name": "Ajuntament de Valls",
+          "score": 0.6667
+        }
+      ]
+    },
+    {
+      "reveLabel": "Ayuntamiento de Viana . .",
+      "bestCandidates": [
+        {
+          "name": "Ajuntament de Tiana",
+          "score": 0.875
+        },
+        {
+          "name": "Ajuntament de Calvià",
+          "score": 0.7059
+        }
+      ]
+    },
+    {
+      "reveLabel": "Corbera de Llobregat",
+      "bestCandidates": [
+        {
+          "name": "Ajuntament del Prat de Llobregat",
+          "score": 0.7805
+        },
+        {
+          "name": "Ajuntament de Cabrera de Mar",
+          "score": 0.5405
+        }
+      ]
+    },
+    {
+      "reveLabel": "ELECTRICA SOLLERENSE S.A.",
+      "bestCandidates": [
+        {
+          "name": "Eléctrica Sollerense / U Energia",
+          "score": 0.8519
+        },
+        {
+          "name": "Torrecillas Serna, S.A.",
+          "score": 0.5778
+        }
+      ]
+    },
+    {
+      "reveLabel": "Energía Distribuida del Norte S.A.",
+      "bestCandidates": [
+        {
+          "name": "Energía Distribuida del Norte / Edinor",
+          "score": 0.8696
+        },
+        {
+          "name": "PETREM DISTRIBUCIO SA",
+          "score": 0.5098
+        }
+      ]
+    },
+    {
+      "reveLabel": "Sant Julià de Vilatorta",
+      "bestCandidates": [
+        {
+          "name": "Ajuntament Sant Joan de Vilatorrada",
+          "score": 0.8085
+        },
+        {
+          "name": "Ajuntament de Santa Eugènia de Berga",
+          "score": 0.5417
+        }
+      ]
+    },
+    {
+      "reveLabel": "Tersa",
+      "bestCandidates": [
+        {
+          "name": "Tesla",
+          "score": 0.8
+        },
+        {
+          "name": "Aj. Mollerussa",
+          "score": 0.5333
+        }
+      ]
+    },
+    {
+      "reveLabel": "Ajuntament de Palafolls",
+      "bestCandidates": [
+        {
+          "name": "Ajuntament de Calafell",
+          "score": 0.7826
+        },
+        {
+          "name": "Ajuntament de Pals",
+          "score": 0.7368
+        }
+      ]
+    }
+  ],
+  "noPlausiblePersistedMatchLabels": [
+    "Ayuntamiento de Agullent - -",
+    "Caseres",
+    "Club Náutico Moraira",
+    "EPRESA ENERGIA SA",
+    "PARKING VAPOR GRAN",
+    "Ponent Energia",
+    "Sant Pere de Ribes",
+    "Sant Quirze de Besora",
+    "Santa Coloma de Farners",
+    "Servicios Petroleros Mallorca SL",
+    "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
+    "Aj. Montcada i Reixac",
+    "Ajuntament d’Alforja des",
+    "Ajuntament de Font-rubi",
+    "Ajuntament de Guardiola de Berguedà",
+    "Ajuntament de Guissona",
+    "Ajuntament de Gurb",
+    "Ajuntament de Juneda",
+    "Ajuntament de l'Albiol",
+    "Ajuntament de l'Espluga de Francolí",
+    "AJUNTAMENT DE L'OLLERIA - -",
+    "Ajuntament de Les Borges Blanques",
+    "Ajuntament de Moià",
+    "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
+    "Ajuntament de Mont-roig del Camp",
+    "Ajuntament de Montferrer",
+    "Ajuntament de Pont de Suert",
+    "Ajuntament de Renau",
+    "Ajuntament de Riells i Viabrea",
+    "Ajuntament de Saldes",
+    "Ajuntament de Salomó",
+    "Ajuntament de Sant Andreu de Llavaneres",
+    "Ajuntament de Sant Boi de Lluçanès",
+    "Ajuntament de Sant Feliu de Codines",
+    "Ajuntament de Sant Fruitós de Bages",
+    "Ajuntament de Sant Jaume d'Enveja",
+    "Ajuntament de Sant Julià de Cerdanyola",
+    "Ajuntament de Santa Fe del Penedès",
+    "Ajuntament de Soses",
+    "Ajuntament de Torroella de Montgrí",
+    "Ajuntament de Vic",
+    "Ajuntament de Vinyols i els Arcs",
+    "Ajuntament del Catllar",
+    "Ajuntament del Lloar",
+    "Ajuntament del Pla de Santa Maria",
+    "Ajuntament dels Pallaresos",
+    "Ajuntament Lliçà de Vall",
+    "Ajuntament Manlleu",
+    "Ajuntament Sant Julià de Llor i Bonmatí",
+    "Ajuntament Selva del Camp",
+    "Alcover",
+    "ALDI",
+    "ALEGRIA HOTELS",
+    "Almatret",
+    "Andrés Rodríguez Brenes",
+    "ANTONIO SALDAÑA MARCO",
+    "APARCAMENTS Tarragona",
+    "ARSA INVERSIONES SAU",
+    "Artesa de Segre",
+    "Ascó",
+    "Asociacion Autonoma de Instaladores Electricos y de Telecomunicaciones de Granada",
+    "Avinyonet de Puigventos",
+    "Ayto Beriáin",
+    "Ayto. Ansoain Ansoain Ansoain",
+    "Ayuntamiento Alcalá de la Selva",
+    "Ayuntamiento cendea de Olza/Oltza Zendea Ayuntamiento Ayuntamiento",
+    "AYUNTAMIENTO DE ALMOCITA . .",
+    "AYUNTAMIENTO DE ARRONIZ . .",
+    "AYUNTAMIENTO DE AZAGRA Azagra Navarra",
+    "Ayuntamiento de Casas Bajas Casas Bajas Casas Bajas",
+    "Ayuntamiento de Espirdo Espirdo Espirdo",
+    "AYUNTAMIENTO DE ESTERIBAR Esteribar Navarra",
+    "Ayuntamiento de Falces Falces Falces",
+    "AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA",
+    "Ayuntamiento de Garínoain",
+    "Ayuntamiento de Grazalema Grazalema Cádiz",
+    "Ayuntamiento de Huarte",
+    "AYUNTAMIENTO DE LLIBER AYUNTAMIENTO LLIBER",
+    "AYUNTAMIENTO DE LOS MONTESINOS . .",
+    "AYUNTAMIENTO DE MERINDAD DE RÍO UBIERNA MERINDAD RÍO UBIERNA",
+    "AYUNTAMIENTO DE OLOCAU",
+    "Ayuntamiento de Premià",
+    "Ayuntamiento de Ribafrecha - -",
+    "AYUNTAMIENTO DE VILLADIEGO BURGOS ESPAÑA",
+    "AYUNTAMIENTO DE VILVIESTRE DEL PINAR",
+    "Ayuntamiento de Xeraco Ayuntamiento Ayuntamiento",
+    "Ayuntamiento Getaria",
+    "Ayuntamiento Santo Domingo de la Calzada",
+    "AYUNTAMIENTO VALLE DE ARANGUREN",
+    "Badia del Vallés",
+    "Balsareny",
+    "Banana Express",
+    "Belen Lorefice Gaitan",
+    "Benavent de Segrià",
+    "Bodegas Macias Batle",
+    "Bodegas Nodus",
+    "Bolaños",
+    "BONPREU, S.A.U.",
+    "Braker Corporation",
+    "Cabildo Lanzarote",
+    "CADENA MAR S.L. MAR HOTELS",
+    "Cambrils APARCAM",
+    "Camping l'Amfora",
+    "Camping Mas Patoxas",
+    "Capmany",
+    "Cardona",
+    "CARGADORES LOW COST",
+    "Carmen Andres Garcia",
+    "Castellolí",
+    "CENTROS COMERCIALES CARREFOUR SA",
+    "CIMALSA Castellar del Vallès",
+    "CIMALSA la Selva",
+    "Club de Golf el Bosque Chiva",
+    "Club de Golf Gorraiz",
+    "Complex Comercial Vilafranca",
+    "Constanti",
+    "Consum",
+    "Cooperativa Eléctrica Catralense",
+    "El Far d'Empordà",
+    "El Masroig",
+    "El Pont de Vilomara",
+    "elRetiro",
+    "EMAG S.L ARILLA ALLUE",
+    "EMAYA, S.A.",
+    "Emerix Systems S.L.",
+    "ENERGEA CONSULTING Y ASESORES SL",
+    "ENILEC ENILEC ENILEC",
+    "Ernesto Serra Gomez",
+    "Espolla",
+    "Estació Servei Porto Gas",
+    "EUROPA CENTER",
+    "Febrer Gasolineras",
+    "Fenie Propietario Propietario",
+    "FISERSA",
+    "FLORETTE HORTÍCOLA NAVARRA - MILAGRO",
+    "Fornells de la Selva",
+    "Forumsa",
+    "FUNDACION FEMEVAL Fundacion Femeval",
+    "GALP_SPAIN",
+    "Gandesa",
+    "GASOLINERA RAFAL --",
+    "Golf Vistahermosa",
+    "GP TRADE",
+    "Guadalupe Martínez Sánchez",
+    "Guaw",
+    "HCC HOTELS SL",
+    "Horta de Sant Joan",
+    "Hospital de Toledo",
+    "Hospital Ribera de Covadonga",
+    "Hospitalet de l'Infant",
+    "Hotel Amic Horizonte",
+    "Hotel Amoros Cala Ratjada",
+    "Hotel Bosquemar SL",
+    "HOTEL DEL OSO",
+    "Hotel OCA Vermar .",
+    "Hotel Spa Atlántico . .",
+    "IBERDROLA CLIENTES S.A.U",
+    "InstaVolt CPO",
+    "Inversiones Pascual",
+    "INVESMORAZO S.L",
+    "ION SMART ENERGY 2000 SL",
+    "Ivars d'Urgell",
+    "J. REDONDO, S.L.",
+    "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+    "Jarada Motor, S.L.",
+    "JARDINES LA TEJERA, S.A.U.",
+    "Jesus Vidal Ubeda",
+    "Joncosa de Montmell",
+    "JOSE LUIS DOMINGO VENTURA",
+    "La Jonquera",
+    "La Llagosta",
+    "La Pobla de Segur",
+    "LAG OLEIROS SLU",
+    "LES FONTS DE MARIOLA, S.L.",
+    "Llagostera",
+    "Lleida",
+    "Lloret de Mar",
+    "Lucía María Díaz Soberón",
+    "M.P. PORT ROSES SA",
+    "Manresa",
+    "Martin Rivera Bua",
+    "Matadepera",
+    "Mediterraneo Golf",
+    "Montmeló",
+    "Móra d'Ebre",
+    "Móra la Nova",
+    "Movilidad Eléctrica Gran Canaria",
+    "Muntaner Batle Sl Muntaner Batle Sl Muntaner Batle Sl",
+    "Mutua Madrileña Inmobiliaria",
+    "NAITEC",
+    "NATURGY RECARGA",
+    "Navarcles",
+    "Navarra te recarga",
+    "NIMA GRUP D'AUTOMOCIO SL",
+    "Nuñez y Navarro",
+    "Ocimax P de Mallorca",
+    "Oftalmedic Salva",
+    "Palol de Revardit",
+    "Pamplona",
+    "Parking Benalmadena Pueblosol",
+    "Parking Garatge 2000",
+    "PARKING LIDER S.A.",
+    "Parking NN Espronceda",
+    "Parking Pozuelo",
+    "Parking TEKNON",
+    "Patrimonio Natural CyL",
+    "Peralada",
+    "Petrolia Conil de la Frontera",
+    "PLENOIL, S.L.",
+    "Polinyà",
+    "Port de Roses",
+    "Postventa Propietario Propietario",
+    "Powy",
+    "Premià de Mar",
+    "Puig-reig",
+    "PUMSA Mataró",
+    "RAMIS GARAU, S.A. MIQUEL RAMIS",
+    "Rasquera",
+    "Real Club Pineda",
+    "Roda de Ter",
+    "Roses",
+    "Salvador Fernandez Labadia",
+    "Sant Vicenç de Castellet",
+    "Santa Barbara",
+    "Santa Eulàlia de Ronçana",
+    "SANTA LUCIA VIVIENDAS SL",
+    "Santa Maria de Palautordera",
+    "Santa Perpètua de Mogoda",
+    "Santpedor",
+    "Sergio Peinado Gimenez",
+    "Ses Jardines . .",
+    "Siemens",
+    "SUNSET OASIS IBIZA ROSELLO RAUSELL",
+    "Test REMO",
+    "Torre Inbisa",
+    "UMBRELLA e-MOBILITY",
+    "Vallmoll",
+    "Vibroaspre, S.A. Vibroaspre Vibroaspre",
+    "Vicente Martinez Corcoles",
+    "Vidreres",
+    "Viladrau"
+  ],
+  "rule": "No tariff lookup; no REVE external quota. Conservative identity resolution; uncertain matches remain review/unrepresented."
+}

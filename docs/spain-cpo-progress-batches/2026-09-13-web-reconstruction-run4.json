@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "generatedAt": "2026-09-13T22:44:00Z",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historicalMembershipClaimed": false,
+  "legacyWorkLabelCount": 618,
+  "sourceProbe": "data/spain_reve/reve_public_web_probe.json",
+  "rule": "First-pass genuinely new REVE-web identities before any re-audit of difficult cases; never infer membership in the lost frozen 618 snapshot.",
+  "decisions": [
+    {
+      "canonicalName": "Ajuntament de Pals",
+      "labels": ["Ajuntament de Pals"],
+      "status": "setAside",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label", "https://www.pals.cat/ca/actualitat/l-ajuntament-de-pals-instal-la-un-carregador-de-vehicles-electrics/"],
+      "blockingReason": "Municipal charging infrastructure is official and nominatively observed in REVE web, but the bounded first pass did not locate a current numeric direct charging tariff; 2026 concession activity also makes extrapolation from older conditions unsafe.",
+      "resumeCondition": "Current municipal/concession tariff, payment/app/QR tariff, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Sant Celoni",
+      "labels": ["Ajuntament de Sant Celoni"],
+      "status": "sourceValidated",
+      "model": "municipal direct public price",
+      "evidence": ["https://santceloni.cat/ARXIUS/documents/departaments_i_ambits/urbanisme/Ordenanca_2_reguladora_del_preu_public_servei_de_recarrega_de_vehicles.pdf"],
+      "tariff": "0.34 EUR/kWh before applicable VAT, per municipal public-price ordinance",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate only if the municipality publishes a tariff modification.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Súria",
+      "labels": ["Ajuntament de Súria"],
+      "status": "partial",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label", "https://www.suria.cat/recarregavehicleselectrics/"],
+      "coverageKnown": "Official municipal page confirms several charging locations in Súria.",
+      "blockingReason": "Current numeric direct charging tariff was not located in the bounded first pass.",
+      "resumeCondition": "Current municipal tariff, QR/app price, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Vallgorguina",
+      "labels": ["Ajuntament de Vallgorguina"],
+      "status": "partial",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label", "https://www.vallgorguina.cat/actualitat/noticies/punt-de-recarrega-operatiu-per-a-vehicles-electrics-a-vallgorguina.html", "https://bop.diba.cat/anuncio/3836607/aprovacio-inicial-de-la-modificacio-del-preu-public-per-recarrega-de-vehicles-electrics-ajuntament-de-vallgorguina"],
+      "coverageKnown": "Official municipal source confirms the charging point; BOPB shows a 2025 modification process for the charging public price.",
+      "blockingReason": "The exact current 2026 numeric tariff was not established in this bounded first pass, so the earlier free-service statement is not promoted.",
+      "resumeCondition": "Final/current 2026 public-price text or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament de Vilablareix",
+      "labels": ["Ajuntament de Vilablareix"],
+      "status": "sourceValidated",
+      "model": "municipal direct tariff via EVCharge",
+      "evidence": ["REVE public web operator label", "https://www.vilablareix.cat/node/1671"],
+      "tariff": "0.31 EUR/kWh general; 0.10 EUR/kWh for eligible residents whose EV/PHEV is on the municipal vehicle-tax roll",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate on a published annual tariff change.",
+      "lastInvestigated": "2026-09-13"
+    },
+    {
+      "canonicalName": "Ajuntament Sant Joan de Vilatorrada",
+      "labels": ["Ajuntament Sant Joan de Vilatorrada"],
+      "status": "partial",
+      "model": "municipal/site-level",
+      "evidence": ["REVE public web operator label", "https://www.santjoanvilatorrada.cat/ca/ajuntament/acords-i-decrets/ple-de-la-corporacio/93d1840d-a093-4433-9739-c68fe0384561.pdf"],
+      "coverageKnown": "Official 2025 municipal proceedings confirm municipal EV chargers and a new ordinance regulating their use.",
+      "blockingReason": "A current numeric charging price was not established in the bounded first pass.",
+      "resumeCondition": "Current municipal price/order, QR/app tariff, or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-13"
+    }
+  ],
+  "delta": {
+    "firstPass": 6,
+    "sourceValidated": 2,
+    "partial": 3,
+    "setAside": 1,
+    "active": 0,
+    "supersededAlias": 0,
+    "platformExcluded": 0
+  }
+}

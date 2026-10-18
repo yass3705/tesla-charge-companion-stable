@@ -1,0 +1,68 @@
+name: Audit Spain REVE identity crosscheck
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/identity_crosscheck_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - name: Crosscheck 445 REVE labels against all persisted Spain decisions
+        run: |
+          python <<'PY'
+          import json,glob,re,unicodedata
+          from pathlib import Path
+          def norm(s):
+            s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
+            s=re.sub(r'\b(ajuntament|ayuntamiento|aj\.?|de|del|d|la|el)\b',' ',s)
+            return re.sub(r'[^a-z0-9]+',' ',s).strip()
+          probe=json.loads(Path('data/spain_reve/reve_public_web_probe.json').read_text())
+          labels=probe['identityDiagnostics']['operatorLabels']
+          decisions=[]
+          for f in sorted(glob.glob('docs/spain-cpo-progress-batches/*.json')):
+            try: d=json.loads(Path(f).read_text())
+            except: continue
+            for x in d.get('decisions',[]):
+              n=x.get('canonicalName') or x.get('name') or x.get('label')
+              if n: decisions.append({'name':n,'status':x.get('status'),'file':f})
+            for key in ('newlyTreated','labelsTraversed'):
+              for n in d.get(key,[]) or []:
+                if isinstance(n,str): decisions.append({'name':n,'status':None,'file':f})
+          # also inspect canonical-like arrays recursively for named entries
+          for f in ['docs/spain-cpo-progress-2026-09.json','docs/spain-cpo-progress-latest.json','data/spain_reve/coverage.json','data/spain_reve/operator_aliases_es.json']:
+            if not Path(f).exists(): continue
+            try: d=json.loads(Path(f).read_text())
+            except: continue
+            def walk(v):
+              if isinstance(v,dict):
+                for k in ('canonicalName','name','label','canonical'):
+                  if isinstance(v.get(k),str): decisions.append({'name':v[k],'status':v.get('status'),'file':f}); break
+                for z in v.values(): walk(z)
+              elif isinstance(v,list):
+                for z in v: walk(z)
+            walk(d)
+          by={}
+          for x in decisions: by.setdefault(norm(x['name']),[]).append(x)
+          matched=[]; unmatched=[]
+          for lab in labels:
+            k=norm(lab)
+            if k in by: matched.append({'reveLabel':lab,'matches':by[k]})
+            else: unmatched.append(lab)
+          # duplicate decision names (normalized) are audit evidence; do not alter historical KPI here
+          dup={k:v for k,v in by.items() if len({x['file'] for x in v})>1}
+          out={'schemaVersion':1,'country':'ES','sourceOperatorLabels':len(labels),'persistedDecisionRecords':len(decisions),'distinctNormalizedDecisionNames':len(by),'reveMatchedByNormalizedIdentity':len(matched),'reveUnmatchedByNormalizedIdentity':len(unmatched),'unmatchedReveLabels':unmatched,'matched':matched,'duplicateDecisionIdentityGroups':len(dup),'rule':'Identity-only crosscheck. No tariff lookup. Current REVE membership does not prove historical-618 membership.'}
+          Path('docs/spain-reve-identity-crosscheck.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({k:out[k] for k in ('sourceOperatorLabels','persistedDecisionRecords','distinctNormalizedDecisionNames','reveMatchedByNormalizedIdentity','reveUnmatchedByNormalizedIdentity','duplicateDecisionIdentityGroups')},indent=2))
+          PY
+      - name: Persist result
+        run: |
+          git add docs/spain-reve-identity-crosscheck.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): persist REVE 445 identity crosscheck"
+          git pull --rebase origin spain-reve-preintegration
+          git push

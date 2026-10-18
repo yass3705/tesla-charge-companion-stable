@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 77,
+  "date": "2026-09-12",
+  "firstPass": {
+    "minimumTraversed": 373,
+    "maximumNeverTraversed": 245,
+    "labelsTraversedThisRun": 0,
+    "reasonNoNominalAdvance": "The durable reconstructed current-REVE identity queue remains exhausted and the historical frozen 618-label nominative snapshot remains unrecoverable. No synthetic historical identities were created and no setAside case was re-audited without new evidence."
+  },
+  "counts": {
+    "sourceValidated": 28,
+    "partial": 8,
+    "active": 94,
+    "setAside": 172,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 373
+  },
+  "reveTariffStatusBatch": {
+    "generatedAt": "2026-09-12T11:44:47.924569Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "tariffPages": [158,159,160],
+    "tariffNewRows": 246,
+    "tariffUpdatedRows": 0,
+    "statusPages": [106,107],
+    "statusNewRows": 180,
+    "statusUpdatedRows": 11,
+    "nextTariffPage": 161,
+    "nextStatusPage": 108,
+    "tariffRowsStored": 14583,
+    "statusRowsStored": 9072,
+    "tariffTotalPages": 462,
+    "statusTotalPages": 448
+  },
+  "persistence": {
+    "temporaryTriggerRemoved": true,
+    "workflowReturnedToDispatchOnly": true,
+    "criticalProgressPersistedInGit": true,
+    "historical618RecoverySearchNotRepeated": true
+  },
+  "coherence": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "countsDeriveExactly": true,
+    "continuityCountSum": 373,
+    "firstPassMinimumTraversed": 373,
+    "syntheticHistoricalMembershipCreated": false,
+    "setAsideReauditWithoutNewEvidence": false,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true,
+    "replacementIdentityQueueExhausted": true
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "parentCanonicalPath": "docs/spain-cpo-progress-latest.json",
+  "generatedAt": "2026-09-08T06:45:30Z",
+  "firstPass": {
+    "previousMinimumTraversed": 190,
+    "newNominativeDecisions": 4,
+    "minimumTraversed": 194,
+    "maximumNeverTraversed": 424,
+    "historicalWorkQueueLabels": 618,
+    "queueInterpretation": "historical derived-label queue; resolve only explicit unprocessed repository aliases without reopening set-aside cases"
+  },
+  "continuityCountsAfter": {
+    "sourceValidated": 17,
+    "partial": 4,
+    "active": 46,
+    "setAside": 83,
+    "platformExcluded": 3,
+    "supersededAlias": 41,
+    "total": 194
+  },
+  "decisions": [
+    {
+      "canonicalName": "Powerdot",
+      "label": "POWER DOT",
+      "status": "supersededAlias",
+      "sourceEvidence": ["data/spain_reve/operator_aliases_es.json", "https://www.powerdot.eu/"],
+      "model": "explicit repository alias -> Powerdot canonical identity; no tariff inherited or re-audited",
+      "coverageKnown": "Repository alias candidate. Powerdot is a charging-point operator active in Spain; exact station pricing remains separate and is not inferred here.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen only on contradictory identity evidence.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Powerdot",
+      "label": "PUNTO RECARGAS S.L.",
+      "status": "supersededAlias",
+      "sourceEvidence": ["data/spain_reve/operator_aliases_es.json"],
+      "model": "explicit legal-name alias -> Powerdot canonical identity; direct CPO pricing remains station/connector specific",
+      "coverageKnown": "Explicit repository alias candidate; no numeric tariff copied from alias normalization.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen only on contradictory identity evidence.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "Powerdot",
+      "label": "PUNTO RECARGAS, S.L.",
+      "status": "supersededAlias",
+      "sourceEvidence": ["data/spain_reve/operator_aliases_es.json"],
+      "model": "punctuation variant of explicit legal-name alias -> Powerdot; no tariff inherited",
+      "coverageKnown": "Explicit repository alias candidate; punctuation-only variant retained as a nominative first-pass decision.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen only on contradictory identity evidence.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    },
+    {
+      "canonicalName": "EDP",
+      "label": "EDP CHARGE ESPAÑA",
+      "status": "supersededAlias",
+      "sourceEvidence": ["data/spain_reve/operator_aliases_es.json", "data/spain_reve/coverage.json"],
+      "model": "accent variant of explicit legacy alias -> EDP canonical identity; direct CPO pricing kept separate from roaming/eMSP",
+      "coverageKnown": "Explicit repository alias candidate aligned with the already evidenced current REVE EDP CLIENTES SAU identity; no tariff value copied.",
+      "blockingReason": null,
+      "resumeCondition": "Reopen only on contradictory REVE identity evidence.",
+      "lastInvestigated": "2026-09-08",
+      "lastChanged": "2026-09-08"
+    }
+  ],
+  "reveTariffStatus": {
+    "complete": false,
+    "latestSuccessfulBatchGeneratedAt": "2026-09-08T06:42:48.221999Z",
+    "batchLaunchedThisRun": true,
+    "workflowRunId": 34167974789,
+    "workflowRunAttempt": 5,
+    "requestsAttemptedThisRun": 5,
+    "requestsSucceededThisRun": 5,
+    "locationsRequestsThisRun": 0,
+    "http429Count": 0,
+    "tariffPagesCollectedThisRun": [26, 27, 28],
+    "statusPagesCollectedThisRun": [18, 19],
+    "tariffNewRowsThisRun": 300,
+    "tariffUpdatedRowsThisRun": 0,
+    "statusNewRowsThisRun": 200,
+    "statusUpdatedRowsThisRun": 0,
+    "nextTariffPage": 29,
+    "tariffPagesCollected": 28,
+    "tariffRowsStored": 2800,
+    "tariffTotalPages": 468,
+    "nextStatusPage": 20,
+    "statusPagesCollected": 19,
+    "statusRowsStored": 1810,
+    "statusTotalPages": 447
+  },
+  "canonicalReconstruction": {
+    "attemptedPreviously": true,
+    "complete": false,
+    "newEvidenceForRetryThisRun": false,
+    "action": "preserve documented 618-label historical queue and append-only nominative ledger; do not repeat a failed reconstruction without new evidence"
+  },
+  "runtimeSafety": {
+    "pr50DraftRequired": true,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "continuityCountSum": 194,
+    "firstPassMinimumTraversed": 194,
+    "newBatchCountsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noTariffReauditForAliasResolution": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  }
+}

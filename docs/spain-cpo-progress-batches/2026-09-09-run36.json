@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-09-run36",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "note": "Continued directly after QWELLO España SL with the next never-traversed identities from the current REVE coverage ordering. No previously set-aside identity was re-audited."
+  },
+  "newNominativeDecisions": [
+    {
+      "canonicalName": "REMO SUSTAINABLE MOBILITY S.L",
+      "labels": ["REMO SUSTAINABLE MOBILITY S.L"],
+      "partyId": "RSM",
+      "status": "active",
+      "source": ["https://me-remo.com/es/politica-de-privacidad/", "https://apps.apple.com/es/app/remo/id6450786486"],
+      "model": "direct app-based station-level charging",
+      "coverageKnown": "REVE snapshot: 120 locations, 423 EVSE/connectors. REMO first-party/app evidence confirms public charging infrastructure and an app exposing point details and charging sessions.",
+      "blockingReason": "No safe uniform numeric direct tariff surfaced publicly; enumerating 120 locations would slow first-pass coverage.",
+      "resumeCondition": "After first-pass completion, enumerate REMO app/station prices or map deterministic REVE connector-tariff rows.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Repsol",
+      "labels": ["REPSOL SOLUCIONES ENERGÉTICAS SA"],
+      "partyId": "REP",
+      "status": "sourceValidated",
+      "source": ["https://www.repsol.es/particulares/faqs/movilidad-electrica/cuanto-cuesta-recargar-en-un-punto-de-recarga-publico/", "https://www.repsol.es/particulares/vehiculos/movilidad-electrica/pago-por-recarga/"],
+      "model": "direct pay-per-use network tariff by charging class; subscriptions kept separate",
+      "coverageKnown": "Official Repsol material publishes direct Repsol-point pay-per-use prices: motorcycles 0.36 EUR/kWh, normal car charging 0.36 EUR/kWh, rapid charging from 0.48 EUR/kWh and ultrarapid charging 0.56 EUR/kWh. Repsol explicitly warns that other operators visible in Waylet may have different tariffs.",
+      "blockingReason": null,
+      "resumeCondition": "Revalidate if Repsol updates its public tariff grid; map rapid 'from' pricing at station level before asserting a value above the published floor.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "SCL AGROPIENSO",
+      "labels": ["SCL AGROPIENSO F22009468"],
+      "partyId": "F22",
+      "status": "setAside",
+      "source": ["https://agropienso.es/"],
+      "model": "single-site/unknown direct charging tariff",
+      "coverageKnown": "REVE snapshot: 1 location, 2 EVSE/connectors. Official company site identifies the operator but exposes no public numeric EV-charging tariff in first-pass research.",
+      "blockingReason": "No deterministic direct price without a deeper station/QR investigation.",
+      "resumeCondition": "New official station/QR/app price or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Serveis Ferroviaris de Mallorca",
+      "labels": ["SERVEIS FERROVIARIS DE MALLORCA"],
+      "partyId": "SFM",
+      "status": "setAside",
+      "source": ["https://recarga.fenieenergia.es/punto-recarga/0008"],
+      "model": "MELIB-managed public charging; direct tariff unresolved",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 2 connectors. Feníe's public charging portal identifies the SFM point and states it is managed through MELIB, but the reviewed public page exposes no numeric charging price.",
+      "blockingReason": "Direct CPO versus MELIB/platform pricing must be resolved before any tariff can be assigned.",
+      "resumeCondition": "Official SFM/MELIB numeric tariff or deterministic REVE connector-tariff mapping for this EVSE.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Servicios Puente Liñares SL",
+      "labels": ["SERVICIOS PUENTE LIÑARES SL"],
+      "partyId": "SPL",
+      "status": "setAside",
+      "source": ["https://www.incibex.com/servicios-puente-linares-sl"],
+      "model": "single service-station/site-level charging tariff",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE, 2 connectors. Public company evidence identifies the service-station operator, but no authoritative numeric EV tariff surfaced within first-pass budget.",
+      "blockingReason": "A deeper station/QR/app investigation would violate first-pass anti-stagnation priority.",
+      "resumeCondition": "Official station/QR/app tariff or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    },
+    {
+      "canonicalName": "Sociedad Cooperativa de Productores Taxistas de Las Palmas",
+      "labels": ["SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS"],
+      "partyId": "TX1",
+      "status": "setAside",
+      "source": ["https://alfa90.com/referencias/planta-solar-fotovoltaica-de-50-kw-para-autoconsumo-de-la-estacion-de-servicio-disa-miller-bajo/"],
+      "model": "single service-station/site-level charging tariff",
+      "coverageKnown": "REVE snapshot: 1 location, 1 EVSE/connector. Project evidence confirms EV charging points at the cooperative's DISA Taxistas Miller service station, but no direct numeric charging tariff is published.",
+      "blockingReason": "No deterministic first-party numeric tariff in first-pass research.",
+      "resumeCondition": "Official station/QR/app price or deterministic REVE connector-tariff mapping.",
+      "lastInvestigated": "2026-09-09",
+      "lastChanged": "2026-09-09"
+    }
+  ],
+  "deltaCounts": {
+    "sourceValidated": 1,
+    "partial": 0,
+    "active": 1,
+    "setAside": 4,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 6
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 331,
+    "maximumNeverTraversed": 287,
+    "firstPassComplete": false
+  },
+  "reveTariffStatus": {
+    "batchTriggerIssued": true,
+    "batchConfirmedCompleted": false,
+    "previousSuccessfulGeneratedAt": "2026-09-08T21:43:27.486815Z",
+    "requestsAttemptedObserved": 0,
+    "requestsSucceededObserved": 0,
+    "http429CountObserved": 0,
+    "locationsRequestsObserved": 0,
+    "quotaWindowConservativelyConsumed": true,
+    "decision": "More than one real hour had elapsed. Exactly one targeted temporary trigger was issued because direct workflow_dispatch was unavailable; the workflow was immediately restored to workflow_dispatch-only and the sentinel removed. No second batch will be launched in this quota window even if the run is delayed or its push fails."
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+    "mandatoryCadenceCheckPerformed": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "countsDeriveExactly": true,
+    "reveRequestBudgetRespectedByObservedState": true,
+    "locationsEndpointUnusedByObservedState": true
+  },
+  "investigationCurrent": "Continue first-pass queue after SOCIEDAD COOPERATIVA DE PRODUCTORES TAXISTAS DE LAS PALMAS; next current-REVE identities include Tesla Spain SLU, The F Charging Espana S.L.U., Torrecillas Serna S.A., Totalenergies Marketing España S.A.U. and TRANSPORTES PENADES E HIJOS SL.",
+  "updatedAt": "2026-09-08T23:47:00Z"
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "run": "2026-09-10-run60",
+  "antiStagnation": {
+    "firstPassPriority": true,
+    "reopenedSetAside": false,
+    "newNeverTraversedLabels": 0,
+    "note": "No additional historical frozen-618 label could be named safely from persisted repository evidence in this execution. No synthetic label was created and no prior active/setAside case was reopened without new evidence."
+  },
+  "firstPassAfter": {
+    "minimumTraversed": 346,
+    "maximumNeverTraversed": 272,
+    "firstPassComplete": false,
+    "counts": {
+      "sourceValidated": 28,
+      "partial": 8,
+      "active": 87,
+      "setAside": 154,
+      "platformExcluded": 3,
+      "supersededAlias": 66,
+      "total": 346
+    }
+  },
+  "reveTariffStatus": {
+    "batchLaunched": true,
+    "workflowRunId": 34446412330,
+    "rerunJobId": 102938153003,
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "http429Observed": 0,
+    "locationsRequests": 0,
+    "tariffPagesCollectedThisBatch": [92, 93, 94],
+    "statusPagesCollectedThisBatch": [62, 63],
+    "newTariffRows": 287,
+    "updatedTariffRows": 0,
+    "newStatusRows": 198,
+    "updatedStatusRows": 0,
+    "stateAfter": {
+      "nextTariffPage": 95,
+      "tariffPagesCollected": 94,
+      "tariffRowsStored": 8981,
+      "tariffTotalPages": 462,
+      "nextStatusPage": 64,
+      "statusPagesCollected": 63,
+      "statusRowsStored": 5522,
+      "statusTotalPages": 448
+    },
+    "locationsCollectionRestarted": false
+  },
+  "runtimeSafety": {
+    "pr50MustRemainDraft": true,
+    "pr50ObservedOpen": true,
+    "pr50ObservedDraft": true,
+    "pr50ObservedMerged": false,
+    "preIntegrationOnly": true,
+    "runtimePublishReady": false,
+    "locationsCollectionComplete": true,
+    "locationsCollectionMustNotRestart": true
+  },
+  "coherenceCheck": {
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY_AND_FROZEN_618_SNAPSHOT",
+    "continuityCountSum": 346,
+    "firstPassMinimumTraversed": 346,
+    "countsDeriveExactly": true,
+    "legacyFirst98ListDerivabilityGapStillDocumented": true,
+    "historicalQueueFrozenAt618DespiteLiveMirrorDrift": true,
+    "noSetAsideReauditWithoutNewEvidence": true,
+    "noRepeatedInvestigationAboveTwoRunsWithoutNewLead": true,
+    "noThirdPartyTariffPromoted": true,
+    "directCpoAndEmspPricingSeparated": true,
+    "reveRequestBudgetRespected": true,
+    "locationsEndpointUnused": true
+  },
+  "investigationCurrent": "Continue recovering genuinely historical frozen-618 labels from preserved evidence only. Do not reopen active/setAside cases before FIRST PASS COMPLETE unless new evidence appears.",
+  "updatedAt": "2026-09-10T15:40:00Z"
+}

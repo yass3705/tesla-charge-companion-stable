@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "integrationStatus": "PRE_INTEGRATION_ONLY",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historical618MembershipClaimed": false,
+  "generatedAt": "2026-09-14T10:46:00Z",
+  "labels": [
+    {
+      "canonicalName": "Santa Coloma de Farners",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://mediambient.scf.cat/punt-de-recarrega-per-a-vehicles-electrics/"
+      ],
+      "finding": "The current municipal environment page identifies the public two-bay charging point at Plaça del 1er d'Octubre, managed through Etecnic, and explicitly states that charging is free while regulated blue-zone parking may still be payable. This is treated as the current published municipal direct condition; no third-party price is promoted.",
+      "resumeCondition": "Periodic municipal/ETECNIC tariff revalidation."
+    },
+    {
+      "canonicalName": "Santa Eulàlia de Ronçana",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://www.ser.cat/actualitat/noticies/el-punt-de-recarrega-de-vehicles-electrics-passara-a-ser-de-pagament-a-partir-de-l1-de-novembre.html",
+        "https://etecnic.es/trabajo/nuevo-punto-de-recarga-publico-en-santa-eulalia-de-roncana/"
+      ],
+      "finding": "The municipality states that its public fast charging point moved to paid use from 1 November 2023 at 0.38 EUR/kWh excluding VAT and uses EVCharge. Etecnic independently confirms the municipal 55.4 kW public point and EVCharge management. No newer conflicting official tariff was located in the first pass.",
+      "resumeCondition": "Periodic municipal price-publication revalidation or deterministic REVE connector-tariff comparison."
+    },
+    {
+      "canonicalName": "SANTA LUCIA VIVIENDAS SL",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://recarga.fenieenergia.es/punto-recarga/0682"
+      ],
+      "finding": "FENÍE Energía's current station page for point 0682 identifies SANTA LUCIA VIVIENDAS SL as owner, reports 7.4 kW / two bays / 24-hour public access, and publishes a direct charging condition of 0.50 EUR fixed plus 0.39 EUR/kWh. The page showed a recent connection on 12 September 2026.",
+      "resumeCondition": "Periodic FENÍE station-page tariff revalidation."
+    },
+    {
+      "canonicalName": "Santa Maria de Palautordera",
+      "status": "partial",
+      "evidence": [
+        "https://tourdera.cat/la-mobilitat-sostenible/",
+        "https://www.electrolitros.com/cargadores/centro-commercial-altrium-santa-maria-de-palautordera/"
+      ],
+      "finding": "Public sources confirm EV charging in Santa Maria de Palautordera and a current Etecnic-operated public site at Centro Comercial Altrium, but no authoritative current numeric direct tariff for the REVE label was located in the first pass. Third-party station data is not promoted as tariff authority.",
+      "resumeCondition": "Municipal/ETECNIC app or QR numeric tariff, or deterministic REVE connector-tariff mapping."
+    },
+    {
+      "canonicalName": "Santa Perpètua de Mogoda",
+      "status": "sourceValidated",
+      "evidence": [
+        "https://www.staperpetua.cat/temes/vehicle-electric/preus-xarxa-publica-de-recarrega-de-vehicles-electrics",
+        "https://www.staperpetua.cat/serveis-i-tramits/serveis-a-la-ciutadania/xarxa-publica-de-recarrega-de-vehicles-electrics.html"
+      ],
+      "finding": "The municipal public charging network page links the active price schedule. Published station-specific prices include 0.42 EUR/kWh at La Granja 1 (50 kW), 0.36 EUR/kWh daytime and 0.32 EUR/kWh nighttime at La Granja 2/3 (22 kW), and 0.31 EUR/kWh daytime / 0.28 EUR/kWh nighttime for several other 22 kW sites, with documented overstay charges. The tariff remains modeled as station/time-dependent rather than a fabricated single network price.",
+      "resumeCondition": "Periodic municipal schedule revalidation and exact station mapping."
+    }
+  ],
+  "firstPassAfter": {
+    "minimumTraversed": 434,
+    "maximumNeverTraversed": 184,
+    "firstPassComplete": false
+  },
+  "countsAfter": {
+    "sourceValidated": 46,
+    "partial": 33,
+    "active": 94,
+    "setAside": 190,
+    "platformExcluded": 3,
+    "supersededAlias": 68,
+    "total": 434
+  },
+  "reveTariffStatusBatch": {
+    "generatedAt": "2026-09-14T10:43:19.004465Z",
+    "requestsAttempted": 5,
+    "requestsSucceeded": 5,
+    "locationsRequests": 0,
+    "http429Observed": 0,
+    "plan": [["tariffs",224],["tariffs",225],["tariffs",226],["status",150],["status",151]],
+    "nextTariffPage": 227,
+    "tariffPagesCollected": 226,
+    "tariffRowsStored": 20014,
+    "tariffTotalPages": 462,
+    "nextStatusPage": 152,
+    "statusPagesCollected": 151,
+    "statusRowsStored": 13192,
+    "statusTotalPages": 448,
+    "currentRunDecision": "Exactly one eligible five-request batch was launched after more than one real hour had elapsed since the previous successful persisted batch. All five requests returned HTTP 200; no /locations request and no HTTP 429 occurred. The one-shot trigger was disarmed before its marker was removed."
+  },
+  "reveWebLead": {
+    "base": "https://www.mapareve.es/api/public/v1",
+    "validatedSamplePages": 100,
+    "perPage": 25,
+    "newReconstructedLabelsFirstPassedThisRun": 5,
+    "endpointStatus": "same public frontend endpoint remains validated; no safer larger-page or official alternate export identified in this run",
+    "nextSafeStep": "Continue diff-first processing after Santa Perpètua de Mogoda (Santpedor and following labels), skipping durable aliases before any difficult-case reaudit."
+  },
+  "coherence": {
+    "legacyWorkLabelCount": 618,
+    "syntheticHistoricalMembershipCreated": false,
+    "countSumMatchesFirstPass": true,
+    "result": "PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY"
+  }
+}

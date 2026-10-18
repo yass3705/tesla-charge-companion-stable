@@ -1,0 +1,94 @@
+name: Resolve Spain REVE remaining identities
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/remaining_identity_resolution_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - name: Resolve ambiguous and unresolved REVE identities
+        run: |
+          python <<'PY'
+          import json,re,unicodedata,glob
+          from pathlib import Path
+          from difflib import SequenceMatcher
+          def norm(s):
+            s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
+            s=re.sub(r'\b(slu|sl|sa|sau|s l|s a|sociedad limitada|sociedad anonima)\b',' ',s)
+            s=re.sub(r'\b(ajuntament|ayuntamiento|aj)\b',' ',s)
+            return re.sub(r'[^a-z0-9]+',' ',s).strip()
+          src=json.loads(Path('docs/spain-reve-identity-resolution.json').read_text())
+          candidates=list(src.get('ambiguous',[]))+[{'reveLabel':x} if isinstance(x,str) else x for x in src.get('unresolved',src.get('unresolvedReveLabels',[]))]
+          # authoritative evidence names from every persisted batch + explicit alias map
+          evidence=[]
+          for f in glob.glob('docs/spain-cpo-progress-batches/*.json'):
+            try:d=json.loads(Path(f).read_text())
+            except:continue
+            def add(n,status=None):
+              if isinstance(n,str) and n.strip(): evidence.append({'name':n,'status':status,'file':f})
+            for x in d.get('decisions',[]): add(x.get('canonicalName') or x.get('name') or x.get('label'),x.get('status'))
+            for k in ('newlyTreated','labelsTraversed'):
+              for x in d.get(k,[]) or []: add(x if isinstance(x,str) else None)
+          aliases={}
+          p=Path('data/spain_reve/operator_aliases_es.json')
+          if p.exists():
+            try:a=json.loads(p.read_text())
+            except:a={}
+            def walk(v):
+              if isinstance(v,dict):
+                can=v.get('canonical') or v.get('canonicalName')
+                als=v.get('aliases')
+                if isinstance(can,str) and isinstance(als,list):
+                  for z in als:
+                    if isinstance(z,str): aliases[norm(z)]=can
+                for z in v.values(): walk(z)
+              elif isinstance(v,list):
+                for z in v: walk(z)
+            walk(a)
+          by={}
+          for e in evidence: by.setdefault(norm(e['name']),[]).append(e)
+          keys=list(by)
+          resolved=[]; review=[]; genuinely_unrepresented=[]
+          for c in candidates:
+            lab=c.get('reveLabel') or c.get('label')
+            if not lab: continue
+            k=norm(lab)
+            if k in aliases and norm(aliases[k]) in by:
+              resolved.append({'reveLabel':lab,'method':'explicit_alias','canonical':aliases[k],'confidence':1.0}); continue
+            # token containment catches municipality/legal suffix variants but requires informative core
+            toks=set(k.split())
+            contain=[]
+            for q in keys:
+              qt=set(q.split())
+              if len(toks)>=2 and len(qt)>=2 and (toks<=qt or qt<=toks):
+                r=SequenceMatcher(None,k,q).ratio()
+                if r>=0.78: contain.append((r,q))
+            if contain:
+              contain.sort(reverse=True)
+              best=contain[0]
+              if len(contain)==1 or best[0]-contain[1][0]>=0.08:
+                resolved.append({'reveLabel':lab,'method':'token_containment','canonical':by[best[1]][0]['name'],'confidence':round(best[0],4)}); continue
+            sims=sorted(((SequenceMatcher(None,k,q).ratio(),q) for q in keys),reverse=True)[:2]
+            if sims and sims[0][0]>=0.92 and (len(sims)==1 or sims[0][0]-sims[1][0]>=0.08):
+              resolved.append({'reveLabel':lab,'method':'high_confidence_similarity','canonical':by[sims[0][1]][0]['name'],'confidence':round(sims[0][0],4)}); continue
+            if sims and sims[0][0]>=0.78:
+              review.append({'reveLabel':lab,'bestCandidates':[{'name':by[q][0]['name'],'score':round(r,4)} for r,q in sims]})
+            else:
+              genuinely_unrepresented.append(lab)
+          out={'schemaVersion':1,'country':'ES','mode':'IDENTITY_ONLY_NO_TARIFF','inputResolved':src.get('resolvedReveLabels'), 'inputAmbiguous':src.get('ambiguousReveLabels'),'inputUnresolved':src.get('unresolvedReveLabels'),'additionalResolved':len(resolved),'manualReview':len(review),'noPlausiblePersistedMatch':len(genuinely_unrepresented),'resolved':resolved,'review':review,'noPlausiblePersistedMatchLabels':genuinely_unrepresented,'rule':'No tariff lookup; no REVE external quota. Conservative identity resolution; uncertain matches remain review/unrepresented.'}
+          Path('docs/spain-reve-remaining-identity-resolution.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({k:out[k] for k in ('additionalResolved','manualReview','noPlausiblePersistedMatch')},indent=2))
+          PY
+      - name: Persist result
+        run: |
+          git add docs/spain-reve-remaining-identity-resolution.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): persist remaining REVE identity resolution"
+          git pull --rebase origin spain-reve-preintegration
+          git push

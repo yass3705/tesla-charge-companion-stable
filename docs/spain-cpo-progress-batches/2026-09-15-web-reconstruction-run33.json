@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "run": 33,
+  "provenance": "persisted national REVE public-web 600-page sweep plus official/public first-pass research",
+  "historicalMembershipClaimed": false,
+  "labelsTraversed": [
+    {"label":"Ajuntament de Font-rubi","status":"sourceValidated","evidence":["https://www.font-rubi.cat/serveis/servei-de-recarrega-de-vehicles-electrics"],"finding":"Official municipal service page, updated 2025-09-04, publishes 0.15 EUR/kWh for vehicles paying IVTM in Font-rubi and 0.30 EUR/kWh for others; EVcharge is the management app."},
+    {"label":"Ajuntament de Gironella","status":"setAside","finding":"Municipality/current public sources located, but no current official numeric EV-charging tariff was found in this first pass."},
+    {"label":"Ajuntament de Guardiola de Berguedà","status":"partial","evidence":["https://www.guardioladebergueda.cat/ajuntament/informacio-oficial/ordenances-fiscals/ordenanca-fiscal-num-29-ordenanca-reguladora-de-preus-publics-per-a-la-prestacio-del-servei-de-recarrega-de-vehicles-electrics-als-punts-de-recarrega-de-titularitat-municipal.html"],"finding":"Official municipality publishes fiscal ordinance 29 specifically governing public EV charging; numeric current tariff was not safely extracted in this pass, so no amount is extrapolated."},
+    {"label":"Ajuntament de Guissona","status":"setAside","evidence":["https://www.guissona.cat/"],"finding":"Official municipal presence confirmed; no current official numeric EV-charging tariff found in first pass."},
+    {"label":"Ajuntament de Gurb","status":"partial","evidence":["https://bop.diba.cat/anunci/3912140/aprovacio-inicial-de-la-modificacio-de-l-ordenanca-fiscal-num-20-reguladora-de-preus-publics-per-a-la-prestacio-del-servei-de-recarrega-de-vehicles-electrics-als-punts-de-recarrega-de-titularitat-municipal-ajuntament-de-gurb"],"finding":"BOPB confirms a 2026 modification of fiscal ordinance 20 governing prices for municipal EV charging, published 2026-03-18; numeric amount was not safely extracted, so no tariff is invented."}
+  ],
+  "delta":{"sourceValidated":1,"partial":2,"active":0,"setAside":2,"platformExcluded":0,"supersededAlias":0,"total":5},
+  "firstPassAfter":{"minimumTraversed":515,"maximumNeverTraversed":103,"legacyWorkLabelCount":618,"firstPassComplete":false},
+  "coherence":"PASS_WITH_DOCUMENTED_LEGACY_UNCERTAINTY",
+  "next":"Continue with genuinely new nominative labels from the persisted 445-label public-web sweep before any difficult-case reaudit."
+}

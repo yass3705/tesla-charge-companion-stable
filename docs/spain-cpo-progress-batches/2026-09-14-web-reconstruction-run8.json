@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "country": "ES",
+  "provenance": "reconstructedCurrentReveWeb",
+  "historical618MembershipClaimed": false,
+  "labelsTraversed": [
+    {
+      "label": "EATIM JESUS POBRE",
+      "status": "sourceValidated",
+      "evidence": ["https://recarga.fenieenergia.es/punto-recarga/0248"],
+      "finding": "Current FENIE public station page identifies EATIM JESUS POBRE as owner, 22 kW / 2 spaces, 24h public access and explicitly states charging has no cost; page reports last connection 2026-09-11.",
+      "tariff": "free",
+      "reason": "Current direct charging-service source provides deterministic tariff and station conditions."
+    },
+    {
+      "label": "Hospitalet de l'Infant",
+      "status": "setAside",
+      "evidence": [],
+      "finding": "Public-web identity observed, but no current official/direct numeric charging tariff was located in this first pass. A third-party 2023 value exists but is not promoted.",
+      "reason": "Need current official municipality/operator/app/QR or deterministic REVE tariff evidence."
+    },
+    {
+      "label": "La Jonquera",
+      "status": "setAside",
+      "evidence": ["https://lajonquera.cat/"],
+      "finding": "Municipality identity is confirmed, but no current official municipal numeric charging tariff was located in the first-pass search. Third-party free-price claims are deliberately not promoted.",
+      "reason": "Need official municipal/operator/app/QR or deterministic REVE tariff evidence."
+    },
+    {
+      "label": "La Llagosta",
+      "status": "partial",
+      "evidence": ["https://www.llagosta.cat/actualitat/noticies/les-noves-estacions-de-recarrega-de-vehicle-electric-es-posen-en-marxa-divendres.html"],
+      "finding": "Official municipality page documents municipal charging stations and a 2024 public price of 0.3421 EUR/kWh, reduced to 0.2737 EUR/kWh for eligible residents; no 2026 revalidation was found in this pass, so the historic official tariff is not promoted as current runtime truth.",
+      "reason": "Official tariff evidence exists but needs current 2026 ordinance/app confirmation before promotion."
+    }
+  ],
+  "countDelta": {
+    "sourceValidated": 1,
+    "partial": 1,
+    "setAside": 2,
+    "active": 0,
+    "platformExcluded": 0,
+    "supersededAlias": 0,
+    "total": 4
+  },
+  "coherence": {
+    "syntheticHistoricalMembershipCreated": false,
+    "thirdPartyTariffPromoted": false,
+    "legacyWorkLabelCountPreserved": 618
+  },
+  "generatedAt": "2026-09-14T02:47:00Z"
+}

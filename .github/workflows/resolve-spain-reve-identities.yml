@@ -1,0 +1,82 @@
+name: Resolve Spain REVE identities
+on:
+  push:
+    branches: [spain-reve-preintegration]
+    paths: [data/spain_reve/identity_resolution_trigger.txt]
+permissions:
+  contents: write
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: spain-reve-preintegration, fetch-depth: 0}
+      - name: Resolve aliases and variants without tariff lookup
+        run: |
+          python <<'PY'
+          import json,glob,re,unicodedata,difflib
+          from pathlib import Path
+          def basic(s):
+            s=unicodedata.normalize('NFKD',str(s)).encode('ascii','ignore').decode().lower()
+            s=re.sub(r'[^a-z0-9]+',' ',s).strip()
+            return re.sub(r'\s+',' ',s)
+          def norm(s):
+            s=basic(s)
+            toks=s.split()
+            # collapse adjacent repeated words (common REVE dirty labels)
+            out=[]
+            for t in toks:
+              if not out or out[-1]!=t: out.append(t)
+            stop={'ajuntament','ayuntamiento','aj','de','del','d','la','el','sl','slu','sa','sau','s','l'}
+            return ' '.join(t for t in out if t not in stop)
+          probe=json.loads(Path('data/spain_reve/reve_public_web_probe.json').read_text())
+          labels=probe['identityDiagnostics']['operatorLabels']
+          records=[]
+          for f in sorted(glob.glob('docs/spain-cpo-progress-batches/*.json')):
+            try:d=json.loads(Path(f).read_text())
+            except:continue
+            for x in d.get('decisions',[]) or []:
+              n=x.get('canonicalName') or x.get('name') or x.get('label')
+              if n: records.append({'name':n,'status':x.get('status'),'file':f})
+            for key in ('newlyTreated','labelsTraversed'):
+              for n in d.get(key,[]) or []:
+                if isinstance(n,str):records.append({'name':n,'status':None,'file':f})
+          # retain unique evidence records
+          uniq={}
+          for r in records: uniq[(basic(r['name']),r['file'],r.get('status'))]=r
+          records=list(uniq.values())
+          bynorm={}
+          for r in records:bynorm.setdefault(norm(r['name']),[]).append(r)
+          resolved=[]; ambiguous=[]; unresolved=[]
+          keys=list(bynorm)
+          for lab in labels:
+            k=norm(lab)
+            if k in bynorm:
+              resolved.append({'reveLabel':lab,'method':'normalized_exact','confidence':1.0,'matches':bynorm[k]});continue
+            # containment after cleaning, require meaningful >=5 char key
+            cont=[q for q in keys if len(q)>=5 and (q in k or k in q)]
+            if len(cont)==1:
+              resolved.append({'reveLabel':lab,'method':'normalized_containment','confidence':0.96,'matches':bynorm[cont[0]]});continue
+            scores=sorted(((difflib.SequenceMatcher(None,k,q).ratio(),q) for q in keys),reverse=True)
+            if scores and scores[0][0]>=0.90 and (len(scores)==1 or scores[0][0]-scores[1][0]>=0.05):
+              resolved.append({'reveLabel':lab,'method':'high_confidence_fuzzy','confidence':round(scores[0][0],4),'matches':bynorm[scores[0][1]]});continue
+            cand=[{'score':round(s,4),'decisionName':bynorm[q][0]['name'],'decisionFiles':sorted({x['file'] for x in bynorm[q]})} for s,q in scores[:3] if s>=0.72]
+            if cand: ambiguous.append({'reveLabel':lab,'candidates':cand})
+            else: unresolved.append(lab)
+          # exact duplicate groups across distinct batch files
+          dups=[]
+          for k,rs in bynorm.items():
+            fs=sorted({r['file'] for r in rs})
+            if len(fs)>1: dups.append({'normalizedIdentity':k,'names':sorted({r['name'] for r in rs}),'files':fs})
+          out={'schemaVersion':1,'country':'ES','mode':'IDENTITY_ONLY_NO_TARIFF','sourceOperatorLabels':len(labels),'persistedUniqueEvidenceRecords':len(records),'distinctDecisionIdentities':len(bynorm),'resolvedReveLabels':len(resolved),'ambiguousReveLabels':len(ambiguous),'unresolvedReveLabels':len(unresolved),'resolved':resolved,'ambiguous':ambiguous,'unresolved':unresolved,'duplicateDecisionGroups':dups,'duplicateDecisionGroupCount':len(dups),'rules':['No tariff lookup','No synthetic historical-618 membership','Fuzzy matches below deterministic threshold remain ambiguous','Duplicate evidence is retained but must not increment KPI twice']}
+          Path('docs/spain-reve-identity-resolution.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({k:out[k] for k in ('sourceOperatorLabels','persistedUniqueEvidenceRecords','distinctDecisionIdentities','resolvedReveLabels','ambiguousReveLabels','unresolvedReveLabels','duplicateDecisionGroupCount')},indent=2))
+          PY
+      - name: Persist resolution
+        run: |
+          git add docs/spain-reve-identity-resolution.json
+          git config user.name "github-actions[bot]"
+          git config user.email "4189822+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "audit(es): persist REVE identity resolution"
+          git pull --rebase origin spain-reve-preintegration
+          git push

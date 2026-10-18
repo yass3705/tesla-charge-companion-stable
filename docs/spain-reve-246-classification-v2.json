@@ -1,0 +1,1494 @@
+{
+  "schemaVersion": 2,
+  "country": "ES",
+  "mode": "IDENTITY_CLASSIFICATION_NO_TARIFF",
+  "input": 246,
+  "counts": {
+    "candidateCpo": 171,
+    "representedHistorical": 72,
+    "manualReview": 2,
+    "representedPlatform": 1
+  },
+  "complete": true,
+  "entries": [
+    {
+      "label": "Aj. de Cruïlles, Monells i Sant Sadurní de l'Heura",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Aj. Montcada i Reixac",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament d’Alforja des",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Font-rubi",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Font-rubi",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Guardiola de Berguedà",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Guardiola de Berguedà",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Guissona",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Guissona",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Gurb",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Gurb",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Juneda",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Juneda",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de l'Albiol",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de l'Albiol",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de l'Espluga de Francolí",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de l'Espluga de Francolí",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "AJUNTAMENT DE L'OLLERIA - -",
+      "classification": "representedHistorical",
+      "match": "AJUNTAMENT DE L'OLLERIA - -",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Les Borges Blanques",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Les Borges Blanques",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Moià",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Moià",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "AJUNTAMENT DE MOIXENT PARKING CAMP DE FUTBOL",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Mont-roig del Camp",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Mont-roig del Camp",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Montferrer",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Montferrer",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Paüls",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Paüls",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Pont de Suert",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Pont de Suert",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Renau",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Renau",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Riells i Viabrea",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Riells i Viabrea",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Saldes",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Saldes",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Salomó",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Salomó",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Sant Andreu de Llavaneres",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Sant Andreu de Llavaneres",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Sant Boi de Lluçanès",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Sant Boi de Lluçanès",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Sant Feliu de Codines",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Sant Feliu de Codines",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Sant Fruitós de Bages",
+      "classification": "representedHistorical",
+      "match": "Ajuntament de Sant Fruitós de Bages",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ajuntament de Sant Jaume d'Enveja",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Sant Julià de Cerdanyola",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Santa Fe del Penedès",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Soses",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Torroella de Montgrí",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Vic",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Vilada",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament de Vinyols i els Arcs",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament del Catllar",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament del Lloar",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament del Pla de Santa Maria",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament dels Pallaresos",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Lliçà de Vall",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Manlleu",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Sant Julià de Llor i Bonmatí",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ajuntament Selva del Camp",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Alcover",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ALDI",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ALEGRIA HOTELS",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Almatret",
+      "classification": "representedHistorical",
+      "match": "Almatret",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Andrés Rodríguez Brenes",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ANTONIO SALDAÑA MARCO",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "APARCAMENTS Tarragona",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ARSA INVERSIONES SAU",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Artesa de Segre",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ascó",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Asociacion Autonoma de Instaladores Electricos y de Telecomunicaciones de Granada",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Avinyonet de Puigventos",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayto Beriáin",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayto. Ansoain Ansoain Ansoain",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento Alcalá de la Selva",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento cendea de Olza/Oltza Zendea Ayuntamiento Ayuntamiento",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Agullent - -",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ALMOCITA . .",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ARRONIZ . .",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE AZAGRA Azagra Navarra",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Casas Bajas Casas Bajas Casas Bajas",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Espirdo Espirdo Espirdo",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE ESTERIBAR Esteribar Navarra",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Falces Falces Falces",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA AYUNTAMIENTO DE FRAGA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Garínoain",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Grazalema Grazalema Cádiz",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Huarte",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE LLIBER AYUNTAMIENTO LLIBER",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE LOS MONTESINOS . .",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE MERINDAD DE RÍO UBIERNA MERINDAD RÍO UBIERNA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE OLOCAU",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE PADULES . .",
+      "classification": "manualReview",
+      "match": "Ajuntament de Paüls",
+      "method": "possible_historical",
+      "score": 0.8889
+    },
+    {
+      "label": "Ayuntamiento de Premià",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Ribafrecha - -",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Viana . .",
+      "classification": "manualReview",
+      "match": "Ajuntament de Tiana",
+      "method": "possible_historical",
+      "score": 0.875
+    },
+    {
+      "label": "AYUNTAMIENTO DE VILLADIEGO BURGOS ESPAÑA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO DE VILVIESTRE DEL PINAR",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento de Xeraco Ayuntamiento Ayuntamiento",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento Getaria",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ayuntamiento Santo Domingo de la Calzada",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "AYUNTAMIENTO VALLE DE ARANGUREN",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Badia del Vallés",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Balsareny",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Banana Express",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Belen Lorefice Gaitan",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Benavent de Segrià",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Bodegas Macias Batle",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Bodegas Nodus",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Bolaños",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "BONPREU, S.A.U.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Braker Corporation",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Cabildo Lanzarote",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "CADENA MAR S.L. MAR HOTELS",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Cambrils APARCAM",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Camping l'Amfora",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Camping Mas Patoxas",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Capmany",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Cardona",
+      "classification": "representedHistorical",
+      "match": "Cardona",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "CARGADORES LOW COST",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Carmen Andres Garcia",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Caseres",
+      "classification": "representedHistorical",
+      "match": "Caseres",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Castellolí",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "CENTROS COMERCIALES CARREFOUR SA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "CIMALSA Castellar del Vallès",
+      "classification": "representedHistorical",
+      "match": "CIMALSA Castellar del Vallès",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "CIMALSA la Selva",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Club de Golf el Bosque Chiva",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Club de Golf Gorraiz",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Club Náutico Moraira",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Complex Comercial Vilafranca",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Constanti",
+      "classification": "representedHistorical",
+      "match": "Constanti",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Consum",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Cooperativa Eléctrica Catralense",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Corbera de Llobregat",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "El Far d'Empordà",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "El Masroig",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "El Pont de Vilomara",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "elRetiro",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "EMAG S.L ARILLA ALLUE",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "EMAYA, S.A.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Emerix Systems S.L.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ENERGEA CONSULTING Y ASESORES SL",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ENILEC ENILEC ENILEC",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "EPRESA ENERGIA SA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ernesto Serra Gomez",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Espolla",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Estació Servei Porto Gas",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "EUROPA CENTER",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Febrer Gasolineras",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Fenie Propietario Propietario",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "FISERSA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "FLORETTE HORTÍCOLA NAVARRA - MILAGRO",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Fornells de la Selva",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Forumsa",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "FUNDACION FEMEVAL Fundacion Femeval",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "GALP_SPAIN",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Gandesa",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "GASOLINERA RAFAL --",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Golf Vistahermosa",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "GP TRADE",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Guadalupe Martínez Sánchez",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Guaw",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "HCC HOTELS SL",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Horta de Sant Joan",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hospital de Toledo",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hospital Ribera de Covadonga",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hospitalet de l'Infant",
+      "classification": "representedHistorical",
+      "match": "Hospitalet de l'Infant",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Hotel Amic Horizonte",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hotel Amoros Cala Ratjada",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hotel Bosquemar SL",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "HOTEL DEL OSO",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hotel OCA Vermar .",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Hotel Spa Atlántico . .",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "IBERDROLA CLIENTES S.A.U",
+      "classification": "representedHistorical",
+      "match": "IBERDROLA CLIENTES S.A.U",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "InstaVolt CPO",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Inversiones Pascual",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "INVESMORAZO S.L",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "ION SMART ENERGY 2000 SL",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ivars d'Urgell",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "J. REDONDO, S.L.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "JANEIRO RANILLA SUMINISTROS ALTOLEON, S.L.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Jarada Motor, S.L.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "JARDINES LA TEJERA, S.A.U.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Jesus Vidal Ubeda",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Joncosa de Montmell",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "JOSE LUIS DOMINGO VENTURA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "La Jonquera",
+      "classification": "representedHistorical",
+      "match": "La Jonquera",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "La Llagosta",
+      "classification": "representedHistorical",
+      "match": "La Llagosta",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "La Pobla de Segur",
+      "classification": "representedHistorical",
+      "match": "La Pobla de Segur",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "LAG OLEIROS SLU",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "LES FONTS DE MARIOLA, S.L.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Llagostera",
+      "classification": "representedHistorical",
+      "match": "Llagostera",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Lleida",
+      "classification": "representedHistorical",
+      "match": "Lleida",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Lloret de Mar",
+      "classification": "representedHistorical",
+      "match": "Lloret de Mar",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Lucía María Díaz Soberón",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "M.P. PORT ROSES SA",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Manresa",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Martin Rivera Bua",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Matadepera",
+      "classification": "representedHistorical",
+      "match": "Matadepera",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Mediterraneo Golf",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Montmeló",
+      "classification": "representedHistorical",
+      "match": "Montmeló",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Móra d'Ebre",
+      "classification": "representedHistorical",
+      "match": "Móra d'Ebre",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Móra la Nova",
+      "classification": "representedHistorical",
+      "match": "Móra la Nova",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Movilidad Eléctrica Gran Canaria",
+      "classification": "representedHistorical",
+      "match": "Movilidad Eléctrica Gran Canaria",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Muntaner Batle Sl Muntaner Batle Sl Muntaner Batle Sl",
+      "classification": "representedHistorical",
+      "match": "Muntaner Batle Sl Muntaner Batle Sl Muntaner Batle Sl",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Mutua Madrileña Inmobiliaria",
+      "classification": "representedHistorical",
+      "match": "Mutua Madrileña Inmobiliaria",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "NAITEC",
+      "classification": "representedHistorical",
+      "match": "NAITEC",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "NATURGY RECARGA",
+      "classification": "representedHistorical",
+      "match": "NATURGY RECARGA",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Navarcles",
+      "classification": "representedHistorical",
+      "match": "Navarcles",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Navarra te recarga",
+      "classification": "representedHistorical",
+      "match": "Navarra te recarga",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "NIMA GRUP D'AUTOMOCIO SL",
+      "classification": "representedHistorical",
+      "match": "NIMA GRUP D'AUTOMOCIO SL",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Nuñez y Navarro",
+      "classification": "representedHistorical",
+      "match": "Nuñez y Navarro",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ocimax P de Mallorca",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Oftalmedic Salva",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Palol de Revardit",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Pamplona",
+      "classification": "representedHistorical",
+      "match": "Pamplona",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Parking Benalmadena Pueblosol",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Parking Garatge 2000",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "PARKING LIDER S.A.",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Parking NN Espronceda",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Parking Pozuelo",
+      "classification": "representedHistorical",
+      "match": "Parking Pozuelo",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Parking TEKNON",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "PARKING VAPOR GRAN",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Patrimonio Natural CyL",
+      "classification": "representedHistorical",
+      "match": "Patrimonio Natural CyL",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Peralada",
+      "classification": "representedHistorical",
+      "match": "Peralada",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Petrolia Conil de la Frontera",
+      "classification": "representedHistorical",
+      "match": "Petrolia Conil de la Frontera",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "PLENOIL, S.L.",
+      "classification": "representedHistorical",
+      "match": "PLENOIL, S.L.",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Polinyà",
+      "classification": "representedHistorical",
+      "match": "Polinyà",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Ponent Energia",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Port de Roses",
+      "classification": "representedHistorical",
+      "match": "Port de Roses",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Postventa Propietario Propietario",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Premià de Mar",
+      "classification": "representedHistorical",
+      "match": "Premià de Mar",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Puig-reig",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "PUMSA Mataró",
+      "classification": "representedHistorical",
+      "match": "PUMSA Mataró",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "RAMIS GARAU, S.A. MIQUEL RAMIS",
+      "classification": "representedHistorical",
+      "match": "RAMIS GARAU, S.A. MIQUEL RAMIS",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Rasquera",
+      "classification": "representedHistorical",
+      "match": "Rasquera",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Real Club Pineda",
+      "classification": "representedHistorical",
+      "match": "Real Club Pineda",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Roda de Ter",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Roses",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Salvador Fernandez Labadia",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Sant Pere de Ribes",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Sant Quirze de Besora",
+      "classification": "representedHistorical",
+      "match": "Sant Quirze de Besora",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Sant Vicenç de Castellet",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Santa Barbara",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Santa Coloma de Farners",
+      "classification": "representedHistorical",
+      "match": "Santa Coloma de Farners",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Santa Eulàlia de Ronçana",
+      "classification": "representedHistorical",
+      "match": "Santa Eulàlia de Ronçana",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "SANTA LUCIA VIVIENDAS SL",
+      "classification": "representedHistorical",
+      "match": "SANTA LUCIA VIVIENDAS SL",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Santa Maria de Palautordera",
+      "classification": "representedHistorical",
+      "match": "Santa Maria de Palautordera",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Santa Perpètua de Mogoda",
+      "classification": "representedHistorical",
+      "match": "Santa Perpètua de Mogoda",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Santpedor",
+      "classification": "representedHistorical",
+      "match": "Santpedor",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Sergio Peinado Gimenez",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Servicios Petroleros Mallorca SL",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Ses Jardines . .",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Siemens",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "SUNSET OASIS IBIZA ROSELLO RAUSELL",
+      "classification": "representedHistorical",
+      "match": "SUNSET OASIS IBIZA ROSELLO RAUSELL",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Test REMO",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Torre Inbisa",
+      "classification": "representedHistorical",
+      "match": "Torre Inbisa",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "UMBRELLA e-MOBILITY",
+      "classification": "representedHistorical",
+      "match": "UMBRELLA e-MOBILITY",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Vallmoll",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Vibroaspre, S.A. Vibroaspre Vibroaspre",
+      "classification": "representedHistorical",
+      "match": "Vibroaspre, S.A. Vibroaspre Vibroaspre",
+      "method": "exact_normalized"
+    },
+    {
+      "label": "Vicente Martinez Corcoles",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Vidreres",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Viladrau",
+      "classification": "candidateCpo",
+      "match": null,
+      "method": "no_persisted_historical_match"
+    },
+    {
+      "label": "Powy",
+      "classification": "representedPlatform",
+      "match": "powy",
+      "method": "v1_explicit_platform"
+    }
+  ],
+  "runtimePublishReady": false
+}
