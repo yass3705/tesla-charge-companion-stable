@@ -1,0 +1,33 @@
+name: Test Allego direct V8
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "assets/v8-allego-direct.js"
+      - "assets/v8-belib-pricing.js"
+      - "scripts/test_allego_v8_overlay.mjs"
+      - ".github/workflows/test-allego-direct-v8.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-allego-direct-v8-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax
+        run: |
+          node --check assets/v8-allego-direct.js
+          node --check assets/v8-belib-pricing.js
+          node --check scripts/test_allego_v8_overlay.mjs
+      - name: Synthetic exact-tariff overlay
+        run: node scripts/test_allego_v8_overlay.mjs
